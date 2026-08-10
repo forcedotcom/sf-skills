@@ -8,6 +8,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from _test_support import load_module
 
@@ -37,7 +38,7 @@ class DiscoveryCatalogTests(unittest.TestCase):
         self.assertEqual(names, sorted(names))
         self.assertEqual(set(names), self.catalog.visible_skill_names(REPO_ROOT, PLUGIN_ROOT))
         self.assertTrue(data["spikeOnly"])
-        self.assertEqual(data["schemaVersion"], "2.0")
+        self.assertEqual(data["schemaVersion"], "3.0")
         self.assertEqual(data["channel"], "public")
         self.assertNotIn("generatedAt", data)
         blob = json.dumps(data, ensure_ascii=False)
@@ -60,6 +61,15 @@ class DiscoveryCatalogTests(unittest.TestCase):
         self.assertEqual(set(duplicate["variants"]), {"public", "foundation"})
         self.assertTrue(duplicate["foundationInstalled"])
         self.assertNotEqual(id(duplicate["variants"]["public"]), id(duplicate["variants"]["foundation"]))
+        self.assertNotIn("description", blob)
+        # accessCheck rides in every variant as a valid tri-state; foundation
+        # (plugin dialect, no metadata block) is always structurally undeclared.
+        for row in data["skills"]:
+            for source, variant in row["variants"].items():
+                self.assertIn("accessCheck", variant)
+                self.assertTrue(self.catalog.registry._valid_access_check(variant["accessCheck"]))
+                if source == "foundation":
+                    self.assertIsNone(variant["accessCheck"])
 
     def test_frontmatter_supports_escaped_quotes_unicode_and_block_descriptions(self):
         with tempfile.TemporaryDirectory() as td:
@@ -143,6 +153,12 @@ class DiscoveryCatalogTests(unittest.TestCase):
                     with self.assertRaisesRegex(self.catalog.CatalogError, filename):
                         self.catalog.read_skill(path)
 
+    def test_catalog_hashes_the_same_safely_loaded_manifest_bytes(self):
+        with mock.patch.object(Path, "read_bytes", side_effect=AssertionError("must not reopen")):
+            data = self.catalog.build_catalog(REPO_ROOT, PLUGIN_ROOT)
+        self.assertEqual(data["schemaVersion"], "3.0")
+        self.assertRegex(data["publicRelease"]["manifestSha256"], r"^[0-9a-f]{64}$")
+
     def test_checked_in_artifact_is_current_and_has_no_paths(self):
         artifact = PLUGIN_ROOT / "catalog/discovery.json"
         expected = self.catalog.build_catalog(REPO_ROOT, PLUGIN_ROOT)
@@ -204,18 +220,14 @@ class DiscoveryCatalogTests(unittest.TestCase):
             mutate("unapproved domain", lambda d: d["skills"][0].update({"domain": "other"})),
             mutate("mismatched domain", lambda d: d["skills"][0].update({"domain": "platform"})),
             mutate("bad boolean", lambda d: d["skills"][0].update({"foundationInstalled": 1})),
-            mutate("long description", lambda d: d["skills"][0]["variants"][first_source].update({"description": "x" * 1025})),
+            mutate("variant description forbidden", lambda d: d["skills"][0]["variants"][first_source].update({"description": "not runtime-safe"})),
             mutate("bad hash", lambda d: d["skills"][0]["variants"][first_source].update({"treeSha256": "bad"})),
+            # accessCheck is a required per-variant key with an enforced tri-state
+            # shape: a missing key, a non-list scalar, and a malformed entry all fail.
+            mutate("missing variant accessCheck", lambda d: d["skills"][0]["variants"][first_source].pop("accessCheck")),
+            mutate("scalar variant accessCheck", lambda d: d["skills"][0]["variants"][first_source].update({"accessCheck": "license"})),
+            mutate("bad variant accessCheck entry", lambda d: d["skills"][0]["variants"][first_source].update({"accessCheck": [{"type": "bogus", "value": "x"}]})),
             mutate("long example", lambda d: d["skills"][0].update({"examplePrompt": "x" * 141})),
-            *[
-                mutate(
-                    f"description Unicode control U+{ord(char):04X}",
-                    lambda d, char=char: d["skills"][0]["variants"][first_source].update(
-                        {"description": f"Use catalog discovery safely {char} without control text."}
-                    ),
-                )
-                for char in ("\u001b", "\u009b", "\u2028", "\u2029", "\u202e", "\u2066", "\u2067", "\u2068", "\u2069")
-            ],
             mutate("variant mismatch", lambda d: d["skills"][0]["variants"].update({"remote": copy.deepcopy(d["skills"][0]["variants"][first_source])})),
         ]
         with tempfile.TemporaryDirectory() as td:
@@ -241,9 +253,9 @@ class CuratedExampleTests(unittest.TestCase):
         }
 
     def _heuristic(self, row: dict) -> str:
-        """Re-derive the fallback prompt from the same description build_catalog selects."""
-        variants = row["variants"]
-        description = variants.get("public", variants.get("foundation"))["description"]
+        """Re-derive only from a physically bundled source, never catalog prose."""
+        source = PLUGIN_ROOT / "skills" / row["name"] / "SKILL.md"
+        description = self.catalog.read_skill(source)["description"]
         return self.catalog.example_prompt(row["name"], description, row["domain"])
 
     def test_curated_seed_wins_over_the_heuristic_for_a_hero_skill(self):
@@ -256,6 +268,7 @@ class CuratedExampleTests(unittest.TestCase):
         uncurated = [
             row for name, row in self.rows.items()
             if name not in self.catalog.CURATED_EXAMPLES
+            and row["foundationInstalled"] and not row["publicAvailable"]
         ]
         self.assertTrue(uncurated)
         for row in uncurated:
@@ -292,15 +305,82 @@ class CuratedExampleTests(unittest.TestCase):
             self.assertIsInstance(node, ast.Constant)
             self.assertIsInstance(node.value, str)
         described = [
-            (f"{name}:{source}", variant["description"].casefold())
-            for name, row in self.rows.items()
-            for source, variant in row["variants"].items()
+            (name, self.catalog.read_skill(path)["description"].casefold())
+            for name, path in self.catalog._skill_paths(PLUGIN_ROOT / "skills").items()
         ]
         self.assertTrue(described)
         for prompt in self.catalog.CURATED_EXAMPLES.values():
             stem = prompt.rstrip(".").casefold()
             with self.subTest(prompt=prompt):
                 self.assertEqual([], [label for label, text in described if stem in text])
+
+
+class DomainDisplayTests(unittest.TestCase):
+    """The first-party overview display taxonomy: complete, bounded, safe fallback."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.catalog = load_module(MODULE_PATH, "discovery_catalog_under_test")
+        cls.prefixes = sorted({
+            row["domain"] for row in cls.catalog.build_catalog(REPO_ROOT, PLUGIN_ROOT)["skills"]
+        })
+
+    def test_every_catalog_domain_prefix_has_a_display_entry(self):
+        """Every prefix the catalog actually emits must have curated display copy —
+        the overview renders friendly labels, so a missing prefix would silently
+        title-case at runtime. This is the fail-loud gate that keeps the map honest
+        as new domains land (runtime degrades gracefully; CI must not)."""
+        self.assertTrue(self.prefixes)
+        for prefix in self.prefixes:
+            with self.subTest(prefix=prefix):
+                self.assertIn(prefix, self.catalog._DOMAIN_DISPLAY)
+                self.assertTrue(self.catalog._DOMAIN_DISPLAY[prefix]["label"].strip())
+
+    def test_display_copy_fits_the_overview_cell(self):
+        """Labels + a two-digit count fit the domain cell, and taglines/installed
+        examples fit the example cell, so no authored copy can widen a row past 80."""
+        label_budget = self.catalog._DOMAIN_CELL - len(" (99)")
+        for prefix, disp in self.catalog._DOMAIN_DISPLAY.items():
+            with self.subTest(prefix=prefix):
+                self.assertLessEqual(len(disp["label"]), label_budget)
+                self.assertLessEqual(len(disp.get("tagline", "")), self.catalog._EXAMPLE_CELL)
+                if disp.get("installedExample"):
+                    self.assertLessEqual(len(disp["installedExample"]), self.catalog._EXAMPLE_CELL)
+
+    def test_display_copy_is_a_first_party_module_literal(self):
+        """_DOMAIN_DISPLAY is authored copy, never mined — that is what lets the
+        tier-2 contract reproduce the block verbatim. The guarantee is STRUCTURAL,
+        not textual: the map is a module-scope literal of literals, so no runtime
+        expression can pull a description (least of all an available skill's) into a
+        label/tagline. A substring check would false-positive — a tagline may share
+        product nouns ("OmniScripts, FlexCards") with a description without being
+        derived from it; being a literal is the honest, sufficient invariant."""
+        assignment = next(
+            (
+                node for node in ast.parse(MODULE_PATH.read_text(encoding="utf-8")).body
+                if isinstance(node, (ast.Assign, ast.AnnAssign))
+                and "_DOMAIN_DISPLAY" in {
+                    getattr(target, "id", None)
+                    for target in (node.targets if isinstance(node, ast.Assign) else [node.target])
+                }
+            ),
+            None,
+        )
+        self.assertIsNotNone(assignment, "_DOMAIN_DISPLAY must be assigned at module scope")
+        self.assertIsInstance(assignment.value, ast.Dict)
+        for entry in assignment.value.values:
+            self.assertIsInstance(entry, ast.Dict)
+            for node in [*entry.keys, *entry.values]:
+                self.assertIsInstance(node, ast.Constant)
+                self.assertIsInstance(node.value, str)
+
+    def test_display_falls_back_to_title_case_without_crashing(self):
+        """An unmapped prefix (a newly-added domain) degrades to a bare title-cased
+        label with an empty tagline — never a crash, never fabricated copy."""
+        fallback = self.catalog._display("brand-new-domain")
+        self.assertEqual(fallback["label"], "Brand New Domain")
+        self.assertEqual(fallback["tagline"], "")
+        self.assertIsNone(fallback.get("installedExample"))
 
 
 if __name__ == "__main__":

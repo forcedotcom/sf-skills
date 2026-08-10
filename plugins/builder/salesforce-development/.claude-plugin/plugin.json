@@ -1,7 +1,7 @@
 {
   "name": "salesforce-development",
   "displayName": "Salesforce Development",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Build Salesforce apps and agents using these core building blocks: metadata, Apex, deploy/retrieve, security, reporting, and generated installed-versus-available capability discovery.",
   "author": { "name": "Salesforce", "url": "https://github.com/forcedotcom/sf-skills" },
   "license": "Apache-2.0",
@@ -9,6 +9,14 @@
   "repository": "https://github.com/forcedotcom/sf-skills.git",
   "keywords": ["salesforce", "apex", "flow", "soql", "metadata", "deploy", "agentforce"],
   "dependencies": [],
+  "userConfig": {
+    "ui_mode": {
+      "type": "string",
+      "title": "Salesforce development UI mode",
+      "description": "Ambient UI: full (default), compact, plain semantic text, or off. Explicit commands and safety guidance remain available.",
+      "default": "full"
+    }
+  },
   "skills": "./skills/",
   "commands": "./commands/",
   "hooks": {
@@ -18,7 +26,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context detect"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context detect",
+            "statusMessage": "Loading local Salesforce project context…"
           }
         ]
       }
@@ -76,6 +85,11 @@
             "type": "command",
             "if": "Bash(sf data query *)",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project generate*)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context scaffold-gate"
           }
         ]
       },
@@ -103,11 +117,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context reset-dispatch-turn"
-          },
-          {
-            "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context orientation-rail"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context prompt-dispatch"
           }
         ]
       }
@@ -118,12 +128,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(sf project deploy *)",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context post-deploy"
-          },
-          {
-            "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context wayfinder"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context post-bash"
           }
         ]
       },

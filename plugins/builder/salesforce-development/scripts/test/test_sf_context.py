@@ -19,9 +19,12 @@ from __future__ import annotations
 import importlib.util
 import json
 import io
+import os
+import stat
+import tempfile
 import types
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -451,6 +454,171 @@ class RunResultTests(unittest.TestCase):
 
 
 class CheckToolsTests(unittest.TestCase):
+    def setUp(self):
+        # cmd_check_tools now writes a readiness verdict to ./.sf/ as a side effect,
+        # so isolate the cwd in a temp dir — otherwise the run litters the invoker's
+        # directory. The direct `_check_*` unit tests don't touch cwd, so this is
+        # harmless for them.
+        self._prev_cwd = os.getcwd()
+        self._tmp = tempfile.TemporaryDirectory()
+        os.chdir(self._tmp.name)
+
+    def tearDown(self):
+        os.chdir(self._prev_cwd)
+        self._tmp.cleanup()
+
+    def _mock_all_checks(self, git=None, cli=None):
+        """Patch every _check_* to a green row (info for the MCP process row) so a
+        cmd_check_tools run is deterministic and offline. `git`/`cli` override those
+        rows for the not-ready cases."""
+        ok = lambda name: {"name": name, "status": "ok", "version": "x", "message": "Installed"}
+        return [
+            mock.patch.object(sfx, "_check_sf_cli", return_value=cli or ok("Salesforce CLI")),
+            mock.patch.object(sfx, "_check_code_analyzer", return_value=ok("Code Analyzer plugin")),
+            mock.patch.object(sfx, "_check_node", return_value=ok("Node.js")),
+            mock.patch.object(sfx, "_check_npm", return_value=ok("NPM")),
+            mock.patch.object(sfx, "_check_git", return_value=git or ok("Git")),
+            mock.patch.object(sfx, "_check_source_tracking", return_value=ok("Source Tracking")),
+            mock.patch.object(sfx, "_check_mcp", return_value=[
+                {"name": "Salesforce MCP (config)", "status": "ok"},
+                {"name": "Salesforce MCP (process)", "status": "info"},
+            ]),
+            mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/tool"),
+        ]
+
+    def _run_check_tools(self):
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            sfx.cmd_check_tools()
+        return json.loads(buf.getvalue())
+
+    def _read_verdict(self):
+        return json.loads((Path(".sf") / "environment-readiness.json").read_text())
+
+    def _read_report(self):
+        return json.loads((Path(".sf") / "environment-readiness-report.json").read_text())
+
+    def _run_readiness_banner(self):
+        buf, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(buf), redirect_stderr(err):
+            code = sfx.cmd_readiness_banner()
+        return code, buf.getvalue(), err.getvalue()
+
+    def test_readiness_banner_prints_the_deterministic_render_from_the_persisted_report(self):
+        # The platform-environment-validate paint fallback: after a check-tools scan
+        # persists the report, `readiness-banner` prints exactly render_readiness_text
+        # from that same report — so the skill never hand-renders the banner from JSON.
+        patches = self._mock_all_checks()
+        for p in patches:
+            p.start()
+        try:
+            self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        code, out, err = self._run_readiness_banner()
+        self.assertEqual(code, 0)
+        self.assertEqual(err, "")
+        self.assertEqual(out, sfx.render_readiness_text(self._read_report(), color=False) + "\n")
+        self.assertIn("Ready to build on Salesforce?", out)
+
+    def test_readiness_banner_fails_open_with_a_pointer_when_no_report_exists(self):
+        # No check-tools run in this cwd → no persisted report. The command stays
+        # fail-open: nothing on stdout, a one-line pointer to check-tools on stderr,
+        # exit 2. The check-tools JSON, not this banner, is the authoritative result.
+        code, out, err = self._run_readiness_banner()
+        self.assertEqual(code, 2)
+        self.assertEqual(out, "")
+        self.assertIn("check-tools", err)
+
+    def test_check_tools_writes_ready_verdict_when_all_green(self):
+        # No critical and no warn rows (the MCP process row is info, which does NOT
+        # count) → readiness is a pass, with a toolchain signature and timestamp.
+        patches = self._mock_all_checks()
+        for p in patches:
+            p.start()
+        try:
+            report = self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        self.assertNotIn("diagnostic", report)  # nothing critical
+        verdict = self._read_verdict()
+        self.assertTrue(verdict["ready"])
+        self.assertEqual(verdict["needsAttention"], [])
+        self.assertIn("signature", verdict)
+        self.assertIn("checkedAt", verdict)
+
+    def test_check_tools_writes_not_ready_when_a_tool_is_critical(self):
+        git_missing = {"name": "Git", "status": "critical", "version": None, "message": "Not found"}
+        patches = self._mock_all_checks(git=git_missing)
+        for p in patches:
+            p.start()
+        try:
+            self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        verdict = self._read_verdict()
+        self.assertFalse(verdict["ready"])
+        self.assertIn("Git", verdict["needsAttention"])
+
+    def test_check_tools_warn_row_is_ready_but_flagged(self):
+        # A 🟡 warn (a non-LTS Node, an outdated-but-working CLI) is ADVISORY, not a
+        # blocker: it is surfaced in needsAttention for the banner, but readiness
+        # stays True and blockers is empty, so the scaffold gate never blocks on it.
+        cli_outdated = {"name": "Salesforce CLI", "status": "warn", "version": "2.1",
+                        "message": "Version 2.1 is outdated"}
+        patches = self._mock_all_checks(cli=cli_outdated)
+        for p in patches:
+            p.start()
+        try:
+            self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        verdict = self._read_verdict()
+        self.assertTrue(verdict["ready"])                          # warn alone never blocks
+        self.assertEqual(verdict["blockers"], [])                  # nothing critical
+        self.assertIn("Salesforce CLI", verdict["needsAttention"])  # still surfaced
+
+    def test_check_tools_blockers_are_critical_only_not_warnings(self):
+        # When a critical AND a warn coexist, ready is False (the critical blocks)
+        # but `blockers` names ONLY the critical — the warn stays advisory in
+        # needsAttention so the scaffold-gate block never misattributes it.
+        git_missing = {"name": "Git", "status": "critical", "version": None, "message": "Not found"}
+        cli_warn = {"name": "Salesforce CLI", "status": "warn", "version": "2.1",
+                    "message": "Version 2.1 is outdated"}
+        patches = self._mock_all_checks(git=git_missing, cli=cli_warn)
+        for p in patches:
+            p.start()
+        try:
+            self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        verdict = self._read_verdict()
+        self.assertFalse(verdict["ready"])
+        self.assertEqual(verdict["blockers"], ["Git"])              # critical only
+        self.assertIn("Git", verdict["needsAttention"])
+        self.assertIn("Salesforce CLI", verdict["needsAttention"])  # warn surfaced, not a blocker
+
+    def test_check_tools_persists_the_full_report_for_the_paint_hook(self):
+        # The readiness-paint PostToolUse hook renders the banner from this file — a
+        # PostToolUse payload carries only the executed command, never the scan's
+        # stdout, so the report must be persisted for the hook to read back. It is
+        # the same object the scan prints to stdout.
+        patches = self._mock_all_checks()
+        for p in patches:
+            p.start()
+        try:
+            report = self._run_check_tools()
+        finally:
+            for p in patches:
+                p.stop()
+        self.assertEqual(self._read_report(), report)
+        self.assertIn("tools", self._read_report())
+
     def test_sf_cli_ok_when_cmd_shim_resolves(self):
         version_out = "@salesforce/cli/2.100.0 win32-x64 node-v20.0.0"
         with mock.patch.object(sfx, "resolve_executable", return_value=r"C:\tools\sf.cmd"), \
@@ -612,6 +780,811 @@ class CheckToolsTests(unittest.TestCase):
         diag = report["diagnostic"]
         for key in ("platform", "shell", "cwd", "pluginRoot", "resolvedExecutables"):
             self.assertIn(key, diag)
+
+
+class ReadinessStateTests(unittest.TestCase):
+    """The cached readiness verdict mirrors the CLI-update state: cwd-relative
+    .sf/ JSON, fail-open read, signature-gated freshness. The load-bearing rule is
+    the honesty invariant — an absent or corrupt verdict, or a not-ready one, is
+    NEVER treated as a pass."""
+
+    def setUp(self):
+        self._prev_cwd = os.getcwd()
+        self._tmp = tempfile.TemporaryDirectory()
+        os.chdir(self._tmp.name)
+
+    def tearDown(self):
+        os.chdir(self._prev_cwd)
+        self._tmp.cleanup()
+
+    def _readiness_files(self):
+        directory = Path(".sf")
+        return sorted(path.name for path in directory.iterdir()) if directory.exists() else []
+
+    def test_record_and_load_roundtrip(self):
+        self.assertTrue(sfx._record_readiness_verdict(True, [], "sig-1"))
+        state = sfx._load_readiness_state()
+        self.assertTrue(state["ready"])
+        self.assertEqual(state["signature"], "sig-1")
+        self.assertEqual(state["needsAttention"], [])
+        self.assertIn("checkedAt", state)
+        self.assertEqual(self._readiness_files(), ["environment-readiness.json"])
+
+    def test_blockers_default_to_needs_attention_when_omitted(self):
+        # Back-compat: a caller that doesn't distinguish severities (no blockers arg)
+        # gets blockers == needsAttention, so the gate still names those.
+        sfx._record_readiness_verdict(False, ["Git"], "sig-1")
+        self.assertEqual(sfx._load_readiness_state()["blockers"], ["Git"])
+
+    def test_blockers_recorded_distinct_from_needs_attention(self):
+        # A warn-only verdict: not-green (needsAttention) yet no blockers, so ready
+        # can honestly be True — this is the shape a warn-only scan writes.
+        sfx._record_readiness_verdict(True, ["Node.js"], "sig-1", blockers=[])
+        state = sfx._load_readiness_state()
+        self.assertTrue(state["ready"])
+        self.assertEqual(state["needsAttention"], ["Node.js"])
+        self.assertEqual(state["blockers"], [])
+
+    def test_is_fresh_requires_a_pass_and_matching_signature(self):
+        sfx._record_readiness_verdict(True, [], "sig-1")
+        self.assertTrue(sfx._readiness_is_fresh("sig-1"))
+        # Toolchain changed since the scan → the cached green no longer applies.
+        self.assertFalse(sfx._readiness_is_fresh("sig-2"))
+
+    def test_not_ready_verdict_is_never_fresh(self):
+        sfx._record_readiness_verdict(False, ["Git"], "sig-1")
+        self.assertFalse(sfx._readiness_is_fresh("sig-1"))
+
+    def test_absent_verdict_reads_empty_and_is_never_a_pass(self):
+        # No file written yet → unchecked → honest {} → never fresh (never green).
+        self.assertEqual(sfx._load_readiness_state(), {})
+        self.assertFalse(sfx._readiness_is_fresh("anything"))
+
+    def test_corrupt_verdict_reads_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        (Path(".sf") / "environment-readiness.json").write_text("{ not json")
+        self.assertEqual(sfx._load_readiness_state(), {})
+        self.assertFalse(sfx._readiness_is_fresh("anything"))
+
+    def test_oversized_verdict_reads_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        padding = "x" * sfx._READINESS_JSON_MAX_BYTES
+        (Path(".sf") / "environment-readiness.json").write_text(
+            json.dumps({"ready": True, "signature": "sig-1", "padding": padding})
+        )
+        self.assertEqual(sfx._load_readiness_state(), {})
+        self.assertFalse(sfx._readiness_is_fresh("sig-1"))
+
+    def test_unreadable_verdict_reads_empty(self):
+        with mock.patch.object(sfx.os, "open", side_effect=OSError("unreadable")) as opened:
+            self.assertEqual(sfx._load_readiness_state(), {})
+        opened.assert_called_once()
+
+    def test_reader_rejects_fifo_mode_without_reading_and_uses_safe_flags(self):
+        binary_flag = 1 << 29
+        fifo_stat = type("FifoStat", (), {"st_mode": stat.S_IFIFO, "st_size": 0})()
+        with mock.patch.object(sfx.os, "O_BINARY", binary_flag, create=True), \
+                mock.patch.object(sfx.os, "open", return_value=71) as opened, \
+                mock.patch.object(sfx.os, "fstat", return_value=fifo_stat), \
+                mock.patch.object(sfx.os, "read") as read, \
+                mock.patch.object(sfx.os, "close") as close:
+            self.assertEqual(sfx._load_bounded_small_json(Path("readiness-fifo")), {})
+            flags = opened.call_args.args[1]
+            for name in ("O_NOFOLLOW", "O_NONBLOCK", "O_CLOEXEC", "O_BINARY"):
+                flag = getattr(sfx.os, name, 0)
+                if flag:
+                    self.assertTrue(flags & flag, name)
+            read.assert_not_called()
+            close.assert_called_once_with(71)
+
+    def test_reader_does_not_follow_symlink_when_no_follow_is_supported(self):
+        if not hasattr(os, "O_NOFOLLOW") or not hasattr(os, "symlink"):
+            self.skipTest("no-follow symlink opens are not supported")
+        target = Path("readiness-target.json")
+        target.write_text(json.dumps({"ready": True}))
+        link = Path("readiness-link.json")
+        try:
+            link.symlink_to(target.name)
+        except OSError as error:
+            self.skipTest(f"symlink creation is unavailable: {error}")
+
+        self.assertEqual(sfx._load_bounded_small_json(link), {})
+        self.assertEqual(json.loads(target.read_text()), {"ready": True})
+
+    def test_symlinked_readiness_parent_fails_open_and_writes_fail_silent(self):
+        if not hasattr(os, "symlink"):
+            self.skipTest("symlinks are not supported")
+        outside = Path(self._tmp.name).parent / f"{Path(self._tmp.name).name}-outside-sf"
+        outside.mkdir()
+        target = outside / "environment-readiness-report.json"
+        original = json.dumps({"tools": [{"name": "outside"}]}).encode()
+        target.write_bytes(original)
+        try:
+            Path(".sf").symlink_to(outside, target_is_directory=True)
+        except OSError as error:
+            target.unlink()
+            outside.rmdir()
+            self.skipTest(f"directory symlink creation is unavailable: {error}")
+        try:
+            self.assertEqual(sfx._load_readiness_report(), {})
+            self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "inside"}]}))
+            # Simulate Python's native-Windows no-dir-fd path: identity and reparse
+            # checks must reject the same hostile parent without touching its target.
+            with mock.patch.object(sfx, "_PHASE_DIR_FD_SUPPORTED", False):
+                self.assertEqual(sfx._load_readiness_report(), {})
+                self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "fallback"}]}))
+            self.assertEqual(target.read_bytes(), original)
+            self.assertEqual(sorted(path.name for path in outside.iterdir()), [target.name])
+        finally:
+            Path(".sf").unlink()
+            target.unlink()
+            outside.rmdir()
+
+    def test_valid_non_object_json_roots_read_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        path = Path(".sf") / "environment-readiness.json"
+        for value in ([{"ready": True}], "ready", 1, True, None):
+            with self.subTest(value=value):
+                path.write_text(json.dumps(value))
+                self.assertEqual(sfx._load_readiness_state(), {})
+
+    def test_deeply_nested_json_recursion_reads_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        path = Path(".sf") / "environment-readiness.json"
+        path.write_text("[" * 10000 + "{}" + "]" * 10000)
+        self.assertEqual(sfx._load_readiness_state(), {})
+
+    def test_report_record_and_load_roundtrip(self):
+        # The FULL report is persisted next to the coarse verdict so the readiness-
+        # paint hook can render the banner from it (the hook payload carries only the
+        # command, never the scan's stdout). Same cwd-relative .sf/, fail-open read.
+        report = {"tools": [{"name": "Git", "status": "ok", "version": "git version 2.50.1"}]}
+        self.assertTrue(sfx._record_readiness_report(report))
+        self.assertEqual(sfx._load_readiness_report(), report)
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_atomic_replace_exposes_only_complete_old_or_new_report(self):
+        old = {"tools": [{"name": "Git", "status": "warn", "message": "old"}]}
+        new = {"tools": [{"name": "Git", "status": "ok", "message": "new"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        path = Path(".sf") / "environment-readiness-report.json"
+        prior = path.read_bytes()
+        real_replace = os.replace
+        observations = []
+
+        def observe_replace(source, destination, **kwargs):
+            source_path = path.parent / source if kwargs.get("src_dir_fd") is not None else Path(source)
+            observations.append((path.read_bytes(), source_path.read_bytes()))
+            real_replace(source, destination, **kwargs)
+
+        with mock.patch.object(sfx.os, "replace", side_effect=observe_replace):
+            self.assertTrue(sfx._record_readiness_report(new))
+
+        self.assertEqual(observations[0][0], prior)
+        self.assertEqual(json.loads(observations[0][1]), new)
+        self.assertEqual(sfx._load_readiness_report(), new)
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_readiness_temp_is_exclusive_owner_only_and_cleaned_after_success(self):
+        report = {"tools": [{"name": "Git", "status": "ok"}]}
+        real_open = os.open
+        real_replace = os.replace
+        temp_modes = []
+
+        def observe_replace(source, destination, **kwargs):
+            stat_kwargs = ({"dir_fd": kwargs["src_dir_fd"]}
+                           if kwargs.get("src_dir_fd") is not None else {})
+            temp_modes.append(os.stat(source, **stat_kwargs).st_mode & 0o777)
+            real_replace(source, destination, **kwargs)
+
+        with mock.patch.object(sfx.os, "open", wraps=real_open) as opened, \
+                mock.patch.object(sfx.os, "replace", side_effect=observe_replace):
+            self.assertTrue(sfx._record_readiness_report(report))
+
+        temp_open = next(
+            call for call in opened.call_args_list
+            if Path(call.args[0]).name.startswith(".environment-readiness-report.json.")
+        )
+        self.assertTrue(temp_open.args[1] & os.O_EXCL)
+        self.assertEqual(temp_open.args[2], 0o600)
+        self.assertEqual(temp_modes, [0o600])
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_writer_uses_binary_flag_when_available(self):
+        binary_flag = 1 << 29
+        directory = types.SimpleNamespace(fd=None)
+        with mock.patch.object(sfx.os, "O_BINARY", binary_flag, create=True), \
+                mock.patch.object(sfx, "_open_phase_directory", return_value=directory), \
+                mock.patch.object(
+                    sfx, "_open_phase_child", side_effect=OSError("stop")
+                ) as opened:
+            self.assertFalse(sfx._record_readiness_report({"tools": []}))
+
+        self.assertTrue(opened.call_args.args[2] & binary_flag)
+
+    def test_temp_file_collision_is_preserved_and_destination_unchanged(self):
+        old = {"tools": [{"name": "Git", "status": "warn", "message": "old"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        destination = Path(".sf") / "environment-readiness-report.json"
+        prior = destination.read_bytes()
+        collision = destination.with_name(f".{destination.name}.collision.tmp")
+        collision_bytes = b"owned by another writer"
+        collision.write_bytes(collision_bytes)
+
+        with mock.patch.object(sfx.secrets, "token_hex", return_value="collision"), \
+                mock.patch.object(sfx.os, "replace") as replace:
+            self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "Node.js"}]}))
+
+        replace.assert_not_called()
+        self.assertEqual(destination.read_bytes(), prior)
+        self.assertEqual(collision.read_bytes(), collision_bytes)
+
+    def test_temp_directory_collision_is_not_removed(self):
+        destination = Path(".sf") / "environment-readiness-report.json"
+        destination.parent.mkdir(parents=True)
+        collision = destination.with_name(f".{destination.name}.collision.tmp")
+        collision.mkdir()
+
+        with mock.patch.object(sfx.secrets, "token_hex", return_value="collision"):
+            self.assertFalse(sfx._record_readiness_report({"tools": []}))
+
+        self.assertTrue(collision.is_dir())
+        self.assertFalse(destination.exists())
+
+    def test_temp_symlink_collision_is_not_removed_or_followed(self):
+        if not hasattr(os, "symlink"):
+            self.skipTest("symlinks are not supported")
+        destination = Path(".sf") / "environment-readiness-report.json"
+        destination.parent.mkdir(parents=True)
+        target = destination.parent / "collision-target"
+        target_bytes = b"must remain untouched"
+        target.write_bytes(target_bytes)
+        collision = destination.with_name(f".{destination.name}.collision.tmp")
+        try:
+            collision.symlink_to(target.name)
+        except OSError as error:
+            self.skipTest(f"symlink creation is unavailable: {error}")
+
+        with mock.patch.object(sfx.secrets, "token_hex", return_value="collision"):
+            self.assertFalse(sfx._record_readiness_report({"tools": []}))
+
+        self.assertTrue(collision.is_symlink())
+        self.assertEqual(target.read_bytes(), target_bytes)
+        self.assertFalse(destination.exists())
+
+    def test_partial_writes_are_completed_before_replace(self):
+        report = {"tools": [{"name": "Git", "status": "ok", "message": "complete"}]}
+        real_write = os.write
+        writes = []
+
+        def write_small_chunk(fd, value):
+            chunk = bytes(value[:min(7, len(value))])
+            writes.append(chunk)
+            return real_write(fd, chunk)
+
+        with mock.patch.object(sfx.os, "write", side_effect=write_small_chunk):
+            self.assertTrue(sfx._record_readiness_report(report))
+
+        self.assertGreater(len(writes), 1)
+        self.assertEqual(sfx._load_readiness_report(), report)
+
+    def test_failed_short_write_preserves_prior_report_and_cleans_temp(self):
+        old = {"tools": [{"name": "Git", "status": "warn", "message": "old"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        path = Path(".sf") / "environment-readiness-report.json"
+        prior = path.read_bytes()
+        real_write = os.write
+        first_write = True
+
+        def short_then_stop(fd, value):
+            nonlocal first_write
+            if first_write:
+                first_write = False
+                chunk = bytes(value[:max(1, len(value) // 2)])
+                return real_write(fd, chunk)
+            return 0
+
+        with mock.patch.object(sfx.os, "write", side_effect=short_then_stop):
+            self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "Node.js"}]}))
+
+        self.assertEqual(path.read_bytes(), prior)
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_failed_fsync_preserves_prior_report_and_cleans_temp(self):
+        old = {"tools": [{"name": "Git", "status": "warn", "message": "old"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        path = Path(".sf") / "environment-readiness-report.json"
+        prior = path.read_bytes()
+
+        with mock.patch.object(sfx.os, "fsync", side_effect=OSError("fsync failed")):
+            self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "Node.js"}]}))
+
+        self.assertEqual(path.read_bytes(), prior)
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_failed_replace_preserves_prior_report_and_cleans_temp(self):
+        old = {"tools": [{"name": "Git", "status": "warn", "message": "old"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        path = Path(".sf") / "environment-readiness-report.json"
+        prior = path.read_bytes()
+
+        with mock.patch.object(sfx.os, "replace", side_effect=OSError("replace failed")):
+            self.assertFalse(sfx._record_readiness_report({"tools": [{"name": "Node.js"}]}))
+
+        self.assertEqual(path.read_bytes(), prior)
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_directory_sync_failure_is_reported_and_temp_is_cleaned(self):
+        with mock.patch.object(sfx, "_sync_phase_directory", return_value=False) as sync:
+            self.assertFalse(sfx._record_readiness_report({"tools": []}))
+        sync.assert_called_once()
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_recursive_report_is_rejected_before_filesystem_mutation(self):
+        recursive = {"tools": []}
+        cursor = recursive
+        for _ in range(10000):
+            child = {}
+            cursor["child"] = child
+            cursor = child
+        with mock.patch.object(sfx.os, "open", wraps=os.open) as opened:
+            self.assertFalse(sfx._record_readiness_report(recursive))
+        opened.assert_not_called()
+        self.assertFalse(Path(".sf").exists())
+
+    def test_oversized_report_write_is_rejected_before_mutation(self):
+        old = {"tools": [{"name": "Git", "status": "ok"}]}
+        self.assertTrue(sfx._record_readiness_report(old))
+        path = Path(".sf") / "environment-readiness-report.json"
+        prior = path.read_bytes()
+        oversized = {"tools": [], "padding": "x" * sfx._READINESS_JSON_MAX_BYTES}
+
+        with mock.patch.object(sfx.os, "open", wraps=os.open) as opened:
+            self.assertFalse(sfx._record_readiness_report(oversized))
+
+        self.assertEqual(path.read_bytes(), prior)
+        opened.assert_not_called()
+        self.assertEqual(self._readiness_files(), ["environment-readiness-report.json"])
+
+    def test_absent_report_reads_empty(self):
+        # No scan has run yet → honest {} (the paint hook then stays silent).
+        self.assertEqual(sfx._load_readiness_report(), {})
+
+    def test_corrupt_report_reads_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        (Path(".sf") / "environment-readiness-report.json").write_text("{ not json")
+        self.assertEqual(sfx._load_readiness_report(), {})
+
+    def test_oversized_report_reads_empty(self):
+        Path(".sf").mkdir(parents=True, exist_ok=True)
+        padding = "x" * sfx._READINESS_JSON_MAX_BYTES
+        (Path(".sf") / "environment-readiness-report.json").write_text(
+            json.dumps({"tools": [], "padding": padding})
+        )
+        self.assertEqual(sfx._load_readiness_report(), {})
+
+    def test_unreadable_report_reads_empty(self):
+        with mock.patch.object(sfx.os, "open", side_effect=OSError("unreadable")) as opened:
+            self.assertEqual(sfx._load_readiness_report(), {})
+        opened.assert_called_once()
+
+
+class WelcomeReadinessTests(unittest.TestCase):
+    """`_welcome_readiness` is the cheap 3-way signal the front-of-journey surfaces
+    read: it resolves `sf` on PATH and consults a SESSION-SCOPED env-verified marker,
+    with NO subprocess. "ready" is earned only by a check-tools pass THIS session
+    (recorded by the readiness-paint hook), so a new session re-verifies — readiness
+    is a current property, never trusted from a durable cross-session cache."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self._orig_marker_dir = sfx._WELCOME_MARKER_DIR
+        self._orig_sid = sfx._CURRENT_SESSION_ID
+        sfx._WELCOME_MARKER_DIR = Path(self._tmp.name)
+        sfx._CURRENT_SESSION_ID = "sess-1"
+
+    def tearDown(self):
+        sfx._WELCOME_MARKER_DIR = self._orig_marker_dir
+        sfx._CURRENT_SESSION_ID = self._orig_sid
+        self._tmp.cleanup()
+
+    def test_absent_when_sf_not_on_path(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value=None):
+            self.assertEqual(sfx._welcome_readiness(), "absent")
+
+    def test_unverified_when_present_but_not_checked_this_session(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            # No env-verified marker recorded for this session yet.
+            self.assertEqual(sfx._welcome_readiness(), "unverified")
+
+    def test_ready_when_checked_this_session(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_env_verified("sess-1")
+            self.assertEqual(sfx._welcome_readiness(), "ready")
+
+    def test_marker_from_another_session_does_not_carry_over(self):
+        # Readiness is session-scoped: a pass recorded under a DIFFERENT session id
+        # never counts for this one, so a fresh session honestly re-verifies.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_env_verified("sess-OTHER")
+            self.assertEqual(sfx._welcome_readiness(), "unverified")
+
+    def test_absent_wins_even_with_a_marker(self):
+        # `sf` off PATH is definitively not-ready, whatever any marker says.
+        sfx._record_env_verified("sess-1")
+        with mock.patch.object(sfx, "resolve_executable", return_value=None):
+            self.assertEqual(sfx._welcome_readiness(), "absent")
+
+    def test_no_session_id_reads_unverified(self):
+        # The non-hook Bash-subcommand path carries no session id; with nothing to
+        # key a marker on, readiness reads conservatively as unverified (never ready).
+        sfx._CURRENT_SESSION_ID = ""
+        sfx._record_env_verified("sess-1")   # a marker exists, but not for ""
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            self.assertEqual(sfx._welcome_readiness(), "unverified")
+
+
+class HasAuthedOrgTests(unittest.TestCase):
+    """`_has_authed_org` is the cheap, subprocess-free "has the user ever authed an
+    org" signal. It is auth HISTORY — deliberately DISTINCT from `_has_target_org`
+    (the current-target signal that lights the Connect stage); this one only tunes
+    the Connect CTA copy (a returning developer with orgs authed is invited to pick
+    one as the target; a first-timer to authenticate one). It lists the global auth
+    store (~/.sfdx) — a per-USER, cwd-independent fact — and counts a *.json off the
+    non-auth denylist ONLY when its content carries a stored credential. A tokenless
+    cache the CLI co-locates there (notably the org-id-keyed *.sandbox.json sandbox-
+    process record, which survives `sf org logout --all`) must NOT read as an org, or
+    the returning-developer CTA would show falsely. Home is patched to a temp dir so
+    the real store is never read (determinism on any machine / CI)."""
+
+    # A credential-bearing auth file (the OAuth shape); any of _AUTH_CREDENTIAL_KEYS
+    # would do — this mirrors what `sf org login web` persists.
+    AUTH_CONTENT = {"accessToken": "00Dxx!redacted", "refreshToken": "5Aep!redacted",
+                    "orgId": "00Dxx0000001gPFEAY", "instanceUrl": "https://x.my.salesforce.com"}
+    # The exact key set sf writes into the tokenless *.sandbox.json process cache —
+    # note `username` is present (so a "has a username" heuristic would false-positive)
+    # but NONE of _AUTH_CREDENTIAL_KEYS is.
+    SANDBOX_CACHE = {"prodOrgUsername": "admin@acme.com", "sandboxInfoId": "0GRxx",
+                     "sandboxName": "mySandbox", "sandboxOrgId": "00Dxx", "sandboxProcessId": "0GQxx",
+                     "sandboxUsername": "admin@acme.com.mysandbox", "timestamp": "2026-07-27T00:00:00Z",
+                     "username": "admin@acme.com.mysandbox"}
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.home = Path(self._tmp.name)
+        self.sfdx = self.home / ".sfdx"
+        self._home_patch = mock.patch.object(sfx.Path, "home", return_value=self.home)
+        self._home_patch.start()
+
+    def tearDown(self):
+        self._home_patch.stop()
+        self._tmp.cleanup()
+
+    def _write(self, name, *, as_dir=False, content=None):
+        """Create ~/.sfdx/<name>. Files default to a credential-bearing auth body so a
+        plain _write() is a real authentication; pass content={...} for a tokenless
+        cache or content='...' for raw (non-JSON) bytes."""
+        target = self.sfdx / name
+        self.sfdx.mkdir(parents=True, exist_ok=True)
+        if as_dir:
+            target.mkdir()
+            return
+        if content is None:
+            content = self.AUTH_CONTENT
+        body = json.dumps(content) if isinstance(content, (dict, list)) else str(content)
+        target.write_text(body, encoding="utf-8")
+
+    def test_true_when_a_username_keyed_auth_file_present(self):
+        self._write("jdoe@acme.example.com.json")
+        self.assertTrue(sfx._has_authed_org())
+
+    def test_true_for_org_id_and_scratch_keyed_auth(self):
+        # Auth files are keyed by username, org-id, or scratch-org id — the KEY shape is
+        # irrelevant; a credential in the body is what counts, so a new key shape is
+        # still a connection. Presence is monotonic, so each shape in turn stays True.
+        for key in ("00Dxx0000001gPFEAY.json", "test-abc123@example.com.json"):
+            with self.subTest(key=key):
+                self._write(key)
+                self.assertTrue(sfx._has_authed_org())
+
+    def test_true_for_jwt_and_password_only_credentials(self):
+        # JWT persists a private key (no refresh token); username-password / scratch
+        # orgs persist a password. Either alone is a real, durable authentication.
+        for content in ({"privateKey": "-----BEGIN-redacted", "username": "svc@acme.com"},
+                        {"password": "!redacted", "username": "test@scratch.com"}):
+            with self.subTest(cred=sorted(content)[0]):
+                self.sfdx.mkdir(parents=True, exist_ok=True)
+                for stale in self.sfdx.glob("*.json"):
+                    stale.unlink()
+                self._write("cred.json", content=content)
+                self.assertTrue(sfx._has_authed_org())
+
+    def test_false_for_tokenless_sandbox_process_cache(self):
+        # THE N4 regression: an org-id-keyed *.sandbox.json is off the denylist and
+        # is_file()==True, but it carries no credential, so it must not light Connect.
+        # This is the state left behind by `sf org create sandbox` + `sf org logout`.
+        self._write("00DXK0000011cVh2AI.sandbox.json", content=self.SANDBOX_CACHE)
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_false_for_credential_less_json(self):
+        # A *.json off the denylist that carries no credential (e.g. a stray metadata
+        # blob) is not an authentication — content, not filename, is the gate.
+        self._write("orphan.json", content={"orgId": "00Dxx", "username": "a@b.c"})
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_sandbox_cache_alongside_a_real_auth_returns_true(self):
+        # The real auth file still wins — the tokenless cache neither adds nor masks.
+        self._write("00DXK0000011cVh2AI.sandbox.json", content=self.SANDBOX_CACHE)
+        self._write("jdoe@acme.example.com.json")
+        self.assertTrue(sfx._has_authed_org())
+
+    def test_false_when_only_non_auth_files_present(self):
+        # The bookkeeping files sf drops next to auth entries must NOT read as an org.
+        for name in sfx._NON_AUTH_SFDX_FILES:
+            self._write(name)
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_mixed_auth_and_non_auth_returns_true(self):
+        for name in sfx._NON_AUTH_SFDX_FILES:
+            self._write(name)
+        self._write("jdoe@acme.example.com.json")
+        self.assertTrue(sfx._has_authed_org())
+
+    def test_false_when_sfdx_dir_absent(self):
+        # No ~/.sfdx at all → iterdir raises → fails soft to False, never raises.
+        self.assertFalse(self.sfdx.exists())
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_false_when_sfdx_dir_empty(self):
+        self.sfdx.mkdir(parents=True)
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_corrupt_or_oversized_json_fails_soft_to_false(self):
+        # An unreadable / non-JSON *.json off the denylist must be skipped, never raise.
+        self._write("broken.json", content="{not: valid json")
+        self.assertFalse(sfx._has_authed_org())
+
+    def test_non_json_files_and_json_subdirectories_do_not_count(self):
+        # A .json-suffixed *directory* (is_file() False) and a non-json file must both
+        # be ignored — only regular *.json auth entries light Connect.
+        self._write("notes.txt")
+        self._write("scratch-orgs.json", as_dir=True)
+        self.assertFalse(sfx._has_authed_org())
+
+
+class HasTargetOrgTests(unittest.TestCase):
+    """`_has_target_org` is the CURRENT-target signal that lights the Connect stage —
+    "is an org set as the default/target right now", distinct from `_has_authed_org`'s
+    auth history. Subprocess-free: it reads the local project config first, then the
+    global user config, honoring the modern `sf` `target-org` key and the legacy sfdx
+    `defaultusername`. A configured-but-offline target still counts as set; a missing /
+    empty / corrupt config fails soft to False. Home AND the project root are temp
+    dirs so the real config is never read (determinism on any machine / CI)."""
+
+    def setUp(self):
+        self._home_tmp = tempfile.TemporaryDirectory()
+        self._root_tmp = tempfile.TemporaryDirectory()
+        self.home = Path(self._home_tmp.name)
+        self.root = Path(self._root_tmp.name)
+        self._home_patch = mock.patch.object(sfx.Path, "home", return_value=self.home)
+        self._home_patch.start()
+
+    def tearDown(self):
+        self._home_patch.stop()
+        self._home_tmp.cleanup()
+        self._root_tmp.cleanup()
+
+    def _write(self, base, rel, content):
+        path = base / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(content) if isinstance(content, dict) else str(content),
+                        encoding="utf-8")
+
+    def test_false_when_no_config_anywhere(self):
+        self.assertFalse(sfx._has_target_org(self.root))
+
+    def test_true_from_local_sf_config(self):
+        self._write(self.root, ".sf/config.json", {"target-org": "acme-dev"})
+        self.assertTrue(sfx._has_target_org(self.root))
+
+    def test_true_from_global_sf_config(self):
+        self._write(self.home, ".sf/config.json", {"target-org": "acme-dev"})
+        self.assertTrue(sfx._has_target_org(self.root))
+
+    def test_true_from_legacy_sfdx_defaultusername(self):
+        # A project configured by older sfdx tooling still counts as having a target.
+        self._write(self.root, ".sfdx/sfdx-config.json", {"defaultusername": "a@b.c"})
+        self.assertTrue(sfx._has_target_org(self.root))
+
+    def test_false_when_config_present_but_no_target_key(self):
+        # An empty config, or one carrying only unrelated keys, is not a target.
+        self._write(self.root, ".sf/config.json", {})
+        self._write(self.home, ".sf/config.json", {"org-api-version": "60.0"})
+        self.assertFalse(sfx._has_target_org(self.root))
+
+    def test_false_when_target_value_is_empty(self):
+        # A present-but-empty target-org must not read as set.
+        self._write(self.root, ".sf/config.json", {"target-org": ""})
+        self.assertFalse(sfx._has_target_org(self.root))
+
+    def test_corrupt_config_fails_soft_to_false(self):
+        self._write(self.root, ".sf/config.json", "{ not json")
+        self.assertFalse(sfx._has_target_org(self.root))
+
+    def test_local_target_counts_even_when_global_is_empty(self):
+        # A configured-but-offline target is still "set" — reachability isn't tested
+        # here; the org band annotates that separately.
+        self._write(self.home, ".sf/config.json", {})
+        self._write(self.root, ".sf/config.json", {"target-org": "offline-org"})
+        self.assertTrue(sfx._has_target_org(self.root))
+
+    def test_configured_alias_returns_the_target_name(self):
+        # _has_target_org is a thin boolean over _configured_target_alias, which returns
+        # the NAME so the org band can show *which* org is targeted (not just that one is).
+        self._write(self.root, ".sf/config.json", {"target-org": "acme-dev"})
+        self.assertEqual(sfx._configured_target_alias(self.root), "acme-dev")
+
+    def test_configured_alias_is_none_when_nothing_is_set(self):
+        self.assertIsNone(sfx._configured_target_alias(self.root))
+
+    def test_configured_alias_prefers_local_over_global(self):
+        self._write(self.home, ".sf/config.json", {"target-org": "global-org"})
+        self._write(self.root, ".sf/config.json", {"target-org": "local-org"})
+        self.assertEqual(sfx._configured_target_alias(self.root), "local-org")
+
+    def test_configured_alias_ignores_empty_and_whitespace_values(self):
+        self._write(self.root, ".sf/config.json", {"target-org": "   "})
+        self.assertIsNone(sfx._configured_target_alias(self.root))
+
+
+class ToolchainSignatureTests(unittest.TestCase):
+    """The freshness signature must be STABLE across shells: per-shell version-manager
+    shims (fnm, nvm, pyenv) resolve to different symlink paths per invocation but point
+    at the same real executable. Canonicalizing with realpath collapses them, so a
+    cached 'ready' verdict isn't spuriously invalidated between the scan and a later
+    welcome — while a genuine version change (a new realpath target) still invalidates."""
+
+    def test_signature_canonicalizes_symlinks_to_the_real_binary(self):
+        with tempfile.TemporaryDirectory() as d:
+            real = Path(d) / "sf-real"
+            real.write_text("#!/bin/sh\n")
+            # Two distinct shim paths that both point at the same real binary — the
+            # shape of per-shell version-manager churn.
+            shim_a = Path(d) / "shim-a"
+            shim_b = Path(d) / "shim-b"
+            os.symlink(real, shim_a)
+            os.symlink(real, shim_b)
+            with mock.patch.object(
+                sfx, "resolve_executable",
+                side_effect=lambda t: str(shim_a) if t == "sf" else None,
+            ):
+                sig_a = sfx._toolchain_signature()
+            with mock.patch.object(
+                sfx, "resolve_executable",
+                side_effect=lambda t: str(shim_b) if t == "sf" else None,
+            ):
+                sig_b = sfx._toolchain_signature()
+            # Different shims, same real binary → identical signature (the stability).
+            self.assertEqual(sig_a, sig_b)
+            self.assertIn(os.path.realpath(str(real)), sig_a)   # keyed on the target
+            self.assertNotIn("shim-a", sig_a)                    # not on the volatile shim
+
+    def test_missing_tool_contributes_empty_segment_not_a_crash(self):
+        # resolve_executable → None for every tool must yield a stable all-empty
+        # signature (no realpath call on a falsy path), never an exception.
+        with mock.patch.object(sfx, "resolve_executable", return_value=None):
+            self.assertEqual(sfx._toolchain_signature(), "|||")
+
+
+class ScaffoldGateTests(unittest.TestCase):
+    """The PreToolUse backstop on `sf project generate` — the scaffold chokepoint of
+    the front-of-journey readiness floor. It NEVER runs the scan (PATH lookup + one
+    small verdict read only), self-gates on the command, and grades block/warn/allow
+    by how cheaply it can prove the environment broken. Fails OPEN on any error."""
+
+    def setUp(self):
+        self._prev_cwd = os.getcwd()
+        self._tmp = tempfile.TemporaryDirectory()
+        os.chdir(self._tmp.name)
+
+    def tearDown(self):
+        os.chdir(self._prev_cwd)
+        self._tmp.cleanup()
+
+    def run_gate(self, command):
+        payload = io.StringIO(json.dumps({"tool_input": {"command": command}}))
+        out = io.StringIO()
+        with mock.patch.object(sfx.sys, "stdin", payload), redirect_stdout(out):
+            code = sfx.cmd_scaffold_gate()
+        return code, json.loads(out.getvalue())
+
+    def _decision(self, result):
+        return result.get("hookSpecificOutput", {}).get("permissionDecision")
+
+    def test_non_scaffold_command_stays_silent_without_touching_path_or_verdict(self):
+        # Some Claude Code builds fire every Bash PreToolUse hook — the self-gate
+        # must let unrelated commands through without even resolving the CLI.
+        for cmd in ("cd /tmp && ls", "sf org list", "sf project deploy start -o x", ""):
+            with self.subTest(cmd=cmd):
+                with mock.patch.object(sfx, "resolve_executable") as rex, \
+                        mock.patch.object(sfx, "_load_readiness_state") as lrs:
+                    code, result = self.run_gate(cmd)
+                self.assertEqual((code, result), (0, {"continue": True}))
+                rex.assert_not_called()
+                lrs.assert_not_called()
+
+    def test_absent_cli_denies_with_remediation(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value=None):
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(self._decision(result), "deny")
+        reason = result["hookSpecificOutput"]["permissionDecisionReason"]
+        self.assertIn("platform-environment-validate", reason)
+        self.assertRegex(reason, r"(?i)isn't on your path")
+
+    def test_ran_and_failed_verdict_for_this_toolchain_denies(self):
+        # A scan that RAN and FAILED under the CURRENT signature is known-broken →
+        # block, naming what needs attention.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_readiness_verdict(False, ["Git", "Node.js"], sfx._toolchain_signature())
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(self._decision(result), "deny")
+        reason = result["hookSpecificOutput"]["permissionDecisionReason"]
+        self.assertIn("Git", reason)
+        self.assertIn("Node.js", reason)
+
+    def test_fresh_pass_allows_silently(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_readiness_verdict(True, [], sfx._toolchain_signature())
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(result, {"continue": True})
+
+    def test_warn_only_verdict_allows_silently(self):
+        # THE field regression: a scan that recorded warnings but no blockers is
+        # ready=True, so scaffolding passes through untouched. This is the non-LTS
+        # Node / indeterminate source-tracking case — advisory warns must never gate.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_readiness_verdict(True, ["Node.js", "Source Tracking"],
+                                          sfx._toolchain_signature(), blockers=[])
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(result, {"continue": True})
+        self.assertIsNone(self._decision(result))
+
+    def test_block_names_only_blockers_not_advisory_warnings(self):
+        # When a real blocker and an advisory warn coexist, the deny reason names the
+        # blocker (Git) and NOT the warn (Node.js) — a block never reads as though a
+        # warning were the thing standing in the way.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_readiness_verdict(False, ["Git", "Node.js"],
+                                          sfx._toolchain_signature(), blockers=["Git"])
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(self._decision(result), "deny")
+        reason = result["hookSpecificOutput"]["permissionDecisionReason"]
+        self.assertIn("Git", reason)
+        self.assertNotIn("Node.js", reason)
+
+    def test_unverified_allows_but_nudges_the_check(self):
+        # `sf` present, no verdict → can't prove broken → ALLOW, but the model note
+        # steers toward verifying first. Never a deny.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertTrue(result.get("continue"))
+        self.assertIsNone(self._decision(result))
+        note = result["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("platform-environment-validate", note)
+
+    def test_stale_failed_verdict_does_not_block(self):
+        # A failure recorded under a DIFFERENT (since-changed) toolchain no longer
+        # describes this machine — we can't prove it's broken now, so warn, not block.
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"):
+            sfx._record_readiness_verdict(False, ["Git"], "some-other-signature")
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertTrue(result.get("continue"))
+        self.assertIsNone(self._decision(result))
+
+    def test_crash_fails_open(self):
+        with mock.patch.object(sfx, "_read_hook_payload", side_effect=RuntimeError("boom")):
+            _, result = self.run_gate("sf project generate --name acme")
+        self.assertEqual(result, {"continue": True})
 
 
 class McpHealthContractTests(unittest.TestCase):
@@ -1063,6 +2036,16 @@ class DiagnosticTests(unittest.TestCase):
         text = sfx.render_diagnostic_lines(sfx.diagnostic_context(["sf"]))
         self.assertIn("platform:", text)
         self.assertIn("resolved executables:", text)
+
+    def test_render_diagnostic_lines_wraps_wide_paths_by_terminal_cells(self):
+        wide = "界" * 80
+        text = sfx.render_diagnostic_lines({
+            "platform": "darwin", "shell": wide, "cwd": wide,
+            "pluginRoot": wide, "resolvedExecutables": {"sf": wide},
+        })
+        self.assertTrue(all(
+            sfx._terminal_cell_width(line) <= 80 for line in text.splitlines()
+        ), text)
 
 
 if __name__ == "__main__":

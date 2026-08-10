@@ -70,18 +70,27 @@ done
 echo ""
 echo "sync-discovery-catalog — end-to-end regen keeps catalog current"
 
-# Force the regen branch via a foundation-skill path; the catalog is already current,
-# so this must run generate + `git add` a no-op and leave --check passing with no net
-# change staged for discovery.json.
-before=$(git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json" 2>/dev/null || echo none)
-out=$(CATALOG_SYNC_FILES="plugins/builder/salesforce-development/skills/agentforce-generate/SKILL.md" sh "$SYNC")
-after=$(git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json" 2>/dev/null || echo none)
+# Force the regen branch via a foundation-skill path. Run against an isolated
+# temporary index seeded with the intentional worktree catalog: this test exercises
+# the hook's `git add` without ever staging or rewriting a developer's real index.
+real_tree_before=$(git write-tree)
+index_path=$(git rev-parse --git-path index)
+tmp_index=$(mktemp)
+cp "$index_path" "$tmp_index"
+GIT_INDEX_FILE="$tmp_index" git add plugins/builder/salesforce-development/catalog/discovery.json
+before=$(GIT_INDEX_FILE="$tmp_index" git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json" 2>/dev/null || echo none)
+out=$(GIT_INDEX_FILE="$tmp_index" CATALOG_SYNC_FILES="plugins/builder/salesforce-development/skills/agentforce-generate/SKILL.md" sh "$SYNC")
+after=$(GIT_INDEX_FILE="$tmp_index" git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json" 2>/dev/null || echo none)
+real_tree_after=$(git write-tree)
+rm -f "$tmp_index"
 if printf '%s' "$out" | grep -q "regenerated and staged" \
    && python3 plugins/builder/salesforce-development/scripts/discovery_catalog.py --check >/dev/null 2>&1 \
-   && [ "$before" = "$after" ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-52s → regenerated, current, no net change\n' "end-to-end regen"
+   && [ "$before" = "$after" ] \
+   && [ "$real_tree_before" = "$real_tree_after" ]; then
+  PASS=$((PASS + 1)); printf '  ok   %-52s → regenerated, current, real index untouched\n' "end-to-end regen"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-52s → out=%s before=%s after=%s\n' "end-to-end regen" "$out" "$before" "$after"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-52s → out=%s before=%s after=%s real-before=%s real-after=%s\n' \
+    "end-to-end regen" "$out" "$before" "$after" "$real_tree_before" "$real_tree_after"
 fi
 
 echo ""

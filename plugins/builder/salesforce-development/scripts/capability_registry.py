@@ -29,11 +29,21 @@ from pathlib import Path
 from typing import Optional
 from urllib.parse import unquote, urlsplit
 
-PUBLIC_MANIFEST_SCHEMA = "1.0"
+PUBLIC_MANIFEST_SCHEMA = "2.0"
 PUBLIC_REPOSITORY = "https://github.com/forcedotcom/sf-skills.git"
 RELEASE_REF_PATTERN = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+")
 PUBLIC_MANIFEST_RELATIVE = Path("catalog/public-release-manifest.json")
 TREE_HASH_FORMAT = b"sf-skill-tree-v1\0"
+TREE_SCAN_MAX_ENTRIES = 4096
+TREE_SCAN_MAX_DEPTH = 32
+TREE_SCAN_MAX_FILE_BYTES = 8 * 1024 * 1024
+TREE_SCAN_MAX_TOTAL_BYTES = 64 * 1024 * 1024
+TREE_SCAN_CHUNK_BYTES = 1024 * 1024
+TREE_SCAN_DIR_FD_SUPPORTED = (
+    os.name != "nt"
+    and hasattr(os, "O_DIRECTORY")
+    and os.open in getattr(os, "supports_dir_fd", set())
+)
 NAME_PATTERN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 APPROVED_DOMAIN_PREFIXES = (
     "agentforce", "automation", "automotive-cloud", "channel-revenue-management",
@@ -50,19 +60,97 @@ class RegistryError(ValueError):
     """A deterministic registry validation or generation error."""
 
 
-def sha256_file(path: Path) -> str:
-    """Hash one regular file as raw bytes."""
+def _tree_identity(value: os.stat_result) -> tuple[int, int, int, int, int, int, int]:
+    return (
+        value.st_dev, value.st_ino, value.st_mode, value.st_nlink, value.st_size,
+        value.st_mtime_ns, value.st_ctime_ns,
+    )
+
+
+def read_regular_file_bytes(
+    path: Path,
+    *,
+    max_bytes: int = TREE_SCAN_MAX_FILE_BYTES,
+    expected: Optional[os.stat_result] = None,
+    expected_parent: Optional[os.stat_result] = None,
+) -> bytes:
+    """Read one stable, unlinked regular file through a verified parent directory."""
+    path = Path(path)
     try:
-        mode = path.lstat().st_mode
-        if not stat.S_ISREG(mode):
-            raise RegistryError(f"{path}: expected a regular file")
-        digest = hashlib.sha256()
-        with path.open("rb") as stream:
-            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                digest.update(chunk)
-        return digest.hexdigest()
+        before = path.lstat()
+        parent_before = path.parent.lstat()
     except OSError as exc:
-        raise RegistryError(f"{path}: cannot hash file: {exc}") from exc
+        raise RegistryError(f"{path}: cannot inspect regular file: {exc}") from exc
+    if expected is not None and _tree_identity(expected) != _tree_identity(before):
+        raise RegistryError(f"{path}: regular file changed before read")
+    if (expected_parent is not None
+            and _tree_identity(expected_parent) != _tree_identity(parent_before)):
+        raise RegistryError(f"{path}: parent directory changed before read")
+    if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1:
+        raise RegistryError(f"{path}: expected one non-hardlinked regular file")
+    flags = os.O_RDONLY
+    for optional in ("O_CLOEXEC", "O_NOFOLLOW", "O_NONBLOCK", "O_BINARY"):
+        flags |= getattr(os, optional, 0)
+    parent_descriptor: Optional[int] = None
+    descriptor: Optional[int] = None
+    try:
+        if TREE_SCAN_DIR_FD_SUPPORTED:
+            parent_flags = os.O_RDONLY | os.O_DIRECTORY
+            for optional in ("O_CLOEXEC", "O_NOFOLLOW"):
+                parent_flags |= getattr(os, optional, 0)
+            parent_descriptor = os.open(path.parent, parent_flags)
+            opened_parent = os.fstat(parent_descriptor)
+            if (_tree_identity(parent_before) != _tree_identity(opened_parent)
+                    or not stat.S_ISDIR(opened_parent.st_mode)):
+                raise RegistryError(f"{path}: parent directory changed before read")
+            descriptor = os.open(path.name, flags, dir_fd=parent_descriptor)
+        else:
+            descriptor = os.open(path, flags)
+    except (OSError, RegistryError) as exc:
+        if parent_descriptor is not None:
+            os.close(parent_descriptor)
+        if isinstance(exc, RegistryError):
+            raise
+        raise RegistryError(f"{path}: cannot open regular file safely: {exc}") from exc
+    try:
+        opened = os.fstat(descriptor)
+        if (not stat.S_ISREG(opened.st_mode)
+                or opened.st_nlink != 1
+                or _tree_identity(before) != _tree_identity(opened)):
+            raise RegistryError(f"{path}: regular file changed before read")
+        if opened.st_size > max_bytes:
+            raise RegistryError(f"{path}: regular file byte limit exceeded")
+        chunks: list[bytes] = []
+        size = 0
+        while True:
+            chunk = os.read(descriptor, min(TREE_SCAN_CHUNK_BYTES, max_bytes + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
+            if size > max_bytes:
+                raise RegistryError(f"{path}: regular file byte limit exceeded")
+        finished = os.fstat(descriptor)
+    except OSError as exc:
+        raise RegistryError(f"{path}: cannot read regular file: {exc}") from exc
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        if parent_descriptor is not None:
+            os.close(parent_descriptor)
+    try:
+        current = path.lstat()
+    except OSError as exc:
+        raise RegistryError(f"{path}: regular file changed after read") from exc
+    if (_tree_identity(opened) != _tree_identity(finished)
+            or _tree_identity(finished) != _tree_identity(current)):
+        raise RegistryError(f"{path}: regular file changed during read")
+    return b"".join(chunks)
+
+
+def sha256_file(path: Path) -> str:
+    """Hash one bounded, stable regular file as raw bytes."""
+    return hashlib.sha256(read_regular_file_bytes(path)).hexdigest()
 
 
 def _hash_field(digest, value: bytes) -> None:
@@ -70,12 +158,16 @@ def _hash_field(digest, value: bytes) -> None:
     digest.update(value)
 
 
-def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> str:
-    """Return the canonical ``sf-skill-tree-v1`` hash for a directory tree.
+def inspect_skill_tree(
+    root: Path, *, safety_root: Optional[Path] = None,
+    budget: Optional[dict[str, int]] = None,
+) -> dict:
+    """Hash one tree and capture its SKILL.md bytes in the same bounded scan.
 
-    ``safety_root`` defaults to the hashed tree. Inventory callers may supply
-    their containing checkout so intentional shared-file symlinks remain safe;
-    links escaping that declared root are always rejected.
+    Runtime callers must derive trusted prose only from ``skillMdBytes``. Regular
+    files are opened no-follow/nonblocking where the host supports those flags,
+    verified before reading, and consumed within explicit byte budgets. A second
+    bounded inventory must match the first before captured prose is released.
     """
     root = Path(root)
     safety_root = Path(safety_root) if safety_root is not None else root
@@ -85,30 +177,57 @@ def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> 
         tree_anchor = root.resolve(strict=True)
         anchor = safety_root.resolve(strict=True)
         tree_anchor.relative_to(anchor)
+        root_metadata = root.lstat()
     except (OSError, ValueError) as exc:
         raise RegistryError(f"{root}: cannot resolve tree root inside safety root: {exc}") from exc
 
-    entries: list[tuple[str, Path, os.stat_result]] = []
+    def inventory() -> list[tuple[str, Path, os.stat_result]]:
+        entries: list[tuple[str, Path, os.stat_result]] = []
 
-    def visit(directory: Path) -> None:
-        try:
-            children = list(os.scandir(directory))
-        except OSError as exc:
-            raise RegistryError(f"{directory}: cannot scan tree: {exc}") from exc
-        for child in children:
-            path = Path(child.path)
+        def visit(directory: Path, depth: int) -> None:
+            if depth > TREE_SCAN_MAX_DEPTH:
+                raise RegistryError(f"{directory}: tree depth limit exceeded")
             try:
-                metadata = path.lstat()
+                children = os.scandir(directory)
             except OSError as exc:
-                raise RegistryError(f"{path}: cannot inspect tree entry: {exc}") from exc
-            relative = path.relative_to(root).as_posix()
-            entries.append((relative, path, metadata))
-            if stat.S_ISDIR(metadata.st_mode):
-                visit(path)
+                raise RegistryError(f"{directory}: cannot scan tree: {exc}") from exc
+            try:
+                for child in children:
+                    if len(entries) >= TREE_SCAN_MAX_ENTRIES:
+                        raise RegistryError(f"{root}: tree entry limit exceeded")
+                    if budget is not None:
+                        budget["entries"] = budget.get("entries", 0) + 1
+                        if budget["entries"] > budget.get("maxEntries", TREE_SCAN_MAX_ENTRIES):
+                            raise RegistryError(f"{root}: aggregate tree entry limit exceeded")
+                    path = Path(child.path)
+                    try:
+                        metadata = path.lstat()
+                    except OSError as exc:
+                        raise RegistryError(f"{path}: cannot inspect tree entry: {exc}") from exc
+                    relative = path.relative_to(root).as_posix()
+                    entries.append((relative, path, metadata))
+                    if stat.S_ISDIR(metadata.st_mode):
+                        visit(path, depth + 1)
+            finally:
+                close = getattr(children, "close", None)
+                if close is not None:
+                    close()
 
-    visit(root)
+        visit(root, 0)
+        return entries
+
+    entries = inventory()
+    directory_metadata = {".": root_metadata}
+    directory_metadata.update({
+        relative: metadata
+        for relative, _, metadata in entries
+        if stat.S_ISDIR(metadata.st_mode)
+    })
     digest = hashlib.sha256()
     digest.update(TREE_HASH_FORMAT)
+    skill_md_bytes: Optional[bytes] = None
+    stable = True
+    total_bytes = 0
     for relative, path, metadata in sorted(entries, key=lambda item: item[0]):
         relative_bytes = relative.encode("utf-8")
         mode = metadata.st_mode
@@ -116,14 +235,83 @@ def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> 
             digest.update(b"D")
             _hash_field(digest, relative_bytes)
         elif stat.S_ISREG(mode):
+            if metadata.st_nlink != 1:
+                raise RegistryError(f"{path}: hardlinked tree files are not supported")
             digest.update(b"F")
             _hash_field(digest, relative_bytes)
             digest.update(b"1" if mode & 0o111 else b"0")
+            flags = os.O_RDONLY
+            for optional in ("O_CLOEXEC", "O_NOFOLLOW", "O_NONBLOCK", "O_BINARY"):
+                flags |= getattr(os, optional, 0)
+            parent_descriptor: Optional[int] = None
+            descriptor: Optional[int] = None
+            parent_relative = Path(relative).parent.as_posix()
+            expected_parent = directory_metadata[parent_relative]
+            use_parent_fd = TREE_SCAN_DIR_FD_SUPPORTED
             try:
-                content = path.read_bytes()
+                if use_parent_fd:
+                    parent_flags = os.O_RDONLY | os.O_DIRECTORY
+                    for optional in ("O_CLOEXEC", "O_NOFOLLOW"):
+                        parent_flags |= getattr(os, optional, 0)
+                    parent_descriptor = os.open(path.parent, parent_flags)
+                    opened_parent = os.fstat(parent_descriptor)
+                    if (_tree_identity(expected_parent) != _tree_identity(opened_parent)
+                            or not stat.S_ISDIR(opened_parent.st_mode)):
+                        raise RegistryError(f"{path}: parent directory changed before read")
+                    descriptor = os.open(path.name, flags, dir_fd=parent_descriptor)
+                else:
+                    descriptor = os.open(path, flags)
+            except (OSError, RegistryError) as exc:
+                if parent_descriptor is not None:
+                    os.close(parent_descriptor)
+                if isinstance(exc, RegistryError):
+                    raise
+                raise RegistryError(f"{path}: cannot open parent directory or tree file safely: {exc}") from exc
+            try:
+                opened = os.fstat(descriptor)
+                if (not stat.S_ISREG(opened.st_mode)
+                        or opened.st_nlink != 1
+                        or _tree_identity(metadata) != _tree_identity(opened)):
+                    raise RegistryError(f"{path}: tree file changed before read")
+                if opened.st_size > TREE_SCAN_MAX_FILE_BYTES:
+                    raise RegistryError(f"{path}: tree file byte limit exceeded")
+                chunks: list[bytes] = []
+                file_bytes = 0
+                while True:
+                    chunk = os.read(descriptor, TREE_SCAN_CHUNK_BYTES)
+                    if not chunk:
+                        break
+                    file_bytes += len(chunk)
+                    total_bytes += len(chunk)
+                    if budget is not None:
+                        budget["bytes"] = budget.get("bytes", 0) + len(chunk)
+                        if budget["bytes"] > budget.get("maxBytes", TREE_SCAN_MAX_TOTAL_BYTES):
+                            raise RegistryError(f"{root}: aggregate tree byte limit exceeded")
+                    if file_bytes > TREE_SCAN_MAX_FILE_BYTES:
+                        raise RegistryError(f"{path}: tree file byte limit exceeded")
+                    if total_bytes > TREE_SCAN_MAX_TOTAL_BYTES:
+                        raise RegistryError(f"{root}: tree total byte limit exceeded")
+                    chunks.append(chunk)
+                content = b"".join(chunks)
+                finished = os.fstat(descriptor)
             except OSError as exc:
                 raise RegistryError(f"{path}: cannot read tree file: {exc}") from exc
+            finally:
+                if descriptor is not None:
+                    os.close(descriptor)
+                if parent_descriptor is not None:
+                    os.close(parent_descriptor)
+            try:
+                current = path.lstat()
+            except OSError:
+                stable = False
+            else:
+                if (_tree_identity(opened) != _tree_identity(finished)
+                        or _tree_identity(finished) != _tree_identity(current)):
+                    stable = False
             _hash_field(digest, content)
+            if relative == "SKILL.md":
+                skill_md_bytes = content
         elif stat.S_ISLNK(mode):
             try:
                 target_text = os.readlink(path)
@@ -136,17 +324,49 @@ def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> 
             _hash_field(digest, os.fsencode(target_text))
         else:
             raise RegistryError(f"{path}: special files are not supported in capability trees")
-    return digest.hexdigest()
+
+    current_root: Optional[os.stat_result] = None
+    try:
+        current_root = root.lstat()
+        second = inventory()
+    except (OSError, RegistryError):
+        stable = False
+        second = []
+    first_fingerprint = [
+        (relative, _tree_identity(metadata))
+        for relative, _, metadata in sorted(entries, key=lambda item: item[0])
+    ]
+    second_fingerprint = [
+        (relative, _tree_identity(metadata))
+        for relative, _, metadata in sorted(second, key=lambda item: item[0])
+    ]
+    if (current_root is None
+            or _tree_identity(root_metadata) != _tree_identity(current_root)
+            or first_fingerprint != second_fingerprint):
+        stable = False
+    return {
+        "treeSha256": digest.hexdigest(),
+        "skillMdBytes": skill_md_bytes if stable else None,
+        "stable": stable,
+    }
+
+
+def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> str:
+    """Return the canonical ``sf-skill-tree-v1`` hash for a directory tree."""
+    observation = inspect_skill_tree(root, safety_root=safety_root)
+    if not observation["stable"]:
+        raise RegistryError(f"{root}: tree changed during scan")
+    return observation["treeSha256"]
 
 
 def _has_control(value: str) -> bool:
     return any(unicodedata.category(char) in {"Cc", "Cf", "Zl", "Zp"} for char in value)
 
 
-def _frontmatter(path: Path) -> list[str]:
+def _frontmatter_bytes(content: bytes, path: Path) -> list[str]:
     try:
-        lines = path.read_text(encoding="utf-8").splitlines()
-    except (OSError, UnicodeError) as exc:
+        lines = content.decode("utf-8").splitlines()
+    except UnicodeError as exc:
         raise RegistryError(f"{path}: cannot read SKILL.md: {exc}") from exc
     if not lines or lines[0].strip() != "---":
         raise RegistryError(f"{path}: missing opening frontmatter delimiter")
@@ -155,6 +375,10 @@ def _frontmatter(path: Path) -> list[str]:
     except StopIteration as exc:
         raise RegistryError(f"{path}: missing closing frontmatter delimiter") from exc
     return lines[1:end]
+
+
+def _frontmatter(path: Path) -> list[str]:
+    return _frontmatter_bytes(read_regular_file_bytes(path), path)
 
 
 def _block_scalar(lines: list[str], start: int, style: str, path: Path) -> str:
@@ -189,9 +413,9 @@ def _block_scalar(lines: list[str], start: int, style: str, path: Path) -> str:
     return text + "\n" if style.endswith("+") or style in (">", "|") else text
 
 
-def read_skill(path: Path) -> dict[str, str]:
-    """Read the bounded name and description subset from SKILL.md frontmatter."""
-    lines = _frontmatter(path)
+def read_skill_bytes(content: bytes, path: Path) -> dict[str, str]:
+    """Parse the bounded name and description subset from captured SKILL.md bytes."""
+    lines = _frontmatter_bytes(content, path)
     fields: dict[str, str] = {}
     for index, line in enumerate(lines):
         if not line or line[0].isspace() or ":" not in line:
@@ -223,6 +447,151 @@ def read_skill(path: Path) -> dict[str, str]:
     if _has_control(fields["name"]) or _has_control(fields["description"]):
         raise RegistryError(f"{path}: name or description contains control characters")
     return fields
+
+
+def read_skill(path: Path) -> dict[str, str]:
+    """Read the bounded name and description subset from SKILL.md frontmatter."""
+    return read_skill_bytes(read_regular_file_bytes(path), path)
+
+
+def _access_scalar(raw: str, path: Path) -> str:
+    """Parse a single accessCheck ``type``/``value`` scalar (quoted or bare)."""
+    if raw.startswith('"'):
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            raise RegistryError(f"{path}: invalid quoted accessCheck scalar: {exc.msg}") from exc
+        if type(parsed) is not str:
+            raise RegistryError(f"{path}: accessCheck scalar must be a string")
+        return parsed
+    return raw
+
+
+def read_access_check(path: Path) -> Optional[list[dict[str, str]]]:
+    """Read the tri-state ``metadata.accessCheck`` from SKILL.md frontmatter.
+
+    Returns ``None`` when accessCheck is undeclared (no ``metadata`` block or no
+    ``accessCheck`` key), ``[]`` for an explicit empty array (applies to any
+    org), or a list of ``{"type", "value"}`` entries when availability is
+    conditional. Raises RegistryError on a present-but-malformed declaration so a
+    broken accessCheck can never silently collapse into "undeclared" or "any
+    org". Bounded hand parser (this module intentionally avoids a YAML
+    dependency, matching ``read_skill``); shape is enforced by
+    ``_valid_access_check``. Only inline ``[]`` / double-quoted JSON arrays and
+    block-style ``- type:``/``value:`` entries are recognized; any other form
+    fails loud.
+    """
+    lines = _frontmatter(path)
+    meta_index = next(
+        (index for index, line in enumerate(lines)
+         if line and not line[0].isspace() and line.split(":", 1)[0].strip() == "metadata"),
+        None,
+    )
+    if meta_index is None:
+        return None
+    block = []
+    for line in lines[meta_index + 1:]:
+        if line and not line[0].isspace():
+            break
+        block.append(line)
+    ac_index = ac_indent = None
+    inline = ""
+    for index, line in enumerate(block):
+        if not line.strip():
+            continue
+        if line.split(":", 1)[0].strip() == "accessCheck":
+            ac_index = index
+            ac_indent = len(line) - len(line.lstrip())
+            inline = line.split(":", 1)[1].strip() if ":" in line else ""
+            break
+    if ac_index is None:
+        return None
+    if inline:
+        try:
+            parsed = json.loads(inline)
+        except json.JSONDecodeError as exc:
+            raise RegistryError(f"{path}: unsupported accessCheck value: {exc.msg}") from exc
+        if type(parsed) is not list:
+            raise RegistryError(f"{path}: accessCheck must be an array")
+        return parsed
+    entries: list[dict[str, str]] = []
+    current: Optional[dict[str, str]] = None
+    for line in block[ac_index + 1:]:
+        if not line.strip():
+            continue
+        if len(line) - len(line.lstrip()) <= ac_indent:
+            break
+        stripped = line.strip()
+        if stripped.startswith("-"):
+            current = {}
+            entries.append(current)
+            stripped = stripped[1:].strip()
+            if not stripped:
+                continue
+        if current is None or ":" not in stripped:
+            raise RegistryError(f"{path}: malformed accessCheck entry")
+        key, raw = stripped.split(":", 1)
+        current[key.strip()] = _access_scalar(raw.strip(), path)
+    if not entries:
+        raise RegistryError(f"{path}: accessCheck is present but empty; use [] for any-org")
+    return entries
+
+
+EXCLUSION_CLAUSE = re.compile(
+    r"\b(?:do\s+not\s+trigger|do\s+not\s+use|not\s+for|skip\s+when|does\s+not\s+apply)\b",
+    re.IGNORECASE,
+)
+USER_INTENT_VERBS = {
+    "add", "analyze", "apply", "assign", "audit", "build", "check", "configure",
+    "connect", "create", "debug", "deploy", "enable", "find", "generate", "get",
+    "help", "integrate", "migrate", "open", "query", "replace", "retrieve", "run",
+    "review", "scan", "score", "search", "secure", "set", "ship", "show", "switch",
+    "test", "validate", "verify",
+}
+CURATED_EXAMPLES = {
+    "agentforce-generate": "Build an Agentforce agent for order-status help.",
+    "data360-connect": "Connect a data stream from my order system.",
+    "platform-apex-generate": "Create an Apex service to query Accounts.",
+    "platform-apex-test-generate": "Generate Apex tests for my selector class.",
+    "platform-custom-object-generate": "Create a custom object for service visits.",
+    "platform-deploy-validate": "Validate this deployment before I ship it.",
+    "platform-environment-validate": "Check whether my environment is ready to build.",
+    "platform-metadata-deploy": "Deploy my local changes to the scratch org.",
+    "platform-soql-query": "Query the ten largest open opportunities.",
+}
+
+
+def is_user_prompt_like(phrase: str) -> bool:
+    if not phrase or "\n" in phrase or len(phrase) > 140:
+        return False
+    if re.search(r"[<>/\\`{}\[\]]|__|\.[A-Za-z0-9]", phrase):
+        return False
+    words = re.findall(r"[A-Za-z][A-Za-z'-]*", phrase)
+    return bool(
+        len(words) >= 2
+        and (len(words[0]) != 1 or words[0].lower() == "i")
+        and words[0].lower() in USER_INTENT_VERBS | {"how", "i", "what", "when", "where", "why"}
+    )
+
+
+def example_prompt(name: str, description: str, domain: str) -> str:
+    """Freeze a bounded display prompt while trusted source prose is in hand."""
+    if name in CURATED_EXAMPLES:
+        return CURATED_EXAMPLES[name]
+    for trigger in re.finditer(r"\btriggers?\b|\buse when\b", description, re.IGNORECASE):
+        prefix = description[max(0, trigger.start() - 24):trigger.start()]
+        if re.search(r"\bdo\s+not\s+$", prefix, re.IGNORECASE):
+            continue
+        tail = EXCLUSION_CLAUSE.split(description[trigger.end():], maxsplit=1)[0]
+        for match in re.finditer(r"['\"]([^'\"\n]{4,140})['\"]", tail):
+            phrase = match.group(1).strip()
+            if is_user_prompt_like(phrase):
+                return phrase[0].upper() + phrase[1:]
+    remainder = name[len(domain):].strip("-")
+    parts = remainder.split("-") if remainder else []
+    verb = parts[-1] if parts else "use"
+    subject = " ".join(parts[:-1]) or domain.replace("-", " ")
+    return f"Help me {verb} Salesforce {subject}."
 
 
 def derive_domain(name: str) -> str:
@@ -390,12 +759,17 @@ def build_public_manifest(checkout: Path, release_ref: str) -> dict:
     rows = []
     for name, skill_dir in inventory.items():
         record = read_skill(skill_dir / "SKILL.md")
+        domain = derive_domain(name)
+        prompt = example_prompt(name, record["description"], domain)
+        if not is_user_prompt_like(prompt) or _has_control(prompt):
+            raise RegistryError(f"{skill_dir}: cannot freeze a safe example prompt")
         rows.append({
             "name": name,
-            "domain": derive_domain(name),
-            "description": record["description"],
+            "domain": domain,
+            "examplePrompt": prompt,
             "skillMdSha256": sha256_file(skill_dir / "SKILL.md"),
             "treeSha256": canonical_tree_sha256(skill_dir),
+            "accessCheck": read_access_check(skill_dir / "SKILL.md"),
         })
     data = {
         "schemaVersion": PUBLIC_MANIFEST_SCHEMA,
@@ -411,11 +785,29 @@ def build_public_manifest(checkout: Path, release_ref: str) -> dict:
 
 
 _MANIFEST_TOP_KEYS = {"schemaVersion", "channel", "repository", "commit", "releaseRef", "counts", "skills"}
-_MANIFEST_ROW_KEYS = {"name", "domain", "description", "skillMdSha256", "treeSha256"}
+_MANIFEST_ROW_KEYS = {"name", "domain", "examplePrompt", "skillMdSha256", "treeSha256", "accessCheck"}
+_ACCESS_CHECK_TYPES = {"license", "userPerm", "orgPerm", "orgPref", "accessCheck"}
 
 
 def _valid_hash(value) -> bool:
     return type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None
+
+
+def _valid_access_check(value) -> bool:
+    """Validate the tri-state accessCheck: ``None`` (undeclared) or a list of
+    ``{type, value}`` entries (``[]`` = any org). Mirrors the canonical schema in
+    scripts/validate-skills.ts exactly: ``type`` in the fixed enum, ``value`` any
+    string (no emptiness or control-character constraint), exact ``{type, value}``
+    keys. ``None`` and ``[]`` are kept distinct — never collapsed."""
+    if value is None:
+        return True
+    if type(value) is not list:
+        return False
+    return all(
+        type(entry) is dict and set(entry) == {"type", "value"}
+        and entry["type"] in _ACCESS_CHECK_TYPES and type(entry["value"]) is str
+        for entry in value
+    )
 
 
 def validate_public_manifest(data, context: str) -> None:
@@ -441,11 +833,14 @@ def validate_public_manifest(data, context: str) -> None:
             raise RegistryError(f"{row_context}: invalid name")
         if row["domain"] != derive_domain(name):
             raise RegistryError(f"{row_context}: invalid domain")
-        description = row["description"]
-        if type(description) is not str or not 1 <= len(description) <= 1024 or _has_control(description):
-            raise RegistryError(f"{row_context}: invalid description")
+        prompt = row["examplePrompt"]
+        if (type(prompt) is not str or not 1 <= len(prompt) <= 140
+                or _has_control(prompt) or not is_user_prompt_like(prompt)):
+            raise RegistryError(f"{row_context}: invalid example prompt")
         if not _valid_hash(row["skillMdSha256"]) or not _valid_hash(row["treeSha256"]):
             raise RegistryError(f"{row_context}: invalid content hash")
+        if not _valid_access_check(row["accessCheck"]):
+            raise RegistryError(f"{row_context}: invalid accessCheck")
         names.append(name)
     if names != sorted(names) or len(names) != len(set(names)):
         raise RegistryError(f"{context}: public skill names must be unique and sorted")
@@ -455,13 +850,19 @@ def serialize(data: dict) -> str:
     return json.dumps(data, ensure_ascii=False, indent=2) + "\n"
 
 
-def load_public_manifest(path: Path) -> dict:
+def load_public_manifest_observation(path: Path) -> tuple[dict, bytes]:
+    """Load and validate a manifest while retaining the exact verified bytes."""
     try:
-        data = json.loads(Path(path).read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        content = read_regular_file_bytes(Path(path), max_bytes=16 * 1024 * 1024)
+        data = json.loads(content.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise RegistryError(f"{path}: cannot load public release manifest: {exc}") from exc
     validate_public_manifest(data, str(path))
-    return data
+    return data, content
+
+
+def load_public_manifest(path: Path) -> dict:
+    return load_public_manifest_observation(path)[0]
 
 
 def snapshot_public(checkout: Path, destination: Path, release_ref: str) -> Path:
@@ -473,8 +874,8 @@ def snapshot_public(checkout: Path, destination: Path, release_ref: str) -> Path
 
 def check_public(checkout: Path, destination: Path, release_ref: str) -> bool:
     try:
-        actual = destination.read_text(encoding="utf-8")
-    except OSError as exc:
+        actual = read_regular_file_bytes(destination, max_bytes=16 * 1024 * 1024).decode("utf-8")
+    except (OSError, UnicodeError, RegistryError) as exc:
         raise RegistryError(f"{destination}: public manifest is missing: {exc}") from exc
     expected = serialize(build_public_manifest(checkout, release_ref))
     if actual != expected:

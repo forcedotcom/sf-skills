@@ -37,7 +37,7 @@ parse() {
 import json,sys
 d=json.load(sys.stdin)
 ctx=d.get('hookSpecificOutput',{}).get('additionalContext','') or ''
-if 're-injected by salesforce-development after compaction' in ctx:
+if 'salesforce-development durable context after compaction' in ctx:
     kind='lean'
 elif 'auto-injected by salesforce-development' in ctx:
     kind='full'

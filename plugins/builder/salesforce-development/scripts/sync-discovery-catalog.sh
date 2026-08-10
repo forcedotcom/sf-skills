@@ -27,7 +27,11 @@ ARTIFACT="${PLUGIN}/catalog/discovery.json"
 # Paths whose change can alter the generated catalog.
 PATTERN="^${PLUGIN}/skills/|^${PLUGIN}/catalog/public-release-manifest\.json$|^${PLUGIN}/scripts/(discovery_catalog|capability_registry)\.py$"
 
-changed="${CATALOG_SYNC_FILES:-$(git diff --cached --name-only --diff-filter=ACMRD)}"
+if [ "${CATALOG_SYNC_FILES+x}" = "x" ]; then
+  changed="$CATALOG_SYNC_FILES"
+else
+  changed="$(git diff --cached --name-only --diff-filter=ACMRD)"
+fi
 
 if ! printf '%s\n' "$changed" | grep -qE "$PATTERN"; then
   [ "${CATALOG_SYNC_CHECK_ONLY:-}" = "1" ] && echo "skip"

@@ -13,35 +13,13 @@ Run the tool prerequisite scan and render an actionable status report.
 ${CLAUDE_PLUGIN_ROOT}/scripts/sf-context check-tools
 ```
 
-The output is a JSON object with a `tools` array. Parse it and render a report grouped by severity:
+The output is a JSON object with a `tools` array (plus a `diagnostic` block on any critical failure).
 
-```
-=========================
+**The banner is painted for you — do not reproduce it.** When `check-tools` runs, the plugin paints the framed **"Ready to build on Salesforce?"** banner deterministically on the visible channel (one status row per tool, the footer verdict, and the wayfinding footer), exactly like the SessionStart banner. Read the JSON for your own understanding, but do **NOT** reproduce, redraw, or re-render the banner — add only a short read of what it means for the user, then go to Phase 2.
 
-🔴 Critical (N):
-   <tool>: <message>
+**Only if you do not see the banner painted** (an older Claude Code build, or a paint fallback) render it yourself from the JSON, using the layout defined in the `platform-environment-validate` skill as the single source of truth. **Read `${CLAUDE_PLUGIN_ROOT}/skills/platform-environment-validate/SKILL.md` (Phase 1)** for the canonical frame, status-dot definitions, fixed row order, footer verdict, and wayfinding footer. In brief: one framed block, one row per tool with a 🔴/🟡/🟢/ℹ️ status dot in a fixed order, and a footer verdict — ` ✓ toolchain ready` when there are no 🔴/🟡 rows, or ` ⚠ <N> need attention · <M> ready` otherwise — then the "You don't memorize commands here." wayfinding block ending in a context-aware `Next: <action> → "<phrase>"` line. A setup is "all green" when there are no 🔴 or 🟡 rows; ℹ️ rows never count against it.
 
-🟡 Warnings (N):
-   <tool>: <message>
-
-🟢 Successfully Configured (N):
-   <tool> <version>
-
-ℹ️ Informational (N):
-   <tool>: <message>
-
-=========================
-```
-
-**Status definitions:**
-- 🔴 Critical (`critical`) — missing or below minimum; development cannot proceed without it
-- 🟡 Warning (`warn`) — installed but outdated, non-LTS, or misconfigured
-- 🟢 OK (`ok`) — installed and meets all requirements
-- ℹ️ Info (`info`) — a contextual note that cannot be auto-verified (e.g. MCP process health); does **not** count against an "all green" result
-
-A setup is "all green" when there are no 🔴 or 🟡 rows.
-
-**Deterministic results — do NOT override a failure.** The JSON report is the authoritative result. If a tool reports 🔴/🟡, report it as-is; never re-run the check a different way and present the result as 🟢. When the report includes a `diagnostic` block (attached on any critical failure), surface it — it carries platform, active shell, working directory, plugin root, and the resolved executable paths, and is secret-free by design.
+**Deterministic results — do NOT override a failure.** The JSON report is the authoritative result. If a tool reports 🔴/🟡, render it as-is; never re-run the check a different way and present the result as 🟢. When the report includes a `diagnostic` block (attached on any critical failure), surface it — it carries platform, active shell, working directory, plugin root, and the resolved executable paths, and is secret-free by design.
 
 Note: the Code Analyzer plugin is a JIT ("just-in-time") plugin — if it is registered but not yet physically installed, `check-tools` reports it 🟢 with a note that it auto-installs on first `sf code-analyzer` run. That is expected and not a problem.
 

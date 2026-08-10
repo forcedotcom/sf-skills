@@ -122,18 +122,18 @@ check quiet - "empty payload" '{}'
 
 # --- turn-aware suppression (#415) -------------------------------------------
 # Once the owning skill has dispatched THIS turn, the advisory stays quiet for
-# that skill's owned ops; a different owner still warns; a new turn (reset) or a
-# different session re-arms it. The ledger lives at `.sf/skill-dispatch-state.json`
-# relative to CWD, so run this block in an isolated temp dir to avoid writing a
-# `.sf/` into the repo and to keep each assertion's state explicit.
+# that skill's owned ops; a different owner still warns; a new prompt_id or a
+# different session re-arms it. Prompt markers live in a cwd-independent private
+# runtime namespace, so use process-unique ids to keep this run isolated.
 echo ""
 echo "  turn-aware suppression (#415):"
 TMPDIR_415="$(mktemp -d)"
 trap 'rm -rf "$TMPDIR_415"' EXIT
 pushd "$TMPDIR_415" >/dev/null
 
-CLS='{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/classes/Foo.cls"},"session_id":"s1"}'
-PSET='{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/permissionsets/Admin.permissionset-meta.xml"},"session_id":"s1"}'
+SID="skills-first-$$"
+CLS="{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"force-app/main/default/classes/Foo.cls\"},\"session_id\":\"$SID\",\"prompt_id\":\"prompt-1\"}"
+PSET="{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"force-app/main/default/permissionsets/Admin.permissionset-meta.xml\"},\"session_id\":\"$SID\",\"prompt_id\":\"prompt-1\"}"
 
 # Clean slate: no ledger → first .cls edit warns.
 check warn platform-apex-generate "1st .cls edit warns (no dispatch yet)" "$CLS"
@@ -141,7 +141,7 @@ check warn platform-apex-generate "1st .cls edit warns (no dispatch yet)" "$CLS"
 # Record a platform-apex-generate dispatch for session s1 (the Skill-tool hook's job).
 # The Skill tool carries a plugin-qualified name; the hook normalizes on the last
 # ":"-segment, so the plugin prefix here is our plugin, not the upstream sfdx-apex.
-printf '%s' '{"session_id":"s1","tool_input":{"skill":"salesforce-development:platform-apex-generate"}}' \
+printf '%s' "{\"session_id\":\"$SID\",\"prompt_id\":\"prompt-1\",\"tool_input\":{\"skill\":\"salesforce-development:platform-apex-generate\"}}" \
   | "$CTX" record-skill-dispatch >/dev/null
 
 # Same skill, same turn → quiet.
@@ -152,15 +152,13 @@ check warn platform-permission-set-generate "permissionset edit still warns (per
 
 # Different session → warns (no cross-session suppression).
 check warn platform-apex-generate ".cls edit in another session warns" \
-  '{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/classes/Foo.cls"},"session_id":"s2"}'
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"force-app/main/default/classes/Foo.cls\"},\"session_id\":\"$SID-other\",\"prompt_id\":\"prompt-1\"}"
 
-# New turn (UserPromptSubmit reset) → re-arms the nudge for s1.
-printf '%s' '{"session_id":"s1"}' | "$CTX" reset-dispatch-turn >/dev/null
-check warn platform-apex-generate ".cls edit warns again after turn reset" "$CLS"
+# New native prompt id → re-arms the nudge without resetting shared state.
+check warn platform-apex-generate ".cls edit warns again in prompt 2" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"force-app/main/default/classes/Foo.cls\"},\"session_id\":\"$SID\",\"prompt_id\":\"prompt-2\"}"
 
-# Hardening: a session-less ledger (malformed reset/record payload) must never
-# suppress a session-less advisory call — suppression requires a real match.
-printf '%s' '{}' | "$CTX" reset-dispatch-turn >/dev/null
+# Hardening: malformed unkeyed state must never suppress a session-less advisory.
 printf '%s' '{"tool_input":{"skill":"platform-apex-generate"}}' | "$CTX" record-skill-dispatch >/dev/null
 check warn platform-apex-generate "session-less ledger does not suppress session-less call" \
   '{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/classes/Foo.cls"}}'

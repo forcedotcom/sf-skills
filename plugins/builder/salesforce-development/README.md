@@ -6,13 +6,13 @@ The foundation plugin for building apps and agents on the Salesforce Platform. W
 
 ## Quick Start
 
-This quick start describes the required software you must install, how to authorize your Salesforce org, and how to add the Salesforce Claude Plugin Marketplace and install this plugin. 
+This quick start describes the required software you must install, how to authorize your Salesforce org, and how to add the Salesforce Claude Plugin Marketplace and install this plugin.
 
-1. Install these required prerequisites:
-   - [Claude Code](https://claude.ai/code)
-   - [Node.js LTS](https://nodejs.org).  The bundled language servers run under `node`.
-   - [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli). The MCP host and deploy hooks shell out to `sf`.  
-   - Python 3.8+.  The the `org-detection` and `deploy-safety` hooks use Python under the hood. 
+1. **Install prerequisites:**
+   - [Claude Code](https://claude.ai/code) — requires Claude Code 2.1.222 or later
+   - [Node.js LTS](https://nodejs.org). The bundled language servers run under `node`.
+   - [Salesforce CLI](https://developer.salesforce.com/tools/salesforcecli). The MCP host and deploy hooks shell out to `sf`.
+   - Python 3.8+. The org-detection, deploy-safety, and agent-validation hooks use Python under the hood.
 
 2. Authorize your Salesforce org. From a terminal or command window, use the `org login web` Salesforce CLI command which opens a browser where you log into your org with your authentication credentials:
    ```bash
@@ -46,39 +46,9 @@ Once you're all set up, use natural language to describe what you want to do; th
 
 ## Verify, Update, and Uninstall the Plugin
 
-To check that the plugin is installed, run this command in Claude Code:
-
-```text
-/plugin
-```
-
-You should see `salesforce-development` listed. Skills are available automatically. 
-
-To show the org/project banner, run this command:
-
-```text
-/salesforce-development:status
-```
-
-To check the bundled language-server host:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}"/bin/lsp-doctor
-```
-
-To update the plugin:
-
-```text
-/plugin marketplace update salesforce
-/plugin update salesforce-development@salesforce
-```
-
-To uninstall the plugin and remove the Salesforce marketplace: 
-
-```text
-/plugin uninstall salesforce-development@salesforce
-/plugin marketplace remove salesforce
-```
+- **Verify:** `/plugin` lists `salesforce-development`. `/salesforce-development:status` shows the org/project banner. `"${CLAUDE_PLUGIN_ROOT}"/bin/lsp-doctor` checks the bundled language-server host.
+- **Update:** `/plugin marketplace update salesforce` then `/plugin update salesforce-development@salesforce`.
+- **Uninstall:** `/plugin uninstall salesforce-development@salesforce` then `/plugin marketplace remove salesforce`.
 
 ## What's Included
 
@@ -103,18 +73,15 @@ To uninstall the plugin and remove the Salesforce marketplace:
 ### What Else Is in the Box
 
 - **Agents** — `salesforce-dev`, the primary Salesforce development agent (activates automatically in Salesforce projects — `sfdx-project.json` present — and routes requests skills-first, then SF CLI, then direct API as a last resort); `architecture-review`, a read-only Well-Architected reviewer that grades a project against the Trusted / Easy / Adaptable pillars and hands back a pillar-scored report plus a governance checklist; and the Agentforce ADLC agents — `adlc-orchestrator` (plan-mode lifecycle coordinator) delegating to `adlc-author` (writes `.agent` files), `adlc-engineer` (scaffolds Flow/Apex and deploys bundles), and `adlc-qa` (tests, optimizes, and security-assesses agents).
-- **Slash commands** — `/salesforce-development:discovery` (computed public-channel capability overview/drilldown and optional on-demand `features [--target-org <alias>] [--refresh] [--json]`), `:setup`, `:status`, `:org`, `:login`, `:logout`, `:set-default`, `:project`, `:reset-source-tracking`, `:welcome`. The checked discovery artifact is generated from an exact Git-tracked public-release manifest pinned to release `1.32.0` plus the physical foundation roster, not the internal authoring tree. Runtime discovery re-hashes bundled foundation trees and counts only valid standalone skill directories as installed; invalid same-name observations do not suppress public add. Feature probes never run at SessionStart; they use a normalized OS/XDG user cache outside `.sf`/`.sfdx` and report `unknown` rather than inferring absence from permission or coverage gaps.
+- **Slash commands** — `/salesforce-development:discovery` (computed public-channel capability overview/drilldown and optional on-demand `features [--target-org <alias>] [--refresh] [--json]`), `:setup`, `:status`, `:org`, `:login`, `:logout`, `:set-default`, `:project`, `:reset-source-tracking`, `:welcome`.
 - **MCP servers** — `salesforce-api-context` and `salesforce-metadata-experts` (API/metadata guidance), and `salesforce-lsp`, a local host that lazily spawns the **Apex** and **SOQL** language servers and exposes their semantic capabilities as MCP tools. See the `platform-lsp-integrate` skill for the tool contract.
 - **Hooks** — org-context detection on session start; a production deploy-safety gate and an Apex pre-deploy diagnostics gate on `sf project deploy`; skills-first advisories; and an Agent Script (`.agent`) syntax validator that runs after `Write`/`Edit` and surfaces non-blocking findings.
 
-### Other Important Notes
-
-- **Guard rails vs. Claude Code's auto-mode classifier.** This plugin's gates fire **only** on `sf project deploy`, `sf project delete`, and destructive-changes deploys — they **never block read-only commands** (`sf org list/display`, `sf data query`, `sf project retrieve`, source-tracking probes). Every gate emission is prefixed `[salesforce-development · deploy-gate]`. A denial on a *read-only* command with **no such prefix** is Claude Code's auto-mode classifier, not this plugin — a separate layer the plugin cannot rewrite. If reads get gated, the fix is to retarget a **sandbox** (the classifier reclassifies `production` → `sandbox` and the reads pass) or to allowlist them via `/permissions`. Routing around a denial by re-shaping the command defeats the control while technically satisfying it — don't.
-- **Opt-in auto-deploy.** Set `SFDX_AUTO_DEPLOY=1` to have `sf-deploy-gate auto-deploy` push a saved `force-app/**` edit (`Write`/`Edit`/`MultiEdit`) to your default org automatically after each save. Off by default. It refuses to run against orgs classified `production` or `unknown` regardless of the flag — the same production guard rail above still applies.
-- **LSP scope:** This plugin vendors the Apex + SOQL language servers only. The LWC language server is intentionally not bundled.
+Your progress through **Connect → Project → Build → Test → Deploy → Observe** is tracked from real, successful actions in your project — never assumed. Run `/salesforce-development:discovery journey inspect` to review it, or `journey reset` to clear it.
 
 ## More Information
 
-To skip Claude Code's permission prompts for the CLI commands that this plugin runs (`sf`, `node`,`npm`, read-only `git`), add the equivalent allow-rules to your DX project's `.claude/settings.json`. [Settings](https://code.claude.com/docs/en/settings#permission-settings) in the Claude Code docs. This plugin doesn't ship a `settings.json` of its own.
-
-Third-party code bundled with this plugin (such as the vendored Apex language server and a few esbuild-bundled MCP dependencies) is attributed in [`NOTICE`](./NOTICE).
+- **[Configuration reference](./docs/configuration.md)** — ambient UI modes, the optional status line, and deploy/delete guard rails.
+- **[Changelog](https://github.com/forcedotcom/sf-skills/blob/main/plugins/builder/salesforce-development/CHANGELOG.md)** — what's new in each release.
+- To skip Claude Code's permission prompts for the CLI commands this plugin runs (`sf`, `node`, `npm`, read-only `git`), add the equivalent allow-rules to your DX project's `.claude/settings.json`. See [Settings](https://code.claude.com/docs/en/settings#permission-settings) in the Claude Code docs. This plugin doesn't ship a `settings.json` of its own.
+- Third-party code bundled with this plugin (such as the vendored Apex language server and a few esbuild-bundled MCP dependencies) is attributed in [`NOTICE`](./NOTICE).

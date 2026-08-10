@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "2.0",
   "channel": "public-release",
   "repository": "https://github.com/forcedotcom/sf-skills.git",
   "commit": "7baeb07b36799eada4dce06d85664c0c16a269a8",
@@ -11,716 +11,827 @@
     {
       "name": "agentforce-architecture-analyze",
       "domain": "agentforce",
-      "description": "Declared architecture snapshot for one Agentforce agent: planner, topics, actions, flows, Apex, prompt templates, and NGA plugins. Renders a human-readable architecture document and Mermaid invocation graph from design-time metadata (not runtime audit rows). TRIGGER when user asks to describe, diagram, inventory, audit, document, or diff (e.g. v3 vs v5) the architecture / action tree / topic structure / tool inventory of a specific agent by agent API name in a specific org. DO NOT TRIGGER for runtime session traces, conversation transcripts, generation timings, or gateway audit chains — this skill reads design-time metadata only (use agentforce-d360-analyze for session traces).",
       "skillMdSha256": "c8831cf24cf7631985bb560c736a13b259255dc668d053778800460bd685314b",
-      "treeSha256": "0193071ec59dc88c05ab8bf68bc212de2da82299dac04e39fc3433546e740319"
+      "treeSha256": "0193071ec59dc88c05ab8bf68bc212de2da82299dac04e39fc3433546e740319",
+      "accessCheck": null,
+      "examplePrompt": "Help me analyze Salesforce architecture."
     },
     {
       "name": "agentforce-bot-upgrade",
       "domain": "agentforce",
-      "description": "Use this skill to Upgrade Einstein Bots into Agentforce agents end-to-end in a single pass, orchestrating per-bot Agent Spec generation, planner reconciliation across bots, agentforce-generate authoring, and post-conversion .agent enhancements. TRIGGER when: user asks to migrate, upgrade, or convert one or more Einstein Bots to Agentforce; runs a multi-bot bot-to-agent upgrade; needs Einstein Bot metadata turned into Agent Spec handoffs and generated .agent agents; convert bots to agents; upgrade my service bots; move bots to Agentforce. DO NOT TRIGGER when: user already has an approved Agent Spec and only wants direct .agent authoring, deploy, test, or observe flows; the request is unrelated to Einstein Bot migration.",
       "skillMdSha256": "7324a9ff273c3672578fcb2aff0ac89732138140e6fdb16e7878b1562ff9aa5b",
-      "treeSha256": "c10f7ab33441c398e2cba96fa20ddf84e02f4b341c5b9380085d2658d17921e2"
+      "treeSha256": "c10f7ab33441c398e2cba96fa20ddf84e02f4b341c5b9380085d2658d17921e2",
+      "accessCheck": null,
+      "examplePrompt": "Help me upgrade Salesforce bot."
     },
     {
       "name": "agentforce-d360-analyze",
       "domain": "agentforce",
-      "description": "Data Cloud 360° view of a single Agentforce session. TRIGGER when user asks to trace, inspect, summarize, or describe a specific Agentforce session by session id (Agent Session UUID `019d…` or MessagingSession id `0Mw…`). Also triggers on session discovery — find/list/search sessions by time, agent, channel, outcome, or conversation text — when the user has no session id yet. DO NOT TRIGGER for design-time architecture questions (use agentforce-architecture-analyze instead) or for runtime perf/latency/SLO questions that require platform telemetry beyond Data Cloud.",
       "skillMdSha256": "17bae30d5b5521a555b06c5d8574d8b34cac34715ba3a543d0fa52cf7a66b45e",
-      "treeSha256": "5311b4565c5366d01c7feeab6dc01678649e4625c1591eb67c29f373a57e0c86"
+      "treeSha256": "5311b4565c5366d01c7feeab6dc01678649e4625c1591eb67c29f373a57e0c86",
+      "accessCheck": null,
+      "examplePrompt": "Help me analyze Salesforce d360."
     },
     {
       "name": "agentforce-generate",
       "domain": "agentforce",
-      "description": "Build, modify, debug, and deploy agents with Agentforce Agent Script. TRIGGER when: user creates, modifies, or asks about .agent files or aiAuthoringBundle metadata; changes agent behavior, responses, or conversation logic; designs agent actions, tools, subagents, or flow control; writes or reviews an Agent Spec; previews, debugs, deploys, publishes, or tests agents; uses Agent Script CLI commands (sf agent generate/preview/publish/test). DO NOT TRIGGER when: Apex development, Flow building, Prompt Template authoring, Experience Cloud configuration, or general Salesforce CLI tasks unrelated to Agent Script.",
       "skillMdSha256": "2bbef3cb40d7e21836562d34c07ede2babdcb7a0aa03079bc104d4f060d4e9d5",
-      "treeSha256": "d31b1c4fa2c984318ec65a76e37ee4f640c89bf9c083e2fa17ba2044f4bcb676"
+      "treeSha256": "d31b1c4fa2c984318ec65a76e37ee4f640c89bf9c083e2fa17ba2044f4bcb676",
+      "accessCheck": null,
+      "examplePrompt": "Build an Agentforce agent for order-status help."
     },
     {
       "name": "agentforce-observe",
       "domain": "agentforce",
-      "description": "Analyze production Agentforce agent behavior using session traces and Data Cloud. TRIGGER when: user queries STDM session data or Data Cloud trace records; investigates production agent failures, regressions, or performance issues; asks about session traces, conversation logs, or agent metrics; wants to reproduce a reported production issue in preview; runs findSessions or trace analysis queries. DO NOT TRIGGER when: user creates, modifies, or debugs .agent files during development (use agentforce-generate); writes or runs test specs (use agentforce-test); uses sf agent preview for local development iteration; deploys or publishes agents.",
       "skillMdSha256": "b8b5055c05fe15d67ba4ceefa26c0c35e86270957e814aa94e3950e09c873921",
-      "treeSha256": "1b9013f9de8e1f71fa78ea85cad145693a32e71b0a4382448615c5c2e463bc74"
+      "treeSha256": "1b9013f9de8e1f71fa78ea85cad145693a32e71b0a4382448615c5c2e463bc74",
+      "accessCheck": null,
+      "examplePrompt": "Help me observe Salesforce agentforce."
     },
     {
       "name": "agentforce-test",
       "domain": "agentforce",
-      "description": "Write, run, and analyze structured test suites for Agentforce agents. TRIGGER when: user writes or modifies test spec YAML (AiEvaluationDefinition); runs sf agent test create, run, run-eval, or results commands; asks about test coverage strategy, metric selection, or custom evaluations; interprets test results or diagnoses test failures; asks about batch testing, regression suites, or CI/CD test integration. DO NOT TRIGGER when: user creates, modifies, previews, or debugs .agent files (use agentforce-generate); deploys or publishes agents; writes Agent Script code; uses sf agent preview for development iteration; analyzes production session traces (use agentforce-observe).",
       "skillMdSha256": "692c9fa7f3c7c630f6971a568152d6404a1dca97588bfa02accb43bfc27f34a3",
-      "treeSha256": "b9d980bbcde7e663caa7bf11e961de5f05e538e5ced074ad9c87a43182c3aeb2"
+      "treeSha256": "b9d980bbcde7e663caa7bf11e961de5f05e538e5ced074ad9c87a43182c3aeb2",
+      "accessCheck": null,
+      "examplePrompt": "Help me test Salesforce agentforce."
     },
     {
       "name": "automation-flow-generate",
       "domain": "automation",
-      "description": "Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as \"when a record is created\", \"trigger daily at\", \"send an email when\", \"update the field when\", \"automate\", \"workflow\", or \"flow XML/metadata\". This is the only skill for Salesforce Flow generation.",
       "skillMdSha256": "b8403f5cfe15560e2f633b1634f454d179b000779f375d61e04921120a4f0b6f",
-      "treeSha256": "8db8bf65e1a5629a6c2d768938186a565c1f6a38d5801c89d46197671ab30cb5"
+      "treeSha256": "8db8bf65e1a5629a6c2d768938186a565c1f6a38d5801c89d46197671ab30cb5",
+      "accessCheck": null,
+      "examplePrompt": "When a record is created"
     },
     {
       "name": "commerce-b2b-open-code-components-integrate",
       "domain": "commerce",
-      "description": "Integrate Salesforce B2B Commerce open source components from GitHub into B2B Commerce stores. Use when users mention \"integrate open code components\", \"open source B2B commerce\", \"add open code components\", \"forcedotcom/b2b-commerce-open-source-components\", or want to add open source commerce components to their store. Copies all components and labels so they become available in Experience Builder.",
       "skillMdSha256": "f127d6c8c920ba0238e5b183f5d3ad61078ff14b4175d8ffa282ebfa8285565d",
-      "treeSha256": "7f7e0cf87df687f106b9486a1af641f486648d415bef08dac8b33a4ad18eef16"
+      "treeSha256": "7f7e0cf87df687f106b9486a1af641f486648d415bef08dac8b33a4ad18eef16",
+      "accessCheck": null,
+      "examplePrompt": "Integrate open code components"
     },
     {
       "name": "commerce-b2b-open-code-components-replace",
       "domain": "commerce",
-      "description": "Replace OOTB (out-of-the-box) B2B Commerce components with open source equivalents in site metadata content.json files, or look up the equivalent open code `site:` component for OOTB definitions. Use when users mention \"replace OOTB components\", \"replace commerce components with open code\", \"swap OOTB for open source\", \"replace commerce_builder:\", \"replace OOTB in site\", \"replace component in site metadata\", \"replace component definition\", \"find open code equivalent\", \"equivalent open code component\", \"OOTB to open code mapping\", \"what is the site component for\", components \"in this view\" or \"for a given view\", or a specific list of component names — and want to update or only discover mappings in their store metadata.",
       "skillMdSha256": "83f12c7d308da8b6d9438e744401ff3aa76277174da72738fdcaab0a86a0ae4d",
-      "treeSha256": "95389798787946755e894fa0f37da8566dbd7e17bdec853636b848d8f6c54b1c"
+      "treeSha256": "95389798787946755e894fa0f37da8566dbd7e17bdec853636b848d8f6c54b1c",
+      "accessCheck": null,
+      "examplePrompt": "Replace OOTB components"
     },
     {
       "name": "commerce-b2b-store-create",
       "domain": "commerce",
-      "description": "Interactive workflow to create Commerce B2B Stores and retrieve storefront metadata. Use when users want to: create B2B Commerce stores, build Commerce storefronts, set up B2B stores from Vibes, retrieve Commerce metadata, deploy Commerce experiences, work with DigitalExperienceBundle for Commerce.",
       "skillMdSha256": "07d92b74043e26fe208145c2b1beddcff54e77ff50c5574a53e652f80fcf09c5",
-      "treeSha256": "589410afadeddd268f2b15452f34012e90d04fe889fb027c80c8c788a45084bf"
+      "treeSha256": "589410afadeddd268f2b15452f34012e90d04fe889fb027c80c8c788a45084bf",
+      "accessCheck": null,
+      "examplePrompt": "Help me create Salesforce b2b store."
     },
     {
       "name": "data360-activate",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Act phase. Use this skill when the user manages activations, activation targets, data actions, or downstream delivery of Data Cloud audiences and data. TRIGGER when: user manages activations, activation targets, data actions, or downstream delivery of Data Cloud audiences and data. DO NOT TRIGGER when: the task is segment creation (use data360-segment), data retrieval/search work (use data360-query), or STDM/session tracing (use agentforce-observe).",
       "skillMdSha256": "e95926161f83cad3deb1d758c0db4bee1b87c0950438349fb864b9b6e9fa4e23",
-      "treeSha256": "13b2edd10c5325f4d43ae85af4605ae6b13799ba3fd51a65efafe8bd7940c778"
+      "treeSha256": "13b2edd10c5325f4d43ae85af4605ae6b13799ba3fd51a65efafe8bd7940c778",
+      "accessCheck": null,
+      "examplePrompt": "Help me activate Salesforce data360."
     },
     {
       "name": "data360-code-extension-generate",
       "domain": "data360",
-      "description": "Develop and deploy Data Cloud Code Extensions using SF CLI plugin. Use this skill when creating custom Python transformations for Data Cloud, deploying code extensions, or testing data transformations. Supports init, run, scan, and deploy operations.",
       "skillMdSha256": "54db69aef31d3f76fdc1863818d9f806c8e166fee864a326dea8c4903bc36ff0",
-      "treeSha256": "2b5c36212dcaf47fbc981c571ed5da6a0e155064c22c906b54fe9f7ced64831f"
+      "treeSha256": "2b5c36212dcaf47fbc981c571ed5da6a0e155064c22c906b54fe9f7ced64831f",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce code extension."
     },
     {
       "name": "data360-connect",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Connect phase. Use this skill when the user manages Data Cloud connections, connectors, or sets up a new source system. TRIGGER when: user manages Data Cloud connections, connectors, connector metadata, tests a connection, browses source objects or databases, or sets up a new source system. DO NOT TRIGGER when: the task is about data streams or DLOs (use data360-prepare), DMOs or identity resolution (use data360-harmonize), retrieval/search (use data360-query), or STDM telemetry (use agentforce-observe).",
       "skillMdSha256": "909a1c605c80c9f94c72fb68465f46dcb9374cb398ac0223b3779561111d940b",
-      "treeSha256": "7d1741f58843f2a940d8cae045fe62ce53ea5881cd756c92983bca9606940ead"
+      "treeSha256": "7d1741f58843f2a940d8cae045fe62ce53ea5881cd756c92983bca9606940ead",
+      "accessCheck": null,
+      "examplePrompt": "Connect a data stream from my order system."
     },
     {
       "name": "data360-harmonize",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Harmonize phase. Use this skill when the user works with DMOs, mappings, relationships, identity resolution, unified profiles, data graphs, or universal IDs. TRIGGER when: user works with DMOs, mappings, relationships, identity resolution, unified profiles, data graphs, or universal IDs. DO NOT TRIGGER when: the task is only about streams/DLOs (use data360-prepare), segments/insights (use data360-segment), retrieval/search (use data360-query), or STDM/session tracing (use agentforce-observe).",
       "skillMdSha256": "d0c7f14f14e6d3fa1ebf329d9a79127bdd21ac9f4859e7fb443ceffb499dc9f1",
-      "treeSha256": "aaaa780e4962de8ce8ad408a1fed7a2248265b486ae07cc47eac8200bb4bdf43"
+      "treeSha256": "aaaa780e4962de8ce8ad408a1fed7a2248265b486ae07cc47eac8200bb4bdf43",
+      "accessCheck": null,
+      "examplePrompt": "Help me harmonize Salesforce data360."
     },
     {
       "name": "data360-orchestrate",
       "domain": "data360",
-      "description": "Salesforce Data Cloud product orchestrator for connect→prepare→harmonize→segment→act workflows. Use this skill when the user needs a multi-step Data Cloud pipeline, cross-phase troubleshooting, or data space and data kit management. TRIGGER when: user needs a multi-step Data Cloud pipeline, asks to set up or troubleshoot Data Cloud across phases, manages data spaces or data kits, or wants a cross-phase sf data360 workflow. DO NOT TRIGGER when: work is isolated to a single phase (use the matching phase-specific skill), the task is STDM/session tracing/parquet telemetry (use agentforce-observe), standard CRM SOQL (use platform-soql-query), or Apex implementation (use platform-apex-generate).",
       "skillMdSha256": "598c6efdf1ae193a349ea071ef6d41bc40b1bc84e3838d59b093ab5448dd4f00",
-      "treeSha256": "9dbb5dae7efb627accc0ce419ee706d6f237c6275aa2f42fde5e0711385594a3"
+      "treeSha256": "9dbb5dae7efb627accc0ce419ee706d6f237c6275aa2f42fde5e0711385594a3",
+      "accessCheck": null,
+      "examplePrompt": "Help me orchestrate Salesforce data360."
     },
     {
       "name": "data360-prepare",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Prepare phase. Use this skill when the user creates or manages Data Cloud data streams, DLOs, transforms, or Document AI configurations. TRIGGER when: user creates or manages Data Cloud data streams, DLOs, transforms, or Document AI configurations, or asks about ingestion into Data Cloud. DO NOT TRIGGER when: the task is connection setup only (use data360-connect), DMOs and identity resolution (use data360-harmonize), or query/search work (use data360-query).",
       "skillMdSha256": "f1abccf7e9e07bf82dc1c71a5d25592ed36ed36fe93d80127dfa0c4bc0e461b4",
-      "treeSha256": "5dc66c3e9be02b2ac5b522619bb9efa6e433447cf8268bd44c8f780678578164"
+      "treeSha256": "5dc66c3e9be02b2ac5b522619bb9efa6e433447cf8268bd44c8f780678578164",
+      "accessCheck": null,
+      "examplePrompt": "Help me prepare Salesforce data360."
     },
     {
       "name": "data360-query",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Retrieve phase. Use this skill when the user runs Data Cloud SQL, async queries, vector search, search-index workflows, or metadata introspection for Data Cloud objects. TRIGGER when: user runs Data Cloud SQL, describe, async queries, vector search, search-index workflows, or metadata introspection for Data Cloud objects. DO NOT TRIGGER when: the task is standard CRM SOQL (use platform-soql-query), segment creation or calculated insight design (use data360-segment), or STDM/session tracing/parquet analysis (use agentforce-observe).",
       "skillMdSha256": "0024d050f284e80013ffeab0187c9fd2c74698f3247d456afeda8eb1ff638473",
-      "treeSha256": "0aa8f1bdb1e6cd7e7d24ba71acaa6c3f7a84808724ba51b36ffd47b228e19de2"
+      "treeSha256": "0aa8f1bdb1e6cd7e7d24ba71acaa6c3f7a84808724ba51b36ffd47b228e19de2",
+      "accessCheck": null,
+      "examplePrompt": "Help me query Salesforce data360."
     },
     {
       "name": "data360-schema-get",
       "domain": "data360",
-      "description": "Retrieve Data Lake Object (DLO) and Data Model Object (DMO) schema information from Salesforce Data Cloud using REST APIs. Use this skill when you need to inspect DLO or DMO field definitions, data types, or metadata. Takes org alias and optional DLO/DMO name as parameters.",
       "skillMdSha256": "cfea108fc82035b1fae1a0e9bcece41a5d6454a00da85d1418144aec41acd009",
-      "treeSha256": "ef653f5bac3f949d39cc6dad960f7f77e89e6e17670f266340bd1b5c86ce374e"
+      "treeSha256": "ef653f5bac3f949d39cc6dad960f7f77e89e6e17670f266340bd1b5c86ce374e",
+      "accessCheck": null,
+      "examplePrompt": "Help me get Salesforce schema."
     },
     {
       "name": "data360-segment",
       "domain": "data360",
-      "description": "Salesforce Data Cloud Segment phase. Use this skill when the user creates or publishes segments, manages calculated insights, or troubleshoots audience SQL in Data Cloud. TRIGGER when: user creates or publishes segments, manages calculated insights, inspects segment counts or membership, or troubleshoots audience SQL in Data Cloud. DO NOT TRIGGER when: the task is DMO/mapping/identity-resolution work (use data360-harmonize), activation work (use data360-activate), query/search-index work (use data360-query), or Standard Data Model (STDM)/session tracing (use agentforce-observe).",
       "skillMdSha256": "4ff25e496a77a308bcbf28d03070866d07c4af503bdcfe374fda40be1b9ad315",
-      "treeSha256": "d7e5d85f49b65e89607eb992b468f8c5cabe06ed884629be58e0990948c1f3fa"
+      "treeSha256": "d7e5d85f49b65e89607eb992b468f8c5cabe06ed884629be58e0990948c1f3fa",
+      "accessCheck": null,
+      "examplePrompt": "Help me segment Salesforce data360."
     },
     {
       "name": "design-systems-slds-apply",
       "domain": "design-systems",
-      "description": "Apply SLDS-compliant UI using the correct blueprints, styling hooks, utility classes, and icons. Use when building any UI that needs SLDS, choosing between Lightning Base Components and SLDS Blueprints, applying styling hooks for theming, using utility classes for layout and spacing, or selecting icons. Triggers include \"build a modal\", \"create a form\", \"data table\", \"SLDS styling\", \"style with hooks\", \"add an icon\".",
       "skillMdSha256": "945816124adaf8a502061d759b45e4da0962235e54fba252936ed2cd867ad9e6",
-      "treeSha256": "d9b3fd8ed93e27e7377b1d9e23b45f8a0c49617d3986f8e35e2256f53ad2d64d"
+      "treeSha256": "d9b3fd8ed93e27e7377b1d9e23b45f8a0c49617d3986f8e35e2256f53ad2d64d",
+      "accessCheck": null,
+      "examplePrompt": "Build a modal"
     },
     {
       "name": "design-systems-slds-validate",
       "domain": "design-systems",
-      "description": "Audit Lightning Web Components for SLDS compliance and produce a scored quality report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing, checks HTML for accessibility attributes, and scores findings across categories into an overall grade. Use when asked to \"score my component\", \"SLDS scorecard\", \"quality report\", \"audit SLDS compliance\", \"how good is my SLDS\", \"check component quality\", \"rate my component\", \"evaluate my component\", \"is this component ready to ship?\", \"look at my LWC for issues\", \"audit this before I submit\", \"review my component before code review\", or any time a user wants a quality assessment or production-readiness check on an LWC or SLDS component. Not for fixing violations (use design-systems-slds2-migrate) or building new components (use design-systems-slds-apply).",
       "skillMdSha256": "0922258d2999b48222a09074b3c9b2e635629503fe3522aa01815b69d22d556c",
-      "treeSha256": "9b2a515bc16e6fe35b3e5a646a1c377f4a3ea4e4734e2d9a51549c05c9c8cba3"
+      "treeSha256": "9b2a515bc16e6fe35b3e5a646a1c377f4a3ea4e4734e2d9a51549c05c9c8cba3",
+      "accessCheck": null,
+      "examplePrompt": "Score my component"
     },
     {
       "name": "design-systems-slds2-migrate",
       "domain": "design-systems",
-      "description": "Migrate Lightning Web Components from SLDS 1 to SLDS 2 by running the SLDS linter and fixing violations. Use this skill whenever users mention SLDS 2, SLDS uplift, linter violations, LWC token migration, class overrides, hardcoded CSS values that need SLDS hook replacement, or styling hook selection. Covers all styling hook categories — color, spacing, sizing, typography, borders, radius, and shadows. Also use when users mention no-hardcoded-values, no-slds-class-overrides, lwc-to-slds-hooks, no-deprecated-tokens-slds1, or ask about SLDS component migration — even if they don't explicitly say \"uplift\" or \"migration\".",
       "skillMdSha256": "aa2b67267279c2c6965c7ef1aa3b056d12321a4a29dab1bb662bd1cc89ca5414",
-      "treeSha256": "93bf7ca1c46667adfa10ab81d695f4073b4933fa663d8b2514d8fb6ddcebcc8a"
+      "treeSha256": "93bf7ca1c46667adfa10ab81d695f4073b4933fa663d8b2514d8fb6ddcebcc8a",
+      "accessCheck": null,
+      "examplePrompt": "Help me migrate Salesforce slds2."
     },
     {
       "name": "dx-app-analytics-query",
       "domain": "dx",
-      "description": "ISV App Analytics metadata types — AppAnalyticsQueryRequest and AppAnalyticsSettings. Use this skill when the user asks about retrieving managed package usage data, configuring App Analytics simulation mode, querying subscriber snapshots, or understanding the AppAnalyticsQueryRequest lifecycle (New → Pending → Complete → Expired). TRIGGER when: user mentions App Analytics, AppAnalyticsQueryRequest, AppAnalyticsSettings, package usage data, subscriber analytics, ISV analytics, or simulation mode for app analytics. DO NOT TRIGGER when: the task is about standard Salesforce reports/dashboards (use reporting skills), custom SOQL on Account/Contact (use platform-soql-query), or Data Cloud query/search (use data360-query).",
       "skillMdSha256": "e58f0f11eff309e2b345e5a8077bdede9c9f539abdc96231a577c3fa8ed69587",
-      "treeSha256": "6ac8c0279f37aeb7eef70175a2d7da650188f7267032e8f89eeb3a180ef732c6"
+      "treeSha256": "6ac8c0279f37aeb7eef70175a2d7da650188f7267032e8f89eeb3a180ef732c6",
+      "accessCheck": null,
+      "examplePrompt": "Help me query Salesforce app analytics."
     },
     {
       "name": "dx-code-analyzer-configure",
       "domain": "dx",
-      "description": "Set up, configure, and troubleshoot Salesforce Code Analyzer for any project. Handles installation, prerequisite checks, diagnosing broken setups, creating and editing code-analyzer.yml overrides, engine-specific settings, ignore patterns, severity overrides, and CI/CD pipeline setup. TRIGGER when: user says 'set up code analyzer', 'configure code analyzer', 'install code analyzer', 'code analyzer not working', 'fix my setup', 'scan failing', 'check my setup', 'enable/disable engine', 'exclude files', 'change severity', 'set up GitHub Actions', 'set up CI/CD', 'add to pipeline', 'pipeline fail', 'update my workflow', 'quality gate', 'fail on violations', 'scan changed files only', 'add SARIF', 'code-analyzer.yml', 'ESLint config', 'increase SFGE memory', or reports errors running Code Analyzer. DO NOT TRIGGER when: user wants to run a scan (use dx-code-analyzer-run), fix violations, explain rules, create custom rules (use dx-code-analyzer-custom-rule-create), or suppress violations.",
       "skillMdSha256": "38ed8f3ba805fa1db689ee9e66519c5108612c29d594cbe4ed06dc86950fb927",
-      "treeSha256": "d6575d3b12fc0b2fb90a6407a4af68648e4df925d369baf5b83b603b11862749"
+      "treeSha256": "d6575d3b12fc0b2fb90a6407a4af68648e4df925d369baf5b83b603b11862749",
+      "accessCheck": null,
+      "examplePrompt": "Set up code analyzer"
     },
     {
       "name": "dx-code-analyzer-custom-rule-create",
       "domain": "dx",
-      "description": "Create custom Code Analyzer rules for Regex (pattern matching), PMD (XPath/AST for Apex and metadata XML), and ESLint (LWC/JavaScript/TypeScript). Use when users want to enforce coding standards, ban patterns, detect hardcoded values, govern metadata, or add rules not in the built-in set. TRIGGER when: user says 'create a rule', 'ban System.debug', 'enforce naming convention', 'detect hardcoded IDs', 'custom rule', 'xpath rule', 'regex rule', 'add a PMD rule', 'enforce a policy', 'create a check for', 'flag this pattern', 'make a rule that catches', 'metadata rule', 'check permissions', 'enforce API version', 'eslint rule', 'lwc rule', 'override rule threshold', 'customize complexity', or describes a pattern to enforce. DO NOT TRIGGER when: user wants to run a scan (use dx-code-analyzer-run), configure engines (use dx-code-analyzer-configure), or explain existing rules (use dx-code-analyzer-run).",
       "skillMdSha256": "96b2801009c214b6700481eecf33061f2f9c8db4a0185e9c20e66efdd06372d1",
-      "treeSha256": "c9d0d949a4a26046d0f5fe50a0f76e3e9d44fac98c95832da91853e6ad45074c"
+      "treeSha256": "c9d0d949a4a26046d0f5fe50a0f76e3e9d44fac98c95832da91853e6ad45074c",
+      "accessCheck": null,
+      "examplePrompt": "Create a rule"
     },
     {
       "name": "dx-code-analyzer-run",
       "domain": "dx",
-      "description": "Run Salesforce Code Analyzer to scan code for security, performance, best practice, and code style violations. Supports all engines (PMD, ESLint, CPD, RetireJS, Flow, SFGE, ApexGuru), targets (files, folders, git diff), categories, and severities. Also handles post-scan exploration: filtering results by engine/severity/category/file, and explaining what rules mean. TRIGGER when: user says 'scan my code', 'check security issues', 'run PMD/ESLint', 'find duplicates', 'analyze Flows', 'check vulnerable libraries', 'AppExchange review', 'lint my LWC', 'static analysis', 'code quality', 'show security violations', 'what is this rule', 'explain ApexCRUDViolation', 'filter results', or mentions engines/file types (.cls, .trigger, .js, .flow-meta.xml). Use this skill for scanning, exploring results, and listing rules. DO NOT TRIGGER when: user asks only about installation/configuration (use dx-code-analyzer-configure), or wants to create a custom rule (use dx-code-analyzer-custom-rule-create).",
       "skillMdSha256": "85f25690e0fe8a6f4b6cf4c36ea43ae63f2aa531006a1e189b9862a3b18eeb60",
-      "treeSha256": "aa5f2df427e8d1d74f8d2089ca460089daea44df430dbe2ec453a79b377f334e"
+      "treeSha256": "aa5f2df427e8d1d74f8d2089ca460089daea44df430dbe2ec453a79b377f334e",
+      "accessCheck": null,
+      "examplePrompt": "Scan my code"
     },
     {
       "name": "dx-devops-test-failures-analyze",
       "domain": "dx",
-      "description": "Analyzes DevOps Center test failures and Code Analyzer violations in plain language — failure category, offending file/class/method/line, rule violated, fix direction, and prioritized improvement suggestions (test-code vs production-code) — then optionally creates a tracked fix WorkItem on explicit request. Analysis is pure reasoning; work-item creation is a confirmation-gated write. Use this skill to explain failures or improvement suggestions, translate Code Analyzer violations, or track a fix as a work item. TRIGGER when: a run failed and the user wants root cause; a quality gate failure needs explaining; violations need translating; the user shares a failure payload and asks how to address it; wants to strengthen tests; or wants to create a fix work item, log a remediation, or assign a failure. DO NOT TRIGGER when: the user wants fix code written (use platform-apex-generate) or new test classes authored (use platform-apex-test-generate).",
       "skillMdSha256": "96394f80f485d771809f26a534ba2387f2b97a9e6d30858ca22fd56ac8352a86",
-      "treeSha256": "5a7651cea7d44ce66f8e8cb8af44be9015e02c9f03ca5d095d1d5ba90e9913af"
+      "treeSha256": "5a7651cea7d44ce66f8e8cb8af44be9015e02c9f03ca5d095d1d5ba90e9913af",
+      "accessCheck": null,
+      "examplePrompt": "Help me analyze Salesforce devops test failures."
     },
     {
       "name": "dx-devops-test-pipeline-configure",
       "domain": "dx",
-      "description": "Configures DevOps Center pipeline testing infrastructure: enables a test provider so its suites become available, re-syncs a configured provider to pull in new suites, or creates a quality gate with rules on a stage. Routes by intent across three modes after running shared prerequisite checks and an explicit confirmation gate. Use this skill when a user wants to set up, configure, enable, sync, or refresh a test provider, or set/configure a quality gate or coverage threshold on a DevOps Center pipeline stage. TRIGGER when: the user wants to configure/enable/add/set up a test provider, re-sync or refresh a provider's suite list, pull in new suites, or set/configure a quality gate, coverage threshold, or testing benchmark on a stage. DO NOT TRIGGER when: assigning existing suites to a stage (use dx-devops-test-suite-assignments-configure), running or retriggering a suite (use dx-devops-test-suite-run), or non-DevOps-Center work.",
       "skillMdSha256": "15d391ca3c5b744379fde7e2d8783aa9d7503778ae1fd7e4f55c921b8caf6cb6",
-      "treeSha256": "ae53f2832b218907c487030777bf3e579920b0d794df456481313d64778200a7"
+      "treeSha256": "ae53f2832b218907c487030777bf3e579920b0d794df456481313d64778200a7",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce devops test pipeline."
     },
     {
       "name": "dx-devops-test-suite-assignments-configure",
       "domain": "dx",
-      "description": "Recommends and manages DevOps Center test suite assignments for pipeline stages. Mode A analyzes a commit diff against assigned suite metadata to recommend relevant existing suites and flag coverage gaps (pure reasoning). Modes B-D assign a single suite, bulk-map multiple suites with a mandatory impact preview, or add/remove test classes with governance rules, via the testSuiteStages Connect API. Use this skill to recommend suites for a commit, assign or map suites to stages, or add/remove tests in a suite. TRIGGER when: the user asks which suites to run for a commit/diff or what covers their changes; a suite is unlinked and the user wants it assigned; the user wants to configure suite-to-stage mappings, assign multiple suites, or add/remove/sync tests in a suite. DO NOT TRIGGER when: configuring or syncing a test provider (use dx-devops-test-pipeline-configure), running suites (use dx-devops-test-suite-run), or authoring/running tests directly (use platform-apex-test-generate or platform-apex-test-run).",
       "skillMdSha256": "00019782988eb36a457613c4863c1b82570d041833bba5bd9804241ee69b9a8e",
-      "treeSha256": "30c776add87f38bdac041bd6e5099d5f555cfe487dbead2661230401914480d0"
+      "treeSha256": "30c776add87f38bdac041bd6e5099d5f555cfe487dbead2661230401914480d0",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce devops test suite assignments."
     },
     {
       "name": "dx-devops-test-suite-run",
       "domain": "dx",
-      "description": "Runs DevOps Center test suites on a pipeline stage (Pre-Promote, Post-Promote, or Review event) end to end: triggers async execution via the Connect API after an explicit confirmation gate, then polls by runId at provider-specific intervals until it completes, fails, or times out, and hands results to failure analysis. Also retriggers a quality gate after fixes, but only once coverage meets the threshold. Use this skill when a user wants to run, kick off, or launch test suites on a stage, re-run a quality gate, or watch an in-progress run to completion. TRIGGER when: the user wants to run/launch suites on a stage, execute tests before or after promotion, re-run a quality gate after fixing failures, unblock a blocked promotion after adding tests, or poll/watch an in-progress run. DO NOT TRIGGER when: running sf apex run test directly (use platform-apex-test-run), or configuring a NEW gate or threshold (use dx-devops-test-pipeline-configure).",
       "skillMdSha256": "41ea74d5947287da7d23a3722e3b02783ba6c801d933aa863ce1e24c6274d952",
-      "treeSha256": "45eed5464593793e6d67400761efebfc556f425cd107336ba0c7ab31c5481039"
+      "treeSha256": "45eed5464593793e6d67400761efebfc556f425cd107336ba0c7ab31c5481039",
+      "accessCheck": null,
+      "examplePrompt": "Help me run Salesforce devops test suite."
     },
     {
       "name": "dx-devops-work-item-manage",
       "domain": "dx",
-      "description": "Use this skill to manage the full lifecycle of DevOps Center work items — list, create, update, commit changes, perform status transitions, and create pull requests. Update fields like subject, description, and status. Commit and push code changes to work item branches. Create pull requests for work item branches via DevOps Center API. Invoke when the user wants to track, find, create, or update a work item, commit changes to a work item branch, advance a work item's status through the pipeline, or create a pull request for code review. Consolidates sf devops work-item and review operations. DO NOT TRIGGER for promotion or deployment operations, or conflict detection.",
       "skillMdSha256": "cea834538db9c189b44b1024d10d57754e838063517f0aebd2db91ff20c01026",
-      "treeSha256": "77bc67e26695431fe4284fda11b19d1bfc4b78b327edaacfdb390e63602fd442"
+      "treeSha256": "77bc67e26695431fe4284fda11b19d1bfc4b78b327edaacfdb390e63602fd442",
+      "accessCheck": null,
+      "examplePrompt": "Help me manage Salesforce devops work item."
     },
     {
       "name": "dx-org-manage",
       "domain": "dx",
-      "description": "INVOKE this skill to execute Salesforce org operations: create scratch orgs, create org snapshots, open orgs in browser. This skill EXECUTES operations immediately - it does NOT generate scripts or code files. ALWAYS invoke this skill (do not execute SF CLI commands directly) when user requests to: create a scratch org (Developer/Enterprise edition, from definition file (.json), from snapshot, or from org shape), create an org snapshot, or open a Salesforce org. Trigger phrases include: 'create a snapshot', 'create snapshot of my scratch org', 'take a snapshot', 'create scratch org', 'create a Developer edition scratch org', 'new scratch org', 'spin up an org', 'create org from snapshot', 'scratch-def.json', 'project-scratch-def.json', 'open my Salesforce org', 'open org in browser', 'get me the URL'. Do NOT use for switching default org (use dx-org-switch) or deploying metadata (use platform-metadata-deploy).",
       "skillMdSha256": "9adabcb548f7ab6204f8b4d11cb189e15734288464380c30b9fd69decca21526",
-      "treeSha256": "d0b1e903a4ab6ef4c299836cf7186001d8a0c99d521cb8af5ab33a72efb9de4e"
+      "treeSha256": "d0b1e903a4ab6ef4c299836cf7186001d8a0c99d521cb8af5ab33a72efb9de4e",
+      "accessCheck": null,
+      "examplePrompt": "Create a snapshot"
     },
     {
       "name": "dx-org-permission-set-assign",
       "domain": "dx",
-      "description": "ALWAYS USE THIS SKILL to assign permission sets to org users. Assign one or more permission sets to org users using the sf org assign permset command. TRIGGER when the user asks to assign, grant, give, add, or apply permission sets to users, admins, specific orgs, or specific users. Supports granting permissions, giving access, and adding permission sets to default admin or specific users via --on-behalf-of. DO NOT TRIGGER for listing permission sets or checking user permissions.",
       "skillMdSha256": "bfd1ff8cbd9c1ab09eed14fea927f01b5cf646f28cb394a5a17d6d838d2f668b",
-      "treeSha256": "279fab47a4016d95b7b390f4c450ae92ef89de0c4fd6685aaecfab5d6e118e9f"
+      "treeSha256": "279fab47a4016d95b7b390f4c450ae92ef89de0c4fd6685aaecfab5d6e118e9f",
+      "accessCheck": null,
+      "examplePrompt": "Help me assign Salesforce org permission set."
     },
     {
       "name": "dx-org-switch",
       "domain": "dx",
-      "description": "Switches the active Salesforce org (default target-org) using the Salesforce CLI. Use whenever someone wants to change which org CLI commands run against — whether they say \"switch org\", \"change default org\", \"set my org to\", \"use alias\", \"point to\", or describe wanting to work against a specific org, scratch org, sandbox, or production.",
       "skillMdSha256": "36a7906963e28c3865ea06e00820f173b963d66e98b3d817218069d96dac6f2b",
-      "treeSha256": "1e01ad0b7721683e2c226c41b4155c00faeede7f29f409056a7e8e397d53729c"
+      "treeSha256": "1e01ad0b7721683e2c226c41b4155c00faeede7f29f409056a7e8e397d53729c",
+      "accessCheck": null,
+      "examplePrompt": "Help me switch Salesforce org."
     },
     {
       "name": "dx-org-trial-expiration-check",
       "domain": "dx",
-      "description": "Check when Salesforce orgs expire (or already expired) and what to do about it, for one org, the default org, or across all authenticated orgs, using the Salesforce CLI (sf). Use when the user asks about org or trial expiration, \"when does my trial expire\", \"is my trial org still active\", \"how many days are left\", \"which orgs are expiring soon\", wants to filter orgs expiring within N days, needs machine-readable (JSON/CSV) output for cron or alerting, wants to back up an at-risk org before it lapses, or asks how to extend or renew an expiring trial or Developer Edition org. Covers trial editions, Developer Edition orgs (anything with a TrialExpirationDate), and scratch orgs (via sf org list). DO NOT TRIGGER for sandbox refresh timing, for creating, deleting, or switching the active org, or for non-Salesforce trials such as AWS, Netflix, or other vendors — this skill reads expiration and prints guidance, it does not modify orgs.",
       "skillMdSha256": "cf792909911206c016639863f5b5dce447a7e58a8693fa98d79c57606d1acc8a",
-      "treeSha256": "631e438f69309a4d8dbfa1c7309fa824d7dbf65246145e383774dbe141f93423"
+      "treeSha256": "631e438f69309a4d8dbfa1c7309fa824d7dbf65246145e383774dbe141f93423",
+      "accessCheck": null,
+      "examplePrompt": "When does my trial expire"
     },
     {
       "name": "dx-pkg-post-install-configure",
       "domain": "dx",
-      "description": "Use this skill to automate managed package post-install configuration. Package-agnostic — works with any managed package (LMA, FMA, work.com, Certinia, etc.). TRIGGER when: user installs a managed package and needs post-install configuration, mentions LMA/FMA/work.com post-install setup, asks to configure permission sets/FLS/page layouts for an installed package, says 'post-install', 'package setup', 'configure LMA', 'set up FMA', 'post-install steps'. DO NOT TRIGGER for: standalone permission set assignment (use dx-org-permission-set-assign), generating permission set metadata XML (use platform-permission-set-generate), package installation, or org switching.",
       "skillMdSha256": "f38ffdd8b19c1203654dc509f96e9f4d78adb290981050f0364bce5908c568df",
-      "treeSha256": "f499834836d34998209899aa4ca0984b79d8904eb1341d89425cddb069ef4a28"
+      "treeSha256": "f499834836d34998209899aa4ca0984b79d8904eb1341d89425cddb069ef4a28",
+      "accessCheck": null,
+      "examplePrompt": "Configure LMA"
     },
     {
       "name": "experience-cms-brand-apply",
       "domain": "experience",
-      "description": "Extracts, retrieves, and applies CMS brand guidelines (voice, tone, style, colors, typography) to generated content. Use this skill ANY TIME a user request involves branding, brand voice, brand tone, brand guidelines, brand identity, brand styling, or applying a brand to content. Triggers for requests like \"apply my brand\", \"use our brand voice\", \"match our brand guidelines\", \"find my brand\", \"search for brand\", \"get brand instructions\", \"apply brand tone\". Handles the full workflow: searching for brands in Salesforce CMS, extracting brand instructions, and applying brand voice/tone/guidelines to generated content. Does not apply to media/image search (use experience-content-media-search skill), logo search, or creating new brand definitions.",
       "skillMdSha256": "6a298f91f50e9afd69e8d9283ad83c6b25024806793cc54cbab3378c50bde94e",
-      "treeSha256": "abe568281e67a3c18b852be6630179c93227117922b8a8764f6663ef99b6c108"
+      "treeSha256": "abe568281e67a3c18b852be6630179c93227117922b8a8764f6663ef99b6c108",
+      "accessCheck": null,
+      "examplePrompt": "Apply my brand"
     },
     {
       "name": "experience-content-media-search",
       "domain": "experience",
-      "description": "Searches for and retrieves existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from sources such as Salesforce CMS, Data 360 or any other source. Use this skill ANY TIME a user request involves finding, searching, getting, fetching, retrieving, grab, looking up, locating media. NEVER call search_media_cms_channels, search_electronic_media tools directly — always go through this skill first. This skill must be activated before any tool is used for media search or retrieval, without exception.  Takes PRIORITY and activates FIRST when ANY media search/retrieval is mentioned, regardless of what else happens with the media afterward. Triggers for requests like \"search for logo\", \"find hero image\", \"get company logo\", \"locate icons\", \"fetch background image\", \"retrieve product photos\". Handles the search and source selection workflow. Does not apply when the request is about brand search, to generate NEW images with AI, or edit existing images.",
       "skillMdSha256": "bc0166899fc59d49e112e42b146b876a8f7eba6b8bfbdd5ce5cf75ae40720565",
-      "treeSha256": "b9a9479c536212f7d9ad2cfdb2a4c061d7d42f6a078bd5fdca0b12020fa07bdb"
+      "treeSha256": "b9a9479c536212f7d9ad2cfdb2a4c061d7d42f6a078bd5fdca0b12020fa07bdb",
+      "accessCheck": null,
+      "examplePrompt": "Search for logo"
     },
     {
       "name": "experience-lwc-generate",
       "domain": "experience",
-      "description": "Lightning Web Components with PICKLES methodology and 165-point scoring. Use this skill when the user creates or edits LWC components, builds wire service patterns, or writes Jest tests for LWC. TRIGGER when: user creates/edits LWC components, touches lwc/**/*.js, .html, .css, .js-meta.xml files, or asks about wire service, SLDS, or Jest LWC tests. DO NOT TRIGGER when: Apex classes (use platform-apex-generate), Aura components, or Visualforce.",
       "skillMdSha256": "3829ae9acc13d00b737083a4d1a0c540c625fefeb339bc7c1c3c5ba2f2e3af3a",
-      "treeSha256": "07e43772a1d078b8436ca1ba35c2788a557d6ce0e4853c9d5ac18fa7221bad1b"
+      "treeSha256": "07e43772a1d078b8436ca1ba35c2788a557d6ce0e4853c9d5ac18fa7221bad1b",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce lwc."
     },
     {
       "name": "experience-ui-bundle-agentforce-client-generate",
       "domain": "experience",
-      "description": "Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant in a UI Bundle project. TRIGGER when: project contains a uiBundles/*/src/ directory and the task involves adding or modifying a chat widget, chatbot, or conversational AI; files under uiBundles/*/src/ import AgentforceConversationClient; user asks to add any chat or agent functionality to a page. DO NOT TRIGGER when: user wants to create a custom agent, chatbot, or chat widget component from scratch; the project has no uiBundles directory.",
       "skillMdSha256": "842d5dbd90ce6c4aeba44bec37594b32d5412868e13e84dbd1ec608e077f6081",
-      "treeSha256": "03bb47b803286fe9b4e5cce37822e6a40bcf47f8277e4322ed0cf1099120ad70"
+      "treeSha256": "03bb47b803286fe9b4e5cce37822e6a40bcf47f8277e4322ed0cf1099120ad70",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle agentforce client."
     },
     {
       "name": "experience-ui-bundle-app-coordinate",
       "domain": "experience",
-      "description": "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. Do NOT use for Lightning Experience apps with custom objects (use platform-lightning-app-coordinate). Do NOT use for single-concern edits to an existing page (use experience-ui-bundle-frontend-generate).",
       "skillMdSha256": "e891d4b6f4795b7c5d61a83212748754450df5efb0ba12294d5e4284a8f509e7",
-      "treeSha256": "f490a8cdb59a6b3c1531f493ea0ae2ef4da3f20fe5327bc972eab27ac9090777"
+      "treeSha256": "f490a8cdb59a6b3c1531f493ea0ae2ef4da3f20fe5327bc972eab27ac9090777",
+      "accessCheck": null,
+      "examplePrompt": "Help me coordinate Salesforce ui bundle app."
     },
     {
       "name": "experience-ui-bundle-custom-app-generate",
       "domain": "experience",
-      "description": "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves creating or configuring a Custom Application for hosting a UI bundle in Lightning Experience. Use this skill when creating a CustomApplication metadata record to surface the UI bundle in the App Launcher. Activate when files matching applications/*.app-meta.xml exist and need modification, or when the user wants to expose their app via the Lightning App Launcher without a Digital Experience Site. Do NOT use platform-custom-application-generate for this — UI bundle apps do not use tabs, action overrides, or flexipages.",
       "skillMdSha256": "163094bb82cc988af199e4e3ba8226e91bb9d13b9545188c2cfed39bf15f7a3d",
-      "treeSha256": "3d32a6042d588af6032facf99e755f343498324c031f27dfc9cd0bef2f12a62b"
+      "treeSha256": "3d32a6042d588af6032facf99e755f343498324c031f27dfc9cd0bef2f12a62b",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle custom app."
     },
     {
       "name": "experience-ui-bundle-deploy",
       "domain": "experience",
-      "description": "MUST activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the task involves deploying, pushing to an org, or post-deploy setup. Use this skill when deploying a UI bundle app to a Salesforce org. Covers the full deployment sequence: org authentication, pre-deploy build, metadata deployment, permission set assignment, data import, GraphQL schema fetch, and codegen. Activate when files like *.uibundle-meta.xml or sfdx-project.json exist and the user mentions deploying, pushing, org setup, or post-deploy tasks.",
       "skillMdSha256": "d92544304f41bdc3bde89bca524b7791a22de687f8affede58c09c6cc27b32b2",
-      "treeSha256": "eb9637efb27fb78e75d80818c4335593a0a90b444fb2dc3f60177c439d204c4a"
+      "treeSha256": "eb9637efb27fb78e75d80818c4335593a0a90b444fb2dc3f60177c439d204c4a",
+      "accessCheck": null,
+      "examplePrompt": "Help me deploy Salesforce ui bundle."
     },
     {
       "name": "experience-ui-bundle-features-generate",
       "domain": "experience",
-      "description": "MUST activate when the project contains a uiBundles/*/src/ directory and the user wants to add a pre-built feature — such as authentication (login, logout, protected routes, session management) or search (global search across pages and content) — instead of building it from scratch. Always run list first to see the current feature catalog, since it can include more than authentication and search. Always use this skill for installing pre-built features rather than hand-building them. DO NOT TRIGGER for Agentforce conversational client or file-upload features — use experience-ui-bundle-agentforce-client-generate and experience-ui-bundle-file-upload-generate respectively.",
       "skillMdSha256": "bf1455bd1ea0841542acd5f3feed8a2d5c57b071e07441214c981420ae9c5ac9",
-      "treeSha256": "fa0476c477f727e419d17974155c1e703266d152cb45b4b93ba2e5693ef375ac"
+      "treeSha256": "fa0476c477f727e419d17974155c1e703266d152cb45b4b93ba2e5693ef375ac",
+      "accessCheck": [
+        {
+          "type": "license",
+          "value": "Experience Cloud (Customer Community / Customer Community Plus)"
+        },
+        {
+          "type": "orgPref",
+          "value": "Sites"
+        }
+      ],
+      "examplePrompt": "Help me generate Salesforce ui bundle features."
     },
     {
       "name": "experience-ui-bundle-file-upload-generate",
       "domain": "experience",
-      "description": "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves uploading, attaching, or dropping files. Use this skill when adding file upload functionality to a UI bundle app. Provides progress tracking and Salesforce ContentVersion integration. This feature provides programmatic APIs ONLY — build custom UI using the upload() API. ALWAYS use this instead of building file upload from scratch with FormData or XHR.",
       "skillMdSha256": "15bb2299ec9ad48bc71b90f62199115488f9869721252cfbe447f75e6321742e",
-      "treeSha256": "1994e93ede6a5356522e6f6408c65c7223e2a76eb44355e62a63fd40773372a1"
+      "treeSha256": "1994e93ede6a5356522e6f6408c65c7223e2a76eb44355e62a63fd40773372a1",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle file upload."
     },
     {
       "name": "experience-ui-bundle-frontend-generate",
       "domain": "experience",
-      "description": "MUST activate before editing ANY file under uiBundles/*/src/ for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, or navigation in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, or src/styles/global.css. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch (use experience-ui-bundle-app-coordinate instead).",
       "skillMdSha256": "84df72ac9ee1b33a53b1b76fafb1068d660aefc8a73a1472d8378b253e92d2a7",
-      "treeSha256": "e7b2dc467bea8388b6a1023e2280ebf506927f868061a202544921c554a103df"
+      "treeSha256": "e7b2dc467bea8388b6a1023e2280ebf506927f868061a202544921c554a103df",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle frontend."
     },
     {
       "name": "experience-ui-bundle-metadata-generate",
       "domain": "experience",
-      "description": "Use this skill when adding a front-end React UI bundle to an existing project or configuring UI bundle metadata and config files. TRIGGER when: adding or scaffolding a new UI bundle inside a project that already exists; running sf template generate ui-bundle; editing ui-bundle.json routing, headers, or output directory; working with *.uibundle-meta.xml files; or registering CSP Trusted Sites, resolving blocked images or fonts or external API calls, or editing cspTrustedSites/*.cspTrustedSite-meta.xml files. DO NOT TRIGGER when: creating a brand-new Salesforce project from scratch, where the whole SFDX starter project (UI bundle plus Experience Site metadata and toolchain) is generated together (use experience-ui-bundle-project-generate).",
       "skillMdSha256": "a5a30a85255dc50694715817ee5458a0f4ced3805caed37c7191aeeea7d5a42a",
-      "treeSha256": "1b2b77a64770aa2577973448d8c609e36b0cdb245be0d60ab1dda3ad62335ad4"
+      "treeSha256": "1b2b77a64770aa2577973448d8c609e36b0cdb245be0d60ab1dda3ad62335ad4",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle metadata."
     },
     {
       "name": "experience-ui-bundle-project-generate",
       "domain": "experience",
-      "description": "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce React UI bundle app and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new React UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch.",
       "skillMdSha256": "df2f296f57f817fba413074b1c1e465620ecc160c065bad2dc3f10dd5cb49918",
-      "treeSha256": "d35c8d265e4459c819cd0ff12f6067aa3cd2431897ec726f46a46361aff63e6f"
+      "treeSha256": "d35c8d265e4459c819cd0ff12f6067aa3cd2431897ec726f46a46361aff63e6f",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle project."
     },
     {
       "name": "experience-ui-bundle-salesforce-data-access",
       "domain": "experience",
-      "description": "MUST activate when a uiBundles/*/src/ project does ANY Salesforce record operation — reading, creating, updating, deleting, or caching/refreshing query results. Triggers: code importing @salesforce/platform-sdk, calls to sdk.graphql.query / sdk.graphql.mutate / sdk.fetch, *.graphql files, stale data needing a force-refresh, or wiring up a UI bundle's data layer to read, write, or refresh Salesforce records. The default for new read/write work is the Read/Write workflow with the current @salesforce/platform-sdk API; only follow the migration path when EXISTING code already uses the old @salesforce/sdk-data callable form. Not for building app shell/UI, styling, file upload, or auth/search scaffolding — use the other ui-bundle-* skills. DO NOT TRIGGER when: OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation.",
       "skillMdSha256": "a171f4446706896d18e1f1503252b8232ad8ecae75abf38da1a106685f0b30c2",
-      "treeSha256": "40846a59ea355562b20a04cd656bb6349f143b4764c4d31cd4cce3659452c344"
+      "treeSha256": "40846a59ea355562b20a04cd656bb6349f143b4764c4d31cd4cce3659452c344",
+      "accessCheck": null,
+      "examplePrompt": "Help me access Salesforce ui bundle salesforce data."
     },
     {
       "name": "experience-ui-bundle-site-generate",
       "domain": "experience",
-      "description": "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves creating or configuring site infrastructure. Use this skill when creating or configuring a Salesforce Digital Experience Site for hosting a UI bundle. Activate when files matching digitalExperiences/, networks/, customSite/, or DigitalExperienceBundle exist and need modification, or when the user wants to publish, host, or configure guest access for their app.",
       "skillMdSha256": "6e0f8d234c4c5df88d97aaa7125590dfadf208e07afccf1a1568d709a439295e",
-      "treeSha256": "cd02b49745a993038d5c027e91842a3b4afec0664a2a318af2c779efb4239fd1"
+      "treeSha256": "cd02b49745a993038d5c027e91842a3b4afec0664a2a318af2c779efb4239fd1",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce ui bundle site."
     },
     {
       "name": "external-diagram-mermaid-generate",
       "domain": "external",
-      "description": "Salesforce architecture diagrams using Mermaid with ASCII fallback. Use this skill when generating text-based diagrams for Salesforce architecture, OAuth flows, ERDs, integration sequences, or Agentforce structure. TRIGGER when: user says \"diagram\", \"visualize\", \"ERD\", or asks for sequence diagrams, flowcharts, class diagrams, or architecture visualizations in Mermaid. DO NOT TRIGGER when: user asks about non-Salesforce systems.",
       "skillMdSha256": "73f5c5e849828f860d6d3f14eb07a02908b4d5f59f5c2c7e60bf36161635143d",
-      "treeSha256": "c43649178025a461b931eab961b3998ebe041ab56b531fb3edeeedc7c7548a7c"
+      "treeSha256": "c43649178025a461b931eab961b3998ebe041ab56b531fb3edeeedc7c7548a7c",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce diagram mermaid."
     },
     {
       "name": "integration-connectivity-connected-app-configure",
       "domain": "integration",
-      "description": "Salesforce Connected Apps and External Client Apps OAuth configuration with 120-point scoring. Use this skill to configure OAuth flows, JWT bearer auth, Connected Apps, and External Client Apps in Salesforce. TRIGGER when: user configures OAuth flows, JWT bearer auth, Connected Apps, ECAs, or touches .connectedApp-meta.xml / .eca-meta.xml files. DO NOT TRIGGER when: configuring Named Credentials for callouts (use integration-connectivity-generate), reviewing permission policies (use platform-metadata-deploy), or writing Apex token-handling code (use platform-apex-generate).",
       "skillMdSha256": "ca093aacb21f810b76670ff5a3338630e509dcd059bd16d7aec5b27886300acc",
-      "treeSha256": "26aeef50751265127d076190da3c04b3dc43c621ba1214e981cb14dac7688fb0"
+      "treeSha256": "26aeef50751265127d076190da3c04b3dc43c621ba1214e981cb14dac7688fb0",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce connectivity connected app."
     },
     {
       "name": "integration-connectivity-generate",
       "domain": "integration",
-      "description": "Salesforce integration architecture and runtime plumbing with 120-point scoring. Use this skill to set up Named Credentials, External Credentials, External Services, REST/SOAP callout patterns, Platform Events, and Change Data Capture. TRIGGER when: user sets up Named Credentials, External Services, REST/SOAP callouts, Platform Events, CDC, or touches .namedCredential-meta.xml files. DO NOT TRIGGER when: Connected App/OAuth config (use integration-connectivity-connected-app-configure), Apex-only logic (use platform-apex-generate), data import/export (use platform-data-manage), or CDC channel-membership metadata such as PlatformEventChannel, PlatformEventChannelMember, or EnrichedField (use integration-eventing-cdc-configure).",
       "skillMdSha256": "6a0c2eeef9f220b5b31cd2acb44495990e70e19904755579b4e34837e39b1a1d",
-      "treeSha256": "c65e4f4b19f1cec71fa73030be6686796a3f92ad3f325edac3748c91acbad83f"
+      "treeSha256": "c65e4f4b19f1cec71fa73030be6686796a3f92ad3f325edac3748c91acbad83f",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce connectivity."
     },
     {
       "name": "integration-eventing-cdc-configure",
       "domain": "integration",
-      "description": "Use to enable Salesforce Change Data Capture (CDC) on a standard or custom object, configure a custom event channel, set a filter expression, or add enrichment fields. TRIGGER broadly on any of: 'enable CDC', 'enable Change Data Capture', 'turn on CDC', 'subscribe X to change events', 'only emit events for', 'filter change events', 'enrich change events', 'create a custom event channel'; or any mention of CDC, change events, PlatformEventChannel, PlatformEventChannelMember, EnrichedField, ChangeEvents channel, enrichment fields, change event filter; or when the user wants a downstream system to receive Salesforce data changes; or when the user touches .platformEventChannelMember-meta.xml / .platformEventChannel-meta.xml files. SKIP when publishing platform events, Pub/Sub API or REST/SOAP (use integration-connectivity-generate), or ManagedEventSubscription (out of scope for CDC). Always use this skill for CDC channel-membership metadata.",
       "skillMdSha256": "f323397263e6b69fa41832c617b09ad7316dedd8279a85697717def9c49c0ec4",
-      "treeSha256": "88929561c207c113019d3075f06b07b2a984d0d277a547c3f87a087a622a9920"
+      "treeSha256": "88929561c207c113019d3075f06b07b2a984d0d277a547c3f87a087a622a9920",
+      "accessCheck": null,
+      "examplePrompt": "Enable CDC"
     },
     {
       "name": "integration-eventing-subscription-configure",
       "domain": "integration",
-      "description": "Create, read, update, and delete ManagedEventSubscription metadata in Salesforce. Use this skill for any work involving managed event subscriptions, platform event subscriptions, event channel subscribers, or .managedEventSubscription-meta.xml files. TRIGGER when: user asks to subscribe to a platform event, create a managed subscription, set up event replay, configure an event channel subscriber, update replay preset, activate or deactivate a subscription, delete a subscription, or manage ManagedEventSubscription metadata. SKIP when: user needs to create the platform event channel itself (use platform-custom-object-generate skill) or needs Flow-based event subscriptions (use automation-flow-generate skill).",
       "skillMdSha256": "5208d5fe51726401e8e0f239977c34265a47f14b0c9423c8c7d6143f170272ff",
-      "treeSha256": "a14de893a33fc4146f099793b11b5df9b4857017c46c2584fbf3d2799b6c3330"
+      "treeSha256": "a14de893a33fc4146f099793b11b5df9b4857017c46c2584fbf3d2799b6c3330",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce eventing subscription."
     },
     {
       "name": "mobile-apps-create",
       "domain": "mobile",
-      "description": "The entry point for building any Salesforce native mobile app on iOS or Android. TRIGGER when the user says: \"build a Salesforce iOS app\", \"add Salesforce login to my Android app\", \"set up Mobile SDK\", \"add MobileSync / SmartStore offline storage\", \"embed an Agentforce agent in my mobile app\", \"add Agentforce chat to iOS/Android\", or otherwise asks to create, extend, or integrate a Salesforce mobile experience in Swift or Kotlin (MSDK, Agentforce SDK, or both). SKIP when the user is building a non-Salesforce mobile app, using React Native / Flutter / Ionic without Salesforce integration, asking about generic mobile UI design, or working on a Salesforce-adjacent web/desktop surface (LWC, Experience Cloud, Mobile Publisher branding-only).",
       "skillMdSha256": "929ba91c2946e5ddeba5705b05a460935656cac380251984a03243cecc8420e7",
-      "treeSha256": "0b3dbb5dd66497406e10fd0e0174ee9f788dee525d9b3477ea6acc8c1cc7cb7c"
+      "treeSha256": "0b3dbb5dd66497406e10fd0e0174ee9f788dee525d9b3477ea6acc8c1cc7cb7c",
+      "accessCheck": null,
+      "examplePrompt": "Build a Salesforce iOS app"
     },
     {
       "name": "mobile-platform-native-capabilities-integrate",
       "domain": "mobile",
-      "description": "Build a Salesforce LWC that uses native mobile device capabilities — barcode scanner, biometrics, location, NFC, calendar, contacts, document scanner, geofencing, AR space capture, app review, and payments. Use this skill when the user asks for an LWC that scans a barcode, captures a photo of a document, reads location or geofences, prompts for biometrics, reads/writes the device calendar or contacts, taps NFC, takes a payment, prompts for an app review, or scans an AR space. Also triggers on \"lightning/mobileCapabilities\", \"mobile capability\", \"Nimbus\", \"device capability\". Do not use for mobile offline / Komaci priming reviews (use `mobile-platform-offline-validate`) or for picking generic Lightning base components (use `design-systems-slds-apply`).",
       "skillMdSha256": "351e2797e5a2f410c2bc2019329e8639a97e60c070ef0b469d9a7099e442aa97",
-      "treeSha256": "e47266869bd28d3d7625805b202c0e670388419ccb21fd16a2de575799a8144f"
+      "treeSha256": "e47266869bd28d3d7625805b202c0e670388419ccb21fd16a2de575799a8144f",
+      "accessCheck": null,
+      "examplePrompt": "Help me integrate Salesforce platform native capabilities."
     },
     {
       "name": "mobile-platform-offline-validate",
       "domain": "mobile",
-      "description": "Review a Lightning Web Component for **mobile offline** compatibility — the Komaci offline static analyzer that pre-primes the data graph for Salesforce Mobile App Plus and Field Service Mobile App. Produces a finding list with code-level fixes covering inline GraphQL queries in `@wire` configurations, modern `lwc:if` / `lwc:elseif` / `lwc:else` directives, and Komaci ESLint rule violations (private wire properties, non-local reactive references, getter side-effects). Use when the user asks for a \"mobile offline review\", \"Komaci check\", \"offline priming audit\", \"offline priming failure\", or \"offline data graph error\", or to validate an LWC against the `@salesforce/eslint-plugin-lwc-graph-analyzer` recommended ruleset. Do not use for generic LWC code review (use an appropriate domain review skill) or for building LWCs with native mobile capabilities (use `mobile-platform-native-capabilities-integrate`).",
       "skillMdSha256": "e15359135061609cdaaf62ac49a1ed35e6905c00f71273adeeeef1913fabf887",
-      "treeSha256": "71779d345d5c9af6df56d5d1bf77738854eb8874c936f92a305e75e9353f5588"
+      "treeSha256": "71779d345d5c9af6df56d5d1bf77738854eb8874c936f92a305e75e9353f5588",
+      "accessCheck": null,
+      "examplePrompt": "Help me validate Salesforce platform offline."
     },
     {
       "name": "omnistudio-callable-apex-generate",
       "domain": "omnistudio",
-      "description": "Salesforce Industries Common Core (OmniStudio/Vlocity) Apex callable generation and review skill with 120-point scoring. Use when creating, reviewing, or migrating Industries callable Apex implementations. TRIGGER when: user creates or reviews System.Callable classes, migrates VlocityOpenInterface or VlocityOpenInterface2, or builds Industries callable extensions used by OmniStudio, Integration Procedures, or DataRaptors. DO NOT TRIGGER when: generic Apex classes or triggers (use platform-apex-generate), building Integration Procedures (use omnistudio-integration-procedure-generate), authoring OmniScripts (use omnistudio-omniscript-generate), configuring Data Mappers (use omnistudio-datamapper-generate), or analyzing namespace/dependency issues (use omnistudio-dependencies-analyze).",
       "skillMdSha256": "53f3f478bf44b4d131d1b79e968729938ef8c3f9d757d6a810a55eba511af027",
-      "treeSha256": "d9f43e0eb6edbfee595c3ebc80faa91590d5e8aefee53ed364dececc5dbfedce"
+      "treeSha256": "d9f43e0eb6edbfee595c3ebc80faa91590d5e8aefee53ed364dececc5dbfedce",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce callable apex."
     },
     {
       "name": "omnistudio-datamapper-generate",
       "domain": "omnistudio",
-      "description": "OmniStudio Data Mapper (formerly DataRaptor) creation and validation with 100-point scoring. Use when building Extract, Transform, Load, or Turbo Extract Data Mappers, mapping Salesforce object fields, or reviewing existing Data Mapper configurations. TRIGGER when: user creates Data Mappers, configures field mappings, works with OmniDataTransform metadata, or asks about DataRaptor/Data Mapper patterns. DO NOT TRIGGER when: building Integration Procedures (use omnistudio-integration-procedure-generate), authoring OmniScripts (use omnistudio-omniscript-generate), or analyzing cross-component dependencies (use omnistudio-dependencies-analyze).",
       "skillMdSha256": "2d2cf67ecc351abdc9f18ff4ff7214a3d1a447c3466350826e44e903da8e6d3f",
-      "treeSha256": "1d598f970cc60bb497cf955daaa12704a5e889d0e399b9e336ac2de715492546"
+      "treeSha256": "1d598f970cc60bb497cf955daaa12704a5e889d0e399b9e336ac2de715492546",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce datamapper."
     },
     {
       "name": "omnistudio-datapacks-deploy",
       "domain": "omnistudio",
-      "description": "Salesforce Industries DataPack deployment automation using Vlocity Build. TRIGGER when: user deploys or validates OmniStudio/Vlocity DataPacks with vlocity commands (packDeploy/packRetry/packExport/packGetDiffs), sets up DataPack CI/CD pipelines, or troubleshoots DataPack migration errors. DO NOT TRIGGER when: deploying Salesforce metadata with sf project deploy (use platform-metadata-deploy), authoring OmniStudio artifacts (use omnistudio-*-build), or writing Apex/LWC business logic (use platform-apex-generate/experience-lwc-generate).",
       "skillMdSha256": "fdecbd4a00ce9b35381600422070d91bd6e8e44fc1c921f5c3d56a73a80a077d",
-      "treeSha256": "2dfae37505514425034609a81812063bffb66d0b00f28d588a64bb3f0e190022"
+      "treeSha256": "2dfae37505514425034609a81812063bffb66d0b00f28d588a64bb3f0e190022",
+      "accessCheck": null,
+      "examplePrompt": "Help me deploy Salesforce datapacks."
     },
     {
       "name": "omnistudio-dependencies-analyze",
       "domain": "omnistudio",
-      "description": "Cross-cutting OmniStudio analysis skill for namespace detection, dependency visualization, and impact analysis across OmniScripts, FlexCards, Integration Procedures, and Data Mappers. TRIGGER when: user asks about OmniStudio dependencies, wants namespace detection (Core vs vlocity_cmt vs vlocity_ins), needs impact analysis, requests dependency graphs or Mermaid diagrams, or asks which components are affected by a change. DO NOT TRIGGER when: authoring OmniScripts (use omnistudio-omniscript-generate), building FlexCards (use omnistudio-flexcard-generate), creating Integration Procedures (use omnistudio-integration-procedure-generate), or configuring Data Mappers (use omnistudio-datamapper-generate).",
       "skillMdSha256": "3e2babf5fca134991ec1fd796a1d6bf1c2d6896cc952f1ffac355261297e2869",
-      "treeSha256": "9a3d6d7f0491508882b0ca0da19d371bfddcb64429bbcc46fbb9a433ffc26ade"
+      "treeSha256": "9a3d6d7f0491508882b0ca0da19d371bfddcb64429bbcc46fbb9a433ffc26ade",
+      "accessCheck": null,
+      "examplePrompt": "Help me analyze Salesforce dependencies."
     },
     {
       "name": "omnistudio-epc-catalog-generate",
       "domain": "omnistudio",
-      "description": "Salesforce Industries CME EPC product-modeling skill for Product2-based catalog creation. Use when creating EPC products, configuring product attributes, building offer bundles with Product Child Items, or reviewing EPC DataPack JSON metadata for product catalog changes. TRIGGER when: user creates or updates Product2 EPC records, AttributeAssignment payloads, AttributeMetadata/AttributeDefaultValues, Offer bundles, or ProductChildItem relationships. DO NOT TRIGGER when: designing OmniScripts/FlexCards/Integration Procedures (use omnistudio-omniscript-generate, omnistudio-flexcard-generate, or omnistudio-integration-procedure-generate), implementing Apex business logic (use platform-apex-generate), or troubleshooting deployment pipelines (use platform-metadata-deploy).",
       "skillMdSha256": "ea4ae75085fd711cd9aed38a832f925fafbce0f6f7c1e8249f7edb65feda49f4",
-      "treeSha256": "98aff7123ce271959186c78a984f099484a43ea6fe1aa57e67475b2d7880187e"
+      "treeSha256": "98aff7123ce271959186c78a984f099484a43ea6fe1aa57e67475b2d7880187e",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce epc catalog."
     },
     {
       "name": "omnistudio-flexcard-generate",
       "domain": "omnistudio",
-      "description": "OmniStudio FlexCard creation and validation with 130-point scoring. Use when building at-a-glance UI cards, configuring data source bindings to Integration Procedures, or reviewing existing FlexCard definitions for accessibility and performance. TRIGGER when: user creates FlexCards, configures data sources, designs card layouts, or asks about OmniUiCard metadata. DO NOT TRIGGER when: building OmniScripts (use omnistudio-omniscript-generate), creating Integration Procedures (use omnistudio-integration-procedure-generate), or analyzing dependencies (use omnistudio-dependencies-analyze).",
       "skillMdSha256": "0516b34d24b3eb97cf337792be06f835054ddfc7d9a61fb0d76f352cf5095ebd",
-      "treeSha256": "cc7199eccd1ae387d057df4d107d0a2d0101ee7302c53ee18e95cbd33956ed9d"
+      "treeSha256": "cc7199eccd1ae387d057df4d107d0a2d0101ee7302c53ee18e95cbd33956ed9d",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce flexcard."
     },
     {
       "name": "omnistudio-integration-procedure-generate",
       "domain": "omnistudio",
-      "description": "OmniStudio Integration Procedure creation and validation with 110-point scoring. Use this skill when building server-side process orchestrations that combine Data Mapper actions, Apex Remote Actions, HTTP callouts, and conditional logic. TRIGGER when: user creates Integration Procedures, adds Data Mapper steps, configures Remote Actions, or reviews existing IP configurations. DO NOT TRIGGER when: building OmniScripts (use omnistudio-omniscript-generate), creating Data Mappers directly (use omnistudio-datamapper-generate), or analyzing cross-component dependencies (use omnistudio-dependencies-analyze).",
       "skillMdSha256": "03732912305889bc9be1d98c7e15d7427047af2b400f8e46692b45da6d0f826f",
-      "treeSha256": "4d0222b627783eb2053924bc81eb4ef12877739d82e011c4bfd03edf4496d383"
+      "treeSha256": "4d0222b627783eb2053924bc81eb4ef12877739d82e011c4bfd03edf4496d383",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce integration procedure."
     },
     {
       "name": "omnistudio-omniscript-generate",
       "domain": "omnistudio",
-      "description": "OmniStudio OmniScript creation and validation with 120-point scoring. Use when building guided digital experiences, multi-step forms, or interactive processes that orchestrate Integration Procedures and Data Mappers. TRIGGER when: user creates OmniScripts, designs step flows, configures element types, or reviews existing OmniScript configurations. DO NOT TRIGGER when: building FlexCards (use omnistudio-flexcard-generate), creating Integration Procedures directly (use omnistudio-integration-procedure-generate), or analyzing dependencies (use omnistudio-dependencies-analyze).",
       "skillMdSha256": "b6ec00c1606ba024228d46504a2013d3730b6e67c590829f82f3aa82f6f815fe",
-      "treeSha256": "eba0dd442250fef273ba08472d9b644000e226c11168f55f59393775eeec887b"
+      "treeSha256": "eba0dd442250fef273ba08472d9b644000e226c11168f55f59393775eeec887b",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce omniscript."
     },
     {
       "name": "platform-agentexchange-partner-offers-configure",
       "domain": "platform",
-      "description": "Enable or disable the org preference that controls whether a Salesforce org can receive partner offers from the Transactable Marketplace. Use this skill when the user wants to turn partner offer reception on or off for an org. TRIGGER when: user asks to enable or disable partner offers, configure TransactableMarketplaceReceivePartnerOffers, configure enableTransactableMarketplaceReceivePartnerOffers, set up marketplace partner offer reception, toggle the TM partner offers setting, edit a TransactableMarketplacePrivateOffer.settings file, or configure org preferences related to transactable marketplace. DO NOT TRIGGER when: user needs to create or manage the partner offer records themselves, configure marketplace listing settings, or work with SfdcPartnerOffer objects (use platform-metadata-deploy or platform-apex-generate instead).",
       "skillMdSha256": "adc8586d99fbfa1c956ad99bbbab957d1bd7b84ad49047081e5b18318eb6b1c3",
-      "treeSha256": "671b8fd78494b75080ff6a51f2ad758e7e207acc6a0db5d5bddf4f3f04dafbd9"
+      "treeSha256": "671b8fd78494b75080ff6a51f2ad758e7e207acc6a0db5d5bddf4f3f04dafbd9",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce agentexchange partner offers."
     },
     {
       "name": "platform-agentsetup-categories-fetch",
       "domain": "platform",
-      "description": "Fetch agentic setup prompt categories from a connected Salesforce org using the Connect API. Use this skill to call GET /agenticsetup/categories and return the list of prompt categories, optionally with their nested prompts. TRIGGER when: user asks to get, fetch, list, or show agentic setup categories, prompt categories, setup copilot categories, prompt library categories, available setup prompts, Agentforce prompt library, or copilot prompts. DO NOT TRIGGER when: user wants to create new categories, work with non-categories endpoints, or generate OpenAPI specs.",
       "skillMdSha256": "f338d8720b5a9476de55c1a8e9a5b0b92ec599854eb5ecdf13f256a70f817fb9",
-      "treeSha256": "81e7d65c6cba6f1c5b7d30f23267bd427b58b61842b33bd60eba511e45fc48f7"
+      "treeSha256": "81e7d65c6cba6f1c5b7d30f23267bd427b58b61842b33bd60eba511e45fc48f7",
+      "accessCheck": null,
+      "examplePrompt": "Help me fetch Salesforce agentsetup categories."
     },
     {
       "name": "platform-apex-generate",
       "domain": "platform",
-      "description": "Primary Apex authoring skill for class generation, refactoring, and review. ALWAYS ACTIVATE when the user mentions Apex, .cls, triggers, or asks to create/refactor a class (service, selector, domain, batch, queueable, schedulable, invocable, DTO, utility, interface, abstract, exception, REST resource). Use this skill for requests involving SObject CRUD, mapping collections, fetching related records, scheduled jobs, batch jobs, trigger design, @AuraEnabled controllers, @RestResource endpoints, custom REST APIs, or code review of existing Apex.",
       "skillMdSha256": "6bd7e2812ba39a5d3990fa5b7d43ad3a4271642a9d64f2119faa257a5c89278a",
-      "treeSha256": "1be0d7973f3cb1589d7f68cd22e3f9339d7781bb5a8d91e93671e310ff3bd099"
+      "treeSha256": "1be0d7973f3cb1589d7f68cd22e3f9339d7781bb5a8d91e93671e310ff3bd099",
+      "accessCheck": null,
+      "examplePrompt": "Create an Apex service to query Accounts."
     },
     {
       "name": "platform-apex-logs-debug",
       "domain": "platform",
-      "description": "Salesforce debug log analysis and troubleshooting with 100-point scoring. TRIGGER when: user analyzes debug logs, hits governor limits, reads stack traces, or touches .log files from Salesforce orgs. DO NOT TRIGGER when: running Apex tests (use platform-apex-test-run), generating or fixing Apex code (use platform-apex-generate), or Agentforce session tracing (use agentforce-observe).",
       "skillMdSha256": "8ab77dfca2e101116e742308e823f1dfcb87a423c3f8bb1ffb3e435b8886e44f",
-      "treeSha256": "496fb4be2be61064713a50ce5eb07555745cc7aa51357369a03909e4c2e2010a"
+      "treeSha256": "496fb4be2be61064713a50ce5eb07555745cc7aa51357369a03909e4c2e2010a",
+      "accessCheck": null,
+      "examplePrompt": "Help me debug Salesforce apex logs."
     },
     {
       "name": "platform-apex-test-generate",
       "domain": "platform",
-      "description": "Generate and validate Apex test classes with TestDataFactory patterns, bulk testing (251+ records), mocking strategies, assertion best practices, and disciplined test-fix loops. Use this skill when creating new Apex test classes, improving test coverage, debugging and fixing failing Apex tests, running test execution and coverage analysis, or implementing testing patterns for triggers, services, controllers, batch jobs, queueables, and integrations. Triggers on *Test.cls, *_Test.cls files, sf apex run test workflows, coverage reports, test-fix loops. Do NOT trigger for production Apex code (use platform-apex-generate) or Jest/LWC tests.",
       "skillMdSha256": "7ed0d88a1f131365af9fb719f49fcb07837890af57ed130a392bdeee110c49e4",
-      "treeSha256": "0859e1293a612a28bb390ff58dbd08558d55444daa5d7376486c352ec1108d92"
+      "treeSha256": "0859e1293a612a28bb390ff58dbd08558d55444daa5d7376486c352ec1108d92",
+      "accessCheck": null,
+      "examplePrompt": "Generate Apex tests for my selector class."
     },
     {
       "name": "platform-apex-test-run",
       "domain": "platform",
-      "description": "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use platform-apex-generate), Agentforce agent testing (use agentforce-test), or Jest/LWC tests (use experience-lwc-generate).",
       "skillMdSha256": "734ed7245d08db058b2cabe90144ad4541553be15b0e9a4ab8262ba10b0ec3a4",
-      "treeSha256": "980f1400fbee447e708b595f2dfb9a3048794e36b823f719acdd567acba734fb"
+      "treeSha256": "980f1400fbee447e708b595f2dfb9a3048794e36b823f719acdd567acba734fb",
+      "accessCheck": null,
+      "examplePrompt": "Help me run Salesforce apex test."
     },
     {
       "name": "platform-custom-application-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create or configure tab-based Salesforce Custom Applications with navigation, branding, and action overrides. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Do NOT use when the goal is hosting a React UI bundle in the App Launcher — use experience-ui-bundle-custom-app-generate for that case.",
       "skillMdSha256": "52527c0f7faf7a4b6adbba62bddb9c3b454dac8b90798c53b325a36272853b6e",
-      "treeSha256": "ae10dd8d9f1fe77811a3622452e13053e0326d45bfefc4aa51bd8d265b3b35b8"
+      "treeSha256": "ae10dd8d9f1fe77811a3622452e13053e0326d45bfefc4aa51bd8d265b3b35b8",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce custom application."
     },
     {
       "name": "platform-custom-field-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, or validate Salesforce Custom Field metadata. Trigger when users mention custom fields, field types, Roll-up Summary fields, Master-Detail relationships, Lookup relationships, formula fields, picklists, dependent (controlling) picklists, referencing a value set from a field, or scoping/limiting picklist values for a specific record type. Also use when users encounter field deployment errors, especially around Roll-up Summary format, Master-Detail constraints, formula issues, or a record type that won't deploy without a business process. Use this skill for custom field metadata work, field generation, and field troubleshooting. DO NOT TRIGGER for creating or customizing the value set itself — defining a new GlobalValueSet, or modifying a StandardValueSet catalog like Industry or Lead Source — use platform-value-set-generate instead; this skill covers the field that references a value set, not the value set definition.",
       "skillMdSha256": "86300a6bcfa915810576b885258f80c16e8cfd9540b0ecb9daf8dae9064f983a",
-      "treeSha256": "b37e8879f55abd51ec03a935d5abb7fa16ce81b21c9f676382f7e641d9d5138a"
+      "treeSha256": "b37e8879f55abd51ec03a935d5abb7fa16ce81b21c9f676382f7e641d9d5138a",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce custom field."
     },
     {
       "name": "platform-custom-lightning-type-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. For widget renditions that combine a CLT with a Widget bundle, use the platform-lightning-type-widget-coordinate orchestrator instead. This is complex - always use this skill for CLT work.",
       "skillMdSha256": "8f0d0f42c1850b22a622802fdc3ef12b3ba3fa8ded83658ffa53db88fed1b1b9",
-      "treeSha256": "82e672f236390dca6430c37d9a6b25976e08c8a792a049338827cc8b44f5c01b"
+      "treeSha256": "82e672f236390dca6430c37d9a6b25976e08c8a792a049338827cc8b44f5c01b",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce custom lightning type."
     },
     {
       "name": "platform-custom-object-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, or validate Salesforce Custom Object metadata. Trigger when users mention custom objects, creating objects, object metadata, .object files, sharing models, name fields, or validation rules on objects. Also use when users say things like \"create a custom object\", \"generate object metadata\", \"set up an object for...\", or when they're troubleshooting object deployment errors especially around sharing models and Master-Detail relationships. Always use this skill for any custom object metadata work, including enriching and keeping the object's description current whenever its fields or validation rules change. Do NOT use this skill for non-Custom-Object metadata (Apex, Flows, LWC, Permission Sets, Custom Metadata Types) or for standard Salesforce objects.",
       "skillMdSha256": "2227de31cd2a343c6673b55b3f3395152463d652b2dfa44e06221f738e4bea06",
-      "treeSha256": "3c12dd464e6d8a31bcfcd90bcbfec2e46d9557e403e80a1fe086eda742d835c0"
+      "treeSha256": "3c12dd464e6d8a31bcfcd90bcbfec2e46d9557e403e80a1fe086eda742d835c0",
+      "accessCheck": null,
+      "examplePrompt": "Create a custom object for service visits."
     },
     {
       "name": "platform-custom-report-type-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, or validate Salesforce Custom Report Type metadata. Trigger when users mention custom report types, report types, CRTs, reporting frameworks, cross-object reports, report builder data sources, or ask to expose fields for reporting across related objects. Also use when users mention primary and related objects for reports, inner vs outer joins in reports, report type categories, or encounter deployment errors for .reportType-meta.xml files. Do NOT trigger for: running, editing, or filtering existing reports; creating report folders, dashboards, or list views; or general reporting questions that don't involve authoring a .reportType-meta.xml file.",
       "skillMdSha256": "31fa5fde3e0685cf1669856230d4f7ae307d9b91088a222a28ca847dc1759e5c",
-      "treeSha256": "b014a0c5ed1579f6d1fe088a905d7e146ca8a3ae434ed7fcf16385d5392c226c"
+      "treeSha256": "b014a0c5ed1579f6d1fe088a905d7e146ca8a3ae434ed7fcf16385d5392c226c",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce custom report type."
     },
     {
       "name": "platform-custom-tab-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create or configure Salesforce Custom Tabs. Trigger when users mention tabs, navigation tabs, object tabs, web tabs, Visualforce tabs, Lightning component tabs, app page tabs, or tab configuration. Also use when users want to add navigation to custom objects, create tabs for external content, or set up Lightning page tabs. Always use this skill for any custom tab work.",
       "skillMdSha256": "a72d7e57d368799642a1287b18916ed91f9ffacd06b49be4733e192a10922d1d",
-      "treeSha256": "766634c3a8a7b583ccf3eeaafebafd287e212a2ba72980e015a443f3a89eef76"
+      "treeSha256": "766634c3a8a7b583ccf3eeaafebafd287e212a2ba72980e015a443f3a89eef76",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce custom tab."
     },
     {
       "name": "platform-data-manage",
       "domain": "platform",
-      "description": "Salesforce data operations with 130-point scoring. Use this skill to create, update, delete, bulk import/export, generate test data, and clean up org records using sf CLI and anonymous Apex. TRIGGER when: user creates test data, performs bulk import/export, uses sf data CLI commands, needs data factory patterns for Apex tests, or needs to seed/clean records in a Salesforce org. DO NOT TRIGGER when: SOQL query writing only (use platform-soql-query), Apex test execution (use platform-apex-test-run), or metadata deployment (use platform-metadata-deploy).",
       "skillMdSha256": "7aede67bcf2cbe1ab5a01aa6cfa4015bfc3a31d2c75f79aff8c359c7eb4842e0",
-      "treeSha256": "e4a1c6752ad33920498a5627fb80858853440d557dfd193df2ab41a5e6736d51"
+      "treeSha256": "e4a1c6752ad33920498a5627fb80858853440d557dfd193df2ab41a5e6736d51",
+      "accessCheck": null,
+      "examplePrompt": "Help me manage Salesforce data."
     },
     {
       "name": "platform-dataspace-access-configure",
       "domain": "platform",
-      "description": "Use this skill to configure Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, and optionally grants object-level access to specific DMO, DLO, or CIO objects via the Object Access Grants Connect API. TRIGGER when: user needs to create or update a permission set that includes DataSpace access, grant a permission set access to a specific dataspace, configure dataAccessLevel or objectAccessLevel for a dataspace scope, add RBAC object access grants for Data Cloud objects, or list or remove object access grants for a permission set and DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without any dataspace access (use platform-permission-set-generate), the request is about data ingestion or streams (use data360-prepare), or the work involves creating dataspaces themselves rather than granting access to them.",
       "skillMdSha256": "3c33073e4ff28230ddd444276ea3034715bf53db8a83c0028a2fb57b064e81a8",
-      "treeSha256": "b84c9042c438242cd348a50a767ee599f3f740cb7a5772c8d994d77618adaf23"
+      "treeSha256": "b84c9042c438242cd348a50a767ee599f3f740cb7a5772c8d994d77618adaf23",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce dataspace access."
     },
     {
       "name": "platform-docs-get",
       "domain": "platform",
-      "description": "Official Salesforce documentation retrieval skill. Use when you need authoritative Salesforce docs from developer.salesforce.com, help.salesforce.com, architect.salesforce.com, admin.salesforce.com, or lightningdesignsystem.com, especially when pages are JS-heavy, shell-rendered, or hard to extract with naive fetching. Use to ground answers in official Salesforce sources instead of third-party blogs or summaries. TRIGGER when: user asks for official Salesforce documentation, Apex or API reference, LWC docs, Agentforce docs, setup or help articles, or any doc from a Salesforce-owned domain. DO NOT TRIGGER when: user is asking for a code change, deployment task, or anything not requiring documentation retrieval — use the appropriate sf-* skill instead.",
       "skillMdSha256": "c559e03636860e4730acfdc365266e37b5ad851a8341e4f671b4369efcd34af8",
-      "treeSha256": "a2b74fa6851a04d8f70c254d1c659b7ef560b55a52bd83351229f2b34541d3e2"
+      "treeSha256": "a2b74fa6851a04d8f70c254d1c659b7ef560b55a52bd83351229f2b34541d3e2",
+      "accessCheck": null,
+      "examplePrompt": "Help me get Salesforce docs."
     },
     {
       "name": "platform-encryption-configure",
       "domain": "platform",
-      "description": "Configure Salesforce Shield Platform Encryption — generate deployable encryption settings and encrypted-field metadata, and answer key-model and lifecycle questions. TRIGGER when: user wants to turn on deterministic encryption, encrypt a field, set up Cache-Only Keys, External Key Management, or replay detection, or mentions Shield Platform Encryption, encryption at rest, deterministic vs probabilistic encryption, encryptionScheme, PlatformEncryptionSettings, EncryptionKeySettings, BYOK, BYOKMS, tenant secrets, key rotation, or .settings-meta.xml / .field-meta.xml for encryption — even when they don't say 'Shield'. SKIP when: user needs a generic custom field with no encryption (use platform-custom-field-generate), needs the raw Metadata API type reference (use platform-metadata-api-context-get), or asks about Classic Encryption (encrypted text fields), which is a different feature. Use this skill for any Platform Encryption configuration, field-encryption, or key-model question.",
       "skillMdSha256": "d069f1f3a51f5960ac9723a2f66bc6974b083ab92baf18446f45433793ba6f44",
-      "treeSha256": "23a0a196984615514377a8d1f8e296c69360fd974c530c269880668d2df5696d"
+      "treeSha256": "23a0a196984615514377a8d1f8e296c69360fd974c530c269880668d2df5696d",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce encryption."
     },
     {
       "name": "platform-flexipage-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, modify, or validate Salesforce Lightning pages (FlexiPages). Trigger when users mention RecordPage, AppPage, HomePage, Lightning pages, page layouts, adding components to pages, or page customization. Also use when users say things like 'create a Lightning page', 'add a component to a page', 'customize the record page', 'generate a FlexiPage', or when they're working with FlexiPage XML files and need help with components, regions, or deployment errors. Always use this skill for any FlexiPage-related work, even if they just mention 'page' in the context of Salesforce. DO NOT TRIGGER when users ask about Visualforce pages, Aura components without FlexiPage context, page layout assignments in the UI, or Lightning Web Component development that does not involve placing components on a FlexiPage.",
       "skillMdSha256": "e0026a6e1a2131aa4f68dd1bb0cac44f9b2837acdde0947e8728fd6d3ed3568a",
-      "treeSha256": "06004211922a3383c745572d3ea7c5269d3ba4ca86bad0e7c523e9b1c0b766b1"
+      "treeSha256": "06004211922a3383c745572d3ea7c5269d3ba4ca86bad0e7c523e9b1c0b766b1",
+      "accessCheck": null,
+      "examplePrompt": "Create a Lightning page"
     },
     {
       "name": "platform-lightning-app-coordinate",
       "domain": "platform",
-      "description": "Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a \"complete app\", \"Lightning app\", \"business solution\", \"management system\", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application.",
       "skillMdSha256": "e0610b3a4f718bff0b9ca53d3108e67ee60e12dbf576ba7288e8a228cbd7e682",
-      "treeSha256": "9102e04e5b3c0484cdb850ecfbd6c304c272f73495c9b911e85f0c3aa7ce7938"
+      "treeSha256": "9102e04e5b3c0484cdb850ecfbd6c304c272f73495c9b911e85f0c3aa7ce7938",
+      "accessCheck": null,
+      "examplePrompt": "Help me coordinate Salesforce lightning app."
     },
     {
       "name": "platform-lightning-type-widget-coordinate",
       "domain": "platform",
-      "description": "Orchestrate Apex-backed Lightning Type + HXL widget generation. TRIGGER only when the prompt EXPLICITLY invokes Lightning Types: user says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', references '@apexClassType/...', asks to build a widget or card for a named Lightning Type, asks to create a new Lightning Type and widget together, or grounds a widget in a specific Apex class as its schema. DO NOT TRIGGER when the prompt names only a subject, domain, feature, or entity noun. Also DO NOT TRIGGER when: authoring only a Custom Lightning Type (use platform-custom-lightning-type-generate), only an Apex class (use platform-apex-generate), editing an existing widget without any Lightning Type change, or grounding a widget on an object/JSON-based Lightning Type (lightning__objectType with primitives).",
       "skillMdSha256": "0ef5542898290e005b5d197489b295266e08bb9888ec636c13c0398ba9d64b98",
-      "treeSha256": "e4ae9e188a9af624dac1eefcb4bb03970525b74868a30c370cb172f74462048c"
+      "treeSha256": "e4ae9e188a9af624dac1eefcb4bb03970525b74868a30c370cb172f74462048c",
+      "accessCheck": null,
+      "examplePrompt": "Help me coordinate Salesforce lightning type widget."
     },
     {
       "name": "platform-list-view-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, or validate Salesforce List View metadata. Trigger when users mention list views, filtered record lists, creating views, setting up record columns, filtering records by criteria, or ask about list view visibility. Also use when users say things like \"I need a view that shows...\", \"filter records by...\", \"create a list view for...\", or when they're working with ListView XML files and need validation or troubleshooting.",
       "skillMdSha256": "3b8b022eaa70b9875a3173b085e23345d2c5373153fb48f298d43d6afac5c5b8",
-      "treeSha256": "b0b573c807533cd1fed81bd7e9f852f7fb6b0e8d8ffef8d14bf3638fb38ec831"
+      "treeSha256": "b0b573c807533cd1fed81bd7e9f852f7fb6b0e8d8ffef8d14bf3638fb38ec831",
+      "accessCheck": null,
+      "examplePrompt": "I need a view that shows..."
     },
     {
       "name": "platform-metadata-api-context-get",
       "domain": "platform",
-      "description": "REQUIRED companion for Salesforce metadata generation — load this schema/API-context skill in the SAME turn as ANY metadata generation skill; if you load a generator, you ALSO load this. Use it whenever you create, generate, add, edit, or author metadata or a *-meta.xml file: custom object, custom field, formula field, picklist, lookup, master-detail, validation rule, permission set, profile, custom tab, lightning record page, flexipage, list view, custom application, flow, layout, record type, sharing rules, report, and 604 Metadata API types. It provides the authoritative schema, fields, field properties, required flags, allowed enum values, and XML structure so generated *-meta.xml deploys cleanly — skipping it causes hallucinated element names and deploy failures. Trigger on *-meta.xml, metadata schema, api context, 'Salesforce metadata', or 'sfdx project'. DO NOT use for SOQL, DML, runtime sObject access, or Tooling API records.",
       "skillMdSha256": "00912d132820080e10d7ec137b86e5ef4ec1bc491fab4bc5684fc8a13a005e21",
-      "treeSha256": "d4754d78ba5fcbf7b3a1b273465bd46ca6a4a2f200d061f8e3b17921cfb6c49c"
+      "treeSha256": "d4754d78ba5fcbf7b3a1b273465bd46ca6a4a2f200d061f8e3b17921cfb6c49c",
+      "accessCheck": null,
+      "examplePrompt": "Help me get Salesforce metadata api context."
     },
     {
       "name": "platform-metadata-deploy",
       "domain": "platform",
-      "description": "Salesforce DevOps automation using sf CLI v2. TRIGGER when: user deploys metadata, creates/manages scratch orgs or sandboxes, sets up CI/CD pipelines, or troubleshoots deployment errors with sf project deploy. DO NOT TRIGGER when: writing Apex code (use platform-apex-generate), building LWC components (use experience-lwc-generate), creating metadata definitions (use platform-custom-object-generate or platform-custom-field-generate), or querying org data (use platform-data-manage).",
       "skillMdSha256": "3fad9a41fbac4766c6f82ffdf4309c048dd70654803a90a0029260e9551e1fdb",
-      "treeSha256": "68c279c2e2796e2ef3fe49bc4bd5ff0be486a7b5b47db1aa961b3181a831f049"
+      "treeSha256": "68c279c2e2796e2ef3fe49bc4bd5ff0be486a7b5b47db1aa961b3181a831f049",
+      "accessCheck": null,
+      "examplePrompt": "Deploy my local changes to the scratch org."
     },
     {
       "name": "platform-metadata-retrieve",
       "domain": "platform",
-      "description": "ALWAYS USE THIS SKILL to retrieve metadata from an org to your local project using the sf project retrieve start command. Supports multiple retrieval modes: retrieve all remote changes, retrieve by source directory, retrieve by metadata type with wildcards, retrieve by manifest (package.xml), or retrieve by package name. Use when the user asks to retrieve, pull, sync, or download metadata, Apex classes, custom objects, or org changes. Supports source format (default) or metadata format (ZIP). DO NOT TRIGGER for deploying metadata (use platform-metadata-deploy skill), listing metadata, or generating package.xml. NEVER use MCP tools - always use this skill and the Bash tool with sf project retrieve start.",
       "skillMdSha256": "e71ef818721e49db91ee4c7af75d57fef55ffa0815fdea3b0685a60b8279c72d",
-      "treeSha256": "1fb214a4561953097be21ac6e03295fa421676f3b375b28343403d83bde39056"
+      "treeSha256": "1fb214a4561953097be21ac6e03295fa421676f3b375b28343403d83bde39056",
+      "accessCheck": null,
+      "examplePrompt": "Help me retrieve Salesforce metadata."
     },
     {
       "name": "platform-models-api-configure",
       "domain": "platform",
-      "description": "Configure (or troubleshoot) an AI coding agent or CLI to route through the Salesforce Models API using a signed OrgJWT. Use this skill when pointing an agent at the Salesforce model endpoint (api.salesforce.com/ai/gpt/v1), setting up OrgJWT / Bedrock-mode auth, wiring the agent's settings, API-key helper, and credentials file for the Salesforce endpoint, or fixing Models API 401 / 404 / \"model not available\" errors. DO NOT TRIGGER when the user needs to create or configure the Salesforce Connected App itself (use integration-connectivity-connected-app-configure) or set up Named Credentials / callout auth (use integration-connectivity-generate).",
       "skillMdSha256": "0a7fa40427bcf6634310cf2c19c63a9e401824345fc11b6e3d22506680a8e779",
-      "treeSha256": "f11cba815fec32f427db16e45a201eca91a52f1635680b09494601bf4396571b"
+      "treeSha256": "f11cba815fec32f427db16e45a201eca91a52f1635680b09494601bf4396571b",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce models api."
     },
     {
       "name": "platform-permission-set-generate",
       "domain": "platform",
-      "description": "Generates correct, deployable Salesforce permission set metadata (PermissionSet XML) with object, field, user, and app permissions. Use this skill when creating or editing permission set metadata, object permissions, field-level security (FLS), tab visibility, or deploying permission sets.",
       "skillMdSha256": "030c1f3acf1d1042e824f0238e02aa3ac839ba953de680366289482ea42ea26e",
-      "treeSha256": "948ed4e25185a6d774ed959a141538fbe1ea7ca28e6a7b1ba9b7ef9e7623b1a6"
+      "treeSha256": "948ed4e25185a6d774ed959a141538fbe1ea7ca28e6a7b1ba9b7ef9e7623b1a6",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce permission set."
     },
     {
       "name": "platform-policy-rule-generate",
       "domain": "platform",
-      "description": "Use this skill when authoring PolicyRuleDefinition and PolicyRuleDefinitionSet metadata XML for the Salesforce Enforce-O-Matic MDAPI (Data Cloud governance policies), or when editing *.policyRuleDefinition / *.policyRuleDefinitionSet files. Covers the category decision tree, full schema for all policy variants (ACCESS, GOVERNANCE, RECORD, TRANSFORM), UI-compatibility rules for the Data Governance Policy Builder, and validation guardrails. Do NOT use this skill for UserAccessPolicy, AccessPolicy, SharingRules, PermissionSet, or any non-Enforce-O-Matic access-control metadata — those have their own types and live outside the PolicyRuleDefinition schema.",
       "skillMdSha256": "19d1a9490a1f0d2dbf116ae8f027a4b0110e9addf34b533fa1a0e5d27be6c019",
-      "treeSha256": "4a7a0611c60617d3465921404a9aa5afe1af14d1af12f6523e075528ec8e19eb"
+      "treeSha256": "4a7a0611c60617d3465921404a9aa5afe1af14d1af12f6523e075528ec8e19eb",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce policy rule."
     },
     {
       "name": "platform-sharing-owd-configure",
       "domain": "platform",
-      "description": "Use when the user wants to retrieve or update Organization-Wide Default (OWD) sharing settings for Salesforce objects. TRIGGER when: user asks to check current OWD settings, view sharing defaults, change default access levels (Private, Public Read Only, Public Read/Write, Controlled by Parent), configure internal or external access for standard or custom objects, mentions org-wide defaults, wants to make records private or restrict who can see records, wants to control default record visibility for an object, or references .settings-meta.xml sharing fields or sharingModel in .object-meta.xml files. DO NOT TRIGGER when: user asks about sharing rules, criteria-based sharing, role hierarchy, or manual sharing — delegate to platform-sharing-rules-generate.",
       "skillMdSha256": "4692c35818d34362460869a501c007fcae2e432c95d3fb2ffb3119283608156c",
-      "treeSha256": "f94ce3b3ddb734105a76718484618fadd1899b18988662d26945a7fde4463d91"
+      "treeSha256": "f94ce3b3ddb734105a76718484618fadd1899b18988662d26945a7fde4463d91",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce sharing owd."
     },
     {
       "name": "platform-sharing-rules-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, edit, delete, or manage Salesforce Sharing Rules metadata. TRIGGER when: users mention sharing rules, record sharing, criteria-based sharing, role-based sharing, guest user sharing, sharingRules, sharingCriteriaRules, sharingGuestRules, sharingOwnerRules, .sharingRules-meta.xml files, or ask to share records with specific roles or groups. Also trigger when users want to modify or remove existing sharing rules, or update sharing rule criteria or access levels. DO NOT TRIGGER when user needs permission sets or profiles (use platform-permission-set-generate), or needs object-level security rather than record-level sharing (use platform-permission-set-generate).",
       "skillMdSha256": "28a29d1e91ba92b08e5883aea1cf3c0adc16142625684a3cc14d5026bd7f43af",
-      "treeSha256": "11b8c18a5109c00c6a3883e9a8b3616c1b8f79450fc8ffb655ef109bcde22e5f"
+      "treeSha256": "11b8c18a5109c00c6a3883e9a8b3616c1b8f79450fc8ffb655ef109bcde22e5f",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce sharing rules."
     },
     {
       "name": "platform-soql-query",
       "domain": "platform",
-      "description": "SOQL query generation, optimization, and analysis with 100-point scoring. Use this skill when the user needs SOQL/SOSL authoring or optimization: natural-language-to-query generation, relationship queries, aggregates, query-plan analysis, and performance or safety improvements for Salesforce queries. TRIGGER when: user writes, optimizes, or debugs SOQL/SOSL queries, touches .soql files, or asks about relationship queries, aggregates, or query performance. DO NOT TRIGGER when: bulk data operations (use platform-data-manage), Apex DML logic (use platform-apex-generate), or report/dashboard queries.",
       "skillMdSha256": "2c565a192069a6c6ef92fa3f6dd8a9faa82ab3554fc1612b603040c2c35f1e96",
-      "treeSha256": "94589831e815b329facf325654204440f4380e0e17578bddaec3f42c6caf8cf2"
+      "treeSha256": "94589831e815b329facf325654204440f4380e0e17578bddaec3f42c6caf8cf2",
+      "accessCheck": null,
+      "examplePrompt": "Query the ten largest open opportunities."
     },
     {
       "name": "platform-tracing-agentforce-configure",
       "domain": "platform",
-      "description": "Generate AgentforcePlatformTracingSettings metadata to enable or disable Agentforce agent execution trace spans flowing to Data Cloud. Use this skill for any AgentforcePlatformTracingSettings metadata work. TRIGGER when: user mentions Agentforce tracing, agent trace spans, Data Cloud tracing, AgentforcePlatformTracingSettings, platform observability tracing, enable agent tracing, wants agent execution spans in Data Cloud, mentions .settings-meta.xml for AgentforcePlatformTracing, or asks about enabling observability for Agentforce agents. DO NOT TRIGGER when: user wants Platform Tracing for TraceSpanEvent (use platform-tracing-configure), wants to query or analyze existing agent trace data in Data Cloud (use agentforce-observe), wants Event Log Files or ELF configuration, wants Change Data Capture (use integration-eventing-cdc-configure), or wants ManagedEventSubscription (use integration-eventing-subscription-configure).",
       "skillMdSha256": "9f6c2bd7283f603502b0aab498b08fc6aa58dbe21d0b23a12f8d496afc60ddec",
-      "treeSha256": "c6e92526502b18a021126e90f783c9d6fff1f530939682f6d5c623cbca6c5d5b"
+      "treeSha256": "c6e92526502b18a021126e90f783c9d6fff1f530939682f6d5c623cbca6c5d5b",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce tracing agentforce."
     },
     {
       "name": "platform-tracing-configure",
       "domain": "platform",
-      "description": "Generate EventSettings metadata to enable or disable Platform Tracing (TraceSpanEvent publishing) in Event Monitoring. Use this skill for any EventSettings enablePlatformTracing metadata work. TRIGGER when: user mentions Platform Tracing, TraceSpanEvent, enable tracing in Event Monitoring Settings, event monitoring tracing toggle, enablePlatformTracing, .settings-meta.xml for Event settings tracing, turn on trace span events, or stop publishing trace spans. DO NOT TRIGGER when: user wants Agentforce agent tracing to Data Cloud (use platform-tracing-agentforce-configure), wants Event Log Files or ELF generation, wants Change Data Capture (use integration-eventing-cdc-configure), or wants ManagedEventSubscription (use integration-eventing-subscription-configure).",
       "skillMdSha256": "838e98e291dcacdf8f8cd27b24fc78bd02213773998a922a3bea509de522b32e",
-      "treeSha256": "76472c9068494410ecb6ca99f15923423db67fd17eb7e023c916dc8e162ee19c"
+      "treeSha256": "76472c9068494410ecb6ca99f15923423db67fd17eb7e023c916dc8e162ee19c",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce tracing."
     },
     {
       "name": "platform-trust-archive-manage",
       "domain": "platform",
-      "description": "ALWAYS USE THIS SKILL for anything involving Salesforce Archive (also called Trusted Services Archive) — search, view, unarchive, analyze, mask, and erase (RTBF) archived records via the Archive Connect API, and reading archive job status from the ArchiveActivity object. TRIGGER when: user mentions Salesforce Archive, Trusted Services Archive, archive/unarchive records, ArchiveActivity, archive jobs, archive policy, archive analyzer, archived record search, archive storage, archive failure logs, right to be forgotten / RTBF on archived data, or masking archived PII — including phrasings like 'find records that were archived', 'restore archived data', 'why did the archive job fail', 'download the archive failure log', or 'monitor my archive jobs', AND even when they ask you to explain, give guidance, or write a runbook/doc about these topics rather than run code. SKIP when: the user wants generic data-export/backup unrelated to the Archive add-on, or wants to build the archive policy UI metadata.",
       "skillMdSha256": "5069d8567e1e07b6d1ee854daf56c5a1cf8862d983b1671dd6f0e67efd32dc6b",
-      "treeSha256": "55e1fc0a1d06fc0e386ba58aab29e89420dfce66469fd5604e9f142f9a56d8f8"
+      "treeSha256": "55e1fc0a1d06fc0e386ba58aab29e89420dfce66469fd5604e9f142f9a56d8f8",
+      "accessCheck": null,
+      "examplePrompt": "Find records that were archived"
     },
     {
       "name": "platform-validation-rule-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, modify, or validate Salesforce Validation Rules. Trigger when users mention validation rules, field validation, data quality rules, formula validation, error messages, or validation logic. Also use when users encounter validation errors, need to update formulas, or want to enforce business rules at the data layer. Always use this skill for any validation rule work.",
       "skillMdSha256": "2631cfc7a45b7fc8370b33edb4f4bab3124947787f0d3535b2068cd63f1c8dd9",
-      "treeSha256": "5514f143a4ebe801012c9cba0c18ea6202cbbfd71cc58361bd1943ddb5ff687d"
+      "treeSha256": "5514f143a4ebe801012c9cba0c18ea6202cbbfd71cc58361bd1943ddb5ff687d",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce validation rule."
     },
     {
       "name": "platform-value-set-generate",
       "domain": "platform",
-      "description": "Use this skill when users need to create, generate, or validate a Salesforce global value set or customize a standard value set. Trigger when users mention a global value set, GlobalValueSet, standard value set, StandardValueSet, a reusable picklist, a picklist value set shared across fields, or customizing standard picklists like Industry, Lead Source, or Opportunity Stage. Also use when users hit deployment errors adding values to a standard picklist, referencing a value set from a custom field, or working with .globalValueSet-meta.xml or .standardValueSet-meta.xml files. DO NOT TRIGGER for an inline one-off picklist on a single field with no reuse, or for general custom field metadata work that does not involve a GlobalValueSet or StandardValueSet — use platform-custom-field-generate instead.",
       "skillMdSha256": "a926f60c3a867f0250967701e25b69e8ae7c723ac264afe7421a1475a1589ef9",
-      "treeSha256": "92cfb7968a24f613231dff508e2af1a0d9f6685e8181ba1f1b05dfe94d38dd96"
+      "treeSha256": "92cfb7968a24f613231dff508e2af1a0d9f6685e8181ba1f1b05dfe94d38dd96",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce value set."
     },
     {
       "name": "platform-widget-generate",
       "domain": "platform",
-      "description": "Use this skill to author a complete HXL WidgetBundle (UEM body + schema.json + -meta.xml). TRIGGER when: user asks for a widget, mosaic, fragment, card, or rich UI surface for any subject, domain, feature, or entity noun; the prompt names only an entity or data shape without invoking Lightning Types, CLTs, or Apex-backed types. DO NOT TRIGGER when: the prompt explicitly says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', or references '@apexClassType/...' (use platform-lightning-type-widget-coordinate); authoring a custom-LWC renderer for a Custom Lightning Type (use platform-custom-lightning-type-generate); or editing only an LWC component.",
       "skillMdSha256": "c09e1fa55ccfafff96537f08b6c6966a7adccaf9f8825406dd24f91d9bc69efe",
-      "treeSha256": "b17495be3f5f9dc93eb54249681f16e83e132d1b01c25d39081313e0f72ec793"
+      "treeSha256": "b17495be3f5f9dc93eb54249681f16e83e132d1b01c25d39081313e0f72ec793",
+      "accessCheck": null,
+      "examplePrompt": "Help me generate Salesforce widget."
     },
     {
       "name": "sales-agentforce-pipeline-management-configure",
       "domain": "sales",
-      "description": "Use to configure, set up, or repair the Sales Management agent and Agentforce Pipeline Management in a Salesforce org. Automates metadata creation for flows, prompt templates, permission sets, and data source configuration. TRIGGER when: user wants to enable Pipeline Management, configure Sales pipeline features, set up the Sales Management agent for opportunity field updates (including autonomous updates), connect enabled data sources like Einstein Conversation Insights or Einstein Activity Capture, customize opportunity stage descriptions, configure post-meeting suggestions, verify or audit configuration status, fix partially configured orgs, or troubleshoot Pipeline Management metadata issues. DO NOT TRIGGER when: user wants to build a custom agent (use agentforce-generate), configure general Agentforce tracing (use platform-tracing-agentforce-configure), work with non-Sales agents, or enable Einstein Conversation Insights or Einstein Activity Capture from scratch (provisioning is out of scope).",
       "skillMdSha256": "eb67c124f966676a27eb722877033316404229dd614091fb584c276fc9d19ac5",
-      "treeSha256": "a05db55490ffcc9c9b9f5de280b4e3b2fabf6833d2feb4d69cb176b4c603484d"
+      "treeSha256": "a05db55490ffcc9c9b9f5de280b4e3b2fabf6833d2feb4d69cb176b4c603484d",
+      "accessCheck": null,
+      "examplePrompt": "Help me configure Salesforce agentforce pipeline management."
     }
   ]
 }
