@@ -1,3 +1,13 @@
+# [1.36.0](https://github.com/forcedotcom/sf-skills/compare/1.35.0...1.36.0) (2026-08-11)
+
+
+### Features
+
+* @W-23737112@ Integrate PR [#1138](https://github.com/forcedotcom/sf-skills/issues/1138) to main ([870e4af](https://github.com/forcedotcom/sf-skills/commit/870e4afc09bc2ccf9c6c41b045e54492f1f37688))
+* Fix dx-app-analytics-query & mobile-apps-create for strict validator on main @W-23705745@ ([6e0cb27](https://github.com/forcedotcom/sf-skills/commit/6e0cb27718fed4032508860d30c6ceda886755b2))
+
+
+
 # [1.35.0](https://github.com/forcedotcom/sf-skills/compare/1.34.0...1.35.0) (2026-08-07)
 
 
