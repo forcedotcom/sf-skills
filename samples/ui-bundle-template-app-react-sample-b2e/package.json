@@ -1,6 +1,6 @@
 {
   "name": "@salesforce/ui-bundle-template-base-sfdx-project",
-  "version": "10.2.2",
+  "version": "11.54.1",
   "description": "Base SFDX project template",
   "license": "SEE LICENSE IN LICENSE.txt",
   "publishConfig": {
@@ -11,6 +11,7 @@
     "build": "echo 'No build required for base-sfdx-project'",
     "clean": "echo 'No clean required for base-sfdx-project'",
     "lint": "eslint --no-error-on-unmatched-pattern **/{aura,lwc}/**/*.js",
+    "validate:org-setup-config": "node scripts/validate-org-setup-config.mjs",
     "test": "npm run test:unit",
     "test:coverage": "npm run test",
     "test:unit": "sfdx-lwc-jest -- --passWithNoTests",
@@ -20,7 +21,12 @@
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "precommit": "lint-staged",
-    "setup": "node scripts/org-setup.mjs"
+    "setup": "node scripts/org-setup.mjs",
+    "dev:preview": "node scripts/org-setup-dev.mjs"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.9.3",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@lwc/eslint-plugin-lwc": "^3.3.0",

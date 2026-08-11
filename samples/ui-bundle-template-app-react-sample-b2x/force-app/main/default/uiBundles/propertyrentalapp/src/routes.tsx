@@ -31,10 +31,6 @@ export const routes: RouteObject[] = [
         handle: { showInNavigation: true, label: "Home" }
       },
       {
-        path: "*",
-        element: <NotFound />
-      },
-      {
         path: "accounts/:recordId",
         element: <AccountObjectDetail />
       },
@@ -118,6 +114,10 @@ export const routes: RouteObject[] = [
             handle: { showInNavigation: true, label: "Maintenance" }
           }
         ]
+      },
+      {
+        path: "*",
+        element: <NotFound />
       }
     ]
   }

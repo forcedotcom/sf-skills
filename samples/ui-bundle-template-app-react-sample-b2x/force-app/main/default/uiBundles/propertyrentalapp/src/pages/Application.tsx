@@ -10,6 +10,62 @@ import { fetchPropertyDetailById } from "@/api/properties/propertyDetailGraphQL"
 import { createApplicationRecord } from "@/api/applications/applicationApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { fetchUserContact } from "@/features/authentication/api/userProfileApi";
+import { createRecord } from "@salesforce/ui-bundle/api";
+import { executeGraphQL } from "@/api/graphqlClient.js";
+import GET_USER_DETAILS_QUERY from "@/api/applications/query/getUserDetails.graphql?raw";
+
+interface UserDetailsQueryResult {
+	uiapi?: {
+		currentUser?: {
+			Id?: string;
+			FirstName?: { value?: string };
+			LastName?: { value?: string };
+			Email?: { value?: string };
+		};
+	};
+}
+
+async function createContactForUser(): Promise<string | null> {
+	try {
+		// Fetch current user details
+		const userData = (await executeGraphQL(GET_USER_DETAILS_QUERY)) as UserDetailsQueryResult;
+
+		const currentUser = userData?.uiapi?.currentUser;
+		if (!currentUser) {
+			console.warn("Could not fetch current user details for Contact creation");
+			return null;
+		}
+
+		const firstName = currentUser.FirstName?.value || "Test Property Rental App";
+		const lastName = currentUser.LastName?.value || "User";
+		const email = currentUser.Email?.value || null;
+
+		// Create Contact record
+		const contactFields: Record<string, unknown> = {
+			FirstName: firstName,
+			LastName: lastName,
+		};
+
+		if (email) {
+			contactFields.Email = email;
+		}
+
+		const result = (await createRecord("Contact", contactFields)) as unknown as Record<
+			string,
+			unknown
+		>;
+		const contactId =
+			typeof result.id === "string"
+				? result.id
+				: ((result.fields as Record<string, { value?: string }> | undefined)?.Id?.value ?? null);
+
+		return contactId;
+	} catch (error) {
+		console.error("Failed to create Contact for user:", error);
+		return null;
+	}
+}
 
 function ApplicationSkeleton() {
 	return (
@@ -45,6 +101,14 @@ export default function Application() {
 	const [searchParams] = useSearchParams();
 	const propertyId = searchParams.get("propertyId") ?? "";
 
+	const { data: contactId } = useAsyncData(async () => {
+		if (!user?.id) return null;
+		const contactData = await fetchUserContact<{ ContactId?: string }>(user.id);
+		if (contactData?.ContactId) return contactData.ContactId;
+		// No Contact found — create one from current user details (internal/admin users)
+		return createContactForUser();
+	}, [user?.id]);
+
 	const {
 		data: property,
 		loading,
@@ -78,10 +142,14 @@ export default function Application() {
 			setSubmitError(null);
 			setSubmitting(true);
 			try {
+				if (!contactId) {
+					throw new Error("No Contact ID available for application.");
+				}
+
 				const result = await createApplicationRecord({
 					Property__c: propertyId || null,
 					Status__c: "Submitted",
-					User__c: user?.id || "",
+					User__c: contactId,
 					Start_Date__c: moveInDate.trim() || null,
 					Employment__c: employment.trim() || null,
 					References__c: references.trim() || null,
@@ -93,7 +161,7 @@ export default function Application() {
 				setSubmitting(false);
 			}
 		},
-		[propertyId, moveInDate, employment, references, user],
+		[propertyId, contactId, moveInDate, employment, references, user?.id],
 	);
 
 	if (loading) {

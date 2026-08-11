@@ -12,7 +12,7 @@ import {
 	type DashboardMaintenanceNode,
 } from "../api/dashboard/dashboard";
 import {
-	PROPERTY_OBJECT_API_NAME,
+	ALL_SEARCH_OBJECT_VALUE,
 	SEARCHABLE_OBJECTS,
 	type SearchableObjectConfig,
 } from "../lib/constants";
@@ -25,8 +25,10 @@ export default function Home() {
 	const navigate = useNavigate();
 
 	const [searchQuery, setSearchQuery] = useState("");
+	// Default the dashboard search to "All", which routes to the unified
+	// `/search` page spanning every object.
 	const [selectedObjectApiName, setSelectedObjectApiName] =
-		useState<SearchableObjectConfig["objectApiName"]>(PROPERTY_OBJECT_API_NAME);
+		useState<SearchableObjectConfig["objectApiName"]>(ALL_SEARCH_OBJECT_VALUE);
 
 	const selectedConfig = useMemo(
 		() => SEARCHABLE_OBJECTS.find((o) => o.objectApiName === selectedObjectApiName),
@@ -131,6 +133,7 @@ export default function Home() {
 	return (
 		<PageContainer>
 			<div className="max-w-7xl mx-auto space-y-6">
+				<h1 className="sr-only">Dashboard</h1>
 				<GlobalSearchBar
 					searchableObjects={SEARCHABLE_OBJECTS}
 					selectedObjectApiName={selectedObjectApiName}

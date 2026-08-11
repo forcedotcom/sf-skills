@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronDown, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import zenLogo from "../../assets/icons/zen-logo.svg";
 import { getUserInfo } from "../../api/dashboard/dashboard";
 
@@ -20,7 +20,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 		loadUserInfo();
 	}, []);
 	return (
-		<div className="bg-[#372949] text-white h-16 flex items-center justify-between px-6">
+		<header className="bg-[#372949] text-white h-16 flex items-center justify-between px-6">
 			{/* Left section - Logo and Menu */}
 			<div className="flex items-center gap-4">
 				<button
@@ -42,14 +42,16 @@ export const TopBar: React.FC<TopBarProps> = ({ onMenuClick }) => {
 			{/* Right section - Profile */}
 			<div className="flex items-center gap-4">
 				{/* User Profile */}
-				<button className="flex items-center gap-2 px-3 py-2 hover:bg-purple-700 rounded-md transition-colors">
-					<div className="w-8 h-8 bg-purple-300 rounded-full flex items-center justify-center text-purple-900 font-semibold">
+				<div className="flex items-center gap-2 px-3 py-2">
+					<div
+						className="w-8 h-8 bg-purple-300 rounded-full flex items-center justify-center text-purple-900 font-semibold"
+						aria-hidden="true"
+					>
 						{userName.charAt(0).toUpperCase()}
 					</div>
 					<span className="hidden md:inline font-medium">{userName.toUpperCase()}</span>
-					<ChevronDown className="w-4 h-4 hidden md:inline" />
-				</button>
+				</div>
 			</div>
-		</div>
+		</header>
 	);
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { Input } from "../../../../components/ui/input";
 
 import { useFilterField } from "../FilterContext";
@@ -62,6 +62,7 @@ export function NumericRangeFilterInputs({
 	className,
 	...props
 }: NumericRangeFilterInputsProps) {
+	const errorId = useId();
 	const [localMin, setLocalMin] = useState(value?.min ?? "");
 	const [localMax, setLocalMax] = useState(value?.max ?? "");
 
@@ -129,6 +130,7 @@ export function NumericRangeFilterInputs({
 			label={label}
 			helpText={helpText}
 			error={errorMessage}
+			errorId={errorId}
 			className={className}
 			{...props}
 		>
@@ -146,6 +148,7 @@ export function NumericRangeFilterInputs({
 					}}
 					aria-label={`${label} minimum`}
 					aria-invalid={hasError || undefined}
+					aria-describedby={hasError ? errorId : undefined}
 				/>
 				<Input
 					type="number"
@@ -160,6 +163,7 @@ export function NumericRangeFilterInputs({
 					}}
 					aria-label={`${label} maximum`}
 					aria-invalid={hasError || undefined}
+					aria-describedby={hasError ? errorId : undefined}
 				/>
 			</div>
 		</FilterFieldWrapper>

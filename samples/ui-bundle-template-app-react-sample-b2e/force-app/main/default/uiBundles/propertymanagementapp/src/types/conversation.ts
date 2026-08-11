@@ -33,6 +33,7 @@ export interface AgentforceConversationClientProps {
 	height?: string | number;
 	/** Theme overrides for the chat UI. */
 	styleTokens?: StyleTokens;
+	isFileBased?: boolean;
 	/** Optional. If not provided, resolved internally (e.g. from /__lo/frontdoor in dev, window.location.origin in prod). */
 	salesforceOrigin?: string;
 	/** Optional. If not provided, resolved internally in dev via /__lo/frontdoor. */

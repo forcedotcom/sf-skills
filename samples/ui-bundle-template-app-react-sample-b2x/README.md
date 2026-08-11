@@ -87,13 +87,16 @@ Two npm scripts at the project root streamline getting started and deployment.
 
 **`npm run sf-project-setup`** — installs the UI Bundle dependencies, builds the app, and starts the dev server (see [Local Development](#local-development)).
 
-**`npm run setup`** — automates the full setup: login, deploy metadata, assign permission sets, import sample data, fetch the GraphQL schema, run codegen, build the UI Bundle, and optionally launch the dev server:
+**`npm run setup`** — automates the full setup: logs in to the org (a required precondition, auto-skipped if already connected), deploys metadata, assigns permission sets, imports sample data, fetches the GraphQL schema, runs codegen, and builds the UI Bundle. It no longer starts the dev server — run `npm run dev:preview` for that (see [Local Development](#local-development)):
 
 ```bash
+# Install project dependencies first (required before running setup)
+npm install
+
 npm run setup -- --target-org <alias>
 ```
 
-Replace `<alias>` with your target org alias or username. Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
+Replace `<alias>` with your target org alias or username. When `--target-org` is omitted, setup uses your default org or (in an interactive terminal) prompts you to pick from your authenticated orgs. Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
 
 ```bash
 npm run setup -- --target-org <alias> --yes
@@ -103,7 +106,7 @@ npm run setup -- --target-org <alias> --yes
 
 | Option                    | Description                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------------ |
-| `--skip-login`            | Skip browser login (auto-skipped if org is already connected)                        |
+| `--target-org <alias>`    | Target org alias or username. If omitted, uses the default org or prompts you        |
 | `--skip-deploy`           | Skip the metadata deploy step                                                        |
 | `--skip-permset`          | Skip permission set assignment                                                       |
 | `--skip-data`             | Skip data preparation and import                                                     |
@@ -111,10 +114,11 @@ npm run setup -- --target-org <alias> --yes
 | `--skip-ui-bundle-build`  | Skip `npm install` and UI Bundle build                                               |
 | `--skip-role`             | Skip role assignment to current user                                                 |
 | `--skip-self-reg`         | Skip Experience Cloud self-registration configuration                                |
-| `--skip-dev`              | Do not launch the dev server at the end                                              |
 | `--permset-name <name>`   | Assign only a specific permission set (repeatable). Default: all sets in the project |
 | `--ui-bundle-name <name>` | UI Bundle folder name under `uiBundles/` (default: auto-detected)                    |
 | `-y, --yes`               | Skip interactive step picker and run all enabled steps immediately                   |
+
+> Login is a required precondition, not a toggleable step, so there is no `--skip-login`. The dev server is no longer part of setup, so there is no `--skip-dev`. Both flags are accepted but ignored for backward compatibility. To start the dev server, run `npm run dev:preview`.
 
 For a full list of options:
 
@@ -133,8 +137,7 @@ The `npm run setup` script reads `scripts/org-setup.config.json` to control whic
       "Property_Management_Access": { "assignee": "currentUser" },
       "Tenant_Maintenance_Access": { "assignee": "skip" },
       "Property_Rental_Guest_User_Access": {
-        "assignee": "guestUser",
-        "siteName": "propertyrentalapp"
+        "assignee": "guestUser"
       }
     }
   },
@@ -143,7 +146,6 @@ The `npm run setup` script reads `scripts/org-setup.config.json` to control whic
     "roleName": "Admin"
   },
   "selfRegistration": {
-    "siteName": "propertyrentalapp",
     "selfRegProfile": "Property Rental Prospect Profile",
     "accountName": "Property Rental Self-Registration"
   }
@@ -154,12 +156,13 @@ The `npm run setup` script reads `scripts/org-setup.config.json` to control whic
 
 Each key is a permission set API name. The `assignee` value controls who it is assigned to:
 
-| Value            | Behavior                                                                          |
-| ---------------- | --------------------------------------------------------------------------------- |
-| `"currentUser"`  | Assigns to the user running the script (resolved via `sf org display`)            |
-| `"skip"`         | Explicitly skips this permission set                                              |
-| `"guestUser"`    | Auto-resolves the site's guest user (requires `siteName` field on the same entry) |
-| `"user@org.com"` | Assigns to a specific user by username                                            |
+| Value           | Behavior                                                                                                                                                                |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"currentUser"` | Assigns to the user running the script (resolved via `sf org display`)                                                                                                  |
+| `"guestUser"`   | Auto-resolves the site's guest user. The site is derived from the single `networks/<siteName>.network-meta.xml` the app ships — it is **not** configured per assignment |
+| `"skip"`        | Explicitly skips this permission set                                                                                                                                    |
+
+`assignee` is a closed set — only the three values above are accepted. Arbitrary usernames are not supported.
 
 #### `role`
 
@@ -173,6 +176,19 @@ Enables Experience Cloud self-registration by:
 2. Adding the specified profile to network member groups
 3. Creating an Account record for self-registered users
 4. Creating the `NetworkSelfRegistration` record
+
+Like `guestUser` permset assignment, the site is derived from the single `networks/<siteName>.network-meta.xml` the app ships — `selfRegistration` does **not** take a `siteName`.
+
+**License pre-check.** Before configuring self-registration, setup verifies the org actually holds the license the flow needs. It derives that license from the `selfRegProfile` you configure (a profile is bound to exactly one `UserLicense`, queried via `Profile.UserLicense` and matched on the stable `LicenseDefinitionKey`), then checks the license is active and has an available seat. If the org lacks the license or is out of seats, self-registration is **skipped with a warning** rather than reported as complete — so prospect login can't silently fail on an under-provisioned org. No separate license field is needed; the requirement always follows the profile the flow assigns.
+
+#### Validation
+
+`org-setup.config.json` is validated against a shared schema at **two moments**, so a malformed config can never silently misbehave:
+
+- **Build / CI time** — every shipped config is validated; an invalid one fails the build.
+- **Setup runtime** — `npm run setup` validates the config before any step runs and exits early with a clear error if it's invalid.
+
+Validation is **strict**: unknown keys (e.g. a `siteName` on an assignment or on `selfRegistration`, or a `permsetAssignment` typo) are rejected rather than silently ignored.
 
 > **After the automated setup completes**, proceed to [Org Configuration](#org-configuration) for the manual steps that cannot be automated via CLI (profile cloning, site member configuration, guest user setup, and publishing the Experience Cloud site).
 
@@ -547,6 +563,13 @@ npm run sf-project-setup
 ```
 
 This installs the UI Bundle dependencies, builds the app, and opens the dev server at `http://localhost:5173`. For manual build and test instructions, see the [UI Bundle README](force-app/main/default/uiBundles/propertyrentalapp/README.md).
+
+Once the org has been set up with `npm run setup`, use `npm run dev:preview` to refresh the GraphQL schema/types against your org and launch the dev server without re-running the full setup:
+
+```bash
+npm run dev:preview                              # prompt to pick an org + bundle
+npm run dev:preview -- --target-org <alias>      # skip the org prompt
+```
 
 ---
 

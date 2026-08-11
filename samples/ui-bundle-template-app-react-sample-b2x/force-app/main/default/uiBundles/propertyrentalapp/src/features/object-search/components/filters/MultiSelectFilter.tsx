@@ -28,6 +28,7 @@ export function MultiSelectFilter({
 }: MultiSelectFilterProps) {
 	const { value, onChange } = useFilterField(field);
 	const selected = value?.value ? value.value.split(",") : [];
+	const labelId = `filter-${field}-label`;
 
 	const triggerLabel =
 		selected.length === 0
@@ -54,12 +55,19 @@ export function MultiSelectFilter({
 	}
 
 	return (
-		<FilterFieldWrapper label={label} helpText={helpText} className={className} {...props}>
+		<FilterFieldWrapper
+			label={label}
+			labelId={labelId}
+			helpText={helpText}
+			className={className}
+			{...props}
+		>
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
 						variant="outline"
 						role="combobox"
+						aria-labelledby={labelId}
 						className={cn(
 							"w-full justify-between font-normal",
 							selected.length === 0 && "text-muted-foreground",

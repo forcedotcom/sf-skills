@@ -32,8 +32,17 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
 
 	return (
 		<div
-			className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+			role="button"
+			tabIndex={0}
+			aria-label={name}
+			className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-purple focus-visible:ring-offset-2"
 			onClick={handleClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					handleClick();
+				}
+			}}
 		>
 			<div className="relative h-48 bg-gray-200">
 				{heroImage && !imageError ? (
@@ -51,7 +60,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
 			</div>
 
 			<div className="p-6">
-				<h3 className="text-xl font-bold text-gray-900 mb-2">{name}</h3>
+				<h2 className="text-xl font-bold text-gray-900 mb-2">{name}</h2>
 				<p className="text-sm text-gray-600 mb-4">{address}</p>
 				<p className="text-sm text-gray-700 mb-4 line-clamp-3">{truncatedDescription}</p>
 				{createdYear && <p className="text-sm text-gray-500 font-medium">Since {createdYear}</p>}

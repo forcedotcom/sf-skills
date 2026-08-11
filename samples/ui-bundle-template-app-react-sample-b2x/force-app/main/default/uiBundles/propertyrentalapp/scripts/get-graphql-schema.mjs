@@ -15,13 +15,16 @@ import { buildClientSchema, getIntrospectionQuery, printSchema } from 'graphql';
 import { pruneSchema } from '@graphql-tools/utils';
 
 const DEFAULT_SCHEMA_PATH = '../../../../../schema.graphql';
+const TARGET_ORG = process.env.SF_TARGET_ORG || undefined;
 
 async function executeSalesforceGraphQLQuery(query, variables, operationName) {
-  const {
-    rawInstanceUrl: instanceUrl,
-    apiVersion,
-    accessToken,
-  } = await getOrgInfo();
+  const orgInfo = await getOrgInfo(TARGET_ORG);
+  if (!orgInfo) {
+    throw new Error(
+      'Could not resolve a Salesforce org. Set SF_TARGET_ORG or a default org.'
+    );
+  }
+  const { rawInstanceUrl: instanceUrl, apiVersion, accessToken } = orgInfo;
 
   const targetUrl = `${instanceUrl}/services/data/v${apiVersion}/graphql`;
 
