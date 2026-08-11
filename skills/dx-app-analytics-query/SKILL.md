@@ -6,6 +6,8 @@ metadata:
     - tool: ["sf"]
       semver: ">=2.0.0"
   relatedSkills:
+    - "data360-query"
+    - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.0"
   minApiVersion: "56.0"
