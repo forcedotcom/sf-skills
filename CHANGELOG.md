@@ -1,3 +1,12 @@
+# [1.37.0](https://github.com/forcedotcom/sf-skills/compare/1.36.0...1.37.0) (2026-08-13)
+
+
+### Features
+
+* Reconcile mcpTools declarations across skills (main) @W-23536091@ ([933c8df](https://github.com/forcedotcom/sf-skills/commit/933c8dfb04878d081715b9a107670332d913f629))
+
+
+
 # [1.36.0](https://github.com/forcedotcom/sf-skills/compare/1.35.0...1.36.0) (2026-08-11)
 
 
