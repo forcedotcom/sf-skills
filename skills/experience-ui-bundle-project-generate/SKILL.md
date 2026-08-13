@@ -1,8 +1,8 @@
 ---
 name: experience-ui-bundle-project-generate
-description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce React UI bundle app and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new React UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
+description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce UI bundle app (any supported frontend framework) and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
 metadata:
-  version: "1.1"
+  version: "1.2"
   relatedSkills:
     - "experience-ui-bundle-app-coordinate"
     - "experience-ui-bundle-metadata-generate"
@@ -20,20 +20,24 @@ metadata:
 
 # Using a UI Bundle Template
 
-Before building a Salesforce React UI bundle app from scratch, offer the user a **prebuilt starter template**. The Salesforce CLI generates these — a complete, deployable SFDX project (React UI bundle + toolchain + an `npm run setup` automation) — in one command. Starting from a starter is faster and less error-prone than hand-scaffolding.
+Before building a Salesforce UI bundle app from scratch, offer the user a **prebuilt starter template**. The Salesforce CLI generates these — a complete, deployable SFDX project (UI bundle + toolchain + an `npm run setup` automation) — in one command. Starting from a starter is faster and less error-prone than hand-scaffolding.
 
 The CLI command is `sf template generate project`.
 
 ## Step 1: Offer the choice
 
-The following are the templates. Ask the user which one fits, or whether they want to start from scratch.
+**Determine the framework.** It is normally already decided by the calling context — either passed down by the root/coordinator skill that invoked this one, or stated in the user's request. Use that.
 
-| Template | `--template` flag | Best for |
-|----------|-------------------|----------|
-| Internal starter | `reactinternalapp` | Starter for internal, employee-facing Salesforce apps (e.g. support consoles, ops dashboards, internal admin apps) — users are already-authenticated employees. Includes Agentforce chat. No login flow or public. |
-| External starter | `reactexternalapp` | Starter for customer/partner-facing Salesforce apps/sites (e.g. portals, communities, storefront, public sites). Full auth support (login, registration, reset, profile) -- external users sign in with their own accounts. |
+The frameworks this skill supports are exactly the reference files under [`references/`](references/), each named `<framework>-project-generate.md` (so `react` → `references/react-project-generate.md`). This is the single source of truth — adding a framework means adding a reference file, nothing here changes.
 
-**If the user prefers to start from scratch** (or neither fits), stop here and let `experience-ui-bundle-app-coordinate` scaffold a new project. This skill is opt-in — do not force a template.
+- **If the framework is known** — open `references/<framework>-project-generate.md`.
+- **If it is unknown** (a standalone run where nobody said which) — list `references/`, derive the supported set by stripping the `-project-generate.md` suffix from each filename, and ask the user to pick one of those. If the user names a framework with no matching reference file, it is not supported here — hand off to `experience-ui-bundle-app-coordinate` to scaffold from scratch.
+
+Each reference lists that framework's `--template` flags and what each starter contains. Pick the one that fits the user's audience (internal vs. external).
+
+**If the user prefers to start from scratch** (or neither template fits), stop here and let `experience-ui-bundle-app-coordinate` scaffold a new project. This skill is opt-in — do not force a template.
+
+Once the user picks, carry the chosen `--template` flag into Step 2.
 
 ## Step 2: Generate the project into the target root
 
@@ -47,8 +51,8 @@ The project contents must land **directly at the target root `$DEST`** — so `s
 NAME=MyApp   # project name the user chose; also names the UI bundle
 DEST=.       # target root directory (the contents land directly here, no NAME/ wrapper)
 
-# choose ONE template flag based on the user's pick from Step 1
-TEMPLATE=reactinternalapp   # or reactexternalapp
+# the --template flag from the framework reference chosen in Step 1
+TEMPLATE=reactinternalapp   # example placeholder — replace with the flag from your Step-1 reference
 
 mkdir -p "$DEST"
 sf template generate project --name "$NAME" --template "$TEMPLATE" --output-dir "$DEST"
@@ -69,7 +73,7 @@ After generation, confirm the contents landed at the root (not in a `$NAME/` sub
 test -f "$DEST/sfdx-project.json" && echo "OK: project root landed" || echo "FAILED"
 ```
 
-`sfdx-project.json` must sit at `$DEST/sfdx-project.json`. The project also contains `package.json`, `force-app/main/default/uiBundles/$NAME/` (the React/Vite bundle), `scripts/`, `config/`, and `README.md`. If `sfdx-project.json` is missing or is one level down in `$DEST/$NAME/`, the flatten did not run — re-check before continuing.
+`sfdx-project.json` must sit at `$DEST/sfdx-project.json`. The project also contains `package.json`, `force-app/main/default/uiBundles/$NAME/` (the UI bundle), `scripts/`, `config/`, and `README.md`. See the framework reference from Step 1 for the specific bundle contents. If `sfdx-project.json` is missing or is one level down in `$DEST/$NAME/`, the flatten did not run — re-check before continuing.
 
 ## Step 3: Install dependencies (you do this — do NOT hand off uninstalled)
 
@@ -89,7 +93,7 @@ for b in "$DEST"/force-app/main/default/uiBundles/*/; do
 done
 ```
 
-> First-run install of the bundle is the heavy step (tailwind, radix-ui, recharts, vite, etc.); expect a short wait. If an install fails, surface it — don't hand off a half-installed project.
+> First-run install of the bundle is the heavy step; expect a short wait. If an install fails, surface it — don't hand off a half-installed project.
 
 ## Step 4: Confirm and hand off
 
