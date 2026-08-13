@@ -21,11 +21,7 @@ metadata:
     # apex.diagnostics -> ...salesforce-lsp__apex_diagnostics. refresh_org_schema
     # is natively underscored, so both forms match.
     salesforce-lsp:
-      tools:
-        - apex.diagnostics
-        - apex.hover
-        - apex.documentSymbol
-        - refresh_org_schema
+      tools: ["apex.diagnostics", "apex.documentSymbol", "apex.hover", "refresh_org_schema"]
       semver: ">=0.1.0"
   version: "1.0"
   minApiVersion: "66.0"

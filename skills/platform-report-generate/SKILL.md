@@ -8,7 +8,7 @@ metadata:
     - "platform-custom-report-type-generate"
   mcpTools:
     salesforce-api-context:
-      tools: ["get_metadata_type_sections", "get_metadata_type_context", "get_metadata_type_shape"]
+      tools: ["get_metadata_type_context", "get_metadata_type_sections", "get_metadata_type_shape"]
       semver: ">=1.0.0"
 ---
 
