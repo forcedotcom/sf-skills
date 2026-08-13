@@ -15,11 +15,11 @@ metadata:
     - "platform-permission-set-generate"
     - "platform-validation-rule-generate"
   mcpTools:
-    salesforce-api-context:
-      tools: ["get_metadata_type_sections", "get_metadata_type_context", "get_metadata_type_fields", "get_metadata_type_fields_properties", "search_metadata_types"]
-      semver: ">=1.0.0"
     metadata-experts:
       tools: ["execute_metadata_action"]
+      semver: ">=1.0.0"
+    salesforce-api-context:
+      tools: ["get_metadata_type_context", "get_metadata_type_fields", "get_metadata_type_fields_properties", "get_metadata_type_sections", "search_metadata_types"]
       semver: ">=1.0.0"
 ---
 

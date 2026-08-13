@@ -14,23 +14,18 @@
  metadata:
    cliTools:
      - tool: ["jq"]
-@@ -16,6 +23,15 @@
+@@ -16,6 +23,10 @@
      - "platform-apex-test-run"
      - "platform-data-manage"
    version: "1.1"
 +  mcpTools:
 +    salesforce-lsp:
-+      tools:
-+        - validate_soql
-+        - complete_soql
-+        - check_soql_selectivity
-+        - extract_soql_from_apex
-+        - refresh_org_schema
++      tools: ["check_soql_selectivity", "complete_soql", "extract_soql_from_apex", "refresh_org_schema", "validate_soql"]
 +      semver: ">=0.1.0"
  ---
  
  # platform-soql-query: Salesforce SOQL Query Expert
-@@ -59,6 +75,10 @@
+@@ -59,6 +70,10 @@
  - reasonable LIMIT when appropriate
  - relationship depth only as deep as necessary
  
@@ -41,7 +36,7 @@
  ### 2. Choose the right query shape
  | Need | Default pattern |
  |---|---|
-@@ -68,14 +88,38 @@
+@@ -68,14 +83,38 @@
  | records with / without related rows | semi-join / anti-join |
  | text search across objects | SOSL |
  

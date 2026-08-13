@@ -7,6 +7,10 @@ metadata:
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
+  mcpTools:
+    metadata-grounding:
+      tools: ["query_metadata", "search_metadata"]
+      semver: ">=1.0.0"
 ---
 
 ## Overview
@@ -198,7 +202,7 @@ When customizing a **StandardValueSet** (or extending a shared GlobalValueSet), 
 
 For well-known standard picklists you already know the canonical values (e.g. `Industry`, `LeadSource`, `OpportunityStage`). When you are unsure a named value exists, you can confirm it against the live org — but treat lookup as a *confirmation* step, not a required first call:
 
-- **Grounding MCP** (if available) exposes `search_metadata` and `query-metadata` to look up live metadata. Use them only to confirm a named value's exact `<fullName>`/`<label>` — not to pull the full list to reproduce.
+- **Grounding MCP** (if available) exposes `search_metadata` and `query_metadata` to look up live metadata. Use them only to confirm a named value's exact `<fullName>`/`<label>` — not to pull the full list to reproduce.
 - **CLI fallback** — query the Tooling API directly:
 
 ```bash
@@ -291,7 +295,7 @@ Before generating value-set XML, verify:
 - [ ] When referencing from a field, is `<valueSetName>` the **bare** developer name with NO `__gvs` suffix?
 
 ### StandardValueSet Checks CRITICAL
-- [ ] Are you emitting modifications ONLY to values you know exist (confirmed from known standard catalogs, or via grounding `search_metadata`/`query-metadata` / Tooling API if unsure) — never invented values?
+- [ ] Are you emitting modifications ONLY to values you know exist (confirmed from known standard catalogs, or via grounding `search_metadata`/`query_metadata` / Tooling API if unsure) — never invented values?
 - [ ] Is the root `<StandardValueSet>` with the correct namespace?
 - [ ] Does the root use `<fullName>` set to the fixed catalog name (NOT `masterLabel`)?
 - [ ] Are values `<standardValue>` entries (NOT `customValue`)?
