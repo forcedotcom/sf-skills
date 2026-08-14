@@ -110,31 +110,27 @@ start_agent input_collector:
         # Tell the LLM its PRIMARY GOAL is to collect the input
         instructions: ->
             | YOUR PRIMARY GOAL: Collect the account ID from the user.
-            |
-            | CURRENT STATE:
+              CURRENT STATE:
             if @variables.account_id == "":
                 | ⚠️ Account ID NOT YET COLLECTED
-                | ASK the user for their Salesforce Account ID.
-                | The ID should be 18 characters and start with "001".
-                |
-                | Example prompt: "Please provide the Account ID you'd like me to research."
+                  ASK the user for their Salesforce Account ID.
+                  The ID should be 18 characters and start with "001".
+                  Example prompt: "Please provide the Account ID you'd like me to research."
 
             if @variables.account_id != "" and @variables.account_id_validated == False:
                 | 🔄 Account ID received: {!@variables.account_id}
-                | Attempting validation...
-                |
-                | Use {!@actions.capture_account_id} to validate this ID.
+                  Attempting validation...
+                  Use {!@actions.capture_account_id} to validate this ID.
 
             if @variables.account_id_validated == True:
                 | ✅ Account ID validated: {!@variables.account_id}
-                | Account Name: {!@variables.account_name}
-                |
-                | Continue to the research workflow.
+                  Account Name: {!@variables.account_name}
+                  Continue to the research workflow.
 
             if @variables.collection_attempts > 2 and @variables.account_id_validated == False:
                 | ❌ Multiple validation failures.
-                | Ask the user to verify their Account ID is correct.
-                | Suggest they check Salesforce for the correct ID format.
+                  Ask the user to verify their Account ID is correct.
+                  Suggest they check Salesforce for the correct ID format.
 
         actions:
             # ★ PATTERN 3: Single-Use Pattern
@@ -178,12 +174,11 @@ subagent research:
     reasoning:
         instructions: ->
             | Researching account: {!@variables.account_name} ({!@variables.account_id})
-            |
             if @variables.research_summary == "":
                 | Use {!@actions.research_account} to analyze this account.
             if @variables.research_summary != "":
                 | Research complete!
-                | {!@variables.research_summary}
+                  {!@variables.research_summary}
 
         actions:
             # ★ PATTERN 4: Null Guard - Uses variable binding, NOT slot filling

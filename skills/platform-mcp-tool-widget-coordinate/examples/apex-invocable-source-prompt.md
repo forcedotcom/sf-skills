@@ -69,7 +69,6 @@ LIGHTNING TYPES:
 
 WIDGET: getAccountSummaryWidget
   Renderer binding: each attribute → {!$attrs.outputValues.<field>}
-  Properties omitted: status, message (envelope-status text, not rendered on the card)
 
 GENERATION ORDER: response CLT → widget → envelope CLT
 ```
@@ -80,11 +79,11 @@ Proceed unless the next reply pushes back.
 
 1. Response CLT `getAccountSummaryResponse` — `lightning__objectType`, all 14 `payloadFields` (1:1 with the response class's `@InvocableVariable` fields — the response CLT always models the complete response, including `status`/`message`).
 2. Envelope CLT `getAccountSummary` — `actionName`, `isSuccess`, `outputValues` → `c__getAccountSummaryResponse`.
-3. Widget `getAccountSummaryWidget` — flat schema over the 12 rendered payload fields (14 minus the two `Properties omitted:` status fields); body binds `{!$attrs.accountName}` etc.
+3. Widget `getAccountSummaryWidget` — flat schema over all 14 payload fields; body binds `{!$attrs.accountName}` etc.
 4. Default renderer at `lightningTypes/getAccountSummary/renderer.json` — `definition: @widget/c/getAccountSummaryWidget`, each attribute `{!$attrs.outputValues.<field>}`.
 
 ## Phase 5 — Validation
 
 - `clt-reference-integrity`: envelope `outputValues` → `c__getAccountSummaryResponse`, response CLT exists, no `$schema`/`items` → **pass**.
 - `renderer-wires-widget`: bundle-root renderer present, definition `@widget/c/getAccountSummaryWidget`, every widget prop bound as `{!$attrs.outputValues.<prop>}` → **pass**.
-- `field-trace`: INVENTED empty; OMITTED = `status, message` (both in `Properties omitted:`) → **pass**.
+- `field-trace`: INVENTED empty; OMITTED empty (all 14 fields rendered) → **pass**.

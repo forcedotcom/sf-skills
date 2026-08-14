@@ -20,9 +20,9 @@
               ]
             },
             {
-              "definition": "tile/card",
-              "meta": { "if": "{!$attrs.isVerified}" },
-              "attributes": { "padding": "md", "variant": "outlined" },
+              "definition": "tile/column",
+              "attributes": { "padding": "md" },
+              "meta": { "if": "{!$attrs.isVerified}"},
               "children": [
                 {
                   "definition": "tile/row",
@@ -41,25 +41,30 @@
               ]
             },
             {
-              "definition": "tile/card",
+              "definition": "tile/container",
               "meta": {
                 "forEach": "{!$attrs.tasks}",
                 "forItem": "$task",
                 "if": "{!$task.isUrgent}"
               },
-              "attributes": { "padding": "md", "variant": "outlined" },
               "children": [
                 {
-                  "definition": "tile/row",
-                  "attributes": { "gap": "md", "justify": "between", "align": "center" },
+                  "definition": "tile/column",
+                  "attributes": { "padding": "md" },
                   "children": [
                     {
-                      "definition": "tile/text",
-                      "attributes": { "text": "{!$task.title}", "variant": "h4" }
-                    },
-                    {
-                      "definition": "tile/badge",
-                      "attributes": { "label": "{!$task.priority}", "variant": "secondary" }
+                      "definition": "tile/row",
+                      "attributes": { "gap": "md", "justify": "between", "align": "center" },
+                      "children": [
+                        {
+                          "definition": "tile/text",
+                          "attributes": { "text": "{!$task.title}", "variant": "h4" }
+                        },
+                        {
+                          "definition": "tile/badge",
+                          "attributes": { "label": "{!$task.priority}", "variant": "secondary" }
+                        }
+                      ]
                     }
                   ]
                 }

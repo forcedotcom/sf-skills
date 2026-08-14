@@ -14,9 +14,27 @@ Scan instruction blocks for logic that may need deterministic enforcement:
 3. **Post-action invariants**: Success/failure outcomes that must enable,
    disable, or route later execution.
 
+4. **Exact comparisons in prompt text**: Instructions such as
+   `If {!@variables.status} == "blocked"` that expose a runtime value but ask
+   the model to perform a machine-known branch.
+
 Do not extract current intent, remembered preferences, question progress, or
 other unstructured conversational judgment into mutable state merely because
 it can be phrased as “if X.”
+
+## Decision Test
+
+Put on the author's thinking hat; do not rewrite conditions mechanically.
+
+- **Keep model-facing:** “If the user wants to speak with a human…” The model
+  must interpret the user's intent from natural language.
+- **Make deterministic when material:** “If account status equals blocked…”
+  The runtime already knows the exact value and the branch must not drift.
+- **Use mixed control when needed:** Let the model identify intent, but gate a
+  consequential action with `available when` over trusted state.
+
+Interpolation and determinism are separate decisions. A merge field gives the
+model a value; it does not make the model's comparison or sequence reliable.
 
 ## How to Fix
 
@@ -33,6 +51,21 @@ When the decision is immediate in the producing action's post-action scope, use
 `@outputs.X` directly instead of copying it to state.
 
 **Ordering**: Deterministic checks should happen BEFORE natural language instructions, not embedded within them.
+
+### Focused example
+
+```agentscript
+# BAD: exact runtime comparison delegated to the model
+| If {!@variables.account_status} == "blocked", use account recovery.
+
+# GOOD: runtime owns the exact comparison
+if @variables.account_status == "blocked":
+    | Help the customer recover access to the blocked account.
+
+# ALSO GOOD: model owns semantic intent
+| If the user asks to speak with a human, use
+  {!@actions.escalate_to_support}.
+```
 
 ## Example
 

@@ -55,10 +55,9 @@ start_agent agent_router:
     reasoning:
         instructions: ->
             | Ask the user what type of content they'd like to generate:
-            | 1. Personalized daily schedule
-            | 2. Professional email
-            |
-            | Route to the appropriate request handler.
+              1. Personalized daily schedule
+              2. Professional email
+              Route to the appropriate request handler.
         actions:
             go_schedule: @utils.transition to @subagent.schedule_generation
             go_email: @utils.transition to @subagent.email_generation
@@ -95,14 +94,12 @@ subagent schedule_generation:
     reasoning:
         instructions: ->
             | Help the user create a personalized daily schedule.
-            |
-            | 1. Ask for their email (required)
-            | 2. Ask for their timezone (optional, defaults to Pacific)
-            | 3. Generate the schedule using the AI template
-            | 4. Present the generated schedule
-            |
-            | The schedule will include morning routine, work blocks,
-            | breaks, and evening wind-down based on preferences.
+              1. Ask for their email (required)
+              2. Ask for their timezone (optional, defaults to Pacific)
+              3. Generate the schedule using the AI template
+              4. Present the generated schedule
+              The schedule will include morning routine, work blocks,
+              breaks, and evening wind-down based on preferences.
 
         actions:
             create_schedule: @actions.Generate_Personalized_Schedule
@@ -140,13 +137,11 @@ subagent email_generation:
     reasoning:
         instructions: ->
             | Help the user draft a professional email.
-            |
-            | Collect:
-            | 1. Recipient's name (required)
-            | 2. Email topic/purpose (required)
-            | 3. Desired tone: formal, friendly, or urgent (optional)
-            |
-            | Generate the email and present it for review.
+              Collect:
+              1. Recipient's name (required)
+              2. Email topic/purpose (required)
+              3. Desired tone: formal, friendly, or urgent (optional)
+              Generate the email and present it for review.
 
         actions:
             create_email: @actions.Generate_Professional_Email

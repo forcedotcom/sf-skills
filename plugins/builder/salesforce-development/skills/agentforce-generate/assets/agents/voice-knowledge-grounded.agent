@@ -76,9 +76,9 @@ start_agent agent_router:
     reasoning:
         instructions: ->
             | Listen to what the caller needs and route them to the right topic.
-            | For questions about products, policies, procedures, or troubleshooting, go to knowledge answers.
-            | If the caller asks to speak with a person or you cannot help, escalate.
-            | Do NOT answer questions directly — route to the appropriate topic.
+              For questions about products, policies, procedures, or troubleshooting, go to knowledge answers.
+              If the caller asks to speak with a person or you cannot help, escalate.
+              Do NOT answer questions directly — route to the appropriate topic.
         actions:
             go_knowledge: @utils.transition to @subagent.knowledge_answers
                 description: "Route to knowledge answers for product, policy, or how-to questions"
@@ -90,15 +90,15 @@ subagent knowledge_answers:
     reasoning:
         instructions: ->
             | If the question is unclear, ask one short clarifying question first.
-            | For every substantive question, call AnswerQuestionsWithKnowledge
+              For every substantive question, call AnswerQuestionsWithKnowledge
               before answering.
-            | Answer only from the returned knowledge summary, using one or two
+              Answer only from the returned knowledge summary, using one or two
               spoken sentences.
-            | If the summary is empty, say the knowledge base has no answer and
+              If the summary is empty, say the knowledge base has no answer and
               use {!@actions.go_escalation}.
-            | Never speak URLs, citations, or list formatting. Offer to send
+              Never speak URLs, citations, or list formatting. Offer to send
               returned links instead.
-            | After answering, ask if there's anything else you can help with.
+              After answering, ask if there's anything else you can help with.
         actions:
             AnswerQuestionsWithKnowledge: @actions.AnswerQuestionsWithKnowledge
                 with query = ...
@@ -159,7 +159,7 @@ subagent escalation:
     reasoning:
         instructions: ->
             | The caller needs to speak with a human agent. Use {!@actions.escalate_to_human} to transfer them.
-            | Before transferring, briefly let them know you're connecting them.
+              Before transferring, briefly let them know you're connecting them.
         actions:
             escalate_to_human: @utils.escalate
                 description: "Transfer the caller to a live agent"

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/cs01/schemas/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "experience-lwc-security-validate",
+          "informationUri": "https://developer.salesforce.com/docs/component-library/documentation/en/lwc/lwc.security_lws_intro",
+          "rules": [
+            { "id": "lws-001", "shortDescription": { "text": "document.createProcessingInstruction" } }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "lws-001",
+          "level": "error",
+          "message": { "text": "Usage of document.createProcessingInstruction creates XML injection vulnerabilities enabling XSS attacks" },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": { "uri": "force-app/main/default/lwc/myCmp/myCmp.js" },
+                "region": { "startLine": 42, "startColumn": 1 }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

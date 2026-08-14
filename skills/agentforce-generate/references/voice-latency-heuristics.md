@@ -96,6 +96,10 @@ handoff can add another. This is the voice cost of the "dead hub" and
 
 **Fix**
 - **Flag for human:** collapsing multi-subagent → flatter routing is a design decision.
+- If genuine domain boundaries remain and the entry router only selects
+  transitions, consider Einstein HyperClassifier. Do not use it when the router
+  must answer, clarify, run other actions, inspect images, or use lifecycle
+  hooks.
 - Where the structure must stay, ensure each hop has an ack phrase.
 - Consider whether a guardrail subagent can become instruction-level rules in `system:`.
 

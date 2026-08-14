@@ -8,11 +8,24 @@ Common issues when using the Agentforce Conversation Client.
 
 **Cause:** `agentId` was not passed.
 
-**Solution:** Pass `agentId` directly as a flat prop:
+**Solution:** Pass `agentId` directly as a flat prop/input:
 
 ```tsx
+// React
 <AgentforceConversationClient agentId="0Xx000000000000AAA" />
 ```
+```html
+<!-- Angular -->
+<app-agentforce-conversation-client agentId="0Xx000000000000AAA" />
+```
+
+---
+
+### (Angular) Element renders nothing / no chat appears
+
+**Cause:** `AgentforceConversationClientComponent` was not registered in the host component's `@Component({ imports: [...] })`, so Angular ignores the `<app-agentforce-conversation-client>` tag. A second common cause is passing a boolean/object as a bare string attribute (e.g. `inline` instead of `[inline]="true"`).
+
+**Solution:** Add the component to the host `imports` array, and use `[prop]` binding for booleans/numbers/objects.
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: platform-policy-rule-generate
-description: "Use this skill when authoring PolicyRuleDefinition and PolicyRuleDefinitionSet metadata XML for the Salesforce Enforce-O-Matic MDAPI (Data Cloud governance policies), or when editing *.policyRuleDefinition / *.policyRuleDefinitionSet files. Covers the category decision tree, full schema for all policy variants (ACCESS, GOVERNANCE, RECORD, TRANSFORM), UI-compatibility rules for the Data Governance Policy Builder, and validation guardrails. Do NOT use this skill for UserAccessPolicy, AccessPolicy, SharingRules, PermissionSet, or any non-Enforce-O-Matic access-control metadata — those have their own types and live outside the PolicyRuleDefinition schema."
+description: "Use this skill when authoring PolicyRuleDefinition and PolicyRuleDefinitionSet metadata XML for Salesforce Data Cloud governance policies, or when editing *.policyRuleDefinition / *.policyRuleDefinitionSet files. Covers the category decision tree, full schema for all policy variants (ACCESS, GOVERNANCE, RECORD, TRANSFORM), UI-compatibility rules for the Data Governance Policy Builder, output hygiene for user-facing agent responses, and validation guardrails. Do NOT use this skill for UserAccessPolicy, AccessPolicy, SharingRules, PermissionSet, or any other access-control metadata type — those have their own types and live outside the PolicyRuleDefinition schema."
 metadata:
   version: "1.0"
   minApiVersion: "64.0"
@@ -13,12 +13,10 @@ metadata:
 
 # Authoring Policy Rule Definitions
 
-**Gating:** `@WsdlGuard("EnforceOMatic.orgCanUsePolicyRuleMDAPI")` = `OrgPermissions.EnforceOMatic && OrgPermissions.PolicyRuleMDAPI` 
-**Min API version:** 64.0 (66.0 for conditions using `PolicyJsonExpression`)
+**Gating:** requires the `EnforceOMatic` and `PolicyRuleMDAPI` org permissions. 
+**Min API version:** 64.0 (66.0 for conditions using `PolicyJsonExpression`).
 
-> **For human maintainers (not the agent):** the Java source-of-truth lives at `enforce-o-matic-impl/java/src/enforce/o/matic/metadata/` and reference fixtures at `enforce-o-matic-impl/test/func/filemetadata/<name>/`. The agent should rely on the templates and reference docs in this skill bundle — those impl paths are not readable from the Vibes/MCP runtime.
-
-This skill covers the **on-disk metadata XML format** for authoring policies. Use it whenever a task asks to write a `*.policyRuleDefinition` or `*.policyRuleDefinitionSet` file, add a fixture under `test/func/filemetadata/`, or ship a metadata package. The runtime side (RuleProvider, hooks) is out of scope.
+This skill covers the **on-disk metadata XML format** for authoring policies. Use it whenever a task asks to write a `*.policyRuleDefinition` or `*.policyRuleDefinitionSet` file, or ship a metadata package containing them. The runtime side (RuleProvider, hooks) is out of scope.
 
 ---
 
@@ -100,13 +98,12 @@ A deployable package always contains:
 
 **Category names a domain (where in the platform's enforcement layers the rule applies). Effect names the action (allow / deny / transform). They are independent except for TRANSFORM.**
 
-The **only** Category × Effect rule the platform validates
-(`enforce-o-matic-api/java/src/enforce/o/matic/api/module/api/RuleBuilder.java`):
+The **only** Category × Effect rule the platform validates:
 
 - `effect=Transform` ⇔ `category=TRANSFORM_POLICY_RULE_DEFINITION` (bidirectional; mismatched throws `INVALIDFORCATEGORY`).
 - All other categories (`ACCESS`, `GOVERNANCE`, `RECORD`, `IDENTIFIED_RECORD`) accept either `Permit` or `Forbid`.
 
-> **Note on the platform's auto-fill default:** When `<category>` is omitted from authored XML, the impl-side save hook (`PolicyRuleDefinitionObject.saveHook_Validate`) fills it in from `effect`: `Permit→ACCESS`, `Forbid→GOVERNANCE`, `Transform→TRANSFORM`. **This is a default-fill, not a validation.** If you author an explicit category that contradicts this default, it is accepted and persisted as-is.
+> **Note on the platform's auto-fill default:** When `<category>` is omitted from authored XML, the server fills it in from `effect`: `Permit→ACCESS`, `Forbid→GOVERNANCE`, `Transform→TRANSFORM`. **This is a default-fill, not a validation.** If you author an explicit category that contradicts this default, it is accepted and persisted as-is.
 
 ### Picking the category
 
@@ -179,7 +176,7 @@ Every `<conditions>` block needs **all four**: `<clause>`, `<operator>`, one pat
 | Record field = user attribute | `<resourcePath>RECORDFIELD</resourcePath>` + `<valueDomain>Schema:field</valueDomain>` | `EQUALS` | `<valuePrincipalPath>USER_ID` \| `ORGANIZATION_ID` \| `USER_ROLE_ID</valuePrincipalPath>` |
 | Entity type check | `<resourcePath>ENTITYTYPE</resourcePath>` | `IS` | `<valueString>{"t":"Text","v":"FIELD"}</valueString>` |
 
-`<conjunctionExpression>` is 1-indexed prefix notation: `1`, `(AND 1 2)`, `(OR 1 2)`, `(AND (OR 1 2) (AND 3))`. A bare top-level index like `1` is valid for **deploy** (impl fixtures use it) but **crashes the Data Governance Policy Builder UI** — see §7 if UI editability matters.
+`<conjunctionExpression>` is 1-indexed prefix notation: `1`, `(AND 1 2)`, `(OR 1 2)`, `(AND (OR 1 2) (AND 3))`. A bare top-level index like `1` is valid for **deploy** but **crashes the Data Governance Policy Builder UI** — see §7 if UI editability matters.
 
 For full path enums (`RulePrincipalPathType`, `RuleResourcePathType`, `RuleContextPathType`), operators, and JSON expressions (PROJECTION / ARGLIST / SOQLTARGETLISTEXPR), see [`references/policy-schema-full.md`](references/policy-schema-full.md). 
 For copy-paste templates for all policy variants, see [`references/templates.md`](references/templates.md).
@@ -203,7 +200,7 @@ For copy-paste templates for all policy variants, see [`references/templates.md`
 13. Standard tag/classification dev names are fully-qualified dotted paths (e.g. `DataGovernanceTags.ExternalData.Visibility.Public`). Retrieve an existing rule to get the exact string before authoring.
 14. Min API versions: `PolicyRuleDefinition` = 64.0; `PolicyJsonExpression` conditions = 66.0; `<replicated>` = 260+; `<builderCompatible>` / `<builderValidated>` = 262+.
 
-> **Note on `<conjunctionExpression>` shape:** A bare top-level index (e.g. `<conjunctionExpression>1</conjunctionExpression>`) deploys cleanly — the impl-side parser accepts bare tokens at the top level, and most positive single-condition fixtures in `enforce-o-matic-impl/test/func/filemetadata/` use it. It is **not** a deploy-time validation error. It does, however, crash the Data Governance Policy Builder UI on load — see §7.
+> **Note on `<conjunctionExpression>` shape:** A bare top-level index (e.g. `<conjunctionExpression>1</conjunctionExpression>`) deploys cleanly — the server-side parser accepts bare tokens at the top level. It is **not** a deploy-time validation error. It does, however, crash the Data Governance Policy Builder UI on load — see §7.
 
 ---
 
@@ -247,9 +244,22 @@ For the full UI-compatibility checklist, round-trip rules, and operator support 
 10. **Validate with dry-run** before any non-dry deploy to a persistent org. Surface errors using the error reference in [`references/deploy-errors.md`](references/deploy-errors.md).
 
 **Three-layer correctness check** before done:
-- **Runtime / Cedar** — does the rule enforce what's intended? (action choice, condition shape)
+- **Runtime enforcement** — does the rule enforce what's intended? (action choice, condition shape)
 - **MDAPI deploy validity** — does it deploy? (§6 guardrails, scope×category, tag dev names, org perms)
 - **UI editability** — can the builder render and re-save it? (§7 checklist, OR-of-ENTITYTYPE requirement)
+
+---
+
+## 9. Output Hygiene — What the Agent Must NOT Say to the User
+
+The agent's user-facing chat response accompanies every generated file. Customers should never see internal engine or implementation details.
+
+- **Do NOT name the internal evaluation engine** in user-facing text — including but not limited to `Cedar`, `policy engine`, `AuthZ engine`, `evaluation engine`, `Rego`, `OPA`, or similar. The customer-facing surface is *Data Governance*, *Policy Builder*, *Data Cloud Governance* — use those terms only.
+- **Do NOT emit trailing "How it works at runtime" narratives** that describe evaluation flow, principal-resource matching semantics, or engine-internal condition ordering. The generated file is the artifact; a one-line summary of what deployed is enough. If the user explicitly asks how enforcement works, describe it in product terms (e.g. "Data Governance denies the read when …"), never in engine terms.
+- **Do NOT name internal packages, source directories, Java class names, method names, or line-number references** in user-facing text. Internal implementation identifiers are not customer-facing; refer to platform behavior in product terms only ("the server validates …", "Data Governance rejects …").
+- **Do NOT explain auto-fill / default-fill / fallback semantics** unless the user asks. Ship the rule; surface constraints only when they affect what the user has to do next (e.g. "the DMO tag must exist before deploy").
+
+If the user needs more context, they'll ask — respond then, in product language.
 
 ---
 

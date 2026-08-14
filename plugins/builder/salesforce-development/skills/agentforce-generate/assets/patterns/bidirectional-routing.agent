@@ -52,13 +52,11 @@ start_agent main_hub:
     reasoning:
         instructions: ->
             | You are the main coordinator.
-            | When user needs specialized help:
-            | - For pricing questions, consult the pricing specialist
-            | - For technical issues, consult the technical specialist
-            |
-            | After specialist returns, communicate their findings to the user.
-            |
-            | Current specialist result: {!@variables.specialist_result}
+              When user needs specialized help:
+              - For pricing questions, consult the pricing specialist
+              - For technical issues, consult the technical specialist
+              After specialist returns, communicate their findings to the user.
+              Current specialist result: {!@variables.specialist_result}
         actions:
             consult_pricing: @utils.transition to @subagent.pricing_specialist
 
@@ -90,9 +88,9 @@ subagent pricing_specialist:
     reasoning:
         instructions: ->
             | You are the pricing specialist.
-            | Focus ONLY on pricing questions.
-            | Calculate the price and prepare your findings.
-            | When done, return to the main hub with your results.
+              Focus ONLY on pricing questions.
+              Calculate the price and prepare your findings.
+              When done, return to the main hub with your results.
         actions:
             calculate: @actions.calculate_price
                 with product_id=...
@@ -123,9 +121,9 @@ subagent technical_specialist:
     reasoning:
         instructions: ->
             | You are the technical specialist.
-            | Focus ONLY on technical issues.
-            | Diagnose the problem and prepare your findings.
-            | When done, return to the main hub with your results.
+              Focus ONLY on technical issues.
+              Diagnose the problem and prepare your findings.
+              When done, return to the main hub with your results.
         actions:
             diagnose: @actions.diagnose_issue
                 with symptoms=...

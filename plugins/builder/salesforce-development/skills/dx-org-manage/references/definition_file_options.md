@@ -23,6 +23,28 @@ Complete reference for scratch org definition file configuration. Use this when 
 }
 ```
 
+## Authoring a definition file (seed-then-modify)
+
+When a user wants features/settings and no suitable definition file exists, do NOT synthesize JSON
+from scratch — **start from a seed and modify it**:
+
+1. **Seed source (priority):** (1) an existing definition file in the project's `config/` (copy as
+   base), else (2) the file `sf template generate project` scaffolds
+   (`config/project-scratch-def.json`), else (3) the minimal seed shipped with this skill:
+   `assets/scratch-def.seed.json` — `{"orgName": "...", "edition": "Developer", "features": [],
+   "settings": {}}`.
+2. **Modify** per the requested features/settings using the schema on this page. The
+   features/settings space is open-ended — compose whatever the user asks for; nested `settings`
+   **cannot** be CLI flags, so any such request means authoring a file.
+3. **Write a new purpose-named file** (`config/<purpose>-scratch-def.json`, or a user-chosen path
+   outside a project) — **no-clobber**: never overwrite an existing file (especially
+   `config/project-scratch-def.json`) without explicit confirmation.
+4. **Interactive:** show the result and let the user accept / edit. **Non-interactive (eval/CI):**
+   author the file AND proceed to create without waiting.
+
+Author only documented fields; never write internal-only fields. See
+`references/scratch-org-create.md` for how authoring fits the full create flow.
+
 ## Core Fields
 
 | Field | Type | Required | Description |
@@ -35,6 +57,8 @@ Complete reference for scratch org definition file configuration. Use this when 
 | `username` | string | No | Custom username for admin (must be globally unique) |
 
 \* Not required if using `snapshot` or `sourceOrg`.
+
+**Pass-through note:** fields not listed in this reference are relayed to the CLI unchanged. If the CLI doesn't accept a field, it reports the error itself — the skill does not pre-validate, rename, or rewrite. When the skill *authors* a definition file it writes only the documented fields below; if your existing file contains other fields, they are relayed as-is.
 
 **CLI Flag Overrides:** When using a definition file with `--definition-file`, you can override any of these fields with CLI flags:
 - `--edition` overrides `edition`

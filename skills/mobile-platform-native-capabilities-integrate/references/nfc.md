@@ -74,6 +74,32 @@ export interface NFCMessage {
    * An array containing a single {@linkcode NFCMessageRecord} object, which in turn contains the payload from the NFC tag.
    */
   records: NFCMessageRecord[];
+
+  /**
+   * An object containing a single {@linkcode NFCTagInfo} object, which in turn contains the matadata of the NFC tag.
+   */
+  tagInfo: NFCTagInfo;
+}
+
+/**
+ * An object within an {@linkcode NFCMessage} object, containing the metadata read from an NFC tag.
+ */
+export interface NFCTagInfo {
+  /**
+   * The serial number of the tag
+   */
+  serialNumber: string;
+
+  /**
+   * Optional. For a tag that can contain NDEF data, this property indicates whether the tag's NDEF data can be overwritten.
+   * If the tag does not support NDEF, the value of this property will be null.
+   */
+  isNdefWritable?: boolean | undefined;
+
+  /**
+   * Optional. The maximum NDEF message size in bytes that the tag can hold. If the tag does not support NDEF, the value of this property will be null.
+   */
+  ndefCapacity?: number | undefined;
 }
 
 /**
@@ -142,6 +168,15 @@ export type TypeNameFormat = 'ABSOLUTE_URI' | 'EMPTY' | 'EXTERNAL' | 'MEDIA' | '
  * An object containing configuration details for an NFC interaction.
  */
 export interface NFCServiceOptions {
+  /**
+   * Optional. Indicates whether reading from an empty tag should be considered an error or not.
+   * Defaults to FALSE, so attempting to read an empty tag will return TAG_EMPTY error.
+   * If you want to get back the tag metadata even for empty tags, you should set this property to TRUE,
+   * so that instead of TAG_EMPTY error, the read() operation would return an {@linkcode NFCMessage} object
+   * where its {@linkcode NFCTagInfo} is populated.
+   */
+  allowEmptyTags?: boolean;
+
   /**
    * Optional. Provides instructions to display in the user interface. Defaults to no text.
    */

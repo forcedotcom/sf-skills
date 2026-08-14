@@ -90,14 +90,14 @@ The gate enforces two things: no invented widget fields (subset rule), and no si
 
    For an inner-class payload, read the .cls file, locate the named inner class's block (`class <InnerClass> {…}`), and run the field enumeration scoped to that block only. Identify further inner classes the payload class declares (singular `InnerClass <field>;` and `List<InnerClass> <field>;`) — typically siblings inside the same outer file — and repeat against each. Combine the printed sets in your reasoning under the label `APEX_FIELDS`. If grep returns nothing, fall back to reading the .cls file with the Read tool and listing fields manually — but do NOT skip the comparison.
 
-2. Extract widget schema property keys, expanding nested `lightning__objectType` properties to their inner-field dot paths:
+2. Extract widget schema property keys, expanding nested inner-Apex-class-reference properties (`lightning:type: "@apexClassType/...$Inner"`, and any remaining `lightning__objectType`) to their inner-field dot paths:
 
    ```bash
    echo "WIDGET_PROPS:"
    jq -r '.properties.attributes.properties | keys[]' <pkgDir>/uiWidgets/<widgetName>/schema.json | sort -u
    ```
 
-   For any property whose `lightning:type` is `lightning__objectType`, also include the dot-notation bindings actually referenced in the widget body (e.g. `address.city`) — you can see these by reading the widget JSON directly with the Read tool. For any property whose `lightning:type` is `lightning__listType`, also include the `{!$item.<innerField>}` references inside the `forEach`. Combine in your reasoning under the label `WIDGET_PROPS`.
+   For any property whose `lightning:type` is an inner-Apex-class reference (`@apexClassType/...$Inner`) or `lightning__objectType`, also include the dot-notation bindings actually referenced in the widget body (e.g. `address.city`) — you can see these by reading the widget JSON directly with the Read tool. For any property whose `lightning:type` is `lightning__listType`, also include the `{!$item.<innerField>}` references inside the `forEach`. Combine in your reasoning under the label `WIDGET_PROPS`.
 
 3. PRINT both lists in the gate report (not just an assertion) — as plain text you author from the two command outputs above, NOT via a shell expression:
 
@@ -118,7 +118,7 @@ The gate enforces two things: no invented widget fields (subset rule), and no si
 
 ## Direction of subset rule
 
-The widget `schema.json` (plus the dot-notation paths it binds through nested `lightning__objectType` properties and the `{!$item.X}` references inside `lightning__listType` loops) is a **subset** of the Apex class's `@AuraEnabled` fields (outer class plus every referenced inner class). The orchestrator enforces both directions, asymmetrically:
+The widget `schema.json` (plus the dot-notation paths it binds through nested inner-Apex-class-reference (`@apexClassType/...$Inner`) or `lightning__objectType` properties, and the `{!$item.X}` references inside `lightning__listType` loops) is a **subset** of the Apex class's `@AuraEnabled` fields (outer class plus every referenced inner class). The orchestrator enforces both directions, asymmetrically:
 
 - **No invented fields (hard).** Widget MUST NOT introduce properties or inner-field paths the Apex classes do not expose. A non-empty INVENTED set fails `field-trace`.
 - **No silent omissions (warn).** Widget MAY omit Apex fields, but every omission MUST appear in the Phase 3 build plan's `Properties omitted:` section with a rationale. Omissions not in the plan are silent and warn at `field-trace` (OMITTED list flagged). The leaf skill must surface the proposed omissions to the user before authoring (`platform-widget-generate/references/schema-from-lightning-type.md`). Inner-class fields (whether reached as singular nested objects or via `List<InnerClass>`) are NEVER silently omitted.

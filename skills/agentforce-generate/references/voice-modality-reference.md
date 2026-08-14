@@ -152,10 +152,10 @@ Voice interactions differ from text. When authoring instructions for voice agent
 **Text agent instruction:**
 ```agentscript
 | Here are your options:
-| 1. Check order status
-| 2. Return an item
-| 3. Speak with a representative
-| Please enter the number of your choice.
+  1. Check order status
+  2. Return an item
+  3. Speak with a representative
+  Please enter the number of your choice.
 ```
 
 **Voice agent instruction:**

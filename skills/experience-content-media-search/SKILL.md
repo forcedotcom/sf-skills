@@ -3,7 +3,16 @@ name: experience-content-media-search
 description: "Searches for and retrieves existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from sources such as Salesforce CMS, Data 360 or any other source. Use this skill ANY TIME a user request involves finding, searching, getting, fetching, retrieving, grab, looking up, locating media. NEVER call search_media_cms_channels, search_electronic_media tools directly — always go through this skill first. This skill must be activated before any tool is used for media search or retrieval, without exception.  Takes PRIORITY and activates FIRST when ANY media search/retrieval is mentioned, regardless of what else happens with the media afterward. Triggers for requests like \"search for logo\", \"find hero image\", \"get company logo\", \"locate icons\", \"fetch background image\", \"retrieve product photos\". Handles the search and source selection workflow. Does not apply when the request is about brand search, to generate NEW images with AI, or edit existing images."
 compatibility: "Requires search_media_cms_channels and/or search_electronic_media MCP tools"
 metadata:
-  version: "1.0"
+  version: "1.1"
+  relatedSkills:
+    - "experience-content-media-stock-image-search"
+  mcpTools:
+    content-readonly:
+      tools:
+        - search_media_cms_channels
+        - search_electronic_media
+        - get_channels
+      semver: "^1.0.0"
 ---
 
 # Media Search
@@ -26,6 +35,7 @@ Universal routing skill for searching and retrieving existing images and media.
 - Create graphics or designs from scratch
 - Edit or modify existing images
 - Build custom visuals or diagrams
+- Search for stock photography or royalty-free images (use `experience-content-media-stock-image-search`)
 
 ## Before You Search
 
@@ -186,8 +196,7 @@ After the user selects an option, execute the corresponding search method below.
     "searchKeyword": "keyword1 OR keyword2 OR keyword3",
     "taxonomyExpression": "{\"OR\": [\"Taxonomy1\", \"Taxonomy2\"]}",
     "searchLanguage": "en_US",
-    "channelIds": "",
-    "channelType": "PublicUnauthenticated",
+    "contentAccessScope": "Public",
     "contentTypeFqn": "sfdc_cms__image",
     "pageOffset": 0,
     "searchLimit": 5
@@ -199,8 +208,7 @@ After the user selects an option, execute the corresponding search method below.
 - `searchKeyword`: Join keywords with ` OR ` (space-OR-space). Use empty string if no keywords.
 - `taxonomyExpression`: Stringify JSON object `{"OR": ["term1", "term2"]}`. Use `"{}"` if no taxonomies.
 - `searchLanguage`: Locale with underscore (e.g., `en_US`)
-- `channelIds`: Always empty string
-- `channelType`: Always `"PublicUnauthenticated"`
+- `contentAccessScope`: Always `"Public"` (covers both public-unauthenticated and public Experience Cloud site channels)
 - `contentTypeFqn`: Always `"sfdc_cms__image"`
 - `pageOffset`: Start at `0`, increment by `searchLimit` for pagination
 - `searchLimit`: Default `5`, adjust if user requests more
@@ -214,8 +222,7 @@ Query: "luxury apartment with river view"
     "searchKeyword": "apartment OR villa OR penthouse OR residence",
     "taxonomyExpression": "{\"OR\": [\"Luxury\", \"Premium\", \"Waterfront\", \"Riverside\"]}",
     "searchLanguage": "en_US",
-    "channelIds": "",
-    "channelType": "PublicUnauthenticated",
+    "contentAccessScope": "Public",
     "contentTypeFqn": "sfdc_cms__image",
     "pageOffset": 0,
     "searchLimit": 5
@@ -230,8 +237,7 @@ Query: "bright spacious room" (no concrete nouns)
     "searchKeyword": "",
     "taxonomyExpression": "{\"OR\": [\"Bright\", \"Spacious\", \"Open\", \"Airy\"]}",
     "searchLanguage": "en_US",
-    "channelIds": "",
-    "channelType": "PublicUnauthenticated",
+    "contentAccessScope": "Public",
     "contentTypeFqn": "sfdc_cms__image",
     "pageOffset": 0,
     "searchLimit": 5
@@ -246,8 +252,7 @@ Query: "car images" (no descriptive terms)
     "searchKeyword": "car OR automobile OR vehicle OR auto",
     "taxonomyExpression": "{}",
     "searchLanguage": "en_US",
-    "channelIds": "",
-    "channelType": "PublicUnauthenticated",
+    "contentAccessScope": "Public",
     "contentTypeFqn": "sfdc_cms__image",
     "pageOffset": 0,
     "searchLimit": 5
@@ -255,7 +260,7 @@ Query: "car images" (no descriptive terms)
 }
 ```
 
-6. **Call the tool** with the exact JSON payload
+6. **Call the tool** with the exact JSON payload — show the payload in your response before calling the tool
 
 ### Search using Data 360 hybrid search
 

@@ -32,7 +32,7 @@ Examples of `sf org create scratch` command outputs for all four creation method
 Examples of `sf org create snapshot` command outputs.
 
 - **success_output.json** - Successful snapshot creation
-- **error_output.json** - Common error scenarios (NOT_FOUND, duplicate name, etc.)
+- **error_output.json** - Common error scenario (duplicate snapshot name)
 
 ## Usage
 

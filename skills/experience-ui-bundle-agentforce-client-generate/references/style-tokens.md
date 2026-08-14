@@ -6,6 +6,8 @@ This document explains how to use `styleTokens` for theming and styling the Agen
 
 The `styleTokens` prop is the **ONLY** way to customize the appearance of the Agentforce conversation client. It accepts an object with style token keys and CSS values.
 
+**Framework note:** The token names and values below are identical for React and Angular. Only the binding syntax differs — the examples in this file use React (`styleTokens={{ ... }}`); in Angular bind the same object with `[styleTokens]="{ ... }"` (or to a component property).
+
 ## Source of Truth
 
 For the complete and always up-to-date list of all style tokens, see the tables below:

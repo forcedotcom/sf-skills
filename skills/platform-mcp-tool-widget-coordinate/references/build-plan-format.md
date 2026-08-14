@@ -20,11 +20,14 @@ LIGHTNING TYPES (two object-based CLTs of equal standing — named for what each
     Name: <responseCLT>          # convention: <toolApiName>Response
     Path: <pkgDir>/lightningTypes/<responseCLT>/schema.json
     Properties: <field: lightning:type, ...>   # 1:1 with response @InvocableVariable fields
+    Nested/list fields: <objectField: @apexClassType/c__<Outer>$<Inner>, ... — or "none">
+      # A single nested object is one @apexClassType property; a List<ApexClass> rides INSIDE an
+      # @apexClassType object (the CLT carries no lightning__listType — the list surfaces in the widget schema).
   Envelope CLT:
     Name: <toolCLT>          # convention: <toolApiName>
     Path: <pkgDir>/lightningTypes/<toolCLT>/schema.json
     Renderer (default, at bundle root — wires the widget): <pkgDir>/lightningTypes/<toolCLT>/renderer.json
-    Envelope properties: actionName (text), isSuccess (boolean), outputValues (c__<responseCLT>), <plus any others>
+    Envelope properties: actionName (text), isSuccess (boolean), outputValues (c__<responseCLT>)   # exactly these three — no others
 
 WIDGET:
   Name: <widgetName>          # convention: <toolApiName>Widget
@@ -33,12 +36,11 @@ WIDGET:
     <pkgDir>/uiWidgets/<widgetName>/schema.json
     <pkgDir>/uiWidgets/<widgetName>/<widgetName>.uiwidget-meta.xml
   Schema source: derived from the response field list (name + primitive type) — a standalone contract, not tied to any Lightning Type
-  Renderer binding: each widget attribute maps to {!$attrs.outputValues.<field>}
-  Layout intent: <one-line description of the widget composition>
-  Properties omitted: <response fields the widget intentionally drops, with rationale — or "none">
-    # actionName/isSuccess never appear here — they are envelope-only and never candidates for the widget.
-    # Default omissions to declare when present in the response: isSuccess, errorMessage, status, message
-    # (operational/status indicators, not display data) — each needs its own one-line rationale, not just the field name.
+  List fields: <listField: element class @apexClassType/c__<Outer>$<Inner> — or "none">   # widget schema/body authored by platform-widget-generate
+  Renderer binding: primitive → {!$attrs.outputValues.<field>}; nested-object leaf → {!$attrs.outputValues.<objectField>.<leaf>};
+    list → {!$attrs.outputValues.<listField>} (top-level) or {!$attrs.outputValues.<wrapperField>.<listField>} (list inside wrapper)
+  Layout intent: <one-line description of the widget composition, incl. how lists are rendered>
+    # actionName/isSuccess are envelope-only fields (on the envelope CLT) and never widget candidates.
 
 SUB-SKILLS THAT WILL RUN:
   platform-custom-lightning-type-generate   (response CLT, then envelope CLT)
@@ -52,11 +54,16 @@ VALIDATIONS THAT WILL RUN AFTER GENERATION:
     - every {!$attrs.X} resolves to a widget schema property
     - <name>.uiwidget-meta.xml is well-formed, root <UiWidgetBundle>, declares <widgetType>JSON</widgetType>
   Cross-skill checks (run by this orchestrator):
-    - clt-reference-integrity: envelope CLT outputValues → c__<responseCLT>; response CLT exists; no $schema/items
+    - clt-reference-integrity: envelope CLT outputValues → c__<responseCLT>; response CLT exists; no $schema/items;
+      non-primitive response fields typed @apexClassType (no CLT-level lightning__listType — lists ride inside the object)
     - renderer-wires-widget: envelope CLT renderer.json (bundle root) references the widget via @widget/c/<widgetName>,
-      binding every widget property as {!$attrs.outputValues.<property>}
+      binding every widget property under outputValues ({!$attrs.outputValues.<property>}, or
+      {!$attrs.outputValues.<objectField>.<leaf|listField>} for nested/list fields)
+    - nested-list-coverage: every nested-object and list field discovered in Phase 2 is rendered by the widget
+      (authored by platform-widget-generate) and bound in the renderer at the correct depth. A discovered
+      nested/list field that is absent FAILS ("out of scope" / "beta single-response" are not valid drop rationales).
     - field-trace (advisory): print response @InvocableVariable fields and widget schema properties; print the diff.
-      Invented widget fields fail; omissions not declared above warn.
+      Invented widget fields fail; a response data field absent from the widget warns.
 
 GENERATION ORDER: response CLT → widget → envelope CLT (response CLT must exist before the envelope CLT references it).
 
@@ -70,5 +77,4 @@ Proceeding unless you push back (reply "no", "stop", "change X"). The plan above
 
 - If the user replies with edits or declines, revise the plan and reprint. Do not assume which sections changed.
 - Approval applies only to the plan as printed. A later request for another tool starts a new planning cycle.
-- "Properties omitted" makes intentional drops explicit — e.g. `status`, `message`, internal IDs that do not belong on the render surface.
 - If the payload source is a pasted sample that nests under `outputValues.data`, record that extra level here — it changes the response CLT and every renderer binding to `{!$attrs.outputValues.data.<field>}`.

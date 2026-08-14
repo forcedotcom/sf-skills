@@ -51,4 +51,4 @@ sf project deploy start \
   --wait 10
 ```
 
-A `--dry-run` failure runs the full server-side validation hooks (including the `IDENTIFIED_RECORD` constraint at `PolicyRuleDefinitionCondObject.java:332-339`) without persisting. This catches all of the errors in the table above before they affect a real org.
+A `--dry-run` failure runs the full server-side validation (including the `IDENTIFIED_RECORD` constraint) without persisting. This catches all of the errors in the table above before they affect a real org.

@@ -53,7 +53,7 @@ subagent greeting:
 	reasoning:
 		instructions: ->
 			| Welcome the user warmly.
-			| Ask how you can help them today.
+			  Ask how you can help them today.
 ```
 
 Companion `bundle-meta.xml` (MUST be this exact content -- no extra fields):
@@ -137,7 +137,7 @@ subagent knowledge_search:
 				| Found article {!@variables.article_id}. Here are the details.
 
 			| Search the knowledge base using the search_articles action.
-			| Present results clearly. Do not fabricate article content.
+			  Present results clearly. Do not fabricate article content.
 
 		actions:
 			search: @actions.search_articles
@@ -164,10 +164,10 @@ subagent account_support:
 					description: "Reset status"
 					is_displayable: True
 
-	reasoning:
-		instructions: ->
-			| I can help with password resets and account access.
-			| Ask for the employee's email, then use the reset_password action.
+		reasoning:
+			instructions: ->
+				| Explain that you can help with password resets and account access.
+				  Ask for the employee's email, then use the reset_password action.
 
 		actions:
 			reset: @actions.reset_password
@@ -270,14 +270,14 @@ subagent order_support:
 					description: "Tracking URL"
 					is_displayable: True
 
-	reasoning:
-		instructions: ->
-			if @variables.order_status != "":
-				| Order {!@variables.order_id} status: {!@variables.order_status}
-
-			| What is your order number? I will look it up for you.
-			| Use the get_order action to retrieve order details.
-			| Do not guess order status -- always use the action result.
+		reasoning:
+			instructions: ->
+				if @variables.order_status != "":
+					| Report order {!@variables.order_id} with exact status
+					  {!@variables.order_status}. Do not guess or paraphrase it.
+				else:
+					| Ask for the order number, then use the get_order action to
+					  retrieve the details.
 
 		actions:
 			lookup: @actions.get_order
@@ -307,11 +307,11 @@ subagent return_support:
 					description: "Return authorization ID"
 					is_displayable: True
 
-	reasoning:
-		instructions: ->
-			| I can help with your return request.
-			| Please provide your order number and the reason for the return.
-			| Use the initiate_return action to start the process -- do not fabricate return IDs.
+		reasoning:
+			instructions: ->
+				| Explain that you can help with the return. Ask for the order
+				  number and reason.
+				  Use the initiate_return action to start the process -- do not fabricate return IDs.
 
 		actions:
 			start_return: @actions.initiate_return
@@ -345,8 +345,8 @@ subagent confirmation:
 	description: "Confirm the completed action"
 	reasoning:
 		instructions: ->
-			| Your request has been processed. Reference: {!@variables.case_id}
-			| Is there anything else I can help with?
+			| Confirm that the request was processed, provide exact reference
+			  {!@variables.case_id}, and ask whether the user needs anything else.
 		actions:
 			new_request: @utils.transition to @subagent.agent_router
 				description: "Start a new request"
@@ -393,7 +393,7 @@ subagent main:
         instructions: ->
             if @variables.customer_verified == True:
                 | You are speaking with a verified customer.
-                | Help them with their request.
+                  Help them with their request.
             else:
                 | Please verify the customer's identity first.
         actions:

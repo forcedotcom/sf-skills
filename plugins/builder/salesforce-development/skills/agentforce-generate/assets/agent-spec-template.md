@@ -101,8 +101,12 @@ For each action, decide how it gets invoked:
 **Modes:**
 - **`run @actions.X` in `instructions: ->`** — Deterministic. Fires every time the condition holds. Use only when regulation, authorization, confirmed consequence, external ordering, or a reproduced trace failure requires it.
 - **Planner slot-fill (`with param = ...` in `reasoning.actions:`)** — LLM decides when to invoke. Use for user-initiated actions where the LLM should judge intent.
-- **`@utils.setVariables`** — LLM captures a value and ends the turn. Use only
-  when a named later deterministic consumer needs the exact value and it cannot
+- **`@utils.setVariables`** — LLM captures a value through a model-selected
+  tool call. The call updates state but does not itself define a turn boundary.
+  Any later reasoning or response follows the runtime's normal tool-loop
+  behavior; do not use this action to force either an end or another
+  iteration. Prompt text asking for the call does not execute it. Use only when
+  a named later deterministic consumer needs the exact value and it cannot
   remain action-local. Do not use it to mirror conversational history.
 
 ## Deterministic Controls (When Needed)

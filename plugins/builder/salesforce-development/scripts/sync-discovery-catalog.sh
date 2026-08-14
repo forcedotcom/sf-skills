@@ -22,6 +22,8 @@ set -e
 
 PLUGIN="plugins/builder/salesforce-development"
 GENERATOR="${PLUGIN}/scripts/discovery_catalog.py"
+REGISTRY="${PLUGIN}/scripts/capability_registry.py"
+MANIFEST="${PLUGIN}/catalog/public-release-manifest.json"
 ARTIFACT="${PLUGIN}/catalog/discovery.json"
 
 # Paths whose change can alter the generated catalog.
@@ -43,6 +45,26 @@ if [ "${CATALOG_SYNC_CHECK_ONLY:-}" = "1" ]; then
   exit 0
 fi
 
-python3 "$GENERATOR" --generate >/dev/null
+# Generate from the staged index rather than the worktree. Besides excluding
+# unrelated unstaged edits, this bypasses core.autocrlf checkout conversion on
+# Windows so the catalog hashes Git's canonical bytes on every platform.
+snapshot="$(mktemp -d "${TMPDIR:-/tmp}/sf-discovery-catalog.XXXXXX")"
+cleanup() {
+  rm -rf "$snapshot"
+}
+trap cleanup EXIT HUP INT TERM
+mkdir -p "$snapshot/skills"
+git ls-files -z -- config.yml "$GENERATOR" "$REGISTRY" "$MANIFEST" "${PLUGIN}/skills" |
+  git -c core.autocrlf=false -c core.eol=lf \
+    checkout-index --stdin -z --prefix="${snapshot}/"
+executable_paths="${snapshot}/executable-paths.json"
+git ls-files --stage -z -- "${PLUGIN}/skills" |
+  python3 -c 'import json, sys; prefix = sys.argv[1].encode(); records = (row for row in sys.stdin.buffer.read().split(b"\0") if row); paths = [path[len(prefix):].decode("utf-8") for metadata, path in (row.split(b"\t", 1) for row in records) if metadata.startswith(b"100755 ") and path.startswith(prefix)]; json.dump(paths, sys.stdout, ensure_ascii=False); sys.stdout.write("\n")' \
+    "${PLUGIN}/" >"$executable_paths"
+python3 "${snapshot}/${GENERATOR}" --generate \
+  --executable-paths-file "$executable_paths" >/dev/null
+python3 "${snapshot}/${GENERATOR}" --check \
+  --executable-paths-file "$executable_paths" >/dev/null
+cp "${snapshot}/${ARTIFACT}" "$ARTIFACT"
 git add "$ARTIFACT"
 echo "sync-discovery-catalog: regenerated and staged ${ARTIFACT}"

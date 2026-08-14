@@ -25,8 +25,8 @@ For a multi-subagent agent, it displays:
 - Action calls within subagents (with backing type: Apex, Prompt Template, Flow)
 - Gating conditions (`available when` expressions), when required
 - Variable state changes that have a trusted writer and named consumer
-- Escalation and off-topic handling
-- Conditional instructions based on variable values
+- Escalation, off-topic handling, and conditional instructions when the
+  intended use cases require them
 
 Subagent Map diagrams are the primary visual deliverable in an Agent Spec (design document) and serve both specification and comprehension purposes.
 
@@ -36,10 +36,10 @@ Subagent Map diagrams are the primary visual deliverable in an Agent Spec (desig
 
 ### Graph Orientation
 
-- ALWAYS use `graph TD` (Top-Down orientation)
+- Prefer `graph TD` (top-down) for the provided templates
 - Put the `start_agent` entry point at the top
 - For a router-first design, subagents flow downward from the router
-- Never use other orientations
+- Use another orientation when it makes the actual design materially clearer
 
 ### Node Identification
 
@@ -101,16 +101,21 @@ graph TD
 
 ### Decision/Gating Nodes
 
-Use curly braces `{}` for required deterministic conditions. Common formats:
+Curly braces `{}` create a Mermaid decision diamond. Use a decision node when
+the design actually branches. Label it according to who owns the decision:
 
-- Authorization or confirmation gates: `{Check: customer_verified == true?}`
-- External outcome gates: `{Check: verification_success == true?}`
-- Subagent transition logic: `{user_intent matches?}`
+- Machine-enforced authorization gate: `{customer_verified == true?}`
+- Machine-enforced external outcome gate: `{verification_success == true?}`
+- Model-interpreted transition: `{User wants account help?}`
+
+`Check:` is optional display text, not AgentScript syntax. Do not make a
+semantic model decision look like a machine-enforced predicate, and do not
+invent a deterministic gate merely to satisfy the diagram format.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
-    A[account_changes<br/>Subagent] --> B{Check: customer_verified<br/>== true?}
+    A[account_changes<br/>Subagent] --> B{customer_verified<br/>== true?}
     B -->|Yes| C[Call update_account<br/>backing: Flow]
     B -->|No| D[Call verify_customer<br/>backing: Apex]
 ```
@@ -127,7 +132,7 @@ history and do not need state-change nodes.
 %%{init: {'theme':'neutral'}}%%
 graph TD
     A[Call verify_customer] --> B[Set verified_customer_id<br/>= action output]
-    B --> C{Check: verified_customer_id<br/>!= empty?}
+    B --> C{verified_customer_id<br/>!= empty?}
     C -->|Yes| D[Protected action available]
 ```
 
@@ -160,14 +165,16 @@ graph TD
 
 ### Subagent with Gating Condition
 
-`available when` expressions prevent protected action execution until trusted
-preconditions are met.
+For model-selected actions, `available when` controls whether the action schema
+is exposed in the current reasoning iteration. Use a trusted predicate to keep
+a protected action unavailable until its preconditions are met; independently
+verify authorization again in the backing implementation when required.
 
 ```mermaid
 %%{init: {'theme':'neutral'}}%%
 graph TD
     A[account_changes<br/>Subagent]
-    A --> B{Check: verified_customer_id<br/>!= empty?}
+    A --> B{verified_customer_id<br/>!= empty?}
     B -->|No| C[Call verify_customer<br/>backing: Apex]
     B -->|Yes| D[Protected account action<br/>backing: Flow]
     C --> E[Set verified_customer_id<br/>= action output]
@@ -184,7 +191,7 @@ Do not add a variable solely to create a conditional prompt.
 graph TD
     A[Call verify_customer<br/>backing: Apex]
     A --> B[Set verification_success<br/>= action output]
-    B --> C{Check: verification_success<br/>== true?}
+    B --> C{verification_success<br/>== true?}
     C -->|Yes| D[Offer protected operations]
     C -->|No| E[Explain verification failure]
 ```
@@ -288,15 +295,18 @@ Before finalizing a Subagent Map diagram:
 - [ ] Nodes use sequential capital letter IDs
 - [ ] All subagents labeled with `[subagent_name<br/>Subagent]` format
 - [ ] Action calls include backing type (Apex, Prompt Template, Flow)
-- [ ] Required gating conditions are shown as decision nodes with `{Check: ...?}` format
+- [ ] Machine-enforced gates that materially affect the map are shown as
+      decision nodes and labeled with their actual predicate
+- [ ] Semantic model decisions are labeled in natural language rather than as
+      machine checks
 - [ ] Every shown variable has a trusted writer and named runtime consumer
 - [ ] Variable state changes that affect logic are labeled with `[Set variable = value]`
 - [ ] Escalation uses `[Call @utils.escalate]` format
 - [ ] All transition branches are labeled
-- [ ] Diagram fits in 20-30 nodes
+- [ ] Diagram remains readable; split or summarize it when detail obscures the
+      architecture
 - [ ] Subagent routing from start_agent is clear
-- [ ] Off-topic and escalation paths are visible
-- [ ] Required conditional instruction logic is shown
+- [ ] Required off-topic, escalation, and conditional paths are visible
 
 ---
 
@@ -304,7 +314,6 @@ Before finalizing a Subagent Map diagram:
 
 ### Don't
 
-- Use `graph LR` or other orientations instead of `graph TD`
 - Place `start_agent` anywhere except top (node A)
 - Label actions without backing type information
 - Use ambiguous decision node labels (avoid `{Process?}`)
@@ -315,17 +324,18 @@ Before finalizing a Subagent Map diagram:
 - Create subagent routing without labels on the decision logic
 - Mix subagent nodes with action nodes at same level without clear containment
 - Use custom color styling (breaks in dark mode)
-- Leave off-topic and escalation paths out of diagram
+- Omit off-topic or escalation paths that the intended use cases require
 
 ### Do
 
 - Keep the selected `start_agent` at the top
 - Show all subagents reachable from start_agent
 - Include backing type for every action call
-- Make gating conditions explicit as decision nodes
+- Make material machine-enforced gates explicit as decision nodes
 - Show justified variable updates as separate nodes when they affect logic flow
 - Label all transition branches
-- Include off-topic and escalation subagents
-- Show conditional instructions with decision nodes
+- Include off-topic and escalation subagents when the design calls for them
+- Show material conditional branches without implying that every model
+  judgment is a runtime predicate
 - Use `%%{init: {'theme':'neutral'}}%%` for light/dark mode compatibility
 - Focus diagram on subagent structure, not detailed action logic

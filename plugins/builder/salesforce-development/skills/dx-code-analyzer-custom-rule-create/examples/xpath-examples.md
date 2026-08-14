@@ -183,7 +183,7 @@ public class ComplexLogic {
 
 ## Example 6: Class Without Explicit Sharing Declaration
 
-**Problem:** Classes without sharing default to "without sharing" — security risk.
+**Problem:** Classes in API versions 66.0 and below without sharing default to "without sharing" — security risk. If the API version is 67.0 or higher, the below example does not apply.
 
 **Sample violating code:**
 ```apex

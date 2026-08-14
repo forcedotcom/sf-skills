@@ -19,15 +19,9 @@ they do not exist in `@salesforce/platform-sdk`. There is also **no need for Rea
 `localStorage`, or any hand-rolled memoization**. If you find yourself writing a cache, **stop**
 — it already exists.
 
-Default policy: **`max-age` with a 300-second TTL** (`DEFAULT_MAX_AGE_SECONDS = 300`).
-
-| Situation | Behavior |
-|-----------|----------|
-| Cache hit (entry < 300s old) | Return cached `data` immediately — **no network call** |
-| Stale (entry > 300s old) | Treated as a miss → fetch from network → write back (300s TTL) |
-| Miss (no entry) | Fetch → write to cache (300s TTL) → return |
-
-`mutate()` is **never** cached — it is a pass-through to the network.
+The installed `CacheControl` and `DataSDKGraphQL` TSDoc define the default TTL, cache hit/miss
+behavior, and mutation cache policy. Read it first and let it win
+([tier-2a](../SKILL.md#ground-the-sdk-contract-on-the-installed-types-tier-2a)).
 
 ### What gets cached
 
@@ -83,10 +77,9 @@ different mental models. Do not conflate `result.refresh()` (a method on a live 
 
 ### 2a. Reactive refresh — `subscribe` + `refresh`
 
-`query()` resolves a **`QueryResult<T>`** — a snapshot (`data`/`errors`) plus `subscribe(cb)`
-and `refresh()`. The contract (type shape, the independent-subscription and fire-on-subsequent
-semantics) lives in [sdk-api.md](sdk-api.md#queryresultt--the-reactive-query-handle); this
-section is about *when* and *how* to use it.
+The installed `QueryResult` TSDoc defines the reactive handle. This section covers when and how
+to use it; [sdk-api.md](sdk-api.md#queryresultt--the-reactive-query-handle) adds the two
+subscription behaviors absent from that TSDoc.
 
 The lifecycle is: read the initial snapshot, register a subscriber for later snapshots, and
 **always unsubscribe when the consumer goes away** (component unmount, effect re-run, view
@@ -123,15 +116,10 @@ await accountsResult.refresh(); // re-fetches, bypasses cache, pushes to subscri
 
 ### 2b. Call-site cache control — the `cacheControl` option
 
-`cacheControl` is a one-shot policy override on the query options bag. The type and the precise
-per-value behavior (including how an `only-if-cached` miss surfaces as `DataNotFoundError`) are
-the SDK contract — see
-[sdk-api.md](sdk-api.md#cachecontrol--the-per-call-cache-policy). In short:
-
-- `"no-cache"` — skip the cache read, always hit the network, still write back.
-- `"only-if-cached"` — cache-only; a miss surfaces a `DataNotFoundError` on `result.errors` (no
-  network, no throw). Handle it by rendering an empty state — do **not** fall back to the network.
-- `{ type: "max-age", maxAge: <seconds> }` — custom TTL instead of 300s.
+`cacheControl` is a one-shot policy override; its values and mechanics are defined in the
+installed `CacheControl` TSDoc. An `only-if-cached` miss is special: it surfaces as
+`DataNotFoundError` on `result.errors`; render an empty state and **do not** fall back to the
+network.
 
 It does **not** affect the cache key — the same query+variables share one slot regardless of the
 policy each call passes. Which policy to reach for is the strategy table below.

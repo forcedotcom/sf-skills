@@ -6,7 +6,8 @@ Scan all `reasoning.instructions` blocks for two categories of issues:
 
 ### 1. Incorrect reference syntax
 
-- Variables referenced directly as `@variables.X` instead of `{!@variables.X}` in natural language text
+- Model instructions require a stored value but contain bare `@variables.X`,
+  which is only literal text
 - Actions/tools mentioned by name without using `{!@actions.X}` syntax
 
 ### 2. Missing action references
@@ -18,8 +19,21 @@ Scan all `reasoning.instructions` blocks for two categories of issues:
 
 ## How to Fix
 
-1. Change `@variables.X` to `{!@variables.X}` in natural language instruction text
-2. Add `{!@actions.X}` syntax when referencing actions by their use case in instructions
+Classify each reference before editing:
+
+1. If the model must read the current value, change bare `@variables.X` to
+   `{!@variables.X}`.
+2. If the text merely names an action parameter or state concept, keep it
+   literal. For example, `Set next_destination to "self_service"` does not need
+   the current value of `next_destination`.
+3. If the text performs an exact comparison over a trusted value, do not stop
+   at interpolation. Move the comparison into an AgentScript `if` when the
+   branch must be deterministic.
+4. Add `{!@actions.X}` when model instructions need to identify an available
+   action by its use case.
+
+Do not auto-fix every interpolation lint hint. The question is whether the
+model needs the value, not whether a variable-like name appears in prose.
 
 ## Example
 
@@ -77,3 +91,18 @@ subagent CustomerService:
   - "looking up their account information" → `GetCustomerAccount` → added `{!@actions.GetAccount}`
   - "answering their questions" → `AnswerWithKnowledge` → added `{!@actions.AnswerQuestion}`
 - Explicit action references improve the LLM's ability to select the correct action at runtime
+
+## Interpolation Is Not Control Flow
+
+```agentscript
+# Still wrong when this must be an exact runtime branch
+| If {!@variables.customer_tier} == "vip", use priority support.
+
+# Runtime-owned exact fact
+if @variables.customer_tier == "vip":
+    | Offer the priority-support options available to this customer.
+
+# Model-owned semantic judgment
+| If the user is asking for a human rather than product guidance, use
+  {!@actions.escalate_to_support}.
+```

@@ -21,6 +21,7 @@
 | Case | Private, Read, ReadWrite, ReadWriteTransfer | Transfer is unique to Case |
 | Lead | Private, Read, ReadWrite, ReadWriteTransfer | Transfer is unique to Lead |
 | Campaign | Private, Read, ReadWrite, FullAccess | FullAccess is unique to Campaign |
+| Pricebook2 (Price Book) | Internal: ReadSelect (Use), Read (View Only), None (No Access) | **External is fixed at `None` — immutable, cannot be changed** |
 | Custom Objects | Private, Read, ReadWrite, ControlledByParent | ControlledByParent requires Master-Detail field |
 
 ## Cross-Object Constraints
@@ -29,8 +30,20 @@
 |-----------|--------|
 | Account = Private cascades | Setting Account to Private forces Contact, Case, and Opportunity to Private — all four recalculate together |
 | Contract tied to Account | Contract OWD cannot be set independently; it follows Account's OWD |
-| Pricebook | Only accepts `Use` or `No Access` (`ReadSelect` / `None` in API) — standard access levels do not apply |
+| Pricebook (internal) | Only accepts `Use`, `View Only`, or `No Access` (`ReadSelect` / `Read` / `None` in API) — standard access levels do not apply |
+| Pricebook (external) | **Fixed at `None` (No Access) — immutable, cannot be changed via Metadata API, Tooling API, or Setup UI** |
 | ControlledByParent cascade | If a child object uses ControlledByParent, changing the parent's OWD implicitly changes the child's effective access |
+
+## Immutable / Fixed OWD Objects
+
+Some objects have OWD values that are platform-fixed and **cannot be changed by any means** (Metadata API, Tooling API, or Setup UI). Attempting to deploy a change will always fail. If the user requests a change to one of these, **explain upfront that it is not possible** — do not attempt a deploy.
+
+| Object | Field | Fixed Value | Notes |
+|--------|-------|-------------|-------|
+| Pricebook2 (Price Book) | External OWD | `None` (No Access) | Platform-enforced; only internal OWD (`Use`/`View Only`/`No Access`) is configurable |
+| User | Internal & External | Read | Cannot be changed |
+| Activity (Task/Event) | External | Private | Only internal OWD is configurable via "Activity" settings |
+| Knowledge Article | External | Controlled by separate channel visibility | Not configurable as a standard OWD |
 
 ## Internal vs External Access
 

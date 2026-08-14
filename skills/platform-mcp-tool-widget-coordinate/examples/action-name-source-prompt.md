@@ -41,7 +41,7 @@ Read the `outputs` array (ignore `inputs` — that is `accountId`, the tool inpu
 
 `payloadFields` = the 14 rows above — identical to what the `apex` source would enumerate, but resolved from the live org without parsing source or filtering the request/helper classes.
 
-> If any output had `maxOccurs > 1`, it would be a list — flag it in the plan (beta renders a single response).
+> If any output had `maxOccurs > 1`, it would be a list — render it as a collection (`lightning__listType` + `items` element type in the widget schema, iterated with `forEach`), never drop it. See `references/mcp-tool-output-discovery.md` ("Nested-object and list payload fields").
 
 ## Phase 3 — Build plan (abridged)
 
@@ -62,7 +62,6 @@ LIGHTNING TYPES:
 
 WIDGET: getAccountSummaryWidget
   Renderer binding: each attribute → {!$attrs.outputValues.<field>}
-  Properties omitted: status, message
 
 GENERATION ORDER: response CLT → widget → envelope CLT
 ```

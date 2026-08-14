@@ -32,7 +32,10 @@ Every top-level key is optional; each object is strict (no extra keys).
   },
   "role": { "assignee": "currentUser", "roleName": "<UserRole name>" },
   "selfRegistration": { "selfRegProfile": "<Profile API name>",
-                        "accountName": "<display name>" }
+                        "accountName": "<display name>" },
+  "socialLogin": { "communityMemberProfile": "<Profile name>",
+                   "authProviderNames": ["<DeveloperName>", "..."],
+                   "communityUserPermset": "<PermissionSet API name>" }
 }
 ```
 
@@ -48,6 +51,15 @@ Every top-level key is optional; each object is strict (no extra keys).
   `roleName` is a non-empty `UserRole` name.
 - **`selfRegistration`** has no license field — the required license is derived
   from `selfRegProfile` (see `references/license-checks.md`).
+- **`socialLogin`** drives step 6b. `communityMemberProfile` (required) is the
+  profile added to `NetworkMemberGroup` so SSO-registered users can access the
+  site. `authProviderNames` (required, non-empty) are the **DeveloperNames** of
+  `AuthProvider` (OAuth) or `SamlSsoConfig` (SAML) records to link to the site's
+  `AuthConfig`. `communityUserPermset` (optional) is assigned to SSO-created
+  community users so `getCurrentUser()` works (needs `ApiEnabled`). Like
+  `selfRegistration`, there is **no `siteName`** — the site is derived from the
+  single `networks/<siteName>.network-meta.xml`. Full step detail:
+  `references/social-login.md`.
 
 ## Scaffolding flow (permset folder present, config missing)
 

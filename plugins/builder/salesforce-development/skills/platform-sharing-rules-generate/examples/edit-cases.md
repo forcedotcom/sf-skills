@@ -12,16 +12,9 @@ Structured test scenarios for edit operations. Each test case defines an input, 
 - Change: access level from `Read` to `Edit`
 
 **Expected behavior:**
-1. Locates the rule by `<fullName>` in the existing file
-2. Presents confirmation showing current vs. proposed change:
-   > **Operation:** Edit
-   > **Object:** `Property__c`
-   > **Rule:** `ShareActivePropertiesWithRegionalManager` (Share Active Properties With Regional Manager)
-   > **Changes:** accessLevel: Read → Edit
-   >
-   > Proceed? (yes / no / edit)
-3. Waits for user confirmation
-4. After confirmation, modifies only `<accessLevel>` — all other elements unchanged
+1. Retrieves the latest sharing rules from the org
+2. Locates the rule by `<fullName>` in the retrieved file
+3. Modifies only `<accessLevel>` — all other elements unchanged
 
 **Expected output (changed portion):**
 ```xml
@@ -31,7 +24,7 @@ All other elements (`fullName`, `label`, `sharedTo`, `criteriaItems`, `includeRe
 
 ---
 
-## TC-06: Edit shared-to target of an existing rule
+## TC-06: Edit shared-to target of an existing rule (UNSUPPORTED)
 
 **Input:**
 - Object: `Property__c`
@@ -39,18 +32,13 @@ All other elements (`fullName`, `label`, `sharedTo`, `criteriaItems`, `includeRe
 - Change: shared-to from role `RegionalManager` to group `PropertyViewers`
 
 **Expected behavior:**
-1. Locates the rule in the file
-2. Presents confirmation showing:
-   > **Changes:** sharedTo: role `RegionalManager` → group `PropertyViewers`
-3. Waits for confirmation
-4. Replaces `<sharedTo>` content only
+1. Detects that the requested change targets `<sharedTo>`, which cannot be edited in place
+2. Refuses the edit and informs the user that the platform does not support modifying `sharedTo` or `sharedFrom` on an existing rule
+3. Suggests: delete the existing rule and create a new one with the desired sharing target
 
-**Expected output (changed portion):**
-```xml
-<sharedTo>
-    <group>PropertyViewers</group>
-</sharedTo>
-```
+**Expected output:** No file changes. Guidance to user about delete + create workflow.
+
+> **Note:** The same restriction applies to `<sharedFrom>` on owner-based rules. Any change to the sharing source or target requires delete + create.
 
 ---
 
@@ -62,10 +50,9 @@ All other elements (`fullName`, `label`, `sharedTo`, `criteriaItems`, `includeRe
 - Change: update criteria from `Status__c equals Active` to `Status__c equals Active` AND `Region__c equals West`
 
 **Expected behavior:**
-1. Locates the rule in the file
-2. Presents confirmation showing current criteria vs. proposed criteria
-3. Waits for confirmation
-4. Replaces `<criteriaItems>` elements
+1. Retrieves the latest sharing rules from the org
+2. Locates the rule in the retrieved file
+3. Replaces `<criteriaItems>` elements
 
 **Expected output (changed portion):**
 ```xml

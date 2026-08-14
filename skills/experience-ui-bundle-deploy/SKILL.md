@@ -1,10 +1,11 @@
 ---
 name: experience-ui-bundle-deploy
-description: "MUST activate when the project contains a uiBundles/*/src/ directory and the task involves deploying, pushing to an org, or post-deploy org setup. Use this skill to deploy a UI bundle app to a Salesforce org and run the full ordered setup: org authentication, pre-deploy build, metadata deploy, permission-set assignment, role assignment, Experience Cloud self-registration, seed-data import, and GraphQL schema fetch plus codegen. Activate when a uiBundles/ project also has files like *.network-meta.xml, org-setup.config.json, a data-plan.json in the data/ dir, or sfdx-project.json and the user mentions deploying, pushing, org setup, or post-deploy tasks. DO NOT TRIGGER when: creating a new UI bundle project from scratch (use experience-ui-bundle-project-generate); styling or editing pages in an existing app without deploying (use experience-ui-bundle-frontend-generate); adding a specific feature such as auth, search, or file upload without deploying (use the matching experience-ui-bundle-*-generate skill)."
+description: "MUST activate when the project has a uiBundles/*/src/ directory and the task involves deploying to an org or post-deploy org setup. Deploys a UI bundle app and runs ordered setup: org auth, build, metadata deploy, permission-set and role assignment, Experience Cloud self-registration, social login / SSO / IDP linking (Auth Providers + SAML SSO configs on a React site), seed-data import, and GraphQL schema fetch + codegen. Trigger signals: *.network-meta.xml, org-setup.config.json (with a socialLogin block), data-plan.json, sfdx-project.json, or mentions of deploy, org setup, or social login / SSO / IDP linking on an Experience site. DO NOT TRIGGER when: creating a new UI bundle project (use experience-ui-bundle-project-generate); styling pages without deploying (use experience-ui-bundle-frontend-generate); adding a feature such as auth, search, or file upload without deploying (use the matching experience-ui-bundle-*-generate skill); configuring MFA permission sets (use experience-ui-bundle-mfa-configure)."
 metadata:
-  version: "1.1"
+  version: "1.2"
   relatedSkills:
     - "experience-ui-bundle-frontend-generate"
+    - "experience-ui-bundle-mfa-configure"
     - "experience-ui-bundle-project-generate"
   cliTools:
     - tool: ["jq"]
@@ -43,10 +44,11 @@ Read these from the project; **ask the user** only for what's missing:
   source dir from `sfdx-project.json` (`packageDirectories[0].path` + `/main/default`).
   It exits non-zero if the project file is missing or malformed. Never hardcode
   `force-app/main/default`.
-- **`org-setup.config.json`** (optional) — drives permset assignment, role, and
-  self-registration. Absent keys mean "skip that step". **Exception:** if the
-  file is missing but `permissionsets/` has permsets to assign, don't silently
-  skip — scaffold the config or gather equivalent inputs (see step 4).
+- **`org-setup.config.json`** (optional) — drives permset assignment, role,
+  self-registration, and social login. Absent keys mean "skip that step".
+  **Exception:** if the file is missing but `permissionsets/` has permsets to
+  assign, don't silently skip — scaffold the config or gather equivalent inputs
+  (see step 4).
 - **`data-plan.json`** (optional, in the project's `data/` dir) — presence enables the data step.
 
 ## Step 1 — Org authentication (always)
@@ -168,6 +170,67 @@ running.** Sequence (full detail in `references/self-registration.md`):
    `assets/network-selfreg.apex` (idempotent; both are query-then-create; run 4a
    and 4b as two separate `sf apex run` invocations).
 
+## Step 6b — Enable social login (config-gated)
+
+Run only when `org-setup.config.json` has a `socialLogin` block. If the block is
+absent, `loadSocialLoginConfig` returns null and the step is hidden — no-op
+cleanly and say so. This step is **non-destructive and idempotent** (it only adds
+missing links/members), so — unlike self-registration and data import — it does
+**not** require asking first.
+
+This links the site's configured **Auth Providers** (OAuth) and **SAML SSO
+configs** to the site so the built-in Social Login component renders their
+buttons on the React login page. On React (Site Container) sites the SSO admin UI
+is hidden, so the linking is done programmatically via `AuthConfig` /
+`AuthConfigProviders` records — you cannot do it by clicking through Setup. Full
+detail, sub-steps, and port-provenance: `references/social-login.md`.
+
+Config shape (see `references/config-scaffold.md` for the full schema):
+
+```json
+{ "socialLogin": {
+    "communityMemberProfile": "Customer Community User",
+    "authProviderNames": ["Google", "My_SAML_Provider"],
+    "communityUserPermset": "myapp_Guest_User_Api_Access"
+} }
+```
+
+Sequence (mirrors reference `org-setup.mjs` `main()` social-login step, which runs
+**after** self-registration and **before** the data/GraphQL steps):
+
+Apply the `assets/` templates **verbatim** (like the self-reg/data steps) — full
+runnable commands for each sub-step are in `references/social-login.md`:
+
+1. **Derive the site** — run `scripts/derive-site-name.sh` (single
+   `*.network-meta.xml`; stop if zero/ambiguous). Social login needs the site to
+   resolve its `AuthConfig`.
+2. **Enable "Allow standard external profiles"** — deploy
+   `assets/Communities.settings-meta.xml` via Metadata API (from a throwaway
+   minimal project; see the reference). Required so the SSO registration handler
+   can create users on standard community profiles; without it auth providers fail
+   user insert with `FIELD_INTEGRITY_EXCEPTION`. A "already active" warning is a
+   non-fatal skip.
+3. **Link Auth Providers to the site `AuthConfig`** — run
+   `assets/social-login-auth-providers.apex` verbatim (substitute `<siteName>`,
+   `<ProviderNamesList>`, `<ApiVersion>`) to create the missing
+   `AuthConfigProviders` junctions, then read its `|DEBUG|` lines (table in the
+   reference). All-or-nothing: if any configured `authProviderNames` entry has no
+   matching `AuthProvider` (OAuth) or `SamlSsoConfig` (SAML) record, it emits
+   `MISSING_PROVIDERS` and links nothing — create/fix them in Setup first.
+   Already-linked providers are skipped (idempotent).
+4. **Add the community member profile to `NetworkMemberGroup`** — resolve the
+   Network + Profile Ids and create the membership if absent (`sf data` commands in
+   the reference). Without it, SSO-registered users hit `NO_ACCESS: User was not
+   authorized for the community`.
+5. **(Optional) Assign `communityUserPermset` to community users** — only when
+   configured. Grants `ApiEnabled` so `getCurrentUser()` (`/chatter/users/me`)
+   works for SSO-created users.
+
+> **IMPORTANT:** A `socialLogin` block present but skipped is a silent-failure
+> trap — the app deploys fine, but no social-login buttons ever appear on the
+> login page and there is no error explaining why. Do not silently skip: run the
+> step when the block is present, or state clearly that it was absent.
+
 ## Step 7 — Data import (presence-driven) — ask first
 
 Run `scripts/find-data-plan.sh` first. If it exits non-zero, **skip this step** —
@@ -211,9 +274,10 @@ that changes objects, fields, or permissions.
 
 ## Done
 
-Setup ends here — the 8 steps above are the complete sequence. Local dev preview
-(`npm run dev:preview`) is a separate developer action, not part of setup; if the
-user asks to preview the site, see `references/dev-preview.md`.
+Setup ends here — the steps above (including the config-gated 6b social login)
+are the complete sequence. Local dev preview (`npm run dev:preview`) is a separate
+developer action, not part of setup; if the user asks to preview the site, see
+`references/dev-preview.md`.
 
 ## Critical rules
 
@@ -222,14 +286,18 @@ user asks to preview the site, see `references/dev-preview.md`.
 - Assign permissions **before** schema fetch — the caller may lack FLS otherwise.
 - Re-run schema fetch + codegen **after every** metadata deploy that changes
   objects, fields, or permissions.
-- Never silently skip permission assignment, self-registration, or data import —
-  either the convention file is present (run it, asking first for the destructive
-  ones) or it's absent (skip cleanly and say so).
+- Never silently skip permission assignment, self-registration, social login, or
+  data import — either the convention file/config block is present (run it, asking
+  first for the destructive ones) or it's absent (skip cleanly and say so). A
+  present-but-skipped `socialLogin` block means no login buttons appear with no
+  error to explain it.
 - Discover the source path from `sfdx-project.json`; never hardcode
   `force-app/main/default`.
 - Apply the `assets/` Apex and XML templates **verbatim** — they encode
-  duplicate-rule bypass, `allOrNone=false` deletes, idempotency, and SOQL-safety
-  that are easy to get wrong by hand.
+  duplicate-rule bypass, `allOrNone=false` deletes, idempotency, SOQL-safety, and
+  (for social login) the all-or-nothing provider pre-check and the
+  DML-not-allowed-on-`AuthConfigProviders` REST-callout insert — all easy to get
+  wrong by hand.
 
 ## Interaction order (summary)
 
@@ -239,5 +307,6 @@ user asks to preview the site, see `references/dev-preview.md`.
 4. Assign permission sets (config-driven assignee)
 5. Assign role (if configured)
 6. Enable self-registration (if configured — ask first)
+6b. Enable social login (if `socialLogin` configured — idempotent, no ask needed)
 7. Import data (if data plan exists — ask first)
 8. Fetch GraphQL schema + codegen + final build

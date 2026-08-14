@@ -208,7 +208,12 @@ def visible_skill_names(repo_root: Path, plugin_root: Path) -> set[str]:
     return {row["name"] for row in public["skills"]} | set(registry.skill_directories(plugin_root / "skills"))
 
 
-def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
+def build_catalog(
+    repo_root: Path,
+    plugin_root: Path,
+    *,
+    executable_paths: Optional[set[str]] = None,
+) -> dict:
     """Build the description-free public v3 catalog."""
     del repo_root
     manifest_path = _manifest_path(plugin_root)
@@ -231,7 +236,19 @@ def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
                 "accessCheck": item.get("accessCheck"),
             }
         if name in foundation_dirs:
-            source = registry.source_variant(foundation_dirs[name])
+            prefix = f"skills/{name}/"
+            skill_executables = (
+                {
+                    path[len(prefix):]
+                    for path in executable_paths
+                    if path.startswith(prefix)
+                }
+                if executable_paths is not None
+                else None
+            )
+            source = registry.source_variant(
+                foundation_dirs[name], executable_paths=skill_executables
+            )
             foundation_description = source.pop("description")
             source["accessCheck"] = None
             variants["foundation"] = source
@@ -277,14 +294,34 @@ def _serialized(data: dict) -> str:
     return json.dumps(data, ensure_ascii=False, indent=2) + "\n"
 
 
-def generate(repo_root: Path, plugin_root: Path, artifact: Optional[Path] = None) -> Path:
+def generate(
+    repo_root: Path,
+    plugin_root: Path,
+    artifact: Optional[Path] = None,
+    *,
+    executable_paths: Optional[set[str]] = None,
+) -> Path:
     destination = artifact or plugin_root / ARTIFACT_RELATIVE
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(_serialized(build_catalog(repo_root, plugin_root)), encoding="utf-8")
+    destination.write_text(
+        _serialized(
+            build_catalog(
+                repo_root, plugin_root, executable_paths=executable_paths
+            )
+        ),
+        encoding="utf-8",
+        newline="\n",
+    )
     return destination
 
 
-def check(repo_root: Path, plugin_root: Path, artifact: Optional[Path] = None) -> bool:
+def check(
+    repo_root: Path,
+    plugin_root: Path,
+    artifact: Optional[Path] = None,
+    *,
+    executable_paths: Optional[set[str]] = None,
+) -> bool:
     destination = artifact or plugin_root / ARTIFACT_RELATIVE
     try:
         actual = registry.read_regular_file_bytes(
@@ -292,7 +329,9 @@ def check(repo_root: Path, plugin_root: Path, artifact: Optional[Path] = None) -
         ).decode("utf-8")
     except (OSError, UnicodeError, CatalogError) as exc:
         raise CatalogError(f"{destination}: catalog artifact is missing: {exc}") from exc
-    if actual != _serialized(build_catalog(repo_root, plugin_root)):
+    if actual != _serialized(
+        build_catalog(repo_root, plugin_root, executable_paths=executable_paths)
+    ):
         raise CatalogError(f"{destination}: catalog artifact is stale; run discovery_catalog.py --generate")
     return True
 
@@ -1407,20 +1446,48 @@ def run_discovery(args: list[str], *, plugin_root: Path, cwd: Optional[Path] = N
     return _guidance(f"unknown or incomplete mode {mode!r}")
 
 
+def _load_executable_paths(path: Path) -> set[str]:
+    try:
+        values = json.loads(
+            registry.read_regular_file_bytes(path, max_bytes=1024 * 1024).decode("utf-8")
+        )
+    except (OSError, UnicodeError, json.JSONDecodeError, CatalogError) as exc:
+        raise CatalogError(f"{path}: cannot load executable path snapshot: {exc}") from exc
+    if not isinstance(values, list) or not all(isinstance(value, str) for value in values):
+        raise CatalogError(f"{path}: executable path snapshot must be a string list")
+    if len(values) != len(set(values)):
+        raise CatalogError(f"{path}: executable path snapshot contains duplicates")
+    for value in values:
+        parts = value.split("/")
+        if (len(parts) < 3 or parts[0] != "skills"
+                or any(not part or part in {".", ".."} for part in parts)
+                or "\\" in value or _has_control_characters(value)):
+            raise CatalogError(f"{path}: invalid executable path snapshot entry")
+    return set(values)
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_mutually_exclusive_group(required=True)
     modes.add_argument("--generate", action="store_true")
     modes.add_argument("--check", action="store_true")
+    parser.add_argument("--executable-paths-file", type=Path)
     options = parser.parse_args(argv)
     plugin_root = Path(__file__).resolve().parent.parent
     try:
         repo_root = _repo_root(plugin_root)
+        executable_paths = (
+            _load_executable_paths(options.executable_paths_file)
+            if options.executable_paths_file is not None
+            else None
+        )
         if options.generate:
-            path = generate(repo_root, plugin_root)
+            path = generate(
+                repo_root, plugin_root, executable_paths=executable_paths
+            )
             print(f"generated {path.relative_to(repo_root)}")
         else:
-            check(repo_root, plugin_root)
+            check(repo_root, plugin_root, executable_paths=executable_paths)
             print(f"catalog is current: {(plugin_root / ARTIFACT_RELATIVE).relative_to(repo_root)}")
     except CatalogError as exc:
         print(f"discovery catalog error: {exc}", file=sys.stderr)

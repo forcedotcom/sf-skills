@@ -13,6 +13,11 @@ v10.10.1):
 This is the **only** document where the dead callable API appears, for comparison. Everywhere
 else in this skill uses the new API exclusively.
 
+> The **new-side** code below is illustrative of the transition, not the source of truth for the
+> current call contract. For the authoritative new signatures, read the installed
+> `dist/*.d.ts` — [tier-2a](../SKILL.md#ground-the-sdk-contract-on-the-installed-types-tier-2a).
+> If a new-side snippet here has drifted from the installed declaration, the declaration wins.
+
 ---
 
 ## 1. Import

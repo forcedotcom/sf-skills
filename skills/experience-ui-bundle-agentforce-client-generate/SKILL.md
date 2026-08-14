@@ -1,8 +1,8 @@
 ---
 name: experience-ui-bundle-agentforce-client-generate
-description: "Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant in a UI Bundle project. TRIGGER when: project contains a uiBundles/*/src/ directory and the task involves adding or modifying a chat widget, chatbot, or conversational AI; files under uiBundles/*/src/ import AgentforceConversationClient; user asks to add any chat or agent functionality to a page. DO NOT TRIGGER when: user wants to create a custom agent, chatbot, or chat widget component from scratch; the project has no uiBundles directory."
+description: "Use this skill when the user asks to add, embed, integrate, configure, style, or remove an agent, chatbot, chat widget, conversation client, or AI assistant in a UI Bundle project (React or Angular). TRIGGER when: project contains a uiBundles/*/src/ directory and the task involves adding or modifying a chat widget, chatbot, or conversational AI; files under uiBundles/*/src/ import AgentforceConversationClient in React `.tsx`/`.jsx` files, or use the app-agentforce-conversation-client element in Angular `.html` templates and AgentforceConversationClientComponent in `.component.ts` files; user asks to add any chat or agent functionality to a page. DO NOT TRIGGER when: user wants to create a custom agent, chatbot, or chat widget component from scratch; the project has no uiBundles directory."
 metadata:
-  version: "1.1"
+  version: "1.2"
   cliTools:
     - tool: ["npm"]
       semver: ">=9.0.0"
@@ -12,7 +12,14 @@ metadata:
 
 # Managing Agentforce Conversation Client
 
-**HARD CONSTRAINT:** NEVER create a custom agent, chatbot, or chat widget component. ALL such requests MUST be fulfilled by importing and rendering the existing `<AgentforceConversationClient />` from `@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client` as documented below. If a requirement is unsupported by this component's props, state the limitation — do not improvise an alternative.
+This skill is **framework-agnostic**: it supports both React and Angular UI Bundle apps. The Agentforce client ships as two feature packages that wrap the same Lightning Out glue — pick the one matching the app's framework (detected in Step 0):
+
+| Framework | Feature package | Element | Component symbol |
+|-----------|-----------------|---------|------------------|
+| React | `@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client` | `<AgentforceConversationClient />` | `AgentforceConversationClient` |
+| Angular | `@salesforce/ui-bundle-template-feature-angular-agentforce-conversation-client` | `<app-agentforce-conversation-client>` | `AgentforceConversationClientComponent` |
+
+**HARD CONSTRAINT:** NEVER create a custom agent, chatbot, or chat widget component. ALL such requests MUST be fulfilled by importing and rendering the existing framework-appropriate component (React `<AgentforceConversationClient />` or Angular `<app-agentforce-conversation-client>`) from its feature package as documented below. If a requirement is unsupported by the component's props/inputs, state the limitation — do not improvise an alternative.
 
 ## Prerequisites
 
@@ -21,20 +28,48 @@ Before the component will work, the following Salesforce settings must be config
 **Trusted domains (required only for local development):**
 
 - Setup → Session Settings → Trusted Domains for Inline Frames → Add your domain
-  - Local development: `localhost:5173` (default Vite dev server port)
+  - Local development: `localhost:<dev-server-port>` — React (Vite) defaults to `localhost:5173`; the Angular template may use a different port (check the app's dev-server config, e.g. `localhost:5174`). Add whichever port the app actually runs on.
   - **Warning:** Remove this trusted domain entry before deploying to production.
 
 ## Instructions
 
+### Step 0: Detect the app framework
+
+Determine whether the target UI Bundle app is **React** or **Angular** before doing anything else — it drives discovery, import, element syntax, and prop binding in every step below.
+
+Run the bundled detector against the app (or uiBundle) root. It performs the detection deterministically and prints exactly one token — `react`, `angular`, `ambiguous`, or `unknown`:
+
+```bash
+bash "<skill_dir>/scripts/detect-framework.sh" "<app-or-uiBundle-root>"
+```
+
+The detector combines: an `angular.json` at/above the root; `@angular/core` / `react` in any non-`node_modules` `package.json`; and source-file signatures (`*.component.ts`, `app.routes.ts`, or `@Component`-decorated classes for Angular; `*.tsx`/`*.jsx` for React).
+
+Act on the result:
+
+- `react` or `angular` → use that framework. **Do NOT ask the user** — the detection is deterministic.
+- `ambiguous` (both frameworks detected) or `unknown` (neither) → ask the user which framework the app uses before proceeding.
+
+Carry the resolved framework through the remaining steps.
+
 ### Step 1: Check if component already exists
 
-Search for existing usage across all app files (not implementation files):
+Search for existing usage across all app files (not implementation files). Use the grep for the detected framework:
 
+**React:**
 ```bash
 grep -r "AgentforceConversationClient" --include="*.tsx" --include="*.jsx" --exclude-dir=node_modules
 ```
 
-**Important:** Look for React files that import and USE the component (for example, shared shells, route components, or feature pages). Do NOT open files named `AgentforceConversationClient.tsx` or `AgentforceConversationClient.jsx` - those are the component implementation.
+**Angular:**
+```bash
+grep -rn "app-agentforce-conversation-client" --include="*.html" --exclude-dir=node_modules
+grep -rn "AgentforceConversationClientComponent" --include="*.ts" --exclude-dir=node_modules
+```
+
+**Important:** Look for the files that USE the element (for example, shared shells/layouts, route components, or feature pages) — for Angular the `<app-agentforce-conversation-client>` tag lives in a `*.html` template and the component is registered in the host's `imports: [...]`. Do NOT open the component *implementation* files:
+- React: `AgentforceConversationClient.tsx` / `AgentforceConversationClient.jsx`
+- Angular: `conversation.ts`, `conversation.html`, `__inherit__conversation.ts`, `agentforce-embed.service.ts`
 
 **If multiple files found:** Ask the user which component file they are referring to. Do not proceed until clarified.
 
@@ -144,7 +179,9 @@ If the SOQL query fails, surface the error message from the response directly to
 
 ### Step 3: Canonical import strategy
 
-Use this import path by default in app code:
+Use the import for the detected framework.
+
+**React** — import the component by default in app code:
 
 ```tsx
 import { AgentforceConversationClient } from "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client";
@@ -156,9 +193,28 @@ If the package is not installed, install it:
 npm install @salesforce/ui-bundle-template-feature-react-agentforce-conversation-client
 ```
 
-Only use a local relative import (for example, `./components/AgentforceConversationClient`) when the user explicitly asks to use a patched/local component in that app.
+**Angular** — import the standalone component **and register it in the host component's `imports` array** (Angular renders nothing without this registration — there is no React analogue):
 
-Do not infer import path from file discovery alone. Prefer one consistent package import across the codebase.
+```ts
+import { AgentforceConversationClientComponent } from "@salesforce/ui-bundle-template-feature-angular-agentforce-conversation-client";
+
+@Component({
+  selector: "app-layout",
+  imports: [/* existing imports */, AgentforceConversationClientComponent],
+  templateUrl: "./app-layout.html",
+})
+export class AppLayoutComponent {}
+```
+
+If the package is not installed, install it:
+
+```bash
+npm install @salesforce/ui-bundle-template-feature-angular-agentforce-conversation-client
+```
+
+**Local/composed imports:** Only use a local relative import when the user explicitly asks to use a patched/local component, OR when the app is a composed UI Bundle that already inherits the feature file locally — React composed apps import from `./components/AgentforceConversationClient`, and Angular composed apps import `AgentforceConversationClientComponent` from the inherited feature file (for example `../../../features/agentforce/__inherit__conversation`). If the host already imports it that way, match the existing import rather than switching to the package.
+
+Do not infer the import path from file discovery alone. Prefer one consistent import across the codebase.
 
 ### Step 4: Add or update component
 
@@ -169,32 +225,38 @@ Determine which sub-step applies:
 
 #### 4a — New installation
 
-1. If the user already specified a target file, use that file. Otherwise, ask the user: _"Which file should I add the AgentforceConversationClient to?"_ Do NOT proceed until a target file is confirmed.
-2. Read the target file to understand its existing imports and TSX structure.
-3. Add the import at the top of the file, alongside existing imports. Use the canonical package import from Step 3:
+1. If the user already specified a target file, use that file. Otherwise, ask the user: _"Which file should I add the Agentforce Conversation Client to?"_ Do NOT proceed until a target file is confirmed. (React: a `*.tsx`/`*.jsx` component. Angular: the host component's `*.html` template — plus its `*.ts` for import + `imports: []` registration.)
+2. Read the target file(s) to understand the existing imports and template structure.
+3. Add the import from Step 3. **Angular additionally requires registering the component in the host `@Component({ imports: [...] })` array** — without this the element renders nothing.
+4. Insert the element as a sibling of existing content — do NOT wrap or restructure existing markup. Use the real `agentId` from Step 2, or the placeholder `<YOUR_AGENT_ID>` if the user skipped Step 2.
 
-```tsx
-import { AgentforceConversationClient } from "@salesforce/ui-bundle-template-feature-react-agentforce-conversation-client";
-```
-
-4. Insert the `<AgentforceConversationClient />` TSX into the component's return block. Place it as a sibling of existing content — do NOT wrap or restructure existing TSX. Use the real `agentId` obtained in Step 2. If no agentId was resolved (user skipped Step 2), use the placeholder:
-
-**With resolved agentId:**
+**React (JSX):**
 ```tsx
 <AgentforceConversationClient agentId="0Xx8X00000001AbCDE" />
 ```
 
-**Without resolved agentId (user skipped):**
-```tsx
-<AgentforceConversationClient agentId="<YOUR_AGENT_ID>" />
+**Angular (template):**
+```html
+<app-agentforce-conversation-client agentId="0Xx8X00000001AbCDE" />
 ```
 
 5. Do NOT add any other code (wrappers, layout components, new functions) unless the user explicitly requests it.
 
+> **Angular prop-binding rule (critical):** input *names* are identical to React, but binding syntax differs. A bare attribute is a **string**, so booleans/numbers/objects MUST use `[prop]` binding:
+> - string → `agentId="0Xx..."`, `width="420px"` (plain attribute is fine)
+> - boolean → `[inline]="true"`, `[headerEnabled]="false"` (NOT bare `inline`, which yields the string `""`)
+> - number → `[width]="420"`
+> - object → `[styleTokens]="{ headerBlockBackground: '#0176d3' }"`
+
+**Verify before finishing (Angular):**
+
+- [ ] Every non-string input (boolean/number/object) uses `[prop]` binding — no bare `inline`/`headerEnabled` attributes.
+- [ ] `AgentforceConversationClientComponent` is registered in the host component's `@Component({ imports: [...] })` array (the element renders nothing without it).
+
 #### 4b — Update existing
 
 1. Read the file identified in Step 1.
-2. Locate the existing `<AgentforceConversationClient ... />` TSX element.
+2. Locate the existing element (`<AgentforceConversationClient ... />` for React, `<app-agentforce-conversation-client ...>` for Angular).
 3. Apply **only** the changes the user requested. Rules:
    - **Add** new props that the user asked for.
    - **Change** prop values the user asked to update.
@@ -209,7 +271,7 @@ If the user reports an error after the component has been set up (e.g., "it's no
 
 ### Step 5: Configure props
 
-**Available props (use directly on component):**
+**Available props/inputs (identical names in both frameworks; only the binding syntax differs — see the Angular rule in Step 4a):**
 
 - `agentId` (string, required) - Salesforce agent ID
 - `inline` (boolean) - `true` for inline mode, omit for floating
@@ -226,26 +288,42 @@ If the user reports an error after the component has been set up (e.g., "it's no
 Floating mode (default):
 
 ```tsx
+// React
 <AgentforceConversationClient agentId="0Xx..." />
+```
+```html
+<!-- Angular -->
+<app-agentforce-conversation-client agentId="0Xx..." />
 ```
 
 Inline mode with dimensions:
 
 ```tsx
+// React
 <AgentforceConversationClient agentId="0Xx..." inline width="420px" height="600px" />
+```
+```html
+<!-- Angular — boolean input needs [ ] binding -->
+<app-agentforce-conversation-client agentId="0Xx..." [inline]="true" width="420px" height="600px" />
 ```
 
 Adding or updating agent label:
 
 ```tsx
+// React
 <AgentforceConversationClient agentId="0Xx..." agentLabel="<dummy-agent-label>" />
+```
+```html
+<!-- Angular -->
+<app-agentforce-conversation-client agentId="0Xx..." agentLabel="<dummy-agent-label>" />
 ```
 
 **Styling rules (mandatory):**
 
-- ALL visual customization (colors, fonts, spacing, borders, radii, shadows) MUST go through the `styleTokens` prop. There are no exceptions.
+- ALL visual customization (colors, fonts, spacing, borders, radii, shadows) MUST go through the `styleTokens` prop/input. There are no exceptions.
 - ONLY use token names listed in the tables below. Do NOT invent custom token names.
-- NEVER apply styling via CSS files, `style` attributes, `className`, or wrapper elements. These approaches will not work and will be ignored by the component.
+- NEVER apply styling via CSS files, `style` attributes, `className`/`class`, or wrapper elements. These approaches will not work and will be ignored by the component.
+- Angular: pass tokens with `[styleTokens]="{ ... }"` binding (an object), not a bare attribute.
 - If the user requests a visual change that does not map to a token below, inform them that the change is not supported by the current token set.
 
 For the complete list of available style tokens, consult `references/style-tokens.md`.

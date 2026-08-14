@@ -60,11 +60,20 @@ class RegistryError(ValueError):
     """A deterministic registry validation or generation error."""
 
 
-def _tree_identity(value: os.stat_result) -> tuple[int, int, int, int, int, int, int]:
-    return (
+def _tree_identity(
+    value: os.stat_result, *, path_descriptor_boundary: bool = False
+) -> tuple[int, ...]:
+    identity = (
         value.st_dev, value.st_ino, value.st_mode, value.st_nlink, value.st_size,
-        value.st_mtime_ns, value.st_ctime_ns,
+        value.st_mtime_ns,
     )
+    # CPython's native Windows path stat reports the creation time as st_ctime,
+    # while fstat reports a metadata-change time. They can therefore differ for
+    # the same open file. Retain ctime for path/path and descriptor/descriptor
+    # race checks, but omit it when crossing between those Windows APIs.
+    if os.name == "nt" and path_descriptor_boundary:
+        return identity
+    return identity + (value.st_ctime_ns,)
 
 
 def read_regular_file_bytes(
@@ -100,7 +109,8 @@ def read_regular_file_bytes(
                 parent_flags |= getattr(os, optional, 0)
             parent_descriptor = os.open(path.parent, parent_flags)
             opened_parent = os.fstat(parent_descriptor)
-            if (_tree_identity(parent_before) != _tree_identity(opened_parent)
+            if (_tree_identity(parent_before, path_descriptor_boundary=True)
+                    != _tree_identity(opened_parent, path_descriptor_boundary=True)
                     or not stat.S_ISDIR(opened_parent.st_mode)):
                 raise RegistryError(f"{path}: parent directory changed before read")
             descriptor = os.open(path.name, flags, dir_fd=parent_descriptor)
@@ -116,7 +126,8 @@ def read_regular_file_bytes(
         opened = os.fstat(descriptor)
         if (not stat.S_ISREG(opened.st_mode)
                 or opened.st_nlink != 1
-                or _tree_identity(before) != _tree_identity(opened)):
+                or _tree_identity(before, path_descriptor_boundary=True)
+                != _tree_identity(opened, path_descriptor_boundary=True)):
             raise RegistryError(f"{path}: regular file changed before read")
         if opened.st_size > max_bytes:
             raise RegistryError(f"{path}: regular file byte limit exceeded")
@@ -143,7 +154,8 @@ def read_regular_file_bytes(
     except OSError as exc:
         raise RegistryError(f"{path}: regular file changed after read") from exc
     if (_tree_identity(opened) != _tree_identity(finished)
-            or _tree_identity(finished) != _tree_identity(current)):
+            or _tree_identity(finished, path_descriptor_boundary=True)
+            != _tree_identity(current, path_descriptor_boundary=True)):
         raise RegistryError(f"{path}: regular file changed during read")
     return b"".join(chunks)
 
@@ -161,6 +173,7 @@ def _hash_field(digest, value: bytes) -> None:
 def inspect_skill_tree(
     root: Path, *, safety_root: Optional[Path] = None,
     budget: Optional[dict[str, int]] = None,
+    executable_paths: Optional[set[str]] = None,
 ) -> dict:
     """Hash one tree and capture its SKILL.md bytes in the same bounded scan.
 
@@ -239,7 +252,12 @@ def inspect_skill_tree(
                 raise RegistryError(f"{path}: hardlinked tree files are not supported")
             digest.update(b"F")
             _hash_field(digest, relative_bytes)
-            digest.update(b"1" if mode & 0o111 else b"0")
+            executable = (
+                relative in executable_paths
+                if executable_paths is not None
+                else bool(mode & 0o111)
+            )
+            digest.update(b"1" if executable else b"0")
             flags = os.O_RDONLY
             for optional in ("O_CLOEXEC", "O_NOFOLLOW", "O_NONBLOCK", "O_BINARY"):
                 flags |= getattr(os, optional, 0)
@@ -255,7 +273,8 @@ def inspect_skill_tree(
                         parent_flags |= getattr(os, optional, 0)
                     parent_descriptor = os.open(path.parent, parent_flags)
                     opened_parent = os.fstat(parent_descriptor)
-                    if (_tree_identity(expected_parent) != _tree_identity(opened_parent)
+                    if (_tree_identity(expected_parent, path_descriptor_boundary=True)
+                            != _tree_identity(opened_parent, path_descriptor_boundary=True)
                             or not stat.S_ISDIR(opened_parent.st_mode)):
                         raise RegistryError(f"{path}: parent directory changed before read")
                     descriptor = os.open(path.name, flags, dir_fd=parent_descriptor)
@@ -271,7 +290,8 @@ def inspect_skill_tree(
                 opened = os.fstat(descriptor)
                 if (not stat.S_ISREG(opened.st_mode)
                         or opened.st_nlink != 1
-                        or _tree_identity(metadata) != _tree_identity(opened)):
+                        or _tree_identity(metadata, path_descriptor_boundary=True)
+                        != _tree_identity(opened, path_descriptor_boundary=True)):
                     raise RegistryError(f"{path}: tree file changed before read")
                 if opened.st_size > TREE_SCAN_MAX_FILE_BYTES:
                     raise RegistryError(f"{path}: tree file byte limit exceeded")
@@ -307,7 +327,8 @@ def inspect_skill_tree(
                 stable = False
             else:
                 if (_tree_identity(opened) != _tree_identity(finished)
-                        or _tree_identity(finished) != _tree_identity(current)):
+                        or _tree_identity(finished, path_descriptor_boundary=True)
+                        != _tree_identity(current, path_descriptor_boundary=True)):
                     stable = False
             _hash_field(digest, content)
             if relative == "SKILL.md":
@@ -351,9 +372,14 @@ def inspect_skill_tree(
     }
 
 
-def canonical_tree_sha256(root: Path, *, safety_root: Optional[Path] = None) -> str:
+def canonical_tree_sha256(
+    root: Path, *, safety_root: Optional[Path] = None,
+    executable_paths: Optional[set[str]] = None,
+) -> str:
     """Return the canonical ``sf-skill-tree-v1`` hash for a directory tree."""
-    observation = inspect_skill_tree(root, safety_root=safety_root)
+    observation = inspect_skill_tree(
+        root, safety_root=safety_root, executable_paths=executable_paths
+    )
     if not observation["stable"]:
         raise RegistryError(f"{root}: tree changed during scan")
     return observation["treeSha256"]
@@ -620,13 +646,18 @@ def skill_directories(root: Path) -> dict[str, Path]:
 
 
 def source_variant(
-    skill_dir: Path, *, safety_root: Optional[Path] = None
+    skill_dir: Path, *, safety_root: Optional[Path] = None,
+    executable_paths: Optional[set[str]] = None,
 ) -> dict[str, str]:
     record = read_skill(skill_dir / "SKILL.md")
     return {
         "description": record["description"],
         "skillMdSha256": sha256_file(skill_dir / "SKILL.md"),
-        "treeSha256": canonical_tree_sha256(skill_dir, safety_root=safety_root),
+        "treeSha256": canonical_tree_sha256(
+            skill_dir,
+            safety_root=safety_root,
+            executable_paths=executable_paths,
+        ),
     }
 
 

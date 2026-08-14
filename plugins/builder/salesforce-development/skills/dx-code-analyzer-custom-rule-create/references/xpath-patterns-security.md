@@ -13,7 +13,7 @@
 ]
 ```
 
-**AST evidence:** `ModifierNode` has `@WithSharing`, `@WithoutSharing`, `@InheritedSharing` — all `false()` means no sharing keyword declared (implicit without sharing).
+**AST evidence:** `ModifierNode` has `@WithSharing`, `@WithoutSharing`, `@InheritedSharing` — all `false()` means no sharing keyword declared (implicit without sharing in API versions 66.0 and below. In API versions 67.0 and higher, the default changes to implicit with sharing).
 
 Added `@Nested = false()` to exclude inner classes (which inherit from parent).
 

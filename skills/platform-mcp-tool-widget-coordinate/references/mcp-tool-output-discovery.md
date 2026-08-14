@@ -55,8 +55,8 @@ The describe response has an `outputs` array. Each entry describes one payload f
 
 - **Use `outputs` only.** `inputs` is the tool input (the request wrapper) — exclude it, exactly as `apex` excludes the request class.
 - `name` → the CLT/widget property key. `label` → the property `title`.
-- A field with `maxOccurs > 1` is a **collection** (list). For the beta, surface it to the user in the build plan — the widget renders a single response, and list payloads need a nested item CLT (out of scope for the default flow).
-- An entry with **`"type": null` and an `"apexClass"` key instead** (e.g. `{ "name": "flightInfo", "type": null, "apexClass": "SearchFlightsAction$Flight", "maxOccurs": 1 }`) is **not missing data to default to text** — it is the describe's encoding for a field typed as another Apex class. `$` separates the outer class from the inner class, matching the `@apexClassType/<ns>__<OuterClass>$<InnerClass>` convention used elsewhere in this skill. This is the same case as a `List<ApexClass>`/nested-object field from the other two sources — see "Nested-object payload fields" below; the Actions REST API describe never exposes that class's own leaf fields, so retrieving/reading the Apex class named in `apexClass` (via `apex` §1/§3) is the correct next step, not a fallback away from `action`.
+- A field with `maxOccurs > 1` is a **collection** (list) — it is in scope, not out of scope. If its `apexClass` is set (a list of nested objects) or its `type` is a primitive (a list of scalars), render it as a collection per "Nested-object and list payload fields" below; never drop it silently. (The `content[]` beta single-response limit is about rendering one tool *result*, not about list *fields* inside that result.)
+- An entry with **`"type": null` and an `"apexClass"` key instead** (e.g. `{ "name": "flightInfo", "type": null, "apexClass": "SearchFlightsAction$Flight", "maxOccurs": 1 }`) is **not missing data to default to text** — it is the describe's encoding for a field typed as another Apex class. `$` separates the outer class from the inner class, matching the `@apexClassType/<ns>__<OuterClass>$<InnerClass>` convention used elsewhere in this skill. This is the same nested-object / list-of-objects case as from the other two sources — see "Nested-object and list payload fields" below (`maxOccurs: 1` → single object; `maxOccurs > 1` → list of that object); the Actions REST API describe never exposes that class's own leaf fields, so retrieving/reading the Apex class named in `apexClass` (via `apex` §1/§3) is the correct next step, not a fallback away from `action`.
 
 Extract the field list with `jq` (do NOT wrap in `$()`):
 
@@ -156,29 +156,62 @@ If the grep misses multi-line annotations, read the `.cls` with the Read tool an
 
 ---
 
-## Nested-object payload fields (applies to every source above)
+## Nested-object and list payload fields (applies to every source above)
 
-The mapping tables above (Actions-API `type`, Apex type, JSON value/schema `type`) cover **primitive** fields. A field can also be typed as **another Apex class** instead of a primitive — e.g. `GetFlightDetailsAction.FlightDetailsResponse.flightInfo`, typed `SearchFlightsAction.Flight`. This is a second, additive branch — check every payload field against it, regardless of which of the three sources produced the field list:
+The mapping tables above (Actions-API `type`, Apex type, JSON value/schema `type`) cover **primitive** fields. A field can also be typed as **another Apex class** — as a single object or as a list of them. Both are in scope; check every payload field against both branches, regardless of which of the three sources produced the field list. Detect a nested/list field by source:
 
-- **Actions API**: an output entry with `"type": null` and an `"apexClass": "<OuterClass>$<InnerClass>"` key, rather than a primitive `STRING`/`INTEGER`/etc. `type` (see step 3 above).
-- **`apex`**: an `@InvocableVariable` field whose declared type is not `String`/`Id`/`Integer`/`Long`/`Decimal`/`Double`/`Boolean`/`Date`/`Datetime` but another Apex class.
-- **`sample`**: a property whose JSON value/schema `type` is `"object"` (not a primitive).
+- **Actions API**: an output entry with `"type": null` and an `"apexClass": "<OuterClass>$<InnerClass>"` key, rather than a primitive `STRING`/`INTEGER`/etc. `type` (see step 3 above). `maxOccurs: 1` → single object; `maxOccurs > 1` → list of that object.
+- **`apex`**: an `@InvocableVariable` field whose declared type is not `String`/`Id`/`Integer`/`Long`/`Decimal`/`Double`/`Boolean`/`Date`/`Datetime` — either another Apex class (single object) or `List<ApexClass>` (list of objects).
+- **`sample`**: a property whose JSON value/schema `type` is `"object"` (single object) or `"array"` of objects (list).
 
-**Never** model such a field as `{"type":"object"}` (opaque, unrenderable) or inline it as a nested `lightning__objectType` (rejected by the CLT metaschema — same rule as the envelope↔response relationship). Instead:
+**Never** model such a field as `{"type":"object"}` (opaque, unrenderable) or inline it as a nested `lightning__objectType` (rejected by the CLT metaschema — same rule as the envelope↔response relationship).
+
+> **Enumerating a referenced/inner Apex class — use its public/`@AuraEnabled` members, not `@InvocableVariable`** (SKILL.md Hard Rule 6: the invocable annotation gates only the top-level response class; an inner class's leaves are never in the describe, so grepping it for `@InvocableVariable` enumerates zero leaves). The grep:
+>
+> ```bash
+> # Inner/referenced class leaves — public/@AuraEnabled members (NOT @InvocableVariable).
+> echo "INNER_FIELDS:"
+> grep -oE '(public|global)\s+[A-Za-z0-9_<>,\s]+\s+[a-zA-Z_][a-zA-Z0-9_]*\s*;' \
+>   <pkgDir>/classes/<OuterClass>.cls \
+>   | sed -E 's/.*\s([a-zA-Z_][a-zA-Z0-9_]*)\s*;/\1/' \
+>   | sort -u
+> # Scope to the inner class block; @AuraEnabled fields have no @InvocableVariable line above them.
+> # If the grep misses multi-line declarations, Read the .cls and list the inner class fields manually.
+> ```
+
+### Single nested object (`maxOccurs: 1`)
+
+`<objectField>` throughout this section is the output entry's own `name` from the describe (e.g. `flightInfo`) — the property key that carries the object, used verbatim in the response CLT property name and the renderer binding path. It is never an invented label.
 
 1. Type the response CLT property as `"@apexClassType/<ns>__<OuterClass>$<InnerClass>"` (e.g. `"@apexClassType/c__SearchFlightsAction$Flight"`) — the same convention `platform-custom-lightning-type-generate` documents for Apex-backed CLTs.
-2. Enumerate the referenced Apex class's own fields (its own `@InvocableVariable`/public members) — these become the widget's leaf properties. The object field itself never appears on the widget.
+2. Enumerate the referenced Apex class's own fields by its **public / `@AuraEnabled`** members (see the callout above — inner classes are *not* gated by `@InvocableVariable`) — these become the widget's leaf properties. The object field itself never appears on the widget.
 3. Bind the renderer one level deeper: `{!$attrs.outputValues.<objectField>.<leaf>}` (e.g. `{!$attrs.outputValues.flightInfo.flightId}`), not `{!$attrs.outputValues.<objectField>}`.
-4. A field typed `List<ApexClass>` (a list of nested objects, not a single one) is out of scope for the beta single-response flow — surface it in the build plan like a `maxOccurs > 1` scalar rather than emitting a schema for it.
 
-See `references/two-clt-modeling.md` ("Nested-object payload fields") for the worked JSON, and `examples/nested-object-source-prompt.md` for the full end-to-end walkthrough.
+### List of nested objects (`List<ApexClass>` / `maxOccurs > 1` with an `apexClass`)
+
+A list of nested objects is **in scope** — a real, boundary-crossing, renderable field. Do **not** declare it "out of scope" and do **not** drop it silently. In a response CLT the list is **always a plain `@apexClassType/...` reference** (the CLT metaschema forbids `lightning__listType`/`items` on a response-CLT property — `unevaluatedProperties: false`); the list-ness surfaces in the *widget* schema. **Never touch the Apex to make a list renderable** — both list positions below bind directly, no wrapper reshape.
+
+> **The binding depth equals the list's position in the describe — read it off the describe, never apply a transform.** Two positions, both directly bindable:
+> - **Top-level list output** — the describe surfaces the list itself as an output entry: `apexClass` set + `maxOccurs > 1` (e.g. `GetLeadsList` → `leads`, `apexClass: GetLeadsList$LeadSummary`, `maxOccurs: 2000`), often alongside scalar sibling outputs (`leadCount`, `status`). Type the response CLT property **directly** as `@apexClassType/c__<Outer>$<ElementClass>` (the element/summary class) and bind the renderer at **two segments**: `{!$attrs.outputValues.<listField>}` (e.g. `{!$attrs.outputValues.leads}`). *No Apex change, no wrapper.*
+> - **List inside a wrapper object** — the describe returns exactly ONE `apexClass` output with `maxOccurs: 1` (e.g. `GetShipmentDetails` → `shipmentDetailsResponse`), and the list is a field *inside* that class that the describe **does not surface**. Read the inner Apex class (via the `apex` source / apex describe) and enumerate its **public / `@AuraEnabled`** members — not `@InvocableVariable` (see the referenced/inner-class callout above) — to discover the list field, type the response CLT property as the wrapper class `@apexClassType/c__<Outer>$<ResponseClass>`, and bind the renderer at **three segments**: `{!$attrs.outputValues.<wrapperField>.<listField>}` (e.g. `{!$attrs.outputValues.shipmentDetailsResponse.statusUpdates}`).
+>
+> Whichever position, the response CLT property is a single `@apexClassType/...` reference — the extra binding depth for the wrapper case comes from the wrapper level in the describe, not from any reshape. See `references/two-clt-modeling.md` ("Top-level list vs list-inside-wrapper") for the worked JSON.
+
+1. **Response CLT:** type the list as a plain `@apexClassType/...` reference — `c__<Outer>$<ElementClass>` for a top-level list output, or `c__<Outer>$<ResponseClass>` (the wrapper class, whose interior list field you found by reading the class) for a list-inside-wrapper. Do NOT add a `lightning__listType` property to the CLT.
+2. **Renderer:** bind the list at the depth its describe position dictates — **two segments** `{!$attrs.outputValues.<listField>}` for a top-level list output, or **three segments** `{!$attrs.outputValues.<wrapperField>.<listField>}` for a list inside a wrapper object (never `.<leaf>`).
+
+The **widget bundle** (schema + body) that surfaces and iterates the list is authored and validated by `platform-widget-generate` — this skill does not specify the widget's `lightning__listType`/`items` schema property or its iteration mechanism.
+
+A `List<InnerClass>` collection is never omitted — it is domain data and is always rendered.
+
+See `references/two-clt-modeling.md` ("Nested-object and list payload fields") for the worked JSON, and `examples/nested-object-single-source-prompt.md` (single object) / `examples/nested-object-list-source-prompt.md` (lists) for the full end-to-end walkthroughs.
 
 ## Output of Phase 2
 
-`payloadFields` — an ordered list of `{ name, title, lightning:type }` describing the response payload (primitive fields), plus any nested-object fields resolved to `@apexClassType/...` per above. This drives:
+`payloadFields` — an ordered list of `{ name, title, lightning:type }` describing the response payload (primitive fields), plus any nested-object or list-of-object fields resolved to `@apexClassType/...` per above. A list-of-object field rides inside an `@apexClassType` object (it is not a CLT-level `lightning__listType`); it surfaces as a `lightning__listType` with an `items` element type in the **widget** schema. This drives:
 
-- the **response CLT** `properties` (CLT type vocabulary, `lightning__integerType` allowed, `@apexClassType/...` for nested-object fields),
-- the **widget schema** `properties.attributes.properties` (widget type vocabulary, numerics → `lightning__numberType`; nested-object fields flattened to their leaf properties),
-- the **renderer** attribute bindings (`{!$attrs.outputValues.<name>}` for primitives, `{!$attrs.outputValues.<objectField>.<leaf>}` for nested-object leaves).
+- the **response CLT** `properties` (CLT type vocabulary, `lightning__integerType` allowed, `@apexClassType/...` for single nested-object fields and for the object a list rides inside — never `lightning__listType`/`items` in the CLT),
+- the **widget schema** (authored by `platform-widget-generate` — flat leaf properties for single nested-object fields, and a list property for list-of-object fields; this skill supplies the field list and element typing, not the widget schema/body shape),
+- the **renderer** attribute bindings (`{!$attrs.outputValues.<name>}` for primitives, `{!$attrs.outputValues.<objectField>.<leaf>}` for single nested-object leaves, `{!$attrs.outputValues.<listField>}` / `{!$attrs.outputValues.<wrapperField>.<listField>}` for list fields at the depth the describe dictates).
 
 Whichever source produced the fields, record it in the build plan so the reviewer knows whether the schema came from the live org (`action`), source (`apex`), or an example (`sample`).
