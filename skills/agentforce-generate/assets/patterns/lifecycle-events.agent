@@ -97,9 +97,8 @@ start_agent conversation:
     reasoning:
         instructions: ->
             | Current user context:
-            | {!@variables.current_context}
-            |
-            | Respond helpfully using the refreshed context above.
+              {!@variables.current_context}
+              Respond helpfully using the refreshed context above.
         actions:
             end_conversation: @utils.transition to @subagent.farewell
 

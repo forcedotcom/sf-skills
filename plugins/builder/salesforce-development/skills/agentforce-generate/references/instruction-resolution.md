@@ -11,12 +11,15 @@ AgentScript defines deterministic lifecycle hooks around an iterative LLM
 reasoning loop:
 
 ```text
-before_reasoning (once per turn)
-    -> resolve reasoning.instructions (every reasoning iteration)
-    -> LLM calls a tool or produces a user response
-       -> tool call: execute it, then resolve reasoning.instructions again
-       -> response: end the loop
-    -> after_reasoning (once, if execution reaches the hook)
+before_reasoning (once per subagent execution)
+    -> render effective system.instructions and resolve
+       reasoning.instructions (every reasoning iteration)
+    -> LLM returns text and zero or more tool calls
+       -> tool calls: execute the planned batch; unless control hands off or
+          execution stops, render both instruction surfaces for another
+          reasoning iteration
+       -> no tool calls: advance to after_reasoning
+    -> after_reasoning (once per subagent execution, if reached)
 ```
 
 Do not confuse a new reasoning iteration after a tool call with
@@ -28,8 +31,8 @@ Do not confuse a new reasoning iteration after a tool call with
 
 | Surface | Runtime meaning | Authoring use |
 |---|---|---|
-| Global `system.instructions` | Default system prompt for every execution block | Durable identity, safety, scope, and response invariants |
-| Subagent `system.instructions` | Replaces the global system prompt for that subagent; it does not merge | Rare specialist override that restates every invariant still required |
+| Global `system.instructions` | Default declarative system prompt, rendered on each reasoning iteration | Durable identity, safety, scope, and response invariants |
+| Subagent `system.instructions` | Declarative system prompt rendered on each reasoning iteration; replaces the global value for that subagent | Rare specialist override that restates every invariant still required |
 | `reasoning.instructions` | Runtime-resolved instructions rebuilt on every reasoning iteration | Current objective, relevant state, action guidance, and stop conditions |
 | `before_reasoning` | Deterministic procedure that runs once before the reasoning loop | Preconditions, data preparation, and early transitions |
 | `after_reasoning` | Deterministic procedure that runs if execution reaches the hook after the reasoning loop | Final state updates and post-response transitions |
@@ -43,6 +46,20 @@ on a model provider separating or prioritizing the AgentScript surfaces
 differently unless the target runtime's public, versioned contract guarantees
 that behavior. Their combined meaning must contain no contradiction, duplicate
 policy, or reliance on one layer overriding the other.
+
+### System Instructions Are Dynamic Prompt Context, Not a Procedure
+
+`system.instructions` may contain merge fields such as
+`{!@variables.account_status}`. The runtime renders the selected global or
+subagent value on each reasoning iteration, so a later iteration can receive
+the current value.
+
+System instructions are declarative prompt text. They do not support the
+procedural `instructions: ->` form or runtime statements such as `run`, `set`,
+`if`, or `transition`. Put deterministic procedures in lifecycle or reasoning
+procedure blocks. A merge field only exposes a rendered value to the model; it
+does not turn a system instruction into a runtime predicate or guarantee that
+the model follows a requested branch.
 
 ### Separate AgentScript Control from Model Instructions
 
@@ -89,11 +106,12 @@ narrowing. For every reachable LLM call, that effective pair must prescribe one
 unambiguous response posture. A subagent system replacement must restate every
 durable invariant it retains.
 
-### Deterministic Resolution Before Each LLM Call
+### Instruction Rendering Before Each LLM Call
 
-Before every reasoning iteration, the runtime evaluates deterministic
-constructs in `reasoning.instructions: ->`. This happens before the LLM sees
-the resolved reasoning instructions.
+Before every reasoning iteration, the runtime renders the selected
+`system.instructions` value and evaluates deterministic constructs in
+`reasoning.instructions: ->`. This happens before the LLM sees either effective
+instruction surface.
 
 ### What Happens During Resolution
 
@@ -101,7 +119,8 @@ the resolved reasoning instructions.
 2. **Variable injection**: `{!@variables.X}` tokens are replaced with current values.
 3. **`run` execution**: Deterministic `run @actions.X` calls execute and their outputs are captured.
 4. **`set` execution**: Variable assignments execute immediately.
-5. **`transition to`**: If reached, the subagent switch happens immediately (LLM is never called).
+5. **`transition to`**: If reached during deterministic resolution, control
+   hands to the target before the current subagent invokes its planner.
 
 ### Resolution Example
 
@@ -131,12 +150,14 @@ the tool again.
 
 ## 3. LLM Processing
 
-AgentScript guarantees the authored semantics, not an exact provider message
-count. Reasoning receives:
+The AgentScript authoring contract defines deterministic resolution and the
+inputs exposed to reasoning, not an exact provider message count. Reasoning
+receives:
 
 - One authored node-instruction value: the subagent system override when
   present, otherwise the global `system.instructions`. Runtime base prompts and
-  metadata may add other system content outside AgentScript.
+  metadata may add other system content outside AgentScript. Merge fields in
+  the selected value are rendered for the current reasoning iteration.
 - Conversation history.
 - The resolved `reasoning.instructions`, when non-empty.
 - The currently available tools and their schemas.
@@ -147,12 +168,10 @@ AgentScript authoring contract.
 
 ### What the LLM Decides
 
-Based on the assembled prompt, the LLM:
-
-1. **Selects an action** (if applicable) from the available actions list
-2. **Fills slot parameters** (`...` values) from conversation context
-3. **Generates a text response** to send to the user
-4. **Decides whether to transition** (if a transition action is available and appropriate)
+Based on the assembled prompt, an LLM result may contain text and zero or more
+available action calls. For an action call, the model selects the action and
+fills slot parameters (`...`) from conversation context. A model-selected
+transition is an action call; it is not a separate deterministic decision.
 
 ### What the LLM Does NOT See
 
@@ -162,49 +181,59 @@ Based on the assembled prompt, the LLM:
 - `run` statements (already executed before the iteration)
 - `set` statements (already executed)
 - `available when` conditions (already evaluated -- hidden actions are simply absent)
-- `after_reasoning` blocks (run after the LLM, not shown to it)
+- `after_reasoning` source code (it is a runtime hook when reached, not authored
+  prompt text)
 
 ---
 
 ## 4. Tool Loop and Re-Resolution
 
-After the LLM selects and executes a tool, the runtime begins another reasoning
-iteration and rebuilds `reasoning.instructions` from current state.
+The runtime may execute several model-selected calls from one planner result.
+After that batch, it either follows a handoff or stop condition, or begins
+another reasoning iteration and rebuilds both instruction surfaces from
+current state.
 
 ### Loop Sequence
 
 ```text
 1. Resolve reasoning instructions
-2. LLM reasons and selects a tool
-3. Action executes -> outputs captured in variables
+2. LLM returns text and zero or more tool calls
+3. Planned tool calls execute -> configured outputs are captured
 4. Re-resolve reasoning instructions with updated variables
-   - Post-action checks at TOP of instructions fire
+   - State-dependent checks are evaluated again
    - New data is injected into the prompt
 5. LLM reasons again with updated context
-6. Repeat until a transition occurs or the LLM produces a user response
+6. Repeat unless execution hands off, pauses, reaches a limit, is cancelled, or
+   the planner returns no tool calls
 ```
 
-Only after the LLM produces a user response does the reasoning loop end and
-`after_reasoning` run.
+When the planner returns no tool calls, execution advances to
+`after_reasoning`. A handoff, cancellation, confirmation pause, or runtime
+limit can take a different path.
 
-### Why Post-Action Checks Go at the TOP
+### Post-Action Checks Need Exclusive Control
 
-Place post-action checks at the TOP of `instructions: ->` so they fire immediately on re-resolution:
+Placing a completed-state check near the top makes its precedence visible, but
+position alone does not suppress later prompt fragments. Use mutually
+exclusive predicates, `else`, or an actual transition when the completed path
+must exclude first-entry guidance:
 
 ```agentscript
 reasoning:
    instructions: ->
-      # POST-ACTION CHECK (at TOP -- fires on re-resolution)
+      # Completed state owns this path.
       if @variables.order_cancelled == True:
-         | Your order has been cancelled successfully.
          transition to @subagent.confirmation
 
-      # These instructions are for the FIRST entry (before action runs)
-      | I can help you cancel your order.
-      | What is your order number?
+      else:
+         | Explain that you can help cancel the order and ask for its order
+           number.
 ```
 
-If the check were at the BOTTOM, the LLM would see the "ask for order number" instructions again even after the cancellation succeeded, causing confusion.
+Without the `else` or transition, completed-state and first-entry duties can be
+assembled in the same iteration. Here the target confirmation subagent owns the
+success response. A transition exits the current subagent before its planner
+runs; merely moving a prompt fragment does not.
 
 ---
 
@@ -248,12 +277,12 @@ Prevent access to sensitive actions until identity is verified:
 reasoning:
    instructions: ->
       if @variables.is_verified == False:
-         | You must verify your identity before I can help with account changes.
-         | Please provide your email address.
+         | Explain that identity verification is required before account
+           changes and ask for the user's email address.
 
       if @variables.is_verified == True:
-         | Identity verified. I can now help with account changes.
-         | What would you like to do?
+         | Confirm successful verification and ask what account change the user
+           wants to make.
 
    actions:
       update_account: @actions.update_account_info
@@ -263,7 +292,9 @@ reasoning:
          with value = ...
 ```
 
-The `available when` guard hides the action from the LLM until verification passes. The conditional instructions tell the user what to do.
+The `available when` guard hides the action from the LLM until verification
+passes. The conditional instructions tell the model which response duty is
+current.
 
 ### Pattern 2: Data-Dependent Instructions
 
@@ -278,16 +309,16 @@ reasoning:
          set @variables.balance = @outputs.balance
 
       | Account status: {!@variables.account_status}
-      | Current balance: {!@variables.balance}
+        Current balance: {!@variables.balance}
 
       if @variables.account_status == "delinquent":
          | IMPORTANT: This account is delinquent.
-         | Collect payment before processing any other requests.
-         | Offer payment plan options if customer cannot pay in full.
+           Collect payment before processing any other requests.
+           Offer payment plan options if customer cannot pay in full.
 
       if @variables.account_status == "active":
          | This account is in good standing.
-         | Process requests normally.
+           Process requests normally.
 ```
 
 ### Pattern 3: Action Chaining
@@ -299,14 +330,13 @@ reasoning:
    instructions: ->
       # Post-action check: case was created in previous loop
       if @variables.case_id != "":
-         | Case {!@variables.case_id} has been created.
          run @actions.assign_case
             with case_id = @variables.case_id
             with priority = @variables.priority
          transition to @subagent.case_confirmation
 
-      | I need to collect some information to create a support case.
-      | What is the issue you're experiencing?
+      | Explain that issue details are needed to create a support case and ask
+        the user to describe the issue.
 ```
 
 ### Pattern 4: Machine-Known Gate
@@ -335,31 +365,36 @@ reasoning:
 
 ### Anti-Pattern 1: Re-Explaining Language Syntax
 
-Keep this reference focused on instruction resolution. For supported
-`if / else if / else`, invalid `elif`, nested-condition limitations, and
-post-action conditionals, use the canonical
+Keep this reference focused on instruction resolution. For supported flat
+conditions, nested-condition limitations, and post-action conditionals, use the
+canonical
 [Conditional Control Flow Syntax](agent-script-core-language.md#conditional-control-flow-syntax)
 section.
 
-### Anti-Pattern 2: Post-Action Check at Bottom
+### Anti-Pattern 2: Conflicting Entry and Completed-State Text
 
 ```agentscript
-# WRONG -- Check at bottom; LLM sees stale instructions on re-resolution
+# WRONG -- both fragments can survive when order_status is populated
 reasoning:
    instructions: ->
-      | What is your order number?
+      | Ask for the order number.
 
       if @variables.order_status != "":
-         transition to @subagent.show_status
+         | Report the current order status.
 
-# CORRECT -- Check at TOP
+# CORRECT -- the predicates make the duties exclusive
 reasoning:
    instructions: ->
       if @variables.order_status != "":
-         transition to @subagent.show_status
-
-      | What is your order number?
+         | Report the current order status.
+      else:
+         | Ask for the order number.
 ```
+
+Moving a condition to the top can make precedence easier to read, but the
+runtime resolves the whole procedure before invoking the planner. Position
+alone does not exclude another prompt fragment. Use exclusive predicates or a
+reached transition when only one duty should survive.
 
 ### Anti-Pattern 3: Persona in Subagent Instructions
 
@@ -406,20 +441,21 @@ reasoning:
 # WRONG -- Variable name as literal text
 reasoning:
    instructions: ->
-      | Your order ID is @variables.order_id
+      | Tell the user their order ID is @variables.order_id.
 
 # CORRECT -- Use injection syntax
 reasoning:
    instructions: ->
-      | Your order ID is {!@variables.order_id}
+      | Tell the user their order ID is {!@variables.order_id}.
 ```
 
 ### Pattern: `after_reasoning` Lifecycle Actions
 
 `run` is supported in `after_reasoning` through the common action mechanism.
-The block runs after the reasoning loop ends, including a turn where the model
-produced a response without calling a tool. Use it only when the follow-up must
-run after every completed reasoning pass.
+The block runs when the subagent's reasoning loop reaches that lifecycle hook,
+including a planner result with no tool calls. It is not an after-every-tool
+hook and can be bypassed by other terminal paths such as a handoff. Use it only
+when the follow-up belongs at that lifecycle point.
 
 Do not use this lifecycle hook for an irreversible action merely because it is
 deterministic; consequential-action preconditions still need explicit guards.
@@ -439,26 +475,26 @@ after_reasoning:
 reasoning:
    instructions: ->
       | If the user is a VIP, offer priority support.
-      | If they haven't been verified, ask for verification first.
-      | If the refund has been approved, confirm it and end the conversation.
-      | Check availability before booking.
+        If they haven't been verified, ask for verification first.
+        If the refund has been approved, confirm it and end the conversation.
+        Check availability before booking.
 
 # CORRECT when the conditions are trusted machine facts protecting material
 # invariants. The LLM sees only the matching operating instructions.
 reasoning:
    instructions: ->
       if @variables.refund_approved == True:
-         | Your refund has been confirmed. Reference: {!@variables.refund_id}
          transition to @subagent.confirmation
 
-      if @variables.customer_verified == False:
-         | I need to verify your identity before proceeding.
-         | Please provide your email address.
+      if @variables.refund_approved == False and @variables.customer_verified == False:
+         | Explain that identity verification is required before proceeding and
+           ask for the user's email address.
 
-      if @variables.customer_tier == "vip":
-         | As a VIP customer, you have access to priority support.
+      if @variables.refund_approved == False and @variables.customer_verified == True:
+         | Help with the current account request.
 
-      | How can I help you today?
+      if @variables.refund_approved == False and @variables.customer_verified == True and @variables.customer_tier == "vip":
+         | Mention that priority support is available.
 ```
 
 Why this matters: machine-known authorization, confirmation, action-result, and
@@ -489,7 +525,7 @@ Or with the `|` prefix on each line (inside procedural mode):
 ```agentscript
 instructions: ->
    | Help the customer with their order.
-   | Be professional and concise.
+     Be professional and concise.
 ```
 
 ### Procedural Mode (`->`)
@@ -499,15 +535,16 @@ Enables conditionals, variable injection, and deterministic actions:
 ```agentscript
 instructions: ->
    if @variables.condition == True:
-      | Text shown when condition is true.
+      | Instruction included when the condition is true.
    else:
-      | Text shown when condition is false.
+      | Instruction included when the condition is false.
 ```
 
 ### Variable Injection
 
 ```agentscript
-| Your order {!@variables.order_id} is {!@variables.status}.
+| Tell the user order {!@variables.order_id} has status
+  {!@variables.status}.
 ```
 
 ### Deterministic Run
@@ -582,7 +619,10 @@ For production agents, use the Session Trace Data Model (STDM) in Data Cloud to 
 
 ## 10. Resolution Across Subagent Transitions
 
-When a subagent transition occurs (via `@utils.transition to @subagent.X` or `transition to @subagent.X`), instruction resolution starts fresh in the new subagent:
+When a subagent transition occurs (via `@utils.transition to @subagent.X` or
+`transition to @subagent.X`), the current subagent stops resolving and the
+target subagent begins its lifecycle. Conversation history and shared state are
+retained:
 
 1. The current subagent's remaining instructions are NOT processed
 2. The new subagent's `before_reasoning:` runs (if present)
@@ -596,7 +636,7 @@ When a subagent transition occurs (via `@utils.transition to @subagent.X` or `tr
 subagent collect_info:
    reasoning:
       instructions: ->
-         | Please provide your order number.
+         | Ask for the user's order number.
       actions:
          capture_order: @actions.get_order_id
             with input = ...

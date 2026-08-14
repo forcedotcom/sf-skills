@@ -24,6 +24,10 @@ Scan systematically across ALL subagents:
    complete/incomplete gate, store the trusted boolean outcome and leave a
    display-only receipt or identifier in the action result and surviving
    history. Do not persist a richer value merely because the action returns it.
+   Match semantics as well as the declared primitive type: a scalar category is
+   not a JSON record just because both are strings. Do not rename or store a
+   partial output to disguise a producer/consumer contract gap. Surface the
+   mismatch, or change the stub contract only when that change is approved.
 
 ## How to Fix
 

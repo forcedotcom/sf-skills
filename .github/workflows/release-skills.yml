@@ -100,12 +100,3 @@ jobs:
           npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Notify cline-fork
-        if: ${{ steps.changelog.outputs.skipped == 'false' && steps.release.outputs.id != '' && steps.publish.outcome == 'success' }}
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.IDEE_GH_TOKEN }}
-          repository: forcedotcom/cline-fork
-          event-type: skills-released
-          client-payload: '{"version": "${{ steps.changelog.outputs.version }}"}'

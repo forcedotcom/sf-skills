@@ -24,12 +24,20 @@ writing a component.
 
 ## How to enable
 
-1. **Configure the Auth Provider(s)** in Setup → Identity → Auth. Providers
-   (e.g. Google, Facebook, Salesforce, or a SAML/OpenID Connect provider).
-2. **Add the provider(s) to the site's login configuration** so they are
-   exposed to the community — Setup → Digital Experiences → *(site)* → 
-   Administration → Login & Registration.
-3. **Publish** the site. The React login page renders a button per configured
+1. **Create the Auth Provider(s)** in Setup → Identity → Auth. Providers
+   (e.g. Google, Facebook, Salesforce, or a SAML/OpenID Connect provider). This
+   part is done in Setup as usual.
+2. **Link the provider(s) to the React site.** Do **not** use Setup → Digital
+   Experiences → Login & Registration for this — on React (Site Container) sites
+   that SSO admin UI is **hidden**, so the provider cannot be attached to the site
+   by clicking through Setup. The link is created programmatically by writing
+   `AuthConfigProviders` junction records against the site's `AuthConfig`. Use the
+   `experience-ui-bundle-deploy` skill's **social login step** (a `socialLogin`
+   block in `org-setup.config.json` with `communityMemberProfile` +
+   `authProviderNames`), which runs the shipped org-setup automation and also adds
+   the community profile to the site's `NetworkMemberGroup`. See that skill's
+   `references/social-login.md` for the mechanism and config.
+3. **Publish** the site. The React login page renders a button per linked
    provider automatically.
 
 ## How the redirect works (for troubleshooting)
@@ -56,7 +64,7 @@ writing a component.
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| No provider buttons on React login page | No Auth Providers configured, or not added to the site's Login & Registration settings | Configure Auth Providers and add them to the site, then re-publish |
+| No provider buttons on React login page | No Auth Providers created, or created but not linked to the site's `AuthConfig` (React sites can't be linked via the Login & Registration UI — it's hidden) | Create the Auth Providers, then link them via the `experience-ui-bundle-deploy` social login step (`socialLogin` in `org-setup.config.json`), and re-publish |
 | Buttons appear but SSO fails to start | `startURL` points at `/` or `/login` | Set `startURL` to the site home path |
 | Redirect loop after SSO | `startURL` misconfigured | Point `startURL` at the site home path, not the login page |
 | Provider button missing an icon | Auth Provider icon not set | Set the icon on the Auth Provider definition |

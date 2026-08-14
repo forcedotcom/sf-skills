@@ -2,7 +2,8 @@
 name: platform-apex-test-generate
 description: "Generate and validate Apex test classes with TestDataFactory patterns, bulk testing (251+ records), mocking strategies, assertion best practices, and disciplined test-fix loops. Use this skill when creating new Apex test classes, improving test coverage, debugging and fixing failing Apex tests, running test execution and coverage analysis, or implementing testing patterns for triggers, services, controllers, batch jobs, queueables, and integrations. Triggers on *Test.cls, *_Test.cls files, sf apex run test workflows, coverage reports, test-fix loops. Do NOT trigger for production Apex code (use platform-apex-generate) or Jest/LWC tests."
 metadata:
-  version: "1.0"
+  version: "1.1"
+  minApiVersion: "66.0"
   relatedSkills:
     - "platform-apex-generate"
   cliTools:
@@ -153,6 +154,7 @@ Focus on:
 - failing methods — exception types and stack traces
 - uncovered lines and weak coverage areas
 - whether failures indicate bad test data, brittle assertions, or broken production logic
+- when class metadata crosses from versions 66.0 and below to 67.0 and above, check explicit sharing, decide user/system mode per operation, grant required CRUD/FLS in test users or permission sets, and rerun affected tests
 
 ### Step 5 — Fix Loop
 

@@ -14,9 +14,9 @@ Structured test scenarios for create operations. Each test case defines an input
 - Criteria: `Status__c` equals `Active`
 
 **Expected behavior:**
-1. Discovers SFDX project path and checks for existing `Property__c.sharingRules-meta.xml`
-2. Presents confirmation summary to user and waits for approval
-3. After confirmation, writes the file
+1. Retrieves the latest sharing rules from the org
+2. Checks for existing `Property__c.sharingRules-meta.xml` — no duplicates found
+3. Writes the file
 
 **Expected output:**
 ```xml
@@ -51,10 +51,9 @@ Structured test scenarios for create operations. Each test case defines an input
 - Criteria: `Published__c` equals `true`
 
 **Expected behavior:**
-1. Discovers project path and checks for existing file
+1. Retrieves the latest sharing rules from the org
 2. Queries org for guest user nickname if not provided
-3. Presents confirmation summary and waits for approval
-4. After confirmation, writes file using `<guestUser>` (not `<role>` or `<group>`)
+3. Writes file using `<guestUser>` (not `<role>` or `<group>`)
 
 **Expected output:**
 ```xml
@@ -89,10 +88,10 @@ Structured test scenarios for create operations. Each test case defines an input
 - Access level: Edit
 
 **Expected behavior:**
-1. Discovers project path, checks for existing Account sharing rules
-2. Includes `<accountSettings>` with all three sub-elements defaulted to `None`
-3. Presents confirmation summary and waits for approval
-4. After confirmation, writes the file
+1. Retrieves the latest sharing rules from the org
+2. Checks for existing Account sharing rules
+3. Includes `<accountSettings>` with all three sub-elements defaulted to `None`
+4. Writes the file
 
 **Expected output:**
 ```xml
@@ -122,17 +121,17 @@ Structured test scenarios for create operations. Each test case defines an input
 ## TC-04: Append a rule to an existing file
 
 **Input:**
-- Object: `Property__c` (file already exists with TC-01's rule)
+- Object: `Property__c` (org already contains TC-01's rule)
 - Rule type: criteria-based
 - Share with: group `AllAgents`
 - Access level: Edit
 - Criteria: `Price__c` greaterThan `1000000`
 
 **Expected behavior:**
-1. Reads existing file and finds TC-01's rule already present
-2. Does not duplicate existing rule
-3. Presents confirmation showing the new rule will be appended
-4. After confirmation, appends new rule inside existing `<SharingRules>` root
+1. Retrieves the latest sharing rules from the org
+2. Reads existing file and finds TC-01's rule already present
+3. Does not duplicate existing rule
+4. Appends new rule inside existing `<SharingRules>` root
 
 **Expected output:** File contains both TC-01's rule AND the new rule within the same `<SharingRules>` element.
 
@@ -141,11 +140,11 @@ Structured test scenarios for create operations. Each test case defines an input
 ## TC-17: Create rule with duplicate fullName
 
 **Input:**
-- Object: `Property__c` (file already contains rule `ShareActivePropertiesWithRegionalManager`)
+- Object: `Property__c` (org already contains rule `ShareActivePropertiesWithRegionalManager`)
 - Create a new rule also named `ShareActivePropertiesWithRegionalManager`
 
 **Expected behavior:**
-1. Reads existing file, finds duplicate `<fullName>`
+1. Retrieves from org, reads file, finds duplicate `<fullName>`
 2. Informs user of the conflict
 3. Suggests an alternative name or asks user to choose
 

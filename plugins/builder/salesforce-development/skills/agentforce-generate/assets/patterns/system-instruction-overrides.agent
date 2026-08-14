@@ -115,10 +115,10 @@ subagent orders:
             # ★ Tier-specific instructions carry through to subagents
             if @variables.customer_tier == "vip":
                 | This is a VIP customer. Expedite all order requests.
-                | Offer free shipping upgrades proactively.
+                  Offer free shipping upgrades proactively.
 
             | Help the customer with their order inquiry.
-            | Look up order status, process changes, or handle returns.
+              Look up order status, process changes, or handle returns.
 
         actions:
             back: @utils.transition to @subagent.agent_router
@@ -132,7 +132,7 @@ subagent billing:
             # ★ Different authority based on tier
             if @variables.customer_tier == "vip":
                 | You can waive fees up to $100 for VIP customers.
-                | Proactively offer payment plan options.
+                  Proactively offer payment plan options.
             else if @variables.customer_tier == "premium":
                 | You can waive fees up to $25 for premium customers.
             else if @variables.customer_tier == "standard":
@@ -154,7 +154,7 @@ subagent support:
         instructions: ->
             if @variables.business_hours == False:
                 | Technical support is limited outside business hours.
-                | Log the issue for follow-up and provide self-service resources.
+                  Log the issue for follow-up and provide self-service resources.
 
             if @variables.business_hours == True:
                 | Full technical support available. Troubleshoot thoroughly.
@@ -184,10 +184,8 @@ subagent formal_mode:
 
     reasoning:
         instructions: ->
-            | [Formal Mode Engaged]
-            |
-            | Good day. How may I be of assistance?
-            | I am prepared to address your inquiry with the utmost professionalism.
+            | Greet the user in the formal style defined by the system
+              instructions and ask what business matter they need help with.
 
         actions:
             back: @utils.transition to @subagent.agent_router
@@ -206,12 +204,8 @@ subagent creative_mode:
 
     reasoning:
         instructions: ->
-            | 🎨 [Creative Mode Activated!]
-            |
-            | Hey there, creative spirit! Ready to explore some ideas together?
-            | Think of me as your brainstorming buddy - no idea is too wild!
-            |
-            | What shall we dream up today?
+            | Greet the user in the playful, imaginative style defined by the
+              system instructions and ask what they want to create or explore.
 
         actions:
             back: @utils.transition to @subagent.agent_router
@@ -230,12 +224,9 @@ subagent technical_expert:
 
     reasoning:
         instructions: ->
-            | [Technical Expert Mode]
-            |
-            | I'm ready to dive deep into technical details.
-            | Feel free to use technical terminology - I'll match your level.
-            |
-            | What technical challenge are we solving?
+            | Greet the user as a technical expert, match their apparent level
+              of technical detail, and ask what technical problem they need to
+              solve.
 
         actions:
             back: @utils.transition to @subagent.agent_router

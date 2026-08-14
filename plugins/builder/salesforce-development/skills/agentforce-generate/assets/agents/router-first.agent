@@ -31,13 +31,13 @@ start_agent agent_router:
     label: "Request Router"
     description: "Routes the user's latest request without answering it"
 
+    model_config:
+        model: "model://sfdc_ai__DefaultEinsteinHyperClassifier"
+
     reasoning:
         instructions: ->
-            | Route only the user's latest request:
-            | - order status or tracking: order help;
-            | - return eligibility or an existing return: return help;
-            | - general questions: support.
-            | Do not answer the underlying request in this router.
+            | Route only the user's latest request. Choose exactly one route,
+              and do not answer the underlying request in this router.
         actions:
             check_order: @utils.transition to @subagent.orders
                 description: "Handle order status or tracking"

@@ -81,9 +81,9 @@ start_agent shipment_status:
     reasoning:
         instructions: ->
             | Ask for a tracking number when none is present in the conversation.
-            | Use the shipment lookup for a supplied tracking number.
-            | Answer from the normalized result. If it says the shipment was
-            | not found or delivery is unavailable, say that directly.
+              Use the shipment lookup for a supplied tracking number.
+              Answer from the normalized result. If it says the shipment was
+              not found or delivery is unavailable, say that directly.
 
         actions:
             # The callback runs after the lookup returns normally. Every value
@@ -104,5 +104,5 @@ start_agent shipment_status:
 #         run @actions.third
 #
 # If a third deterministic step is required, redesign the backing automation
-# as one atomic action or use a supported lifecycle/sequence with explicit
-# inputs and failure semantics.
+# as one action that owns the complete sequence or use a supported lifecycle
+# with explicit inputs and failure semantics.

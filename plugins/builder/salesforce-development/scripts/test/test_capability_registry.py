@@ -32,6 +32,41 @@ class CapabilityRegistryTests(unittest.TestCase):
         cls.registry = load_module(REGISTRY_PATH, "capability_registry_under_test")
         cls.catalog = load_module(CATALOG_PATH, "channel_catalog_under_test")
 
+    def test_windows_path_descriptor_identity_ignores_incompatible_ctime(self):
+        path_stat = mock.Mock(
+            st_dev=1, st_ino=2, st_mode=3, st_nlink=1, st_size=4,
+            st_mtime_ns=5, st_ctime_ns=6,
+        )
+        descriptor_stat = mock.Mock(
+            st_dev=1, st_ino=2, st_mode=3, st_nlink=1, st_size=4,
+            st_mtime_ns=5, st_ctime_ns=7,
+        )
+        with mock.patch.object(self.registry.os, "name", "nt"):
+            self.assertEqual(
+                self.registry._tree_identity(path_stat, path_descriptor_boundary=True),
+                self.registry._tree_identity(descriptor_stat, path_descriptor_boundary=True),
+            )
+            self.assertNotEqual(
+                self.registry._tree_identity(path_stat),
+                self.registry._tree_identity(descriptor_stat),
+            )
+
+    def test_tree_hash_can_use_canonical_executable_paths(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td) / "skill"
+            root.mkdir()
+            script = root / "scripts/run.sh"
+            script.parent.mkdir()
+            script.write_text("#!/bin/sh\n", encoding="utf-8")
+            script.chmod(script.stat().st_mode & ~0o111)
+            non_executable = self.registry.canonical_tree_sha256(
+                root, executable_paths=set()
+            )
+            executable = self.registry.canonical_tree_sha256(
+                root, executable_paths={"scripts/run.sh"}
+            )
+            self.assertNotEqual(non_executable, executable)
+
     def test_canonical_tree_hash_is_order_independent_and_tracks_bytes_type_and_execute_bit(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td) / "skill"
@@ -371,11 +406,11 @@ class CapabilityRegistryTests(unittest.TestCase):
         self.assertEqual(data["channel"], "public")
         self.assertEqual(data["counts"], {
             "public": 102,
-            "foundation": 40,
+            "foundation": 41,
             "overlap": 29,
             "publicStandaloneAddable": 73,
-            "foundationOnly": 11,
-            "visibleUnion": 113,
+            "foundationOnly": 12,
+            "visibleUnion": 114,
         })
         public = {row["name"] for row in manifest["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}

@@ -54,9 +54,9 @@ start_agent agent_router:
     reasoning:
         instructions: ->
             | Listen to what the caller needs and route them to the right topic.
-            | For order questions (tracking, status, delivery) go to order status.
-            | If the caller asks to speak with a person or you cannot help, escalate.
-            | Do NOT answer questions directly — route to the appropriate topic.
+              For order questions (tracking, status, delivery) go to order status.
+              If the caller asks to speak with a person or you cannot help, escalate.
+              Do NOT answer questions directly — route to the appropriate topic.
         actions:
             go_order_status: @utils.transition to @subagent.order_status
                 description: "Route to order status topic for tracking and delivery questions"
@@ -68,9 +68,9 @@ subagent order_status:
     reasoning:
         instructions: ->
             | Help the caller check their order status. Ask for their order number if not provided.
-            | Use {!@actions.get_order_status} to look up the order. Read back the status clearly and concisely.
-            | NEVER guess order details — only report what the action returns.
-            | After answering, ask if there's anything else you can help with.
+              Use {!@actions.get_order_status} to look up the order. Read back the status clearly and concisely.
+              NEVER guess order details — only report what the action returns.
+              After answering, ask if there's anything else you can help with.
         actions:
             get_order_status: @actions.get_order_status
                 description: "Look up order status by order number"
@@ -95,7 +95,7 @@ subagent escalation:
     reasoning:
         instructions: ->
             | The caller needs to speak with a human agent. Use {!@actions.escalate_to_human} to transfer them.
-            | Before transferring, briefly let them know you're connecting them.
+              Before transferring, briefly let them know you're connecting them.
         actions:
             escalate_to_human: @utils.escalate
                 description: "Transfer the caller to a live agent"

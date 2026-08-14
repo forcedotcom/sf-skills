@@ -2,21 +2,22 @@
 name: experience-ui-bundle-mfa-configure
 description: "Configure Multi-Factor Authentication (MFA) for Salesforce Experience Site users. TRIGGER when: user wants to enable MFA on a community, enforce two-factor authentication for portal users, add MFA to a React Experience Site / Web App, configure ForceTwoFactor permission, create MFA permission sets for external users, or troubleshoot MFA not appearing on login. Also triggers on: MFA community, two-factor portal, ForceTwoFactor permission set, MFA Experience Cloud, MFA React site, identity verification community, MFA experience site, ForceTwoFactor permissionset-meta.xml, MFA permissionset-meta.xml. DO NOT TRIGGER when: configuring org-wide MFA for internal users (that's Setup > Identity Verification), building custom login UI components (use experience-ui-bundle-frontend-generate), or generating generic permission sets without MFA context (use platform-permission-set-generate)."
 metadata:
-  version: "1.0"
+  version: "1.1"
   minApiVersion: "47.0"
   cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
     - tool: ["jq"]
       semver: ">=1.6"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
   accessCheck:
     - type: "license"
       value: "Experience Cloud (Customer Community / Customer Community Login)"
   relatedSkills:
-    - "platform-permission-set-generate"
     - "dx-org-permission-set-assign"
+    - "experience-ui-bundle-deploy"
     - "experience-ui-bundle-frontend-generate"
     - "platform-metadata-deploy"
+    - "platform-permission-set-generate"
 ---
 
 # Enabling MFA on Experience Sites
@@ -370,7 +371,7 @@ Files generated in the user's project:
 | User needs to deploy all project metadata | `platform-metadata-deploy` |
 | User wants to customize the login page UI | `experience-ui-bundle-frontend-generate` |
 | User needs to create a new generic permission set | `platform-permission-set-generate` |
-| User wants IDP/Social Login (different from MFA) | Supported on React sites — the built-in Social Login component renders configured Auth Providers on the login page automatically (shipped in 264). Configure Auth Providers in Setup; no custom code needed. See `references/social-login.md`. |
+| User wants IDP/Social Login (different from MFA) | Supported on React sites — the built-in Social Login component renders linked Auth Providers on the login page automatically. Create the Auth Providers in Setup, then link them to the React site via the `experience-ui-bundle-deploy` social login step (`socialLogin` in `org-setup.config.json`) — the React SSO admin UI is hidden, so linking is programmatic, not a Setup click-path. See `references/social-login.md`. |
 
 ---
 

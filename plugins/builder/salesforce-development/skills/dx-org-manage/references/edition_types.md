@@ -15,12 +15,14 @@ Reference for choosing the right Salesforce edition for scratch org creation.
 
 Only available if the Dev Hub is a Partner Business Org:
 
-| Edition | When to use |
-|---------|-------------|
-| `partner developer` | Partner app development |
-| `partner enterprise` | Partner enterprise app testing |
-| `partner group` | Partner professional edition testing |
-| `partner professional` | Partner professional edition apps |
+CLI `--edition` flag values are **hyphenated**; definition-file `edition` values are **space + titlecase**.
+
+| CLI flag value | Definition-file value | When to use |
+|----------------|-----------------------|-------------|
+| `partner-developer` | `"Partner Developer"` | Partner app development |
+| `partner-enterprise` | `"Partner Enterprise"` | Partner enterprise app testing |
+| `partner-group` | `"Partner Group"` | Partner professional edition testing |
+| `partner-professional` | `"Partner Professional"` | Partner professional edition apps |
 
 ## Edition Comparison
 
@@ -66,13 +68,13 @@ sf org create scratch --edition developer --alias my-org
 
 **Important notes:**
 - Edition value is case-insensitive in CLI flags but case-sensitive in definition files (capital first letter)
-- Partner editions use space format: `partner developer`, `partner enterprise`, etc. (no hyphen)
+- Partner editions use **hyphenated** values in the CLI `--edition` flag (`partner-developer`, `partner-enterprise`, etc.) and **space + titlecase** in definition files (`"Partner Developer"`, `"Partner Enterprise"`, etc.)
 - CLI flag `--edition` overrides definition file `edition` if both are specified
 
 ## Common Errors
 
 | Error | Cause | Fix |
 |-------|-------|-----|
-| `edition value must be one of` | Invalid edition name | Use: developer, enterprise, group, professional, or partner editions (e.g., "partner developer") |
+| `edition value must be one of` | Invalid edition name | Use: developer, enterprise, group, professional, or partner editions (CLI flag hyphenated, e.g. `partner-developer`) |
 | Partner edition not available | Dev Hub is not a Partner Business Org | Use non-partner edition or switch to Partner Dev Hub |
 | Features not available in edition | Requested features not available in chosen edition | Use Enterprise edition or remove unavailable features |

@@ -25,12 +25,7 @@ metadata:
   version: "1.1"
   mcpTools:
     salesforce-lsp:
-      tools:
-        - validate_soql
-        - complete_soql
-        - check_soql_selectivity
-        - extract_soql_from_apex
-        - refresh_org_schema
+      tools: ["check_soql_selectivity", "complete_soql", "extract_soql_from_apex", "refresh_org_schema", "validate_soql"]
       semver: ">=0.1.0"
 ---
 

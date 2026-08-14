@@ -68,7 +68,7 @@ sf org create scratch --source-org <id> --target-dev-hub <alias> --alias <name> 
 - `--duration-days <days>` — Set expiration (default 7, max 30)
 - `--set-default` — Make this the default org
 - `--no-track-source` — Disable source tracking for CI/CD performance
-- `--wait <minutes>` — Wait for completion (default 5 minutes, min 2)
+- `--wait <minutes>` — Number of minutes to wait for the org to be ready
 - `--async` — Return immediately, don't wait for completion
 
 **⚠️ CRITICAL: This is a BLOCKING command**
@@ -138,7 +138,7 @@ This JSON response means: org is created, authenticated, and ready for `sf org o
 | `Snapshot not found` | Snapshot doesn't exist in this Dev Hub — run `sf org list snapshot` to see available |
 | `sourceOrg value must be 15 or 18 characters` | Org shape ID format incorrect — use output from `sf org list shape` |
 | `The org could not be created` | Generic creation failure — check Dev Hub limits, licensing, or try again |
-| Timeout during creation (exit code 69) | Command timed out waiting for org. CLI displays the resume command with Request ID. User can run the displayed command or increase `--wait` time (min 2 minutes) for next attempt |
+| Timeout during creation (exit code 69) | Command timed out waiting for org. CLI displays the resume command with Request ID. User can run the displayed command or increase `--wait` time for next attempt |
 | `Definition file not found` | Path to definition file is incorrect — verify file exists |
 | Partner editions unavailable | Partner editions only work if Dev Hub is a Partner Business Org |
 

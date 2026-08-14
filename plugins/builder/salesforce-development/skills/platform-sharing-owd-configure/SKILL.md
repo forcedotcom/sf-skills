@@ -2,7 +2,7 @@
 name: platform-sharing-owd-configure
 description: "Use when the user wants to retrieve or update Organization-Wide Default (OWD) sharing settings for Salesforce objects. TRIGGER when: user asks to check current OWD settings, view sharing defaults, change default access levels (Private, Public Read Only, Public Read/Write, Controlled by Parent), configure internal or external access for standard or custom objects, mentions org-wide defaults, wants to make records private or restrict who can see records, wants to control default record visibility for an object, or references .settings-meta.xml sharing fields or sharingModel in .object-meta.xml files. DO NOT TRIGGER when: user asks about sharing rules, criteria-based sharing, role hierarchy, or manual sharing — delegate to platform-sharing-rules-generate."
 metadata:
-  version: "1.1"
+  version: "1.2"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
@@ -60,21 +60,30 @@ All steps are sequential. Do not skip or reorder.
 
 ### Phase 2 — Update Settings (if requested)
 
-4. **Validate the requested access level** — read `references/access_levels.md` to confirm the value is valid for the target object.
+4. **Check for immutable/fixed OWD** — read `references/access_levels.md` "Immutable / Fixed OWD Objects" section. If the requested change targets a fixed value (e.g., Price Book external OWD), **stop immediately** and explain to the user that this value is platform-fixed and cannot be changed by any means. Do not attempt a deploy.
 
-5. **Retrieve the object metadata** using the Metadata API (same command for both standard and custom objects): `sf project retrieve start --metadata CustomObject:<ObjectName> --target-org <org>`. This retrieves `<ObjectName>.object-meta.xml` containing `<sharingModel>` and `<externalSharingModel>`. See `references/metadata_api_approach.md` for the full procedure.
+5. **Validate the requested access level** — read `references/access_levels.md` to confirm the value is valid for the target object. If the value is not in the allowed set for that object, explain what values are valid and ask the user to choose one. Do not guess alternative values.
 
-6. **Modify the sharing settings** — update the `<sharingModel>` (internal access) and/or `<externalSharingModel>` (external access) in the object's `.object-meta.xml`. Read `references/metadata_api_approach.md` for details.
+6. **Retrieve the object metadata** using the Metadata API (same command for both standard and custom objects): `sf project retrieve start --metadata CustomObject:<ObjectName> --target-org <org>`. This retrieves `<ObjectName>.object-meta.xml` containing `<sharingModel>` and `<externalSharingModel>`. See `references/metadata_api_approach.md` for the full procedure.
 
-7. **Pre-deploy verification** — before deploying, confirm:
+7. **Modify the sharing settings** — update the `<sharingModel>` (internal access) and/or `<externalSharingModel>` (external access) in the object's `.object-meta.xml`. Read `references/metadata_api_approach.md` for details.
+
+8. **Pre-deploy verification** — before deploying, confirm:
    - [ ] External access is not more permissive than internal access
    - [ ] Objects with Master-Detail relationships use `ControlledByParent`
    - [ ] The requested access level is valid for the target object (see `references/access_levels.md`)
    - [ ] Cross-object constraints are satisfied (see "Cross-Object Constraints" in `references/access_levels.md`)
+   - [ ] The target field is not listed as immutable/fixed in `references/access_levels.md`
 
-8. **Deploy the updated settings:** `sf project deploy start --metadata CustomObject:<ObjectName> --target-org <org>`. If the deploy fails, check the error message for the specific cause (see Gotchas table). A failed deploy does not change the org. To discard local edits, re-retrieve from the org: `sf project retrieve start --metadata CustomObject:<ObjectName> --target-org <org>`.
+9. **Deploy the updated settings:** `sf project deploy start --metadata CustomObject:<ObjectName> --target-org <org>`.
 
-9. **Verify the change** by re-running the query from Step 1.
+10. **Handle deploy failure (max 2 attempts):** If the deploy fails:
+    - Read the error message and identify the root cause.
+    - If the error indicates the value is invalid or unsupported for the object, **stop** — report the failure to the user with the exact error message and explain what is and isn't possible. Do not try alternative values unless the user explicitly requests a different valid value.
+    - If the error is transient (network timeout, auth expired), retry **once**.
+    - **Never attempt more than 2 total deploys for the same change.** After 2 failures, report the error, discard local edits (`sf project retrieve start --metadata CustomObject:<ObjectName> --target-org <org>`), and ask the user how to proceed.
+
+11. **Verify the change** by re-running the query from Phase 1, Step 1.
 
 ---
 
@@ -84,11 +93,13 @@ All steps are sequential. Do not skip or reorder.
 |-----------|-----------|
 | Objects with Master-Detail relationships must use `ControlledByParent` | Platform enforces this — attempting other values fails |
 | External access cannot be more permissive than internal access | Salesforce rejects configurations where external > internal |
-| Some standard objects have fixed OWD (e.g., User, Activity) | Not all objects support OWD changes |
+| Some objects have immutable/fixed OWD (e.g., Price Book external, User, Activity external) | These are platform-enforced — explain impossibility upfront, never attempt a deploy |
+| Price Book only accepts `Use` (`ReadSelect`) or `No Access` (`None`) for internal OWD; external is always `None` | Standard access levels (Private/Read/ReadWrite) are invalid for Price Book |
 | Changing OWD to more restrictive triggers sharing recalculation | This can take significant time on large orgs — warn the user |
 | Custom objects default to `Public Read/Write` when created | Users may not realize the default is permissive |
 | For managed package custom objects, use the full API name including namespace prefix (e.g., `ns__Object__c`) | Namespace-prefixed objects require the prefix in both queries and metadata retrieval |
 | Always verify the org connection before querying | Prevents confusing error messages |
+| Maximum 2 deploy attempts per change | Prevents unbounded retry loops — after 2 failures, stop and report to the user |
 
 ---
 
@@ -102,6 +113,7 @@ All steps are sequential. Do not skip or reorder.
 | `ControlledByParent` not available | Object has no Master-Detail relationship — use Private, Public Read Only, or Public Read/Write |
 | External access field not showing | External sharing model only appears when external org-wide defaults are enabled |
 | Query returns no results | Object may not be customizable or API name may be incorrect — verify spelling |
+| Deploy fails with invalid value for Price Book | Price Book only accepts `Use`/`None` (internal) and external is fixed at `None` — do not retry with other values, explain to user |
 
 ---
 

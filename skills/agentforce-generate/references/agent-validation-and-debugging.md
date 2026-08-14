@@ -31,6 +31,18 @@ Example:
 sf agent validate authoring-bundle --json --api-name Local_Info_Agent
 ```
 
+On an internal test-pod or OrgFarm org, the validation endpoint can return a
+404 whose message explicitly says `SF_TEST_API=false`. In that specific case,
+retry the same command with the test-API switch enabled:
+
+```bash
+SF_TEST_API=true sf agent validate authoring-bundle --json \
+  --api-name Local_Info_Agent --target-org <TEST_ORG_ALIAS>
+```
+
+Do not set `SF_TEST_API=true` for a normal production or sandbox host, and do
+not treat the initial 404 as an Agent Script compile failure.
+
 ### Interpreting Output
 
 When validation succeeds, the JSON output contains `result.success` set to `true`:
@@ -53,9 +65,12 @@ Do not attempt to preview or deploy until validation passes.
 
 ### Validation Checklist (Pre-Validate Mental Model)
 
-Before running the validation command, mentally check these 14 items. This checklist prevents the most common errors and speeds up the feedback loop:
+Before running the validation command, mentally check these 15 items. This checklist prevents the most common errors and speeds up the feedback loop:
 
 - Block ordering is correct: `system` → `access` → `config` → `variables` → `connections` → `knowledge` → `language` → `start_agent` → `subagent` blocks
+- The bundle directory, `.agent` filename, and `.bundle-meta.xml` basename use
+  the same case-sensitive API name; never leave the metadata file named only
+  `bundle-meta.xml`
 - `config` has `developer_name`; service agents also need `access.default_agent_user`
 - `system` block has `messages.welcome`, `messages.error`, and `instructions`
 - `start_agent` block exists with description and at least one transition action
@@ -69,7 +84,8 @@ Before running the validation command, mentally check these 14 items. This check
 - New files use 4-space structural indentation; edited files do not mix styles
 - Names follow naming rules (letters, numbers, underscores only; no spaces; start with letter)
 - No duplicate block names or action names within the same scope
-- Conditional chains use `if / else if / else`, never legacy `elif`; true
+- Exclusive multi-branch logic uses `if / else if / else`; independent top-level
+  conditions are used only when more than one branch may run; `elif` and true
   nested conditionals are avoided
 
 ---
@@ -158,26 +174,36 @@ session_id: linked string
 
 Linked variables are populated from their `source` at runtime. Do not assign a default value.
 
-**7. Post-Action Directives on Utility Actions**
+**7. Output-Based Directives on Utility Actions**
 
 ```agentscript
-# WRONG — utilities don't support post-action directives
+# WRONG — transition has no output to bind
 go_next: @utils.transition to @subagent.next
-    set @variables.navigated = True
+    set @variables.result = @outputs.result
 
-# CORRECT — only @actions support post-action directives
+# CORRECT — backing action output can be captured
 process: @actions.process_order
     set @variables.result = @outputs.result
+
+# SPECIAL CASE — setVariables supports direct state assignments
+mark_navigated: @utils.setVariables
+    set @variables.navigated = True
 ```
 
-Post-action directives (`set`, `run`, `if`, `transition`) only work after `@actions.*` invocations. Utility actions (`@utils.*`) and subagent delegates (`@subagent.*`) do not produce outputs, so post-action directives are not applicable.
+Utility actions and subagent delegates do not produce `@outputs`, so
+output-based directives are not applicable. `@utils.setVariables` is the
+exception for direct state assignment: it accepts `with` and
+`set @variables...`, but not follow-up `run` statements or transitions.
 
 **8. Conditional Syntax**
 
-Use `if / else if / else`; `elif` produces a syntax error. Agentforce lint
-rejects true nested conditionals with `unsupported-nested-if`; the compiler
-also warns about the narrower nested `if/else` condition-slot limitation. For
-examples, post-action behavior, and flattening alternatives, use the canonical
+Use `if / else` for two alternatives and `if / else if / else` for three or
+more alternatives where the first matching branch should win. Spell it
+`else if`; Python-style `elif` is invalid. Use independent top-level `if`
+statements only when more than one branch may run. True nested conditionals are
+unsupported.
+For examples, post-action behavior, and flattening alternatives, use the
+canonical
 [Conditional Control Flow Syntax](agent-script-core-language.md#conditional-control-flow-syntax)
 section rather than maintaining a second syntax guide here.
 

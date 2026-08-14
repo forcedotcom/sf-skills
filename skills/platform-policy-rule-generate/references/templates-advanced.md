@@ -53,6 +53,6 @@ Source: `conditionWithHierarchy`
 
 `IDENTIFIED_RECORD` policies cannot be authored as XML. The required `RuleContextPath.SESSION_CONSUMER_ID` is not in `RuleContextPathType`.
 
-To author one: write a runtime `RuleProvider` using `AgenticPolicyRuleProviderService.java:130-260` as the canonical builder.
+To author one: implement it as a runtime `RuleProvider` in the consuming service, not via MDAPI XML.
 
 **Do not** synthesize a placeholder XML using `<contextPath>SESSION_CONSUMER_ID</contextPath>` — the value is not in `RuleContextPathType` and the deploy will fail.

@@ -14,7 +14,7 @@ independently required gate or post-action behavior.
 | Pattern | Use When |
 |---------|----------|
 | Single Scope | Default. One domain `start_agent` block, zero `subagent` blocks, and one compatible set of instructions, actions, authority, and escalation behavior |
-| Router-First Architecture | Multiple genuine domains require different objectives, instructions, actions, authority, or escalation behavior |
+| Router-First Architecture | Multiple genuine domains require different objectives, instructions, actions, authority, or escalation behavior; use HyperClassifier when the router is transition-only and routing latency matters |
 | Verification Gate | Sensitive data, payments, or PII require identity verification first |
 | Post-Action Re-resolution | Trusted action output must drive a named follow-up instruction, gate, or action input |
 
@@ -41,10 +41,11 @@ A central `agent_router` routes to specialized subagents. Transition paths shoul
 ```agentscript
 start_agent agent_router:
     description: "Route user requests to the appropriate subagent"
+
+    model_config:
+        model: "model://sfdc_ai__DefaultEinsteinHyperClassifier"
+
     reasoning:
-        instructions: |
-            You are a router only. Do NOT answer questions directly.
-            Always use a transition action to route immediately.
         actions:
             to_orders: @utils.transition to @subagent.order_support
                 description: "Order questions"
@@ -67,11 +68,72 @@ subagent order_support:
 
 > **Routing lives in `start_agent`** -- put classification transitions in `start_agent agent_router:`. Do NOT create a separate routing-only subagent (e.g. `main_menu`, `central_hub`) -- that duplicates the router, adds an extra LLM hop (~3-5s latency), and confuses the platform. A transition back to router is optional and should only be added when the use case requires reclassification.
 
-> **`instructions: |` in a router is probabilistic.** The LLM may respond
-> conversationally instead of emitting a transition. This is appropriate for
-> unstructured current-intent classification. Use `instructions: ->` only when
-> a named deterministic cause, such as verified authorization, selects the
-> transition; do not encode ordinary dialogue stages as state.
+### Fast routing with Einstein HyperClassifier
+
+Use HyperClassifier when the node has one job: select one transition from the
+current request and conversation context. Adding this model configuration makes
+the block a restricted router node rather than a general reasoning node:
+
+```agentscript
+model_config:
+    model: "model://sfdc_ai__DefaultEinsteinHyperClassifier"
+```
+
+It is a good fit when multiple genuine domains already justify a router and
+classification latency matters. The router selects a destination; the target
+subagent handles the request and produces the user-facing response.
+
+The restrictions are part of the design:
+
+- reasoning actions must be `@utils.transition`;
+- `before_reasoning` and `after_reasoning` are not supported;
+- it cannot classify from images;
+- it cannot fill action inputs, run domain actions, set variables, escalate, or
+  delegate to a connected agent;
+- it cannot ask a clarifying question directly. When ambiguity needs a
+  conversation, transition to a clarification or fallback subagent.
+
+Use `available when` to remove routes based on trusted runtime state before
+classification. Give every route a distinct description that states its
+positive scope and important exclusions. Treat those descriptions as the
+primary classification contract. Keep `reasoning.instructions` concise: state
+the shared routing duty, such as selecting exactly one route without answering,
+and put route-specific boundaries in the action descriptions. Add a fallback
+route only when the agent has an intended fallback behavior.
+
+An instruction-free router is structurally valid. It can preserve an optimized
+one-step routing path in runtimes where router instructions compile into a
+lifecycle hook, but use that form only when the action descriptions fully carry
+the routing contract and preview traces confirm the intended optimization.
+Instructions are not prohibited by HyperClassifier; this is a measured latency
+tradeoff, not a language requirement.
+
+When adding HyperClassifier to an existing compatible router, preserve its
+instruction block unless changing that contract is separately required. An
+`instructions: ->` block containing only `|` prompt text is valid; do not
+normalize it to `instructions: |` as part of the model-config repair merely
+because it has no runtime statements.
+
+Keep an ordinary reasoning model when the entry node must answer, clarify,
+collect information, manipulate state, invoke non-transition actions, inspect
+images, or use lifecycle hooks. HyperClassifier is an optimization for a
+compatible router, not a reason to create more subagents.
+
+Validate structure, then validate routing behavior:
+
+```bash
+sf agent validate authoring-bundle --json --api-name <BundleName> -o <OrgAlias>
+sf agent preview start --json --use-live-actions --authoring-bundle <BundleName> -o <OrgAlias>
+```
+
+Preview positive and negative examples for every route, ambiguous boundary
+utterances, follow-up turns, unavailable-route states, and the intended
+fallback. Inspect the selected transition in the trace; response text alone
+does not prove routing.
+
+Without HyperClassifier, transition actions on an ordinary reasoning node
+remain model-selected and the node can respond instead. That flexibility is
+useful when conversation at the entry node is intentional.
 
 ## Verification Gate
 
@@ -125,10 +187,11 @@ follow-up context.
 
 ## Post-Action Re-resolution
 
-The subagent re-resolves after an action completes. Persist action output only
-when a named later runtime consumer needs the exact value. Place the
-post-action check at the top of `instructions: ->` so it applies on
-re-resolution:
+The subagent can re-resolve after an action completes. Persist action output
+only when a named later runtime consumer needs the exact value. Make
+post-action and first-entry duties mutually exclusive; placing the post-action
+check first can make that ownership easier to review, but position alone does
+not exclude another fragment:
 
 ```agentscript
 variables:
@@ -138,13 +201,13 @@ subagent retention_review:
     description: "Use a returned risk score to select retention guidance"
     reasoning:
         instructions: ->
-            # POST-ACTION CHECK (at top on re-resolution)
+            # POST-ACTION CHECK (first for readability, exclusive by predicate)
             if @variables.risk_score >= 80:
-                | The returned risk score is {!@variables.risk_score}.
-                | Offer the approved retention options.
+                | Use the returned risk score {!@variables.risk_score}. Offer
+                  the approved high-risk retention options.
             else if @variables.risk_score >= 0:
-                | The returned risk score is {!@variables.risk_score}.
-                | Follow the standard retention policy.
+                | Use the returned risk score {!@variables.risk_score}. Follow
+                  the standard retention policy.
             else:
                 | Explain that a risk assessment is needed before making an offer.
         actions:

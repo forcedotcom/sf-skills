@@ -10,6 +10,7 @@ The skill routes agent work across the full lifecycle:
 |--------|----------------|
 | Create an Agent | Agent Spec design, environment checks, bundle generation, draft authoring |
 | Modify an Agent | Subagent/action changes, instruction refinement, flow updates |
+| Audit and Repair | Health checks, common-pitfall review, minimal evidence-backed repairs |
 | Diagnose Compilation Errors | Error capture, classification, targeted fixes |
 | Diagnose Behavioral Issues | Trace-based debugging, routing/action analysis |
 | Deploy / Release | Draft iteration, deploy, explicit publish + activate |
@@ -26,6 +27,7 @@ agentforce-generate/
 │   ├── agent-design-and-spec-creation.md
 │   ├── architecture-patterns.md
 │   ├── agent-script-core-language.md
+│   ├── agent-audit-and-repair.md
 │   ├── salesforce-cli-for-agents.md
 │   ├── agent-validation-and-debugging.md
 │   ├── deploy-reference.md
@@ -47,8 +49,8 @@ agentforce-generate/
 Core rules include:
 
 1. **Always `--json`** on every `sf` CLI command
-2. **Diagnose before you fix** — preview with live actions and read traces before modifying code
-3. **Spec approval is a hard gate** — never proceed past Agent Spec creation without user approval
+2. **Use proportionate evidence** — compile local syntax changes; use preview and traces for behavior; use live actions only with approval in a safe org
+3. **Use a proportionate spec gate** — require approval for greenfield and material design changes, not every one-line repair
 4. **Draft-first lifecycle** — iterate in draft by default; publish/activate only with explicit user confirmation
 
 ## Prerequisites
@@ -75,6 +77,20 @@ your-project/
 
 Restart Claude Code after installation.
 
+The skill can install its local AgentScript compiler on first use. It uses a
+skill-owned user cache and does not add dependencies to the customer's project:
+
+```bash
+node .claude/skills/agentforce-generate/scripts/setup-agentscript-sdk.mjs \
+  --npm --json
+```
+
+Claude should run this automatically for every existing `.agent` file before
+org-side validation. If npm setup fails, the skill can build the public
+`salesforce/agentscript` source checkout. If neither provider works, the skill
+continues with target-org validation or a clearly labeled static review and
+states that the compiler was not used.
+
 ## Key References
 
 - Pattern selection: [references/patterns-by-requirement.md](references/patterns-by-requirement.md)
@@ -82,12 +98,13 @@ Restart Claude Code after installation.
 - Design/spec workflow: [references/agent-design-and-spec-creation.md](references/agent-design-and-spec-creation.md)
 - Architecture mechanics: [references/architecture-patterns.md](references/architecture-patterns.md)
 - Core language: [references/agent-script-core-language.md](references/agent-script-core-language.md)
+- Audit and repair: [references/agent-audit-and-repair.md](references/agent-audit-and-repair.md)
 - Validation/debugging: [references/agent-validation-and-debugging.md](references/agent-validation-and-debugging.md)
 - Reference index and consolidation notes: [references/reference-map.md](references/reference-map.md)
 
 ## Version
 
-Current version: **0.6.1** (2026-05-20). See [references/version-history.md](references/version-history.md) for the full changelog.
+Current version: **0.11**. See [references/version-history.md](references/version-history.md) for the full changelog.
 
 ## Credits
 

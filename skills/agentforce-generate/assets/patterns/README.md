@@ -178,11 +178,11 @@ reasoning:
    instructions: ->
       if @variables.customer_tier == "vip":
          | PRIORITY CUSTOMER - Provide white-glove service.
-         | You have authority to offer 20% discounts.
+           You have authority to offer 20% discounts.
 
       if @variables.business_hours == False:
-         | We are outside business hours.
-         | Complex issues should be logged for follow-up.
+         | Explain that support is outside business hours and log complex
+           issues for follow-up.
 
       | Respond to the customer's inquiry.
 ```

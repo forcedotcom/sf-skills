@@ -1,16 +1,17 @@
 ---
 name: design-systems-slds-validate
-description: "Audit Lightning Web Components for SLDS compliance and produce a scored quality report. Runs the SLDS linter, analyzes CSS for theming hook usage and pairing, checks HTML for accessibility attributes, and scores findings across categories into an overall grade. Use when asked to \"score my component\", \"SLDS scorecard\", \"quality report\", \"audit SLDS compliance\", \"how good is my SLDS\", \"check component quality\", \"rate my component\", \"evaluate my component\", \"is this component ready to ship?\", \"look at my LWC for issues\", \"audit this before I submit\", \"review my component before code review\", or any time a user wants a quality assessment or production-readiness check on an LWC or SLDS component. Not for fixing violations (use design-systems-slds2-migrate) or building new components (use design-systems-slds-apply)."
+description: "Audit Lightning Web Components for SLDS design-system compliance and produce a scored quality report. Runs the SLDS linter and analyzes CSS for theming hook usage and pairing, scoring SLDS findings across categories into an overall grade. Use when asked to \"score my component's SLDS\", \"SLDS scorecard\", \"SLDS quality report\", \"audit SLDS compliance\", \"how good is my SLDS\", \"check SLDS quality\", \"rate my SLDS styling\", \"evaluate my component's SLDS\", \"is this component's SLDS ready to ship?\", \"look at my LWC for SLDS issues\", \"audit SLDS before I submit\", \"review my component's SLDS before code review\", or any time a user wants an SLDS quality assessment or SLDS production-readiness check on an LWC. Not for fixing violations (use design-systems-slds2-migrate), building new components (use design-systems-slds-apply), or accessibility/WCAG/ARIA audits (use experience-lwc-accessibility-validate)."
 metadata:
-  cliTools:
-    - tool: ["node"]
-      semver: ">=18.0.0"
-    - tool: ["npx"]
-      semver: ">=7.0.0"
+  version: "1.0"
   relatedSkills:
     - "design-systems-slds-apply"
     - "design-systems-slds2-migrate"
-  version: "1.0"
+    - "experience-lwc-accessibility-validate"
+  cliTools:
+    - tool: ["npx"]
+      semver: ">=7.0.0"
+    - tool: ["node"]
+      semver: ">=18.0.0"
 ---
 
 # SLDS Quality Audit
@@ -32,7 +33,7 @@ Not for:
 
 ## Quality Validation Process
 
-```
+```text
 1. Run SLDS Linter     → Collect violation counts (linter's job)
 2. Run Analyze Script  → Check what linter doesn't cover (supplementary)
 3. Agent Review        → Required manual review gate
@@ -60,7 +61,7 @@ Count violations by rule. These feed directly into the **Linter Compliance** sco
 
 **If the linter is unavailable** (no Node.js, no network access, CI sandbox restrictions): skip this step, note "Linter not run" in the report header, mark Linter Compliance as N/A, and compute the Overall score using the remaining 4 categories renormalized to 100%:
 
-```
+```text
 Overall (linter unavailable) = (Theming × 0.29) + (Accessibility × 0.29)
                               + (CodeQuality × 0.21) + (ComponentUsage × 0.21)
 ```
@@ -111,7 +112,7 @@ The script outputs JSON with findings organized by severity. It checks:
 
 The script checks that background/foreground hooks are semantically paired:
 
-```
+```text
 surface-* backgrounds     → on-surface-* text
 surface-container-* bg    → on-surface-* text
 accent-* backgrounds      → on-accent-* text
@@ -158,7 +159,7 @@ Include the complexity classification in the report header. This prevents misrea
 
 ### Automated Scoring Formula
 
-```
+```text
 Category Score = 100 - (critical_issues × 10) - (warnings × 3) - (info × 1)
 Minimum score: 0
 ```
@@ -175,7 +176,7 @@ Minimum score: 0
 
 ### Automated Overall Score
 
-```
+```text
 Overall = (Linter × 0.30) + (Theming × 0.20) + (Accessibility × 0.20)
         + (CodeQuality × 0.15) + (ComponentUsage × 0.15)
 ```
@@ -233,7 +234,7 @@ For a rapid quality check without full analysis:
 2. Count violations by type
 3. Report summary only
 
-```
+```text
 Quick Quality Check: <component-name>
 ─────────────────────────────────────
 Linter Violations:

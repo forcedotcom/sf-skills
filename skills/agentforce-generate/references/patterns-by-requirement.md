@@ -21,7 +21,7 @@ Read this file first when deciding architecture and flow patterns. Then use:
 
 | Requirement / Scenario | Recommended Pattern | Why | Reference Assets |
 |---|---|---|---|
-| Multiple genuine domains need different instructions, actions, authority, or escalation | Router-first architecture | Separates incompatible domain scopes and classifies current intent | `references/architecture-patterns.md`, `assets/agents/router-first.agent`, `assets/agents/template-multi-subagent.agent` |
+| Multiple genuine domains need different instructions, actions, authority, or escalation | Router-first architecture; consider HyperClassifier for a transition-only router when latency matters | Separates incompatible domain scopes and classifies current intent without turning a conversational node into a router | `references/architecture-patterns.md`, `assets/agents/router-first.agent`, `assets/agents/template-multi-subagent.agent` |
 | Identity/trust gate before protected operations | Verification gate | Enforces trusted action output before sensitive actions; does not require a generic focus lock | `references/architecture-patterns.md` |
 | Need deterministic follow-up after action | Action callbacks (`run`) | Guarantees ordered post-action execution | `assets/patterns/action-callbacks.agent` |
 | Need deterministic setup/cleanup around a turn | Lifecycle events | Runs once before and once after the turn's reasoning loop | `assets/patterns/lifecycle-events.agent` |
@@ -44,6 +44,8 @@ Read this file first when deciding architecture and flow patterns. Then use:
    - Start with one domain `start_agent` and zero `subagent` blocks.
    - Never add a router that only transitions to that one domain.
    - Add a router only for multiple genuine domains.
+   - Use HyperClassifier only when that router can remain transition-only; keep
+     an ordinary model when the entry node must converse or run other actions.
    - Add verification gates for protected operations.
    - Add workflow-local sequencing only for externally ordered outcomes.
 

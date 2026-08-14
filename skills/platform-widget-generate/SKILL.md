@@ -2,7 +2,7 @@
 name: platform-widget-generate
 description: "Use this skill to author a complete HXL WidgetBundle (UEM body + schema.json + -meta.xml). TRIGGER when: user asks for a widget, mosaic, fragment, card, or rich UI surface for any subject, domain, feature, or entity noun; the prompt names only an entity or data shape without invoking Lightning Types, CLTs, or Apex-backed types. DO NOT TRIGGER when: the prompt explicitly says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', or references '@apexClassType/...' (use platform-lightning-type-widget-coordinate); authoring a custom-LWC renderer for a Custom Lightning Type (use platform-custom-lightning-type-generate); or editing only an LWC component."
 metadata:
-  version: "1.1"
+  version: "1.2"
   minApiVersion: "68.0"
   relatedSkills:
     - "platform-apex-generate"
@@ -62,7 +62,7 @@ interface Block {
 }
 ```
 
-The first child of `tile/widget.children` SHOULD be a single `tile/column` (or a single `tile/card`). All widget content typically goes inside that first child for predictable vertical structure across surfaces.
+The first child of `tile/widget.children` SHOULD be a single `tile/column`. All widget content typically goes inside that first child for predictable vertical structure across surfaces.
 
 ---
 
@@ -103,10 +103,8 @@ These conventions cover widget *structure* — how blocks are grouped and stacke
 |---|---|---|
 | `tile/column` | Vertical stack of children | Root wrapper, and any group of blocks that should stack |
 | `tile/row` | Horizontal stack of children | Two or more blocks that belong on the same line |
-| `tile/card` | Visually-boxed group | A bounded section that should read as one unit |
 | `tile/spacer` | Whitespace between blocks | When extra space is needed between content groups |
 
-- **Sectioning:** Separate major content groups with a fresh `tile/card`-bounded section. Do not nest cards inside cards.
 - **Nesting:** Prefer flat layouts. Only nest a `tile/column` inside a `tile/row` (or vice versa) when the visual orientation actually changes for that subgroup.
 - **Authoritative palette:** the table above lists *typical* layout primitives. Always confirm a block exists by inspecting `discoverUiComponents` output — do not assume a block name from this table without seeing it in the discovery response.
 
@@ -198,7 +196,7 @@ Widgets express *intent*, not pixels. Each surface provides a default look and f
 9. **Self-validate.** Before reporting, confirm each check below and report each result individually (`pass` or `fail (<reason>)`). Do **not** summarize as a single "all passed" line — list every check so a reviewer can spot a silent skip.
     - **`schema-parses`** — `<pkgDir>/uiWidgets/<widgetName>/schema.json` parses as JSON.
     - **`schema-root-keys`** — root has `title` (string), `type: "object"`, and `properties.attributes` (object) — where `properties.attributes` carries `lightning:type: "lightning__objectType"` and a nested `properties` map. No `unevaluatedProperties: false`.
-    - **`schema-leaf-types`** — every leaf under `properties.attributes.properties` carries a `lightning:type`. Singular nested inner-class fields appear as `lightning__objectType`; the nested shape is not redeclared.
+    - **`schema-leaf-types`** — every leaf under `properties.attributes.properties` carries a `lightning:type`. Singular nested inner-class fields carry `lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`); the nested shape is not redeclared. `List<InnerClass>` fields carry `lightning:type: "lightning__listType"` with `items.lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`), not a redeclared field map. See `references/schema-from-lightning-type.md`.
     - **`bindings-resolve`** — every `{!$attrs.X}` (or `{!$attrs.<outerField>.<innerField>}` for nested objects) in `<widgetName>.json` resolves to a property under `schema.json` `properties.attributes.properties`, and every `{!$item.X}` resolves to a `forItem` loop variable defined upstream.
     - **`body-envelope`** — `<widgetName>.json` root has `type: "lightning__agentforceWidget"` and a `contentBody` object whose `widgetBody` carries the UEM tree rooted at `tile/widget`. No node in the tree — root or non-root — carries a `type` key.
     - **`metaxml-wellformed`** — `<widgetName>.uiwidget-meta.xml` parses as well-formed XML.

@@ -1,7 +1,12 @@
 ---
 name: experience-ui-bundle-salesforce-data-access
-description: "MUST activate when a uiBundles/*/src/ project does ANY Salesforce record operation — reading, creating, updating, deleting, or caching/refreshing query results. Triggers: code importing @salesforce/platform-sdk, calls to sdk.graphql.query / sdk.graphql.mutate / sdk.fetch, *.graphql files, stale data needing a force-refresh, or wiring up a UI bundle's data layer to read, write, or refresh Salesforce records. The default for new read/write work is the Read/Write workflow with the current @salesforce/platform-sdk API; only follow the migration path when EXISTING code already uses the old @salesforce/sdk-data callable form. Not for building app shell/UI, styling, file upload, or auth/search scaffolding — use the other ui-bundle-* skills. DO NOT TRIGGER when: OAuth setup, schema changes, Bulk/Tooling/Metadata API, or declarative automation."
+description: "MUST activate whenever a uiBundles/*/src/ project reads, writes, or displays Salesforce data — INCLUDING building a page, list, table, card grid, dashboard, or form that shows, filters, counts, or edits records of any object (e.g. Property__c, Account, Case), even when the prompt names only the UI or the object and never says query, GraphQL, or SDK. Records behind such a component come from Salesforce, so use this ALONGSIDE experience-ui-bundle-frontend-generate: that skill styles the component, this one wires its data. Also triggers on @salesforce/platform-sdk imports, sdk.graphql.query / mutate / sdk.fetch calls, *.graphql files, or stale data needing force-refresh. New read/write work uses the current @salesforce/platform-sdk API; migrate only EXISTING old @salesforce/sdk-data callable code. Not for pure styling/layout with no records, app shell, file upload, or auth/search scaffolding. DO NOT TRIGGER for OAuth, object/field schema changes, Bulk/Tooling/Metadata API, or declarative automation."
 metadata:
+  version: "2.2"
+  minApiVersion: "66.0"
+  relatedSkills:
+    - "experience-ui-bundle-frontend-generate"
+    - "platform-metadata-deploy"
   cliTools:
     - tool: ["node"]
       semver: ">=18.0.0"
@@ -11,9 +16,6 @@ metadata:
       semver: ">=9.0.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-  relatedSkills:
-    - "platform-metadata-deploy"
-  version: "2.1"
 ---
 
 # Salesforce Data Access (UI bundles)
@@ -73,6 +75,39 @@ live in [references/sdk-api.md](references/sdk-api.md).
 
 ---
 
+## Ground the SDK contract on the installed types (tier-2a)
+
+`@salesforce/platform-sdk` force-publishes on a shared version line and moves
+fast. This SKILL's prose is a point-in-time snapshot of the call contract; the
+**installed declarations are authoritative for the version you actually have**.
+Before writing any `query`/`mutate`, read the installed types and let them win:
+
+- `node_modules/@salesforce/platform-sdk/dist/core/data.d.ts` — `query`/`mutate`
+  signatures, `QueryResult` (has `subscribe`/`refresh`) vs `MutationResult` (has
+  neither, by design), the `CacheControl` union, the default TTL.
+- `node_modules/@salesforce/platform-sdk/dist/data/index.d.ts` — `createDataSDK`,
+  `gql`, `NodeOfConnection`.
+
+**Precedence — installed `.d.ts` beats this SKILL's prose.** If a signature,
+type, or default here disagrees with the installed declaration, follow the
+declaration and note the drift; do not "correct" the types to match the prose.
+
+**Grounding ladder** (one model, two axes):
+
+| Tier | Grounds | Answers | Via |
+|---|---|---|---|
+| tier-1 | GraphQL **schema** | *what data exists* | graphiti / `graphql-search.sh` (Precondition #2) |
+| tier-2a | SDK **contract** | *how you call it* | the installed `.d.ts` above |
+| spine | this SKILL.md | workflow + guardrails that orchestrate both; the fallback when a tier can't ground |
+
+**Fallback when the `.d.ts` is absent** — the package **is installed** but ships
+no declarations (a stale or types-stripped build artifact). Then use this SKILL's
+prose as best-effort. This fallback does **not** cover a missing package: if
+`@salesforce/platform-sdk` isn't installed, stop and install it (Precondition #1)
+— do not author calls from prose against a dependency you don't have.
+
+---
+
 ## Surfaces — `sdk.graphql!` vs guard
 
 `createDataSDK()` runs on multiple surfaces, and **`sdk.graphql` / `sdk.fetch` are genuinely
@@ -123,7 +158,7 @@ you grounded against the right file.
 
 | # | Requirement | Verify | If missing |
 |---|---|---|---|
-| 1 | `@salesforce/platform-sdk` installed | `package.json` in the UI bundle dir | Tell user to install it; cannot proceed |
+| 1 | `@salesforce/platform-sdk` installed **and its contract read** | `package.json` in the UI bundle dir lists it; then read `node_modules/@salesforce/platform-sdk/dist/core/data.d.ts` + `dist/data/index.d.ts` and let them win over this SKILL's prose ([tier-2a](#ground-the-sdk-contract-on-the-installed-types-tier-2a)) | Not installed → tell user to install it; cannot proceed. Installed but `.d.ts` absent (stale artifact) → use prose fallback |
 | 2 | A grounding tool resolves | **Preferred:** `npx graphiti sf-gql-discover '{"org":"<alias>","mode":"list_objects"}'` from the UI bundle dir returns objects. **Fallback:** `bash <skill-dir>/scripts/graphql-search.sh <Entity>` from the project root prints a lookup, not "schema.graphql not found" | No graphiti dep / org won't prime → use the script. Script can't find `schema.graphql` → pass `--schema <path>`, or `npm run graphql:schema` from the UI bundle dir. ([references/graphiti-cli.md](references/graphiti-cli.md) covers CLI setup) |
 | 3 | Target objects/fields deployed | The object appears in `sf-gql-discover` (or `graphql-search.sh <Entity>` returns output) | Entity absent usually means it isn't deployed (or the cache/schema is stale). Refresh: `npx graphiti sf-gql-connect '{"org":"<alias>","forceRefresh":true}'` (CLI) or `npm run graphql:schema` (script). If still absent, deploy the metadata (the **platform-metadata-deploy** skill handles this) and assign the permission sets, then re-check |
 
@@ -396,6 +431,7 @@ silent runtime failures. (Details + templates: [references/graphql-hand-authorin
 ## Pre-flight checklist
 
 - [ ] Surface decided: `sdk.graphql!` only if WebApp-only; otherwise guard with `if (!sdk.graphql) …` ([Surfaces](#surfaces--sdkgraphql-vs-guard))
+- [ ] SDK contract grounded on installed `dist/*.d.ts` (types win over prose) ([tier-2a](#ground-the-sdk-contract-on-the-installed-types-tier-2a))
 - [ ] Every field/entity verified — `sf-gql-discover` (preferred) or `graphql-search.sh` (fallback, against the right schema)
 - [ ] If compiled with graphiti: `warnings: []` confirmed (non-empty = degraded query, don't ship); `query` pasted verbatim
 - [ ] `@optional` on FLS-gated fields + relationships (NOT `Id`/`edges`/`node`/`pageInfo`); `?.`/`??` in consuming code

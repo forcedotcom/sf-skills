@@ -93,14 +93,17 @@ subagent identity_verification:
     reasoning:
         instructions: ->
             if @variables.failed_attempts >= 3:
-                | Too many failed attempts. Transferring to a human agent.
+                | Briefly explain that repeated verification attempts require
+                  a human handoff.
                 transition to @subagent.escalation
 
             if @variables.customer_verified == True:
-                | Identity verified! How can I help you today?
+                | Confirm successful identity verification and ask how you can
+                  help.
 
             if @variables.customer_verified == False:
-                | Please verify your identity by confirming your email address.
+                | Ask the user to verify their identity by confirming their
+                  email address.
 
         actions:
             check_email: @actions.verify_email
@@ -152,9 +155,8 @@ subagent account_management:
             if @variables.customer_verified == False:
                 transition to @subagent.identity_verification
 
-            | Welcome to account management.
-            | What would you like to do with your account?
-            | Use the update actions to make changes.
+            | Welcome the verified customer to account management and ask what
+              they want to change. Use the matching update action.
 
         actions:
             change_email: @actions.update_email

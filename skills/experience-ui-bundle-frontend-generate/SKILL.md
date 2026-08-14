@@ -5,6 +5,7 @@ metadata:
   version: "1.1"
   relatedSkills:
     - "experience-ui-bundle-app-coordinate"
+    - "experience-ui-bundle-features-generate"
     - "experience-ui-bundle-metadata-generate"
     - "experience-ui-bundle-salesforce-data-access"
   cliTools:
@@ -48,6 +49,19 @@ Determine which category the request falls into:
 | **Component** | Widget, card, table, form, dialog | `references/component.md` |
 
 A request to rename/rebrand the app (e.g. "call it X everywhere a user would see it") is a **Header / Footer** task even though it doesn't mention "header" by name — it always touches at least two files: `src/appLayout.tsx` (header/nav brand text) AND `index.html`'s `<title>` (browser tab title). Treat these as one atomic change; a rename that only updates one of the two is incomplete.
+
+---
+
+## Pre-built Features (Check Before Hand-Building)
+
+Some capabilities ship as pre-built, tested feature packages. The catalog **evolves and is not something you can know from memory** — never decide from the request wording alone whether a capability "is" or "isn't" a feature. Before hand-writing any non-trivial capability (anything beyond a plain page, component, or styling change) in this skill:
+
+1. **Consult the authoritative catalog.** Invoke `experience-ui-bundle-features-generate`, which runs `list` to show the *current* set of installable features. Do not rely on a hardcoded or remembered list — this skill deliberately names none, because any names it listed would go stale.
+2. **Detect whether a matching feature is already installed** in the bundle — inspect `package.json` dependencies and existing `src/` files. If present, use it as-is; do not reinstall or re-implement.
+3. **If a matching feature exists in the catalog but isn't installed**, let `experience-ui-bundle-features-generate` install the tested package. Do not build it from scratch here.
+4. **Only hand-build** a capability that has no matching catalog feature.
+
+This gate is **idempotent**: when this skill runs as a phase of `experience-ui-bundle-app-coordinate` (which installs features earlier in its sequence), step 2 finds the feature already present and this collapses to a no-op. It only does real work when the skill was reached directly — the path that would otherwise skip feature detection.
 
 ---
 

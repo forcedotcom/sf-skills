@@ -10,11 +10,25 @@ organized without risky deletions.
 - `agent-script-core-language.md` — syntax and execution model
 - `agent-design-and-spec-creation.md` — design/spec workflow
 - `patterns-by-requirement.md` — scenario-to-pattern selection
-- `architecture-patterns.md` — architecture mechanics and migration
+- `architecture-patterns.md` — architecture mechanics, HyperClassifier routing, and migration
 - `posture-and-determinism.md` — subagent posture guidance
 - `zen-of-agentscript.md` — concrete, unordered authoring invariants and merge checks
 - `salesforce-cli-for-agents.md` — command reference
 - `agent-validation-and-debugging.md` — runtime validation/debug flow
+- `agent-audit-and-repair.md` — audit operating contract and workflow router
+- `agent-audit-scope-path-review.md` — scope, use cases, and reachable-path review
+- `agent-audit-repair-report.md` — intervention selection, repair, evaluation, and reporting
+- `agent-audit-diagnostic-catalog.md` — intervention and diagnostic-category router
+- `agent-audit-diagnostics-instructions-routing.md` — instruction and routing findings
+- `agent-audit-diagnostics-actions-state.md` — action, contract, state, and sequencing findings
+- `agent-audit-diagnostics-architecture-evaluation.md` — architecture, evidence, and non-findings
+- `common-control-flow-pitfalls.md` — prompt and variable-visibility pitfalls
+- `control-flow-actions-sequencing.md` — action availability and sequencing pitfalls
+- `control-flow-lifecycle-side-effects.md` — lifecycle, transition, and side-effect pitfalls
+- `agent-audit-evaluation-loop.md` — baseline capture and coherent-repair comparison
+- `agent-audit-candidate-verification.md` — candidate inspection, regression handling, and reporting
+- `agentscript-toolchain.md` — customer-local compiler setup, source fallback,
+  and provenance
 - `deploy-reference.md` — draft-vs-release deployment lifecycle
 
 ## Adjacent Operational References (Keep)
@@ -36,7 +50,9 @@ organized without risky deletions.
 
 ## Full Reference Index (annotated)
 
-The complete reference set the **Create an Agent** workflow draws on, in load order. Other task domains list only the subset they need; each SKILL.md step also links the specific reference it requires inline.
+The complete reference set available to the **Create an Agent** workflow. This
+is an index, not a preload order: read only the references named by the active
+SKILL.md step and the current feature decision.
 
 1. [CLI for Agents](salesforce-cli-for-agents.md) — exact command syntax for generate, validate, deploy, publish, activate; Section 12 for Einstein Agent User creation
 2. [Core Language](agent-script-core-language.md) — execution model, syntax, block structure, anti-patterns
@@ -49,7 +65,7 @@ The complete reference set the **Create an Agent** workflow draws on, in load or
 9. [Agent Access Guide](agent-access-guide.md) — end-user access permissions, visibility troubleshooting
 10. [Known Issues](known-issues.md) — only load when errors persist after code fixes
 11. [Patterns by Requirement](patterns-by-requirement.md) — scenario-to-pattern mapping for architecture and flow choices
-12. [Architecture Patterns](architecture-patterns.md) — router-first mechanics, verification gates, workflow-local linear patterns
+12. [Architecture Patterns](architecture-patterns.md) — router-first and HyperClassifier mechanics, verification gates, workflow-local linear patterns
 13. [Complex Data Types](complex-data-types.md) — type mapping decision tree
 14. [Safety Review](safety-review-reference.md) — 7-category safety review
 15. [Discover Reference](discover-reference.md) — target discovery CLI

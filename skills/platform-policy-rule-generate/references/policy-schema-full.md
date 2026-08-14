@@ -1,12 +1,10 @@
 # Policy Schema — Full Element Reference
 
-Source: `enforce-o-matic-impl/java/src/enforce/o/matic/metadata/`
-
 ---
 
 ## Path Enums
 
-> **Surface principle.** The MDAPI surface is the narrower `*Type` enum in `enforce-o-matic-impl/java/src/enforce/o/matic/metadata/`. The wider runtime enums (`RulePrincipalPath`, `RuleResourcePath`, `RuleContextPath` in `enforce-o-matic-api/.../enums/`) drive Cedar evaluation and DAO behavior; values absent from the `*Type` enums are **not authorable via MDAPI**.
+> **Surface principle.** The MDAPI surface is a narrower set of `*Type` enums (`RulePrincipalPathType`, `RuleResourcePathType`, `RuleContextPathType`) than what the runtime honors at evaluation time. Values that appear at runtime but are not in the MDAPI `*Type` enums are **not authorable via MDAPI** — use a runtime RuleProvider for those.
 
 ### `<principalPath>` / `<valuePrincipalPath>` — `RulePrincipalPathType` (6 values)
 
@@ -44,13 +42,13 @@ Outside contract (not in `RulePrincipalPathType`): `IS_INTERNAL`, `CONTACT_ID`, 
 
 ### `<contextPath>` / `<valueContextPath>` — `RuleContextPathType` (1 value)
 
-| Value | Cedar attribute | Use case |
-|-------|-----------------|----------|
-| `SESSION_DATASPACE` | `context.sessionDataspace` | Session-scoped dataspace check |
+| Value | Use case |
+|-------|----------|
+| `SESSION_DATASPACE` | Session-scoped dataspace check |
 
 Outside contract: `SESSION_CONSUMER_ID`, `CONTEXT_AGENT_ID`, `CONTEXT_AGENT_VERSION_ID` (IDENTIFIED_RECORD / agentic — runtime RuleProvider only).
 
-> Some steelthread fixtures use `SCALAR_ATTRIBUTE` / `PLURAL_ATTRIBUTE` in `<valuePrincipalPath>` (`conditionScalarAttributeValidSteelThread`). They deploy in the ftest harness because the entity object is type-tolerant, but these values are outside `RulePrincipalPathType` — not sanctioned for new work.
+> `SCALAR_ATTRIBUTE` / `PLURAL_ATTRIBUTE` in `<valuePrincipalPath>` are outside `RulePrincipalPathType` — not authorable via MDAPI for new work.
 
 ---
 
@@ -71,7 +69,7 @@ Outside contract: `SESSION_CONSUMER_ID`, `CONTEXT_AGENT_ID`, `CONTEXT_AGENT_VERS
 
 ---
 
-## `<conditions>` — Full Schema (`PolicyRuleDefinitionCondition.java`)
+## `<conditions>` — Full Schema
 
 | Element | Notes |
 |---------|-------|
@@ -94,7 +92,7 @@ Outside contract: `SESSION_CONSUMER_ID`, `CONTEXT_AGENT_ID`, `CONTEXT_AGENT_VERS
 
 ---
 
-## `<policyRuleValueSet>` — `PolicyRuleValueSet.java`
+## `<policyRuleValueSet>`
 
 Three fields (all optional at schema level, but a non-empty value set needs at least one):
 
@@ -130,7 +128,7 @@ Multiple `<policyRuleValueSet>` siblings inside one condition are OR-combined.
 
 ---
 
-## JSON Expressions — `PolicyJsonExpression.java` (min API 66.0)
+## JSON Expressions (min API 66.0)
 
 `<type>` must match the location:
 
@@ -229,22 +227,3 @@ Plural (use a set operator: `CONTAINS_ANY` / `CONTAINS_NONE` / `CONTAINS_ALL`):
 | `REPLACE_ALL_CHARS_RESOURCE_TRANSFORM` | Replace each char |
 
 Pure transforms (NULL, EMPTY_STRING) need no `<resourceExpression>`. Parameterized transforms (FIRST_N, LAST_N, ROUND, REPLACE_ALL_CHARS, TRUNCATE_DATE) take args via ARGLIST.
-
----
-
-## File Cross-References
-
-| Concern | File |
-|---------|------|
-| Rule wrapper | `enforce-o-matic-impl/java/src/enforce/o/matic/metadata/PolicyRuleDefinition.java` |
-| Set wrapper | `…/PolicyRuleDefinitionSet.java` |
-| Conditions | `…/PolicyRuleDefinitionClauseConjunction.java`, `…/PolicyRuleDefinitionCondition.java` |
-| Value set | `…/PolicyRuleValueSet.java` + `…/PolicyRuleValueSetReferenceType.java` |
-| JSON expression | `…/PolicyJsonExpression.java` + `…/PolicyJsonExpressionType.java` |
-| ARGLIST | `…/TransformExpression.java` + `…/TransformExpressionArgument.java` |
-| PROJECTION | `…/ProjectionExpression.java` + `…/ProjectionJoin.java` + `…/PolicyJoinPredicate.java` |
-| SOQLTARGETLISTEXPR | `…/PrincipalExpression.java` |
-| Resource domain | `…/PolicyRuleResourceDomain.java` |
-| Enums | `Category.java`, `Effect.java`, `RuleConsumer.java`, `PrincipalAuthenticationLevel.java`, `RulePrincipalScopeType.java`, `RuleResourceScopeType.java`, `RulePrincipalPathType.java`, `RuleResourcePathType.java`, `RuleContextPathType.java`, `RuleDefinitionClauseType.java`, `RuleDefinitionOperatorType.java`, `ResourceTransform.java` |
-| IDENTIFIED_RECORD condition validator | `PolicyRuleDefinitionCondObject.java:332-339` |
-| Agentic RuleProvider canonical builder | `AgenticPolicyRuleProviderService.java:130-260` |

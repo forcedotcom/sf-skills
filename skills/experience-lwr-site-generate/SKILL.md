@@ -11,8 +11,7 @@ metadata:
       semver: ">=2.0.0"
   mcpTools:
     metadata-experts:
-      tools:
-        - "execute_metadata_action"
+      tools: ["execute_metadata_action"]
       semver: ">=1.0.0"
 ---
 

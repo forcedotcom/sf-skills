@@ -102,11 +102,13 @@ subagent verification:
     reasoning:
         instructions: ->
             if @variables.customer_verified == True:
-                | Welcome back! How can I help you today?
+                | Welcome the verified customer and ask how you can help with
+                  their order.
 
             if @variables.customer_verified == False:
-                | To help you with your order, I need to verify your identity.
-                | What is the email address associated with your account?
+                | Explain that identity verification is required before order
+                  assistance. Ask for the email address associated with the
+                  account.
 
         actions:
             verify: @actions.verify_customer
@@ -151,12 +153,14 @@ subagent order_status:
     reasoning:
         instructions: ->
             if @variables.order_status != "":
-                | Order {!@variables.verified_order_id} status: {!@variables.order_status}
-                | Would you like to track your shipment or initiate a return?
+                | Report order {!@variables.verified_order_id} with exact status
+                  {!@variables.order_status}. Ask whether the customer wants to
+                  track the shipment or initiate a return.
 
             if @variables.order_status == "":
-                | What is your order number? You can find it in your confirmation email.
-                | Use the find_order action to look up order details.
+                | Ask for the order number and mention that it appears in the
+                  confirmation email. Use the find_order action after the user
+                  supplies it.
 
         actions:
             find_order: @actions.lookup_order
@@ -240,13 +244,13 @@ subagent returns:
     reasoning:
         instructions: ->
             if @variables.return_initiated == True:
-                | Your return has been initiated!
-                | Return label: {!@variables.return_label_url}
+                | Confirm that the return was initiated and provide the exact
+                  return-label URL: {!@variables.return_label_url}
 
             if @variables.return_initiated == False:
-                | I can help you with a return for order {!@variables.verified_order_id}.
-                | What is the reason for your return?
-                | Use the process_return action to start the return.
+                | Explain that you can help return order
+                  {!@variables.verified_order_id}. Ask for the reason, then use
+                  the process_return action to start the return.
 
         actions:
             process_return: @actions.initiate_return

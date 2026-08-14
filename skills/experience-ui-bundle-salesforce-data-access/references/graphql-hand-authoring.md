@@ -197,9 +197,8 @@ Do **not** use Chatter (`/chatter/users/me`).
 
 ## Mutations
 
-Mutations GA in v66+. Call via `sdk.graphql!.mutate({ mutation, variables })` (the document
-goes under the `mutation` key — see [sdk-api.md](sdk-api.md)). Wrap under
-`uiapi(input: { allOrNone: true | false })` and set `allOrNone` explicitly.
+Mutations GA in v66+. The installed declarations own the `mutate()` call shape; wrap every
+document under `uiapi(input: { allOrNone: true | false })` and set `allOrNone` explicitly.
 
 ```graphql
 # Create
@@ -229,22 +228,8 @@ mutation DeleteAccount($input: RecordDeleteInput!) {
 # runtime: variables: { input: { Id: "001…" } }   // flat Id — matches the spine's delete shape
 ```
 
-Real consumer call (`userProfileApi.ts`):
-
-```typescript
-const result = await sdk.graphql!.mutate<UpdateResult>({
-  mutation: UPDATE_USER_PROFILE,
-  variables: { input: { Id: userId, User: { ...values } } },
-});
-if (result.errors?.length) throw new Error("An unexpected error occurred");
-return result.data?.uiapi?.UserUpdate?.Record;
-```
-
-> Evidence note: the snippet above is reproduced from the shipped `userProfileApi.ts` to show the
-> *call mechanics* (the `mutate()` options bag and `result` handling) only — it predates the
-> `allOrNone` guardrail and omits the `uiapi(input: { allOrNone })` wrapper. Always author new
-> mutations with the wrapper set explicitly, as in the templates above; the guardrail wins over
-> this older shipped example.
+> Older shipped examples can omit `uiapi(input: { allOrNone })`. They predate this guardrail;
+> always author new mutations with the explicit wrapper in the templates above.
 
 **Input constraints**
 - Create: required fields (unless `defaultedOnCreate`), only `createable` fields, no child

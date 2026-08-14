@@ -2,13 +2,7 @@
 name: platform-apex-test-run
 description: "Apex test execution, coverage analysis, and test-fix loops with 120-point scoring. Use when the user needs to run Apex tests, check code coverage, fix failing tests, or work with *Test.cls / *_Test.cls files. TRIGGER when: user runs Apex tests, checks code coverage, fixes failing tests, or touches *Test.cls / *_Test.cls files. DO NOT TRIGGER when: writing Apex production code (use platform-apex-generate), Agentforce agent testing (use agentforce-test), or Jest/LWC tests (use experience-lwc-generate)."
 metadata:
-  cliTools:
-    - tool: ["jq"]
-      semver: ">=1.6.0"
-    - tool: ["python3"]
-      semver: ">=3.10.0"
-    - tool: ["sf"]
-      semver: ">=2.0.0"
+  version: "1.2"
   relatedSkills:
     - "agentforce-test"
     - "experience-lwc-generate"
@@ -16,7 +10,13 @@ metadata:
     - "platform-apex-logs-debug"
     - "platform-data-manage"
     - "platform-metadata-deploy"
-  version: "1.1"
+  cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["python3"]
+      semver: ">=3.10.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # platform-apex-test-run: Salesforce Test Execution & Coverage Analysis
@@ -105,6 +105,7 @@ Cover:
 | "Uncommitted work pending" error in callout test | DML and HTTP callouts cannot be mixed in the same test context without `Test.startTest()` wrapping |
 | Mock not taking effect in test | Ensure `Test.setMock()` is called before the code that makes the callout |
 | `@TestSetup` data missing in test method | `@TestSetup` data is committed per test method — re-query it; do not store in static variables |
+|  API version 67.0 and higher without necessary access level checks | Check failing SOQL/DML stack traces for CRUD/FLS access errors, using System.runAs with an assigned permission set when user-mode behavior is intended, or documenting a justified `SYSTEM_MODE` path when system access is required |
 
 ---
 

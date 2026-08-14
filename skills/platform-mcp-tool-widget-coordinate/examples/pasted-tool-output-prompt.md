@@ -64,7 +64,6 @@ LIGHTNING TYPES:
 
 WIDGET: getOrderStatusWidget
   Renderer binding: each attribute → {!$attrs.outputValues.<field>}
-  Properties omitted: none
 
 GENERATION ORDER: response CLT → widget → envelope CLT
 ```

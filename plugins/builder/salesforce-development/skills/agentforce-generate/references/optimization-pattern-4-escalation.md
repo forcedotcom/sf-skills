@@ -33,7 +33,7 @@ start_agent customer_support:
     reasoning:
         instructions: ->
             | Help customers with supported questions.
-            | Transfer users to a person when they ask.
+              Transfer users to a person when they ask.
         actions:
             answer_question: @actions.AnswerQuestionWithKnowledge
                 with query = ...
@@ -46,7 +46,7 @@ start_agent customer_support:
     reasoning:
         instructions: ->
             | Help customers with supported questions.
-            | If the user explicitly asks for a person, use
+              If the user explicitly asks for a person, use
               {!@actions.human_handoff} without also answering the request.
         actions:
             answer_question: @actions.AnswerQuestionWithKnowledge

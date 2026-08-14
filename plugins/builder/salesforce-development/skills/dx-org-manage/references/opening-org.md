@@ -12,7 +12,7 @@ Infer from the user's request:
 - **What to open**: Path, file, or org home
 - **Browser**: Only include if explicitly requested (chrome, firefox, edge)
 - **Incognito**: Only if user says "private" or "incognito"
-- **URL only**: If user says "URL", "link", or "don't open browser"
+- **URL only**: the skill must **never run `--url-only`**. It returns a credential-equivalent frontdoor token (`/secur/frontdoor.jsp?otp=`/`sid=`) that must not enter agent context or an artifact. If the user explicitly asks for the URL and not a browser — e.g. "URL only", "just give me the link", "don't open a/the browser", or a headless/remote context — tell them to run `sf org open --url-only` themselves in their own terminal (same as `sf org display --verbose`). Always open the browser otherwise; plain `sf org open` never prints a login URL.
 
 Do not ask for clarification - infer and execute immediately.
 
@@ -37,12 +37,10 @@ If error occurs:
 | Open in specific browser | `sf org open --browser chrome` (or firefox, edge) |
 | Private/incognito mode | `sf org open --private` |
 | Navigate to path | `sf org open --path '<path>'` |
-| Get URL only | `sf org open --url-only` |
-| Path + URL only | `sf org open --path '<path>' --url-only` |
 | Open local file | `sf org open --source-file <file-path>` |
-| File + URL only | `sf org open --source-file <file-path> --url-only` |
+| Get URL only | **Do not run from the skill** — tell the user to run `sf org open --url-only` locally (it returns a live login token). |
 
-**Note:** Flags `--private`, `--url-only`, `--browser` are mutually exclusive.
+**Note:** Flags `--private`, `--url-only`, `--browser` are mutually exclusive. The skill never runs `--url-only`; if the user needs the raw URL (optionally with `--path`/`--source-file`), direct them to run it themselves in their terminal.
 
 ---
 
@@ -138,7 +136,7 @@ sf org open --source-file force-app/main/default/classes/MyController.cls
 | Auth error | Re-authenticate: `sf org login web --alias <alias>` |
 | `--source-file` opens wrong page or throws `FlowIdNotFound` / `ApexClassIdNotFound` / `CustomObjectIdNotFound` | Metadata is not deployed in the org. Run `sf project deploy start --source-file <path> --target-org <alias>` first. FlexiPage silently falls back to org home; Flow/ApexClass/CustomObject throw an error. |
 | Metadata file opens wrong Builder | Verify the file extension matches the metadata type (e.g. `.flow-meta.xml` for Flow Builder) |
-| URL-only flag but user expects browser to open | `--url-only` prints the URL without launching — remove the flag to open the browser |
+| User wants the raw login URL | The skill never runs `--url-only` (it returns a live login token). Tell the user to run `sf org open --url-only` in their own terminal. |
 | Path not found / 404 | Verify the path is correct; some paths require specific permissions or licenses |
 
 ---
@@ -147,13 +145,14 @@ sf org open --source-file force-app/main/default/classes/MyController.cls
 
 ### Default behavior
 - Opens the specified org/path in the system's default browser
-- No console output on success
+- No console output on success (plain `sf org open`)
+- **No artifact.** Open is the one operation in this skill that writes no file. Report to the user that the org/path was opened; do not write `org-url-result.json`.
 
-### With `--url-only`
-Returns the login URL without opening browser:
-```text
-https://...-dev-ed.develop.my.salesforce.com/secur/frontdoor.jsp?sid=...
-```
+### Never use `--json` for open
+`sf org open --json` returns a **live login URL** in `result.url`: `https://<host>/secur/frontdoor.jsp?otp=<token>` (or `?sid=<token>`). That token is credential-equivalent — the same reason `--url-only` is banned — and pulling it into agent context (even to redact it before writing a file) is the exact S1 leak the plain command avoids. The skill therefore runs plain `sf org open` (browser launch), never `--json`, and writes no artifact. The working login is delivered by the browser launch — never through agent context or a written file.
+
+### `--url-only` (skill does not run this)
+`sf org open --url-only` returns a frontdoor login URL (`/secur/frontdoor.jsp?` with an `otp=`/`sid=` token) that is **credential-equivalent** — anyone holding it is logged into the org. Because that would place a live auth token into agent context and the written artifact, the skill **must not run or serialize `--url-only`**. When the user needs the raw URL (headless/remote, or an explicit "just the link"), instruct them to run `sf org open --url-only` themselves in their terminal — the same way `sf org display --verbose` is left to the user. Always open the browser from the skill; plain `sf org open` never emits this URL.
 
 ### With `--source-file`
 - Opens the metadata in its appropriate Builder/Editor

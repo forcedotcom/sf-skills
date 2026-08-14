@@ -155,7 +155,7 @@ subagent order_management:
    reasoning:
       instructions: ->
          | Help the customer with their order.
-         | When they ask about an order, look it up.
+           When they ask about an order, look it up.
       actions:
          # LLM automatically selects this when appropriate
          lookup: @actions.get_order
@@ -180,7 +180,7 @@ You can also reference action definitions inside `instructions:` using `{!@actio
 reasoning:
    instructions: ->
       | To look up an order, use {!@actions.get_order}.
-      | To check shipping status, use {!@actions.track_shipment}.
+        To check shipping status, use {!@actions.track_shipment}.
 ```
 
 > See [patterns-by-requirement.md](patterns-by-requirement.md) and

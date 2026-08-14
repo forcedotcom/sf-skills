@@ -28,11 +28,11 @@ class DiscoveryCatalogTests(unittest.TestCase):
         data = self.catalog.build_catalog(REPO_ROOT, PLUGIN_ROOT)
         self.assertEqual(data["counts"], {
             "public": 102,
-            "foundation": 40,
+            "foundation": 41,
             "overlap": 29,
             "publicStandaloneAddable": 73,
-            "foundationOnly": 11,
-            "visibleUnion": 113,
+            "foundationOnly": 12,
+            "visibleUnion": 114,
         })
         names = [row["name"] for row in data["skills"]]
         self.assertEqual(names, sorted(names))

@@ -8,8 +8,7 @@ metadata:
     # dotted as lsp.health). In allowed-tools it appears in Claude Code's
     # sanitized form: mcp__plugin_salesforce-development_salesforce-lsp__lsp_health.
     salesforce-lsp:
-      tools:
-        - lsp.health
+      tools: ["lsp.health"]
       semver: ">=0.1.0"
   cliTools:
     - tool: ["sf"]

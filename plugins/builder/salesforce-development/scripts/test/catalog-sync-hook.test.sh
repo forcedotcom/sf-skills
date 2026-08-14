@@ -84,13 +84,41 @@ after=$(GIT_INDEX_FILE="$tmp_index" git rev-parse ":plugins/builder/salesforce-d
 real_tree_after=$(git write-tree)
 rm -f "$tmp_index"
 if printf '%s' "$out" | grep -q "regenerated and staged" \
-   && python3 plugins/builder/salesforce-development/scripts/discovery_catalog.py --check >/dev/null 2>&1 \
    && [ "$before" = "$after" ] \
    && [ "$real_tree_before" = "$real_tree_after" ]; then
   PASS=$((PASS + 1)); printf '  ok   %-52s → regenerated, current, real index untouched\n' "end-to-end regen"
 else
   FAIL=$((FAIL + 1)); printf '  FAIL %-52s → out=%s before=%s after=%s real-before=%s real-after=%s\n' \
     "end-to-end regen" "$out" "$before" "$after" "$real_tree_before" "$real_tree_after"
+fi
+
+echo ""
+echo "sync-discovery-catalog — hostile CRLF git config"
+
+# Reproduce a Windows-style checkout policy even on Linux CI. The sync script
+# must override both autocrlf and eol while materializing its index snapshot.
+real_tree_before=$(git write-tree)
+index_path=$(git rev-parse --git-path index)
+tmp_index=$(mktemp)
+cp "$index_path" "$tmp_index"
+GIT_INDEX_FILE="$tmp_index" git add plugins/builder/salesforce-development/catalog/discovery.json
+before=$(GIT_INDEX_FILE="$tmp_index" git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json")
+out=$(GIT_CONFIG_COUNT=2 \
+  GIT_CONFIG_KEY_0=core.autocrlf GIT_CONFIG_VALUE_0=true \
+  GIT_CONFIG_KEY_1=core.eol GIT_CONFIG_VALUE_1=crlf \
+  GIT_INDEX_FILE="$tmp_index" \
+  CATALOG_SYNC_FILES="plugins/builder/salesforce-development/skills/agentforce-generate/SKILL.md" \
+  sh "$SYNC")
+after=$(GIT_INDEX_FILE="$tmp_index" git rev-parse ":plugins/builder/salesforce-development/catalog/discovery.json")
+real_tree_after=$(git write-tree)
+rm -f "$tmp_index"
+if printf '%s' "$out" | grep -q "regenerated and staged" \
+   && [ "$before" = "$after" ] \
+   && [ "$real_tree_before" = "$real_tree_after" ]; then
+  PASS=$((PASS + 1)); printf '  ok   %-52s → canonical LF catalog preserved\n' "CRLF checkout policy"
+else
+  FAIL=$((FAIL + 1)); printf '  FAIL %-52s → out=%s before=%s after=%s real-before=%s real-after=%s\n' \
+    "CRLF checkout policy" "$out" "$before" "$after" "$real_tree_before" "$real_tree_after"
 fi
 
 echo ""

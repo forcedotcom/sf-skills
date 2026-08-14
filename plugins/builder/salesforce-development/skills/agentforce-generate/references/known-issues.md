@@ -109,7 +109,6 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
   - Will a new metadata type be introduced for Agent Script tests?
   - Can `AiEvaluationDefinition` be used with Agent Script agents?
   - Is there a roadmap for test portability?
-- **References**: See `references/custom-eval-investigation.md` in `agentforce-test` for related findings on custom evaluation data structure issues.
 
 ---
 
@@ -296,7 +295,7 @@ Unresolved platform bugs, limitations, and edge cases that affect Agent Script d
 
   # ✅ CORRECT — executable statement present
   if @variables.premium == True:
-    | Welcome back, valued premium member!
+    | Greet the returning premium member.
   ```
 - **Open Questions**: Will the compiler emit a warning for empty `if` bodies?
 

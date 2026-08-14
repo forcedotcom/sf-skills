@@ -22,6 +22,10 @@ when the runtime needs it. Build the spec before writing Agent Script. For
 existing agents, reverse-engineer the spec from the `.agent` file so intent is
 explicit before changes.
 
+If the user supplies a sufficiently detailed design or Agent Spec and explicitly
+says it is already approved, use it as the current build contract. Do not
+recreate or reapprove it unless requirements are missing or materially change.
+
 ### What an Agent Spec Contains
 
 - **Purpose & Scope** — what business outcome the agent should drive
@@ -229,19 +233,22 @@ subagent off_topic:
     description: "Handle off-topic requests"
     reasoning:
         instructions: ->
-            | You asked about something outside my scope.
-              I can only help with [list your capabilities].
-              What can I help you with today?
+            | Explain that the request is outside scope, state the supported
+              capabilities, and ask which supported task the user wants help
+              with.
 
 subagent ambiguous_question:
     description: "Ask for clarification"
     reasoning:
         instructions: ->
-            | I didn't quite understand your request.
-              Can you provide more details about what you need?
+            | Explain briefly that the request is unclear and ask one focused
+              question for the missing detail needed to proceed.
 ```
 
-**Escalation Subagents.** Hand off to a human via `@utils.escalate`. This is a permanent exit — the user leaves the agent for a support channel (phone, email, chat with a human). Once triggered, the agent session ends. The escalation action does NOT return.
+**Escalation Subagents.** Hand off via `@utils.escalate`. It ends the current
+agent turn and transfers control to the configured escalation path; the source
+subagent does not resume automatically. Do not assume the broader messaging
+session ends unless that channel's escalation contract says so.
 
 ```agentscript
 subagent escalation:
@@ -307,11 +314,18 @@ subagent local_events:
 # resort_hours, off_topic, ambiguous_question defined further down the file
 ```
 
-**Externally Ordered Flow.** Subagents may form a pipeline when an external
-protocol requires successful step 1 before step 2 (for example, verified
-identity before a protected commit). Do not turn an ordinary multi-question
-conversation into a pipeline. Every locked stage needs correction,
-cancellation, and intent-change behavior.
+**Staged Flow.** Subagents may form a pipeline when the benefit of strict
+ordering outweighs the loss of conversational flexibility—for example, when
+an external protocol requires successful verification before a protected
+commit. A staged flow improves repeatability and auditability, but adds state,
+maintenance, and friction around corrections or changed intent. A prompt-led
+multi-question conversation is usually more flexible but cannot guarantee the
+same order.
+
+Choose deliberately. For stages that persist across turns, define the
+correction, cancellation, retry, or intent-change behavior that the actual use
+cases need. A short-lived deterministic guard does not need ceremonial state
+or every possible exit path.
 
 ```agentscript
 start_agent intake:
@@ -439,25 +453,16 @@ public class WeatherFetcher {
 }
 ```
 
-Wire with: `target: "apex://ClassName"`
+Wire with the exact registered target identifier, commonly
+`target: "apex://ClassName"`.
 
-> **One `@InvocableMethod` per Apex class — one class per action.** Salesforce permits **only one** `@InvocableMethod` in a given Apex class. The `apex://` target therefore names the **class**, not a method: use `apex://ClassName` — never `apex://ClassName.methodName`. Each distinct Apex-backed action MUST point at its **own** class.
->
-> A common mistake is to treat one Apex class as a namespace for several related actions:
-> ```agentscript
-> # WRONG — 5 actions sharing one class (won't compile: >1 @InvocableMethod per class)
-> target: "apex://CaseIntelligence.searchSimilarCases"
-> target: "apex://CaseIntelligence.summarizeResolution"
-> target: "apex://CaseIntelligence.proposeResolution"
-> ```
-> The `ClassName.method` shape *looks* like ordinary OOP and invites treating one class as a home for several actions. The **verified** failure mode is the shared class: a single `CaseIntelligence` class carrying multiple `@InvocableMethod`s fails Apex compilation with `Only one method per type can be defined with: InvocableMethod`, which cascades into failed deploy, failed publish, and no grounded action calls at runtime (observed in the `enterprise-use-cases` eval run). Whether the `.method` **suffix in the target string itself** breaks resolution or is simply ignored by the runtime is not independently confirmed here — but authoring it invites the shared-class pattern above, so treat `apex://ClassName` (no suffix) as the rule.
-> ```agentscript
-> # RIGHT — one class per action, distinct class names, no method suffix
-> target: "apex://CaseIntelligenceSearchSimilarCases"
-> target: "apex://CaseIntelligenceSummarizeResolution"
-> target: "apex://CaseIntelligenceProposeResolution"
-> ```
-> When several actions are conceptually related, give each its own class with a shared prefix (e.g. `CaseIntelligence…`) rather than sharing one class. Never emit two `apex://` targets that resolve to the same class name.
+> **One `@InvocableMethod` per Apex class.** This verified Apex constraint
+> governs implementation structure; it does not justify rewriting an action
+> target supplied by the user, project, org metadata, or an approved contract.
+> Preserve the exact target. If its implementation mapping is uncertain, flag
+> that uncertainty and verify it from the implementation or target org before
+> proposing a contract change. Do not infer from a dotted target that several
+> `@InvocableMethod`s share one class.
 
 **Flows**: Only **autolaunched Flows** work. Screen Flows, record-triggered Flows, and schedule-triggered Flows will not work. The Flow must start only when explicitly invoked.
 
@@ -740,7 +745,7 @@ ALWAYS fix deploy errors BEFORE generating and deploying the next stub.
 
 When creating a new agent, label every transition in your Agent Spec's Subagent Map as either **handoff** or **delegation**. When analyzing an existing agent, classify each transition to determine whether context flow matches the design intent.
 
-### Handoff: Permanent Transition
+### Handoff: Non-Returning Transition
 
 A handoff is a one-way transition. The user moves to a new subagent and control never returns to the original subagent. Handoffs use `@utils.transition to` in `reasoning.actions`.
 
@@ -840,53 +845,81 @@ subagent admin_panel:
               If they are not an admin, tell them access is denied.
 ```
 
-The LLM may comply, or it may not — instructions are suggestions. The RIGHT approach uses a `before_reasoning` guard that the runtime enforces before the LLM is ever invoked. See Section 8 for all gating mechanisms.
+Model instructions influence behavior but do not provide the same enforcement
+as a runtime gate over a trusted authorization value. For this protected
+boundary, use a `before_reasoning` guard that resolves before the planner. See
+Section 8 for the available gating mechanisms.
 
 ### Writing Effective Instructions
 
-Two factors govern subjective control effectiveness: instruction ordering and grounding.
+Three useful factors for subjective control effectiveness are clear response
+duties, instruction ordering, and grounding.
 
-**Instruction Ordering.** The runtime resolves instructions top-to-bottom — evaluating `if/else` blocks and expanding template expressions — before the LLM sees the result. The resolved text becomes the LLM's prompt. Put post-action checks first, data references next, dynamic conditional text last.
+**Describe the duty, not a draft reply.** By default, tell the model what the
+response must accomplish: the facts to use, claims to avoid, action to take,
+and next conversational objective. Do not write ordinary prompt fragments as
+finished user-facing copy. Copy-first instructions can hide the intended
+behavior, adapt poorly to conversation context, and make conflicting duties
+harder to notice.
+
+Use exact response copy only when the wording itself is a requirement, such as
+an approved legal or compliance notice. State that contract explicitly with
+language such as `Respond with exactly this text, with no additions:`. Label
+optional wording as an example and state which tone or content properties the
+model should preserve.
+
+**Instruction Ordering.** The runtime resolves instructions top-to-bottom —
+evaluating conditions and expanding template expressions — before the LLM sees
+the assembled result. Ordering controls the order of prompt fragments, not
+whether the model can respond before a later deterministic condition resolves.
+Put the current objective and highest-consequence guidance where it is easy to
+notice, and use exclusive predicates or a transition when two duties must not
+coexist.
 
 The checkout examples assume `cart_validation_failed`, `cart_total`,
 `free_shipping_eligible`, and `shipping_cost` are exact outputs from cart and
 entitlement actions. Each is consumed by the shown prompt branch or output
 reference; none mirrors a conversational fact.
 
-RIGHT: Post-action check at the top (LLM sees it first)
+RIGHT: Completed and first-entry duties are mutually exclusive
 ```agentscript
 subagent checkout:
     reasoning:
         instructions: ->
-            # Post-action check — LLM sees this first
             if @variables.cart_validation_failed:
-                | Your cart has items that are no longer available.
-                  Please remove them and try again.
+                | Explain that one or more cart items are unavailable. Do not
+                  offer payment. Ask the user to review or remove those items.
 
-            # Data reference — LLM sees the resolved value
-            | Your current cart total is {!@variables.cart_total}.
+            if @variables.cart_validation_failed == False:
+                | Tell the user the current cart total is
+                  {!@variables.cart_total}. Ask whether they want to proceed to
+                  payment or cancel.
 
-            # Dynamic instructions — conditional on state
-            if @variables.free_shipping_eligible:
-                | You qualify for FREE shipping.
-            else:
-                | Standard shipping is {!@variables.shipping_cost}.
+            if @variables.cart_validation_failed == False and @variables.free_shipping_eligible:
+                | Tell the user shipping is free.
 
-            | Proceed to payment or cancel?
+            if @variables.cart_validation_failed == False and @variables.free_shipping_eligible == False:
+                | Tell the user standard shipping costs
+                  {!@variables.shipping_cost}.
 ```
 
-WRONG: Post-action check at the bottom (LLM may respond before seeing it)
+WRONG: Conflicting fragments can be assembled together
 ```agentscript
 subagent checkout:
     reasoning:
         instructions: ->
-            | Your current cart total is {!@variables.cart_total}.
-              Proceed to payment or cancel?
+            | Tell the user the current cart total is
+              {!@variables.cart_total}. Ask whether they want to proceed to
+              payment or cancel.
 
-            # Too late — LLM may already be generating a response
             if @variables.cart_validation_failed:
-                | Your cart has items that are no longer available.
+                | Explain that one or more cart items are unavailable and ask
+                  the user to review or remove them.
 ```
+
+The problem is not that the model responds before the bottom condition is
+evaluated; deterministic resolution finishes first. The problem is that both
+the payment duty and failure duty can reach the same assembled prompt.
 
 **Grounding.** The platform's grounding service validates that the agent's response matches action output data. Paraphrasing or embellishing may cause grounding failures. In the example below, `event_date` is exact action output consumed by the response.
 
@@ -896,11 +929,20 @@ subagent checkout:
 
 Grounding validation requires **live mode preview** (`sf agent preview --use-live-actions --json`). Simulated mode preview generates fake outputs, so grounding has nothing real to validate against.
 
-**Naming output fields in post-action instructions.** ALWAYS specify which output fields to include in text responses. Generic instructions like "present the results clearly" let platform-injected tools hijack the response. EXAMPLE: The LLM calls `show_command` instead of composing text, producing generic "Here are the results:" message wrapper with raw structured data. This can corrupt session state, causing subsequent turns to fail with generic "something went wrong" message. Naming output fields steers the LLM toward composing a direct text response. This reliably grounds the response because it maps closely to action output values. ALWAYS include `Do NOT use the show_command tool. Always compose your response as direct text.` in post-action instructions. See *Anti-Patterns* in the *Core Language* reference for full WRONG/RIGHT example.
+**Naming output fields in post-action instructions.** Name the fields needed in
+the response when generic result-presentation guidance produces the wrong
+format or tool choice in the target runtime. Observed configurations may expose
+platform presentation tools such as `show_command`; if traces show the model
+selecting one when direct text is required, add a scoped instruction to compose
+text and test it with that configuration. Do not add a universal
+`show_command` prohibition to agents where the tool is absent or desired.
 
 ### Post-Action Behavior
 
-When an action completes without triggering a transition, the subagent stays active. The runtime re-evaluates the entire subagent — resolving instructions top-to-bottom again with updated variables, then passing the new prompt to the LLM. The LLM may call the same action again. To prevent unwanted loops, see Section 9 (Action Loop Prevention).
+When a model-selected action batch completes without a handoff, pause,
+cancellation, or limit, the runtime begins another reasoning iteration with
+updated state. The LLM may call the same still-available action again. To
+prevent unwanted loops, see Section 9 (Action Loop Prevention).
 
 ---
 
@@ -1003,10 +1045,13 @@ subagent checkout:
 
     reasoning:
         instructions: ->
-            | Review your order.
-
             if @variables.items_in_cart == 0:
-                | Your cart is empty. Go back and select items.
+                | Explain that the cart is empty and ask the user to select an
+                  item before checkout.
+
+            if @variables.items_in_cart > 0:
+                | Summarize the current order and help the user review it before
+                  payment.
 
         actions:
             pay: @actions.process_payment
@@ -1042,8 +1087,9 @@ subagent verification:
 ```
 
 Each flag has one trusted writer and a named next-step consumer. Failed actions
-must leave the next action unavailable. Define correction, cancellation, reset,
-and expiry semantics for the real workflow.
+must leave the next action unavailable. Define only the correction,
+cancellation, reset, and expiry semantics relevant to the real workflow and
+the lifetime of that state.
 
 ### Same-Turn Behavior After Gate Transitions
 
