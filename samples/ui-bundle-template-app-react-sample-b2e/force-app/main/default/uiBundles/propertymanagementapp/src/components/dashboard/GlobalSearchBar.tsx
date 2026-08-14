@@ -92,9 +92,9 @@ export function GlobalSearchBar({
 				type="button"
 				onClick={onBrowseAll}
 				className="px-4 py-3 text-sm font-medium text-[#372949] bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-50 whitespace-nowrap"
-				aria-label={`Browse all ${labelPlural}`}
+				aria-label={`Browse ${labelPlural}`}
 			>
-				Browse all {labelPlural}
+				Browse {labelPlural}
 			</button>
 		</div>
 	);

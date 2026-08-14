@@ -3,7 +3,6 @@ import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 import upgraphIcon from "../../assets/icons/upgraph.svg";
 import downgraphIcon from "../../assets/icons/downgraph.svg";
-import { MoreVertical } from "lucide-react";
 
 interface StatCardProps {
 	title: string;
@@ -30,13 +29,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 			className={`p-4 border-gray-200 shadow-sm relative ${onClick ? "cursor-pointer hover:shadow-lg transition-shadow" : ""}`}
 			onClick={onClick}
 		>
-			{/* Three-dot menu */}
-			<button className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-md transition-colors">
-				<MoreVertical className="w-4 h-4 text-gray-400" />
-			</button>
-
 			<div className="space-y-1">
-				<p className="text-sm font-medium text-gray-600 uppercase tracking-wide">{title}</p>
+				<h2 className="text-sm font-medium text-gray-600 uppercase tracking-wide">{title}</h2>
 				{loading ? (
 					<>
 						<div className="flex items-baseline gap-3">

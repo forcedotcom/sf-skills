@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router";
 import { Home, Search, BarChart3, Wrench, Phone, type LucideIcon } from "lucide-react";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { useTenantAccess } from "@/context/TenantAccessContext";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 interface VerticalNavItem {
 	path: string;
@@ -28,6 +28,15 @@ export function VerticalNav({ isOpen = false, onClose }: VerticalNavProps) {
 	const location = useLocation();
 	const { isAuthenticated } = useAuth();
 	const { hasTenantRecord } = useTenantAccess();
+
+	useEffect(() => {
+		if (!isOpen) return;
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === "Escape") onClose?.();
+		};
+		document.addEventListener("keydown", onKey);
+		return () => document.removeEventListener("keydown", onKey);
+	}, [isOpen, onClose]);
 
 	const visibleItems = useMemo(
 		() =>
@@ -63,6 +72,7 @@ export function VerticalNav({ isOpen = false, onClose }: VerticalNavProps) {
 					}`}
 					title={item.label}
 					aria-label={item.label}
+					aria-current={active ? "page" : undefined}
 				>
 					<Icon className="size-6 shrink-0" aria-hidden />
 					<span className="text-center text-xs font-medium leading-tight">{item.label}</span>
@@ -84,9 +94,14 @@ export function VerticalNav({ isOpen = false, onClose }: VerticalNavProps) {
 			{isOpen && (
 				<>
 					<div className="fixed inset-0 z-40 bg-black/50" onClick={onClose} aria-hidden />
+					{/*
+					 * Distinct label from the desktop sidebar: both navs are in the DOM at the
+					 * same time, and two navigation landmarks sharing one name is ambiguous.
+					 */}
 					<nav
+						id="mobile-nav"
 						className="fixed left-0 top-0 bottom-0 z-50 flex w-24 flex-col border-r border-gray-200 bg-white py-8"
-						aria-label="Main navigation"
+						aria-label="Mobile navigation"
 					>
 						{navContent(onClose)}
 					</nav>

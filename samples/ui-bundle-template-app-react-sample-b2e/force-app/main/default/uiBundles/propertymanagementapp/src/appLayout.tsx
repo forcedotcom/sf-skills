@@ -11,6 +11,12 @@ export default function AppLayout() {
 	return (
 		<div className="flex flex-col">
 			<Toaster />
+			<a
+				href="#main-content"
+				className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-purple-700 focus:shadow-lg focus:outline focus:outline-2 focus:outline-purple-700"
+			>
+				Skip to main content
+			</a>
 			{/* Top Bar */}
 			<TopBar onMenuClick={() => setIsNavOpen(true)} />
 
@@ -20,7 +26,7 @@ export default function AppLayout() {
 				<VerticalNav isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
 
 				{/* Page Content */}
-				<main className="flex-1 overflow-auto">
+				<main id="main-content" className="flex-1 overflow-auto">
 					<Outlet />
 				</main>
 			</div>

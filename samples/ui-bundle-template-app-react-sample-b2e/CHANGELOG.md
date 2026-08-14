@@ -3,6 +3,1615 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [11.57.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.57.1...v11.57.2) (2026-08-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.57.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.57.0...v11.57.1) (2026-08-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.57.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.56.4...v11.57.0) (2026-08-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.56.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.56.3...v11.56.4) (2026-08-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.56.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.56.2...v11.56.3) (2026-08-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.56.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.56.1...v11.56.2) (2026-08-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.56.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.56.0...v11.56.1) (2026-08-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.56.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.55.1...v11.56.0) (2026-08-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.55.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.55.0...v11.55.1) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.55.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.54.1...v11.55.0) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.54.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.54.0...v11.54.1) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.54.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.53.1...v11.54.0) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.53.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.53.0...v11.53.1) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.53.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.52.0...v11.53.0) (2026-08-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.52.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.51.0...v11.52.0) (2026-08-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.51.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.50.0...v11.51.0) (2026-08-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.50.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.49.4...v11.50.0) (2026-08-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.49.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.49.3...v11.49.4) (2026-08-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.49.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.49.2...v11.49.3) (2026-08-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.49.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.49.1...v11.49.2) (2026-08-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.49.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.49.0...v11.49.1) (2026-08-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.49.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.48.0...v11.49.0) (2026-08-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.48.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.47.1...v11.48.0) (2026-08-05)
+
+
+### Features
+
+* **auth:** upmerge React authentication feature (IDP/SSO + MFA) from webapps-develop @W-23707015 ([#846](https://github.com/salesforce-experience-platform-emu/webapps/issues/846)) ([4179304](https://github.com/salesforce-experience-platform-emu/webapps/commit/4179304b8a36eeca6ae599398fa7e73ee1bbb266))
+
+
+
+## [11.47.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.47.0...v11.47.1) (2026-08-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.47.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.46.1...v11.47.0) (2026-08-04)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.46.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.46.0...v11.46.1) (2026-08-04)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.46.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.11...v11.46.0) (2026-08-04)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.11](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.10...v11.45.11) (2026-08-03)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.10](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.9...v11.45.10) (2026-08-03)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.9](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.8...v11.45.9) (2026-07-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.7...v11.45.8) (2026-07-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.6...v11.45.7) (2026-07-31)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.5...v11.45.6) (2026-07-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.4...v11.45.5) (2026-07-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.3...v11.45.4) (2026-07-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.2...v11.45.3) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.1...v11.45.2) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.45.0...v11.45.1) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.45.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.5...v11.45.0) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.44.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.4...v11.44.5) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.44.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.3...v11.44.4) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.44.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.2...v11.44.3) (2026-07-29)
+
+
+### Bug Fixes
+
+* data import JSON parsing fails due to debug log format - @W-23626126@ ([#817](https://github.com/salesforce-experience-platform-emu/webapps/issues/817)) ([17fd9d7](https://github.com/salesforce-experience-platform-emu/webapps/commit/17fd9d77e76ca7385c40df03976492ed77d01ace))
+
+
+
+## [11.44.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.1...v11.44.2) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.44.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.44.0...v11.44.1) (2026-07-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.44.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.43.2...v11.44.0) (2026-07-28)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.43.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.43.1...v11.43.2) (2026-07-28)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.43.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.43.0...v11.43.1) (2026-07-28)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.43.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.42.2...v11.43.0) (2026-07-28)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.42.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.42.1...v11.42.2) (2026-07-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.42.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.42.0...v11.42.1) (2026-07-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.42.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.41.0...v11.42.0) (2026-07-27)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.41.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.40.0...v11.41.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.40.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.39.0...v11.40.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.39.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.38.0...v11.39.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.38.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.37.1...v11.38.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.37.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.37.0...v11.37.1) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.37.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.36.0...v11.37.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.36.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.6...v11.36.0) (2026-07-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.5...v11.35.6) (2026-07-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.4...v11.35.5) (2026-07-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.3...v11.35.4) (2026-07-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.2...v11.35.3) (2026-07-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.1...v11.35.2) (2026-07-22)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.35.0...v11.35.1) (2026-07-22)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.35.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.34.2...v11.35.0) (2026-07-22)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.34.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.34.1...v11.34.2) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.34.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.34.0...v11.34.1) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.34.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.33.0...v11.34.0) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.33.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.32.0...v11.33.0) (2026-07-21)
+
+
+### Features
+
+* **org-setup:** harden org-setup.mjs against SOQL/Apex/CLI injection (W-23043731) ([#751](https://github.com/salesforce-experience-platform-emu/webapps/issues/751)) ([e820204](https://github.com/salesforce-experience-platform-emu/webapps/commit/e8202049e262ddbb47235cbedf5ccf54fe6a4d31))
+
+
+
+## [11.32.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.15...v11.32.0) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.15](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.14...v11.31.15) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.14](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.13...v11.31.14) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.13](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.12...v11.31.13) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.12](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.11...v11.31.12) (2026-07-21)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.11](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.10...v11.31.11) (2026-07-20)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.10](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.9...v11.31.10) (2026-07-20)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.9](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.8...v11.31.9) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.7...v11.31.8) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.6...v11.31.7) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.5...v11.31.6) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.4...v11.31.5) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.3...v11.31.4) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.2...v11.31.3) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.1...v11.31.2) (2026-07-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.31.0...v11.31.1) (2026-07-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.31.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.30.1...v11.31.0) (2026-07-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.30.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.30.0...v11.30.1) (2026-07-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.30.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.29.0...v11.30.0) (2026-07-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.29.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.28.0...v11.29.0) (2026-07-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.28.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.27.0...v11.28.0) (2026-07-15)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.27.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.26.3...v11.27.0) (2026-07-15)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.26.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.26.2...v11.26.3) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.26.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.26.1...v11.26.2) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.26.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.26.0...v11.26.1) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.26.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.25.0...v11.26.0) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.25.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.8...v11.25.0) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.8](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.7...v11.24.8) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.6...v11.24.7) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.5...v11.24.6) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.4...v11.24.5) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.3...v11.24.4) (2026-07-14)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.2...v11.24.3) (2026-07-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.1...v11.24.2) (2026-07-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.24.0...v11.24.1) (2026-07-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.24.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.23.0...v11.24.0) (2026-07-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.23.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.22.1...v11.23.0) (2026-07-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.22.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.22.0...v11.22.1) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.22.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.21.0...v11.22.0) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.21.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.20.0...v11.21.0) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.20.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.19.0...v11.20.0) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.19.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.18.0...v11.19.0) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.18.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.17.1...v11.18.0) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.17.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.17.0...v11.17.1) (2026-07-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.17.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.16.1...v11.17.0) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.16.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.16.0...v11.16.1) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.16.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.15.0...v11.16.0) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.15.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.14.0...v11.15.0) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.14.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.13.2...v11.14.0) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.13.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.13.1...v11.13.2) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.13.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.13.0...v11.13.1) (2026-07-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.13.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.12.2...v11.13.0) (2026-07-09)
+
+
+### Features
+
+* **org-setup:** @W-23043735@ org-setup.mjs UX enhancements ([#709](https://github.com/salesforce-experience-platform-emu/webapps/issues/709)) ([ad7f480](https://github.com/salesforce-experience-platform-emu/webapps/commit/ad7f480232a363a6f6dfd9df13bce6e32e24ac46))
+
+
+
+## [11.12.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.12.1...v11.12.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* **template:** harden org-setup.mjs XML editing + temp-file/lock hygiene (W-23043734) ([#704](https://github.com/salesforce-experience-platform-emu/webapps/issues/704)) ([9dc682e](https://github.com/salesforce-experience-platform-emu/webapps/commit/9dc682efe168c1758a40d677b55d8da83add653e))
+
+
+
+## [11.12.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.12.0...v11.12.1) (2026-07-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.12.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.11.1...v11.12.0) (2026-07-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.11.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.11.0...v11.11.1) (2026-07-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.11.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.10.1...v11.11.0) (2026-07-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.10.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.10.0...v11.10.1) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.10.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.9.0...v11.10.0) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.9.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.8.4...v11.9.0) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.8.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.8.3...v11.8.4) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.8.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.8.2...v11.8.3) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.8.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.8.1...v11.8.2) (2026-07-07)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.8.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.8.0...v11.8.1) (2026-07-06)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.8.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.7.0...v11.8.0) (2026-07-06)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.7.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.6.0...v11.7.0) (2026-07-06)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.6.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.5.0...v11.6.0) (2026-07-02)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.5.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.7...v11.5.0) (2026-07-02)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.7](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.6...v11.4.7) (2026-07-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.6](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.5...v11.4.6) (2026-07-01)
+
+
+### Bug Fixes
+
+* **sfdx:** point agents to the 'experience-ui-bundle-salesforce-data-access' skill ([#664](https://github.com/salesforce-experience-platform-emu/webapps/issues/664)) ([a344d0f](https://github.com/salesforce-experience-platform-emu/webapps/commit/a344d0f6042602cc0732ca49adb2e04b19118540))
+
+
+
+## [11.4.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.4...v11.4.5) (2026-07-01)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.3...v11.4.4) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.2...v11.4.3) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.1...v11.4.2) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.4.0...v11.4.1) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.4.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.3.0...v11.4.0) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.3.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.2.0...v11.3.0) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.2.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.1.3...v11.2.0) (2026-06-30)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.1.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.1.2...v11.1.3) (2026-06-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.1.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.1.1...v11.1.2) (2026-06-29)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.1.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.1.0...v11.1.1) (2026-06-29)
+
+
+### Bug Fixes
+
+* **template:** consolidate per-app data prep into feature package @W-22910624@ ([#677](https://github.com/salesforce-experience-platform-emu/webapps/issues/677)) ([6a98367](https://github.com/salesforce-experience-platform-emu/webapps/commit/6a98367b5c3542bb4fd5090ba3fbcf7b12b71616))
+
+
+
+## [11.1.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v11.0.0...v11.1.0) (2026-06-26)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [11.0.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.24.0...v11.0.0) (2026-06-25)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.24.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.23.0...v10.24.0) (2026-06-25)
+
+
+### Features
+
+* **org-setup:** error handling, result ledger, and config validation @W-23043729 ([#665](https://github.com/salesforce-experience-platform-emu/webapps/issues/665)) ([f68ff9c](https://github.com/salesforce-experience-platform-emu/webapps/commit/f68ff9cf68df52efba1a9bea25f22f30246cb083))
+
+
+
+## [10.23.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.22.0...v10.23.0) (2026-06-25)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.22.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.21.0...v10.22.0) (2026-06-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.21.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.20.2...v10.21.0) (2026-06-24)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.20.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.20.1...v10.20.2) (2026-06-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.20.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.20.0...v10.20.1) (2026-06-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.20.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.19.1...v10.20.0) (2026-06-23)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.19.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.19.0...v10.19.1) (2026-06-22)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.19.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.18.3...v10.19.0) (2026-06-19)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.18.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.18.2...v10.18.3) (2026-06-19)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.18.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.18.1...v10.18.2) (2026-06-19)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.18.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.18.0...v10.18.1) (2026-06-19)
+
+
+### Bug Fixes
+
+* **template:** @W-23043727@ org-setup runtime bugs (ApiEnabled + global config) ([#646](https://github.com/salesforce-experience-platform-emu/webapps/issues/646)) ([293a940](https://github.com/salesforce-experience-platform-emu/webapps/commit/293a940ec46ecc863c1446dfcb418b0fee5dc46b))
+
+
+
+## [10.18.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.17.0...v10.18.0) (2026-06-19)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.17.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.16.0...v10.17.0) (2026-06-18)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.16.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.15.1...v10.16.0) (2026-06-18)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.15.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.15.0...v10.15.1) (2026-06-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.15.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.14.1...v10.15.0) (2026-06-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.14.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.14.0...v10.14.1) (2026-06-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.14.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.13.1...v10.14.0) (2026-06-17)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.13.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.13.0...v10.13.1) (2026-06-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.13.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.12.4...v10.13.0) (2026-06-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.12.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.12.3...v10.12.4) (2026-06-16)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.12.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.12.2...v10.12.3) (2026-06-15)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.12.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.12.1...v10.12.2) (2026-06-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.12.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.12.0...v10.12.1) (2026-06-13)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.12.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.11.1...v10.12.0) (2026-06-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.11.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.11.0...v10.11.1) (2026-06-12)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.11.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.10.3...v10.11.0) (2026-06-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.10.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.10.2...v10.10.3) (2026-06-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.10.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.10.1...v10.10.2) (2026-06-11)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.10.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.10.0...v10.10.1) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.10.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.9.2...v10.10.0) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.9.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.9.1...v10.9.2) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.9.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.9.0...v10.9.1) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.9.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.8.0...v10.9.0) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.8.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.7.0...v10.8.0) (2026-06-10)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.7.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.5...v10.7.0) (2026-06-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.5](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.4...v10.6.5) (2026-06-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.4](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.3...v10.6.4) (2026-06-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.3](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.2...v10.6.3) (2026-06-09)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.1...v10.6.2) (2026-06-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.6.0...v10.6.1) (2026-06-08)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.6.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.5.1...v10.6.0) (2026-06-05)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.5.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.5.0...v10.5.1) (2026-06-04)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.5.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.4.1...v10.5.0) (2026-06-03)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.4.1](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.4.0...v10.4.1) (2026-06-03)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.4.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.3.0...v10.4.0) (2026-06-02)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
+## [10.3.0](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.2.2...v10.3.0) (2026-06-02)
+
+**Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project
+
+
+
+
+
 ## [10.2.2](https://github.com/salesforce-experience-platform-emu/webapps/compare/v10.2.1...v10.2.2) (2026-06-01)
 
 **Note:** Version bump only for package @salesforce/ui-bundle-template-base-sfdx-project

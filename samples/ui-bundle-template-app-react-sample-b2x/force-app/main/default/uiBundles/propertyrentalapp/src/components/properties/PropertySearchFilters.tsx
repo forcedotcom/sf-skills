@@ -5,16 +5,24 @@ import { Popover } from "radix-ui";
 import { Search, ChevronDown } from "lucide-react";
 
 const SEARCH_INPUT_CLASS =
-	"h-10 rounded-full border-2 border-primary/50 bg-background px-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20";
+	"h-10 rounded-full border-2 border-primary bg-background px-4 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 const FILTER_PILL_CLASS =
-	"inline-flex h-10 items-center gap-1.5 rounded-full border-2 border-primary/50 bg-background px-4 text-sm font-medium text-foreground outline-none transition-colors hover:border-primary/70 focus:ring-2 focus:ring-primary/20";
+	"inline-flex h-10 items-center gap-1.5 rounded-full border-2 border-primary bg-background px-4 text-sm font-medium text-foreground outline-none transition-colors hover:bg-primary/10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 const SAVE_BUTTON_CLASS =
-	"mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20";
+	"mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 const DEFAULT_PRICE_MIN = 0;
 const DEFAULT_PRICE_MAX = 100_000;
+
+/*
+ * Radix renders each `Popover.Content` as `role="dialog"`, which needs an
+ * accessible name. Each popover's own heading supplies it via `aria-labelledby`.
+ */
+const PRICE_POPOVER_TITLE_ID = "property-filter-price-title";
+const BEDS_POPOVER_TITLE_ID = "property-filter-beds-title";
+const SORT_POPOVER_TITLE_ID = "property-filter-sort-title";
 
 /** Bedroom filter buckets: ≤2, exactly 3, or ≥4 */
 export type BedroomFilter = "le2" | "3" | "ge4" | null;
@@ -145,12 +153,15 @@ export default function PropertySearchFilters({
 							<Popover.Content
 								sideOffset={8}
 								align="start"
+								aria-labelledby={PRICE_POPOVER_TITLE_ID}
 								className="z-[1100] w-[min(20rem,90vw)] rounded-xl border border-border bg-background p-4 shadow-lg outline-none"
 							>
 								<div className="space-y-3">
-									<p className="text-sm font-medium text-foreground">Price range</p>
+									<p id={PRICE_POPOVER_TITLE_ID} className="text-sm font-medium text-foreground">
+										Price range
+									</p>
 									<div className="flex items-center gap-2">
-										<div className="flex flex-1 items-center rounded-full border-2 border-primary/50 bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+										<div className="flex flex-1 items-center rounded-full border-2 border-primary bg-background focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
 											<span className="pl-4 text-sm text-muted-foreground">$</span>
 											<input
 												type="number"
@@ -165,7 +176,7 @@ export default function PropertySearchFilters({
 											/>
 										</div>
 										<span className="text-muted-foreground">–</span>
-										<div className="flex flex-1 items-center rounded-full border-2 border-primary/50 bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+										<div className="flex flex-1 items-center rounded-full border-2 border-primary bg-background focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2">
 											<span className="pl-4 text-sm text-muted-foreground">$</span>
 											<input
 												type="number"
@@ -211,12 +222,15 @@ export default function PropertySearchFilters({
 							<Popover.Content
 								sideOffset={8}
 								align="start"
+								aria-labelledby={BEDS_POPOVER_TITLE_ID}
 								className="z-[1100] w-[min(20rem,90vw)] rounded-xl border border-border bg-background p-4 shadow-lg outline-none"
 							>
 								<div className="space-y-3">
-									<p className="text-sm font-medium text-foreground">Number of bedrooms</p>
+									<p id={BEDS_POPOVER_TITLE_ID} className="text-sm font-medium text-foreground">
+										Number of bedrooms
+									</p>
 									<div
-										className="flex overflow-hidden rounded-full border-2 border-primary/40"
+										className="flex rounded-full border-2 border-primary"
 										role="group"
 										aria-label="Number of bedrooms"
 									>
@@ -225,7 +239,7 @@ export default function PropertySearchFilters({
 												key={value}
 												type="button"
 												onClick={() => onBedroomsChange(bedrooms === value ? null : value)}
-												className={`min-w-[4rem] flex-1 border-r border-primary/40 px-4 py-2 text-sm font-medium transition-colors last:border-r-0 ${
+												className={`min-w-[4rem] flex-1 border-r border-primary px-4 py-2 text-sm font-medium transition-colors first:rounded-l-full last:rounded-r-full last:border-r-0 outline-none focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
 													bedrooms === value
 														? "bg-primary text-primary-foreground"
 														: "bg-background text-primary hover:bg-primary/10"
@@ -274,17 +288,20 @@ export default function PropertySearchFilters({
 							<Popover.Content
 								sideOffset={8}
 								align="start"
+								aria-labelledby={SORT_POPOVER_TITLE_ID}
 								className="z-[1100] w-[min(20rem,90vw)] rounded-xl border border-border bg-background p-4 shadow-lg outline-none"
 							>
 								<div className="space-y-3">
-									<p className="text-sm font-medium text-foreground">Sort by</p>
+									<p id={SORT_POPOVER_TITLE_ID} className="text-sm font-medium text-foreground">
+										Sort by
+									</p>
 									<div className="flex flex-col gap-1">
 										{SORT_OPTIONS.map(({ value, label }) => (
 											<button
 												key={value}
 												type="button"
 												onClick={() => onSortChange(value)}
-												className={`rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+												className={`rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
 													sortBy === value
 														? "bg-primary text-primary-foreground"
 														: "bg-background text-foreground hover:bg-muted"

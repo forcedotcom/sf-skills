@@ -1,0 +1,88 @@
+{
+  "pagination": {
+    "mode": "per-source",
+    "pageSize": 10,
+    "pageSizeOptions": [5, 10, 20]
+  },
+  "sources": [
+    {
+      "kind": "sobject",
+      "key": "accounts",
+      "objectName": "Account",
+      "label": "Accounts",
+      "labelSingular": "Account",
+      "routePattern": "/accounts/:id",
+      "searchableFields": ["Name", "Phone", "Industry"],
+      "displayFields": [
+        "Name",
+        "Industry",
+        "Type",
+        "Phone",
+        "AnnualRevenue",
+        { "name": "Owner", "subfields": ["Name"] }
+      ],
+      "filterBy": [
+        { "field": "Industry", "label": "Industry", "type": "picklist" },
+        { "field": "Type", "label": "Type", "type": "picklist" },
+        { "field": "AnnualRevenue", "label": "Annual Revenue", "type": "numeric" }
+      ],
+      "sortBy": [
+        { "field": "Name", "label": "Name" },
+        { "field": "Industry", "label": "Industry" },
+        { "field": "AnnualRevenue", "label": "Annual Revenue" },
+        { "field": "CreatedDate", "label": "Created Date" }
+      ]
+    },
+    {
+      "kind": "sobject",
+      "key": "contacts",
+      "objectName": "Contact",
+      "label": "Contacts",
+      "labelSingular": "Contact",
+      "searchableFields": ["Name", "Email", "Phone"],
+      "displayFields": [
+        "Name",
+        "Title",
+        "Email",
+        "Phone",
+        { "name": "Account", "subfields": ["Name"] }
+      ],
+      "sortBy": [
+        { "field": "Name", "label": "Name" },
+        { "field": "CreatedDate", "label": "Created Date" }
+      ]
+    },
+    {
+      "kind": "sobject",
+      "key": "opportunities",
+      "objectName": "Opportunity",
+      "label": "Opportunities",
+      "labelSingular": "Opportunity",
+      "searchableFields": ["Name"],
+      "displayFields": [
+        "Name",
+        "StageName",
+        "Amount",
+        "CloseDate",
+        { "name": "Account", "subfields": ["Name"] }
+      ],
+      "filterBy": [
+        { "field": "StageName", "label": "Stage", "type": "picklist" },
+        { "field": "Amount", "label": "Amount", "type": "numeric" },
+        { "field": "CloseDate", "label": "Close Date", "type": "daterange" }
+      ],
+      "sortBy": [
+        { "field": "CloseDate", "label": "Close Date" },
+        { "field": "Amount", "label": "Amount" },
+        { "field": "Name", "label": "Name" }
+      ],
+      "defaultSort": { "field": "CloseDate", "direction": "DESC" }
+    },
+    {
+      "kind": "cms",
+      "key": "content",
+      "label": "Content",
+      "labelSingular": "Content"
+    }
+  ]
+}

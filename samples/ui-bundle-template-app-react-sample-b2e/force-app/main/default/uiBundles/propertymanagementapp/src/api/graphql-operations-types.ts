@@ -27551,7 +27551,8 @@ export type GetApplicationsQuery = {
 						Id: string;
 						Name?: { value?: string | null } | null;
 						User__r?: {
-							Name?: { value?: string | null } | null;
+							FirstName?: { value?: string | null } | null;
+							LastName?: { value?: string | null } | null;
 						} | null;
 						Property__r?: {
 							Name?: { value?: string | null } | null;
@@ -27684,13 +27685,10 @@ export type GetUserInfoQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUserInfoQuery = {
 	uiapi: {
-		query: {
-			User?: {
-				edges?: Array<{
-					node?: { Id: string; Name?: { value?: string | null } | null } | null;
-				} | null> | null;
-			} | null;
-		};
+		currentUser?: {
+			Id: string;
+			Name?: { value?: string | null } | null;
+		} | null;
 	};
 };
 

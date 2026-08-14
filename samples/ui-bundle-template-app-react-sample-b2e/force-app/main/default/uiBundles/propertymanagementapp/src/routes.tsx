@@ -3,6 +3,7 @@ import AppLayout from './appLayout';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import { Navigate } from "react-router";
+import Search from "./pages/Search";
 import PropertySearch from "./pages/PropertySearch";
 import MaintenanceRequestSearch from "./pages/MaintenanceRequestSearch";
 import MaintenanceWorkerSearch from "./pages/MaintenanceWorkerSearch";
@@ -20,8 +21,9 @@ export const routes: RouteObject[] = [
         handle: { showInNavigation: true, label: "Home" }
       },
       {
-        path: '*',
-        element: <NotFound />
+        path: "search",
+        element: <Search />,
+        handle: { showInNavigation: true, label: "Search" }
       },
       {
         path: "maintenance",
@@ -51,6 +53,10 @@ export const routes: RouteObject[] = [
         path: "applications",
         element: <ApplicationSearch />,
         handle: { showInNavigation: true, label: "Applications" }
+      },
+      {
+        path: '*',
+        element: <NotFound />
       }
     ]
   }

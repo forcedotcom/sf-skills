@@ -30,6 +30,10 @@ import {
 	Twitter,
 } from "lucide-react";
 
+/** FAQ accordion ids — shared between the toggle button and the panel it controls. */
+const faqButtonId = (index: number) => `faq-toggle-${index}`;
+const faqPanelId = (index: number) => `faq-panel-${index}`;
+
 const HERO_IMAGE = "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85";
 const CITY_IMAGE = "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800&q=85";
 const RELAX_IMAGE = "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=85";
@@ -208,7 +212,7 @@ export default function Home() {
 							<Button
 								type="submit"
 								size="lg"
-								className="min-h-12 shrink-0 cursor-pointer rounded-xl bg-primary px-8 font-medium text-primary-foreground shadow-md transition-colors duration-200 hover:bg-primary/90"
+								className="min-h-12 shrink-0 cursor-pointer rounded-xl bg-primary px-8 font-medium text-primary-foreground shadow-md transition-colors duration-200 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
 							>
 								Find Home
 							</Button>
@@ -246,7 +250,10 @@ export default function Home() {
 							amenitiesMap={amenitiesMap}
 						/>
 					) : (
-						<div className="rounded-xl bg-white/60 px-6 py-10 text-center text-muted-foreground">
+						<div
+							role="status"
+							className="rounded-xl bg-white/60 px-6 py-10 text-center text-muted-foreground"
+						>
 							<p>No featured properties at the moment.</p>
 							<Button asChild className="mt-3">
 								<Link to="/properties">Browse all properties</Link>
@@ -288,7 +295,7 @@ export default function Home() {
 							href="tel:18005550120"
 							className="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-foreground transition-colors duration-200 hover:underline"
 						>
-							<Phone className="size-4" />
+							<Phone className="size-4" aria-hidden />
 							Talk to an Agent 1.800.555.0120
 						</a>
 					</div>
@@ -353,13 +360,13 @@ export default function Home() {
 						</Button>
 						<Button asChild variant="outline" size="lg" className="rounded-full gap-2">
 							<Link to="/contact">
-								<MessageCircle className="size-4" />
+								<MessageCircle className="size-4" aria-hidden />
 								Contact
 							</Link>
 						</Button>
 						<Button asChild variant="ghost" size="lg" className="rounded-full gap-2">
 							<Link to="/contact">
-								<HelpCircle className="size-4" />
+								<HelpCircle className="size-4" aria-hidden />
 								Help
 							</Link>
 						</Button>
@@ -374,30 +381,45 @@ export default function Home() {
 						Frequently Asked Questions
 					</h2>
 					<div className="space-y-2">
-						{FAQ_ITEMS.map((item, index) => (
-							<div
-								key={index}
-								className="overflow-hidden rounded-xl border border-teal-100 bg-white shadow-sm"
-							>
-								<button
-									type="button"
-									onClick={() => setFaqOpen(faqOpen === index ? null : index)}
-									className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left font-medium text-foreground transition-colors duration-200 hover:bg-muted/50"
+						{FAQ_ITEMS.map((item, index) => {
+							const expanded = faqOpen === index;
+							return (
+								<div
+									key={index}
+									className="overflow-hidden rounded-xl border border-teal-100 bg-white shadow-sm"
 								>
-									<span>{item.q}</span>
-									{faqOpen === index ? (
-										<ChevronUp className="size-5 shrink-0 text-muted-foreground" />
-									) : (
-										<ChevronDown className="size-5 shrink-0 text-muted-foreground" />
-									)}
-								</button>
-								{faqOpen === index && (
-									<div className="border-t border-teal-100 px-5 py-4 text-sm text-muted-foreground">
+									<h3>
+										<button
+											type="button"
+											id={faqButtonId(index)}
+											aria-expanded={expanded}
+											aria-controls={faqPanelId(index)}
+											onClick={() => setFaqOpen(expanded ? null : index)}
+											className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left font-medium text-foreground transition-colors duration-200 hover:bg-muted/50"
+										>
+											<span>{item.q}</span>
+											{expanded ? (
+												<ChevronUp className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+											) : (
+												<ChevronDown
+													className="size-5 shrink-0 text-muted-foreground"
+													aria-hidden
+												/>
+											)}
+										</button>
+									</h3>
+									<div
+										id={faqPanelId(index)}
+										role="region"
+										aria-labelledby={faqButtonId(index)}
+										hidden={!expanded}
+										className="border-t border-teal-100 px-5 py-4 text-sm text-muted-foreground"
+									>
 										{item.a}
 									</div>
-								)}
-							</div>
-						))}
+								</div>
+							);
+						})}
 					</div>
 				</div>
 			</section>
@@ -416,33 +438,39 @@ export default function Home() {
 									value={footerEmail}
 									onChange={(e: ChangeEvent<HTMLInputElement>) => setFooterEmail(e.target.value)}
 									disabled={newsletterSubmitting}
-									className="max-w-xs border-teal-600 bg-teal-900/50 text-white placeholder:text-teal-300"
+									className="max-w-xs border-teal-600 bg-teal-900/50 text-white placeholder:text-teal-300 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-teal-800"
 									aria-label="Email for updates"
 								/>
 								<Button
 									type="submit"
 									size="icon"
-									className="shrink-0 bg-teal-600 hover:bg-teal-700"
+									aria-label="Subscribe to newsletter"
+									className="shrink-0 bg-teal-600 hover:bg-teal-700 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-teal-800"
 									disabled={newsletterSubmitting}
 								>
 									<Send className="size-4" aria-hidden />
 								</Button>
 							</div>
-							{newsletterMessage && (
-								<p
-									className={
-										newsletterMessage.type === "success" ? "text-teal-200" : "text-red-300"
-									}
-								>
-									{newsletterMessage.text}
-								</p>
-							)}
+							{/* Live region stays mounted so the result is announced when it arrives. */}
+							<p
+								role="status"
+								aria-live="polite"
+								className={
+									newsletterMessage == null
+										? "sr-only"
+										: newsletterMessage.type === "success"
+											? "text-teal-200"
+											: "text-red-200"
+								}
+							>
+								{newsletterMessage?.text ?? ""}
+							</p>
 						</form>
 					</div>
 					<div>
-						<h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
+						<h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
 							Explore
-						</h4>
+						</h3>
 						<ul className="space-y-2 text-sm">
 							<li>
 								<Link to="/" className="text-teal-200 hover:text-white">
@@ -462,9 +490,9 @@ export default function Home() {
 						</ul>
 					</div>
 					<div>
-						<h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
+						<h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">
 							Support
-						</h4>
+						</h3>
 						<ul className="space-y-2 text-sm">
 							<li>
 								<Link to="/contact" className="text-teal-200 hover:text-white">
@@ -488,16 +516,15 @@ export default function Home() {
 					<p className="text-xs text-teal-300">
 						© {new Date().getFullYear()} ZENLEASE. All rights reserved. Terms & Conditions
 					</p>
-					<div className="flex gap-4">
-						<a href="#" className="text-teal-300 hover:text-white" aria-label="Facebook">
-							<Facebook className="size-5" aria-hidden />
-						</a>
-						<a href="#" className="text-teal-300 hover:text-white" aria-label="Instagram">
-							<Instagram className="size-5" aria-hidden />
-						</a>
-						<a href="#" className="text-teal-300 hover:text-white" aria-label="Twitter">
-							<Twitter className="size-5" aria-hidden />
-						</a>
+					{/*
+					 * Brand marks only. Rendered as decorative, non-focusable icons rather than
+					 * `href="#"` links: a link that goes nowhere is a keyboard trap for no benefit
+					 * (WCAG 2.4.4 / 3.2.4). Swap in real anchors when the social URLs exist.
+					 */}
+					<div className="flex gap-4 text-teal-300" aria-hidden="true">
+						<Facebook className="size-5" />
+						<Instagram className="size-5" />
+						<Twitter className="size-5" />
 					</div>
 				</div>
 			</footer>

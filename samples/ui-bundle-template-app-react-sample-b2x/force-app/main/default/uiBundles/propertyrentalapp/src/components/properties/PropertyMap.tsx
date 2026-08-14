@@ -144,6 +144,7 @@ function MapContent({
 					key={`${m.lat}-${m.lng}-${m.propertyId ?? i}`}
 					position={[m.lat, m.lng]}
 					icon={pinIcon}
+					title={m.label ?? "Property"}
 				>
 					<Popup>
 						{popupContent ? (
@@ -172,8 +173,9 @@ export default function PropertyMap({
 		return center;
 	}, [center, hasMarkers, markers]);
 
+	// `aria-label` needs a role to be exposed; a labelled region is what a map container is.
 	return (
-		<div className={`relative ${className}`} aria-label="Property map">
+		<div className={`relative ${className}`} role="region" aria-label="Property map">
 			<MapContent
 				center={effectiveCenter}
 				zoom={zoom}

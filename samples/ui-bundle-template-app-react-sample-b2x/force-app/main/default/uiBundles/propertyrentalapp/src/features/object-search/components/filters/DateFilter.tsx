@@ -83,7 +83,7 @@ export function DateFilter({
 		<FilterFieldWrapper label={label} helpText={helpText} className={className} {...props}>
 			<div className="flex gap-2">
 				<Select value={operator} onValueChange={(v) => handleOperatorChange(v as DateOperator)}>
-					<SelectTrigger className="w-full flex-1">
+					<SelectTrigger className="w-full flex-1" aria-label={label}>
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>

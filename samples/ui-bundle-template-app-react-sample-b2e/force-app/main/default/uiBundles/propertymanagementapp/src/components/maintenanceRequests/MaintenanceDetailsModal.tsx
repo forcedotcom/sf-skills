@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { X } from "lucide-react";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+} from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import type { MaintenanceRequestSearchNode } from "../../api/maintenanceRequests/maintenanceRequestSearchService";
@@ -53,8 +59,6 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 		}
 	};
 
-	if (!isOpen) return null;
-
 	const description = request.Description__c?.value || "";
 	const issueType = request.Type__c?.value || "General";
 	const propertyAddress = request.Property__r?.Address__c?.value || "Unknown Address";
@@ -64,18 +68,13 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 	const priority = request.Priority__c?.value;
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center">
-			<div className="fixed inset-0 bg-black/50" onClick={onClose} />
+		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+				<DialogHeader>
+					<DialogTitle>Maintenance Request Details</DialogTitle>
+				</DialogHeader>
 
-			<div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-				<div className="flex items-center justify-between p-6 border-b border-gray-200">
-					<h2 className="text-xl font-semibold text-gray-900">Maintenance Request Details</h2>
-					<button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-						<X className="w-6 h-6" />
-					</button>
-				</div>
-
-				<div className="p-6 space-y-6">
+				<div className="space-y-6">
 					{/* Description */}
 					<div>
 						<h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
@@ -136,6 +135,7 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 							<select
 								value={selectedStatus}
 								onChange={(e) => setSelectedStatus(e.target.value)}
+								aria-label="Maintenance request status"
 								className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
 							>
 								{statusOptions.map((s) => (
@@ -155,7 +155,7 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 					</div>
 				</div>
 
-				<div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+				<DialogFooter>
 					<Button variant="outline" onClick={onClose} disabled={isSaving}>
 						Close
 					</Button>
@@ -168,9 +168,9 @@ export const MaintenanceDetailsModal: React.FC<MaintenanceDetailsModalProps> = (
 							{isSaving ? "Saving..." : "Save Changes"}
 						</Button>
 					)}
-				</div>
-			</div>
-		</div>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

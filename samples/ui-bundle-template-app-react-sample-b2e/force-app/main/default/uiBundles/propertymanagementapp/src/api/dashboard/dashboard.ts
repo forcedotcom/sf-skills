@@ -77,7 +77,7 @@ export async function getUserInfo(): Promise<{ name: string; id: string } | null
 			GET_USER_INFO,
 			{},
 		);
-		const user = data?.uiapi?.query?.User?.edges?.[0]?.node;
+		const user = data?.uiapi?.currentUser;
 		if (user) {
 			return {
 				id: user.Id,
