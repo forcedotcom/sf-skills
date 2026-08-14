@@ -4,7 +4,13 @@ description: "Use this skill when users need to create, generate, or validate Sa
 metadata:
   version: "1.0"
   minApiVersion: "60.0"
-  relatedSkills: ["platform-value-set-generate", "platform-validation-rule-generate"]
+  relatedSkills:
+    - "platform-validation-rule-generate"
+    - "platform-value-set-generate"
+  mcpTools:
+    metadata-grounding:
+      tools: ["search_metadata"]
+      semver: ">=1.0.0"
 ---
 
 # Salesforce Custom Field Generator and Validator
