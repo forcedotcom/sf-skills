@@ -1,6 +1,6 @@
 ---
 name: experience-ui-bundle-project-generate
-description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce UI bundle app (any supported frontend framework) and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
+description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce UI bundle app (React or Angular) and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
 metadata:
   version: "1.2"
   relatedSkills:
@@ -28,10 +28,10 @@ The CLI command is `sf template generate project`.
 
 **Determine the framework.** It is normally already decided by the calling context — either passed down by the root/coordinator skill that invoked this one, or stated in the user's request. Use that.
 
-The frameworks this skill supports are exactly the reference files under [`references/`](references/), each named `<framework>-project-generate.md` (so `react` → `references/react-project-generate.md`). This is the single source of truth — adding a framework means adding a reference file, nothing here changes.
+The frameworks this skill supports are exactly the reference files under `<SKILL_DIR>/references/`, each named `<framework>-project-generate.md` (so `react` → `<SKILL_DIR>/references/react-project-generate.md`). This is the single source of truth — adding a framework means adding a reference file, nothing here changes.
 
-- **If the framework is known** — open `references/<framework>-project-generate.md`.
-- **If it is unknown** (a standalone run where nobody said which) — list `references/`, derive the supported set by stripping the `-project-generate.md` suffix from each filename, and ask the user to pick one of those. If the user names a framework with no matching reference file, it is not supported here — hand off to `experience-ui-bundle-app-coordinate` to scaffold from scratch.
+- **If the framework is known** — open `<SKILL_DIR>/references/<framework>-project-generate.md`.
+- **If it is unknown** (a standalone run where nobody said which) — list `<SKILL_DIR>/references/`, derive the supported set by stripping the `-project-generate.md` suffix from each filename, and ask the user to pick one of those. If the user names a framework with no matching reference file, it is not supported here — hand off to `experience-ui-bundle-app-coordinate` to scaffold from scratch.
 
 Each reference lists that framework's `--template` flags and what each starter contains. Pick the one that fits the user's audience (internal vs. external).
 

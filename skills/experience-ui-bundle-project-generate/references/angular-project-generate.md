@@ -6,10 +6,8 @@ Reference for the **Angular** path of `experience-ui-bundle-project-generate`. P
 
 | Template | `--template` flag | Best for |
 |----------|-------------------|----------|
-| Internal starter | `angularinternalapp` | Starter for internal, employee-facing Salesforce apps (e.g. support consoles, ops dashboards, internal admin apps) — users are already-authenticated employees. Includes Agentforce chat. No login flow or public access. |
-| External starter | `angularexternalapp` | Starter for customer/partner-facing Salesforce apps/sites (e.g. portals, communities, storefront, public sites). Full auth support (login, registration, reset, profile) — external users sign in with their own accounts. |
-
-> The customer-typed CLI template names are `angularinternalapp` / `angularexternalapp`.
+| Internal starter | `angularinternalapp` | Starter for internal, employee-facing Salesforce apps (e.g. support consoles, ops dashboards, internal admin apps) — users are already-authenticated employees. Includes agent chat container. No login flow or public access. |
+| External starter | `angularexternalapp` | Starter for customer/partner-facing Salesforce apps/sites (e.g. portals, communities, storefront, public sites). Includes agent chat container. Full auth support (login, registration, reset, profile) — external users sign in with their own accounts. |
 
 ## What the bundle contains
 
@@ -21,5 +19,3 @@ The generated UI bundle under `force-app/main/default/uiBundles/$NAME/` is an **
 - **UI library:** 16 shared primitives + layout on **Angular Material M3** (`mat.theme()`) + **CDK 21.2.x**, styled with **shadcn design tokens** (remap the `--mat-sys-*` variables) and **Tailwind 4.0**.
 - **Data layer:** injectable GraphQL client `src/api/graphql-client.service.ts`. GraphQL type codegen is optional and manual (not chained to the build).
 - **Metadata & config:** `ui-bundle.json`, `*.uibundle-meta.xml`, `tsconfig.*`, `eslint.config.js`, `README.md`.
-
-The `--internal` vs `--external` split matches the two flags above: internal ships the Agentforce Conversation Client and skips auth; external ships the full authentication flow (login, register, forgot/reset password, profile).

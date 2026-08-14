@@ -6,8 +6,8 @@ Reference for the **React** path of `experience-ui-bundle-project-generate`. Pic
 
 | Template | `--template` flag | Best for |
 |----------|-------------------|----------|
-| Internal starter | `reactinternalapp` | Starter for internal, employee-facing Salesforce apps (e.g. support consoles, ops dashboards, internal admin apps) — users are already-authenticated employees. Includes Agentforce chat. No login flow or public access. |
-| External starter | `reactexternalapp` | Starter for customer/partner-facing Salesforce apps/sites (e.g. portals, communities, storefront, public sites). Full auth support (login, registration, reset, profile) — external users sign in with their own accounts. |
+| Internal starter | `reactinternalapp` | Starter for internal, employee-facing Salesforce apps (e.g. support consoles, ops dashboards, internal admin apps) — users are already-authenticated employees. Includes agent chat container. No login flow or public access. |
+| External starter | `reactexternalapp` | Starter for customer/partner-facing Salesforce apps/sites (e.g. portals, communities, storefront, public sites). Includes agent chat container. Full auth support (login, registration, reset, profile) — external users sign in with their own accounts. |
 
 ## What the bundle contains
 
@@ -18,5 +18,3 @@ The generated UI bundle under `force-app/main/default/uiBundles/$NAME/` is a **R
 - `.tsx` pages/components; app entry `src/App.tsx`, pages under `src/pages/`.
 - GraphQL client (`src/api/graphqlClient.ts`) + codegen (`codegen.yml`), `useAsyncData` data util.
 - `ui-bundle.json`, `*.uibundle-meta.xml`, project config, `README.md`.
-
-The `--internal` vs `--external` split matches the two flags above: internal ships the Agentforce chat and skips auth; external ships the full authentication flow.
