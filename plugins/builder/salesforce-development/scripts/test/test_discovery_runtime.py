@@ -33,7 +33,7 @@ POINTER = 'Ask “what can I do here?” or run /salesforce-development:discover
 # note. On any visible banner the discovery command token appears exactly once — the
 # "single pointer" invariant.
 DISCOVERY_CMD = "/salesforce-development:discovery"
-INSTALL = "npx skills@1.5.20 add forcedotcom/sf-skills#1.32.0 --skill {name} --agent claude-code --yes"
+INSTALL = "npx skills@1.5.20 add forcedotcom/sf-skills#1.38.0 --skill {name} --agent claude-code --yes"
 TAGLINE = "headless Salesforce development, from inside the agent"
 
 catalog = load_module(CATALOG_PATH, "discovery_runtime_catalog")
@@ -216,8 +216,31 @@ class DiscoveryRuntimeTests(unittest.TestCase):
                 self.assertEqual(
                     entry["addableExample"], addable[0]["examplePrompt"] if addable else None
                 )
-        self.assertIn(None, [entry["installedExample"] for entry in data["domains"]])
-        self.assertIn(None, [entry["addableExample"] for entry in data["domains"]])
+
+    def test_overview_domain_examples_fall_back_to_none_with_no_installed_or_addable(self):
+        """installedExample/addableExample are None, not fabricated, when a domain's
+        live catalog has zero rows on that side — exercised with a synthetic catalog
+        rather than relying on any real domain happening to be lopsided today."""
+        cat = {"counts": {"public": 1, "foundation": 1, "overlap": 0, "publicStandaloneAddable": 0,
+                           "foundationOnly": 1, "visibleUnion": 1},
+               "publicRelease": {"releaseRef": "0.0.0"},
+               "skills": [{"name": "platform-widget-search", "domain": "platform", "variants": {
+                   "foundation": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64, "accessCheck": None},
+               }}]}
+        rows = [{
+            "name": "platform-widget-search", "domain": "platform", "status": "installed",
+            "publicAvailable": False, "foundationInstalled": True, "examplePrompt": "search widgets",
+            "variants": {"foundation": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64}},
+        }]
+        data = catalog._overview(cat, rows, org_presence="none")
+        entry = next(e for e in data["domains"] if e["domain"] == "platform")
+        self.assertIsNone(entry["addableExample"])
+
+        rows[0].update(status="available", foundationInstalled=False, publicAvailable=True)
+        cat["skills"][0]["variants"] = {"public": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64, "accessCheck": None}}
+        data = catalog._overview(cat, rows, org_presence="none")
+        entry = next(e for e in data["domains"] if e["domain"] == "platform")
+        self.assertIsNone(entry["installedExample"])
 
     def test_overview_omits_the_connect_affordance_even_when_no_org(self):
         """The connect-an-org affordance was removed (org connection can't yet tailor
@@ -488,7 +511,7 @@ class DiscoveryRuntimeTests(unittest.TestCase):
             code, index_out, _ = self.run_discovery(["index"], root, root / "home")
             self.assertEqual(code, 0)
             index_lines = index_out.strip().splitlines()
-            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 114)
+            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 148)
             self.assertTrue(all(catalog._terminal_cell_width(line) <= 80 for line in index_lines))
 
     def test_valid_standalone_directory_symlink_counts_as_installed(self):
@@ -1264,6 +1287,157 @@ class EnvironmentBandTests(unittest.TestCase):
             project={"name": "Z" * 300, "source_api": "9" * 300, "package_dirs": "p" * 300},
             stats=self.stats, git_line="g" * 300))
         self.assertTrue(all(len(line) <= 80 for line in d.splitlines()), d)
+
+    def _notice(self):
+        # The heading line marks the notice band; the rest is body/spacers.
+        return ["Salesforce Development Plugin - Telemetry Usage", "",
+                "anonymous usage data: the commands and skills run.", "",
+                "To disable, run this command:",
+                "  /salesforce-development:telemetry off"]
+
+    def test_notice_band_leads_the_region_below_the_logo_above_the_guidance(self):
+        # The telemetry notice is woven in as the FIRST band — after the logo
+        # lockup, before the org guidance — sharing the region's dividers so it
+        # never renders as a wider, separately-framed box below everything.
+        d = strip_ansi(sfx.render_degraded_banner(
+            "No Default Org", ["No target-org is set."], notice_lines=self._notice()))
+        logo0 = sfx.BANNER.splitlines()[0]
+        self.assertLess(d.index(logo0), d.index("Telemetry Usage"))       # logo first
+        self.assertLess(d.index("Telemetry Usage"), d.index("No Default Org"))  # notice above guidance
+
+    def test_notice_band_shares_rules_and_matches_band_width(self):
+        # Woven in as a band, the notice shares the region's 64-col rules with the
+        # neighbouring bands — no doubled rule, no box glyphs, same width as the
+        # rest (the misaligned-box bug this replaced).
+        rule = "─" * 64
+        d = strip_ansi(sfx.render_degraded_banner(
+            "No Default Org", ["No target-org is set.", "", "Skills are available."],
+            project=self.project, stats=self.stats, git_line="4 file(s) changed",
+            notice_lines=self._notice()))
+        lines = d.splitlines()
+        for box_glyph in ("╭", "╰", "│"):
+            self.assertNotIn(box_glyph, d)
+        for i in range(1, len(lines) - 1):          # never a blank sandwiched by two rules
+            if lines[i] == "":
+                self.assertFalse(lines[i - 1] == rule and lines[i + 1] == rule)
+        self.assertTrue(all(len(line) <= 80 for line in lines), d)
+
+    def test_notice_band_clips_hostile_lines_within_eighty(self):
+        # Notice text is a checked-in constant today, but the band must clip
+        # defensively like every other so the ≤80 contract is structural.
+        d = strip_ansi(sfx.render_degraded_banner(
+            "No Default Org", ["No target-org is set."],
+            notice_lines=["H" * 300, "", "b" * 300]))
+        self.assertTrue(all(len(line) <= 80 for line in d.splitlines()), d)
+
+    def test_connected_banner_weaves_notice_between_install_and_environment(self):
+        # On the connected path the notice sits below the install summary, above
+        # the environment band — still the first status band, one shared region.
+        org = {"alias": "acme", "edition": "Developer", "apiVersion": "63.0"}
+        d = strip_ansi(sfx.render_banner_message(
+            org, self.project, self.stats, "", "connecting", notice_lines=self._notice()))
+        self.assertLess(d.index("✓ Installed"), d.index("Telemetry Usage"))
+        self.assertLess(d.index("Telemetry Usage"), d.index("org: acme"))
+        self.assertTrue(all(len(line) <= 80 for line in d.splitlines()), d)
+
+    def test_banner_without_notice_is_unchanged(self):
+        # When no notice is due (notice_lines falsy), neither renderer inserts a
+        # band — the default composition is byte-identical to the pre-notice one.
+        org = {"alias": "acme", "edition": "Developer", "apiVersion": "63.0"}
+        self.assertEqual(
+            sfx.render_banner_message(org, self.project, self.stats, "", "connecting"),
+            sfx.render_banner_message(org, self.project, self.stats, "", "connecting", notice_lines=[]))
+        self.assertEqual(
+            sfx.render_degraded_banner("No Default Org", ["x"]),
+            sfx.render_degraded_banner("No Default Org", ["x"], notice_lines=[]))
+
+
+class SessionStartNoticePlacementTests(unittest.TestCase):
+    """The one-time telemetry notice, woven into cmd_detect's banner as the first
+    band: user-visible only, above the org guidance, and fired exactly once.
+
+    cmd_detect is local-first — it never probes the org at startup — so these
+    exercise its two in-project banner paths ("No Default Org" and the configured-
+    but-unprobed target). The notice rides the visible systemMessage only; the
+    model-facing additionalContext is a separate structured object that never
+    carries it. Machine-wide telemetry state (consent + notified marker) is
+    redirected via SF_DEV_TELEMETRY_HOME into the tmp dir, so each test starts from
+    a clean fire-once gate."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.cwd = Path(self.tmp.name)
+        self.old_cwd = Path.cwd()
+        os.chdir(self.cwd)
+        self.cwd.joinpath("sfdx-project.json").write_text("{}")
+        # The real fire-once gate is silent in CI and when opted out; clear those
+        # signals so the end-to-end gate test can observe the notice actually fire.
+        # Consent + the notified marker are MACHINE-WIDE now, so redirect the
+        # telemetry home into this temp dir — otherwise the gate reads this machine's
+        # real ~/.sf state and the "fires once" assertion is non-hermetic.
+        self.env_patch = mock.patch.dict(os.environ, {
+            "CI": "", "CONTINUOUS_INTEGRATION": "", "BUILD_NUMBER": "",
+            "GITHUB_ACTIONS": "", "SF_DISABLE_TELEMETRY": "", "DO_NOT_TRACK": "",
+            "SF_DEV_TELEMETRY_HOME": str(self.cwd / "machine-state"),
+        }, clear=False)
+        self.env_patch.start()
+
+    def tearDown(self):
+        self.env_patch.stop()
+        os.chdir(self.old_cwd)
+        self.tmp.cleanup()
+
+    def capture_detect(self):
+        out = io.StringIO()
+        payload = io.StringIO(json.dumps({"source": "startup"}))
+        with mock.patch.object(sfx.sys, "stdin", payload), redirect_stdout(out):
+            sfx.cmd_detect()
+        return json.loads(out.getvalue())
+
+    def patches(self, target=""):
+        # Local-first detect makes no org calls; only the local stats read is
+        # pinned for a deterministic full-mode banner. `_configured_target_alias`
+        # selects the no-org vs. configured-unprobed path.
+        stack = ExitStack()
+        for p in (
+            mock.patch.object(sfx, "project_stats", return_value={"apex_src": 0, "apex_test": 0, "triggers": 0, "lwc": 0, "aura": 0, "objects": 0, "permsets": 0, "flows": 0}),
+            mock.patch.object(sfx, "_configured_target_alias", return_value=target),
+        ):
+            stack.enter_context(p)
+        return stack
+
+    def cases(self):
+        return {
+            "no-default-org": ("", "No Default Org"),
+            "configured-unprobed": ("fixture", "Target Org Configured (Unprobed)"),
+        }
+
+    def test_notice_is_visible_only_above_guidance_and_fires_once(self):
+        for label, (target, guide) in self.cases().items():
+            with self.subTest(path=label):
+                due = ["Salesforce Development Plugin - Telemetry Usage", "",
+                       "anonymous usage data; disable via :telemetry off"]
+                with self.patches(target):
+                    with mock.patch.object(sfx, "_telemetry_notice_lines", return_value=due):
+                        first = self.capture_detect()
+                visible = strip_ansi(first["systemMessage"])
+                context = first["hookSpecificOutput"]["additionalContext"]
+                # Woven into the VISIBLE banner, above the org guidance…
+                self.assertIn("Telemetry Usage", visible)
+                self.assertLess(visible.index("Telemetry Usage"), visible.index(guide))
+                self.assertLessEqual(visible.index(sfx.BANNER.splitlines()[0]), visible.index("Telemetry Usage"))
+                # …and NEVER in the model-facing context.
+                self.assertNotIn("Telemetry Usage", context)
+                self.assertTrue(all(len(l) <= 80 for l in visible.splitlines()), visible)
+
+    def test_real_gate_fires_notice_once_then_never_again(self):
+        # End-to-end through the real telemetry gate (no notice mock): the notice
+        # paints on the first detect in a fresh project and is suppressed on the next.
+        with self.patches():
+            first = self.capture_detect()
+            second = self.capture_detect()
+        self.assertIn("Telemetry Usage", strip_ansi(first["systemMessage"]))
+        self.assertNotIn("Telemetry Usage", strip_ansi(second["systemMessage"]))
 
 
 class SessionStartPointerTests(unittest.TestCase):

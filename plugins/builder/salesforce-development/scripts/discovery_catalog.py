@@ -185,6 +185,7 @@ _DOMAIN_DISPLAY: dict[str, dict] = {
     "mobile": {"label": "Mobile", "tagline": "Native iOS/Android, device APIs, offline."},
     "omnistudio": {"label": "OmniStudio", "tagline": "OmniScripts, FlexCards, Integration Procedures."},
     "sales": {"label": "Sales Cloud", "tagline": "Agentforce pipeline management setup."},
+    "service": {"label": "Service Cloud", "tagline": "Help agents, digital engagement, ITSM/CMDB setup.", "installedExample": "coordinate a Help Agent"},
 }
 
 

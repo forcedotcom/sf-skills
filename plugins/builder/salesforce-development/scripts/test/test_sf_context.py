@@ -2048,5 +2048,45 @@ class DiagnosticTests(unittest.TestCase):
         ), text)
 
 
+class PostBashTelemetryOutcomeTests(unittest.TestCase):
+    """Agent review: the in-process command_invoked telemetry on PostToolUse:Bash must
+    consult _hook_reports_failure (like its sibling success-writers cmd_post_deploy /
+    observe / apex-test), not hardcode 'success' — some builds fire the Bash hook
+    regardless of exit status, so a failed command must be recorded as a failure."""
+
+    def _run_with(self, payload):
+        recorded = []
+
+        class _FakeTelemetry:
+            @staticmethod
+            def capture_event(event, outcome, _payload):
+                recorded.append((event, outcome))
+
+        # A command that matches no paint handler → silent allow, so the only thing
+        # exercised is the telemetry outcome selection at the top of cmd_post_bash.
+        with mock.patch.object(sfx, "_read_hook_payload", return_value=payload), \
+                mock.patch.object(sfx, "_load_sf_telemetry", return_value=_FakeTelemetry), \
+                redirect_stdout(io.StringIO()):
+            sfx.cmd_post_bash()
+        return recorded
+
+    def test_failure_payload_records_failure(self):
+        recorded = self._run_with({"tool_input": {"command": "ls -la"},
+                                   "tool_response": {"exitCode": 1}})
+        self.assertIn(("command_invoked", "failure"), recorded,
+                      "a failure-reporting Bash payload must record outcome=failure")
+
+    def test_success_payload_records_success(self):
+        recorded = self._run_with({"tool_input": {"command": "ls -la"},
+                                   "tool_response": {"exitCode": 0}})
+        self.assertIn(("command_invoked", "success"), recorded)
+
+    def test_absent_tool_response_defaults_to_success(self):
+        # No affirmative failure signal → success (never fail-closed on an older host
+        # that omits tool_response), matching _hook_reports_failure's contract.
+        recorded = self._run_with({"tool_input": {"command": "ls -la"}})
+        self.assertIn(("command_invoked", "success"), recorded)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -1,7 +1,7 @@
 ---
 name: adlc-author
 description: Writes Agentforce Agent Script (.agent) files from requirements
-tools: Read, Edit, Write, Bash, Grep, Glob
+tools: Read, Edit, Write, Bash, Grep, Glob, Skill
 skills: agentforce-generate
 ---
 

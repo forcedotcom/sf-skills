@@ -380,12 +380,12 @@ class CapabilityRegistryTests(unittest.TestCase):
     def test_checked_public_manifest_and_v3_catalog_counts_and_sets(self):
         manifest = self.registry.load_public_manifest(MANIFEST_PATH)
         self.assertEqual(manifest["repository"], "https://github.com/forcedotcom/sf-skills.git")
-        self.assertEqual(manifest["commit"], "7baeb07b36799eada4dce06d85664c0c16a269a8")
-        self.assertEqual(manifest["releaseRef"], "1.32.0")
-        self.assertEqual(manifest["counts"], {"public": 102})
-        self.assertEqual(len(manifest["skills"]), 102)
+        self.assertEqual(manifest["commit"], "ba78d3871d54196e86dbde6bbd9f9a79944ff07f")
+        self.assertEqual(manifest["releaseRef"], "1.38.0")
+        self.assertEqual(manifest["counts"], {"public": 138})
+        self.assertEqual(len(manifest["skills"]), 138)
         # accessCheck travels through the manifest as a tri-state (Option A). Every
-        # row carries the key; at 1.32.0 exactly one skill declares a conditional
+        # row carries the key; at 1.38.0 a fixed set of skills declare a conditional
         # gate and the rest are undeclared (None) — never silently [], which would
         # falsely claim org-agnostic before the backfill lands.
         for row in manifest["skills"]:
@@ -396,21 +396,58 @@ class CapabilityRegistryTests(unittest.TestCase):
             self.assertTrue(self.registry._valid_access_check(row["accessCheck"]))
         gated = {row["name"]: row["accessCheck"] for row in manifest["skills"] if row["accessCheck"] is not None}
         self.assertEqual(gated, {
+            "dx-devops-pipeline-manage": [
+                {"type": "orgPref", "value": "ALMDevopsCorePref"},
+                {"type": "userPerm", "value": "UserHasDevOpsCore"},
+            ],
+            "dx-devops-promote": [
+                {"type": "orgPref", "value": "ALMDevopsCorePref"},
+                {"type": "userPerm", "value": "UserHasDevOpsCore"},
+            ],
+            "dx-org-devhub-configure": [
+                {"type": "userPerm", "value": "ModifyAllData"},
+            ],
+            "experience-ui-bundle-2gp-deploy": [
+                {"type": "orgPref", "value": "Package2Enabled"},
+            ],
             "experience-ui-bundle-features-generate": [
                 {"type": "license", "value": "Experience Cloud (Customer Community / Customer Community Plus)"},
                 {"type": "orgPref", "value": "Sites"},
+            ],
+            "experience-ui-bundle-mfa-configure": [
+                {"type": "license", "value": "Experience Cloud (Customer Community / Customer Community Login)"},
+            ],
+            "platform-sandbox-configure": [
+                {"type": "userPerm", "value": "ManageSandboxes"},
+            ],
+            "service-itsm-agentic-setup-cmdb-bundle-deploy": [
+                {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
+                {"type": "orgPref", "value": "CMDBEnabled"},
+            ],
+            "service-itsm-agentic-setup-cmdb-configure": [
+                {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
+            ],
+            "service-itsm-agentic-setup-cmdb-coordinate": [
+                {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
+            ],
+            "service-itsm-agentic-setup-cmdb-discovery-configure": [
+                {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
+            ],
+            "service-itsm-incident-priority-configure": [
+                {"type": "userPerm", "value": "CustomizeApplication"},
+                {"type": "orgPref", "value": "ITSMIncidentMgmtEnabled"},
             ],
         })
         data = self.catalog.load_catalog(PLUGIN_ROOT)
         self.assertEqual(data["schemaVersion"], "3.0")
         self.assertEqual(data["channel"], "public")
         self.assertEqual(data["counts"], {
-            "public": 102,
+            "public": 138,
             "foundation": 41,
-            "overlap": 29,
-            "publicStandaloneAddable": 73,
-            "foundationOnly": 12,
-            "visibleUnion": 114,
+            "overlap": 31,
+            "publicStandaloneAddable": 107,
+            "foundationOnly": 10,
+            "visibleUnion": 148,
         })
         public = {row["name"] for row in manifest["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}
