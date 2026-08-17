@@ -316,7 +316,7 @@ For monorepos where Salesforce code lives in a subdirectory, use `--target` to s
 ```
 
 For multiple packages:
-```
+```text
 --target packages/app-a/force-app --target packages/app-b/force-app
 ```
 
@@ -601,7 +601,7 @@ Build the `run-arguments` string by combining these independent flags as needed:
 
 ### Decision Tree for Template Selection
 
-```
+```text
 User wants CI/CD for Code Analyzer
 ├── Platform?
 │   ├── GitHub Actions → Use forcedotcom/run-code-analyzer@v2

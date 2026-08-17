@@ -260,7 +260,7 @@ const NATIVE_SELECT = /<select\s/gi;
 
 The script outputs individual category scores. It does **not** produce a combined overall grade — the agent computes that using the formula in SKILL.md Step 4:
 
-```
+```text
 Overall = (Linter × 0.30) + (Theming × 0.20) + (Accessibility × 0.20)
         + (CodeQuality × 0.15) + (ComponentUsage × 0.15)
 ```
@@ -273,7 +273,7 @@ The script automates **17 of 53** checks listed above (marked **Script** in the 
 
 ### Theming
 
-```
+```text
 Score = 100 - (critical issues in category × 10)
               - (warnings in category × 3)
               - (info in category × 1)
@@ -282,7 +282,7 @@ Min: 0
 
 ### Accessibility
 
-```
+```text
 Score = 100 - (critical issues in category × 10)
               - (warnings in category × 3)
               - (info in category × 1)
@@ -291,7 +291,7 @@ Min: 0
 
 ### Code Quality
 
-```
+```text
 Score = 100 - (critical issues in category × 10)
               - (warnings in category × 3)
               - (info in category × 1)
@@ -300,7 +300,7 @@ Min: 0
 
 ### Component Usage
 
-```
+```text
 Score = 100 - (critical issues in category × 10)
               - (warnings in category × 3)
               - (info in category × 1)

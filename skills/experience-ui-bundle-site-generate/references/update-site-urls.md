@@ -80,7 +80,7 @@ Before deploying, confirm:
 
 ## Example URL Configuration
 
-```
+```text
 ChatterNetworkPicasso Site (Primary):
   DigitalExperienceConfig: <urlPathPrefix>bestsupport</urlPathPrefix>
 

@@ -3,7 +3,7 @@
 The DC pipeline for a single Agentforce session runs as three stages in
 sequence:
 
-```
+```text
 fetch_dc.py → 24 dc.<name>.json artifacts + dc._session_manifest.json
 assemble_dc.py → dc._session_tree.json (pure in-memory join)
 render_dc.py → dc._session_summary.md (pure tree reader)
@@ -71,7 +71,7 @@ Per-field schema for every DMO lives in
 The "normal" path that nests a `GatewayRequest` under its owning
 `LLM_STEP` in the tree. Every edge is a platform-sanctioned forward FK:
 
-```
+```text
 Step.ssot__GenerationId__c → Generation.generationId__c
 Generation.generationResponseId__c → GatewayResponse.generationResponseId__c
 GatewayResponse.generationRequestId__c → GatewayRequest.gatewayRequestId__c

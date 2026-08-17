@@ -8,7 +8,7 @@ The `appContainer: true` field in `content.json` is what makes this a React site
 ## File Location
 The DigitalExperience directory contains only `_meta.json` and `content.json`. Do not create any directories other than `sfdc_cms__site` inside the bundle.
 
-```
+```text
 digitalExperiences/site/{siteName}1/sfdc_cms__site/{siteName}1/_meta.json
 digitalExperiences/site/{siteName}1/sfdc_cms__site/{siteName}1/content.json
 ```

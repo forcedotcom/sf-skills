@@ -1,7 +1,6 @@
 ---
 name: external-diagram-mermaid-generate
 description: "Salesforce architecture diagrams using Mermaid with ASCII fallback. Use this skill when generating text-based diagrams for Salesforce architecture, OAuth flows, ERDs, integration sequences, or Agentforce structure. TRIGGER when: user says \"diagram\", \"visualize\", \"ERD\", or asks for sequence diagrams, flowcharts, class diagrams, or architecture visualizations in Mermaid. DO NOT TRIGGER when: user asks about non-Salesforce systems."
-compatibility: "Requires Mermaid-capable renderer for diagram previews"
 metadata:
   cliTools:
     - tool: ["curl"]

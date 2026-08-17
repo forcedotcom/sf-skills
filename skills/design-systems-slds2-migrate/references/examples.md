@@ -19,7 +19,7 @@ Before/after examples organized by violation type.
 ## Class Override Example
 
 **Violation:**
-```
+```text
 dataTable.css
   5:1   warning  Overriding slds-table isn't supported. To differentiate SLDS and
                  custom classes, create a CSS class in your namespace.
@@ -68,7 +68,7 @@ dataTable.css
 ## LWC Token Example
 
 **Violation:**
-```
+```text
 panelHeader.css
   3:3  error  The '--lwc-colorBackgroundAlt' design token is deprecated. Replace it with
               the SLDS 2 styling hook and set the fallback to '--lwc-colorBackgroundAlt'.
@@ -106,7 +106,7 @@ panelHeader.css
 ### Tile with Border and Spacing
 
 **Violation:**
-```
+```text
 tile.css
   2:20  warning  Consider replacing the #ffffff static value with an SLDS 2 styling hook
                  that has a similar value:

@@ -4,7 +4,7 @@
 This configuration file creates a **net-new, default** DigitalExperienceBundle metadata record for a Digital Experience React Site. It is not intended to edit or modify an existing DigitalExperienceBundle record. Use this template only when provisioning a brand-new React site.
 
 ## File Location
-```
+```text
 digitalExperiences/site/{siteName}1/{siteName}1.digitalExperience-meta.xml
 ```
 

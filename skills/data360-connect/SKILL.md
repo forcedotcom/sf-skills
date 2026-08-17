@@ -1,7 +1,6 @@
 ---
 name: data360-connect
 description: "Salesforce Data Cloud Connect phase. Use this skill when the user manages Data Cloud connections, connectors, or sets up a new source system. TRIGGER when: user manages Data Cloud connections, connectors, connector metadata, tests a connection, browses source objects or databases, or sets up a new source system. DO NOT TRIGGER when: the task is about data streams or DLOs (use data360-prepare), DMOs or identity resolution (use data360-harmonize), retrieval/search (use data360-query), or STDM telemetry (use agentforce-observe)."
-compatibility: "Requires the sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
   cliTools:
     - tool: ["node"]

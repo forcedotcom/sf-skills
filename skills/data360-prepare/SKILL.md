@@ -1,7 +1,6 @@
 ---
 name: data360-prepare
 description: "Salesforce Data Cloud Prepare phase. Use this skill when the user creates or manages Data Cloud data streams, DLOs, transforms, or Document AI configurations. TRIGGER when: user creates or manages Data Cloud data streams, DLOs, transforms, or Document AI configurations, or asks about ingestion into Data Cloud. DO NOT TRIGGER when: the task is connection setup only (use data360-connect), DMOs and identity resolution (use data360-harmonize), or query/search work (use data360-query)."
-compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
   cliTools:
     - tool: ["node"]

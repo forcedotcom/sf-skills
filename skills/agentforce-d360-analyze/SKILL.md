@@ -2,15 +2,15 @@
 name: agentforce-d360-analyze
 description: "Data Cloud 360° view of a single Agentforce session. TRIGGER when user asks to trace, inspect, summarize, or describe a specific Agentforce session by session id (Agent Session UUID `019d…` or MessagingSession id `0Mw…`). Also triggers on session discovery — find/list/search sessions by time, agent, channel, outcome, or conversation text — when the user has no session id yet. DO NOT TRIGGER for design-time architecture questions (use agentforce-architecture-analyze instead) or for runtime perf/latency/SLO questions that require platform telemetry beyond Data Cloud."
 metadata:
+  version: "1.0"
+  minApiVersion: "66.0"
+  relatedSkills:
+    - "agentforce-architecture-analyze"
   cliTools:
     - tool: ["python3"]
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-  relatedSkills:
-    - "agentforce-architecture-analyze"
-  version: "1.0"
-  minApiVersion: "66.0"
 ---
 
 # agentforce-d360-analyze — Data Cloud 360° session view
@@ -72,7 +72,7 @@ python3 "$prefix/discover_sessions.py" --org <alias> [filters...]
 
 ## Pipeline — three stages
 
-```
+```text
 fetch_dc.py     →  24 dc.<name>.json + dc._session_manifest.json     (DC Query REST waterfall, 5 waves)
 assemble_dc.py  →  dc._session_tree.json                             (pure in-memory hierarchical join)
 render_dc.py    →  dc._session_summary.md                            (human summary, multi-section)
@@ -92,7 +92,7 @@ Flags: `--verbose` for per-DMO row counts; `--no-assemble` / `--no-render` to st
 
 Everything lands under `~/.vibe/data/agentforce-d360-analyze/<org_id15>/<agent>__<ver>/<session_id>/` (default; override with `--data-dir <path>`):
 
-```
+```text
 dc.sessions.json              dc.steps.json                dc.gateway_requests.json
 dc.interactions.json          dc.messages.json             dc.gateway_responses.json
 dc.participants.json          dc.generations.json          dc.gateway_request_llm.json

@@ -24,7 +24,7 @@ This guide helps you choose the correct SLDS 2 color hook. Use it when replacing
 
 **Always try semantic hooks first.** ~85-90% of color decisions should use semantic hooks. System and palette hooks are last resorts, not alternatives.
 
-```
+```text
 1. SEMANTIC HOOKS (try first, ~85-90% of decisions)
    surface-*, accent-*, error/warning/success/info/disabled-*
    • Accessibility built-in  • Theme-aware  • Dark mode ready

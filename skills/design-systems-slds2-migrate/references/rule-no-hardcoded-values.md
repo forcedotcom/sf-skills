@@ -10,7 +10,7 @@
 
 The linter detects hardcoded values and reports them as warnings. Here's real output for an icon component:
 
-```
+```text
   3:10  warning  Consider replacing the 32px static value with an SLDS 2 styling hook
                  that has a similar value: --slds-g-sizing-9.                              slds/no-hardcoded-values-slds2
 
@@ -72,7 +72,7 @@ The fallback must be the **exact original value** from the source CSS (e.g., `#0
 
 When examining a hardcoded value or deprecated token, follow this decision tree:
 
-```
+```text
 1. SLDS utility class available?
    └─ Yes → Remove CSS, add utility class to HTML
    └─ No  ↓

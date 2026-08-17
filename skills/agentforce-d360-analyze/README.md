@@ -50,7 +50,7 @@ See `SKILL.md` for the full TRIGGER conditions, flag table, and the "DC-only bli
 
 Three stages, each independently runnable:
 
-```
+```text
 fetch_dc.py     →  24 dc.<name>.json + dc._session_manifest.json   (DC Query REST waterfall)
 assemble_dc.py  →  dc._session_tree.json                           (in-memory hierarchical join)
 render_dc.py    →  dc._session_summary.md                          (markdown rendering)
@@ -87,7 +87,7 @@ For design-time architecture questions (topic/action tree, flow inventory, Apex 
 
 ## Layout
 
-```
+```text
 agentforce-d360-analyze/
 ├── SKILL.md                               ← runtime-parsed entry point (TRIGGER / DO NOT TRIGGER, flags, prompts)
 ├── README.md                              ← this file

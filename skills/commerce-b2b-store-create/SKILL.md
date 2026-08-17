@@ -1,7 +1,6 @@
 ---
 name: commerce-b2b-store-create
 description: "Interactive workflow to create Commerce B2B Stores and retrieve storefront metadata. Use when users want to: create B2B Commerce stores, build Commerce storefronts, set up B2B stores from Vibes, retrieve Commerce metadata, deploy Commerce experiences, work with DigitalExperienceBundle for Commerce."
-compatibility: "Requires Commerce licenses, Experience Cloud, Salesforce CLI"
 metadata:
   version: "1.0"
   minApiVersion: "56.0"
@@ -101,7 +100,7 @@ sf org list metadata --metadata-type DigitalExperienceConfig --json
 - Explain naming (underscores, number suffixes)
 
 **Example output:**
-```
+```text
 Available Digital Experience sites:
 1. My_B2B_Store1
 2. Partner_Portal
@@ -134,7 +133,7 @@ sf project retrieve start -m DigitalExperienceBundle:site/<selected-store-name> 
 - List retrieved directory structure
 
 **Expected output:**
-```
+```text
 Retrieved: force-app/main/default/digitalExperiences/site/My_B2B_Store1/
 ├── My_B2B_Store1.digitalExperience-meta.xml
 ├── sfdc_cms__view/ (home, current_cart, detail_*, list_*, etc.)
@@ -149,7 +148,7 @@ Retrieved: force-app/main/default/digitalExperiences/site/My_B2B_Store1/
 
 **Agent provides:**
 
-✅ **Metadata retrieved successfully!**
+**Metadata retrieved successfully!**
 
 **Next steps:**
 - Customize with custom LWCs or branding changes

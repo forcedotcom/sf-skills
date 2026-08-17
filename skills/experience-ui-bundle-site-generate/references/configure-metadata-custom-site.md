@@ -4,7 +4,7 @@
 This configuration file creates a **net-new, default** CustomSite metadata record for a Digital Experience React Site. It is not intended to edit or modify an existing CustomSite record. Use this template only when provisioning a brand-new React site.
 
 ## File Location
-```
+```text
 sites/{siteName}.site-meta.xml
 ```
 
