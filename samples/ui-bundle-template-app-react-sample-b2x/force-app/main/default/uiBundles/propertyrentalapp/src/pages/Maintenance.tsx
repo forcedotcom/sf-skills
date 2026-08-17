@@ -58,6 +58,7 @@ const PAGINATION_CONFIG: PaginationConfig = {
 function MaintenanceSkeleton() {
 	return (
 		<div className="mx-auto max-w-[900px]" role="status">
+			<h1 className="sr-only">Maintenance</h1>
 			<Card className="mb-6 rounded-2xl shadow-md">
 				<CardHeader>
 					<Skeleton className="h-6 w-1/3" />
@@ -173,8 +174,8 @@ export default function Maintenance() {
 				setPriority("Standard");
 				setDateRequested(new Date().toISOString().slice(0, 10));
 				setRefreshCounter((c) => c + 1);
-			} catch (err) {
-				setSubmitError(err instanceof Error ? err.message : "Failed to submit request");
+			} catch {
+				setSubmitError("Something went wrong. Please try again later.");
 			} finally {
 				setSubmitting(false);
 			}
@@ -186,9 +187,12 @@ export default function Maintenance() {
 
 	return (
 		<div className="mx-auto max-w-[900px]">
+			<h1 className="sr-only">Maintenance</h1>
 			<Card className="mb-6 rounded-2xl shadow-md">
 				<CardHeader>
-					<CardTitle className="text-2xl text-primary">New maintenance request</CardTitle>
+					<CardTitle role="heading" aria-level={2} className="text-2xl text-primary">
+						New maintenance request
+					</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<form onSubmit={handleSubmit} className="space-y-4">
@@ -214,7 +218,8 @@ export default function Maintenance() {
 						)}
 						{tenantProperties.length === 1 && selectedTenant && (
 							<div className="space-y-2">
-								<Label>Property</Label>
+								{/* Read-only value, not a form control — a <label> here would have nothing to label. */}
+								<p className="text-sm font-medium leading-none">Property</p>
 								<p className="text-sm text-muted-foreground">
 									{selectedTenant.Property__r?.Address__c?.value ??
 										selectedTenant.Property__r?.Name?.value}
@@ -302,11 +307,11 @@ export default function Maintenance() {
 						</div>
 						{submitError && (
 							<p className="text-sm text-destructive" role="alert">
-								Something went wrong. Please try again later.
+								{submitError}
 							</p>
 						)}
 						{submitSuccess && (
-							<p className="text-sm text-green-600" role="status">
+							<p className="text-sm text-green-700" role="status">
 								Request submitted. It will appear in the list below.
 							</p>
 						)}

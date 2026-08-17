@@ -29,14 +29,21 @@ export default function MaintenanceRequestList({
 					onClose={() => setSelectedRequest(null)}
 				/>
 			)}
-			{loading && <SkeletonListRows count={skeletonCount} />}
+			{loading && (
+				<div role="status" aria-live="polite" aria-atomic="true">
+					<SkeletonListRows count={skeletonCount} />
+					<span className="sr-only">Loading maintenance requests…</span>
+				</div>
+			)}
 			{error && (
 				<p className="py-4 text-sm text-destructive" role="alert">
 					{error}
 				</p>
 			)}
 			{!loading && !error && requests.length === 0 && (
-				<div className="py-8 text-center text-gray-500">{emptyMessage}</div>
+				<div role="status" className="py-8 text-center text-gray-500">
+					{emptyMessage}
+				</div>
 			)}
 			{!loading &&
 				!error &&

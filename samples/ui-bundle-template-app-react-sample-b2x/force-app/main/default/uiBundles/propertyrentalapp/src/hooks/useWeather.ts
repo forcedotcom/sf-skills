@@ -15,7 +15,7 @@ const IMPERIAL_REGIONS = new Set(["US", "LR", "MM"]);
 const MIN_TODAY_TILES = 3;
 
 /** WMO weather codes → short label (Open-Meteo) */
-const WEATHER_LABELS: Record<number, string> = {
+export const WEATHER_LABELS: Record<number, string> = {
 	0: "Clear",
 	1: "Mainly clear",
 	2: "Partly cloudy",

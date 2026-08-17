@@ -1,4 +1,4 @@
-import { useState, useCallback, type SubmitEvent } from "react";
+import { useState, useCallback, useEffect, useRef, type SubmitEvent } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,23 +13,31 @@ import { useAsyncData } from "@/hooks/useAsyncData";
 import type { UserInfo } from "@/api/leads/leadApi";
 
 function SuccessCard() {
+	const containerRef = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		containerRef.current?.focus();
+	}, []);
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle className="text-xl">Message sent</CardTitle>
-			</CardHeader>
-			<CardContent className="space-y-4">
-				<p className="text-muted-foreground">
-					Thank you for reaching out. We've received your message and will get back to you soon.
-				</p>
-				<Button asChild variant="outline">
-					<Link to="/">Back to Home</Link>
-				</Button>
-				<Button asChild>
-					<Link to="/contact">Send another message</Link>
-				</Button>
-			</CardContent>
-		</Card>
+		<div ref={containerRef} tabIndex={-1} role="status" aria-live="polite" className="outline-none">
+			<Card>
+				<CardHeader>
+					<CardTitle role="heading" aria-level={2} className="text-xl">
+						Message sent
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<p className="text-muted-foreground">
+						Thank you for reaching out. We've received your message and will get back to you soon.
+					</p>
+					<Button asChild variant="outline">
+						<Link to="/">Back to Home</Link>
+					</Button>
+					<Button asChild>
+						<Link to="/contact">Send another message</Link>
+					</Button>
+				</CardContent>
+			</Card>
+		</div>
 	);
 }
 
@@ -60,13 +68,19 @@ function ContactForm({
 	return (
 		<Card className="relative">
 			{loading && (
-				<div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-muted/60">
-					<Loader2 className="size-8 animate-spin text-muted-foreground" />
+				<div
+					role="status"
+					aria-live="polite"
+					className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-muted/60"
+				>
+					<Loader2 className="size-8 animate-spin text-muted-foreground" aria-hidden />
 					<span className="sr-only">Loading contact form…</span>
 				</div>
 			)}
 			<CardHeader>
-				<CardTitle className="text-lg">Send a message</CardTitle>
+				<CardTitle role="heading" aria-level={2} className="text-lg">
+					Send a message
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<form
@@ -148,11 +162,11 @@ function ContactForm({
 						/>
 					</div>
 					{submitError && (
-						<p className="text-sm text-destructive">
+						<p className="text-sm text-destructive" role="alert">
 							Something went wrong. Please try again later.
 						</p>
 					)}
-					<Button type="submit" disabled={submitting} className="bg-teal-600 hover:bg-teal-700">
+					<Button type="submit" disabled={submitting} className="bg-teal-700 hover:bg-teal-800">
 						{submitting ? "Sending…" : "Send message"}
 					</Button>
 				</form>

@@ -4,6 +4,7 @@
  */
 export const PATHS = {
 	HOME: "/",
+	SEARCH: "/search",
 	PROPERTIES: "/properties",
 	MAINTENANCE_REQUESTS: "/maintenance/requests",
 	MAINTENANCE_WORKERS: "/maintenance/workers",

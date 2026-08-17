@@ -2,7 +2,7 @@
  * Stacked property listing card: image on top, details below. Single price + bedrooms, amenity list, Apply button.
  * No phone or secondary price. Virtual Tours / Videos pills on image.
  */
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { useCallback, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -74,16 +74,6 @@ export default function PropertyListingCard({
 		navigate(detailPath);
 	}, [navigate, detailPath]);
 
-	const handleKeyDown = useCallback(
-		(e: React.KeyboardEvent) => {
-			if (e.key === "Enter" || e.key === " ") {
-				e.preventDefault();
-				handleClick();
-			}
-		},
-		[handleClick],
-	);
-
 	if (loading) {
 		return <PropertyListingCardSkeleton />;
 	}
@@ -94,14 +84,15 @@ export default function PropertyListingCard({
 		.map((s) => s.trim())
 		.filter(Boolean);
 
+	/*
+	 * The card is a pointer-only shortcut to the detail page; the keyboard/AT path is the
+	 * heading link below. Making the whole card `role="button"` would nest the Apply
+	 * button inside an interactive control (axe `nested-interactive`) and swallow its name.
+	 */
 	return (
 		<article
 			className="flex h-full min-h-0 cursor-pointer flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-200 hover:shadow-md focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
 			onClick={handleClick}
-			onKeyDown={handleKeyDown}
-			role="button"
-			tabIndex={0}
-			aria-label={`View details for ${name}`}
 		>
 			{/* Image on top, full width */}
 			<div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-t-2xl bg-muted">
@@ -126,7 +117,15 @@ export default function PropertyListingCard({
 			<div className="flex min-h-0 flex-1 flex-col justify-between p-3">
 				<div className="min-h-0">
 					<div className="mb-1.5">
-						<h3 className="text-2xl font-semibold text-foreground">{name}</h3>
+						<h3 className="text-2xl font-semibold text-foreground">
+							<Link
+								to={detailPath}
+								onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}
+								className="no-underline hover:underline focus-visible:outline-none"
+							>
+								{name}
+							</Link>
+						</h3>
 						{displayAddress && (
 							<p className="truncate text-sm text-muted-foreground">{displayAddress}</p>
 						)}

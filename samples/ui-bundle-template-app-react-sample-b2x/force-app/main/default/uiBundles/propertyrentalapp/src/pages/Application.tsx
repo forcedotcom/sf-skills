@@ -1,5 +1,12 @@
 import { useSearchParams, Link } from "react-router";
-import { useCallback, useState, type ChangeEvent, type SubmitEvent } from "react";
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	type ChangeEvent,
+	type SubmitEvent,
+} from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
@@ -10,10 +17,67 @@ import { fetchPropertyDetailById } from "@/api/properties/propertyDetailGraphQL"
 import { createApplicationRecord } from "@/api/applications/applicationApi";
 import { useAuth } from "@/features/authentication/context/AuthContext";
 import { useAsyncData } from "@/hooks/useAsyncData";
+import { fetchUserContact } from "@/features/authentication/api/userProfileApi";
+import { createRecord } from "@salesforce/ui-bundle/api";
+import { executeGraphQL } from "@/api/graphqlClient.js";
+import GET_USER_DETAILS_QUERY from "@/api/applications/query/getUserDetails.graphql?raw";
+
+interface UserDetailsQueryResult {
+	uiapi?: {
+		currentUser?: {
+			Id?: string;
+			FirstName?: { value?: string };
+			LastName?: { value?: string };
+			Email?: { value?: string };
+		};
+	};
+}
+
+async function createContactForUser(): Promise<string | null> {
+	try {
+		// Fetch current user details
+		const userData = (await executeGraphQL(GET_USER_DETAILS_QUERY)) as UserDetailsQueryResult;
+
+		const currentUser = userData?.uiapi?.currentUser;
+		if (!currentUser) {
+			console.warn("Could not fetch current user details for Contact creation");
+			return null;
+		}
+
+		const firstName = currentUser.FirstName?.value || "Test Property Rental App";
+		const lastName = currentUser.LastName?.value || "User";
+		const email = currentUser.Email?.value || null;
+
+		// Create Contact record
+		const contactFields: Record<string, unknown> = {
+			FirstName: firstName,
+			LastName: lastName,
+		};
+
+		if (email) {
+			contactFields.Email = email;
+		}
+
+		const result = (await createRecord("Contact", contactFields)) as unknown as Record<
+			string,
+			unknown
+		>;
+		const contactId =
+			typeof result.id === "string"
+				? result.id
+				: ((result.fields as Record<string, { value?: string }> | undefined)?.Id?.value ?? null);
+
+		return contactId;
+	} catch (error) {
+		console.error("Failed to create Contact for user:", error);
+		return null;
+	}
+}
 
 function ApplicationSkeleton() {
 	return (
 		<div className="mx-auto max-w-[900px]" role="status">
+			<h1 className="sr-only">Apply for a property</h1>
 			<Skeleton className="mb-4 h-4 w-28" />
 
 			<Card className="mb-6 flex gap-4 rounded-2xl border border-border p-6 shadow-sm">
@@ -45,6 +109,14 @@ export default function Application() {
 	const [searchParams] = useSearchParams();
 	const propertyId = searchParams.get("propertyId") ?? "";
 
+	const { data: contactId } = useAsyncData(async () => {
+		if (!user?.id) return null;
+		const contactData = await fetchUserContact<{ ContactId?: string }>(user.id);
+		if (contactData?.ContactId) return contactData.ContactId;
+		// No Contact found — create one from current user details (internal/admin users)
+		return createContactForUser();
+	}, [user?.id]);
+
 	const {
 		data: property,
 		loading,
@@ -71,6 +143,11 @@ export default function Application() {
 	const [submitting, setSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [submittedName, setSubmittedName] = useState<string | null>(null);
+	const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+	useEffect(() => {
+		if (submittedName) successHeadingRef.current?.focus();
+	}, [submittedName]);
 
 	const handleSubmit = useCallback(
 		async (e: SubmitEvent<HTMLFormElement>) => {
@@ -78,10 +155,14 @@ export default function Application() {
 			setSubmitError(null);
 			setSubmitting(true);
 			try {
+				if (!contactId) {
+					throw new Error("No Contact ID available for application.");
+				}
+
 				const result = await createApplicationRecord({
 					Property__c: propertyId || null,
 					Status__c: "Submitted",
-					User__c: user?.id || "",
+					User__c: contactId,
 					Start_Date__c: moveInDate.trim() || null,
 					Employment__c: employment.trim() || null,
 					References__c: references.trim() || null,
@@ -93,7 +174,7 @@ export default function Application() {
 				setSubmitting(false);
 			}
 		},
-		[propertyId, moveInDate, employment, references, user],
+		[propertyId, contactId, moveInDate, employment, references, user?.id],
 	);
 
 	if (loading) {
@@ -102,9 +183,16 @@ export default function Application() {
 
 	if (submittedName) {
 		return (
-			<div className="mx-auto max-w-[900px]">
+			<div className="mx-auto max-w-[900px]" role="status">
+				<h1 className="sr-only">Application submitted</h1>
 				<Card className="mb-6 rounded-2xl border border-border p-6 shadow-sm">
-					<h2 className="mb-2 text-2xl font-semibold text-foreground">Application submitted</h2>
+					<h2
+						ref={successHeadingRef}
+						tabIndex={-1}
+						className="mb-2 text-2xl font-semibold text-foreground"
+					>
+						Application submitted
+					</h2>
 					<p className="text-sm text-muted-foreground">
 						Your application
 						{propertyName ? (
@@ -140,6 +228,7 @@ export default function Application() {
 
 	return (
 		<div className="mx-auto max-w-[900px]">
+			<h1 className="sr-only">Apply for a property</h1>
 			<div className="mb-4">
 				<Link
 					to={propertyId ? `/property/${propertyId}` : "/properties"}
@@ -158,7 +247,7 @@ export default function Application() {
 				</div>
 				<div className="min-w-0 flex-1">
 					<h2 className="mb-1.5 text-2xl font-semibold text-foreground">
-						{propertyName ?? "Apply for a property"}
+						{propertyName ?? "Application details"}
 					</h2>
 					<p className="text-sm text-muted-foreground">
 						{propertyAddress ??
@@ -169,7 +258,7 @@ export default function Application() {
 							))}
 					</p>
 					{loadError && (
-						<p className="mt-2 text-sm text-destructive">
+						<p className="mt-2 text-sm text-destructive" role="alert">
 							Something went wrong. Please try again later.
 						</p>
 					)}
@@ -211,7 +300,7 @@ export default function Application() {
 							/>
 						</div>
 						{submitError && (
-							<p className="mb-4 text-sm text-destructive">
+							<p className="mb-4 text-sm text-destructive" role="alert">
 								Something went wrong. Please try again later.
 							</p>
 						)}

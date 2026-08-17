@@ -50,10 +50,10 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests, lo
 					See All
 				</Button>
 			</div>
-			<div className="space-y-4">
+			<ul className="space-y-4">
 				{loading ? (
 					Array.from({ length: 5 }, (_, i) => (
-						<div key={i} className="flex items-center p-4 bg-gray-50 rounded-lg">
+						<li key={i} className="flex items-center p-4 bg-gray-50 rounded-lg">
 							<Skeleton className="w-12 h-12 rounded-lg shrink-0" />
 							<div className="ml-4 w-64 shrink-0 space-y-2">
 								<Skeleton className="h-4 w-40" />
@@ -66,10 +66,10 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests, lo
 								<Skeleton className="w-8 h-8 rounded-full shrink-0" />
 								<Skeleton className="h-4 w-24" />
 							</div>
-						</div>
+						</li>
 					))
 				) : requests.length === 0 ? (
-					<div className="text-center py-8 text-gray-500">No maintenance requests</div>
+					<li className="text-center py-8 text-gray-500">No maintenance requests</li>
 				) : (
 					requests.slice(0, 5).map((request) => {
 						const issueType = request.Type__c?.value || "General";
@@ -78,7 +78,7 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests, lo
 						const tenantName = request.User__r?.Name?.value || "Unknown";
 
 						return (
-							<div
+							<li
 								key={request.Id}
 								className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
 							>
@@ -119,11 +119,11 @@ export const MaintenanceTable: React.FC<MaintenanceTableProps> = ({ requests, lo
 									</div>
 									<span className="text-sm text-gray-700 font-medium truncate">{tenantName}</span>
 								</div>
-							</div>
+							</li>
 						);
 					})
 				)}
-			</div>
+			</ul>
 		</Card>
 	);
 };

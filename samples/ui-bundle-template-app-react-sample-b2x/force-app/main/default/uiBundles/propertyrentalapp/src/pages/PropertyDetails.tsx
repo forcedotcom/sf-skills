@@ -39,6 +39,7 @@ function formatDate(val: string | null): string {
 function PropertyDetailsSkeleton() {
 	return (
 		<div className="mx-auto max-w-[900px]" role="status">
+			<h1 className="sr-only">Property details</h1>
 			<Skeleton className="mb-4 h-4 w-32" />
 
 			<div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -141,6 +142,7 @@ export default function PropertyDetails() {
 	if (error) {
 		return (
 			<div className="mx-auto max-w-[900px]">
+				<h1 className="sr-only">Property details</h1>
 				<div className="mb-4">
 					<Link to="/properties" className="text-sm text-primary no-underline hover:underline">
 						← Back to listings
@@ -148,7 +150,9 @@ export default function PropertyDetails() {
 				</div>
 				<Card className="rounded-2xl border border-border shadow-sm">
 					<CardContent className="pt-6">
-						<p className="text-destructive">Something went wrong. Please try again later.</p>
+						<p className="text-destructive" role="alert">
+							Something went wrong. Please try again later.
+						</p>
 					</CardContent>
 				</Card>
 			</div>
@@ -158,6 +162,7 @@ export default function PropertyDetails() {
 	if (!property && id) {
 		return (
 			<div className="mx-auto max-w-[900px]">
+				<h1 className="sr-only">Property details</h1>
 				<div className="mb-4">
 					<Link to="/properties" className="text-sm text-primary no-underline hover:underline">
 						← Back to listings
@@ -165,7 +170,9 @@ export default function PropertyDetails() {
 				</div>
 				<Card className="rounded-2xl border border-border shadow-sm">
 					<CardContent className="pt-6">
-						<p className="text-destructive">Listing not found.</p>
+						<p className="text-destructive" role="status">
+							Listing not found.
+						</p>
 					</CardContent>
 				</Card>
 			</div>
@@ -253,25 +260,25 @@ export default function PropertyDetails() {
 							<span className="text-xl font-semibold text-primary-foreground">
 								{property?.Bedrooms__c?.value ?? "—"}
 							</span>
-							<span className="text-xs text-primary-foreground/90">Bedrooms</span>
+							<span className="text-xs text-primary-foreground">Bedrooms</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
 								{property?.Bathrooms__c?.value ?? "—"}
 							</span>
-							<span className="text-xs text-primary-foreground/90">Baths</span>
+							<span className="text-xs text-primary-foreground">Baths</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
 								{property?.Sq_Ft__c?.value ?? "—"}
 							</span>
-							<span className="text-xs text-primary-foreground/90">Square Feet</span>
+							<span className="text-xs text-primary-foreground">Square Feet</span>
 						</div>
 						<div className="flex flex-col items-center justify-center rounded-xl bg-primary px-4 py-3 text-center">
 							<span className="text-xl font-semibold text-primary-foreground">
 								{listing?.Listing_Status__c?.value ?? "Now"}
 							</span>
-							<span className="text-xs text-primary-foreground/90">Available</span>
+							<span className="text-xs text-primary-foreground">Available</span>
 						</div>
 					</div>
 					{property?.Type__c?.value && (
@@ -287,7 +294,9 @@ export default function PropertyDetails() {
 			{costs.length > 0 && (
 				<Card className="mb-4 rounded-2xl border border-border shadow-sm">
 					<CardHeader>
-						<CardTitle className="text-base font-semibold">Related costs</CardTitle>
+						<CardTitle role="heading" aria-level={2} className="text-base font-semibold">
+							Related costs
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ul className="space-y-2">
@@ -322,7 +331,9 @@ export default function PropertyDetails() {
 			{features.length > 0 && (
 				<Card className="mb-4 rounded-2xl border border-border shadow-sm">
 					<CardHeader>
-						<CardTitle className="text-base font-semibold">Features & amenities</CardTitle>
+						<CardTitle role="heading" aria-level={2} className="text-base font-semibold">
+							Features & amenities
+						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex flex-wrap gap-1.5">

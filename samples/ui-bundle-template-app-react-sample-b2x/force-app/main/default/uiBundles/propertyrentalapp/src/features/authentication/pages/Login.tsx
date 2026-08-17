@@ -8,6 +8,7 @@ import { createDataSDK } from "@salesforce/platform-sdk";
 import { ROUTES } from "../authenticationConfig";
 import { emailSchema, getStartUrl, type AuthResponse } from "../authHelpers";
 import { ApiError, handleApiResponse } from "../utils/helpers";
+import { SocialLogin } from "../components/SocialLogin";
 
 const loginSchema = z.object({
 	email: emailSchema,
@@ -106,6 +107,7 @@ export default function Login() {
 						)}
 					</form.AppField>
 				</AuthForm>
+				<SocialLogin />
 			</form.AppForm>
 		</CenteredPageLayout>
 	);

@@ -14,6 +14,7 @@ export default function Dashboard() {
 
 	return (
 		<div className="mx-auto flex max-w-[1100px] flex-col gap-6 lg:flex-row">
+			<h1 className="sr-only">Dashboard</h1>
 			<div className="min-w-0 flex-1">
 				<Card className="border-gray-200 p-6 shadow-sm">
 					<div className="mb-6 flex items-center justify-between">

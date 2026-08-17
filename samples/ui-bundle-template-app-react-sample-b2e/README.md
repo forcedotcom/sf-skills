@@ -59,13 +59,16 @@ Two npm scripts at the project root streamline getting started and deployment.
 
 **`npm run sf-project-setup`** — installs the UI Bundle dependencies, builds the app, and starts the dev server (see [Local Development](#local-development)).
 
-**`npm run setup`** — automates the full setup: login, deploy metadata, assign permission sets, import sample data, fetch the GraphQL schema, run codegen, build the UI Bundle, and optionally launch the dev server:
+**`npm run setup`** — automates the full setup: logs in to the org (a required precondition, auto-skipped if already connected), deploys metadata, assigns permission sets, imports sample data, fetches the GraphQL schema, runs codegen, and builds the UI Bundle. It no longer starts the dev server — run `npm run dev:preview` for that:
 
 ```bash
+# Install project dependencies first (required before running setup)
+npm install
+
 npm run setup -- --target-org <alias>
 ```
 
-Replace `<alias>` with your target org alias or username. Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
+Replace `<alias>` with your target org alias or username. When `--target-org` is omitted, setup uses your default org or (in an interactive terminal) prompts you to pick from your authenticated orgs. Running without flags presents an interactive step picker. Pass `--yes` to skip it and run all steps immediately:
 
 ```bash
 npm run setup -- --target-org <alias> --yes
@@ -75,16 +78,17 @@ npm run setup -- --target-org <alias> --yes
 
 | Option                    | Description                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------------ |
-| `--skip-login`            | Skip browser login (auto-skipped if org is already connected)                        |
+| `--target-org <alias>`    | Target org alias or username. If omitted, uses the default org or prompts you        |
 | `--skip-deploy`           | Skip the metadata deploy step                                                        |
 | `--skip-permset`          | Skip permission set assignment                                                       |
 | `--skip-data`             | Skip data preparation and import                                                     |
 | `--skip-graphql`          | Skip GraphQL schema fetch and codegen                                                |
 | `--skip-ui-bundle-build`  | Skip `npm install` and UI Bundle build                                               |
-| `--skip-dev`              | Do not launch the dev server at the end                                              |
 | `--permset-name <name>`   | Assign only a specific permission set (repeatable). Default: all sets in the project |
 | `--ui-bundle-name <name>` | UI Bundle folder name under `uiBundles/` (default: auto-detected)                    |
 | `-y, --yes`               | Skip interactive step picker and run all enabled steps immediately                   |
+
+> Login is a required precondition, not a toggleable step, so there is no `--skip-login`. The dev server is no longer part of setup, so there is no `--skip-dev`. Both flags are accepted but ignored for backward compatibility. To start the dev server, run `npm run dev:preview`.
 
 For a full list of options:
 
@@ -117,12 +121,22 @@ The `npm run setup` script reads `scripts/org-setup.config.json` to control perm
 
 Each assignment's `assignee` value controls who it is assigned to:
 
-| Value            | Behavior                                                                          |
-| ---------------- | --------------------------------------------------------------------------------- |
-| `"currentUser"`  | Assigns to the user running the script (resolved via `sf org display`)            |
-| `"skip"`         | Explicitly skips this permission set                                              |
-| `"guestUser"`    | Auto-resolves the site's guest user (requires `siteName` field on the same entry) |
-| `"user@org.com"` | Assigns to a specific user by username                                            |
+| Value           | Behavior                                                                                                                                                                |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `"currentUser"` | Assigns to the user running the script (resolved via `sf org display`)                                                                                                  |
+| `"guestUser"`   | Auto-resolves the site's guest user. The site is derived from the single `networks/<siteName>.network-meta.xml` the app ships — it is **not** configured per assignment |
+| `"skip"`        | Explicitly skips this permission set                                                                                                                                    |
+
+`assignee` is a closed set — only the three values above are accepted. Arbitrary usernames are not supported.
+
+#### Validation
+
+`org-setup.config.json` is validated against a shared schema at **two moments**, so a malformed config can never silently misbehave:
+
+- **Build / CI time** — every shipped config is validated; an invalid one fails the build.
+- **Setup runtime** — `npm run setup` validates the config before any step runs and exits early with a clear error if it's invalid.
+
+Validation is **strict**: unknown keys (e.g. a `siteName` on an assignment, or a `permsetAssignment` typo) are rejected rather than silently ignored.
 
 ---
 

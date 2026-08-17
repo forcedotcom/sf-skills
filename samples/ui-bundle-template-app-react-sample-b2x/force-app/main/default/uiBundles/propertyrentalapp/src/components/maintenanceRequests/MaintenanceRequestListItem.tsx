@@ -23,6 +23,16 @@ export default function MaintenanceRequestListItem({
 		: (request.Name?.value ?? "—");
 	const title = request.Description__c?.value?.trim() || request.Name?.value?.trim() || "—";
 
+	const rawStatus = request.Status__c?.value ?? null;
+	const statusLabel =
+		rawStatus === "New"
+			? "Needs Action"
+			: rawStatus === "In Progress"
+				? "In Progress"
+				: rawStatus === "Resolved"
+					? "Resolved"
+					: rawStatus;
+
 	const handleClick = useCallback(() => {
 		onClick?.(request);
 	}, [onClick, request]);
@@ -48,7 +58,14 @@ export default function MaintenanceRequestListItem({
 			tabIndex={isClickable ? 0 : undefined}
 			aria-label={
 				isClickable
-					? `View details for ${title !== "—" ? title : "maintenance request"}`
+					? [
+							`View details for ${title !== "—" ? title : "maintenance request"}`,
+							issueType,
+							addressFirstPart !== "—" ? addressFirstPart : null,
+							statusLabel ? `status ${statusLabel}` : null,
+						]
+							.filter(Boolean)
+							.join(", ")
 					: undefined
 			}
 		>

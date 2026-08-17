@@ -1,46 +1,24 @@
-import SEARCH_QUERY from "./query/searchMaintenanceWorkers.graphql?raw";
-import DISTINCT_TYPE_QUERY from "./query/distinctMaintenanceWorkerEmploymentType.graphql?raw";
-import {
-	searchObjects,
-	fetchDistinctValues,
-	type ObjectSearchOptions,
-	type PicklistOption,
-} from "../../features/object-search/api/objectSearchService";
-import type {
-	SearchMaintenanceWorkersQuery,
-	SearchMaintenanceWorkersQueryVariables,
-	DistinctMaintenanceWorkerEmploymentTypeQuery,
-} from "../graphql-operations-types.js";
+/**
+ * Maintenance-worker search result types.
+ *
+ * Search itself is now driven by feature-react-search (see `lib/searchConfig.ts`),
+ * which builds and runs its GraphQL at runtime — there is no generated
+ * `SearchMaintenanceWorkersQuery` operation type to derive from. This module
+ * declares the node shape that the result card and detail modal read, mirroring
+ * the Salesforce UI API field-wrapper shape (`{ value, displayValue }`).
+ */
 
-export type MaintenanceWorkerSearchResult = NonNullable<
-	SearchMaintenanceWorkersQuery["uiapi"]["query"]["Maintenance_Worker__c"]
->;
+/** A Salesforce UI API scalar field wrapper. */
+type Field<T> = { value?: T | null; displayValue?: string | null } | null;
 
-export type MaintenanceWorkerSearchNode = NonNullable<
-	NonNullable<NonNullable<MaintenanceWorkerSearchResult["edges"]>[number]>["node"]
->;
-
-export type MaintenanceWorkerSearchOptions = ObjectSearchOptions<
-	SearchMaintenanceWorkersQueryVariables["where"],
-	SearchMaintenanceWorkersQueryVariables["orderBy"]
->;
-
-export type { PicklistOption };
-
-export async function searchMaintenanceWorkers(
-	options: MaintenanceWorkerSearchOptions = {},
-): Promise<MaintenanceWorkerSearchResult> {
-	return searchObjects<
-		MaintenanceWorkerSearchResult,
-		SearchMaintenanceWorkersQuery,
-		SearchMaintenanceWorkersQueryVariables
-	>(SEARCH_QUERY, "Maintenance_Worker__c", options);
-}
-
-export async function fetchDistinctMaintenanceWorkerType(): Promise<PicklistOption[]> {
-	return fetchDistinctValues<DistinctMaintenanceWorkerEmploymentTypeQuery>(
-		DISTINCT_TYPE_QUERY,
-		"Maintenance_Worker__c",
-		"Employment_Type__c",
-	);
+export interface MaintenanceWorkerSearchNode {
+	Id: string;
+	Name?: Field<string>;
+	Employment_Type__c?: Field<string>;
+	Type__c?: Field<string>;
+	Phone__c?: Field<string>;
+	Location__c?: Field<string>;
+	Rating__c?: Field<number>;
+	Hourly_Rate__c?: Field<number>;
+	IsActive__c?: Field<boolean>;
 }

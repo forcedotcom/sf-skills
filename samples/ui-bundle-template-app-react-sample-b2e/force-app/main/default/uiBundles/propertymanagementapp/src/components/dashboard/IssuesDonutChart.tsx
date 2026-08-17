@@ -2,7 +2,6 @@ import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Card } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
-import { MoreVertical } from "lucide-react";
 
 interface ChartData {
 	name: string;
@@ -45,13 +44,19 @@ export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data, loadin
 	const maxValue = data.length > 0 ? Math.max(...data.map((item) => item.value)) : 0;
 	const mainPercentage = total > 0 ? Math.round((maxValue / total) * 100) : 0;
 
+	// Recharts renders each sector as an <svg><path role="img">, but arbitrary ARIA
+	// props on <Cell> are not reliably forwarded to that path. Instead of labelling
+	// each slice, expose the whole chart as a single labelled image summarizing the
+	// data, and hide the decorative SVG internals from assistive technology.
+	const chartSummary =
+		total > 0
+			? `Top maintenance issues: ${data
+					.map((item) => `${item.name} ${Math.round((item.value / total) * 100)}%`)
+					.join(", ")}.`
+			: "Top maintenance issues: no data available.";
+
 	return (
 		<Card className="p-4 border-gray-200 shadow-sm flex flex-col relative">
-			{/* Three-dot menu */}
-			<button className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-md transition-colors z-10">
-				<MoreVertical className="w-4 h-4 text-gray-400" />
-			</button>
-
 			<h3 className="text-sm font-medium text-primary-purple mb-2 uppercase tracking-wide">
 				Top Maintenance Issues
 			</h3>
@@ -71,34 +76,41 @@ export const IssuesDonutChart: React.FC<IssuesDonutChartProps> = ({ data, loadin
 				</>
 			) : (
 				<>
-					<div className="relative flex items-center justify-center">
-						<ResponsiveContainer width="100%" height={300}>
-							<PieChart>
-								<Pie
-									data={data}
-									cx="50%"
-									cy="50%"
-									innerRadius={70}
-									outerRadius={110}
-									paddingAngle={2}
-									dataKey="value"
-								>
-									{data.map((entry, index) => (
-										<Cell key={`cell-${index}`} fill={entry.color} />
-									))}
-								</Pie>
-								<Tooltip
-									content={(props) => (
-										<CustomTooltip
-											active={props.active}
-											payload={props.payload as CustomTooltipProps["payload"]}
-											total={total}
-										/>
-									)}
-									wrapperStyle={{ zIndex: 1000 }}
-								/>
-							</PieChart>
-						</ResponsiveContainer>
+					<div
+						className="relative flex items-center justify-center"
+						role="img"
+						aria-label={chartSummary}
+					>
+						<div aria-hidden="true" className="w-full">
+							<ResponsiveContainer width="100%" height={300}>
+								<PieChart>
+									<Pie
+										data={data}
+										cx="50%"
+										cy="50%"
+										innerRadius={70}
+										outerRadius={110}
+										paddingAngle={2}
+										dataKey="value"
+										rootTabIndex={-1}
+									>
+										{data.map((entry, index) => (
+											<Cell key={`cell-${index}`} fill={entry.color} />
+										))}
+									</Pie>
+									<Tooltip
+										content={(props) => (
+											<CustomTooltip
+												active={props.active}
+												payload={props.payload as CustomTooltipProps["payload"]}
+												total={total}
+											/>
+										)}
+										wrapperStyle={{ zIndex: 1000 }}
+									/>
+								</PieChart>
+							</ResponsiveContainer>
+						</div>
 						{/* Center text */}
 						<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 							<div className="text-center">

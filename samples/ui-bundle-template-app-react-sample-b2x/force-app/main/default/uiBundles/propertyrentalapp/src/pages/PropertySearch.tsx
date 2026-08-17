@@ -339,6 +339,7 @@ export default function PropertySearch() {
 
 	return (
 		<div className="flex h-[calc(100vh-4rem)] min-h-[500px] flex-col">
+			<h1 className="sr-only">Property Search</h1>
 			<PropertySearchFilters
 				searchQuery={searchQuery}
 				onSearchQueryChange={setSearchQuery}
@@ -360,7 +361,8 @@ export default function PropertySearch() {
 			{/* Main: map 2/3, list 1/3 */}
 			<div className="flex min-h-0 flex-1 flex-col lg:flex-row">
 				{/* Map – 2/3 on desktop */}
-				<div className="isolate h-64 shrink-0 lg:h-full lg:min-h-0 lg:w-2/3" aria-label="Map">
+				{/* Sizing wrapper only — PropertyMap renders the labelled map region. */}
+				<div className="isolate h-64 shrink-0 lg:h-full lg:min-h-0 lg:w-2/3">
 					<PropertyMap
 						center={MAP_CENTER_FALLBACK}
 						zoom={mapMarkers.length > 0 ? MAP_ZOOM_WITH_MARKERS : MAP_ZOOM_DEFAULT}
@@ -379,7 +381,12 @@ export default function PropertySearch() {
 							{searchQuery.trim() ? ` matching "${searchQuery.trim()}"` : ""}
 						</h2>
 						<div className="flex flex-wrap items-center gap-2">
-							<div className="text-sm text-muted-foreground">
+							<div
+								role="status"
+								aria-live="polite"
+								aria-atomic="true"
+								className="text-sm text-muted-foreground"
+							>
 								{apiUnavailable ? (
 									"Placeholder (API unavailable)"
 								) : resultsLoading ? (
@@ -401,7 +408,12 @@ export default function PropertySearch() {
 							)}
 						</div>
 					</div>
-					<div className="flex-1 overflow-y-auto p-4">
+					<div
+						className="flex-1 overflow-y-auto p-4"
+						tabIndex={0}
+						role="region"
+						aria-label="Property listings"
+					>
 						{apiUnavailable ? (
 							<PropertySearchPlaceholder message="Search is temporarily unavailable." />
 						) : resultsLoading ? (
@@ -411,12 +423,12 @@ export default function PropertySearch() {
 								))}
 							</div>
 						) : results.length === 0 ? (
-							<div className="py-12 text-center">
+							<div role="status" className="py-12 text-center">
 								<p className="mb-2 font-medium">No results found</p>
 								<p className="text-sm text-muted-foreground">Try adjusting search or filters</p>
 							</div>
 						) : visibleResults.length === 0 && mapBounds != null ? (
-							<div className="py-12 text-center">
+							<div role="status" className="py-12 text-center">
 								<p className="mb-2 font-medium">No listings in this map area</p>
 								<p className="text-sm text-muted-foreground">
 									Pan or zoom to see results, or clear the map filter

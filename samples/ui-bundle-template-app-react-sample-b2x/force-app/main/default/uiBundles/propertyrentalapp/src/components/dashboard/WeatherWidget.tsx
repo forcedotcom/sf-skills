@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useWeather, type WeatherData, type WeatherHour } from "@/hooks/useWeather";
+import { useWeather, WEATHER_LABELS, type WeatherData, type WeatherHour } from "@/hooks/useWeather";
 import {
 	Sun,
 	Cloud,
@@ -23,6 +23,10 @@ const FORECAST_TABS: { key: ForecastTab; label: string }[] = [
 	{ key: "tomorrow", label: "Tomorrow" },
 	{ key: "next3days", label: "Next 3 Days" },
 ];
+
+/** Tab/panel ids wiring the forecast tablist to its single panel. */
+const FORECAST_PANEL_ID = "weather-forecast-panel";
+const tabId = (key: ForecastTab) => `weather-tab-${key}`;
 
 const HOURLY_KEY: Record<
 	ForecastTab,
@@ -120,7 +124,7 @@ function StatItem({
 }) {
 	return (
 		<div className="flex flex-col items-center gap-1">
-			<Icon className="h-5 w-5 text-gray-400" />
+			<Icon className="h-5 w-5 text-gray-400" aria-hidden />
 			<p className="text-base font-semibold text-primary">{value}</p>
 			<p className="text-xs text-muted-foreground">{label}</p>
 		</div>
@@ -172,26 +176,79 @@ function ForecastTabs({
 	activeTab: ForecastTab;
 	onTabChange: (tab: ForecastTab) => void;
 }) {
+	// Roving tabindex means only the active tab is in the page tab order, so the
+	// ARIA tablist pattern requires arrow/Home/End keys to move selection *and*
+	// focus between tabs — otherwise the other tabs become keyboard-unreachable.
+	const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+	const onKeyDown = (event: React.KeyboardEvent, index: number) => {
+		const last = FORECAST_TABS.length - 1;
+		let next: number;
+		switch (event.key) {
+			case "ArrowRight":
+			case "ArrowDown":
+				next = index === last ? 0 : index + 1;
+				break;
+			case "ArrowLeft":
+			case "ArrowUp":
+				next = index === 0 ? last : index - 1;
+				break;
+			case "Home":
+				next = 0;
+				break;
+			case "End":
+				next = last;
+				break;
+			default:
+				return;
+		}
+		event.preventDefault();
+		onTabChange(FORECAST_TABS[next].key);
+		tabRefs.current[next]?.focus();
+	};
+
 	return (
-		<div className="flex gap-6">
-			{FORECAST_TABS.map(({ key, label }) => (
-				<button key={key} onClick={() => onTabChange(key)} className="flex flex-col items-center">
-					<span
-						className={`text-sm font-semibold ${activeTab === key ? "text-foreground" : "text-muted-foreground"}`}
+		<div className="flex gap-6" role="tablist" aria-label="Forecast range">
+			{FORECAST_TABS.map(({ key, label }, index) => {
+				const selected = activeTab === key;
+				return (
+					<button
+						key={key}
+						type="button"
+						role="tab"
+						id={tabId(key)}
+						ref={(el) => {
+							tabRefs.current[index] = el;
+						}}
+						aria-selected={selected}
+						aria-controls={FORECAST_PANEL_ID}
+						tabIndex={selected ? 0 : -1}
+						onClick={() => onTabChange(key)}
+						onKeyDown={(event) => onKeyDown(event, index)}
+						className="flex flex-col items-center"
 					>
-						{label}
-					</span>
-					{activeTab === key && <span className="mt-1 h-1.5 w-1.5 rounded-full bg-foreground" />}
-				</button>
-			))}
+						<span
+							className={`text-sm font-semibold ${selected ? "text-foreground" : "text-muted-foreground"}`}
+						>
+							{label}
+						</span>
+						{selected && <span className="mt-1 h-1.5 w-1.5 rounded-full bg-foreground" />}
+					</button>
+				);
+			})}
 		</div>
 	);
 }
 
-function HourlyForecast({ hours }: { hours: WeatherHour[] }) {
-	if (hours.length === 0) return null;
+function HourlyForecast({ hours, activeTab }: { hours: WeatherHour[]; activeTab: ForecastTab }) {
 	return (
-		<div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+		<div
+			id={FORECAST_PANEL_ID}
+			role="tabpanel"
+			aria-labelledby={tabId(activeTab)}
+			tabIndex={0}
+			className="mt-4 flex gap-3 overflow-x-auto pb-1"
+		>
 			{hours.map((h) => (
 				<div
 					key={h.time}
@@ -199,6 +256,7 @@ function HourlyForecast({ hours }: { hours: WeatherHour[] }) {
 				>
 					<p className="whitespace-nowrap text-xs text-muted-foreground">{h.time}</p>
 					{getWeatherIcon(h.weatherCode, "h-5 w-5 text-gray-500")}
+					<span className="sr-only">{WEATHER_LABELS[h.weatherCode] ?? "Unknown"}</span>
 					<p className="text-base font-semibold text-foreground">{h.temp}°</p>
 				</div>
 			))}
@@ -214,7 +272,14 @@ export function WeatherWidget() {
 		<Card className="rounded-2xl border-0 p-6 shadow-md">
 			<h2 className="text-lg font-semibold text-primary">Weather</h2>
 
-			{loading && <WeatherSkeleton />}
+			{loading && (
+				<>
+					<span role="status" className="sr-only">
+						Loading weather
+					</span>
+					<WeatherSkeleton />
+				</>
+			)}
 
 			{error && (
 				<p className="mt-4 text-sm text-destructive" role="alert">
@@ -227,7 +292,7 @@ export function WeatherWidget() {
 					<CurrentConditions weather={weather} />
 					<Divider />
 					<ForecastTabs activeTab={activeTab} onTabChange={setActiveTab} />
-					<HourlyForecast hours={weather[HOURLY_KEY[activeTab]]} />
+					<HourlyForecast hours={weather[HOURLY_KEY[activeTab]]} activeTab={activeTab} />
 				</div>
 			)}
 		</Card>
