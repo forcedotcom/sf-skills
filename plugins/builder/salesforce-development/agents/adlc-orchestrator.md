@@ -1,7 +1,7 @@
 ---
 name: adlc-orchestrator
 description: Plan-mode orchestrator for the Agent Development Life Cycle
-tools: Read, Grep, Glob, Bash, Task(adlc-author, adlc-engineer, adlc-qa)
+tools: Read, Grep, Glob, Bash, Skill, Task(adlc-author, adlc-engineer, adlc-qa)
 skills: agentforce-generate, agentforce-test, agentforce-observe
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "salesforce-development",
   "displayName": "Salesforce Development",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "Build Salesforce apps and agents using these core building blocks: metadata, Apex, deploy/retrieve, security, reporting, and generated installed-versus-available capability discovery.",
   "author": { "name": "Salesforce", "url": "https://github.com/forcedotcom/sf-skills" },
   "license": "Apache-2.0",
@@ -28,6 +28,10 @@
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context detect",
             "statusMessage": "Loading local Salesforce project context…"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture session_start"
           }
         ]
       }
@@ -88,6 +92,11 @@
           },
           {
             "type": "command",
+            "if": "Bash(sf project generate manifest *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
             "if": "Bash(sf project generate*)",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context scaffold-gate"
           }
@@ -108,6 +117,19 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context record-skill-dispatch"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture skill_dispatched"
+          }
+        ]
+      },
+      {
+        "matcher": "Task|Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture agent_dispatched"
           }
         ]
       }
@@ -170,6 +192,15 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture mcp_tool_used success"
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
@@ -180,6 +211,41 @@
             "type": "command",
             "if": "Bash(sf project deploy *)",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context post-deploy-failure"
+          },
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture command_invoked failure"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture mcp_tool_used failure"
+          }
+        ]
+      }
+    ],
+    "StopFailure": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture exception api_error"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-flush"
           }
         ]
       }

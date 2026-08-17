@@ -5,7 +5,7 @@ Every successful trace lands artifacts under
 Re-running the same `(org, sid)` overwrites in place. Listed below in
 the order they're produced.
 
-```
+```text
 ~/.vibe/data/agentforce-d360-analyze/<org_id15>/<agent>__<ver>/<sid>/
 ├── dc._session_manifest.json ← per-query counts + session_shape + empties
 ├── dc._session_tree.json ← hierarchical join (primary artifact)

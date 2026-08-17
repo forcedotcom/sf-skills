@@ -10,7 +10,7 @@
 
 The linter detects CSS classes that directly override SLDS classes and reports them as **warnings**. It does **not** auto-fix — all changes require manual work in both CSS and HTML.
 
-```
+```text
   1:1  warning  Overriding slds-button isn't supported. To differentiate SLDS and
                custom classes, create a CSS class in your namespace.
                Examples: myapp-input, myapp-button.                  slds/no-slds-class-overrides

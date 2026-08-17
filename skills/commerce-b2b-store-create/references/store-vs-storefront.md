@@ -121,7 +121,7 @@ Understanding the distinction between Commerce Store and Storefront is critical 
 
 ### Step 1: Create Commerce Store (Must Be First)
 
-```
+```text
 User Interface (Commerce App)
      ↓
 WebStore Record Created
@@ -144,7 +144,7 @@ Commerce Components Configured
 
 ### Step 2: Retrieve Storefront Metadata
 
-```
+```sh
 sf org list metadata --metadata-type DigitalExperienceConfig
      ↓
 Select Store from List

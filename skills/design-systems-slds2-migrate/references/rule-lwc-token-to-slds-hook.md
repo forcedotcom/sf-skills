@@ -10,7 +10,7 @@
 
 The linter detects deprecated `--lwc-*` tokens and reports them as **errors**. When there is only one suggestion, `--fix` auto-applies it. When there are multiple suggestions, manual selection is required. Here's real linter output for a multiple-suggestion case:
 
-```
+```text
   2:14  error  The '--lwc-colorBackground' design token is deprecated. Replace it with
                the SLDS 2 styling hook and set the fallback to '--lwc-colorBackground'.
                1. --slds-g-color-surface-2

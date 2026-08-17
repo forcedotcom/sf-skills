@@ -4,7 +4,7 @@
 This configuration file creates a **net-new, default** Network metadata record for a Digital Experience React Site. It is not intended to edit or modify an existing Network record. Use this template only when provisioning a brand-new React site.
 
 ## File Location
-```
+```text
 networks/{siteName}.network-meta.xml
 ```
 

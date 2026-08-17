@@ -1,7 +1,7 @@
 ---
 name: adlc-qa
 description: Tests Agentforce agents and optimizes based on session trace analysis
-tools: Read, Edit, Write, Bash, Grep, Glob
+tools: Read, Edit, Write, Bash, Grep, Glob, Skill
 skills: agentforce-test, agentforce-observe
 ---
 
@@ -223,7 +223,7 @@ Use `/agentforce-test` (Mode C) for OWASP LLM Top 10 security testing — securi
 - As part of security review requirements
 
 ### Workflow
-1. Run the security assessment: `/agentforce-test` in Mode C against `<org-alias> --agent <Name>` (requires explicit confirmation before generating security cases)
+1. Run the security assessment: `/agentforce-test` in Mode C against `<org-alias> --agent <Name>`. Generating live security cases is a sensitive step — when dispatched as a subagent you have no channel to confirm with the user directly, so surface the intended assessment and target org back to the orchestrator/caller for a go-ahead rather than initiating it unprompted.
 2. Review grade and findings
 3. Apply remediations from the findings report
 4. Re-run failed categories to verify fixes

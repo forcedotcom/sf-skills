@@ -13,13 +13,13 @@ The linter detects `t()` and `token()` function calls in CSS, `.cmp`, and `.html
 Two message types:
 
 **When a replacement exists:**
-```
+```text
 Consider removing t(colorTextDefault) or replacing it with --slds-g-color-on-surface-3.
 Set the fallback to t(colorTextDefault).
 ```
 
 **When no replacement exists:**
-```
+```text
 Update outdated design tokens to SLDS 2 styling hooks with similar values.
 ```
 

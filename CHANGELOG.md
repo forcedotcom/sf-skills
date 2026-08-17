@@ -1,3 +1,13 @@
+# [1.39.0](https://github.com/forcedotcom/sf-skills/compare/1.38.0...1.39.0) (2026-08-17)
+
+
+### Features
+
+* @W-23864690 Integrate PRs [#1270](https://github.com/forcedotcom/sf-skills/issues/1270), [#1162](https://github.com/forcedotcom/sf-skills/issues/1162), [#1238](https://github.com/forcedotcom/sf-skills/issues/1238), [#1210](https://github.com/forcedotcom/sf-skills/issues/1210) to main ([697c208](https://github.com/forcedotcom/sf-skills/commit/697c208e169e6c542f3d542377939744b651ed87))
+* Release 25 skills updated @W-23888546@ ([b12ff20](https://github.com/forcedotcom/sf-skills/commit/b12ff2011d0a9e443998ae7f813165f459141b58))
+
+
+
 # [1.38.0](https://github.com/forcedotcom/sf-skills/compare/1.37.0...1.38.0) (2026-08-14)
 
 

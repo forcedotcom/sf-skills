@@ -1,7 +1,6 @@
 ---
 name: data360-orchestrate
 description: "Salesforce Data Cloud product orchestrator for connect→prepare→harmonize→segment→act workflows. Use this skill when the user needs a multi-step Data Cloud pipeline, cross-phase troubleshooting, or data space and data kit management. TRIGGER when: user needs a multi-step Data Cloud pipeline, asks to set up or troubleshoot Data Cloud across phases, manages data spaces or data kits, or wants a cross-phase sf data360 workflow. DO NOT TRIGGER when: work is isolated to a single phase (use the matching phase-specific skill), the task is STDM/session tracing/parquet telemetry (use agentforce-observe), standard CRM SOQL (use platform-soql-query), or Apex implementation (use platform-apex-generate)."
-compatibility: "Requires an external community sf data360 CLI plugin and a Data Cloud-enabled org"
 metadata:
   cliTools:
     - tool: ["curl"]

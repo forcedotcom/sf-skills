@@ -1,13 +1,15 @@
 #!/bin/bash
 # Decision test for `sf-context skills-first-advisory` (issue #286).
 #
-# The advisory reads a PreToolUse `tool_input` payload from stdin and emits a
-# WARN-ONLY nudge toward the owning skill on bypass-prone operations (raw
-# metadata edits, raw `sf apex/retrieve/data` calls). It must NEVER block — every
-# response carries `continue: true`. This test asserts, fully offline (no org):
-#   - bypass-prone ops emit an advisory naming the expected skill
-#   - unrelated ops stay silent (advisory text absent)
-#   - every response is non-blocking (continue:true, no permissionDecision)
+# The check reads a PreToolUse `tool_input` payload from stdin and routes
+# bypass-prone operations (raw metadata edits, raw `sf apex/retrieve/data` calls)
+# to the owning skill. Ops whose owning skill is on the `_ENFORCEABLE_SKILLS`
+# allow-list (query, retrieve, apex-test-run, manifest) are BLOCKED with a
+# `deny` + redirect; every other match is WARN-ONLY (`continue: true`). This test
+# asserts, fully offline (no org):
+#   - allow-listed bypass-prone ops deny and name the expected skill
+#   - other bypass-prone ops warn and name the expected skill
+#   - unrelated ops stay silent (advisory text absent), non-blocking
 #
 # Run: bash plugins/sfdx-core/test/skills-first-advisory.test.sh
 
@@ -26,14 +28,21 @@ parse() {
   python3 -c "
 import json,sys,re
 d=json.load(sys.stdin)
-ctx=d.get('hookSpecificOutput',{}).get('additionalContext','')
+hso=d.get('hookSpecificOutput',{})
+ctx=hso.get('additionalContext','')
 warn='warn' if ctx else 'quiet'
-m=re.search(r'\`([a-z][a-z0-9-]+)\`', ctx)
+decision=hso.get('permissionDecision')
+# The skill name is backtick-wrapped in the advisory text (additionalContext) on
+# a warn, and in permissionDecisionReason on an enforcement deny — search both.
+m=re.search(r'\`([a-z][a-z0-9-]+)\`', ctx or hso.get('permissionDecisionReason',''))
 skill=m.group(1) if m else '-'
-blocking='block' if d.get('hookSpecificOutput',{}).get('permissionDecision') else 'ok'
-cont=d.get('continue')
-# continue must always be true; fold a violation into the blocking field so it fails loudly
-if cont is not True: blocking='no-continue'
+if decision:
+    # A blocking deny legitimately omits top-level continue (hook spec) — report
+    # the decision verbatim so an enforce assertion can expect 'block'/'deny'.
+    blocking=decision if decision!='deny' else 'block'
+else:
+    # Warn-only path: continue MUST be true; fold a violation in so it fails loudly.
+    blocking='ok' if d.get('continue') is True else 'no-continue'
 print(f'{warn}|{skill}|{blocking}')
 "
 }
@@ -45,6 +54,23 @@ check() {
   out=$(printf '%s' "$payload" | "$CTX" skills-first-advisory)
   got=$(printf '%s' "$out" | parse)
   expected="${ewarn}|${eskill}|ok"
+  if [ "$got" = "$expected" ]; then
+    PASS=$((PASS + 1)); printf '  ok   %-44s → %s\n' "$desc" "$got"
+  else
+    FAIL=$((FAIL + 1)); printf '  FAIL %-44s → got "%s", expected "%s"\n' "$desc" "$got" "$expected"
+    printf '       raw: %s\n' "$out"
+  fi
+}
+
+# check_deny <expected-skill> <description> <payload-json>
+# An allow-listed op is BLOCKED: deny carries a permissionDecision (block) and no
+# additionalContext (quiet), so the parsed triple is "quiet|<skill>|block".
+check_deny() {
+  local eskill="$1" desc="$2" payload="$3"
+  local out got expected
+  out=$(printf '%s' "$payload" | "$CTX" skills-first-advisory)
+  got=$(printf '%s' "$out" | parse)
+  expected="quiet|${eskill}|block"
   if [ "$got" = "$expected" ]; then
     PASS=$((PASS + 1)); printf '  ok   %-44s → %s\n' "$desc" "$got"
   else
@@ -95,18 +121,64 @@ check quiet - "labels-meta.xml has no owning skill" \
 check quiet - "layout-meta.xml has no owning skill" \
   '{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/layouts/Account-Account Layout.layout-meta.xml"}}'
 
-# --- bypass-prone raw CLI calls → warn, name the owning skill ---
-check warn platform-apex-test-run "sf apex run test" \
+# --- allow-listed raw CLI calls → DENY, name the owning skill ---
+check_deny platform-apex-test-run "sf apex run test → deny" \
   '{"tool_name":"Bash","tool_input":{"command":"sf apex run test --synchronous --json"}}'
 
+check_deny platform-metadata-retrieve "sf project retrieve → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sf project retrieve start --metadata ApexClass"}}'
+
+check_deny platform-soql-query "sf data query → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sf data query --query \"SELECT Id FROM Account\" --json"}}'
+
+check_deny platform-manifest-generate "sf project generate manifest → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sf project generate manifest --source-dir force-app"}}'
+
+# --- non-allow-listed raw CLI call → warn (stays advisory) ---
 check warn platform-apex-anonymous-run "sf apex run (anon)" \
   '{"tool_name":"Bash","tool_input":{"command":"sf apex run --file scripts/anon.apex"}}'
 
-check warn platform-metadata-retrieve "sf project retrieve" \
-  '{"tool_name":"Bash","tool_input":{"command":"sf project retrieve start --metadata ApexClass"}}'
+# --- hand-authoring a deploy manifest → DENY, name platform-manifest-generate ---
+check_deny platform-manifest-generate "Write package.xml → deny" \
+  '{"tool_name":"Write","tool_input":{"file_path":"manifest/package.xml"}}'
 
-check warn platform-soql-query "sf data query" \
-  '{"tool_name":"Bash","tool_input":{"command":"sf data query --query \"SELECT Id FROM Account\" --json"}}'
+check_deny platform-manifest-generate "Write destructiveChanges.xml → deny" \
+  '{"tool_name":"Write","tool_input":{"file_path":"manifest/destructiveChanges.xml"}}'
+
+check quiet - "small Edit of an existing package.xml stays quiet (not authoring)" \
+  '{"tool_name":"Edit","tool_input":{"file_path":"manifest/package.xml"}}'
+
+# F4 — manifest detection by content (non-standard filename) and Windows path.
+check_deny platform-manifest-generate "Write pkg.xml with Package body → deny (by content)" \
+  '{"tool_name":"Write","tool_input":{"file_path":"config/pkg.xml","content":"<?xml version=\"1.0\"?><Package xmlns=\"http://soap.sforce.com/2006/04/metadata\"><version>60.0</version></Package>"}}'
+
+check_deny platform-manifest-generate "Write Windows-path package.xml → deny" \
+  '{"tool_name":"Write","tool_input":{"file_path":"manifest\\package.xml"}}'
+
+check quiet - "Write destructiveChanges-notes.xml stays quiet (not a real manifest name)" \
+  '{"tool_name":"Write","tool_input":{"file_path":"docs/destructiveChanges-notes.xml","content":"just notes"}}'
+
+# F4 (MultiEdit) — MultiEdit's text lives in edits[].new_string, not a top-level
+# content field, so content detection must read the edit bodies or a non-standard
+# manifest filename slips past. Also confirm MultiEdit by-name still denies.
+check_deny platform-manifest-generate "MultiEdit pkg.xml with Package body → deny (by content)" \
+  '{"tool_name":"MultiEdit","tool_input":{"file_path":"config/pkg.xml","edits":[{"old_string":"","new_string":"<?xml version=\"1.0\"?><Package xmlns=\"http://soap.sforce.com/2006/04/metadata\"><version>60.0</version></Package>"}]}}'
+
+check_deny platform-manifest-generate "MultiEdit package.xml → deny (by name)" \
+  '{"tool_name":"MultiEdit","tool_input":{"file_path":"manifest/package.xml","edits":[{"old_string":"a","new_string":"b"}]}}'
+
+check quiet - "MultiEdit non-manifest .xml (no Package body) stays quiet" \
+  '{"tool_name":"MultiEdit","tool_input":{"file_path":"config/settings.xml","edits":[{"old_string":"a","new_string":"<config><setting>x</setting></config>"}]}}'
+
+# F5 — whitespace / colon / sfdx surface variants of enforced CLI calls → deny.
+check_deny platform-soql-query "sf data query with extra whitespace → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sf  data   query --query \"SELECT Id FROM Account\""}}'
+
+check_deny platform-soql-query "sfdx force:data:soql:query → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sfdx force:data:soql:query -q \"SELECT Id FROM Account\""}}'
+
+check_deny platform-apex-test-run "sf apex:test:run colon form → deny" \
+  '{"tool_name":"Bash","tool_input":{"command":"sf apex:test:run --synchronous"}}'
 
 # --- unrelated ops → quiet (no advisory) ---
 check quiet - "non-metadata Edit (README)" \
@@ -122,9 +194,9 @@ check quiet - "empty payload" '{}'
 
 # --- turn-aware suppression (#415) -------------------------------------------
 # Once the owning skill has dispatched THIS turn, the advisory stays quiet for
-# that skill's owned ops; a different owner still warns; a new prompt_id or a
-# different session re-arms it. Prompt markers live in a cwd-independent private
-# runtime namespace, so use process-unique ids to keep this run isolated.
+# that skill's owned ops; a different owner still warns; a new prompt_id or
+# session re-arms it. Markers live in a cwd-independent runtime namespace keyed
+# by (session_id, prompt_id), so use process-unique ids to isolate this run.
 echo ""
 echo "  turn-aware suppression (#415):"
 TMPDIR_415="$(mktemp -d)"
@@ -162,6 +234,40 @@ check warn platform-apex-generate ".cls edit warns again in prompt 2" \
 printf '%s' '{"tool_input":{"skill":"platform-apex-generate"}}' | "$CTX" record-skill-dispatch >/dev/null
 check warn platform-apex-generate "session-less ledger does not suppress session-less call" \
   '{"tool_name":"Edit","tool_input":{"file_path":"force-app/main/default/classes/Foo.cls"}}'
+# A session-less ledger must NOT suppress a real-session call (no cross-key bleed).
+check warn platform-apex-generate "session-less ledger does not suppress a keyed session" \
+  "{\"tool_name\":\"Edit\",\"tool_input\":{\"file_path\":\"force-app/main/default/classes/Foo.cls\"},\"session_id\":\"$SID-9\",\"prompt_id\":\"p-s9\"}"
+
+# No-deadlock: once an ENFORCEABLE skill has dispatched this turn, its owned op is
+# suppressed to `continue: true` (NOT denied), so the skill's own `sf` calls flow
+# through and enforcement can't deadlock. Session ids are process-unique ($$)
+# because the runtime namespace is a shared temp dir.
+QUERY="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sf data query --query \\\"SELECT Id FROM Account\\\"\"},\"session_id\":\"$SID-nd\",\"prompt_id\":\"p1\"}"
+check_deny platform-soql-query "sf data query denies before dispatch" "$QUERY"
+printf '%s' "{\"session_id\":\"$SID-nd\",\"prompt_id\":\"p1\",\"tool_input\":{\"skill\":\"salesforce-development:platform-soql-query\"}}" \
+  | "$CTX" record-skill-dispatch >/dev/null
+check quiet - "sf data query allowed through after platform-soql-query dispatch (no deadlock)" "$QUERY"
+
+# F3 — delegate satisfies the deny: platform-soql-query delegates EXECUTION to
+# platform-data-manage, so a turn where the delegate dispatched must let the raw
+# `sf data query` through rather than re-deny (else the executor deadlocks).
+QUERY_S3="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sf data query --query \\\"SELECT Id FROM Account\\\"\"},\"session_id\":\"$SID-dg\",\"prompt_id\":\"p3\"}"
+check_deny platform-soql-query "sf data query denies before any dispatch (delegate)" "$QUERY_S3"
+printf '%s' "{\"session_id\":\"$SID-dg\",\"prompt_id\":\"p3\",\"tool_input\":{\"skill\":\"salesforce-development:platform-data-manage\"}}" \
+  | "$CTX" record-skill-dispatch >/dev/null
+check quiet - "sf data query allowed after platform-data-manage dispatch (delegate, F3)" "$QUERY_S3"
+
+# F1 — CWD drift must not break suppression: record the dispatch, then `cd`
+# elsewhere before the owning skill's own `sf` call. The cwd-independent runtime
+# dir means that call still hits its own marker and is allowed through.
+printf '%s' "{\"session_id\":\"$SID-cw\",\"prompt_id\":\"p4\",\"tool_input\":{\"skill\":\"salesforce-development:platform-metadata-retrieve\"}}" \
+  | "$CTX" record-skill-dispatch >/dev/null
+RETRIEVE_S4="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sf project retrieve start --metadata ApexClass\"},\"session_id\":\"$SID-cw\",\"prompt_id\":\"p4\"}"
+CWD_DRIFT="$(mktemp -d)"
+pushd "$CWD_DRIFT" >/dev/null
+check quiet - "retrieve allowed through after dispatch despite CWD change (F1)" "$RETRIEVE_S4"
+popd >/dev/null
+rm -rf "$CWD_DRIFT"
 
 popd >/dev/null
 

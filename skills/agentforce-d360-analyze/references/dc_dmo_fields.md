@@ -59,7 +59,7 @@ Per-run row counts, empty reasons, and join paths are recorded in
 Legend: ★ = session-FK direct (one hop) ▸ = polymorphic `parent__c`
  ⚠ = requires feature provisioning
 
-```
+```text
 Session (ssot__AIAgentSession__dlm, PK ssot__Id__c)
  │
  ├── ★ Participant (ssot__AiAgentSessionId__c)
@@ -135,7 +135,7 @@ All 24 entries below are in the `scripts/fetch_dc.py` waterfall — the
 join expressions are exactly what the script runs, and each one has a
 `.sql` template under `assets/dc/`.
 
-```
+```text
  1. sessions WHERE ssot__Id__c = {sid}
  2. interactions WHERE ssot__AiAgentSessionId__c = {sid}
  3. messages WHERE ssot__AiAgentSessionId__c = {sid}
@@ -370,7 +370,7 @@ schemas are documented in the per-DMO sections below.
 `turnId__c` column (verified via live `describe`; 11 fields total,
 none reference session/trace/turn). The canonical join path is:
 
-```
+```text
 Session → Interaction → Step (.ssot__GenerationId__c) → Generation (.generationId__c)
 ```
 
@@ -432,7 +432,7 @@ Richer than `GenAIGeneration` — carries prompt text, tokens, model, and
 session/user/bot identifiers. **Forward entry point for the entire audit
 chain**, reached from Session via `sessionId__c`:
 
-```
+```text
 Session.ssot__Id__c → GatewayRequest.sessionId__c LIKE '%<sid>%'
 ```
 

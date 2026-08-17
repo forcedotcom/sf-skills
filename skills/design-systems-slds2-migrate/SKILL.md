@@ -2,10 +2,10 @@
 name: design-systems-slds2-migrate
 description: "Migrate Lightning Web Components from SLDS 1 to SLDS 2 by running the SLDS linter and fixing violations. Use this skill whenever users mention SLDS 2, SLDS uplift, linter violations, LWC token migration, class overrides, hardcoded CSS values that need SLDS hook replacement, or styling hook selection. Covers all styling hook categories — color, spacing, sizing, typography, borders, radius, and shadows. Also use when users mention no-hardcoded-values, no-slds-class-overrides, lwc-to-slds-hooks, no-deprecated-tokens-slds1, or ask about SLDS component migration — even if they don't explicitly say \"uplift\" or \"migration\"."
 metadata:
+  version: "1.0"
   cliTools:
     - tool: ["npx"]
       semver: ">=7.0.0"
-  version: "1.0"
 ---
 
 # Goal
@@ -36,7 +36,7 @@ Color hooks require the most judgment (context-dependent selection). Non-color h
 
 # Workflow
 
-```
+```text
 1. **REQUIRED — ALWAYS run first:** npx @salesforce-ux/slds-linter@latest lint --fix . — NEVER skip this step. This handles simple violations automatically.
 2. Review linter output -> Identify remaining manual fixes needed
 3. Fix by violation type -> Use per-rule reference guides
@@ -57,7 +57,7 @@ The linter analyzes all CSS and markup files (`.html` for LWC, `.cmp` for Aura),
 
 The linter reports violations in this format:
 
-```
+```text
 componentName.css
   15:3  warning  Overriding slds-button isn't supported. To differentiate SLDS and
                  custom classes, create a CSS class in your namespace.
@@ -126,7 +126,7 @@ See [rule-no-slds-class-overrides.md](references/rule-no-slds-class-overrides.md
 
 **Linter feedback loop — repeat until zero errors:**
 
-```
+```text
 1. npx @salesforce-ux/slds-linter@latest lint .
 2. Review errors -> fix by type (Step 3)
 3. Re-run linter

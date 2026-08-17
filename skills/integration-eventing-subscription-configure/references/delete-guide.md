@@ -13,7 +13,7 @@ After deletion, avoid reusing the same DeveloperName immediately — the Pub/Sub
 ### Step 1 — Remove the metadata file
 
 Delete the file from your project:
-```
+```text
 managedEventSubscriptions/<DeveloperName>.managedEventSubscription-meta.xml
 ```
 

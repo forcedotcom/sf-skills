@@ -1357,6 +1357,21 @@ def render_band(content_lines: list, *, color: bool) -> list[str]:
     return render_bands([content_lines], color=color)
 
 
+def _notice_band_content(lines: list) -> list:
+    """Format plain notice lines (e.g. the telemetry first-run notice, from
+    sf_telemetry) into one band group: the first line is the heading, the rest
+    body, and blank strings stay as spacer rows. Clipped to the band's text width
+    so the ≤80 contract holds. Used to weave the notice in as the FIRST band —
+    below the logo lockup, above the org guidance/environment."""
+    content: list = []
+    for i, line in enumerate(lines):
+        if not line:
+            content.append("")   # blank spacer, rendered verbatim by render_bands
+        else:
+            content.append([(_clip(line, 78), "head" if i == 0 else "muted")])
+    return content
+
+
 def _mcp_indicator(mcp_status: str) -> tuple[str, str]:
     """Tri-state MCP indicator, because at SessionStart we usually CANNOT confirm
     connectivity: the sf-mcp-proxy mints its JWT lazily on the first message, so
@@ -1620,7 +1635,8 @@ def render_invitation(color: bool) -> list[str]:
 
 
 def render_banner_message(org: dict, project: dict, stats: dict, git_line: str, mcp_status: str,
-                          *, color: Optional[bool] = None, state: Optional[dict] = None) -> str:
+                          *, color: Optional[bool] = None, state: Optional[dict] = None,
+                          notice_lines: Optional[list] = None) -> str:
     """Compose the full SessionStart message: the pinned lockup, then the comp's
     rule-delimited bands — install summary, environment, project inventory — the
     position rail (when `state` is supplied), and the closing invitation.
@@ -1634,7 +1650,12 @@ def render_banner_message(org: dict, project: dict, stats: dict, git_line: str, 
     `state` is the inferred journey state; pass it so the banner shows "where you
     are" (the rail) alongside "what's here" (the bands). Callers already resolved
     the org for the bands, so they build `state` via `_derive_journey_state` from
-    that same data — no extra `sf` calls."""
+    that same data — no extra `sf` calls.
+
+    `notice_lines` (optional) is the one-time telemetry notice's plain text; when
+    given it renders as the FIRST band — below the logo/install lockup, above the
+    environment band — sharing the region's dividers. Passed on the visible channel
+    only (never in the model-facing context), so the notice stays user-only."""
     resolved = _banner_color_enabled() if color is None else color
     facts = _banner_provenance()
     # Leading blank line separates the banner from Claude Code's
@@ -1642,12 +1663,15 @@ def render_banner_message(org: dict, project: dict, stats: dict, git_line: str, 
     parts = ["", render_banner_block(color=resolved, facts=facts), ""]
     parts += render_install_summary(resolved, facts=facts)
     parts.append("")
-    # Environment and project render as one rule-region sharing a single middle
-    # divider — no doubled rule between adjacent bands.
-    parts += render_bands([
+    # The telemetry notice (when due) leads the band region, then environment and
+    # project — all one rule-region sharing single dividers, no doubled rules.
+    groups = [
         _environment_content(org, mcp_status),
         _project_content(project, stats, git_line),
-    ], color=resolved)
+    ]
+    if notice_lines:
+        groups.insert(0, _notice_band_content(notice_lines))
+    parts += render_bands(groups, color=resolved)
     # The rail rides below the bands. include_context=False: the bands right above
     # already state the project and org, so the rail's context row would repeat them.
     if state is not None:
@@ -1659,14 +1683,18 @@ def render_banner_message(org: dict, project: dict, stats: dict, git_line: str, 
 
 def render_degraded_banner(title: str, body_lines: list[str], project: Optional[dict] = None,
                            stats: Optional[dict] = None, git_line: str = "",
-                           state: Optional[dict] = None) -> str:
+                           state: Optional[dict] = None, notice_lines: Optional[list] = None) -> str:
     """A compact banner for non-success states (no org / unreachable). Leaner than
     the connected path — no install summary; the provenance line already signals
     the plugin is live and its inventory counts are not actionable when the problem
     is the org. Renders the lockup, then a rule-region: the guidance (bold title +
     the caller's lines verbatim) and, when a project is detected, the project band
     sharing the divider so a no-org/unreachable session still shows where you are.
-    Then the pointer."""
+    Then the pointer.
+
+    `notice_lines` (optional) is the one-time telemetry notice's plain text; when
+    given it leads the rule-region — below the logo lockup, above the guidance —
+    sharing the region's dividers. Passed on the visible channel only."""
     color = _banner_color_enabled()
     guidance: list = [[(_clip(title, 78), "head")]]
     for line in body_lines:
@@ -1674,6 +1702,8 @@ def render_degraded_banner(title: str, body_lines: list[str], project: Optional[
     groups = [guidance]
     if project is not None and stats is not None:
         groups.append(_project_content(project, stats, git_line))
+    if notice_lines:
+        groups.insert(0, _notice_band_content(notice_lines))
     parts = ["", render_banner_block(color=color), ""]
     parts += render_bands(groups, color=color)
     # Even with no reachable org, SessionStart shows the rail — its `likely next`
@@ -3409,6 +3439,49 @@ def _read_hook_payload() -> dict:
     return payload
 
 
+def _load_sf_telemetry():
+    """Import the sibling sf_telemetry module, with the by-path fallback the rest
+    of this file uses for its siblings. Returns the module, or None if it can't be
+    loaded (telemetry is always optional — no caller fails because it's absent).
+
+    The scripts dir is not on sys.path under importlib-based unit tests (and after
+    a chdir into a project dir), so a bare `import` can miss; fall back to loading
+    it by absolute path, the same shim cmd_features/cmd_discovery use."""
+    try:
+        import sf_telemetry
+        return sf_telemetry
+    except ImportError:
+        try:
+            import importlib.util
+            module_path = Path(__file__).resolve().parent / "sf_telemetry.py"
+            spec = importlib.util.spec_from_file_location("sf_telemetry", module_path)
+            if spec is None or spec.loader is None:
+                return None
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            return module
+        except Exception:
+            return None
+
+
+def _telemetry_notice_lines() -> list:
+    """The one-time telemetry notice as plain content lines (no rules), owned by
+    detect so it renders as a band woven INTO the banner — below the logo lockup,
+    above the org guidance. The telemetry SessionStart hook is record-only. Returns
+    [] when not the first run, when opted out, in CI, or if the telemetry module is
+    absent — detect never fails because of telemetry.
+
+    NOTE: calling this marks the notice shown (fire-once gate lives in telemetry),
+    so it must be called exactly once per detect, on the visible path only."""
+    try:
+        sf_telemetry = _load_sf_telemetry()
+        if sf_telemetry is None:
+            return []
+        return sf_telemetry.first_run_notice_lines() or []
+    except Exception:
+        return []
+
+
 def cmd_detect() -> int:
     payload = _read_hook_payload()
     source = payload.get("source") or payload.get("matcher") or ""
@@ -3468,6 +3541,18 @@ def cmd_detect() -> int:
     # edition, or API version. `/status` and the post-login wayfinder own those
     # live facts.
     target = _configured_target_alias(root) or ""
+
+    # The one-time telemetry notice as plain lines ([] when not due / opted out /
+    # in CI). Computed ONCE here — calling it marks it shown, so it must fire at
+    # most once per detect — then woven as the FIRST band (below the logo lockup,
+    # above the org guidance) into the visible banner below. It rides the visible
+    # systemMessage only; the model-facing `context` is a separate structured
+    # object (`_session_model_context`) and never carries the notice. Gated on the
+    # full-banner path (stats is not None): compact/plain/off surfaces don't render
+    # the banner, so the notice must not burn its fire-once flag there — it will
+    # show on the next full-banner session instead.
+    notice_lines = _telemetry_notice_lines() if stats is not None else []
+
     if not target:
         state = _derive_journey_state(root, has_project=True, target="",
                                       target_error=None, org_display=None)
@@ -3482,7 +3567,8 @@ def cmd_detect() -> int:
             "  sf config set target-org <alias>",
             "",
             "Skills are available for local code generation.",
-        ], project=project, stats=stats, git_line=git_line, state=state) if stats is not None else ""
+        ], project=project, stats=stats, git_line=git_line, state=state,
+           notice_lines=notice_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org="", displayed_org="",
             project_present=True,
@@ -3498,7 +3584,8 @@ def cmd_detect() -> int:
             "Run /salesforce-development:status for live org status.",
             "",
             "Skills are available for local code generation.",
-        ], project=project, stats=stats, git_line=git_line, state=state) if stats is not None else ""
+        ], project=project, stats=stats, git_line=git_line, state=state,
+           notice_lines=notice_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org=target,
             displayed_org=target, project_present=True,
@@ -5144,6 +5231,24 @@ def cmd_post_bash() -> int:
     """
     payload = _read_hook_payload()
     command = _hook_command(payload)
+    # Usage telemetry for a successful Bash runs in-process here, not as a second
+    # PostToolUse Bash hook: this block is a single dispatcher precisely so the
+    # coordinated paints can't race for stdin/stdout by hook order, and telemetry
+    # must ride that same guarantee. capture_event is print-free and fail-silent —
+    # it writes the local buffer only and never touches stdout — so it composes
+    # with whichever visible handler the dispatch below selects (or the silent
+    # allow). Consent-gating and scrubbing live inside capture_event.
+    try:
+        sf_telemetry = _load_sf_telemetry()
+        if sf_telemetry is not None:
+            # Mirror the sibling success-writers (cmd_post_deploy/observe/apex-test):
+            # some builds fire PostToolUse:Bash regardless of exit status, so consult
+            # _hook_reports_failure rather than assuming success — a failed first-party
+            # plugin command must be recorded as "failure", not logged as a success.
+            outcome = "failure" if _hook_reports_failure(payload) else "success"
+            sf_telemetry.capture_event("command_invoked", outcome, payload)
+    except Exception:
+        pass  # telemetry must never break the post-bash dispatch
     if _is_sf_context_command(command, "check-tools"):
         return cmd_readiness_paint(payload=payload)
     if _is_connect_command(command):
@@ -5200,12 +5305,79 @@ def _has_no_owning_skill(path: str) -> bool:
     return any(path.endswith(suffix) for suffix in _OWNERLESS_META_SUFFIXES)
 
 
+# Enforcement allow-list: only these skills are BLOCKED (deny + redirect). Each
+# owns a 1:1 bypass-prone `sf` op, so a deny is always satisfiable by dispatching
+# it. Everything else `_skills_first_match` returns stays warn-only, so a hard
+# deny can never name a nonexistent skill or block a step with no single owner.
+_ENFORCEABLE_SKILLS = frozenset({
+    "platform-soql-query",
+    "platform-metadata-retrieve",
+    "platform-apex-test-run",
+    "platform-manifest-generate",
+})
+
+# Map an enforced skill to sibling skills whose in-turn dispatch ALSO satisfies
+# its deny (the owning skill itself always does; these are added). platform-soql-query
+# delegates query EXECUTION to platform-data-manage, so a turn where the delegate
+# dispatched is just as validated — its `sf data query` must flow through, not re-deny.
+_DISPATCH_DELEGATES = {
+    "platform-soql-query": frozenset({"platform-data-manage"}),
+}
+
+
 def _skills_first_match(tool_name: str, tool_input: dict) -> Optional[tuple[str, str]]:
     """Return (skill_hint, advice) for a bypass-prone op, or None to stay silent."""
     if tool_name in ("Edit", "Write", "MultiEdit"):
-        path = (tool_input.get("file_path") or tool_input.get("filePath") or "").lower()
+        # Normalize Windows `\` to `/` so basename/segment checks are OS-independent.
+        path = (
+            tool_input.get("file_path") or tool_input.get("filePath") or ""
+        ).replace("\\", "/").lower()
         if not path:
             return None
+        # Hand-authoring a deploy manifest is the non-CLI bypass of
+        # platform-manifest-generate. Scope to Write/MultiEdit (a small in-place
+        # Edit isn't authoring), and detect either by name or by content, so a
+        # non-standard filename (`pkg.xml`, a heredoc target) can't slip past.
+        if tool_name in ("Write", "MultiEdit"):
+            name = path.rsplit("/", 1)[-1]
+            is_manifest_name = name == "package.xml" or (
+                name.startswith("destructivechanges")
+                and name.endswith(".xml")
+                # match only the real files, not prose like `destructivechanges-notes.xml`
+                and name in (
+                    "destructivechanges.xml",
+                    "destructivechangespre.xml",
+                    "destructivechangespost.xml",
+                )
+            )
+            # MultiEdit carries its text in `edits: [{old_string, new_string}]`,
+            # not a top-level `content`/`new_string`, so pull the edit bodies too —
+            # otherwise content detection never fires for MultiEdit and a
+            # non-standard manifest filename slips through (F4 gap).
+            edits = tool_input.get("edits")
+            edit_bodies = (
+                " ".join(
+                    e.get("new_string") or e.get("new_str") or ""
+                    for e in edits
+                    if isinstance(e, dict)
+                )
+                if isinstance(edits, list)
+                else ""
+            )
+            body = (
+                tool_input.get("content")
+                or tool_input.get("new_string")
+                or tool_input.get("new_str")
+                or edit_bodies
+                or ""
+            )
+            is_manifest_body = (
+                path.endswith(".xml")
+                and "<package" in body.lower()
+                and "soap.sforce.com/2006/04/metadata" in body.lower()
+            )
+            if is_manifest_name or is_manifest_body:
+                return ("platform-manifest-generate", "authoring a deploy manifest directly")
         # Apex source edits — the implementation-phase bypass from #413's review,
         # where every `.cls`/`.trigger` was authored via raw Edit and
         # `platform-apex-generate` never fired (triggers matched; invocation didn't).
@@ -5259,16 +5431,27 @@ def _skills_first_match(tool_name: str, tool_input: dict) -> Optional[tuple[str,
         return None
 
     if tool_name == "Bash":
-        cmd = tool_input.get("command", "") or ""
+        raw = tool_input.get("command", "") or ""
+        # Normalize surface variants onto the modern space-separated `sf` form the
+        # rules below expect: collapse whitespace runs, and fold the legacy `sfdx`
+        # binary and colon-style topics (`sfdx force:data:soql:query`, `sf data:query`).
+        norm = re.sub(r"\s+", " ", raw.lower())
+        norm = re.sub(r"\bsfdx\b", "sf", norm)
+        norm = norm.replace("force:", "").replace(":", " ")
+        # Fold old topic verbs onto modern nouns (`sf data soql query` → `sf data query`).
+        norm = norm.replace("sf data soql query", "sf data query")
+        norm = norm.replace("sf apex test run", "sf apex run test")
         # Order matters: most specific sub-commands first.
         rules = [
             ("sf apex run test", "platform-apex-test-run", "running Apex tests via raw CLI"),
             ("sf apex run", "platform-apex-anonymous-run", "running anonymous Apex via raw CLI"),
             ("sf project retrieve", "platform-metadata-retrieve", "retrieving org metadata via raw CLI"),
+            ("sf project generate manifest", "platform-manifest-generate",
+             "generating a package.xml manifest via raw CLI"),
             ("sf data query", "platform-soql-query", "querying org data via raw CLI"),
         ]
         for needle, skill, why in rules:
-            if needle in cmd:
+            if needle in norm:
                 return (skill, why)
         return None
 
@@ -5276,18 +5459,29 @@ def _skills_first_match(tool_name: str, tool_input: dict) -> Optional[tuple[str,
 
 
 def cmd_skills_first_advisory() -> int:
-    """PreToolUse advisory: nudge toward the owning skill on bypass-prone ops.
+    """PreToolUse skills-first check: route bypass-prone ops to the owning skill.
 
-    WARN-ONLY — always emits `continue: true`; never denies. Reads the tool
-    payload from stdin (Claude Code passes `{tool_name, tool_input}` JSON), the
-    same channel sf-deploy-gate uses.
+    Reads the tool payload from stdin (Claude Code passes `{tool_name,
+    tool_input}` JSON), the same channel sf-deploy-gate uses.
+
+    A bypass-prone op whose owning skill is on the `_ENFORCEABLE_SKILLS`
+    allow-list is BLOCKED with a `deny` + redirect to that skill. Every other
+    match — the generic metadata fallback and Apex/declarative authoring nudges —
+    is WARN-ONLY (emits `continue: true`), so a deny can never point at a skill
+    that does not exist or block a step with no single owning skill.
     """
     try:
         payload = json.loads(sys.stdin.read() or "{}")
     except (json.JSONDecodeError, ValueError):
         payload = {}
+    # Well-formed non-object JSON (`[]`, `"x"`, `42`) has no `.get`; since this is a
+    # BLOCKING hook, an AttributeError would crash the tool call. Treat it as empty.
+    if not isinstance(payload, dict):
+        payload = {}
     tool_name = payload.get("tool_name", "") or payload.get("toolName", "")
     tool_input = payload.get("tool_input", {}) or payload.get("toolInput", {}) or {}
+    if not isinstance(tool_input, dict):
+        tool_input = {}
     prompt_context = _prompt_context(payload, rotate_fallback=False)
 
     match = _skills_first_match(tool_name, tool_input)
@@ -5304,8 +5498,28 @@ def cmd_skills_first_advisory() -> int:
     # later `platform-permission-set-generate` op. The generic fallbacks ("the
     # matching platform metadata skill") are not real skill names, so they never
     # match the ledger and keep nudging — the conservative choice.
-    if skill in _dispatched_skills(prompt_context):
+    dispatched = _dispatched_skills(prompt_context)
+    # The deny is satisfied by the owning skill OR any delegate it hands the call
+    # to (platform-soql-query → platform-data-manage), so the delegate's own call
+    # flows through instead of re-denying.
+    satisfying = {skill} | _DISPATCH_DELEGATES.get(skill, frozenset())
+    if dispatched & satisfying:
         print(json.dumps({"continue": True}))
+        return 0
+
+    # Enforcement: promote the nudge to a blocking deny so the model dispatches the
+    # owning skill instead of a raw CLI/manifest write. Only `_ENFORCEABLE_SKILLS`
+    # denies. The turn-aware suppression above already cleared any op whose owning
+    # skill dispatched this turn, so the deny cannot deadlock the workflow.
+    if skill in _ENFORCEABLE_SKILLS:
+        reason = (
+            f"Skills-first enforcement: this looks like {why}. Dispatch the "
+            f"`{skill}` skill instead — it owns this operation and encodes the "
+            f"validated workflow, governor-limit/FLS guardrails, and error "
+            f"recovery a raw call skips. Once that skill runs, its own underlying "
+            f"calls are allowed through."
+        )
+        emit("PreToolUse", "", decision="deny", reason=reason)
         return 0
 
     advice = (
@@ -8215,8 +8429,14 @@ def main() -> int:
         return cmd_orientation_paint()
     if cmd == "journey-paint":
         return cmd_journey_paint()
+    if cmd in ("telemetry", "telemetry-capture", "telemetry-flush", "telemetry-transmit"):
+        # Stream A (capture): consent-gated, scrubbed, local-only usage-telemetry.
+        # Stream B (flush/transmit): detached O11y-PDP upload through the org.
+        # All telemetry logic lives in the sibling module to keep this file focused.
+        import sf_telemetry
+        return sf_telemetry.dispatch(sys.argv)
     print(f"Unknown command: {cmd}", file=sys.stderr)
-    print("Usage: sf-context [detect|discovery|verify-org|check-tools|readiness-paint|readiness-banner|post-bash|post-deploy|post-deploy-failure|skills-first-advisory|scaffold-gate|resolution-trace|record-skill-dispatch|prompt-dispatch|feedback-nudge|record-feedback-decision|record-update-decision|status|status-org|status-project|wayfinder|orientation-rail|journey-paint]", file=sys.stderr)
+    print("Usage: sf-context [detect|discovery|verify-org|check-tools|readiness-paint|readiness-banner|post-bash|post-deploy|post-deploy-failure|skills-first-advisory|scaffold-gate|resolution-trace|record-skill-dispatch|prompt-dispatch|feedback-nudge|record-feedback-decision|record-update-decision|status|status-org|status-project|wayfinder|orientation-rail|journey-paint|telemetry|telemetry-capture|telemetry-flush|telemetry-transmit]", file=sys.stderr)
     return 1
 
 

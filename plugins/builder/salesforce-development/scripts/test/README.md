@@ -93,11 +93,15 @@ start`/`validate`/`quick` routes to its owning skill
 non-deploy or garbled payloads stay silent (fail-open); never blocks. This suite
 guards the skill-name references that a skill rename must keep in lockstep.
 
-**`skills-first-advisory.test.sh`** (#286/#413/#415/#445) — a PreToolUse advisory
-nudges toward the owning skill on bypass-prone ops (raw `.cls`/`-meta.xml` edits,
-raw `sf apex/retrieve/data` calls), stays silent on owner-less metadata and
-unrelated ops, and applies turn-aware suppression once the owning skill has
-dispatched. WARN-ONLY — every response carries `continue: true`.
+**`skills-first-advisory.test.sh`** (#286/#413/#415/#445) — a PreToolUse
+skills-first check that routes bypass-prone ops to the owning skill. The 4
+allow-listed 1:1 ops (query, retrieve, apex-test-run, manifest) are BLOCKED with
+a `deny` + redirect; every other match (raw `.cls`/`-meta.xml` edits, `sf apex
+run` anon, the generic metadata fallback) is WARN-ONLY (`continue: true`). Stays
+silent on owner-less metadata and unrelated ops, and applies turn-aware
+suppression once the owning skill has dispatched — including the no-deadlock
+invariant that an allow-listed op is allowed through (not denied) after its
+owning skill runs.
 
 ## Port adaptations (source ⇄ this repo)
 
