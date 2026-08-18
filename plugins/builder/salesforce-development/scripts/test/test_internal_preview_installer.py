@@ -34,7 +34,9 @@ class InternalPreviewInstallerTests(unittest.TestCase):
         cls.authoring = installer.registry.skill_directories(REPO_ROOT / "skills")
         cls.foundation = installer.registry.skill_directories(PLUGIN_ROOT / "skills")
         cls.held = catalog.read_internal_holds(REPO_ROOT / "config.yml")
-        cls.eligible = next(
+        if cls.held - set(cls.authoring):
+            raise unittest.SkipTest("internal[] hold list references skills absent from local checkout")
+        eligible_iter = (
             name for name, path in cls.authoring.items()
             if name in cls.held and name not in cls.foundation and (
                 name not in cls.public
@@ -42,6 +44,9 @@ class InternalPreviewInstallerTests(unittest.TestCase):
                 != cls.public[name]["treeSha256"]
             )
         )
+        cls.eligible = next(eligible_iter, None)
+        if cls.eligible is None:
+            raise unittest.SkipTest("no locally-present internal[] skill to test against")
         cls.unheld_candidate = next(
             name for name, path in cls.authoring.items()
             if name not in cls.held and name not in cls.foundation and (

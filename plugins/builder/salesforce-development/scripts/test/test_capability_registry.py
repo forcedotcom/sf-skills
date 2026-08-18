@@ -652,7 +652,10 @@ class CapabilityRegistryTests(unittest.TestCase):
         public = {row["name"] for row in self.registry.load_public_manifest(MANIFEST_PATH)["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}
         authoring = {entry.name for entry in (REPO_ROOT / "skills").iterdir() if entry.is_dir()}
-        candidate = sorted((authoring & held) - public - foundation)[0]
+        candidates = sorted((authoring & held) - public - foundation)
+        if not candidates:
+            self.skipTest("no locally-present internal[] skill to test against")
+        candidate = candidates[0]
         out, err = io.StringIO(), io.StringIO()
         with mock.patch.dict(os.environ, {"SF_SKILLS_INTERNAL_PREVIEW": "1"}, clear=False), redirect_stdout(out), redirect_stderr(err):
             code = self.catalog.run_discovery(
