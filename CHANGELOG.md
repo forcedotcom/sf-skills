@@ -1,3 +1,13 @@
+# [1.40.0](https://github.com/forcedotcom/sf-skills/compare/1.39.0...1.40.0) (2026-08-18)
+
+
+### Features
+
+* Introduce metadata.domains frontmatter field for categorization @W-23894302@ ([1db8f4e](https://github.com/forcedotcom/sf-skills/commit/1db8f4eff426ccadfb67a2a751c07a683901ab39))
+* Sync scripts, packages, and repo config from develop @W-23705745@ ([68bef1d](https://github.com/forcedotcom/sf-skills/commit/68bef1db4c21b1efecf9f6206b9e8b26ac57cdca))
+
+
+
 # [1.39.0](https://github.com/forcedotcom/sf-skills/compare/1.38.0...1.39.0) (2026-08-17)
 
 
