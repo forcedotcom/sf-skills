@@ -3,6 +3,7 @@ name: platform-custom-lightning-type-generate
 description: "Use this skill when users need to create Custom Lightning Types (CLTs) for Einstein Agent actions or structured input/output schemas. Trigger when users mention CLT, Custom Lightning Types, JSON schemas for agents, type definitions, lightning__objectType, or editor/renderer configurations. For widget renditions that combine a CLT with a Widget bundle, use the platform-lightning-type-widget-coordinate orchestrator instead. This is complex - always use this skill for CLT work."
 metadata:
   version: "1.1"
+  domains: ["Platform", "Agentforce"]
   minApiVersion: "60.0"
   relatedSkills:
     - "platform-lightning-type-widget-coordinate"

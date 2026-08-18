@@ -14,6 +14,7 @@ metadata:
     - "data360-query"
     - "data360-segment"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-harmonize: Data Cloud Harmonize Phase

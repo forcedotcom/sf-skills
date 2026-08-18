@@ -18,6 +18,7 @@ metadata:
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.1"
+  domains: ["Platform"]
 ---
 
 # Salesforce Data Operations Expert (platform-data-manage)

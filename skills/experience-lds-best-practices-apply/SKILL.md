@@ -3,6 +3,7 @@ name: experience-lds-best-practices-apply
 description: "Use when reviewing or implementing Lightning Data Service best practices in an LWC (.js, .html, .js-meta.xml) — UIAPI vs Apex, refreshApex / notifyRecordUpdateAvailable, @salesforce/schema imports, LDS record-form data patterns. TRIGGER on \"apply LDS best practices to this LWC\", \"review this LWC for LDS best-practice issues\", \"review this component for Lightning Data Service issues\", \"UIAPI or Apex for this data?\", \"fix stale data after record save\", \"sync LDS cache\", \"use @salesforce/schema for field names\", \"choose between getRecord and Apex\". DO NOT TRIGGER when building a new LWC (use experience-lwc-generate), applying SLDS design tokens (use design-systems-slds-apply), picking or wiring a `lightning-*` base component's props/events/slots generically (use experience-lwc-base-components-integrate — this skill covers only the LDS data-layer rationale, even when the fix involves a base record form), or for security / RTL / accessibility reviews (separate passes)."
 metadata:
   version: "1.0"
+  domains: ["Experience", "Platform"]
   relatedSkills:
     - design-systems-slds-apply
     - experience-lwc-base-components-integrate

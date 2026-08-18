@@ -3,6 +3,7 @@ name: platform-widget-generate
 description: "Use this skill to author a complete HXL WidgetBundle (UEM body + schema.json + -meta.xml). TRIGGER when: user asks for a widget, mosaic, fragment, card, or rich UI surface for any subject, domain, feature, or entity noun; the prompt names only an entity or data shape without invoking Lightning Types, CLTs, or Apex-backed types. DO NOT TRIGGER when: the prompt explicitly says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', or references '@apexClassType/...' (use platform-lightning-type-widget-coordinate); authoring a custom-LWC renderer for a Custom Lightning Type (use platform-custom-lightning-type-generate); or editing only an LWC component."
 metadata:
   version: "1.2"
+  domains: ["Platform", "Agentforce"]
   minApiVersion: "68.0"
   relatedSkills:
     - "platform-apex-generate"

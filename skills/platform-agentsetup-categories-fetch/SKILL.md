@@ -7,6 +7,7 @@ metadata:
     - tool: ["sf"]
       semver: ">=2.0.0"
   version: "1.0"
+  domains: ["Platform", "Agentforce"]
   minApiVersion: "67.0"
 ---
 

@@ -3,6 +3,7 @@ name: experience-aura-lwc-migrate
 description: "Use this skill to analyze a Salesforce Aura component bundle (.cmp, .app, .evt, .intf, Controller.js, Helper.js, Renderer.js) and produce a framework-agnostic migration blueprint (PRD.yaml / PRD.md / PRD.json) capturing public API, data requirements, slots, events, states, accessibility, styling, localization, and security posture. This is Phase 1 (analysis + PRD) only — it does NOT author or edit component code, wire adapters, or Jest tests, and does not write .html/.js/.css/.js-meta.xml. TRIGGER when the user says \"analyze this Aura component\", \"migrate Aura\", \"convert .cmp\", \"produce a migration blueprint\", \"generate a PRD for this Aura component\", or mentions aura:attribute, aura:handler, force:recordData, $Label, $Resource, component.get, cmp.find, or an input directory containing .cmp files. DO NOT TRIGGER when there is no Aura source (delegate downstream LWC authoring to experience-lwc-generate), for post-migration scoring, or for refactoring an existing modern component."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - experience-lwc-generate
 ---

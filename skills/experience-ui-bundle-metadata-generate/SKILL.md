@@ -3,6 +3,7 @@ name: experience-ui-bundle-metadata-generate
 description: "Use this skill when adding a front-end React UI bundle to an existing project or configuring UI bundle metadata and config files. TRIGGER when: adding or scaffolding a new UI bundle inside a project that already exists; running sf template generate ui-bundle; editing ui-bundle.json routing, headers, or output directory; working with *.uibundle-meta.xml files; or registering CSP Trusted Sites, resolving blocked images or fonts or external API calls, or editing cspTrustedSites/*.cspTrustedSite-meta.xml files. DO NOT TRIGGER when: creating a brand-new Salesforce project from scratch, where the whole SFDX starter project (UI bundle plus Experience Site metadata and toolchain) is generated together (use experience-ui-bundle-project-generate)."
 metadata:
   version: "1.2"
+  domains: ["Experience"]
   minApiVersion: "67.0"
   relatedSkills:
     - "experience-ui-bundle-custom-app-generate"

@@ -6,6 +6,7 @@ metadata:
   relatedSkills:
     - "commerce-b2b-open-code-components-integrate"
   version: "1.0"
+  domains: ["Commerce", "Experience"]
 ---
 
 # Replacing OOTB B2B Commerce Components with Open Code

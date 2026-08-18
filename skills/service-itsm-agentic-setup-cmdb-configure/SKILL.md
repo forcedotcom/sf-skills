@@ -3,6 +3,7 @@ name: service-itsm-agentic-setup-cmdb-configure
 description: "Enable the CMDB (Configuration Management Database) feature in Service Cloud ITSM against a production or sandbox org: verify the CMDB org SKU, provision the ITOM tenant, and enable the service-cloud-itsm-cmdb-integration feature that lifts the CMDB access gate. Use when the user asks to enable CMDB, turn on the Configuration Management Database, provision the ITOM tenant, enable the CMDB feature, or fix a CMDB 403 FUNCTIONALITY_NOT_ENABLED error. Triggers on: enable CMDB feature, provision ITOM tenant, turn on CMDB, CMDB not enabled, CMDB 403 error, service-cloud-itsm-cmdb-integration. DO NOT TRIGGER when: the user only wants to assign CMDB permission sets to users, only install a CMDB content bundle, or work with CMDB records directly."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
     - "service-itsm-agentic-setup-cmdb-access-assign"

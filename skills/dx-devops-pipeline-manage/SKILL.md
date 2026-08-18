@@ -3,6 +3,7 @@ name: dx-devops-pipeline-manage
 description: "Use this skill to manage the full lifecycle of a DevOps Center pipeline — list all pipelines, get a single pipeline's details, create a new pipeline linked to a Git repository, add or remove stages, rename a stage, add or remove Salesforce environments on stages, attach or detach projects, and activate or deactivate the pipeline. Invoke when the user wants to set up a release pipeline, wire promotion stages across integration, UAT, staging, and production orgs, connect environments to stages, attach a project, or activate a continuous delivery pipeline. Uses sf devops pipeline and sf devops stage commands with --json output. DO NOT TRIGGER for work-item lifecycle, promotion or deployment execution, conflict detection, or standalone project creation (separate skills)."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "58.0"
   relatedSkills:
     - "dx-devops-work-item-manage"

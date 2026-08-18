@@ -3,6 +3,7 @@ name: experience-ui-bundle-features-generate
 description: "MUST activate when the project contains a uiBundles/*/src/ directory and the user wants to add a pre-built feature — such as authentication (login, logout, protected routes, session management) or search (global search across pages and content) — instead of building it from scratch. Always run list first to see the current feature catalog, since it can include more than authentication and search. Always use this skill for installing pre-built features rather than hand-building them. DO NOT TRIGGER for Agentforce conversational client or file-upload features — use experience-ui-bundle-agentforce-client-generate and experience-ui-bundle-file-upload-generate respectively."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   relatedSkills: ["experience-ui-bundle-agentforce-client-generate", "experience-ui-bundle-file-upload-generate"]
   cliTools:
     - tool: ["npx"]

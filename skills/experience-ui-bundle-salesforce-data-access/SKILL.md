@@ -3,6 +3,7 @@ name: experience-ui-bundle-salesforce-data-access
 description: "MUST activate whenever a uiBundles/*/src/ project reads, writes, or displays Salesforce data — INCLUDING building a page, list, table, card grid, dashboard, or form that shows, filters, counts, or edits records of any object (e.g. Property__c, Account, Case), even when the prompt names only the UI or the object and never says query, GraphQL, or SDK. Records behind such a component come from Salesforce, so use this ALONGSIDE experience-ui-bundle-frontend-generate: that skill styles the component, this one wires its data. Also triggers on @salesforce/platform-sdk imports, sdk.graphql.query / mutate / sdk.fetch calls, *.graphql files, or stale data needing force-refresh. New read/write work uses the current @salesforce/platform-sdk API; migrate only EXISTING old @salesforce/sdk-data callable code. Not for pure styling/layout with no records, app shell, file upload, or auth/search scaffolding. DO NOT TRIGGER for OAuth, object/field schema changes, Bulk/Tooling/Metadata API, or declarative automation."
 metadata:
   version: "2.2"
+  domains: ["Experience", "Platform"]
   minApiVersion: "66.0"
   relatedSkills:
     - "experience-ui-bundle-frontend-generate"

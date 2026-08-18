@@ -4,6 +4,7 @@ description: "Use this skill to Upgrade Einstein Bots into Agentforce agents end
 argument-hint: "[--mode <online|offline>] [--org-alias <org-alias> --bots <bot1:v1,bot2:v2,...> | --offline-dir <offline-dir> [--bots <bot1,bot2,...>]] [--interactive <true|false>]"
 metadata:
   version: "1.0"
+  domains: ["Agentforce"]
   minApiVersion: "63.0"
   relatedSkills:
     - "agentforce-generate"

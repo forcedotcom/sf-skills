@@ -6,6 +6,7 @@ metadata:
     - tool: ["sf"]
       semver: ">=2.0.0"
   version: "1.0"
+  domains: ["Developer Experience"]
 ---
 
 ## Steps

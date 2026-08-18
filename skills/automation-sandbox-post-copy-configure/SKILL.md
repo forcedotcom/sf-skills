@@ -4,6 +4,7 @@ description: "Apply a Salesforce sandbox post-copy automation JSON config agains
 allowed-tools: Bash Read Write
 metadata:
   version: "1.0"
+  domains: ["Automation"]
   cliTools:
     - tool: ["curl"]
       semver: ">=7.0.0"

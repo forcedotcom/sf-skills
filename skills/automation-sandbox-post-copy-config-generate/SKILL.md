@@ -3,6 +3,7 @@ name: automation-sandbox-post-copy-config-generate
 description: "Generate the JSON config file that the Salesforce sandbox post-copy automation tool consumes, from a customer SOP in any format (PDF, xlsx, csv, JSON, docx, Markdown, plain text, or a screenshot of an endpoint table). Use when the user asks to create, build, generate, produce, or convert a post-copy or post-refresh automation config — turning a sandbox-refresh SOP into a JSON array of OutboundMessages and RemoteSiteSettings entries with ConfigurationName, Label, Fields, IsActive, and ExecutionOrder. Also trigger for phrasings like \"post-copy config\", \"post-refresh automation JSON\", \"update the outbound message (OBM) endpoints after refresh\", \"convert this SOP to config\", \"remote site settings JSON\", \"refresh planner to JSON\", or \"sandbox refresh config\". DO NOT TRIGGER when: user wants to deploy the generated config to an org (use platform-metadata-deploy), or apply/execute/run/dry-run the post-copy automation JSON against a sandbox (use automation-sandbox-post-copy-configure)."
 metadata:
   version: "1.0"
+  domains: ["Automation"]
 ---
 
 # Automation: Sandbox Post-Copy Config Generate

@@ -6,6 +6,7 @@ metadata:
     - "design-systems-slds-apply"
     - "mobile-platform-offline-validate"
   version: "1.0"
+  domains: ["Mobile"]
 ---
 
 # Using Mobile Native Capabilities

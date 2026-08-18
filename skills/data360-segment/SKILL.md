@@ -14,6 +14,7 @@ metadata:
     - "data360-orchestrate"
     - "data360-query"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-segment: Data Cloud Segment Phase

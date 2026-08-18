@@ -21,6 +21,7 @@ metadata:
     - "platform-apex-test-run"
     - "platform-metadata-deploy"
   version: "1.1"
+  domains: ["Experience"]
 ---
 
 # experience-lwc-generate: Lightning Web Components Development

@@ -9,6 +9,14 @@ allowed-tools: |
   mcp__plugin_salesforce-development_salesforce-lsp__extract_soql_from_apex
   mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema
 metadata:
+  version: "1.1"
+  domains: ["Platform"]
+  relatedSkills:
+    - "experience-lwc-generate"
+    - "platform-apex-generate"
+    - "platform-apex-logs-debug"
+    - "platform-apex-test-run"
+    - "platform-data-manage"
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6.0"
@@ -16,13 +24,6 @@ metadata:
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-  relatedSkills:
-    - "experience-lwc-generate"
-    - "platform-apex-generate"
-    - "platform-apex-logs-debug"
-    - "platform-apex-test-run"
-    - "platform-data-manage"
-  version: "1.1"
   mcpTools:
     salesforce-lsp:
       tools: ["check_soql_selectivity", "complete_soql", "extract_soql_from_apex", "refresh_org_schema", "validate_soql"]

@@ -21,6 +21,7 @@ metadata:
     - "platform-apex-logs-debug"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["OmniStudio"]
 ---
 
 # omnistudio-datapacks-deploy: Vlocity Build DataPack Deployment

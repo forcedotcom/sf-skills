@@ -3,6 +3,7 @@ name: experience-ui-bundle-frontend-generate
 description: "MUST activate before editing ANY file under uiBundles/*/src/ (or the bundle's index.html) for visual or UI changes to an EXISTING app — pages, components, sections, layout, styling, colors, fonts, navigation, animations, branding, or any look-and-feel change. Use this skill when modifying pages, components, layout, styling, navigation, or branding in an existing UI bundle app. Activate when the project contains appLayout.tsx, routes.tsx, src/pages/, src/components/, src/styles/global.css, or the bundle's index.html. This skill contains critical project-specific conventions (appLayout.tsx shell, shadcn/ui components, Tailwind CSS, Salesforce base-path routing, module restrictions) that override general knowledge. Without this skill, generated code will use wrong imports, break routing, or ignore project structure. Do NOT use when creating a new app from scratch or the bundle has not been scaffolded yet (use experience-ui-bundle-app-coordinate instead)."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-ui-bundle-app-coordinate"
     - "experience-ui-bundle-features-generate"

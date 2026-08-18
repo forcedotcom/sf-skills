@@ -3,6 +3,7 @@ name: service-itsm-agentic-setup-cmdb-bundle-deploy
 description: "Deploy (install) the CMDB Foundation base content bundle in Service Cloud ITSM against a production or sandbox org, after the CMDB feature is enabled. Use when the user asks to install the CMDB bundle, deploy CMDB Foundation, set up the CMDB base content, install CMDB out-of-the-box content, or finish CMDB setup with the base bundle. Triggers on: install CMDB bundle, deploy CMDB Foundation, CMDB base content, CMDB content bundle, bundleInstallation, finish CMDB setup. DO NOT TRIGGER when: the user wants to enable the CMDB feature for the org (that is the CMDB feature-enable skill), assign CMDB permission sets to a user (that is the CMDB access-assign skill), install optional non-base add-on bundles, deploy general (non-CMDB) metadata or packages, or work with CMDB records directly."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
     - "service-itsm-agentic-setup-cmdb-access-assign"

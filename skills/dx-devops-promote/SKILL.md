@@ -3,6 +3,7 @@ name: dx-devops-promote
 description: "Use this skill to drive the full DevOps Center promotion workflow for work items and pipeline stages — validate preconditions, prepare work items, optionally combine work items that share metadata, promote one or more work items or an entire stage to a target pipeline stage, and complete the promotion to finalize the deployment. TRIGGER when the user wants to promote a work item, advance changes to the next environment or stage, combine work items for a single promotion, or move metadata through the release pipeline. The mandatory validate step runs automatically at the start. DO NOT TRIGGER for work item creation or status updates (use dx-devops-work-item-manage), for conflict detection, or for polling an existing promotion's status."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "58.0"
   relatedSkills:
     - "dx-devops-work-item-manage"

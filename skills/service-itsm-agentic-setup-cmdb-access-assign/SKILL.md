@@ -3,6 +3,7 @@ name: service-itsm-agentic-setup-cmdb-access-assign
 description: "Grant a specific user access to CMDB (Configuration Management Database) data in Service Cloud ITSM against a production or sandbox org by assigning the license-backed CMDB permission sets (Configuration Item Reader, Owner, Type Reader, Type Manager) and their permission-set licenses. Use when the user asks to give someone CMDB access, assign CMDB permission sets, grant a user the Configuration Item Reader/Owner role, or fix a CMDB 403 FUNCTIONALITY_NOT_ENABLED that a user still hits after the CMDB feature is already enabled. Triggers on: assign CMDB permission set, grant CMDB access, give user Configuration Item access, CMDB access for user, user still gets CMDB 403 after enable. DO NOT TRIGGER when: the user wants to turn on the CMDB feature or provision the ITOM tenant for the whole org (that is the CMDB feature-enable skill), only install a CMDB content bundle, work with CMDB records directly, or assign general (non-CMDB) permission sets to users (use dx-org-permission-set-assign)."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
     - "dx-org-permission-set-assign"

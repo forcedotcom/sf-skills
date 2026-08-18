@@ -3,6 +3,7 @@ name: experience-lwc-rtl-validate
 description: "Use this skill to review a Lightning Web Component (.html, .js, .css files) for right-to-left (RTL) internationalization correctness, producing a finding list with code-level fixes covering CSS logical properties, bidirectional text handling, keyboard semantics, and RTL-aware SLDS class usage. TRIGGER when the user says \"review this LWC for RTL\", \"audit i18n compliance\", \"fix bidirectional text rendering\", \"replace left/right CSS with logical properties\", \"check RTL layout issues\", \"verify SLDS RTL classes\", \"review my component for Arabic/Hebrew layout\", \"ensure this LWC works in RTL locales\", or \"check bidi text handling\". DO NOT TRIGGER when the user is building a new LWC (use experience-lwc-generate), refactoring SLDS classes themselves (use design-systems-slds-apply or design-systems-slds2-migrate), or performing accessibility/security review."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - design-systems-slds-apply
     - design-systems-slds2-migrate

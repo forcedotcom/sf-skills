@@ -3,6 +3,7 @@ name: commerce-b2b-store-create
 description: "Interactive workflow to create Commerce B2B Stores and retrieve storefront metadata. Use when users want to: create B2B Commerce stores, build Commerce storefronts, set up B2B stores from Vibes, retrieve Commerce metadata, deploy Commerce experiences, work with DigitalExperienceBundle for Commerce."
 metadata:
   version: "1.0"
+  domains: ["Commerce", "Experience"]
   minApiVersion: "56.0"
   cliTools:
     - tool: ["sf"]

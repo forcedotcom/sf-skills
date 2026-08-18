@@ -3,6 +3,7 @@ name: dx-org-manage
 description: "INVOKE this skill to execute Salesforce org operations: create scratch orgs, list/display/resume/delete scratch orgs, create org snapshots, open orgs in browser. This skill EXECUTES operations immediately - it does NOT generate scripts or code files. ALWAYS invoke this skill (do not execute SF CLI commands directly) when user requests to: create a scratch org (from edition, definition file (.json), snapshot, or org shape), list/display/resume/delete scratch orgs, create an org snapshot, or open a Salesforce org. Trigger phrases include: 'create a snapshot', 'take a snapshot', 'create scratch org', 'new scratch org', 'spin up an org', 'create 5 scratch orgs', 'create org from snapshot', 'scratch-def.json', 'project-scratch-def.json', 'list scratch orgs', 'display org', 'delete scratch org', 'resume scratch org', 'open my Salesforce org', 'open org in browser'. Do NOT use for switching default org (use dx-org-switch) or deploying metadata (use platform-metadata-deploy)."
 metadata:
   version: "1.2"
+  domains: ["Developer Experience"]
   minApiVersion: "60.0"
   relatedSkills:
     - "dx-org-switch"

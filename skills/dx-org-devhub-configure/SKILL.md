@@ -4,6 +4,7 @@ description: "Enable Dev Hub on a Salesforce org and view its scratch org alloca
 allowed-tools: Read, Bash(bash), Bash(sf api request rest), Bash(sf data query), Bash(sf org list), Bash(sf org login web), Bash(sf org login device), Bash(sf project deploy), Bash(sf config get), Bash(sf org display), Bash(sf org open), Bash(jq)
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   # DevHubSettings metadata + the Tooling API DevHubSettings endpoint require
   # API 47.0 or later (see scripts/devhub.sh SETTINGS_API_VERSION).
   minApiVersion: "47.0"

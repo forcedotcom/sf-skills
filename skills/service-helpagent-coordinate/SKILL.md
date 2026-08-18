@@ -4,6 +4,7 @@ description: "Use to set up, configure, ground, or go live with a Salesforce Hel
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch AskUserQuestion TodoWrite
 metadata:
   version: "0.9"
+  domains: ["Service", "Agentforce", "Experience"]
   minApiVersion: "67.0"
   relatedSkills:
     - "agentforce-generate"

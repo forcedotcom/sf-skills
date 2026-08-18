@@ -3,6 +3,7 @@ name: dx-pkg-post-install-configure
 description: "Use this skill to automate managed package post-install configuration. Package-agnostic — works with any managed package (LMA, FMA, work.com, Certinia, etc.). TRIGGER when: user installs a managed package and needs post-install configuration, mentions LMA/FMA/work.com post-install setup, asks to configure permission sets/FLS/page layouts for an installed package, says 'post-install', 'package setup', 'configure LMA', 'set up FMA', 'post-install steps'. DO NOT TRIGGER for: standalone permission set assignment (use dx-org-permission-set-assign), generating permission set metadata XML (use platform-permission-set-generate), package installation, or org switching."
 metadata:
   version: "2.2"
+  domains: ["Developer Experience"]
   minApiVersion: "67.0"
   cliTools:
     - tool: ["sf"]

@@ -3,6 +3,7 @@ name: service-digital-engagement-deployment-configure
 description: "Configures Embedded Messaging Deployments for Messaging for In-App and Web (MIAW). Use when the user needs to create a new embedded messaging deployment from scratch using Connect API with defaults, or update an existing deployment's settings using Metadata API. Produces Connect API request payloads for new deployments and EmbeddedServiceConfig metadata XML for updates. TRIGGER when the user mentions embedded messaging deployment, embedded service deployment, MIAW deployment, messaging widget setup, chat widget configuration, embedded chat deployment, or references a .EmbeddedServiceConfig-meta.xml file. DO NOT TRIGGER when the user is creating a messaging channel (use service-digital-engagement-channel-configure), configuring legacy Live Agent embedded service, or generating the JavaScript code snippet for website embedding."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
     - "automation-flow-generate"

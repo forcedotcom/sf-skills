@@ -7,6 +7,7 @@ metadata:
     - "agentforce-generate"
     - "agentforce-observe"
   version: "0.8"
+  domains: ["Agentforce"]
   cliTools:
     - tool: ["curl"]
       semver: ">=7.0.0"

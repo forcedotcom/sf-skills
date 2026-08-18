@@ -3,6 +3,7 @@ name: dx-code-analyzer-custom-rule-create
 description: "Create custom Code Analyzer rules for Regex (pattern matching), PMD (XPath/AST for Apex and metadata XML), and ESLint (LWC/JavaScript/TypeScript). Use when users want to enforce coding standards, ban patterns, detect hardcoded values, govern metadata, or add rules not in the built-in set. TRIGGER when: user says 'create a rule', 'ban System.debug', 'enforce naming convention', 'detect hardcoded IDs', 'custom rule', 'xpath rule', 'regex rule', 'add a PMD rule', 'enforce a policy', 'create a check for', 'flag this pattern', 'make a rule that catches', 'metadata rule', 'check permissions', 'enforce API version', 'eslint rule', 'lwc rule', 'override rule threshold', 'customize complexity', or describes a pattern to enforce. DO NOT TRIGGER when: user wants to run a scan (use dx-code-analyzer-run), configure engines (use dx-code-analyzer-configure), or explain existing rules (use dx-code-analyzer-run)."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   relatedSkills:
     - "dx-code-analyzer-configure"
     - "dx-code-analyzer-run"

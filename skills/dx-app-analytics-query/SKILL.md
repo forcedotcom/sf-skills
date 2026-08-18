@@ -10,6 +10,7 @@ metadata:
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "56.0"
 ---
 

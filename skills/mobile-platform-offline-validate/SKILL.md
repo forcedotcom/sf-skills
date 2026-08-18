@@ -3,6 +3,7 @@ name: mobile-platform-offline-validate
 description: "Review a Lightning Web Component for **mobile offline** compatibility — the Komaci offline static analyzer that pre-primes the data graph for Salesforce Mobile App Plus and Field Service Mobile App. Produces a finding list with code-level fixes covering inline GraphQL queries in `@wire` configurations, modern `lwc:if` / `lwc:elseif` / `lwc:else` directives, and Komaci ESLint rule violations (private wire properties, non-local reactive references, getter side-effects). Use when the user asks for a \"mobile offline review\", \"Komaci check\", \"offline priming audit\", \"offline priming failure\", or \"offline data graph error\", or to validate an LWC against the `@salesforce/eslint-plugin-lwc-graph-analyzer` recommended ruleset. Do not use for generic LWC code review (use an appropriate domain review skill) or for building LWCs with native mobile capabilities (use `mobile-platform-native-capabilities-integrate`)."
 metadata:
   version: "1.0"
+  domains: ["Mobile"]
   relatedSkills:
     - "mobile-platform-native-capabilities-integrate"
   cliTools:

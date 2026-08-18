@@ -3,6 +3,7 @@ name: platform-data-and-tooling-api-context-get
 description: "Authoritative field/schema reference for 2130 STANDARD Salesforce objects — use to look up standard sObject and Tooling field API names, types, properties (filterable/sortable/groupable/updateable), and relationship names for Account, Contact, Opportunity, Lead, Case, ApexClass, ApexCodeCoverage, TraceFlag, and more. Load this alongside a SOQL/query/Apex skill when the field names, types, or Filter/Sort/Group capabilities are unverified — not when the fields are already known and only query syntax or optimization is needed. TRIGGER when verifying, validating, or debugging fields in a SOQL/SOSL query or DML against a standard object — capabilities, relationship/subquery paths, or what fields an object has — so the query runs instead of guessing. Custom __c objects and __c fields are NOT in these assets; describe the live org for those (sf sobject describe). DO NOT TRIGGER for authoring/deploying *-meta.xml or sfdx source (use the Metadata API skill)."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "67.0"
   relatedSkills:
     - "platform-metadata-api-context-get"

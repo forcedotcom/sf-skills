@@ -3,6 +3,7 @@ name: dx-org-permission-set-assign
 description: "ALWAYS USE THIS SKILL to assign permission sets to org users. Assign one or more permission sets to org users using the sf org assign permset command. TRIGGER when the user asks to assign, grant, give, add, or apply permission sets to users, admins, specific orgs, or specific users. Supports granting permissions, giving access, and adding permission sets to default admin or specific users via --on-behalf-of. DO NOT TRIGGER for listing permission sets or checking user permissions."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   relatedSkills:
     - "platform-permission-set-generate"
   cliTools:

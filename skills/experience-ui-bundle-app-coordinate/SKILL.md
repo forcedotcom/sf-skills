@@ -3,6 +3,7 @@ name: experience-ui-bundle-app-coordinate
 description: "MUST activate when the user wants to build, create, or generate a React application, React app, web application, single-page application (SPA), or frontend application — even if no project files exist yet. MUST also activate when the project contains a uiBundles/*/src/ directory or sfdx-project.json and the prompt says create, build, construct, or generate a new app, site, or page from scratch — even if the prompt also describes visual styling. MUST also activate when the task spans more than one ui-bundle skill. Use this skill when building a complete app end-to-end. Do NOT use for Lightning Experience apps with custom objects (use platform-lightning-app-coordinate). Do NOT use for single-concern edits to an existing page (use experience-ui-bundle-frontend-generate)."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-ui-bundle-agentforce-client-generate"
     - "experience-ui-bundle-custom-app-generate"

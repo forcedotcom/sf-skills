@@ -3,6 +3,7 @@ name: experience-ui-bundle-localize
 description: "MUST activate to localize / internationalize a uiBundles/*/src/ React project: extract hardcoded user-facing strings into Custom Labels, wire i18next over the Platform SDK GraphQL backend, add a language to a localized bundle, or troubleshoot label rendering across locales. Triggers: user-facing string literals in .tsx/.jsx, a CustomLabels.labels-meta.xml, a src/i18n/ directory or label-manifest.ts, t(…) calls, or requests to 'translate / localize / internationalize / support another language.' Scope: authenticated UI Bundles only (B2E CustomApplication-bound, or in-core accessCheck-bound apps). DO NOT TRIGGER when: the bundle is a site (B2C/B2B) app bound to a DigitalExperienceConfig (site localization not yet supported), building app shell/UI or styling, reading/writing/refreshing records (use experience-ui-bundle-salesforce-data-access), generating a new bundle (use experience-ui-bundle-frontend-generate), deploying (use experience-ui-bundle-deploy), or authoring translations in Translation Workbench."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   minApiVersion: "68.0"
   relatedSkills:
     - "experience-ui-bundle-deploy"

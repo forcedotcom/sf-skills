@@ -5,6 +5,7 @@ allowed-tools: Read, Bash(bash), Bash(node), Bash(curl), Bash(zip), Bash(unzip),
 argument-hint: "[project-path] [--org <alias>] [--fast]"
 metadata:
   version: "1.1"
+  domains: ["Developer Experience"]
   relatedSkills:
     - "dx-code-analyzer-run"
   cliTools:

@@ -33,6 +33,7 @@ metadata:
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-orchestrate: Salesforce Data Cloud Orchestrator

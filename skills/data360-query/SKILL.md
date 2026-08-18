@@ -13,6 +13,7 @@ metadata:
     - "data360-segment"
     - "platform-soql-query"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-query: Data Cloud Retrieve Phase

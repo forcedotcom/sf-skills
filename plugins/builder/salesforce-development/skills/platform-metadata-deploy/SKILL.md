@@ -3,6 +3,7 @@ name: platform-metadata-deploy
 description: "Salesforce DevOps automation using sf CLI v2. TRIGGER when: user deploys metadata, creates/manages scratch orgs or sandboxes, sets up CI/CD pipelines, or troubleshoots deployment errors with sf project deploy. DO NOT TRIGGER when: writing Apex code (use platform-apex-generate), building LWC components (use experience-lwc-generate), creating metadata definitions (use platform-custom-object-generate or platform-custom-field-generate), or querying org data (use platform-data-manage)."
 metadata:
   version: "1.1"
+  domains: ["Platform", "Developer Experience"]
   relatedSkills:
     - "agentforce-generate"
     - "agentforce-test"

@@ -3,6 +3,7 @@ name: platform-tracing-agentforce-configure
 description: "Generate AgentforcePlatformTracingSettings metadata to enable or disable Agentforce agent execution trace spans flowing to Data Cloud. Use this skill for any AgentforcePlatformTracingSettings metadata work. TRIGGER when: user mentions Agentforce tracing, agent trace spans, Data Cloud tracing, AgentforcePlatformTracingSettings, platform observability tracing, enable agent tracing, wants agent execution spans in Data Cloud, mentions .settings-meta.xml for AgentforcePlatformTracing, or asks about enabling observability for Agentforce agents. DO NOT TRIGGER when: user wants Platform Tracing for TraceSpanEvent (use platform-tracing-configure), wants to query or analyze existing agent trace data in Data Cloud (use agentforce-observe), wants Event Log Files or ELF configuration, wants Change Data Capture (use integration-eventing-cdc-configure), or wants ManagedEventSubscription (use integration-eventing-subscription-configure)."
 metadata:
   version: "1.0"
+  domains: ["Platform", "Agentforce", "Data 360"]
   minApiVersion: "68.0"
   relatedSkills:
     - "agentforce-observe"

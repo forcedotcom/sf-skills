@@ -3,6 +3,7 @@ name: service-itsm-agentic-setup-cmdb-coordinate
 description: "Orchestrator skill for enabling CMDB (Configuration Management Database) end-to-end in Service Cloud ITSM against a production or sandbox org. Use when the user asks to set up CMDB, enable Configuration Management Database, configure the ITSM CMDB, onboard CMDB from scratch, wants a guided walkthrough of CMDB enablement, or asks what CMDB setup steps are available. Triggers on: set up CMDB, enable CMDB, configure CMDB, CMDB onboarding, Configuration Management Database setup, ITSM CMDB walkthrough. DO NOT TRIGGER when: the user asks about a specific CMDB sub-step directly (e.g. only installing a bundle, only assigning permission sets), CMDB record CRUD (creating CIs, relationships), Discovery/Service Graph Connector configuration, or general ITSM queries without CMDB setup intent."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   relatedSkills:
     - "service-itsm-agentic-setup-cmdb-access-assign"
     - "service-itsm-agentic-setup-cmdb-bundle-deploy"

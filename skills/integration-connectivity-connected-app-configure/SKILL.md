@@ -4,6 +4,7 @@ description: "Salesforce Connected Apps and External Client Apps OAuth configura
 allowed-tools: Bash Read Write Edit Glob Grep WebFetch AskUserQuestion TodoWrite
 metadata:
   version: "1.1"
+  domains: ["Integration"]
   minApiVersion: "57.0"
   relatedSkills:
     - "integration-connectivity-generate"

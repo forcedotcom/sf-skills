@@ -3,6 +3,7 @@ name: experience-ui-bundle-mfa-configure
 description: "Configure Multi-Factor Authentication (MFA) for Salesforce Experience Site users. TRIGGER when: user wants to enable MFA on a community, enforce two-factor authentication for portal users, add MFA to a React Experience Site / Web App, configure ForceTwoFactor permission, create MFA permission sets for external users, or troubleshoot MFA not appearing on login. Also triggers on: MFA community, two-factor portal, ForceTwoFactor permission set, MFA Experience Cloud, MFA React site, identity verification community, MFA experience site, ForceTwoFactor permissionset-meta.xml, MFA permissionset-meta.xml. DO NOT TRIGGER when: configuring org-wide MFA for internal users (that's Setup > Identity Verification), building custom login UI components (use experience-ui-bundle-frontend-generate), or generating generic permission sets without MFA context (use platform-permission-set-generate)."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   minApiVersion: "47.0"
   cliTools:
     - tool: ["jq"]

@@ -11,6 +11,7 @@ metadata:
     - "platform-apex-generate"
     - "platform-apex-test-generate"
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "67.0"
 ---
 

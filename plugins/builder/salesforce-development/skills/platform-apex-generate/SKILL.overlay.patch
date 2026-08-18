@@ -1,6 +1,6 @@
 --- a/SKILL.md
 +++ b/SKILL.md
-@@ -1,11 +1,31 @@
+@@ -1,12 +1,28 @@
  ---
  name: platform-apex-generate
  description: "Primary Apex authoring skill for class generation, refactoring, and review. ALWAYS ACTIVATE when the user mentions Apex, .cls, triggers, or asks to create/refactor a class (service, selector, domain, batch, queueable, schedulable, invocable, DTO, utility, interface, abstract, exception, REST resource). Use this skill for requests involving SObject CRUD, mapping collections, fetching related records, scheduled jobs, batch jobs, trigger design, @AuraEnabled controllers, @RestResource endpoints, custom REST APIs, or code review of existing Apex."
@@ -12,6 +12,7 @@
 +  mcp__plugin_salesforce-development_salesforce-lsp__refresh_org_schema
  metadata:
    version: "1.1"
+   domains: ["Platform"]
    minApiVersion: "66.0"
    relatedSkills:
      - "platform-apex-test-generate"
@@ -23,16 +24,12 @@
 +    # apex.diagnostics -> ...salesforce-lsp__apex_diagnostics. refresh_org_schema
 +    # is natively underscored, so both forms match.
 +    salesforce-lsp:
-+      tools:
-+        - apex.diagnostics
-+        - apex.hover
-+        - apex.documentSymbol
-+        - refresh_org_schema
++      tools: ["apex.diagnostics", "apex.documentSymbol", "apex.hover", "refresh_org_schema"]
 +      semver: ">=0.1.0"
    cliTools:
      - tool: ["sf"]
        semver: ">=2.0.0"
-@@ -46,6 +66,7 @@
+@@ -47,6 +63,7 @@
     - Service-Selector-Domain layering, logging utilities
     - Existing classes/triggers and current trigger framework or handler pattern
     - Whether Trigger Actions Framework (TAF) is already in use
@@ -40,7 +37,7 @@
  
  2. **Choose the smallest correct pattern** (see Type-Specific Guidance below)
  
-@@ -62,15 +83,28 @@
+@@ -63,15 +80,28 @@
  
  ### Phase 2 — Validate (required before reporting)
  
@@ -76,7 +73,7 @@
     - Run org tests including `{ClassName}Test` via `sf apex run test` or MCP.
     - Delegate all test generation/fixes/coverage work to `platform-apex-test-generate`; iterate until the tests pass.
     - Capture pass/fail counts and coverage percentage for the report.
-@@ -78,10 +112,11 @@
+@@ -79,10 +109,11 @@
  
  ### Phase 3 — Report
  
@@ -92,7 +89,7 @@
  
  ---
  
-@@ -389,9 +424,10 @@
+@@ -390,9 +421,10 @@
  Apex work: <summary>
  Files: <paths>
  Design: <pattern / framework choices>

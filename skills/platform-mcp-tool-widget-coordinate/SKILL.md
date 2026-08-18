@@ -3,6 +3,7 @@ name: platform-mcp-tool-widget-coordinate
 description: "Orchestrate object-based Lightning Type + HXL widget generation to render the output of a custom MCP server tool backed by an Apex Invocable Action. TRIGGER only when the prompt EXPLICITLY involves rendering an MCP tool result: user says 'MCP server', 'MCP tool', 'custom MCP server', references a tool 'output schema' / 'tool output' / 'outputValues' envelope, names an 'invocable action' backing an MCP tool, or asks to build a widget or rich UI rendition for the output of an Apex-invocable-backed MCP tool. DO NOT TRIGGER when: customizing an Apex-backed agent action output (use platform-lightning-type-widget-coordinate), authoring only a Custom Lightning Type (use platform-custom-lightning-type-generate), authoring only an Apex class (use platform-apex-generate), or building a standalone widget with no Lightning Type or MCP tool involved (use platform-widget-generate)."
 metadata:
   version: "1.0"
+  domains: ["Platform", "Agentforce"]
   minApiVersion: "67.0"
   relatedSkills:
     - "platform-apex-generate"

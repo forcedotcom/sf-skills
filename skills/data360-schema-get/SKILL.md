@@ -10,6 +10,7 @@ metadata:
     - tool: ["sf"]
       semver: ">=2.0.0"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-schema-get Skill

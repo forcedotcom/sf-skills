@@ -3,6 +3,7 @@ name: platform-trust-archive-manage
 description: "ALWAYS USE THIS SKILL for anything involving Salesforce Archive (also called Trusted Services Archive) — search, view, unarchive, analyze, mask, and erase (RTBF) archived records via the Archive Connect API, and reading archive job status from the ArchiveActivity object. TRIGGER when: user mentions Salesforce Archive, Trusted Services Archive, archive/unarchive records, ArchiveActivity, archive jobs, archive policy, archive analyzer, archived record search, archive storage, archive failure logs, right to be forgotten / RTBF on archived data, or masking archived PII — including phrasings like 'find records that were archived', 'restore archived data', 'why did the archive job fail', 'download the archive failure log', or 'monitor my archive jobs', AND even when they ask you to explain, give guidance, or write a runbook/doc about these topics rather than run code. SKIP when: the user wants generic data-export/backup unrelated to the Archive add-on, or wants to build the archive policy UI metadata."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"

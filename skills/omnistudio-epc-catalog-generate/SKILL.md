@@ -17,6 +17,7 @@ metadata:
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.0"
+  domains: ["OmniStudio"]
   minApiVersion: "60.0"
 ---
 

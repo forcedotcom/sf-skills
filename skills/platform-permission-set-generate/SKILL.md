@@ -3,6 +3,7 @@ name: platform-permission-set-generate
 description: "Generates correct, deployable Salesforce permission set metadata (PermissionSet XML) with object, field, user, and app permissions. Use this skill when creating or editing permission set metadata, object permissions, field-level security (FLS), tab visibility, or deploying permission sets."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "60.0"
 ---
 

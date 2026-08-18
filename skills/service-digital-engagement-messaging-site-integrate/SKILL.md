@@ -3,6 +3,7 @@ name: service-digital-engagement-messaging-site-integrate
 description: "Integrates a Messaging for In-App and Web (MIAW) Embedded Messaging chat widget into an Experience Cloud site by patching the site's LWR or Aura page bundle, deploying, publishing, and verifying guest access. Use when the user wants to embed messaging on an Experience site, add a chat widget to a community, place the Embedded Messaging component on an LWR or Aura page, wire an embedded service deployment to a site, references the retrieved bundle artifacts (`content.json`, `homeGuestLayout.json`, or a `*.site-meta.xml` file), or automates the retrieve/patch-JSON/deploy/publish flow instead of clicking through Experience Builder. DO NOT TRIGGER when creating the messaging channel (use service-digital-engagement-channel-configure), when creating or updating the EmbeddedServiceConfig deployment (use service-digital-engagement-deployment-configure), or when generating a standalone JavaScript snippet for a non-Experience website."
 metadata:
   version: "1.0"
+  domains: ["Service", "Experience"]
   minApiVersion: "62.0"
   relatedSkills:
     - "experience-lwr-site-generate"

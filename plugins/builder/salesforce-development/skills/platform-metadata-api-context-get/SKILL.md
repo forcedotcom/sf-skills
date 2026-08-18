@@ -3,6 +3,7 @@ name: platform-metadata-api-context-get
 description: "REQUIRED companion for Salesforce metadata generation — load this schema/API-context skill in the SAME turn as ANY metadata generation skill; if you load a generator, you ALSO load this. Use it whenever you create, generate, add, edit, or author metadata or a *-meta.xml file: custom object, custom field, formula field, picklist, lookup, master-detail, validation rule, permission set, profile, custom tab, lightning record page, flexipage, list view, custom application, flow, layout, record type, sharing rules, report, and 604 Metadata API types. It provides the authoritative schema, fields, field properties, required flags, allowed enum values, and XML structure so generated *-meta.xml deploys cleanly — skipping it causes hallucinated element names and deploy failures. Trigger on *-meta.xml, metadata schema, api context, 'Salesforce metadata', or 'sfdx project'. DO NOT use for SOQL, DML, runtime sObject access, or Tooling API records."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "67.0"
   cliTools:
     - tool: ["jq"]

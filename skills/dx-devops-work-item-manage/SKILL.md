@@ -3,6 +3,7 @@ name: dx-devops-work-item-manage
 description: "Use this skill to manage the full lifecycle of DevOps Center work items — list, create, update, commit changes, perform status transitions, and create pull requests. Update fields like subject, description, and status. Commit and push code changes to work item branches. Create pull requests for work item branches via DevOps Center API. Invoke when the user wants to track, find, create, or update a work item, commit changes to a work item branch, advance a work item's status through the pipeline, or create a pull request for code review. Consolidates sf devops work-item and review operations. DO NOT TRIGGER for promotion or deployment operations, or conflict detection."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "58.0"
   cliTools:
     - tool: ["sf"]

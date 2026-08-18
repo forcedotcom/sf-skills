@@ -3,6 +3,7 @@ name: platform-report-generate
 description: "Use this skill when users need to create, generate, or validate Salesforce Lightning Report metadata. Trigger when users mention reports, creating reports, report metadata, .report-meta.xml files, tabular reports, summary reports, matrix reports, joined reports, report columns, report groupings, report filters, report charts, cross-filters, bucket fields, report formulas, or report time frame filters. Also use when users say things like 'create a report', 'generate a report', 'build a report on Accounts', 'add a chart to my report', or when they encounter deployment errors for .report-meta.xml files. Do NOT trigger for: creating or modifying Custom Report Type metadata (.reportType-meta.xml — use platform-custom-report-type-generate), creating dashboards, creating list views, running or viewing existing reports in the UI, or SOQL queries."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "60.0"
   relatedSkills:
     - "platform-custom-report-type-generate"

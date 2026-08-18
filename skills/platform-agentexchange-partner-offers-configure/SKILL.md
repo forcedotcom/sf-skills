@@ -11,6 +11,7 @@ metadata:
     - "platform-apex-generate"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "67.0"
 ---
 

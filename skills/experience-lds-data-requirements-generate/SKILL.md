@@ -3,6 +3,7 @@ name: experience-lds-data-requirements-generate
 description: "Use when a Lightning Web Component data need is described in ambiguous natural language — turn \"get contact info\" or \"show account data\" into a clear, PRD-ready data-requirements spec. TRIGGER when the user says \"define data requirements for this LWC\", \"turn this PRD data section into validated object/field names\", \"recommend GraphQL vs UIAPI for this data need\", \"validate these Salesforce API names\", or \"spec out the LDS adapter for this component\", or references LWC bundle files (`.js`, `.js-meta.xml`) whose data layer is not yet specified. DO NOT TRIGGER when the data layer is already fully specified, when authoring the actual query or adapter code from a known spec, or when implementing an LWC end-to-end (use experience-lwc-generate)."
 metadata:
   version: "1.0"
+  domains: ["Experience", "Platform"]
   relatedSkills:
     - experience-lwc-generate
 ---

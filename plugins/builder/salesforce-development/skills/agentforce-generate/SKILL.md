@@ -3,6 +3,7 @@ name: agentforce-generate
 description: "Build, modify, audit, repair, optimize, debug, and deploy agents with Agentforce Agent Script. TRIGGER when: user creates, reviews, or changes .agent files or aiAuthoringBundle metadata; asks to fix AgentScript, audit an existing agent, run an AgentScript health check, common-pitfall review, or baseline-versus-candidate repair loop; changes a response, action, subagent, route, state flow, or Agent Spec; previews, debugs, deploys, publishes, or tests agents; uses sf agent generate/preview/publish/test; or manages Agentforce MCP servers, tools, assets, or authentication. DO NOT TRIGGER when: Apex, Flow, Prompt Template, Experience Cloud, or general Salesforce CLI work is unrelated to Agent Script; or the primary input is a production session or trace ID rather than an agent artifact."
 metadata:
   version: "0.11"
+  domains: ["Agentforce"]
   minApiVersion: "66.0"
   relatedSkills:
     - "agentforce-observe"

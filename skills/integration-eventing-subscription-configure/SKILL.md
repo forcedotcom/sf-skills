@@ -10,6 +10,7 @@ metadata:
     - "platform-custom-object-generate"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["Integration"]
 ---
 
 # Managing ManagedEventSubscription

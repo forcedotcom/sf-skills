@@ -3,6 +3,7 @@ name: dx-code-analyzer-run
 description: "Run Salesforce Code Analyzer to scan code for security, performance, best practice, and code style violations. Supports all engines (PMD, ESLint, CPD, RetireJS, Flow, SFGE, ApexGuru), targets (files, folders, git diff), categories, and severities. Also handles post-scan exploration: filtering results by engine/severity/category/file, and explaining what rules mean. TRIGGER when: user says 'scan my code', 'check security issues', 'run PMD/ESLint', 'find duplicates', 'analyze Flows', 'check vulnerable libraries', 'AppExchange review', 'lint my LWC', 'static analysis', 'code quality', 'show security violations', 'what is this rule', 'explain ApexCRUDViolation', 'filter results', or mentions engines/file types (.cls, .trigger, .js, .flow-meta.xml). Use this skill for scanning, exploring results, and listing rules. DO NOT TRIGGER when: user asks only about installation/configuration (use dx-code-analyzer-configure), or wants to create a custom rule (use dx-code-analyzer-custom-rule-create)."
 metadata:
   version: "1.0"
+  domains: ["Developer Experience"]
   relatedSkills:
     - "dx-code-analyzer-configure"
     - "dx-code-analyzer-custom-rule-create"

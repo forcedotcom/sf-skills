@@ -12,6 +12,7 @@ metadata:
     - "omnistudio-integration-procedure-generate"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["OmniStudio"]
 ---
 
 # omnistudio-omniscript-generate: OmniStudio OmniScript Creation and Validation

@@ -3,6 +3,7 @@ name: service-itsm-agentic-setup-cmdb-discovery-configure
 description: "Enable CMDB Asset Discovery in Service Cloud ITSM against a production or sandbox org by turning on the service-cloud-itsm-discovery-integration feature, then grant a user the Discovery page by assigning the IT Service Discovery Manager permission set and its license — the final CMDB setup layer, run after the CMDB feature, user access, and content bundle are in place. Use when the user asks to enable CMDB discovery, turn on asset discovery, enable service-cloud-itsm-discovery-integration, grant Discovery page access, or assign the Discovery Manager permission set. Triggers on: enable CMDB discovery, turn on asset discovery, service-cloud-itsm-discovery-integration, assign Discovery Manager access, CMDB discovery not enabled. DO NOT TRIGGER when: the user wants to enable the base CMDB feature, provision the ITOM tenant, assign the four CMDB Configuration-Item permission sets, install a CMDB content bundle, or work with CMDB records directly — those are earlier CMDB layers."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
     - "service-itsm-agentic-setup-cmdb-access-assign"

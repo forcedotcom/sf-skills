@@ -3,6 +3,7 @@ name: platform-dataspace-access-configure
 description: "Use this skill to configure Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, and optionally grants object-level access to specific DMO, DLO, or CIO objects via the Object Access Grants Connect API. TRIGGER when: user needs to create or update a permission set that includes DataSpace access, grant a permission set access to a specific dataspace, configure dataAccessLevel or objectAccessLevel for a dataspace scope, add RBAC object access grants for Data Cloud objects, or list or remove object access grants for a permission set and DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without any dataspace access (use platform-permission-set-generate), the request is about data ingestion or streams (use data360-prepare), or the work involves creating dataspaces themselves rather than granting access to them."
 metadata:
   version: "1.0"
+  domains: ["Platform", "Data 360"]
   minApiVersion: "67.0"
   cliTools:
     - tool: ["jq"]

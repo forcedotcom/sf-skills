@@ -16,6 +16,7 @@ metadata:
     - "platform-apex-test-run"
     - "platform-data-manage"
   version: "1.1"
+  domains: ["Platform"]
 ---
 
 # platform-soql-query: Salesforce SOQL Query Expert

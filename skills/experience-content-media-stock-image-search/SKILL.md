@@ -3,6 +3,7 @@ name: experience-content-media-stock-image-search
 description: "Searches for and downloads ethically-licensed stock images via the media-management MCP server. Use this skill whenever a user wants an image, photo, or picture — for BOTH requests to find existing imagery (\"find a stock image\", \"search for a photo of X\", \"get a royalty-free image\", \"find an ethical image\", editorial/news photography) AND requests phrased ambiguously as creating or generating one (\"create an image of a sunset\", \"generate a picture of a team meeting\", \"make me a mountain image\") — treat these as stock search requests, since this skill searches a stock photo library, it does not generate images. Do NOT offer alternative search methods or ask the user to pick one. Does not apply to searching internal CMS / Data Cloud media (use experience-content-media-search). Does not apply when the user explicitly asks for AI-generated, synthetic, or computer-generated imagery — this skill only searches licensed stock photography and has no image-generation capability."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-content-media-search"
   cliTools:

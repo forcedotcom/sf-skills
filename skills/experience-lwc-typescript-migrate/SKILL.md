@@ -3,6 +3,7 @@ name: experience-lwc-typescript-migrate
 description: "Use when converting an existing JavaScript Lightning Web Component (.js, .html, .css) to TypeScript with full type annotations and a matching `.d.ts` file that exposes only the component's `@api` surface. TRIGGER when the user says \"convert LWC to TypeScript\", \"migrate LWC to TS\", \"rename .js to .ts for this component\", \"add types to my LWC\", \"generate .d.ts for this LWC\", \"type-annotate @api properties\", or \"produce declare module 'c/componentName' definitions\". DO NOT TRIGGER when the user is authoring a brand-new LWC from scratch (use experience-lwc-generate), generating Jest tests for an existing LWC (use experience-lwc-generate), or migrating an Aura component to LWC."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-lwc-generate"
   cliTools:

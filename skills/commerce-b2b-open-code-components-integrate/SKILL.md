@@ -4,6 +4,7 @@ description: "Integrate Salesforce B2B Commerce open source components from GitH
 allowed-tools: Bash(git clone:*) Bash(cp:*) Read
 metadata:
   version: "1.0"
+  domains: ["Commerce", "Experience"]
   minApiVersion: "56.0"
   relatedSkills:
     - "commerce-b2b-store-create"

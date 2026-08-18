@@ -24,6 +24,7 @@ metadata:
     - "platform-data-manage"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["External"]
 ---
 
 # external-diagram-mermaid-generate: Salesforce Diagram Generation

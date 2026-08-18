@@ -11,6 +11,7 @@ metadata:
     - "platform-custom-object-generate"
     - "platform-permission-set-generate"
   version: "1.0"
+  domains: ["Integration"]
   minApiVersion: "60.0"
 ---
 

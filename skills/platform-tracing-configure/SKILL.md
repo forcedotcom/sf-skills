@@ -3,6 +3,7 @@ name: platform-tracing-configure
 description: "Generate EventSettings metadata to enable or disable Platform Tracing (TraceSpanEvent publishing) in Event Monitoring. Use this skill for any EventSettings enablePlatformTracing metadata work. TRIGGER when: user mentions Platform Tracing, TraceSpanEvent, enable tracing in Event Monitoring Settings, event monitoring tracing toggle, enablePlatformTracing, .settings-meta.xml for Event settings tracing, turn on trace span events, or stop publishing trace spans. DO NOT TRIGGER when: user wants Agentforce agent tracing to Data Cloud (use platform-tracing-agentforce-configure), wants Event Log Files or ELF generation, wants Change Data Capture (use integration-eventing-cdc-configure), or wants ManagedEventSubscription (use integration-eventing-subscription-configure)."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "68.0"
   relatedSkills:
     - "integration-eventing-cdc-configure"

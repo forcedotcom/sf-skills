@@ -3,6 +3,7 @@ name: mobile-apps-create
 description: "The entry point for building any Salesforce native mobile app on iOS or Android. TRIGGER when the user says: \"build a Salesforce iOS app\", \"add Salesforce login to my Android app\", \"set up Mobile SDK\", \"add MobileSync / SmartStore offline storage\", \"embed an Agentforce agent in my mobile app\", \"add Agentforce chat to iOS/Android\", or otherwise asks to create, extend, or integrate a Salesforce mobile experience in Swift or Kotlin (MSDK, Agentforce SDK, or both). SKIP when the user is building a non-Salesforce mobile app, using React Native / Flutter / Ionic without Salesforce integration, asking about generic mobile UI design, or working on a Salesforce-adjacent web/desktop surface (LWC, Experience Cloud, Mobile Publisher branding-only)."
 metadata:
   version: "1.0"
+  domains: ["Mobile"]
   cliTools:
     - tool: ["npx"]
       semver: ">=9.0.0"

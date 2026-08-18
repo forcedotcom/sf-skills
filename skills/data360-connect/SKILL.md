@@ -14,6 +14,7 @@ metadata:
     - "data360-prepare"
     - "data360-query"
   version: "1.0"
+  domains: ["Data 360"]
 ---
 
 # data360-connect: Data Cloud Connect Phase

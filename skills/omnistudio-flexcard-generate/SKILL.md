@@ -13,6 +13,7 @@ metadata:
     - "omnistudio-omniscript-generate"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["OmniStudio"]
   minApiVersion: "60.0"
 ---
 

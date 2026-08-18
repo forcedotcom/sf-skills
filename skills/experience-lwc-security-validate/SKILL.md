@@ -3,6 +3,7 @@ name: experience-lwc-security-validate
 description: "Use this skill as THE specialized Lightning Web Security (LWS) validator for a Lightning Web Component bundle (`.js`, `.ts`, `.html`, `.css`, `.js-meta.xml`) — the canonical LWS/Product-Security review for LWCs, NOT a generic code-security pass. It produces either a severity-ranked finding list with code-level remediations or a SARIF 2.1.0 JSON score report keyed by the `lws-001`…`lws-023b` rule catalog. TRIGGER when the user asks to review, audit, or check an LWC component for LWS compliance issues and recommend fixes, score a component's LWS/security compliance, find dangerous DOM APIs or blocked sinks (`eval`, `Function`, `document.write`, `innerHTML`, `document.createElement('script')`, global-scope assignment to `window`/`globalThis`, unsafe URL schemes), or emit a SARIF security report. DO NOT TRIGGER for generic non-LWC security review, for building a new LWC (use experience-lwc-generate), accessibility (WCAG 2.2), RTL/i18n, or Apex/Aura/server-side review."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - design-systems-slds-validate
     - dx-code-analyzer-run

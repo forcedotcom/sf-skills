@@ -3,6 +3,7 @@ name: experience-lwc-base-components-integrate
 description: "Pick the right Lightning Base Component (`lightning-*`) for a given UI task, retrieve its full API (props, methods, events, slots) from the bundled per-component reference, and wire it into an LWC (LWC `.html`, `.js`, and `.css` files) without breaking SLDS. Use this skill when users say \"I need a Lightning modal / datatable / combobox / record form\", ask which `lightning-*` component fits a use case, want a shortlist of LBC candidates, are about to hand-roll a UI that a base component already provides, or are editing an LWC bundle's `.html` / `.js` / `.css` and need to select or wire a base component. Also triggers on \"Lightning base component\", \"LBC\", \"lightning-combobox\", \"lightning-datatable\", \"use `lightning-` tag\". DO NOT TRIGGER for applying SLDS design tokens, blueprints, or styling guidance in general — that is `design-systems-slds-apply`; this skill only selects and wires `lightning-*` base components."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   relatedSkills:
     - design-systems-slds-apply
 ---

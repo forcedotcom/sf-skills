@@ -3,6 +3,7 @@ name: platform-encryption-configure
 description: "Configure Salesforce Shield Platform Encryption — generate deployable encryption settings and encrypted-field metadata, and answer key-model and lifecycle questions. TRIGGER when: user wants to turn on deterministic encryption, encrypt a field, set up Cache-Only Keys, External Key Management, or replay detection, or mentions Shield Platform Encryption, encryption at rest, deterministic vs probabilistic encryption, encryptionScheme, PlatformEncryptionSettings, EncryptionKeySettings, BYOK, BYOKMS, tenant secrets, key rotation, or .settings-meta.xml / .field-meta.xml for encryption — even when they don't say 'Shield'. SKIP when: user needs a generic custom field with no encryption (use platform-custom-field-generate), needs the raw Metadata API type reference (use platform-metadata-api-context-get), or asks about Classic Encryption (encrypted text fields), which is a different feature. Use this skill for any Platform Encryption configuration, field-encryption, or key-model question."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "62.0"
   relatedSkills:
     - "platform-custom-field-generate"

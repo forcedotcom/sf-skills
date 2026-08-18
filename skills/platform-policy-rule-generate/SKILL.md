@@ -3,6 +3,7 @@ name: platform-policy-rule-generate
 description: "Use this skill when authoring PolicyRuleDefinition and PolicyRuleDefinitionSet metadata XML for Salesforce Data Cloud governance policies, or when editing *.policyRuleDefinition / *.policyRuleDefinitionSet files. Covers the category decision tree, full schema for all policy variants (ACCESS, GOVERNANCE, RECORD, TRANSFORM), UI-compatibility rules for the Data Governance Policy Builder, output hygiene for user-facing agent responses, and validation guardrails. Do NOT use this skill for UserAccessPolicy, AccessPolicy, SharingRules, PermissionSet, or any other access-control metadata type — those have their own types and live outside the PolicyRuleDefinition schema."
 metadata:
   version: "1.0"
+  domains: ["Platform", "Data 360"]
   minApiVersion: "64.0"
   cliTools:
     - tool: ["jq"]

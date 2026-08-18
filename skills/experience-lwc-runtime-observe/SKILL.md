@@ -3,6 +3,7 @@ name: experience-lwc-runtime-observe
 description: "Use when running Salesforce Lightning Preview for an app or a single LWC component to extract the runtime DOM for inspection. TRIGGER when the user says \"preview an LWC locally\", \"run sf lightning dev\", \"launch Local Dev\", \"inspect a component's shadow DOM at runtime\", \"grab rendered HTML from a live preview\", \"troubleshoot what actually renders versus the template\", \"set up Salesforce Live Preview plugin\", \"lightning preview\", \"local dev server\", or \"extract runtime DOM\". DO NOT TRIGGER when the user is authoring or editing LWC source code (use experience-lwc-generate) or reviewing component code statically without running it."
 metadata:
   version: "1.0"
+  domains: ["Experience", "Developer Experience"]
   cliTools:
     - tool: ["python3"]
       semver: ">=3.0.0"

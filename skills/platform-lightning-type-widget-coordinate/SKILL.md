@@ -3,6 +3,7 @@ name: platform-lightning-type-widget-coordinate
 description: "Orchestrate Apex-backed Lightning Type + HXL widget generation. TRIGGER only when the prompt EXPLICITLY invokes Lightning Types: user says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', references '@apexClassType/...', asks to build a widget or card for a named Lightning Type, asks to create a new Lightning Type and widget together, or grounds a widget in a specific Apex class as its schema. DO NOT TRIGGER when the prompt names only a subject, domain, feature, or entity noun. Also DO NOT TRIGGER when: authoring only a Custom Lightning Type (use platform-custom-lightning-type-generate), only an Apex class (use platform-apex-generate), editing an existing widget without any Lightning Type change, or grounding a widget on an object/JSON-based Lightning Type (lightning__objectType with primitives)."
 metadata:
   version: "1.3"
+  domains: ["Platform", "Agentforce"]
   minApiVersion: "68.0"
   relatedSkills:
     - "platform-apex-generate"

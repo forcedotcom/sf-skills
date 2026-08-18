@@ -3,6 +3,7 @@ name: platform-custom-object-generate
 description: "Use this skill when users need to create, generate, or validate Salesforce Custom Object metadata. Trigger when users mention custom objects, creating objects, object metadata, .object files, sharing models, name fields, or validation rules on objects. Also use when users say things like \"create a custom object\", \"generate object metadata\", \"set up an object for...\", or when they're troubleshooting object deployment errors especially around sharing models and Master-Detail relationships. Always use this skill for any custom object metadata work, including enriching and keeping the object's description current whenever its fields or validation rules change. Do NOT use this skill for non-Custom-Object metadata (Apex, Flows, LWC, Permission Sets, Custom Metadata Types) or for standard Salesforce objects."
 metadata:
   version: "1.1"
+  domains: ["Platform"]
   minApiVersion: "60.0"
 ---
 

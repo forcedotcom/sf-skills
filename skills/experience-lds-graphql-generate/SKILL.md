@@ -3,6 +3,7 @@ name: experience-lds-graphql-generate
 description: "Use ALWAYS when a prompt mentions GraphQL, lightning/uiGraphQLApi, @wire(graphql, ...), or gql template tags in an LWC context — even if the surface ask is \"build an LWC\". Owns the ENTIRE flow: introspect the org's LDS GraphQL schema, identify entities/fields, construct the schema-validated gql query or mutation, wire it into the LWC via lightning/uiGraphQLApi, verify against a connected org. REQUIRED whenever a prompt asks to render, list, or edit Salesforce records (Account, Contact, Case, custom objects) via GraphQL — the .html and .js scaffolding IS in scope. DO NOT delegate to experience-lwc-generate: that skill has NO GraphQL schema introspection, NO create_lds_graphql_read_query binding, and defaults to getRecord/getRelatedListRecords wire adapters which will not satisfy a GraphQL prompt. DO NOT TRIGGER only if the prompt forbids GraphQL, chooses UIAPI/Apex (use experience-lds-best-practices-apply), or asks for data requirements (use experience-lds-data-requirements-generate)."
 metadata:
   version: "1.0"
+  domains: ["Experience", "Platform"]
   cliTools:
     - tool: ["python3"]
       semver: ">=3.8"

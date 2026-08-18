@@ -3,6 +3,7 @@ name: service-itsm-incident-priority-configure
 description: "Configures the Incident Priority Matrix for Salesforce ITSM through the sf CLI — enabling or disabling the matrix, shaping the Impact x Urgency grid that derives Priority on Incident records, toggling the manual-override preference, and reading or setting the default fallback priority. Reads every value before writing, is idempotent, and requires explicit user confirmation before any mutation. Use when the user wants to view, enable, disable, set up, seed, add to, change, or remove priority matrix configuration for Incident records, change the default incident priority, or asks about incident priority setup, impact/urgency mapping, override, or the ITSM incident priority matrix. DO NOT TRIGGER for Problem or ChangeRequest priority matrices, Case priority fields, standard Priority picklists outside ITSM, SLA or milestone configuration, or enabling Incident Management itself (use the service-itsm-incident-mgmt-configure skill)."
 metadata:
   version: "1.0"
+  domains: ["Service"]
   minApiVersion: "67.0"
   cliTools:
     - tool: ["sf"]

@@ -15,6 +15,7 @@ metadata:
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.1"
+  domains: ["Platform"]
 ---
 
 # platform-apex-logs-debug: Salesforce Debug Log Analysis & Troubleshooting

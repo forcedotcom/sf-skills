@@ -10,6 +10,7 @@ metadata:
     - "dx-devops-test-suite-assignments-configure"
     - "dx-devops-test-suite-run"
   version: "1.0"
+  domains: ["Developer Experience"]
   minApiVersion: "67.0"
 ---
 

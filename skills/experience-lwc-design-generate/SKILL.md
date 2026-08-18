@@ -3,6 +3,7 @@ name: experience-lwc-design-generate
 description: "Use when you need to create a brand new Lightning Web Component from a Figma design, a Product Requirements Document, or another design artifact — orchestrating the five-phase workflow (gather requirements → generate code → optimize → lint/format/compile → test) and stitching together the specialized skills for SLDS, LDS, base components, optimization, and testing. Use this skill whenever the user mentions building a new LWC from Figma, building an LWC from a PRD, generating an LWC from a design or screenshot, or migrating an Aura component as a fresh LWC build. DO NOT TRIGGER when refactoring an existing LWC (use experience-lwc-generate), for Aura → LWC in-place migration (out of scope for this skill), for standalone SLDS token or styling work (use design-systems-slds-apply), or for standalone data-layer work (use experience-lds-best-practices-apply or experience-lds-data-requirements-generate)."
 metadata:
   version: "1.0"
+  domains: ["Experience", "Design Systems"]
   cliTools:
     - tool: ["eslint"]
       semver: ">=8.0"

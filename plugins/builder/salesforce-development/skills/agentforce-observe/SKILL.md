@@ -7,6 +7,7 @@ metadata:
     - "agentforce-generate"
     - "agentforce-test"
   version: "0.8"
+  domains: ["Agentforce", "Data 360"]
   cliTools:
     - tool: ["git"]
       semver: ">=2.0.0"

@@ -20,6 +20,7 @@ metadata:
     - "platform-data-manage"
     - "platform-metadata-deploy"
   version: "1.1"
+  domains: ["Integration"]
 ---
 
 # integration-connectivity-generate: Salesforce Integration Patterns Expert

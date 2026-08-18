@@ -3,6 +3,7 @@ name: experience-lwc-accessibility-validate
 description: "Use this skill to determine whether a Lightning Web Component (LWC) is accessible and meets WCAG accessibility guidelines. TRIGGER when the user asks \"is my component accessible?\", \"does my LWC meet accessibility guidelines?\", \"is this component WCAG compliant?\", \"find accessibility problems in this LWC\", \"is this LWC keyboard accessible?\", \"does this component work with a screen reader?\", \"does this component have sufficient color contrast?\", \"check ARIA usage in this LWC\", or \"WCAG 2.2 accessibility check\". Also TRIGGER when the user wants to fix or improve accessibility (a11y, WCAG, ARIA) in an LWC's HTML, JS, or CSS — semantic markup, focus, keyboard nav, contrast, screen-reader labels, WCAG 2.2 SC. Produces `a11y-review.md` with WCAG-cited findings. DO NOT TRIGGER for general LWC generation (use `experience-lwc-generate`) or SLDS visual/design review not focused on accessibility (use `design-systems-slds-validate`)."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   cliTools:
     - tool: ["python3"]
       semver: ">=3.8"

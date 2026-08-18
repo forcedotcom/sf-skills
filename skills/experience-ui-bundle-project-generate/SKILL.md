@@ -3,6 +3,7 @@ name: experience-ui-bundle-project-generate
 description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce React UI bundle app and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new React UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-ui-bundle-app-coordinate"
     - "experience-ui-bundle-metadata-generate"

@@ -3,6 +3,7 @@ name: experience-ui-bundle-deploy
 description: "MUST activate when the project has a uiBundles/*/src/ directory and the task involves deploying to an org or post-deploy org setup. Deploys a UI bundle app and runs ordered setup: org auth, build, metadata deploy, permission-set and role assignment, Experience Cloud self-registration, social login / SSO / IDP linking (Auth Providers + SAML SSO configs on a React site), seed-data import, and GraphQL schema fetch + codegen. Trigger signals: *.network-meta.xml, org-setup.config.json (with a socialLogin block), data-plan.json, sfdx-project.json, or mentions of deploy, org setup, or social login / SSO / IDP linking on an Experience site. DO NOT TRIGGER when: creating a new UI bundle project (use experience-ui-bundle-project-generate); styling pages without deploying (use experience-ui-bundle-frontend-generate); adding a feature such as auth, search, or file upload without deploying (use the matching experience-ui-bundle-*-generate skill); configuring MFA permission sets (use experience-ui-bundle-mfa-configure)."
 metadata:
   version: "1.2"
+  domains: ["Experience", "Developer Experience"]
   relatedSkills:
     - "experience-ui-bundle-frontend-generate"
     - "experience-ui-bundle-mfa-configure"

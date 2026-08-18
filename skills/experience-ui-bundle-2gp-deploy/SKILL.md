@@ -3,6 +3,7 @@ name: experience-ui-bundle-2gp-deploy
 description: "MUST activate when the user wants to package, distribute, or install/upgrade/uninstall/promote a UI Bundle as a Salesforce second-generation (2GP) package (project may contain uiBundles/ or sfdx-project.json for packaging tasks; install/upgrade tasks may lack local bundle files). Handles making a bundle packageable, choosing managed/unlocked flavor, creating package/version with sf package, installing/upgrading in another org, and debugging failures. TRIGGER on packaging, 2GP, managed package, unlocked package, AppExchange, package version, sf package, sf package install, sf package upgrade, install a package, upgrade a package, cross-org distribution. DO NOT TRIGGER for plain source deploy to one org (use experience-ui-bundle-deploy) or scaffolding a new bundle (use experience-ui-bundle-project-generate). Apply piecemeal — do ONLY the part asked."
 metadata:
   version: "1.0"
+  domains: ["Experience"]
   minApiVersion: "58.0"
   relatedSkills:
     - "experience-ui-bundle-deploy"

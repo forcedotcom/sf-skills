@@ -3,6 +3,7 @@ name: experience-content-media-search
 description: "Searches for and retrieves existing visual media (images, logos, icons, photos, graphics, banners, thumbnails, hero images, backgrounds) from sources such as Salesforce CMS, Data 360 or any other source. Use this skill ANY TIME a user request involves finding, searching, getting, fetching, retrieving, grab, looking up, locating media. NEVER call search_media_cms_channels, search_electronic_media tools directly — always go through this skill first. This skill must be activated before any tool is used for media search or retrieval, without exception.  Takes PRIORITY and activates FIRST when ANY media search/retrieval is mentioned, regardless of what else happens with the media afterward. Triggers for requests like \"search for logo\", \"find hero image\", \"get company logo\", \"locate icons\", \"fetch background image\", \"retrieve product photos\". Handles the search and source selection workflow. Does not apply when the request is about brand search, to generate NEW images with AI, or edit existing images."
 metadata:
   version: "1.1"
+  domains: ["Experience"]
   relatedSkills:
     - "experience-content-media-stock-image-search"
   mcpTools:

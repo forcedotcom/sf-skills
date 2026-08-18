@@ -4,6 +4,7 @@ description: "Check when Salesforce orgs expire (or already expired) and what to
 allowed-tools: Read, Bash(bash), Bash(sf data query), Bash(sf org list), Bash(sf config get), Bash(jq), Bash(date)
 metadata:
   version: "2.0"
+  domains: ["Developer Experience"]
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6.0"

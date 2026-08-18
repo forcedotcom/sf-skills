@@ -13,6 +13,7 @@ metadata:
     - "integration-connectivity-connected-app-configure"
     - "integration-connectivity-generate"
   version: "1.0"
+  domains: ["Platform", "Agentforce"]
 ---
 
 # Salesforce Models API setup for an AI coding agent

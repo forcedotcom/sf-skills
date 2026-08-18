@@ -15,6 +15,7 @@ metadata:
     - "platform-custom-object-generate"
     - "platform-metadata-deploy"
   version: "1.0"
+  domains: ["OmniStudio"]
 ---
 
 # omnistudio-dependencies-analyze: OmniStudio Cross-Component Analysis

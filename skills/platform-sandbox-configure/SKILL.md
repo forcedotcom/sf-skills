@@ -3,6 +3,7 @@ name: platform-sandbox-configure
 description: "MUST USE this skill for ANY sandbox request — including simply getting a sandbox's details, status, license type, or pending-activation state by name or ID. TRIGGER when the user: types \"sandbox -help\"/\"sandbox help\"; mentions a sandbox ID (07E prefix); asks to list or show sandboxes; asks for the details, status, license type, or config of a sandbox by name or ID; activates or discards a completed refresh; deletes a sandbox; verifies activation or deletion; creates or refreshes a sandbox. DO NOT TRIGGER when: the user wants to clone a sandbox."
 metadata:
   version: "1.0"
+  domains: ["Platform"]
   minApiVersion: "66.0"
   accessCheck:
     - type: "userPerm"
