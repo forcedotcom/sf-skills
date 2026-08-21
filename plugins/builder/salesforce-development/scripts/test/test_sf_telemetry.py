@@ -442,8 +442,38 @@ class EveryEventCapturedTests(TelemetryCaptureTestBase):
     def test_exception_kind_parameterized(self):
         self.capture("exception", "api_error", payload={"session_id": "S1", "error_type": "rate_limit"})
         self.assertEqual(self.last("exception")["payload"], {"error_class": "rate_limit", "kind": "api_error"})
+        # hook is a dormant branch: error_class is hard-clamped to "unknown" (an
+        # identifier like "ValueError" could still be a secret/username), kind kept.
         self.capture("exception", "hook", payload={"session_id": "S1", "error_type": "ValueError"})
-        self.assertEqual(self.last("exception")["payload"]["kind"], "hook")
+        self.assertEqual(self.last("exception")["payload"], {"error_class": "unknown", "kind": "hook"})
+
+    def test_exception_error_class_shape_gate(self):
+        # api_error: a known enum value AND any safe snake_case token survive (so a new
+        # Claude error type never becomes "unknown" — no dashboard drift), while a
+        # free-form message / path / uppercase / over-long value is scrubbed.
+        cases = {
+            "server_error": "server_error",                     # known enum
+            "account_on_hold": "account_on_hold",               # known enum (added post-first-list)
+            "some_future_error_type": "some_future_error_type",  # unknown but safe shape -> passes
+            "/Users/me/secret.key exploded": "unknown",          # path + spaces -> scrubbed
+            "RateLimit": "unknown",                              # not snake_case -> scrubbed
+            "x" * 60: "unknown",                                 # over-long -> scrubbed
+        }
+        for raw, expected in cases.items():
+            self.capture("exception", "api_error",
+                         payload={"session_id": "S1", "error_type": raw})
+            self.assertEqual(self.last("exception")["payload"]["error_class"], expected, raw)
+
+    def test_all_known_error_types_survive_capture_and_egress(self):
+        # Every documented StopFailure error type must survive capture AND the PDP/UIP
+        # egress projection UNCHANGED — a regression guard for the exception dashboard's
+        # componentId dimension (this is where a missing enum value would surface).
+        for et in sorted(sft._API_ERROR_CLASSES):
+            self.capture("exception", "api_error",
+                         payload={"session_id": "S1", "error_type": et})
+            rec = self.last("exception")
+            self.assertEqual(rec["payload"]["error_class"], et, et)
+            self.assertEqual(sft._to_pdp_event(rec)["componentId"], et, et)
 
     def test_all_seven_events_are_capturable(self):
         """End-to-end: fire every plan event once, assert all 7 land in the buffer."""
@@ -545,49 +575,55 @@ class ScrubbingTests(TelemetryCaptureTestBase):
 
 
 class CommandTierTests(TelemetryCaptureTestBase):
+    def _cls(self, cmd):
+        # Production classifier is _classify_command (returns the selected segment
+        # plus binary/category/subcommand); these tests exercise the (binary,
+        # category, subcommand) projection the removed _classify_binary wrapper used.
+        return sft._classify_command(cmd)[1:]
+
     def test_classify_binary_tiers(self):
         # command.invoked now fires ONLY for the plugin's own first-party bins;
         # sf/sfdx and every other binary (git, npm, mystery scripts) drop to
         # "other" — there is no richer sf/sfdx tier anymore.
-        self.assertEqual(sft._classify_binary("sf-context status-org"),
+        self.assertEqual(self._cls("sf-context status-org"),
                          ("sf-context", "plugin_command", "status-org"))
-        self.assertEqual(sft._classify_binary("sf-deploy-gate prod-check"),
+        self.assertEqual(self._cls("sf-deploy-gate prod-check"),
                          ("sf-deploy-gate", "plugin_command", "prod-check"))
-        self.assertEqual(sft._classify_binary("sf org list")[:2], ("other", "other"))
-        self.assertEqual(sft._classify_binary("sfdx force:org:list")[:2], ("other", "other"))
-        self.assertEqual(sft._classify_binary("git push")[:2], ("other", "other"))
-        self.assertEqual(sft._classify_binary("npm ci")[:2], ("other", "other"))
-        self.assertEqual(sft._classify_binary("./mystery.sh")[:2], ("other", "other"))
+        self.assertEqual(self._cls("sf org list")[:2], ("other", "other"))
+        self.assertEqual(self._cls("sfdx force:org:list")[:2], ("other", "other"))
+        self.assertEqual(self._cls("git push")[:2], ("other", "other"))
+        self.assertEqual(self._cls("npm ci")[:2], ("other", "other"))
+        self.assertEqual(self._cls("./mystery.sh")[:2], ("other", "other"))
         # env-assignment prefix is skipped, not classified as the binary
-        self.assertEqual(sft._classify_binary("FOO=bar sf-context status-org")[0], "sf-context")
+        self.assertEqual(self._cls("FOO=bar sf-context status-org")[0], "sf-context")
         # path form reduces to basename
-        self.assertEqual(sft._classify_binary("/usr/local/bin/sf-context status-org")[0], "sf-context")
+        self.assertEqual(self._cls("/usr/local/bin/sf-context status-org")[0], "sf-context")
 
     def test_classify_binary_compound_commands(self):
         # Agents routinely wrap CLI calls; the meaningful binary must be found
         # across shell operators, not lost to the leading cd/pipe head.
-        self.assertEqual(sft._classify_binary("cd app && sf-context status")[:2],
+        self.assertEqual(self._cls("cd app && sf-context status")[:2],
                          ("sf-context", "plugin_command"))
-        self.assertEqual(sft._classify_binary("sf-context status-org | jq .result")[:2],
+        self.assertEqual(self._cls("sf-context status-org | jq .result")[:2],
                          ("sf-context", "plugin_command"))
-        self.assertEqual(sft._classify_binary("ls -la ; sf-context status-org")[:2],
+        self.assertEqual(self._cls("ls -la ; sf-context status-org")[:2],
                          ("sf-context", "plugin_command"))
         # sf is no longer recognized — an all-sf/other compound stays "other"
-        self.assertEqual(sft._classify_binary("echo x | sf org list")[:2], ("other", "other"))
-        self.assertEqual(sft._classify_binary("cd app && git status")[:2], ("other", "other"))
+        self.assertEqual(self._cls("echo x | sf org list")[:2], ("other", "other"))
+        self.assertEqual(self._cls("cd app && git status")[:2], ("other", "other"))
         # first RECOGNIZED segment wins — sf-context is found past the leading npm segment
-        self.assertEqual(sft._classify_binary("npm run build && sf-context status")[0], "sf-context")
+        self.assertEqual(self._cls("npm run build && sf-context status")[0], "sf-context")
         # first-party subcommand still resolves through a cd prefix
-        self.assertEqual(sft._classify_binary("cd x && sf-context status-org"),
+        self.assertEqual(self._cls("cd x && sf-context status-org"),
                          ("sf-context", "plugin_command", "status-org"))
 
     def test_classify_binary_compound_never_leaks(self):
         # No recognized segment => stays "other"; a secret script in a compound
         # command must NEVER surface its name/args.
-        b, c, _ = sft._classify_binary("cd app && ./deploy-prod.sh --token SECRET123")
+        b, c, _ = self._cls("cd app && ./deploy-prod.sh --token SECRET123")
         self.assertEqual((b, c), ("other", "other"))
         # an operator INSIDE quotes is one arg, not a separator (no mis-split)
-        self.assertEqual(sft._classify_binary('echo "a && b"')[:2], ("other", "other"))
+        self.assertEqual(self._cls('echo "a && b"')[:2], ("other", "other"))
 
     def test_command_invoked_is_plugin_bin_only(self):
         # The structural privacy guarantee that replaces the deleted sf/sfdx
@@ -605,10 +641,10 @@ class CommandTierTests(TelemetryCaptureTestBase):
                          "sf must produce no additional command.invoked event")
 
     def test_first_party_subcommand_allowlisted(self):
-        binary, cat, sub = sft._classify_binary("sf-context status-org")
+        binary, cat, sub = self._cls("sf-context status-org")
         self.assertEqual((binary, cat, sub), ("sf-context", "plugin_command", "status-org"))
         # an unknown subcommand is dropped, not stored raw
-        self.assertEqual(sft._classify_binary("sf-context frobnicate-SECRET")[2], "")
+        self.assertEqual(self._cls("sf-context frobnicate-SECRET")[2], "")
 
 
 class ConsentTests(TelemetryCaptureTestBase):
@@ -1181,7 +1217,7 @@ class DisclosureGateTests(TelemetryCaptureTestBase):
         # notice having been shown. With events buffered but the marker absent, the
         # SessionEnd flush spawns no sender.
         self.capture("session_start", payload={"session_id": "S1"})  # marker set by base setUp
-        self.assertTrue(sft._buffer_has_events())
+        self.assertTrue(self.events())
         sft._notified_file().unlink(missing_ok=True)  # marker gone before flush
         stdin = io.StringIO(json.dumps({"session_id": "S1"}))
         buf = io.StringIO()
@@ -1475,6 +1511,20 @@ class PdpMappingTests(TelemetryCaptureTestBase):
         self.assertIsNone(sft._to_pdp_event({"event": "not_real", "payload": {}}))
         self.assertIsNone(sft._to_pdp_event("garbage"))
 
+    def test_exception_error_class_reclamped_at_egress(self):
+        # Defense-in-depth: a record buffered BEFORE the capture-side clamp existed
+        # (or otherwise carrying an arbitrary error_class) must still be clamped when
+        # projected to the wire — an unrecognized api_error value becomes "unknown"...
+        leaky = self._record("exception",
+                             {"error_class": "/etc/passwd leaked", "kind": "api_error"})
+        self.assertEqual(self._pdp(leaky)["componentId"], "unknown")
+        # ...and a dormant hook record is hard-clamped regardless of its value.
+        hook = self._record("exception", {"error_class": "ValueError", "kind": "hook"})
+        self.assertEqual(self._pdp(hook)["componentId"], "unknown")
+        # A legitimate enum value still survives the egress clamp.
+        ok = self._record("exception", {"error_class": "overloaded", "kind": "api_error"})
+        self.assertEqual(self._pdp(ok)["componentId"], "overloaded")
+
 
 class AgentHarnessDetectionTests(unittest.TestCase):
     """_agent_harness(): closed-enum detection of the executing harness from env
@@ -1701,6 +1751,263 @@ class A4dDatasetAlignmentTests(unittest.TestCase):
         self.assertEqual(sft._to_a4d_event(rec)["attributes"]["harness"], "")
 
 
+class GoldenWireShapeTests(unittest.TestCase):
+    """CHARACTERIZATION safety net: pin the EXACT PDP + UIP wire shapes for every
+    event type. This is the guardrail for the telemetry refactor track — any change
+    to a transmitted byte (a new field, a renamed key, a changed value) fails here,
+    so the wire shape can never silently drift (the eval harness and the O11y
+    dashboards depend on it). If you change a shape ON PURPOSE, update the goldens in
+    the SAME commit and say so in the message."""
+
+    PFID = "aJCEE000000SLW94AO"
+
+    # A fully-populated envelope so each projected event is 100% determined.
+    ENV = {
+        "os": "darwin", "arch": "arm64", "os_version": "23.5.0", "locale": "en_US",
+        "plugin_name": "salesforce-development", "plugin_version": "1.11.0",
+        "org_bucket": "production", "model": "claude-opus-4-8", "ci": False,
+        "machine_id": "MID123", "harness": "claude-code", "session_id": "S1",
+    }
+
+    PAYLOADS = {
+        "session_start": {"is_first_run": True},
+        "session_end": {"duration_ms": 2500, "event_count": 7},
+        "command_invoked": {"binary": "sf-context", "category": "plugin_command",
+                            "subcommand": "status-org", "outcome": "success"},
+        "skill_dispatched": {"skill": "platform-apex-generate", "skill_domain": "platform"},
+        "agent_dispatched": {"agent_type": "code-review"},
+        "exception": {"error_class": "rate_limit", "kind": "api_error"},
+        "mcp_tool_used": {"mcp_server": "api-context", "mcp_tool": "query", "outcome": "success"},
+    }
+
+    def _record(self, event):
+        return {"event": event, **self.ENV, "payload": self.PAYLOADS[event]}
+
+    def test_pdp_wire_shape_golden(self):
+        expected = {
+            "session_start": {
+                "productFeatureId": self.PFID, "eventName": "session.started",
+                "componentId": "claude-opus-4-8", "contextName": "os::org_bucket::model",
+                "contextValue": "darwin::production::claude-opus-4-8"},
+            "session_end": {
+                "productFeatureId": self.PFID, "eventName": "session.ended",
+                "componentId": "session", "eventVolume": 7,
+                "contextName": "duration_ms", "contextValue": "2500"},
+            "command_invoked": {
+                "productFeatureId": self.PFID, "eventName": "command.invoked",
+                "componentId": "sf-context.status-org",
+                "contextName": "outcome::category", "contextValue": "success::plugin_command"},
+            "skill_dispatched": {
+                "productFeatureId": self.PFID, "eventName": "skill.dispatched",
+                "componentId": "platform-apex-generate",
+                "contextName": "skill_domain", "contextValue": "platform"},
+            "agent_dispatched": {
+                "productFeatureId": self.PFID, "eventName": "agent.dispatched",
+                "componentId": "code-review",
+                "contextName": "org_bucket", "contextValue": "production"},
+            "exception": {
+                "productFeatureId": self.PFID, "eventName": "exception.raised",
+                "componentId": "rate_limit", "contextName": "kind", "contextValue": "api_error"},
+            "mcp_tool_used": {
+                "productFeatureId": self.PFID, "eventName": "mcpTool.used",
+                "componentId": "api-context.query",
+                "contextName": "outcome", "contextValue": "success"},
+        }
+        for event, want in expected.items():
+            self.assertEqual(sft._to_pdp_event(self._record(event)), want, event)
+
+    def _uip_common(self, component_id, context_name, context_value):
+        return {
+            "componentId": component_id, "contextName": context_name,
+            "contextValue": context_value, "session_Id": "S1", "os": "darwin",
+            "arch": "arm64", "os_version": "23.5.0", "locale": "en_US",
+            "plugin_name": "salesforce-development", "plugin_version": "1.11.0",
+            "org_bucket": "production", "model": "claude-opus-4-8", "ci": "false",
+            "machine_id": "MID123", "harness": "claude-code",
+            "skillSource": "salesforce-development", "modelId": "claude-opus-4-8",
+            "user_Id": "MID123",
+        }
+
+    def test_uip_wire_shape_golden(self):
+        expected = {
+            "session_start": {"eventName": "session.started", "attributes":
+                self._uip_common("claude-opus-4-8", "os::org_bucket::model",
+                                 "darwin::production::claude-opus-4-8")},
+            "session_end": {"eventName": "session.ended", "attributes": {
+                **self._uip_common("session", "duration_ms", "2500"), "eventVolume": 7}},
+            "command_invoked": {"eventName": "command.invoked", "attributes":
+                self._uip_common("sf-context.status-org", "outcome::category",
+                                 "success::plugin_command")},
+            "skill_dispatched": {"eventName": "skill.dispatched", "attributes": {
+                **self._uip_common("platform-apex-generate", "skill_domain", "platform"),
+                "skillName": "platform-apex-generate"}},
+            "agent_dispatched": {"eventName": "agent.dispatched", "attributes":
+                self._uip_common("code-review", "org_bucket", "production")},
+            "exception": {"eventName": "exception.raised", "attributes":
+                self._uip_common("rate_limit", "kind", "api_error")},
+            "mcp_tool_used": {"eventName": "mcpTool.used", "attributes":
+                self._uip_common("api-context.query", "outcome", "success")},
+        }
+        for event, want in expected.items():
+            self.assertEqual(sft._to_a4d_event(self._record(event)), want, event)
+
+    def test_uip_org_id_added_only_when_present(self):
+        rec = self._record("skill_dispatched")
+        self.assertEqual(
+            sft._to_a4d_event(rec, org_id="00Dxx0000000001")["attributes"]["org_id"],
+            "00Dxx0000000001")
+        self.assertNotIn("org_id", sft._to_a4d_event(rec)["attributes"])
+
+
+@unittest.skipIf(os.name == "nt" or not hasattr(os, "chmod"),
+                 "POSIX file-permission bits only")
+class AtRestPermissionTests(TelemetryCaptureTestBase):
+    """Review M3: telemetry-state files carry pseudonymous identifiers (machine id,
+    session id, transmit-only org username, flusher output) and must be created
+    0o600 — and the helper must TIGHTEN a pre-existing 0o644 file too, since O_TRUNC
+    alone preserves an existing file's mode."""
+
+    def _mode(self, path):
+        return Path(path).stat().st_mode & 0o777
+
+    def test_write_private_creates_and_tightens(self):
+        p = Path(".sf") / "probe.json"
+        sft._write_private(p, "{}")
+        self.assertEqual(self._mode(p), 0o600)
+        # A pre-existing world-readable file is tightened on the next write
+        # (os.replace swaps in the private inode) — the H4 correctness point.
+        os.chmod(p, 0o644)
+        sft._write_private(p, '{"x": 1}')
+        self.assertEqual(self._mode(p), 0o600)
+        self.assertEqual(p.read_text(), '{"x": 1}')
+
+    def test_open_private_append_tightens_existing(self):
+        p = Path(".sf") / "probe.log"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("old\n")
+        os.chmod(p, 0o644)
+        with sft._open_private_append(p, binary=True) as fh:
+            fh.write(b"new\n")
+        self.assertEqual(self._mode(p), 0o600)
+        self.assertEqual(p.read_text(), "old\nnew\n")
+
+    def test_open_private_append_refuses_fifo_without_hanging(self):
+        # Agent review [P2]: opening a FIFO O_WRONLY blocks until a reader appears, so a
+        # pre-planted FIFO at the transmit-log path could hang the SessionEnd hook.
+        # O_NONBLOCK must make the open fail fast rather than block. A SIGALRM guard
+        # turns a regression (blocking open) into a failure instead of a hung test.
+        import signal
+        fifo = Path(".sf") / "telemetry-transmit.log"
+        fifo.parent.mkdir(parents=True, exist_ok=True)
+        os.mkfifo(fifo)
+
+        def _timeout(signum, frame):
+            raise AssertionError("_open_private_append blocked on a FIFO (no O_NONBLOCK)")
+
+        old = signal.signal(signal.SIGALRM, _timeout)
+        signal.alarm(3)
+        try:
+            with self.assertRaises(OSError):
+                sft._open_private_append(fifo, binary=True)
+        finally:
+            signal.alarm(0)
+            signal.signal(signal.SIGALRM, old)
+
+    def test_open_private_append_refuses_symlink(self):
+        # DX Prism prizm-default: a pre-planted symlink at a buffer/log path must not
+        # redirect our append (or the fchmod) to an arbitrary file — O_NOFOLLOW makes
+        # open() fail, so we never write through it or change the target's perms.
+        outside = Path(".sf") / "outside-target.txt"
+        outside.parent.mkdir(parents=True, exist_ok=True)
+        outside.write_text("original")
+        os.chmod(outside, 0o644)
+        link = Path(".sf") / "telemetry-buffer-evil.jsonl"
+        os.symlink(outside.name, link)  # relative symlink within .sf
+        with self.assertRaises(OSError):
+            sft._open_private_append(link)
+        self.assertEqual(outside.read_text(), "original", "wrote through a symlink")
+        self.assertEqual(self._mode(outside), 0o644, "chmod'd a symlink target")
+
+    def test_tighten_existing_fixes_stale_0644(self):
+        p = Path(".sf") / "probe2.json"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("{}")
+        os.chmod(p, 0o644)
+        sft._tighten_existing(p)
+        self.assertEqual(self._mode(p), 0o600)
+
+    def test_tighten_existing_refuses_symlink(self):
+        # DX Prism prizm-default: the on-read chmod must not follow a symlink and flip
+        # an arbitrary target to 0o600. A pre-planted symlink at a state path is left
+        # untouched (its target keeps its mode).
+        outside = Path(".sf") / "tighten-outside.txt"
+        outside.parent.mkdir(parents=True, exist_ok=True)
+        outside.write_text("x")
+        os.chmod(outside, 0o644)
+        link = Path(".sf") / "telemetry-org.json"
+        os.symlink(outside.name, link)
+        sft._tighten_existing(link)  # must be a silent no-op, not a raise
+        self.assertEqual(self._mode(outside), 0o644, "chmod'd a symlink target")
+
+    def test_captured_buffer_and_machine_id_are_private(self):
+        self.capture("session_start", payload={"session_id": "S1", "source": "startup"})
+        bufs = self.buffers()
+        self.assertTrue(bufs, "session_start should write a buffer")
+        for b in bufs:
+            self.assertEqual(self._mode(b), 0o600, f"{b} is world-readable")
+        mid = sft._machine_id_file()
+        self.assertTrue(Path(mid).exists())
+        self.assertEqual(self._mode(mid), 0o600, "machine-id file is world-readable")
+
+    def test_session_marker_is_private(self):
+        self.capture("session_start", payload={"session_id": "S1", "source": "startup"})
+        marker = sft._session_file("S1")
+        self.assertTrue(Path(marker).exists())
+        self.assertEqual(self._mode(marker), 0o600, "session marker is world-readable")
+
+    def test_existing_machine_id_is_tightened_on_read(self):
+        # An upgrade case: a machine id minted 0o644 by an older build must be tightened
+        # to 0o600 the next time it is read, not left world-readable indefinitely.
+        mid_file = sft._machine_id_file()
+        mid_file.parent.mkdir(parents=True, exist_ok=True)
+        mid_file.write_text("deadbeef" * 4)
+        os.chmod(mid_file, 0o644)
+        self.assertEqual(sft._machine_id(), "deadbeef" * 4)  # reads the existing fallback
+        self.assertEqual(self._mode(mid_file), 0o600, "stale 0o644 machine id not tightened")
+
+
+class HardOffPurgeAuditTests(TelemetryCaptureTestBase):
+    """Review L1 + M12: a hard-off must remove ALL local telemetry state — including
+    the flusher transmit log and per-session markers — and merely INSPECTING status
+    must never mint identifier state."""
+
+    def test_off_purges_transmit_log_and_session_markers(self):
+        self.capture("session_start", payload={"session_id": "S1", "source": "startup"})
+        sft._TRANSMIT_LOG.parent.mkdir(parents=True, exist_ok=True)
+        sft._TRANSMIT_LOG.write_text("flusher stderr: connected to acme@example.com\n")
+        marker = sft._session_file("S1")
+        self.assertTrue(marker.exists())
+        self.assertTrue(sft._TRANSMIT_LOG.exists())
+        self.assertTrue(self.buffers())
+        self.consent("off")
+        self.assertFalse(sft._TRANSMIT_LOG.exists(), "transmit log survived opt-out")
+        self.assertFalse(marker.exists(), "session marker survived opt-out")
+        self.assertFalse(self.buffers(), "buffers survived opt-out")
+
+    def test_status_does_not_mint_machine_id(self):
+        self.assertFalse(Path(sft._machine_id_file()).exists())
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            sft.cmd_consent(["sf-context", "telemetry", "status"])
+        self.assertIn("telemetry status", buf.getvalue().lower())
+        self.assertFalse(Path(sft._machine_id_file()).exists(),
+                         "inspecting status must not mint a machine id")
+
+    def test_machine_id_peek_returns_empty_without_minting(self):
+        self.assertEqual(sft._machine_id(mint=False), "")
+        self.assertFalse(Path(sft._machine_id_file()).exists())
+
+
 class OrgCacheTests(TelemetryCaptureTestBase):
     """Agent review #4: a raw org id must NEVER be persisted to the org cache, and
     the transmit-only username the cache DOES carry must not outlive its purpose —
@@ -1842,6 +2149,44 @@ class WindowsSfCommandTests(unittest.TestCase):
         # tests mocked subprocess.run but not command resolution — review #1).
         with mock.patch("shutil.which", return_value=None):
             self.assertIsNone(sft._sf_command(["org", "display", "--json"]))
+
+
+class ShimParityTests(unittest.TestCase):
+    """Review M8: _sf_command (telemetry) and build_command (sf_context) now share
+    sf_shim, so they must build BYTE-IDENTICAL argv and pin the SAME metachar refusal
+    sets. This test fails if the two ever diverge again — the enforcement the old
+    'MUST stay in sync' comment lacked."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location(
+            "sf_context_shim_parity", _SCRIPTS_DIR / "sf_context.py")
+        cls.sfx = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.sfx)
+
+    def test_metachar_sets_match_across_modules(self):
+        self.assertEqual(self.sfx._CMD_ARG_METACHARACTERS,
+                         sft._shim._CMD_ARG_METACHARACTERS)
+        self.assertEqual(self.sfx._CMD_PATH_METACHARACTERS,
+                         sft._shim._CMD_PATH_METACHARACTERS)
+
+    def test_build_argv_parity_across_cases(self):
+        cases = [
+            ("/usr/local/bin/sf", ["org", "display", "--json"]),          # posix exe
+            (r"C:\sf\bin\sf.cmd", ["org", "display", "--json"]),          # clean shim
+            (r"C:\Program Files (x86)\sf\bin\sf.cmd", ["org", "display"]),  # parens ok
+            (r"C:\a&b\sf.cmd", ["org", "display"]),                       # bad shim path
+            (r"C:\sf\bin\sf.cmd", ["org", "a&b"]),                        # bad arg
+            (None, ["org", "display"]),                                   # unresolved
+        ]
+        for resolved, args in cases:
+            with mock.patch("shutil.which", return_value=resolved), \
+                    mock.patch.dict(os.environ,
+                                    {"COMSPEC": r"C:\Windows\System32\cmd.exe"}):
+                mine = sft._sf_command(list(args))
+                theirs = self.sfx.build_command("sf", list(args))
+            self.assertEqual(mine, theirs,
+                             f"argv divergence for resolved={resolved!r} args={args!r}")
 
 
 class CliNodeModulesTests(unittest.TestCase):

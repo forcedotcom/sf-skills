@@ -27,12 +27,12 @@ class DiscoveryCatalogTests(unittest.TestCase):
     def test_real_inventory_counts_sets_visibility_and_source_variants(self):
         data = self.catalog.build_catalog(REPO_ROOT, PLUGIN_ROOT)
         self.assertEqual(data["counts"], {
-            "public": 138,
+            "public": 164,
             "foundation": 41,
             "overlap": 31,
-            "publicStandaloneAddable": 107,
+            "publicStandaloneAddable": 133,
             "foundationOnly": 10,
-            "visibleUnion": 148,
+            "visibleUnion": 174,
         })
         names = [row["name"] for row in data["skills"]]
         self.assertEqual(names, sorted(names))

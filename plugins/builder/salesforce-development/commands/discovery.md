@@ -43,7 +43,7 @@ For natural-language `add <name>`, proceed only when the user explicitly asks to
 1. Require `<name>` to match `^[a-z0-9]+(-[a-z0-9]+)*$`.
 2. Run `${CLAUDE_PLUGIN_ROOT}/scripts/sf-context discovery skill <name> --json`, passing the validated name as one argument.
 3. Require successful JSON with the identical name, `status: "available"`, `publicAvailable: true`, `foundationInstalled: false`, and a catalog-emitted `installInstruction`.
-4. Require that instruction to be exactly `npx skills@1.5.20 add forcedotcom/sf-skills#1.38.0 --skill <same-name> --agent claude-code --yes`, then execute that exact instruction once in the current project. Never add or infer a global flag.
+4. Require that instruction to be exactly `npx skills@1.5.20 add forcedotcom/sf-skills#1.41.0 --skill <same-name> --agent claude-code --yes`, then execute that exact instruction once in the current project. Never add or infer a global flag.
 5. Rerun the same discovery detail command and report installed status plus the fresh Claude session requirement.
 
 Unknown, held/internal, foundation-installed, already-installed, and otherwise non-addable names cannot enter the execution step. Do not execute arbitrary user text, reconstruct an install command, or describe discovery as a task router.

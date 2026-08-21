@@ -16,6 +16,7 @@ Run: python3 plugins/builder/salesforce-development/scripts/test/test_sf_context
 """
 from __future__ import annotations
 
+import builtins
 import importlib.util
 import json
 import io
@@ -2086,6 +2087,79 @@ class PostBashTelemetryOutcomeTests(unittest.TestCase):
         # that omits tool_response), matching _hook_reports_failure's contract.
         recorded = self._run_with({"tool_input": {"command": "ls -la"}})
         self.assertIn(("command_invoked", "success"), recorded)
+
+
+class TelemetryDispatchFailClosedTests(unittest.TestCase):
+    """The user-facing `telemetry` consent command must FAIL CLOSED if the telemetry
+    module can't load — reporting success for `telemetry off` without opting out is a
+    broken hard-off. The optional hook subcommands stay fail-open (never break a hook)."""
+
+    def _main_with(self, argv):
+        err = io.StringIO()
+        with mock.patch.object(sfx, "_load_sf_telemetry", return_value=None), \
+                mock.patch.object(sfx.sys, "argv", argv), \
+                redirect_stdout(io.StringIO()), redirect_stderr(err):
+            rc = sfx.main()
+        return rc, err.getvalue()
+
+    def test_consent_command_fails_closed_when_module_missing(self):
+        for action in ("off", "on", "status"):
+            rc, err = self._main_with(["sf-context", "telemetry", action])
+            self.assertEqual(rc, 1,
+                             f"telemetry {action} must fail closed when the module can't load")
+            # It must SAY it failed (no silent, message-less failure) and NOT claim success.
+            self.assertIn("unavailable", err.lower(),
+                          f"telemetry {action} must emit a diagnostic on failure")
+
+    def test_hook_subcommands_stay_fail_open_when_module_missing(self):
+        for cmd in ("telemetry-capture", "telemetry-flush", "telemetry-transmit"):
+            rc, _ = self._main_with(["sf-context", cmd])
+            self.assertEqual(rc, 0, f"{cmd} must no-op (0) when the module can't load")
+
+    def test_consent_command_fails_closed_when_loader_raises(self):
+        # Agent review [P2]: even if the loader itself raises (not just returns None),
+        # `telemetry off` must fail closed with a diagnostic, not crash with a traceback.
+        with mock.patch.object(sfx, "_load_sf_telemetry",
+                               side_effect=RuntimeError("boom at import")), \
+                mock.patch.object(sfx.sys, "argv", ["sf-context", "telemetry", "off"]), \
+                redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()) as err:
+            rc = sfx.main()
+        self.assertEqual(rc, 1)
+        self.assertIn("unavailable", err.getvalue().lower())
+
+
+class TelemetryLoaderResilienceTests(unittest.TestCase):
+    """Agent review [P2]: _load_sf_telemetry must not propagate a non-ImportError raised
+    while importing the sibling module (a module-level SyntaxError/RuntimeError, etc.).
+    The fast `import` path is broadened to swallow any load failure and recover via the
+    by-path fallback, falling back to None only when BOTH paths fail."""
+
+    def test_recovers_when_fast_import_raises_non_importerror(self):
+        real_import = builtins.__import__
+
+        def fake_import(name, *a, **k):
+            if name == "sf_telemetry":
+                raise RuntimeError("module-level failure at import time")
+            return real_import(name, *a, **k)
+
+        with mock.patch.object(builtins, "__import__", side_effect=fake_import):
+            module = sfx._load_sf_telemetry()  # must NOT raise
+        # The by-path fallback (which does not use __import__) still loads the module.
+        self.assertIsNotNone(module)
+        self.assertTrue(hasattr(module, "dispatch"))
+
+    def test_returns_none_when_all_load_paths_fail(self):
+        real_import = builtins.__import__
+
+        def fake_import(name, *a, **k):
+            if name == "sf_telemetry":
+                raise RuntimeError("module-level failure at import time")
+            return real_import(name, *a, **k)
+
+        with mock.patch.object(builtins, "__import__", side_effect=fake_import), \
+                mock.patch("importlib.util.spec_from_file_location",
+                           side_effect=RuntimeError("fallback failure")):
+            self.assertIsNone(sfx._load_sf_telemetry())  # None, not a traceback
 
 
 if __name__ == "__main__":

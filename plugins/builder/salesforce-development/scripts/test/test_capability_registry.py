@@ -380,12 +380,12 @@ class CapabilityRegistryTests(unittest.TestCase):
     def test_checked_public_manifest_and_v3_catalog_counts_and_sets(self):
         manifest = self.registry.load_public_manifest(MANIFEST_PATH)
         self.assertEqual(manifest["repository"], "https://github.com/forcedotcom/sf-skills.git")
-        self.assertEqual(manifest["commit"], "ba78d3871d54196e86dbde6bbd9f9a79944ff07f")
-        self.assertEqual(manifest["releaseRef"], "1.38.0")
-        self.assertEqual(manifest["counts"], {"public": 138})
-        self.assertEqual(len(manifest["skills"]), 138)
+        self.assertEqual(manifest["commit"], "32bf7846b96d4fcb1b2f5c7c06c09a1d9b3cea03")
+        self.assertEqual(manifest["releaseRef"], "1.41.0")
+        self.assertEqual(manifest["counts"], {"public": 164})
+        self.assertEqual(len(manifest["skills"]), 164)
         # accessCheck travels through the manifest as a tri-state (Option A). Every
-        # row carries the key; at 1.38.0 a fixed set of skills declare a conditional
+        # row carries the key; at 1.41.0 a fixed set of skills declare a conditional
         # gate and the rest are undeclared (None) — never silently [], which would
         # falsely claim org-agnostic before the backfill lands.
         for row in manifest["skills"]:
@@ -417,8 +417,30 @@ class CapabilityRegistryTests(unittest.TestCase):
             "experience-ui-bundle-mfa-configure": [
                 {"type": "license", "value": "Experience Cloud (Customer Community / Customer Community Login)"},
             ],
+            "platform-datamask-run": [
+                {"type": "userPerm", "value": "PermissionsManageDataMaskPolicies"},
+                {"type": "userPerm", "value": "PermissionsAccessDataMaskAndSeed"},
+            ],
             "platform-sandbox-configure": [
                 {"type": "userPerm", "value": "ManageSandboxes"},
+            ],
+            "service-catalog-template-deploy": [
+                {"type": "accessCheck", "value": "IndustriesEpc.orgHasUnifiedCatalog"},
+            ],
+            "service-catalog-template-search": [
+                {"type": "accessCheck", "value": "IndustriesEpc.orgHasUnifiedCatalog"},
+            ],
+            "service-concierge-portal-generate": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-agentforce-coordinate": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-agentforce-studio-configure": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-agentforce-studio-validate": [
+                {"type": "license", "value": "Agentforce"},
             ],
             "service-itsm-agentic-setup-cmdb-bundle-deploy": [
                 {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
@@ -433,21 +455,59 @@ class CapabilityRegistryTests(unittest.TestCase):
             "service-itsm-agentic-setup-cmdb-discovery-configure": [
                 {"type": "orgPerm", "value": "ITSrvcsCnfgMgmnt"},
             ],
+            "service-itsm-agentic-setup-employee-agent-configure": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-fulfiller-agent-configure": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-incident-sla-configure": [],
+            "service-itsm-agentic-setup-itsm-agentforce-permset-assign": [
+                {"type": "license", "value": "Agentforce"},
+            ],
+            "service-itsm-agentic-setup-uel-user-create": [
+                {"type": "userPerm", "value": "ManageUsers"},
+                {"type": "userPerm", "value": "ManageProfilesPermissionsets"},
+                {"type": "userPerm", "value": "CustomizeApplication"},
+                {"type": "userPerm", "value": "AssignPermissionSets"},
+            ],
+            "service-itsm-incident-mgmt-configure": [
+                {"type": "userPerm", "value": "CustomizeApplication"},
+                {"type": "orgPerm", "value": "IncidentMgmt.orgHasITSMOrgPermission"},
+            ],
             "service-itsm-incident-priority-configure": [
                 {"type": "userPerm", "value": "CustomizeApplication"},
-                {"type": "orgPref", "value": "ITSMIncidentMgmtEnabled"},
+            ],
+            "service-itsm-swarming-configure": [
+                {"type": "orgPref", "value": "ITSMTeamsEnabled"},
+            ],
+            "service-itsm-teams-configure": [
+                {"type": "orgPerm", "value": "MSTeamsSetupAutomationAccess"},
+            ],
+            "service-itsm-teams-coordinate": [],
+            "service-itsm-teams-debug": [
+                {"type": "orgPref", "value": "ITSMTeamsEnabled"},
+            ],
+            "service-itsm-teams-employee-agent-configure": [
+                {"type": "orgPref", "value": "ITSMTeamsEnabled"},
+            ],
+            "service-itsm-teams-itdesk-configure": [
+                {"type": "orgPref", "value": "ITSMTeamsEnabled"},
+            ],
+            "service-itsm-teams-itservice-configure": [
+                {"type": "orgPref", "value": "ITSMTeamsEnabled"},
             ],
         })
         data = self.catalog.load_catalog(PLUGIN_ROOT)
         self.assertEqual(data["schemaVersion"], "3.0")
         self.assertEqual(data["channel"], "public")
         self.assertEqual(data["counts"], {
-            "public": 138,
+            "public": 164,
             "foundation": 41,
             "overlap": 31,
-            "publicStandaloneAddable": 107,
+            "publicStandaloneAddable": 133,
             "foundationOnly": 10,
-            "visibleUnion": 148,
+            "visibleUnion": 174,
         })
         public = {row["name"] for row in manifest["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}

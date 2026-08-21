@@ -48,6 +48,13 @@ function deadlineFromEnv(name, dflt) {
 }
 const O11Y_DEADLINE_MS = deadlineFromEnv('SF_DEV_TELEMETRY_O11Y_DEADLINE_MS', 15000);
 
+// Fallback-only Salesforce API version for the upload endpoint. The primary POST is
+// org-relative and unversioned (connection.requestPost); this pinned version is used
+// ONLY on the fallback path, and is a FLOOR tied to the plugin's minimum supported
+// Salesforce API version — deliberately NOT the org/CLI's live version. Bump it by
+// hand when the plugin's minimum Salesforce API version moves.
+const FALLBACK_API_VERSION = 'v65.0';
+
 // Last-moment opt-out check, mirroring Python's _is_enabled(): the ecosystem
 // opt-out env vars always win, else the machine-wide consent file is off iff it
 // explicitly says {"enabled": false} (absent/unreadable == default-ON). Python
@@ -108,12 +115,11 @@ async function sendO11y(TelemetryReporter, Org, job) {
   // url. The reporter POSTs via connection.requestPost() to the org-relative path;
   // the endpoint below is only the fallback — pointed at the same org host so
   // telemetry can NEVER egress to a non-org domain even on the fallback path. Its
-  // pinned vNN is a fallback-only API version (the primary POST is org-relative and
-  // unversioned here); bump it when the plugin's minimum Salesforce API version moves.
+  // version is the pinned FALLBACK_API_VERSION floor (see the constant).
   const connection = await (await Org.create({ aliasOrUsername: job.username })).getConnection();
   const instanceUrl = connection.instanceUrl || connection.getConnectionOptions?.().instanceUrl;
   if (!instanceUrl) return; // no resolvable org host — do not send anywhere
-  const uploadEndpoint = `${instanceUrl.replace(/\/$/, '')}/services/data/v65.0/connect/proxy/ui-telemetry`;
+  const uploadEndpoint = `${instanceUrl.replace(/\/$/, '')}/services/data/${FALLBACK_API_VERSION}/connect/proxy/ui-telemetry`;
 
   const reporter = await TelemetryReporter.create({
     project: job.project || 'salesforce-development',

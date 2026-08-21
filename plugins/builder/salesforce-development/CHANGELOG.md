@@ -5,6 +5,39 @@ All notable changes to this plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- Dynamic plugin loading will replace dynamic skill loading.  Rather than installing individual
+  skills, the plugin will be able to discover, suggest, and install other Salesforce
+  plugins - with your permission - directly from what you ask for.
+- Support for the Codex agent, alongside Claude Code.
+
+### Removed
+
+- Dynamic skill loading will be removed in favor of discovering, suggesting, and installing
+  other approved Salesforce plugins.
+
+## [1.12.0] — 2026-08-21
+
+### Changed
+
+- Refreshed the capability catalog against the latest public skill release, so `overview`,
+  `domain`, and `index` now show 26 more skills you can add.
+
+### Security
+
+- Telemetry now only reports error information from a fixed, recognized set of categories —
+  anything else is reported as `"unknown"`, so it can't leak unexpected data.
+- Telemetry's on-disk files (org cache, buffers, transmit log, machine ID) are now restricted to
+  owner-only access.
+- Turning telemetry off now also purges any telemetry data that was already buffered or logged,
+  instead of leaving it behind.
+- The `telemetry on|off|status` command now reports failure instead of silently succeeding if it
+  can't actually read or change telemetry state, so a hard-off you request can be trusted to have
+  taken effect.
+
 ## [1.11.0] — 2026-08-14
 
 ### Added

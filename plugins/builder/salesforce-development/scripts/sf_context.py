@@ -67,7 +67,49 @@ from typing import Optional
 #   - Everything else spawns the resolved absolute path directly with shell=False.
 #   - Kept as one small, well-tested function so the future Node port
 #     (WIN-005/006/007) can mirror it exactly.
-_WINDOWS_SHIM_SUFFIXES = (".cmd", ".bat")
+# The cross-platform command-building primitives (executable resolution, the
+# Windows batch-shim invocation, and the cmd.exe metacharacter refusal sets) now
+# live in the shared sf_shim module, imported by BOTH sf_context and sf_telemetry so
+# there is ONE definition that cannot drift. Loaded robustly: a bare import works in
+# production (scripts/ is sys.path[0] when the wrapper runs), and the by-path
+# fallback covers importlib-based unit tests (which load this file by path without
+# scripts/ on sys.path) and post-chdir use.
+def _load_sf_shim():
+    try:
+        import sf_shim as _m  # fast path (scripts/ importable)
+        return _m
+    except Exception:
+        import importlib.util as _ilu
+        _p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sf_shim.py")
+        _spec = _ilu.spec_from_file_location("sf_shim", _p)
+        _m = _ilu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        return _m
+
+
+_shim = _load_sf_shim()
+
+# The shim-wrapping logic + metachar refusal sets are single-sourced in sf_shim;
+# resolution (NAME -> path) stays LOCAL so this module's resolve_executable mock in
+# the test suite keeps working. Re-export the shared data/predicates under the
+# existing names for in-module callers.
+_WINDOWS_SHIM_SUFFIXES = _shim._WINDOWS_SHIM_SUFFIXES
+_CMD_ARG_METACHARACTERS = _shim._CMD_ARG_METACHARACTERS
+_CMD_PATH_METACHARACTERS = _shim._CMD_PATH_METACHARACTERS
+
+
+def _contains_any(value: str, chars) -> bool:
+    return _shim._contains_any(value, chars)
+
+
+def _is_windows_shim(path: str) -> bool:
+    """True when a resolved path is a Windows batch shim needing a cmd wrapper."""
+    return _shim.is_windows_shim(path)
+
+
+def _has_cmd_metacharacters(value: str) -> bool:
+    """Back-compat helper (arg set). Prefer _contains_any with an explicit set."""
+    return _shim._contains_any(value, _CMD_ARG_METACHARACTERS)
 
 
 def resolve_executable(name: str) -> Optional[str]:
@@ -87,67 +129,15 @@ def resolve_executable(name: str) -> Optional[str]:
     return shutil.which(name)
 
 
-def _is_windows_shim(path: str) -> bool:
-    """True when a resolved path is a Windows batch shim needing a cmd wrapper."""
-    return path.lower().endswith(_WINDOWS_SHIM_SUFFIXES)
-
-
-# cmd.exe re-parses the command line it is handed, so these characters keep shell
-# meaning inside a batch-shim invocation even though we pass an argv array
-# (list2cmdline quotes spaces/quotes, not these). We refuse them on the shim path
-# instead of trying to quote them — a fully-correct cmd.exe quoter is notoriously
-# hard, and every legitimate caller here passes fixed subcommands/flags plus an
-# org alias, none of which contain these. The bash deploy gate keeps the SAME arg
-# set so the two guards don't diverge; the future Node port must too.
-#
-# Two sets: args are fully controlled (subcommands/flags/aliases) so we reject the
-# widest set, including `(` `)` (grouping) and `!` (delayed expansion). The
-# resolved shim PATH is system-provided and legitimately contains `(`/`)` (e.g.
-# "C:\Program Files (x86)\..."), so its guard omits those — but still rejects the
-# chars cmd.exe reparses even inside quotes (`%` env-expansion, `!`) or that break
-# quoting (`"`), plus the redirection/chaining set for the unquoted (no-space)
-# path case.
-_CMD_ARG_METACHARACTERS = ("&", "|", "<", ">", "^", "%", '"', "!", "(", ")", "\n", "\r")
-_CMD_PATH_METACHARACTERS = ("&", "|", "<", ">", "^", "%", '"', "!", "\n", "\r")
-
-
-def _contains_any(value: str, chars) -> bool:
-    return any(ch in value for ch in chars)
-
-
-def _has_cmd_metacharacters(value: str) -> bool:
-    """Back-compat helper (arg set). Prefer _contains_any with an explicit set."""
-    return _contains_any(value, _CMD_ARG_METACHARACTERS)
-
-
 def build_command(name: str, args: Optional[list] = None) -> Optional[list]:
     """Build the argv to spawn `name` + `args` cross-platform, or None if `name`
-    cannot be resolved on PATH (or, on the shim path, an arg is unsafe).
-
-    - Resolves `name` via resolve_executable (PATHEXT-aware).
-    - If the resolved path is a `.cmd`/`.bat` shim, returns
-      [COMSPEC, "/c", resolved, *args] (COMSPEC from env, fallback "cmd.exe") so
-      the batch shim runs. Passing an argv array preserves argv boundaries, but it
-      is NOT sufficient for injection safety on a batch shim, because cmd.exe
-      re-parses the serialized command line. So on this path we REFUSE (return
-      None, fail closed) if any ARG contains a cmd metacharacter, OR the resolved
-      shim PATH contains a reparse-dangerous char — rather than attempt cmd.exe
-      quoting. See _CMD_ARG_METACHARACTERS / _CMD_PATH_METACHARACTERS.
-    - Otherwise returns [resolved, *args] for a direct shell=False spawn (POSIX
-      and native Windows `.exe`), which is not subject to the cmd.exe reparse.
-    """
-    args = list(args) if args else []
+    cannot be resolved on PATH (or, on the shim path, an arg is unsafe). Resolves
+    `name` locally (PATHEXT-aware), then delegates the shim-wrapping + metacharacter
+    refusal to the shared sf_shim.build_argv."""
     resolved = resolve_executable(name)
     if resolved is None:
         return None
-    if _is_windows_shim(resolved):
-        if _contains_any(resolved, _CMD_PATH_METACHARACTERS) or any(
-            _contains_any(a, _CMD_ARG_METACHARACTERS) for a in args
-        ):
-            return None
-        comspec = os.environ.get("COMSPEC", "cmd.exe")
-        return [comspec, "/c", resolved, *args]
-    return [resolved, *args]
+    return _shim.build_argv(resolved, args)
 
 
 def _is_windows() -> bool:
@@ -3450,7 +3440,11 @@ def _load_sf_telemetry():
     try:
         import sf_telemetry
         return sf_telemetry
-    except ImportError:
+    except Exception:
+        # Broad on purpose: telemetry is always optional, so ANY load failure — not
+        # just ImportError, but a module-level SyntaxError/RuntimeError etc. — must
+        # fall through to the by-path fallback (and ultimately None) rather than
+        # propagate a traceback into a hook or the consent command.
         try:
             import importlib.util
             module_path = Path(__file__).resolve().parent / "sf_telemetry.py"
@@ -8433,7 +8427,26 @@ def main() -> int:
         # Stream A (capture): consent-gated, scrubbed, local-only usage-telemetry.
         # Stream B (flush/transmit): detached O11y-PDP upload through the org.
         # All telemetry logic lives in the sibling module to keep this file focused.
-        import sf_telemetry
+        # Route through _load_sf_telemetry() (bare import + by-path fallback) so the
+        # dispatch resolves the sibling even under importlib-based tests / after a
+        # chdir, exactly like the other telemetry entry points in this file.
+        # Defense-in-depth: _load_sf_telemetry() is written to never raise, but wrap
+        # the call too so a future regression can't turn a hook or `telemetry off` into
+        # a traceback — treat any failure as "module unavailable".
+        try:
+            sf_telemetry = _load_sf_telemetry()
+        except Exception:
+            sf_telemetry = None
+        if sf_telemetry is None:
+            # The hook subcommands are optional — silently no-op so a missing telemetry
+            # module never breaks a hook. But the USER-FACING consent command must fail
+            # CLOSED and loud: reporting success for `telemetry off` without actually
+            # opting out would be a broken hard-off promise.
+            if cmd == "telemetry":
+                print("Telemetry controls are unavailable: the telemetry module could not "
+                      "be loaded. No change was made.", file=sys.stderr)
+                return 1
+            return 0  # capture/flush/transmit hooks: optional, never fail the hook
         return sf_telemetry.dispatch(sys.argv)
     print(f"Unknown command: {cmd}", file=sys.stderr)
     print("Usage: sf-context [detect|discovery|verify-org|check-tools|readiness-paint|readiness-banner|post-bash|post-deploy|post-deploy-failure|skills-first-advisory|scaffold-gate|resolution-trace|record-skill-dispatch|prompt-dispatch|feedback-nudge|record-feedback-decision|record-update-decision|status|status-org|status-project|wayfinder|orientation-rail|journey-paint|telemetry|telemetry-capture|telemetry-flush|telemetry-transmit]", file=sys.stderr)

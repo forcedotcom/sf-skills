@@ -33,7 +33,7 @@ POINTER = 'Ask “what can I do here?” or run /salesforce-development:discover
 # note. On any visible banner the discovery command token appears exactly once — the
 # "single pointer" invariant.
 DISCOVERY_CMD = "/salesforce-development:discovery"
-INSTALL = "npx skills@1.5.20 add forcedotcom/sf-skills#1.38.0 --skill {name} --agent claude-code --yes"
+INSTALL = "npx skills@1.5.20 add forcedotcom/sf-skills#1.41.0 --skill {name} --agent claude-code --yes"
 TAGLINE = "headless Salesforce development, from inside the agent"
 
 catalog = load_module(CATALOG_PATH, "discovery_runtime_catalog")
@@ -511,7 +511,7 @@ class DiscoveryRuntimeTests(unittest.TestCase):
             code, index_out, _ = self.run_discovery(["index"], root, root / "home")
             self.assertEqual(code, 0)
             index_lines = index_out.strip().splitlines()
-            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 148)
+            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 174)
             self.assertTrue(all(catalog._terminal_cell_width(line) <= 80 for line in index_lines))
 
     def test_valid_standalone_directory_symlink_counts_as_installed(self):

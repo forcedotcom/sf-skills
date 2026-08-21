@@ -49,8 +49,10 @@ import os
 import platform
 import re
 import shlex
+import stat as _stat
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Optional
 
@@ -133,6 +135,116 @@ _BUFFER_PREFIX = "telemetry-buffer"
 _ORG_CACHE = _STATE_DIR / "telemetry-org.json"           # {"org_bucket","username"} once/session; raw org_id is NEVER cached
 _TRANSMIT_LOG = _STATE_DIR / "telemetry-transmit.log"    # last flusher stderr (debug only)
 
+
+# --- At-rest permission helpers ------------------------------------------------
+# Telemetry-state files carry pseudonymous identifiers (machine id, per-session id,
+# the transmit-only org username, and the flusher's captured output), so they must
+# not be world-readable on a shared/multi-user host. These helpers create/rewrite
+# them 0o600, matching the deliberately-private stage file and consent lock. On
+# non-POSIX platforms the mode is a no-op (Windows uses ACLs, not mode bits).
+def _write_private(path: Path, text: str) -> None:
+    """Atomically write `text` to `path` with 0o600 perms.
+
+    Uses tempfile.mkstemp in the destination's OWN directory — an unpredictable name
+    created O_EXCL|O_CREAT at mode 0o600, so there is no predictable-temp hijack and no
+    symlink to follow — then os.replace()s it into place: atomic (no partial/racy read),
+    self-safe under a concurrent writer, and because it swaps in the private inode it
+    also TIGHTENS a pre-existing 0o644 destination. Raises OSError on failure (callers
+    guard telemetry writes fail-silent)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
+    try:
+        try:
+            os.fchmod(fd, 0o600)  # mkstemp is already 0o600; explicit under an odd umask
+        except (AttributeError, OSError):
+            pass  # non-POSIX
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            fh.write(text)
+        os.replace(tmp, path)
+    except OSError:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+        raise
+
+
+def _open_private_append(path: Path, binary: bool = False):
+    """Open `path` for append at 0o600, refusing to follow a symlink or open a
+    non-regular file at the destination. An attacker could pre-plant a symlink at a
+    telemetry-buffer/log path to redirect our appends — and the follow-up fchmod — to
+    an arbitrary file; O_NOFOLLOW makes open() fail on such a symlink, and the fstat
+    regular-file check rejects a fifo/device/etc. before we chmod or write. Returns an
+    open file object the caller manages; raises OSError on a symlink/irregular target
+    (callers already treat that fail-silent / fall back to DEVNULL)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    # O_NOFOLLOW: fail (ELOOP) if the final component is a symlink. O_NONBLOCK: never
+    # block the (blocking) SessionEnd hook if the path is a FIFO — opening a FIFO
+    # O_WRONLY otherwise blocks until a reader appears, so a pre-planted FIFO at a
+    # predictable buffer/log path could hang the hook indefinitely; with O_NONBLOCK the
+    # open fails fast (ENXIO) instead. Both are 0 where unsupported (non-POSIX); the
+    # fstat regular-file check below is the backstop that also rejects devices/etc.
+    flags = (os.O_CREAT | os.O_WRONLY | os.O_APPEND
+             | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+    fd = os.open(str(path), flags, 0o600)
+    try:
+        if not _stat.S_ISREG(os.fstat(fd).st_mode):
+            raise OSError(f"telemetry target is not a regular file: {path}")
+        # Regular file confirmed — clear O_NONBLOCK so appends behave normally (it is a
+        # no-op for regular-file writes, but don't leave the flag set). Best-effort.
+        try:
+            import fcntl
+            fcntl.fcntl(fd, fcntl.F_SETFL,
+                        fcntl.fcntl(fd, fcntl.F_GETFL) & ~getattr(os, "O_NONBLOCK", 0))
+        except (ImportError, OSError, AttributeError):
+            pass  # non-POSIX
+        try:
+            os.fchmod(fd, 0o600)
+        except (AttributeError, OSError):
+            pass  # non-POSIX
+        fh = os.fdopen(fd, "ab" if binary else "a",
+                       encoding=None if binary else "utf-8")
+    except BaseException:
+        os.close(fd)
+        raise
+    return fh
+
+
+def _tighten_existing(path: Path) -> None:
+    """Best-effort tighten an existing file to 0o600 on READ, so a long-lived file
+    minted 0o644 by an older build is fixed without waiting for a rewrite.
+
+    Does NOT follow symlinks: a plain `os.chmod` follows a link, so a pre-planted
+    symlink at a state path (org cache / machine id) could redirect the chmod and
+    flip an arbitrary user-owned target to 0o600. Open a no-follow, non-blocking
+    read descriptor, confirm it is a regular file via fstat, then fchmod that fd —
+    so we only ever change the permissions of a real, non-symlink telemetry file.
+    Silent on any error / non-POSIX platform."""
+    try:
+        fd = os.open(str(path), os.O_RDONLY
+                     | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+    except OSError:
+        return  # missing, a symlink (ELOOP), or otherwise unopenable — nothing to do
+    try:
+        if _stat.S_ISREG(os.fstat(fd).st_mode):
+            os.fchmod(fd, 0o600)
+    except (AttributeError, OSError):
+        pass  # non-POSIX / race — best-effort
+    finally:
+        os.close(fd)
+
+
+# --- Tuning constants (named for clarity; values unchanged) --------------------
+_CONSENT_LOCK_TIMEOUT_S = 2.0           # default bound for a capture's staged-commit lock
+_CONSENT_TOGGLE_LOCK_TIMEOUT_S = 10.0   # longer bound for an explicit on/off transition
+_LOCK_POLL_INTERVAL_S = 0.02            # busy-wait granularity while acquiring the lock
+_ORG_RESOLVE_TIMEOUT_S = 10             # `sf org display` subprocess deadline (seconds)
+_STAGE_FILE_RETRY_ATTEMPTS = 5          # O_EXCL stage-file name collisions before giving up
+_CLI_NODE_MODULES_WALKUP_LEVELS = 8     # dirs to walk up from the sf shim seeking node_modules
+# Windows: DETACHED_PROCESS | CREATE_NO_WINDOW — the detached child survives the
+# parent exiting, with no console window.
+_WIN_DETACHED_CREATIONFLAGS = 0x00000008 | 0x08000000
+
 # --- Stream B: O11y-PDP transmit target --------------------------------------
 # The suite's GUS Product Feature Record id. Every PDP event we send is stamped
 # with this — it is how O11y/CAP-G attributes the event to this product feature.
@@ -193,6 +305,45 @@ _ALLOWLIST = {
     "exception": {"error_class", "kind"},
     "mcp_tool_used": {"mcp_server", "mcp_tool", "outcome"},
 }
+
+# `error_class` is the one user-influenced value that reaches the wire (PDP componentId
+# + UIP attributes), so it is scrubbed on the way out. Claude Code's StopFailure hook
+# (the only production producer of `exception`) sets `error_type` to a lowercase
+# snake_case enum; these are the values we know about and cover with tests. The set is
+# NOT exhaustive by design — Claude adds error types across releases (e.g.
+# `account_on_hold` shipped after the first list) — so we do NOT clamp strictly to it
+# (that silently turned every new value into "unknown", a dashboard regression). See
+# _clamp_error_class for the actual gate.
+_API_ERROR_CLASSES = frozenset({
+    "rate_limit", "overloaded", "authentication_failed", "oauth_org_not_allowed",
+    "billing_error", "invalid_request", "model_not_found", "server_error",
+    "max_output_tokens", "account_on_hold", "unknown",
+})
+
+# The safe SHAPE of a StopFailure error type: a short lowercase snake_case token. This
+# admits every current AND future Claude enum value (no drift regression) while still
+# rejecting the real threat — a free-form message, a file path, or a secret — which
+# carries spaces, slashes, uppercase, or length beyond this bound.
+_SAFE_ERROR_CLASS_RE = re.compile(r"[a-z][a-z0-9_]{0,40}\Z")
+
+
+def _clamp_error_class(value, kind: str) -> str:
+    """Clamp an exception `error_class` to a safe value BY KIND.
+
+    api_error (the wired StopFailure path): accept it if it is a known enum value OR
+    matches the safe snake_case shape (_SAFE_ERROR_CLASS_RE) — so a new Claude error
+    type flows through unchanged (no dashboard regression) but a free-form message /
+    path / secret is rejected to "unknown". hook (a dormant branch with no production
+    caller): hard-clamp to "unknown" — an identifier-shaped token could still be a
+    secret/username and no fixed hook-error vocabulary exists yet. Applied at BOTH
+    capture and transmit so a pre-existing buffered record can't egress unclamped."""
+    value = value if isinstance(value, str) else ""
+    if kind == "api_error":
+        if value in _API_ERROR_CLASSES or _SAFE_ERROR_CLASS_RE.fullmatch(value):
+            return value
+        return "unknown"
+    return "unknown"
+
 
 # --- Command scope: `command.invoked` fires ONLY for the plugin's OWN configured
 # commands — the first-party bins shipped in salesforce-development/scripts
@@ -322,13 +473,6 @@ def _classify_command(cmd: str) -> tuple[list, str, str, str]:
     return first
 
 
-def _classify_binary(cmd: str) -> tuple[str, str, str]:
-    """Back-compat wrapper: classify a raw shell string to (binary, category,
-    subcommand). See _classify_command for the segment-selection semantics."""
-    _seg, binary, category, subcommand = _classify_command(cmd)
-    return binary, category, subcommand
-
-
 # --- Consent -----------------------------------------------------------------
 
 def _env_optout() -> bool:
@@ -373,15 +517,9 @@ def _save_consent(cfg: dict) -> bool:
         # _consent_generation() coerces a malformed/non-numeric persisted `gen` to 0
         # (it never raises), so a corrupted consent file can't break the transition.
         out["gen"] = max(_consent_generation() + 1, time.time_ns())
-        tmp = _consent_file().with_suffix(f".tmp-{os.getpid()}")
-        tmp.write_text(json.dumps(out, indent=2))
-        os.replace(tmp, _consent_file())
+        _write_private(_consent_file(), json.dumps(out, indent=2))
         return True
     except OSError:
-        try:
-            tmp.unlink(missing_ok=True)
-        except (OSError, NameError):
-            pass
         return False
 
 
@@ -431,7 +569,7 @@ class _ConsentLock:
     genuine contention past `timeout` or the absence of an OS lock primitive.
     Use as `with _ConsentLock() as held: ...`."""
 
-    def __init__(self, timeout: float = 2.0):
+    def __init__(self, timeout: float = _CONSENT_LOCK_TIMEOUT_S):
         self._timeout = timeout
         self._fd = None
         self._held = False
@@ -494,7 +632,7 @@ class _ConsentLock:
             if time.monotonic() >= deadline:
                 self._close_fd()
                 return False
-            time.sleep(0.02)
+            time.sleep(_LOCK_POLL_INTERVAL_S)
 
     def _close_fd(self) -> None:
         if self._fd is not None:
@@ -556,10 +694,15 @@ def _cli_cache_dir() -> Path:
     return Path(base) / "sf"
 
 
-def _machine_id() -> str:
+def _machine_id(mint: bool = True) -> str:
     """Reuse the Salesforce CLI's client id when present (so plugin usage can be
     correlated with CLI usage on the same machine); else reuse/mint our own.
-    All three are random hex — no PII, not hardware-derived."""
+    All three are random hex — no PII, not hardware-derived.
+
+    mint=False is a READ-ONLY peek: it returns the existing id (CLIID or a
+    previously-minted fallback) but never mints/persists a new one, so merely
+    INSPECTING telemetry (e.g. `telemetry status`, including while opted out) cannot
+    create identifier state on disk."""
     # 1) the CLI's CLIID (40-hex), read straight off disk — no `sf` invocation.
     try:
         cliid = (_cli_cache_dir() / "CLIID.txt").read_text().strip()
@@ -572,15 +715,19 @@ def _machine_id() -> str:
     try:
         mine = _machine_id_file().read_text().strip()
         if mine:
+            # Tighten a fallback minted 0o644 by an older build (pre-0o600) on read,
+            # so an upgraded install stops exposing the identifier without a rewrite.
+            _tighten_existing(_machine_id_file())
             return mine
     except OSError:
         pass
+    if not mint:
+        return ""  # peek only — do not create identifier state
     # 3) mint + persist a 32-hex fallback.
     import secrets
     mid = secrets.token_hex(16)
     try:
-        _machine_id_file().parent.mkdir(parents=True, exist_ok=True)
-        _machine_id_file().write_text(mid)
+        _write_private(_machine_id_file(), mid)
     except OSError:
         pass
     return mid
@@ -802,46 +949,40 @@ def _classify_org_bucket(result: dict) -> str:
 # cmd.exe RE-PARSES the command line it is handed, so these characters keep shell
 # meaning inside a batch-shim invocation even though we pass an argv array. On the
 # `.cmd`/`.bat` shim path we REFUSE them (fail closed → None) rather than attempt a
-# notoriously error-prone cmd.exe quoter — exactly as sf_context.build_command does.
-# These two tuples MUST stay in sync with sf_context._CMD_ARG_METACHARACTERS /
-# _CMD_PATH_METACHARACTERS (duplicated, not imported, because sf_context imports
-# THIS module — importing back would be circular). Args are fully controlled here
-# (fixed subcommands/flags), so they get the wider set incl. `(`/`)`/`!`; the
-# system-provided shim PATH legitimately contains `(`/`)` (e.g. "Program Files
-# (x86)") so its guard omits those but still rejects the chars cmd.exe reparses
-# even inside quotes (`%`, `!`), the quote-breaker (`"`), and the chaining set.
-_CMD_ARG_METACHARACTERS = ("&", "|", "<", ">", "^", "%", '"', "!", "(", ")", "\n", "\r")
-_CMD_PATH_METACHARACTERS = ("&", "|", "<", ">", "^", "%", '"', "!", "\n", "\r")
+# notoriously error-prone cmd.exe quoter. The shim-building logic and the cmd.exe
+# metacharacter refusal sets are shared with sf_context via the sf_shim module (ONE
+# definition, no drift) — loaded robustly so both a bare import (production) and the
+# by-path importlib fallback (unit tests) work; sf_shim imports neither consumer, so
+# there is no circular dependency.
+def _load_sf_shim():
+    try:
+        import sf_shim as _m  # fast path (scripts/ importable)
+        return _m
+    except Exception:
+        import importlib.util as _ilu
+        _p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sf_shim.py")
+        _spec = _ilu.spec_from_file_location("sf_shim", _p)
+        _m = _ilu.module_from_spec(_spec)
+        _spec.loader.exec_module(_m)
+        return _m
+
+
+_shim = _load_sf_shim()
 
 
 def _sf_command(args: list) -> Optional[list]:
-    """Build an argv to invoke `sf` that works on Windows too. On Windows `sf` is a
-    batch shim (`sf.cmd`), which subprocess cannot exec directly by bare name — it
-    must be resolved (shutil.which honors PATHEXT so `sf` finds `sf.cmd`) and, for a
-    .cmd/.bat, launched via [COMSPEC, /c, resolved, *args]. This mirrors
-    sf_context.build_command; it is duplicated here (not imported) because
-    sf_context imports THIS module, so importing back would be circular.
-
-    On the batch-shim path, passing an argv array preserves argv boundaries but is
-    NOT sufficient for injection safety, because cmd.exe re-parses the serialized
-    command line — so we FAIL CLOSED (return None) if the resolved shim PATH holds a
-    reparse-dangerous char or any ARG holds a cmd metacharacter, exactly like
-    build_command. Returns None when `sf` cannot be resolved (or is refused), so the
-    caller degrades to the "none" org rather than raising FileNotFoundError and
-    silently skipping the O11y leg on Windows (W-23466799 / WIN-026)."""
+    """Build an argv to invoke `sf` that works on Windows too. Resolves `sf` via
+    shutil.which (PATHEXT-aware, so it finds `sf.cmd`), then delegates the shim
+    wrapping + cmd.exe metacharacter refusal to the shared sf_shim.build_argv — the
+    SAME logic sf_context.build_command uses, so the two cannot drift. Returns None
+    when `sf` cannot be resolved (or is refused), so the caller degrades to the
+    "none" org rather than raising FileNotFoundError and silently skipping the O11y
+    leg on Windows (W-23466799 / WIN-026)."""
     import shutil
     resolved = shutil.which("sf")
     if not resolved:
         return None
-    if os.name == "nt" and os.path.splitext(resolved)[1].lower() in (".cmd", ".bat"):
-        # Reuse build_command's guard: refuse cmd.exe metacharacters rather than quote.
-        if any(ch in resolved for ch in _CMD_PATH_METACHARACTERS) or any(
-            any(ch in str(a) for ch in _CMD_ARG_METACHARACTERS) for a in args
-        ):
-            return None
-        comspec = os.environ.get("COMSPEC", "cmd.exe")
-        return [comspec, "/c", resolved, *args]
-    return [resolved, *args]
+    return _shim.build_argv(resolved, list(args))
 
 
 def _resolve_org_context() -> dict:
@@ -856,7 +997,7 @@ def _resolve_org_context() -> dict:
     try:
         proc = subprocess.run(
             cmd,
-            capture_output=True, text=True, timeout=10,
+            capture_output=True, text=True, timeout=_ORG_RESOLVE_TIMEOUT_S,
         )
         result = (json.loads(proc.stdout) or {}).get("result", {}) if proc.stdout else {}
     except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError, ValueError):
@@ -878,8 +1019,8 @@ def _resolve_org_context() -> dict:
     # Cache it so a later flush that can't reach `sf` can still reuse the bucket.
     if username or bucket != "none":
         try:
-            _ORG_CACHE.parent.mkdir(parents=True, exist_ok=True)
-            _ORG_CACHE.write_text(json.dumps(ctx))
+            # 0o600: the cache holds the transmit-only org username (an email/PII).
+            _write_private(_ORG_CACHE, json.dumps(ctx))
         except OSError:
             pass
     # org_id is returned live for the transmit liveness check AND for the UIP shape;
@@ -891,6 +1032,8 @@ def _org_context() -> dict:
     """Read the per-session org cache; empty envelope when unresolved. The
     `username` is transmit-only (never enveloped) — see _resolve_org_context."""
     try:
+        # Long-lived file: tighten a pre-existing 0o644 cache (older build) on read.
+        _tighten_existing(_ORG_CACHE)
         data = json.loads(_ORG_CACHE.read_text())
         if isinstance(data, dict):
             # org_id is intentionally absent from the cache (see _resolve_org_context);
@@ -984,8 +1127,8 @@ def _write_event(event_type: str, fields: dict, payload: dict) -> None:
         # (no stage set) writes the session buffer directly.
         dest = _CAPTURE_STAGE if _CAPTURE_STAGE is not None \
             else _session_buffer(record.get("session_id") or "")
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        with dest.open("a", encoding="utf-8") as fh:
+        # 0o600: buffered records carry the envelope (machine id, session id, etc.).
+        with _open_private_append(dest) as fh:
             fh.write(json.dumps(record) + "\n")
     except OSError:
         pass
@@ -1117,7 +1260,7 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
     stage = None
     try:
         _STATE_DIR.mkdir(parents=True, exist_ok=True)
-        for _ in range(5):
+        for _ in range(_STAGE_FILE_RETRY_ATTEMPTS):
             cand = _STATE_DIR / f"telemetry-stage-{os.getpid()}-{secrets.token_hex(8)}.jsonl"
             try:
                 os.close(os.open(str(cand), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600))
@@ -1164,8 +1307,7 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             try:
                 sid = payload.get("session_id") or payload.get("sessionId") or ""
                 sf = _session_file(sid)
-                sf.parent.mkdir(parents=True, exist_ok=True)
-                sf.write_text(json.dumps({"start_ms": _now_ms()}))
+                _write_private(sf, json.dumps({"start_ms": _now_ms()}))
             except OSError:
                 pass
             return
@@ -1245,12 +1387,18 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             return
 
         if event == "exception":
-            # StopFailure payload carries an `error_type` (rate_limit, overloaded, …).
-            error_class = payload.get("error_type") or payload.get("errorType") or "unknown"
+            # StopFailure payload carries the error kind on `error_type` (with `error`
+            # as the short code, e.g. "429"); read both defensively — the clamp makes
+            # any unrecognized value safe regardless of which field it arrives on.
+            raw_error = (payload.get("error_type") or payload.get("errorType")
+                         or payload.get("error") or "")
             # `kind` distinguishes an API-error turn from a plugin-hook failure.
             # It arrives as the capture arg (argv[3], read into `outcome`); the
             # StopFailure hook passes "api_error", a hook wrapper would pass "hook".
             kind = outcome if outcome in ("api_error", "hook") else "api_error"
+            # Clamp to a closed vocabulary before it is ever buffered (see
+            # _clamp_error_class); re-clamped at transmit too, for legacy buffers.
+            error_class = _clamp_error_class(raw_error, kind)
             _write_event("exception", {"error_class": error_class, "kind": kind}, payload)
             return
 
@@ -1285,8 +1433,7 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
                 with _ConsentLock() as held:
                     if held and _is_enabled() and _consent_generation() == gen0:
                         buf = _session_buffer(sid)
-                        buf.parent.mkdir(parents=True, exist_ok=True)
-                        with buf.open("a", encoding="utf-8") as out, \
+                        with _open_private_append(buf) as out, \
                                 stage.open(encoding="utf-8") as src:
                             out.write(src.read())
             stage.unlink(missing_ok=True)
@@ -1461,7 +1608,7 @@ def cmd_consent(argv: list[str]) -> int:
         # rule out the rollback/ABA cases. A long timeout means it acquires in practice
         # (the kernel frees a dead holder); if it genuinely can't, we do NOT write
         # unlocked — we report it (telemetry defaults to ON, so nothing changes).
-        with _ConsentLock(timeout=10.0) as held:
+        with _ConsentLock(timeout=_CONSENT_TOGGLE_LOCK_TIMEOUT_S) as held:
             on_saved = _save_consent({"enabled": True}) if held else False
         if not on_saved:
             # Report the ACTUAL effective state — don't claim "on" when the setting
@@ -1500,7 +1647,7 @@ def cmd_consent(argv: list[str]) -> int:
         # acquires in practice (the kernel frees a dead holder); if it genuinely can't,
         # we do NOT write/purge unlocked — we tell the user it is STILL ON and steer
         # them to the env opt-out, which needs no lock or writable state.
-        with _ConsentLock(timeout=10.0) as held:
+        with _ConsentLock(timeout=_CONSENT_TOGGLE_LOCK_TIMEOUT_S) as held:
             off_saved = _save_consent({"enabled": False}) if held else False
             if off_saved:
                 # Hard-off hygiene: drop this project's buffers/stages AND any in-flight
@@ -1555,7 +1702,8 @@ def cmd_consent(argv: list[str]) -> int:
         "Salesforce Development Plugin — telemetry status",
         f"  State:            {'ON' if enabled else 'OFF'}"
         + ("  (forced off by SF_DISABLE_TELEMETRY / DO_NOT_TRACK)" if env_off else ""),
-        f"  Machine id:       {_machine_id()}",
+        # Peek only: inspecting status must not MINT an id (esp. while opted out).
+        f"  Machine id:       {_machine_id(mint=False) or '(not yet assigned)'}",
         f"  Buffered events:  {buffered}  ({_STATE_DIR}/{_BUFFER_PREFIX}-*.jsonl)",
         "  Toggle:           /salesforce-development:telemetry on | off",
     ]
@@ -1630,9 +1778,13 @@ def _to_pdp_event(record: dict, org_bucket: Optional[str] = None) -> Optional[di
                 "componentId": p.get("agent_type") or "agent",
                 "contextName": "org_bucket", "contextValue": org_bucket}
     if event == "exception":
+        # Defense-in-depth: re-clamp error_class at the egress boundary so a record
+        # buffered before the capture-side clamp existed (or otherwise malformed)
+        # still cannot send an unrecognized value on componentId (inherited by UIP).
+        kind = p.get("kind") or ""
         return {**base, "eventName": "exception.raised",
-                "componentId": p.get("error_class") or "unknown",
-                "contextName": "kind", "contextValue": p.get("kind") or ""}
+                "componentId": _clamp_error_class(p.get("error_class"), kind),
+                "contextName": "kind", "contextValue": kind}
     if event == "mcp_tool_used":
         server, tool = p.get("mcp_server") or "", p.get("mcp_tool") or ""
         return {**base, "eventName": "mcpTool.used",
@@ -1752,7 +1904,7 @@ def _cli_node_modules() -> str:
     if not sf:
         return ""
     d = os.path.dirname(os.path.realpath(sf))
-    for _ in range(8):
+    for _ in range(_CLI_NODE_MODULES_WALKUP_LEVELS):
         # Direct node_modules at this level (POSIX/global installs, monorepos).
         direct = os.path.join(d, "node_modules")
         if os.path.isdir(os.path.join(direct, "@salesforce", "telemetry")):
@@ -1857,13 +2009,12 @@ def _spawn_flusher(pending: Path) -> bool:
     if not node or not flusher.exists():
         return False
     try:
-        log = open(_TRANSMIT_LOG, "ab")  # noqa: SIM115 — handed to the child
+        log = _open_private_append(_TRANSMIT_LOG, binary=True)  # noqa: SIM115 — handed to the child
     except OSError:
         log = subprocess.DEVNULL
     kwargs = {"stdin": subprocess.DEVNULL, "stdout": log, "stderr": log}
     if os.name == "nt":
-        # DETACHED_PROCESS | CREATE_NO_WINDOW — survive the parent exiting.
-        kwargs["creationflags"] = 0x00000008 | 0x08000000
+        kwargs["creationflags"] = _WIN_DETACHED_CREATIONFLAGS
     else:
         kwargs["start_new_session"] = True  # new session leader; no SIGHUP on parent exit
     try:
@@ -1884,12 +2035,12 @@ def _spawn_sender(snapshot: Path) -> bool:
     the SAME interpreter (sys.executable) on this module so no reimplementation of
     the tested scrub/classify/shape logic leaks into another language."""
     try:
-        log = open(_TRANSMIT_LOG, "ab")  # noqa: SIM115 — handed to the child
+        log = _open_private_append(_TRANSMIT_LOG, binary=True)  # noqa: SIM115 — handed to the child
     except OSError:
         log = subprocess.DEVNULL
     kwargs = {"stdin": subprocess.DEVNULL, "stdout": log, "stderr": log}
     if os.name == "nt":
-        kwargs["creationflags"] = 0x00000008 | 0x08000000
+        kwargs["creationflags"] = _WIN_DETACHED_CREATIONFLAGS
     else:
         kwargs["start_new_session"] = True
     try:
@@ -1930,20 +2081,19 @@ def _purge_local_telemetry_state() -> None:
             p.unlink(missing_ok=True)
         for p in _STATE_DIR.glob("telemetry-stage-*.jsonl"):
             p.unlink(missing_ok=True)
+        # Per-session start markers embed the session id in their filename; a hard-off
+        # should not leave session-identifying files behind.
+        for p in _STATE_DIR.glob("telemetry-session-*.json"):
+            p.unlink(missing_ok=True)
     except OSError:
         pass
-
-
-def _buffer_has_events() -> bool:
-    """True iff ANY per-session buffer holds at least one non-blank line."""
-    for b in _all_session_buffers():
-        try:
-            with b.open(encoding="utf-8") as fh:
-                if any(line.strip() for line in fh):
-                    return True
-        except OSError:
-            continue
-    return False
+    # The flusher's captured stdout/stderr can contain @salesforce/core /
+    # @salesforce/telemetry error output that mentions the org or username; it must
+    # not survive an opt-out. (Was previously left behind — review L1.)
+    try:
+        _TRANSMIT_LOG.unlink(missing_ok=True)
+    except OSError:
+        pass
 
 
 def _session_has_events(session_id: str) -> bool:
@@ -2045,7 +2195,8 @@ def cmd_send(argv: list[str]) -> int:
         if payload["events"] or payload.get("a4dEvents"):
             _STATE_DIR.mkdir(parents=True, exist_ok=True)
             pending = _STATE_DIR / f"telemetry-pending-{os.getpid()}.json"
-            pending.write_text(json.dumps(payload))
+            # 0o600: the pending job embeds the transmit-only username (+ org id).
+            _write_private(pending, json.dumps(payload))
             # The pending job carries the transmit-only USERNAME (to open the org
             # connection). If the Node flusher fails to launch it normally deletes the
             # file when done — but a failed launch never runs, so the username would

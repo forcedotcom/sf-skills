@@ -66,7 +66,7 @@ Use this flow only when the user **EXPLICITLY asks to add or enable** one named 
 1. Validate the requested name against `^[a-z0-9]+(-[a-z0-9]+)*$`; reject arbitrary text rather than placing it in a shell command.
 2. Run `${CLAUDE_PLUGIN_ROOT}/scripts/sf-context discovery skill <name> --json` with the validated name as one argument.
 3. Continue only when the command succeeds and its JSON has the identical `name`, `status: "available"`, `publicAvailable: true`, `foundationInstalled: false`, and a catalog-emitted `installInstruction`. This blocks unknown, held/internal, foundation-installed, already-installed, and otherwise non-addable names.
-4. Require `installInstruction` to have the exact pinned form `npx skills@1.5.20 add forcedotcom/sf-skills#1.38.0 --skill <same-name> --agent claude-code --yes`. Do not reconstruct it, append flags, interpolate generic user text, substitute another source/version, or add a global flag.
+4. Require `installInstruction` to have the exact pinned form `npx skills@1.5.20 add forcedotcom/sf-skills#1.41.0 --skill <same-name> --agent claude-code --yes`. Do not reconstruct it, append flags, interpolate generic user text, substitute another source/version, or add a global flag.
 5. In the current project, execute that exact instruction once. Do not install globally.
 6. Rerun `${CLAUDE_PLUGIN_ROOT}/scripts/sf-context discovery skill <name> --json`. Report the resulting status and its fresh Claude session requirement. Do not claim same-process hot reload.
 

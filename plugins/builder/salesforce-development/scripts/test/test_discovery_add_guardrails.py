@@ -17,7 +17,7 @@ REPO_ROOT = PLUGIN_ROOT.parents[2]
 SKILL_DOC = PLUGIN_ROOT / "skills/platform-capability-search/SKILL.md"
 COMMAND_DOC = PLUGIN_ROOT / "commands/discovery.md"
 CATALOG_PATH = SCRIPTS / "discovery_catalog.py"
-EXPECTED = "npx skills@1.5.20 add forcedotcom/sf-skills#1.38.0 --skill {name} --agent claude-code --yes"
+EXPECTED = "npx skills@1.5.20 add forcedotcom/sf-skills#1.41.0 --skill {name} --agent claude-code --yes"
 
 
 catalog = load_module(CATALOG_PATH, "discovery_add_catalog")
