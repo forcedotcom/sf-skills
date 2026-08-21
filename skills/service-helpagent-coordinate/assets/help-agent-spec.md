@@ -10,7 +10,7 @@
 
 Create a Salesforce Agentforce Service Agent ("help agent") in the connected org with the shape and behavior described in the agent script (§7), then expose it on a customer-facing Experience Cloud site via an embedded chat widget.
 
-This file is the spec for the Help Agent we're building. The accompanying Claude Code prompt will simply reference this file ("create an agent out of the spec I have created here in `assets/help-agent-spec.md`"). Use the skills under `.claude/skills/` — do **not** author a new Help Agent skill. The relevant skills in this repo are `agentforce-generate` (agent authoring + Agentforce Data Library provisioning/grounding, in its `references/data-library-reference.md` and `references/org-setup-for-adl.md`), `dx-org-permission-set-assign`, `service-digital-engagement-channel-configure`, `service-digital-engagement-deployment-configure`, `experience-lwr-site-generate`, and `service-digital-engagement-messaging-site-integrate` (widget placement + embed, used in Checkpoint 3.5 and Checkpoint 4). The spec is custom data feeding standard skills, not a new skill itself.
+This file is the spec for the Help Agent we're building. The accompanying Claude Code prompt will simply reference this file ("create an agent out of the spec I have created here in `assets/help-agent-spec.md`"). Use the skills under `.claude/skills/` — do **not** author a new Help Agent skill. The relevant skills in this repo are `agentforce-generate` (agent authoring + Agentforce Data Library provisioning/grounding, in its `references/data-library-reference.md` and `references/org-setup-for-adl.md`), `dx-org-permission-set-assign`, `service-digital-engagement-channel-configure` (initial Queue-routed channel setup and activation), `service-agentforce-channel-configure` (replaces the initial routing with the agent binding — fallback queue + `sessionHandlerAsa`), `service-digital-engagement-deployment-configure`, `experience-lwr-site-generate`, and `service-digital-engagement-messaging-site-integrate` (widget placement + embed, used in Checkpoint 3.5 and Checkpoint 4). The spec is custom data feeding standard skills, not a new skill itself.
 
 **Why the spec, not an API.** Salesforce's official Help Agent template-creation API is not yet shipped. Without that API, you (Claude) have no built-in concept of "Help Agent" and would otherwise generate a generic agent. This file substitutes for the missing API: the agent script in §7 is the canonical template that the eventual Quick Start UI will produce. Treat it as the source-of-truth shape — the agent you build should have the same lineage (topics, actions, instructions) as the agent that template would create.
 
@@ -73,34 +73,6 @@ The Data Cloud permission sets *do not exist in the org* until Data Cloud is tur
 
   Note: the Data Space scope on that permission set is a separate UI-only step that cannot be automated — that's handled reactively in Checkpoint 3.5 (Check 2) if grounded queries still return empty after ADL indexing completes.
 
-**Managed-package prerequisite (deterministic check — do not improvise).** The script's actions reference sources that must resolve in the org before agent creation:
-
-- `SvcCopilotTmpl__*` — Service Cloud Copilot Template (verification, case-management actions, flows).
-- `EmployeeCopilot__AnswerQuestionsWithKnowledge` — Employee Copilot (knowledge search action).
-
-> **These are Salesforce out-of-the-box platform artifacts, not AppExchange managed packages.** They're surfaced when `Settings:EinsteinGpt.enableEinsteinGptPlatform` is `true` on the org, and they will **not** show up in `sf package installed list`. Do not diagnose their absence by looking at installed packages — check `enableEinsteinGptPlatform` via `sf project retrieve start --metadata "Settings:EinsteinGpt"` instead. If Einstein GPT Platform is off, turn it on.
-
-Follow this exact branch — every run resolves the same way regardless of org or model:
-
-1. **Verify the setting is on.** Retrieve `Settings:EinsteinGpt` and check `enableEinsteinGptPlatform`. If `false`, deploy `enableEinsteinGptPlatform: true` and re-verify. **The setting being `true` is the authoritative Einstein-GPT-Platform readiness signal.** Do not use `sf package installed list` or `InstalledSubscriberPackage` — these are not installed subscriber packages, and those queries return zero rows even on healthy orgs.
-
-2. **Then probe how the artifacts surfaced on this org.** With `enableEinsteinGptPlatform=true`, the actions the script depends on can appear on the org in one of two shapes. Enumerate both to figure out which shape applies:
-   ```bash
-   SELECT DeveloperName FROM Flow WHERE NamespacePrefix = 'SvcCopilotTmpl' LIMIT 1
-   sf org list metadata --metadata-type GenAiFunction | head
-   sf org list metadata --metadata-type Bot | head
-   ```
-
-3. **Take exactly one of three outcomes based on what's in the org:**
-
-   - **(A) Standard namespaces present** (the `SvcCopilotTmpl` / `EmployeeCopilot` probes return rows) → proceed to agent creation using the canonical action references from §7 (`SvcCopilotTmpl__Send_Verification_Code_to_Customer`, `EmployeeCopilot__AnswerQuestionsWithKnowledge`, etc.). This is the standard path on a bare Developer Edition where `enableEinsteinGptPlatform=true` surfaces the namespaces cleanly.
-
-   - **(B) Namespaces absent but unnamespaced equivalents present** → this is the **trial or preloaded sample-data org** shape: the org came preloaded with the underlying artifacts directly (as `Send_Verification_Code_to_Customer`, `AnswerQuestionsWithKnowledge`, `Create_New_Case`, `Get_Customer_Order`, etc.) rather than under the `SvcCopilotTmpl` / `EmployeeCopilot` namespaces. **Adapt the script's action references to the unnamespaced names** — map `SvcCopilotTmpl__X` → `X` and `EmployeeCopilot__X` → `X` for the subset of actions referenced by §7. Surface this substitution to the user explicitly before applying it (they should know the deployed agent references the org's local, unnamespaced actions rather than the standard-template ones).
-
-   - **(C) Neither namespaced nor unnamespaced equivalents present** → **hard stop.** The agent's actions cannot resolve on this org shape. Tell the user exactly which specific action names are missing and stop. Options for the user: (a) move to a bare Developer Edition where `enableEinsteinGptPlatform=true` produces the standard namespaces, or (b) get the required Bot / GenAiFunction metadata installed on this org by hand. Do not proceed to agent creation.
-
-4. **Never create the agent without running the probe in step 2 first.** Silently assuming the namespaces are present based on the setting alone (or silently rewriting references without user awareness) is not allowed — step 2 is what tells you which of the three branches applies.
-
 ### 4.1 Checkpoint 1 — Meet Your Agent
 
 *Provisions:* the placeholder values wired into the script's `config`, `system`, and `language` blocks (§7). *Fills:* `<agent_label_placeholder>`, `<developer_name_placeholder>`, `<agent_welcome_message_placeholder>`, `<agent_tone_placeholder>`, `<gc:languageSettings_language>`.
@@ -115,10 +87,16 @@ Ask the user for four things (you can ask together):
 
 *Provisions:* an Agentforce Data Library, then wires its `rag_feature_config_id` into the script's `knowledge:` block (§7). *Fills:* `<rag_feature_config_id>`.
 
-Present three grounding options and ask the user which one(s) they want:
-- **Salesforce Knowledge** — ground on existing Knowledge articles, filtered by Data Category.
-- **Upload Files** — ground on files the user provides.
+**Before asking** — run `sf agent adl list --target-org $ORG` to see what ADLs already exist. Then present all options via `AskUserQuestion`:
+
+- **Each existing ADL with a ready status** — list as *"Use existing library: {name} ({status})"*. Include only libraries with `indexingStatus ∈ {COMPLETED, READY, SUCCESS}`; skip `NOT_SCHEDULED` entries (they never indexed and will produce empty grounding at runtime).
+- **Salesforce Knowledge** — create a new library grounded on existing Knowledge articles, filtered by Data Category.
+- **Upload Files** — create a new library grounded on files the user provides.
 - **Website Sync** *[Coming soon]* — fetch content from a public website.
+
+Do not assume any existing ADL is the right one — the user must explicitly choose. Do not default to reusing a library that happens to share the expected name.
+
+**CRITICAL — Wait for the user's selection before proceeding.** The `AskUserQuestion` above is a gate: you must receive the user's explicit reply before asking any follow-up questions. Do NOT ask about Data Category Groups, file paths, website URLs, or anything else in the same turn as the source-selection question. The user answers first; then you branch. If the user's reply names a grounding source other than "Salesforce Knowledge", do NOT ask about Data Categories at all — not now, not as a clarifying question, not as part of a combined question. Data Category questions are ONLY appropriate after the user has explicitly selected "Salesforce Knowledge."
 
 Then, depending on selection:
 - **If Salesforce Knowledge:** query the org for available Data Category Groups (and their categories) and **list them to the user**. Ask which specific categories the agent should ground on. Do not assume "all." Wire the selection into the ADL configuration.
@@ -146,25 +124,66 @@ The `rag_feature_config_id` returned by ADL provisioning gets wired into the age
 
 **After Checkpoint 2, create the agent.** With placeholders (CP1) and `rag_feature_config_id` (CP2) in hand, create the agent per §7, then publish and activate it by deferring to `agentforce-generate` — it owns the publish/activate lifecycle, including the retry-on-transient-failure path. Do not hand-roll publish/activate here.
 
+**Before passing the agent script to `agentforce-generate`, substitute `<default_agent_user_placeholder>` with the Einstein Agent User username captured in the readiness check (step 1): `{agentDevName}_user@{orgId}.ext`.** Do this substitution explicitly in the script text — never pass the literal placeholder string to the skill. If the username was not captured or is unclear, re-derive it as `{agentDevName}_user@{15-char-orgId}.ext` using `sf org display --target-org $ORG` to get the org Id.
+
 ### 4.3 Checkpoint 3 — Add to Channels
 
-*Provisions (Web Chat path):* a messaging channel + omni-channel routing, a new Embedded Service Deployment (`Help Chat`), and a prepared LWR Experience Cloud site. The agent script (§7) does not change here — this is channel/site metadata around the agent.
+*Provisions (Web Chat path):* a messaging channel initially configured, deployed, and activated with Queue routing via `service-digital-engagement-channel-configure`, then rewired to the agent via `service-agentforce-channel-configure` (same fallback queue + `sessionHandlerAsa`), a new Embedded Service Deployment (`Help Chat`), and optionally a prepared LWR Experience Cloud site. The agent script (§7) does not change here — this is channel/site metadata around the agent.
 
-Ask the user which channel(s) they want to expose the agent on. Present all three options, even though some require additional inputs:
+**Step 1 — Discover what channels exist in the org, then present channel types.**
 
-- **Web Chat** — embed a chat widget on a website.
-- **Help Portal** *[Coming soon]* — create a customer-facing Experience Cloud site with the agent built in.
-- **Voice** *[Coming soon]* — let the agent handle phone calls.
+Query existing MessagingChannels. Note: `MessagingChannelType` is **not** a SOQL field — get names via SOQL, then retrieve metadata to determine type:
 
-**IMPORTANT — Coming-soon channels are hard stops, not aspirational selections.** If the user selects **Help Portal** or **Voice**, DO NOT attempt to build anything for that channel. Do not create supporting objects, records, or metadata "toward" the feature — provisioning a phone number, standing up a portal site, or wiring routing for these channels is out of scope and requires a dedicated skill that does not exist yet. Trying to fulfill them by creating adjacent objects produces broken half-configurations that look done but never work. Respond to the user verbatim: *"This feature is coming soon, please select Web Chat."* Then re-present the channel selection and wait for a supported choice — do not proceed until the user picks Web Chat.
+```bash
+# Get channel names
+sf data query --target-org $ORG --json \
+  --query "SELECT Id, DeveloperName, MasterLabel FROM MessagingChannel ORDER BY MasterLabel"
 
-Branch based on the user's selection. **Read only the reference file for the channel the user chose** — do not load all three:
+# Retrieve all channel metadata to read <messagingChannelType> from each XML
+sf project retrieve start --metadata "MessagingChannel" --target-org $ORG
 
-- **If Web Chat** → read [`references/channel-web-chat.md`](../references/channel-web-chat.md) and follow it (domain, the critical `authMode`/"who's chatting" decision, channel + ESD + site provisioning, citations wiring). This is the only fully-supported channel.
-- **If Help Portal** *(Coming soon)* → read [`references/channel-help-portal.md`](../references/channel-help-portal.md). It is a hard stop: respond *"This feature is coming soon, please select Web Chat."* and re-present the selection.
-- **If Voice** *(Coming soon)* → read [`references/channel-voice.md`](../references/channel-voice.md). Also coming-soon; steer to Web Chat, and gracefully skip if the user insists on an existing number the org can't wire.
+# Extract types
+grep -rh "messagingChannelType" force-app/main/default/messagingChannels/
+```
 
-The user may pick more than one channel; handle each branch independently, reading each channel's file as you reach it. If a branch fails, report it plainly and continue with the others — do not abort the whole setup.
+Classify by `<messagingChannelType>` value: `EmbeddedMessaging` → Web Chat; `PstnVoice`/`InternalVoice` → Phone; `WhatsApp`/`AppleBusinessChat` → WhatsApp; `Sms` → SMS.
+
+Use the results to determine which channel types to surface. Always show:
+- **Web Chat** (create new, or add to any existing `EmbeddedMessaging` channels)
+- **Help Portal** (create new Agentforce Concierge experience on an LWR site)
+
+Show these only if the org has existing channels of that type:
+- **Voice** — only if `PstnVoice` channels exist (this skill does not provision a new phone number). Detect native vs partner: extract digits from DeveloperName (`VOICE_PSTN_{digits}`), query `CommunicationChannelLine WHERE DeveloperName='DEV_{digits}'` via Tooling API. A row returned = native SCV (wiring supported); 0 rows = partner voice (wiring not supported — show but surface the limitation). See `service-agentforce-channel-configure`'s `channel-types.md` reference for detection steps.
+- **WhatsApp** — if any WhatsApp channels exist
+- **SMS** — if any Sms channels exist
+
+Present the channel types via `AskUserQuestion` (multiSelect: true). Label each with how many existing channels of that type are in the org (e.g. "Voice — 2 existing channels"), so the user knows what they'd be choosing from.
+
+**Step 2 — For each selected channel type, ask: new or existing?**
+
+After the user picks channel type(s), for each one ask a follow-up via `AskUserQuestion`:
+- **Web Chat:** "Create a new Web Chat channel" OR list each existing `EmbeddedMessaging` channel as *"Add agent to: {MasterLabel}"*
+- **Help Portal:** "Create a new Help Portal" — delegate to `service-concierge-portal-generate`.
+- **Voice:** list each existing `PstnVoice` channel as *"Add agent to: {MasterLabel}"* — read [`references/channel-voice.md`](references/channel-voice.md) and follow it fully.
+- **WhatsApp / SMS:** list each existing MessagingChannel as *"Add agent to: {MasterLabel}"*. "Create a new [type] channel" is NOT offered.
+
+**Step 3 — Branch by selection.**
+
+- **New Web Chat channel** → read [`references/channel-web-chat.md`](references/channel-web-chat.md) and follow it fully (domain, `authMode`, channel + ESD + site provisioning).
+- **New Help Portal** → delegate to `service-concierge-portal-generate`, passing `$ORG`, `$BOT_ID`, and `$BOT_DEV_NAME`. **Immediately after that skill returns, capture its `PUBLISHED_PORTAL_URL` return value and store it as `$PORTAL_URL`. Then run Step 4 (the channel-add loop) before doing anything else — do NOT advance to Checkpoint 3.5 yet.**
+- **Existing channel (any type, including Voice/WhatsApp/SMS/Email)** → delegate wiring to `service-agentforce-channel-configure`, passing the agent DeveloperName and the selected channel's DeveloperName. That skill owns queue resolution, routing flow, and agent wiring for existing channels.
+
+Handle each selected channel branch independently. If one branch fails, report it and continue with the others — do not abort the whole setup.
+
+**Step 4 — After EACH channel branch completes, immediately ask if the user wants to add another channel. This is the next thing you do — before Checkpoint 3.5, before any summary, before anything else.**
+
+After each branch (success or failure), present via `AskUserQuestion`:
+
+- **Add another [same type] channel** — e.g. if the user just wired a Phone channel, default to showing remaining unwired Phone channels first. Re-run Step 2 for that type. Skip channels already wired in this session.
+- **Add a different channel type** — return to Step 1 (re-query `MessagingChannel`, rebuild the type list, omit already-wired channels from the options).
+- **Done — proceed to go-live** — exit the loop and advance to Checkpoint 3.5.
+
+Track which channels have been wired in this session so they are not re-offered. The loop continues until the user selects "Done" or all available channels have been wired.
 
 ### 4.4 Checkpoint 3.5 — Silent pre-flight (internal only, DO NOT show the user)
 
@@ -188,7 +207,7 @@ Run these three checks, in order. Every check must pass before advancing to Chec
 
 **Check 3 — The messaging channel is Active AND the V2 Embedded Messaging bootstrap is actually served by the customer-facing site URL.** This catches two related failures that both ship a dead widget: (a) the Embedded Service Deployment and channel were created but the MessagingChannel was never activated, so the widget renders but no agent answers; and (b) the deployment exists but the site was never wired to load the V2 bootstrap script, so the customer-facing URL loads without a chat widget at all. Verify both, in order:
 
-  - **(a) MessagingChannel is Active.** Fetch the MessagingChannel back from the org and assert its status is `Active` (not `Inactive`/`Draft`). `service-digital-engagement-messaging-site-integrate` does **not** own channel activation — it is deferred to `service-digital-engagement-channel-configure`, and the channel deploys INACTIVE — so do not assume activation happened as a side effect of widget placement. If the channel is not Active, activate it (it must not be activated before the agent is Active) and re-fetch to confirm the status flipped. If it still won't activate, surface the specific channel and stop — do not proceed to Checkpoint 4 with an inactive channel.
+  - **(a) MessagingChannel remains Active after rewiring.** Fetch the MessagingChannel back from the org and assert its status is `Active` (not `Inactive`/`Draft`). `service-digital-engagement-channel-configure` activates the initially Queue-routed channel after deployment; `service-agentforce-channel-configure` then replaces that routing with the agent binding. `service-digital-engagement-messaging-site-integrate` does **not** own activation, so verify that the Agentforce routing deploy preserved the active state rather than assuming widget placement activated it. If the channel is not Active, activate it (the agent must already be Active) and re-fetch to confirm the status flipped. If it still won't activate, surface the specific channel and stop — do not proceed to Checkpoint 4 with an inactive channel.
   - **(b) The V2 Embedded Messaging LWR component is placed on the site's home layout(s) with the correct `deploymentName` and endpoint attributes.** The widget is embedded via the `experience_messaging:embeddedMessaging` LWR component in `homeGuestLayout.json` (and `homeAuthenticated.json` if signed-in visitors are also expected) — **not** via a `<script>` bootstrap in `mainAppPage.json` `headMarkup`. The correct attribute is `deploymentName` (not `configurationName`, which is not a valid attribute for this component and is stripped on deploy). **The V2 component takes a full six-attribute shape that round-trips cleanly through metadata deploy/retrieve.** The end-to-end path is:
 
     1. **Retrieve the ExperienceBundle for the target site** to a scratch directory: `sf project retrieve start --metadata "ExperienceBundle:<SiteName>"`.
@@ -224,7 +243,7 @@ Run these three checks, in order. Every check must pass before advancing to Chec
        **Read the current `Metadata` first with a GET and include every field on the PATCH** — omitting a field (e.g. `clientVersion`, `branding`, `masterLabel`) nulls it out on write. Successful PATCH returns HTTP 204.
     5. **Deploy the ExperienceBundle** back to the org: `sf project deploy start -m "ExperienceBundle:<SiteName>"`.
     6. **Publish the site.** Use the site's **community name** (from `Network.Name`) — not the site's `Site.Name`. On some org shapes these can differ: e.g. `Site.Name = Consumer_Site1` but `Network.Name = "Consumer Site"`. Query `SELECT Name FROM Network WHERE Status = 'Live'` to get the community name, then `sf community publish -n "<CommunityName>"`. `sf community publish` returns immediately; poll `SELECT Status FROM BackgroundOperation WHERE Id='<jobId>'` and wait for `Complete`.
-    7. **Verify by retrieving the ExperienceBundle again and confirming all six `componentAttributes` keys survived the round-trip. Then verify the widget renders by opening the live customer URL in a guest browser.** Do NOT use <!-- skill-validate: ignore-start -->`curl | grep`<!-- skill-validate: ignore-end --> to check for the widget — the launcher mounts at runtime and is not present in the server-rendered HTML the raw GET returns, so a curl check will always report "missing" and lead to a wrong diagnosis. The check that matters: open `<customerSiteUrl>` in an incognito window and confirm the floating chat launcher (branded label like "Ask Me Anything") appears bottom-right. Only then does the widget count as placed.
+    7. **Verify by retrieving the ExperienceBundle again and confirming all six `componentAttributes` keys survived the round-trip. Then verify the widget renders by opening the live customer URL in a guest browser.** Do NOT use `curl | grep` to check for the widget — the launcher mounts at runtime and is not present in the server-rendered HTML the raw GET returns, so a curl check will always report "missing" and lead to a wrong diagnosis. The check that matters: open `<customerSiteUrl>` in an incognito window and confirm the floating chat launcher (branded label like "Ask Me Anything") appears bottom-right. Only then does the widget count as placed.
 
     **Placement scope: the widget is placed on the home layouts you inject the component into.** Unlike the bootstrap-in-`mainAppPage.json` approach (which was site-wide), the LWR-component approach is per-layout. If the user wants the widget on every page of the site, either add the component to each page's layout JSON or (simpler) drop it onto the site's site-wide template in Experience Builder. This is a deliberate tradeoff: metadata-component placement is more surgical but more work to fan out to every page than a headMarkup script would be.
 
@@ -236,11 +255,9 @@ Only after all three checks pass silently, advance to Checkpoint 4. The user sho
 
 Once the agent and channel(s) are deployed:
 1. Tell the user the agent is built, and **link them to Agentforce Builder** for this agent so they can review the agent definition, subagents, and topics.
-2. For the Web Chat / Help Portal path, embed the V2 Embedded Messaging LWR component on the site's home layout(s). Follow the retrieve→inject-component→Tooling-PATCH-ESD→deploy→publish→retrieve-round-trip→live-browser-verify path documented in Checkpoint 3.5 Check 3(b) — that is the verified end-to-end path for a V2 ESD. The correct component is `experience_messaging:embeddedMessaging` with the six-attribute V2 shape (`clientVersion`, `deploymentName`, `hideChatButtonOnLoad`, `isExpSiteAuthMode`, `scrtUrl`, `siteEndpoint`); `deploymentName` is the ESD DeveloperName. Do NOT verify placement with <!-- skill-validate: ignore-start -->`curl | grep`<!-- skill-validate: ignore-end --> — the widget mounts at runtime and is not present in server-rendered HTML, so a curl check will always report "missing" and mislead the diagnosis. The verification that matters: retrieve the ExperienceBundle back after publish and confirm all six `componentAttributes` keys survived the round-trip, then open the live customer URL in an incognito browser and confirm the floating chat launcher renders.
+2. For the Web Chat / Help Portal path, embed the V2 Embedded Messaging LWR component on the site's home layout(s). Follow the retrieve→inject-component→Tooling-PATCH-ESD→deploy→publish→retrieve-round-trip→live-browser-verify path documented in Checkpoint 3.5 Check 3(b) — that is the verified end-to-end path for a V2 ESD. The correct component is `experience_messaging:embeddedMessaging` with the six-attribute V2 shape (`clientVersion`, `deploymentName`, `hideChatButtonOnLoad`, `isExpSiteAuthMode`, `scrtUrl`, `siteEndpoint`); `deploymentName` is the ESD DeveloperName. Do NOT verify placement with `curl | grep` — the widget mounts at runtime and is not present in server-rendered HTML, so a curl check will always report "missing" and mislead the diagnosis. The verification that matters: retrieve the ExperienceBundle back after publish and confirm all six `componentAttributes` keys survived the round-trip, then open the live customer URL in an incognito browser and confirm the floating chat launcher renders.
 
-3. **Wire the Escalation Flow to the agent.** The Quick Setup flow creates an Escalation Flow that routes conversations to a live human, but the created flow is **not automatically wired to the Help Agent's Escalation subagent**. Do this explicitly:
-   - Query the org for an existing Flow with DeveloperName `Help_Agent_Escalation_Flow` (or the canonical name your org uses). If it exists (from a previous run), **reuse it** — do not create a duplicate. If it does not exist, direct the user to Setup → Agentforce Studio → Quick Setup → run the "Escalation" step, and ask them to name the flow `Help_Agent_Escalation_Flow` so subsequent runs reuse it deterministically.
-   - Once the Flow is present, wire it on the agent in **Agentforce Builder → Settings → Escalation → Escalation Flow → select `Help_Agent_Escalation_Flow`**. Then save. Escalation returns to the router if the flow is not wired; the agent won't actually hand off to a human.
+3. **Wire the Escalation Flow to the agent.** The RoutingFlow was created in Step C.1 of `references/channel-web-chat.md` (DeveloperName: `{AgentDevName}_Outbound_Enhanced_Chat_Flow`). Follow `service-agentforce-channel-configure`'s `agent-wiring.md` reference to add the `connection customer_web_client:` block and republish. Web Chat uses `connection customer_web_client:` — not `connection messaging:`. If the flow is not wired, `@utils.escalate` returns immediately without transferring and the agent falls through to the case-creation fallback.
 
 4. **Activate the Messaging Channel.** Even if Checkpoint 3.5 flipped it Active for you, verify one more time before declaring go-live: Setup → Messaging Settings → **Help Chat** → confirm the "Activate" button is greyed out / status shows Active. If the button is still live and the channel is Inactive, click Activate. A published deployment with an inactive channel silently drops all inbound messages.
 
@@ -248,13 +265,13 @@ Once the agent and channel(s) are deployed:
    - Title reads *"Embedded Service Deployment Settings - Web"* with **no `(v1)` suffix and no "Switch to V2" button**.
    - Top-right shows *"Published on: {date}"* and *"Version: 1"* (not empty).
 
-   **If *Published on:* is blank even though the title reads *Web (v2)* and `IsEnabled=true`** — and especially if the Publish button shows a red *"Select a Messaging Channel and then try publishing again."* banner — the ESD was created **without a messaging channel bound** (the `deployment/setup` call omitted `messagingChannelId`). This is the most common publish failure. Clicking "Publish" in the UI will not fix it (a V2 deployment offers no channel to select there). Delete the ESD (`sf project delete source -m EmbeddedServiceConfig:HelpChat`) and recreate via the Connect API path in Step C.3 **with `messagingChannelId` (and `hostDomain`) in the body** — see the CRITICAL note under Step C.3.
+   **If *Published on:* is blank even though the title reads *Web (v2)* and `IsEnabled=true`** — and especially if the Publish button shows a red *"Select a Messaging Channel and then try publishing again."* banner — the ESD was created **without a messaging channel bound** (the `deployment/setup` call omitted `messagingChannelId`). Delete the ESD (`sf project delete source -m EmbeddedServiceConfig:HelpChat`) and recreate via the Connect API path in Step C.4 **with `messagingChannelId` (and `hostDomain`) in the body**.
 
-   **If instead the title still says `(v1)`**, the ESD was created via bare Metadata deploy instead of the Connect API — that path is V1-only and provides no supported API to publish. **Do not tell the user to click "Publish" in the UI as a fix** — the button will publish a V1 deployment that Enhanced Web Chat cannot use. Delete the V1 ESD and recreate via the Connect API path in Step C.3. An unpublished or V1 deployment never serves the widget to visitors, even when the channel is Active.
+   **If the Connect API itself returned `INTERNAL_ERROR`** and a Metadata API fallback was used instead, the ESD will not be auto-published. Attempt `POST /connect/embeddedmessaging/deployment/HelpChat/publish` to trigger publish programmatically. If that endpoint is also unavailable, surface the gap to the user: direct them to Setup → Embedded Service Deployments → Help Chat → Publish, and note the widget will not serve until *Published on:* is stamped.
 
-6. Confirm: once published, the help agent is live. Offer to test it together.
+   **If the title still says `(v1)`**, the ESD was created via bare Metadata deploy without `clientVersion: WebV2`. Delete it and recreate via the Connect API path. An unpublished or V1 deployment never serves the widget to visitors, even when the channel is Active.
 
-Stay in the conversation; don't end abruptly. Ask if they want to make any adjustments before signing off.
+6. Confirm the agent is live. For the Help Portal path, print the live portal URL — use `$PORTAL_URL` captured when `service-concierge-portal-generate` returned. If `$PORTAL_URL` is not in context (e.g. after context compression), re-derive it: query `SELECT UrlPathPrefix FROM Site WHERE Name='<DEB site name>'` and build `https://<orgDomain>.my.site.com/<UrlPathPrefix>/`. Do NOT reconstruct the URL from the instance URL or the org slug — always derive it from the `Site` record. Then print the post-setup next steps from Step D.8 of `references/channel-web-chat.md`: the test URL (or embed snippet instructions for own-website deployments) and the four-item testing checklist. Stay in the conversation — offer to walk through the checklist together and ask if they want any adjustments before signing off.
 
 ---
 

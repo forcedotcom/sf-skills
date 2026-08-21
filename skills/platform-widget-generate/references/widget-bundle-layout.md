@@ -64,7 +64,7 @@ JSON Schema describing what data the widget accepts at runtime. Fields are wrapp
 
 - `description` (string)
 
-**Each leaf under `properties.attributes.properties` MUST have `lightning:type`.** Optional per-leaf: `title`, `description`. **A `lightning__listType` leaf MUST also carry `items.lightning:type`** — set to the matching primitive `lightning:type` for a list of primitives, or to an `@apexClassType/...` reference for a list of Apex objects (see `references/schema-from-lightning-type.md`).
+**Each leaf under `properties.attributes.properties` MUST have `lightning:type`.** Optional per-leaf: `title`, `description`. **A `lightning__listType` leaf MUST also carry `items.lightning:type`** — set to the matching primitive `lightning:type` for a list of primitives, or to an `@apexClassType/...` reference for a list of Apex objects (see `references/schema-from-lightning-type.md`). **For a list of plain objects with no Apex-backed type**, `items.lightning:type` is `lightning__objectType` and `items` MUST also carry a nested `properties` map inlining every field the list items expose (same shape as the outer `attributes.properties` map).
 
 Example:
 

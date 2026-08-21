@@ -44,6 +44,7 @@ VALIDATIONS THAT WILL RUN AFTER GENERATION:
     - widget schema.json parses and has the required root keys
     - every leaf in properties has a lightning:type
     - every {!$attrs.X} (and {!$attrs.<outer>.<inner>} for nested objects, {!$item.X} inside forEach) resolves
+    - every tile/button carries an actions.click entry using action/openLink or action/sendMessage
     - <name>.uiwidget-meta.xml is well-formed XML, root is <UiWidgetBundle>, and declares <widgetType>JSON</widgetType>
   Cross-skill checks (run by this orchestrator):
     - lightning-type-unchanged: when an existing Lightning Type was used as input, its schema.json is byte-identical to the version captured before this run

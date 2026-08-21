@@ -2,7 +2,7 @@
 name: platform-widget-generate
 description: "Use this skill to author a complete HXL WidgetBundle (UEM body + schema.json + -meta.xml). TRIGGER when: user asks for a widget, mosaic, fragment, card, or rich UI surface for any subject, domain, feature, or entity noun; the prompt names only an entity or data shape without invoking Lightning Types, CLTs, or Apex-backed types. DO NOT TRIGGER when: the prompt explicitly says 'Lightning Type', 'CLT', 'Custom Lightning Type', 'Apex-backed type', or references '@apexClassType/...' (use platform-lightning-type-widget-coordinate); authoring a custom-LWC renderer for a Custom Lightning Type (use platform-custom-lightning-type-generate); or editing only an LWC component."
 metadata:
-  version: "1.2"
+  version: "1.3"
   domains: ["Platform", "Agentforce"]
   minApiVersion: "68.0"
   relatedSkills:
@@ -96,6 +96,42 @@ The first child of `tile/widget.children` SHOULD be a single `tile/column`. All 
 
 ---
 
+## Actions
+
+`tile/button` supports an `actions` attribute that dispatches an action node on an event. Two action definitions are supported:
+
+| Action | Timing | Required attributes | Effect |
+|---|---|---|---|
+| `action/openLink` | synchronous | `url` (string). Optional `target` (`_blank`\|`_self`, default `_blank`) | Opens a URL |
+| `action/sendMessage` | asynchronous | `content` (string) | Posts a new user message back to the agent and earns a fresh turn |
+
+```json
+{
+  "definition": "tile/button",
+  "attributes": {
+    "label": "Button Label",
+    "variant": "primary",
+    "actions": { "click": [ { "definition": "action/sendMessage", "attributes": { "content": "content" } } ] }
+  }
+}
+```
+
+```json
+{
+   "definition": "tile/button",
+   "attributes": {
+      "label": "Button Label",
+      "variant": "primary",
+      "actions": { "click": [ { "definition": "action/openLink", "attributes": { "url": "https://www.example.com", "target": "_blank" } } ] }
+   }
+}
+```
+
+
+**A `tile/button` with no `actions` attribute renders disabled** — a button exists to trigger an action, so always attach a `click` action to a button meant to be interactive.
+
+---
+
 ## Layout Best Practices
 
 These conventions cover widget *structure* — how blocks are grouped and stacked.
@@ -116,11 +152,12 @@ These conventions cover widget *structure* — how blocks are grouped and stacke
 Widgets express *intent*, not pixels. Each surface provides a default look and feel; brand/theme overrides apply automatically.
 
 - **Style semantically.** Use `variant`, `size`, and other enum-typed attributes (`primary`, `destructive`, `success`, `warning`). Do not pin literal colors or pixel values.
-- **One primary action per visible group.** At most one `tile/button` with `variant: primary`. Use `secondary`, `outline`, or `ghost` for additional actions.
+- **One primary action per visible group.** At most one `tile/button` with `variant: primary`. Use `secondary` or `destructive` for additional actions (see the `tile/button` schema for the full variant enum).
+- **Every `tile/button` needs a `click` action.** See *Actions* above — an action-less button renders disabled.
 - **One `h1` per widget.** Use `h2`/`h3` for sub-section headings, `body` for prose, `caption` for helper text.
-- **Use semantic state variants on state-bearing blocks** (`tile/alert`, `tile/badge`, `tile/callout`, `tile/chip`).
-- **Accept schema defaults for `gap`, `padding`, `size`** unless there is a specific reason to override.
-- **Don't pin `width`, `height`, `maxWidth`** unless a content constraint requires it. For long text, use `truncate: true`.
+- **Use semantic state variants on state-bearing blocks** (`tile/badge`, `tile/callout`).
+- **Accept schema defaults for `gap`, `size`** unless there is a specific reason to override.
+- **Don't pin `width`** unless a content constraint requires it.
 - **Use the Lucide icon set.** Pass the Lucide name (`"check"`, `"alert-circle"`); other icon libraries are not supported.
 
 ---
@@ -197,12 +234,13 @@ Widgets express *intent*, not pixels. Each surface provides a default look and f
 9. **Self-validate.** Before reporting, confirm each check below and report each result individually (`pass` or `fail (<reason>)`). Do **not** summarize as a single "all passed" line — list every check so a reviewer can spot a silent skip.
     - **`schema-parses`** — `<pkgDir>/uiWidgets/<widgetName>/schema.json` parses as JSON.
     - **`schema-root-keys`** — root has `title` (string), `type: "object"`, and `properties.attributes` (object) — where `properties.attributes` carries `lightning:type: "lightning__objectType"` and a nested `properties` map. No `unevaluatedProperties: false`.
-    - **`schema-leaf-types`** — every leaf under `properties.attributes.properties` carries a `lightning:type`. Singular nested inner-class fields carry `lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`); the nested shape is not redeclared. `List<InnerClass>` fields carry `lightning:type: "lightning__listType"` with `items.lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`), not a redeclared field map. See `references/schema-from-lightning-type.md`.
+    - **`schema-leaf-types`** — every leaf under `properties.attributes.properties` carries a `lightning:type`. Singular nested inner-class fields carry `lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`); the nested shape is not redeclared. `List<InnerClass>` fields carry `lightning:type: "lightning__listType"` with `items.lightning:type` set to the inner Apex class reference (`@apexClassType/<namespace>__<OuterClass>$<InnerClass>`), not a redeclared field map — see `references/schema-from-lightning-type.md`. **When the list has no Apex-backed type** (schema inferred from the prompt), `items.lightning:type: "lightning__objectType"` MUST carry an inline nested `properties` map for every item field the body binds via `{!$item.X}`.
     - **`bindings-resolve`** — every `{!$attrs.X}` (or `{!$attrs.<outerField>.<innerField>}` for nested objects) in `<widgetName>.json` resolves to a property under `schema.json` `properties.attributes.properties`, and every `{!$item.X}` resolves to a `forItem` loop variable defined upstream.
     - **`body-envelope`** — `<widgetName>.json` root has `type: "lightning__agentforceWidget"` and a `contentBody` object whose `widgetBody` carries the UEM tree rooted at `tile/widget`. No node in the tree — root or non-root — carries a `type` key.
     - **`metaxml-wellformed`** — `<widgetName>.uiwidget-meta.xml` parses as well-formed XML.
     - **`metaxml-elements`** — `<widgetName>.uiwidget-meta.xml` has root `<UiWidgetBundle>` and contains `<masterLabel>` (non-empty), `<description>` (non-empty), and `<widgetType>JSON</widgetType>`.
     - **`files-present`** — all three files exist at the resolved `<pkgDir>/uiWidgets/<widgetName>/` path.
+    - **`button-actions-present`** — every `tile/button` in `<widgetName>.json` has an `actions.click` action node whose `definition` is `action/openLink` or `action/sendMessage`.
 
 ---
 
@@ -214,6 +252,7 @@ Widgets express *intent*, not pixels. Each surface provides a default look and f
 | Never pass `tile/widget` to `getUiComponentSchemas` | It is a fixed wrapper, not a queryable component |
 | Always supply `parameters` (with required keys) when calling `execute_metadata_action` | Missing parameters cause hard failure, not partial result |
 | Every `{!$attrs.X}` in the body resolves to a property in the widget `schema.json` | No invented fields |
+| Every `tile/button` carries an `actions.click` entry using `action/openLink` or `action/sendMessage` only | These are the only two supported tile action definitions; an action-less button renders disabled |
 | No `$(…)`, backticks, `<(…)`, brace expansion `{a,b,c}`, or `eval`/`exec` in any Bash tool call | Vibes' safe-shell filter forces manual approval on these patterns even in Bypass mode. Emit separate commands (`mkdir -p a && mkdir -p b`) or print each value with its own command and reason about the output — do not capture into a shell variable |
 
 ---
@@ -226,6 +265,8 @@ Widgets express *intent*, not pixels. Each surface provides a default look and f
 | Body references `{!$attrs.foo}` but `foo` is not under `schema.json` `properties.attributes.properties` | Add `foo` to `schema.json` `properties.attributes.properties` OR remove the body reference |
 | Output written outside `<pkgDir>/uiWidgets/<widgetName>/` | `<pkgDir>` = `<packageDirectories[].path>/main/default` (see `references/widget-bundle-layout.md`). Dropping the `main/default/` segment is the common cause of widgets landing at `force-app/uiWidgets/...` instead of `force-app/main/default/uiWidgets/...` |
 | `if` bound to a non-boolean | Use `if` only when the schema has a `lightning__booleanType` property |
+| `tile/button` renders but does nothing when clicked | No `actions.click` entry was set — an action-less button renders disabled by design. Add one (see *Actions* above) |
+| Using `action/sendMessage` for pure navigation, or `action/openLink` when the agent should respond | `action/openLink` is synchronous and does not consume a turn; `action/sendMessage` is asynchronous and earns a fresh turn. Pick the one matching the intended UX |
 
 ---
 

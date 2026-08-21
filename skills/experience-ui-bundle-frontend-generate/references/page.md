@@ -10,6 +10,7 @@
 6. **No inline styles** — Tailwind utility classes and design tokens only.
 7. **Catch-all last** — `path: '*'` (NotFound) must always remain the last child in the layout route.
 8. **Never modify `appLayout.tsx`** when adding a page — layout changes are a separate concern.
+9. **Search-results pages render the installed search feature** — when a search feature is installed (via `experience-ui-bundle-features-generate`), mount its shipped `<Search>` at the results route. Do **not** query data directly (a custom `SearchResults.tsx` against seed data or a raw GraphQL call) — that bypasses the installed feature so the deployed sObject/CMS search never runs. A custom results UI is fine *only if it's built on the feature's `useSearch` hook*, or when the user explicitly opted out of OOTB search (confirm, don't infer). See the feature's README: get the `Package:` name from `npx @salesforce/ui-bundle-features describe <feature>`, then run `npm view <package> readme`.
 
 ### Step 1 — Create the page file
 

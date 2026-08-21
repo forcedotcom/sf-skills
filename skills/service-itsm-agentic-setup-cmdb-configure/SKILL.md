@@ -134,15 +134,41 @@ CMDB runs on an ITOM tenant that must reach status `PROVISIONED` (asynchronous).
    ```text
    dispatch_readonly({ "url": "/services/data/v67.0/connect/tenantProvisioningStatus", "method": "GET" })
    ```
-   - If `status` is already `PROVISIONED` → skip to Layer 2.
-2. **Trigger provisioning** (write) — only if not already provisioned/in-progress. Confirm with the
+   Branch on `status`:
+   - `PROVISIONED` → already done; skip to Layer 2 (no trigger, no poll).
+   - `UNPROVISIONED` → no job has run; go to step 2 and **trigger** it. Do **not** wait or poll on
+     this state — waiting never starts provisioning and just burns the budget.
+   - `PROVISIONING_IN_PROGRESS` → a job is already running; **skip the trigger** and go straight to
+     the poll in step 3.
+   - `FAILED` → treat as the FAILED case in step 3 (surface the reason; do not retry via API).
+2. **Trigger provisioning** (write) — only when step 1 showed `UNPROVISIONED`. Confirm with the
    user first:
    ```text
    dispatch({ "url": "/services/data/v67.0/connect/tenantProvisioningStatus", "method": "POST" })
    ```
-3. **Poll** the GET until `status == PROVISIONED`. This is async and can take several minutes. Poll
-   **every 30 seconds for up to 10 minutes** (≈20 attempts). Tell the user provisioning is in
-   progress on each poll. Exit the loop as soon as:
+   After the trigger returns, tell the user provisioning has started and **typically takes 2+
+   minutes**, so there is nothing to check yet.
+3. **Poll** the GET until `status == PROVISIONED`. This is async and reliably takes **2+ minutes**
+   (measured completion clusters right around **~2 min 40 s**), so an immediate poll is a guaranteed
+   no-op. **Anchor all timing on the response's `triggeredAt`, not on when this run started** — the
+   job may have been triggered by an earlier run (the `PROVISIONING_IN_PROGRESS` entry from step 1).
+   Parse `triggeredAt` as a UTC epoch and compute `elapsed = max(0, now − triggeredAt)` — clamp to
+   `≥ 0` so a clock skew (or a server-vs-agent timezone mismatch) can't yield a negative `elapsed`
+   (waits forever) or a false timeout. **If `triggeredAt` is missing or unparseable** (the trigger
+   POST response may not have populated it yet, or an in-progress row from an earlier run may omit
+   it), fall back to anchoring on this run's start — treat `elapsed = 0` and wait the full ~2-min
+   floor, so a branch always fires deterministically. Then:
+   - `elapsed < ~2 min` → wait until ~2 min after `triggeredAt` before the first check (skips the
+     guaranteed-useless early polls), then poll every 30 seconds.
+   - `~2 min ≤ elapsed < 10 min` → **poll immediately** (the initial wait has already passed — do not
+     wait a fresh 2 min), then every 30 seconds.
+   - `elapsed ≥ 10 min` → **do not start a fresh wait**; treat it as the timeout case below (report
+     the last-seen status and let the user decide).
+
+   The overall budget is **10 minutes from `triggeredAt`** (≈16 checks after the ~2-min floor). The
+   ~2-min floor is a floor, not an extra delay — it brackets the typical ~2:40 completion within a
+   poll or two; do not stretch it longer. Do not poll during the initial wait. Exit the loop as soon
+   as:
    - `status == PROVISIONED` → success, advance to Layer 2.
    - `status == FAILED` → stop immediately. Do NOT retry via the API — surface the failure to the
      user in plain language with three things:
@@ -157,6 +183,17 @@ CMDB runs on an ITOM tenant that must reach status `PROVISIONED` (asynchronous).
         support.
    - the 10-minute window elapses → stop, report the last-seen status, and let the user decide
      whether to keep waiting (re-run) or investigate. Never spin past the 10-minute bound.
+
+   **Polling in the background (runtime-permitting).** Provisioning is a multi-minute wait, so the
+   user should not have to sit idle. **If — and only if — the executing runtime supports backgrounded
+   work** (e.g. an agent runtime that can spawn a detached sub-agent or a scheduled wake-up), delegate
+   the wait-then-poll loop to a background task so the user can keep working, and report the outcome
+   (`PROVISIONED` / `FAILED` / timed-out) when it finishes. **If the runtime is a single-threaded turn**
+   (the ADK / Agentforce / headless-360 production path is single-threaded — a poll loop blocks the
+   conversation there), poll **inline** instead. Either way: (a) tell the user up front it takes a few
+   minutes, and (b) give a resume path — if they step away and the turn ends, they can re-run this
+   skill and Layer 1 picks up from the current status (an already `PROVISIONED` tenant skips straight
+   to Layer 2). Never *require* a background primitive the runtime may not have.
 
 ### Layer 2 — Enable the CMDB feature (this lifts the 403 gate)
 
@@ -198,7 +235,8 @@ The feature api name is `service-cloud-itsm-cmdb-integration`.
 | Read before every write; verify after every write | Tenant + feature are async/stateful; the POST response can lag the real state |
 | Confirm the target org and each write with the user | These are real, hard-to-reverse changes on a live org |
 | Do not advance past a failed or blocked layer | Later layers depend on earlier ones and will 403 |
-| Poll tenant provisioning every 30s for up to 10 min (≈20 attempts) | It is async; never spin past the 10-min bound — exit on PROVISIONED/FAILED, else report status and let the user decide |
+| Anchor poll timing on the response's `triggeredAt` (parse as UTC epoch; elapsed = max(0, now − triggeredAt)), not on this run's start; ~2-min floor before the first check, then every 30s, 10-min total budget from `triggeredAt`. If `triggeredAt` is missing/unparseable, fall back to this run's start (elapsed = 0) | Provisioning reliably takes 2+ min (measured ~2:40), so earlier polls are guaranteed no-ops. A `PROVISIONING_IN_PROGRESS` entry may have been triggered by an earlier run — if already past the ~2-min floor, poll immediately; if already past 10 min, report a timeout rather than waiting a fresh 2 min. Clamp elapsed to ≥ 0 so clock skew / timezone mismatch can't wait forever or false-timeout; the fallback keeps a branch firing when the timestamp is absent. Never spin past the 10-min bound |
+| Background the poll loop only where the runtime supports it; else poll inline — never require a background primitive | The user shouldn't sit idle for a multi-minute wait, but the production headless-360/ADK path is a single-threaded turn; a skill that mandates a background poller breaks there. Always give a re-run resume path |
 | On `FAILED`, never retry via API — decode the reason, give the Setup URL, ask for a manual retry | The API trigger has already failed; the user can retry from the CMDB provisioning Setup page, which surfaces the real error and any manual remediation |
 | Never expose internal jargon to the user | Keep record IDs, org IDs, HTTP status codes (403/500/…), API error codes (`FUNCTIONALITY_NOT_ENABLED`, …), endpoint names (`bundleListView`, `tenantProvisioningStatus`), developer names (`ITSrvcsCnfgMgmnt`, `CMDBEnabled`), and tooling internals (`dispatch`, `headless-360`) out of user-facing output. Translate to plain language; use human-readable names and statuses |
 
@@ -247,7 +285,7 @@ yet"), rather than echoing the code.
 | `403 FUNCTIONALITY_NOT_ENABLED` on CMDB reads **while feature `status != ENABLED`** | Feature not yet enabled (Layer 2 incomplete) | Finish Layer 2; the gate lifts only after the feature is ENABLED |
 | `403 FUNCTIONALITY_NOT_ENABLED` on `bundleListView` **while feature `status == ENABLED`** | Feature IS enabled; the running user lacks CMDB permission sets (`bundleListView` also enforces user-level access) | Not a Layer 2 failure — this is Layer 3; run `service-itsm-agentic-setup-cmdb-access-assign` to grant the user CMDB access |
 | Feature enable blocked (`enableBlockedReasons` non-empty) | Missing dependency the org still needs | Relay each reason; resolve those first, then retry |
-| Tenant stuck `NOT_PROVISIONED` / long-running | Provisioning is async | It can take minutes; keep polling or retry the trigger |
+| Tenant stuck `UNPROVISIONED` / `PROVISIONING_IN_PROGRESS` / long-running | Provisioning is async | It typically takes ~2–3 min; keep polling within the 10-min budget or retry the trigger |
 | Tenant `FAILED` | Provisioning job failed Salesforce-side | Share the decoded failure reason + the org's `/lightning/setup/CMDBProvisionalSettings/home` link and ask the user to retry provisioning manually there; escalate to Salesforce support only if the manual retry also fails |
 | `dispatch*` auth error | headless-360 MCP session not authenticated / token expired | Re-authenticate the headless-360 MCP connection and confirm the session points at the intended org |
 

@@ -1,17 +1,46 @@
-# Channel branch — Voice *(Coming soon)*
+# Channel branch — Voice
 
-> **When to read this file.** Load it only if the user selected **Voice** at Checkpoint 3.
+> **When to read this file.** Load it only when the user has selected **Voice** at Checkpoint 3 of `assets/help-agent-spec.md`. If they selected Web Chat, read `channel-web-chat.md` instead. If they selected Help Portal, delegate to the sibling skill `service-concierge-portal-generate` — do not inline portal steps here.
 
-## Coming-soon channel — do not build supporting metadata
+Voice wires the Help Agent to an existing `PstnVoice` MessagingChannel via an inbound RoutingFlow. It does **not** provision a new phone number — number acquisition puts the org in a state that isn't cleanly retrievable, so it's out of scope for this skill. If the user has no `PstnVoice` channel yet, tell them to provision the number in Setup (Service Cloud Voice / Number Management) first, then come back.
 
-Voice is **not yet supported** as a first-class channel. Do not provision a phone number, stand up routing, configure Amazon Connect, or create adjacent objects "toward" the feature — that produces broken half-configurations. **Do not write a Voice setup plan, a "here's what I would do" outline, or a "planning-only" scaffold either** — describing the steps is still treating a coming-soon channel as a build target. The only correct output for a Voice selection is the verbatim hard-stop message below, followed by re-presenting the channel options. The channel-selection step treats Voice as a coming-soon option alongside Help Portal; the safe response is to steer the user to Web Chat:
+---
 
-> *"This feature is coming soon, please select Web Chat."*
+## Existing number path
 
-## If the user insists on an existing number
+Query existing channels:
 
-If the user provides an **existing** phone number and asks you to wire it up, you may attempt it — but exit gracefully the moment the APIs aren't there:
+```bash
+sf data query --target-org $ORG --json \
+  --query "SELECT Id, DeveloperName, MasterLabel, MessagingPlatformKey, IsActive FROM MessagingChannel WHERE MessageType='PstnVoice' ORDER BY MasterLabel"
+```
 
-- If the org's APIs to procure or attach a phone number are not available, **gracefully exit this branch.** Say something like: *"I can't set up Voice automatically in this org right now, so I'll skip it. You can add Voice later from Setup."* — then continue with any other selected channels.
+If none are returned, stop and tell the user to provision a phone number and `PstnVoice` MessagingChannel in Setup first — this skill does not create one.
 
-Do not abort the whole setup over Voice. If Voice was one of several selected channels, report the skip plainly and proceed with the others.
+If any are returned, present them and let the user choose. Capture the channel's `DeveloperName` as `CHANNEL_DEV_NAME`, then continue to **Step 8 — Wire the channel to the agent**. Fallback queue resolution (including the `SobjectType='VoiceCall'` requirement) is owned by `service-agentforce-channel-configure` — do not resolve or create the queue here.
+
+---
+
+## Step 8 — Wire the channel to the agent
+
+Delegate to `service-agentforce-channel-configure` Branch B. Pass:
+- **Agent DeveloperName** — the Help Agent
+- **Channel type** — Voice
+- **Channel identifier** — `CHANNEL_DEV_NAME`
+
+The delegated skill resolves and configures the fallback queue itself.
+
+---
+
+## Step 9 — Loop
+
+Return to the Checkpoint 3 loop — offer the user the option to add another channel or proceed to go-live.
+
+---
+
+## Rules / constraints
+
+| Rule | Rationale |
+|---|---|
+| This skill never acquires a phone number | Provisioning puts the org in a state that isn't cleanly retrievable — must be done in Setup before this skill runs |
+| Never resolve or create the fallback queue here | `service-agentforce-channel-configure` owns queue resolution end to end — resolving it twice can double-prompt the user |

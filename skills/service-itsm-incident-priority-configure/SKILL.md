@@ -2,7 +2,7 @@
 name: service-itsm-incident-priority-configure
 description: "Configures the Incident Priority Matrix for Salesforce ITSM through the sf CLI — enabling or disabling the matrix, shaping the Impact x Urgency grid that derives Priority on Incident records, toggling the manual-override preference, and reading or setting the default fallback priority. Reads every value before writing, is idempotent, and requires explicit user confirmation before any mutation. Use when the user wants to view, enable, disable, set up, seed, add to, change, or remove priority matrix configuration for Incident records, change the default incident priority, or asks about incident priority setup, impact/urgency mapping, override, or the ITSM incident priority matrix. DO NOT TRIGGER for Problem or ChangeRequest priority matrices, Case priority fields, standard Priority picklists outside ITSM, SLA or milestone configuration, or enabling Incident Management itself (use the service-itsm-incident-mgmt-configure skill)."
 metadata:
-  version: "1.0"
+  version: "1.3"
   domains: ["Service"]
   minApiVersion: "67.0"
   cliTools:
@@ -11,8 +11,6 @@ metadata:
   accessCheck:
     - type: "userPerm"
       value: "CustomizeApplication"
-    - type: "orgPref"
-      value: "ITSMIncidentMgmtEnabled"
 allowed-tools: |
   Read AskUserQuestion Bash
 ---
@@ -39,9 +37,14 @@ Writes are **idempotent** (skipped when the current state already matches the ta
 
 1. `sf` CLI ≥ 2.60 (verify with `sf --version`).
 2. The target org is authenticated with `sf` — one of `sf org list` should show it as `Connected`.
-3. Incident Management is enabled on the org (`ITSMIncidentMgmtEnabled` org pref). Confirmed at
-   preflight time via the Incident `describe`; if it 404s, direct the user to enable Incident
-   Management first (use the `service-itsm-incident-mgmt-configure` skill).
+3. Incident Management is enabled on the org — the master pref for the Service Cloud ITSM
+   Incident feature (Setup Discovery `apiName = service-cloud-itsm-incident`). Read directly
+   at preflight time via `GET /services/data/v67.0/connect/setup/discovery/features` and
+   filter to `apiName == "service-cloud-itsm-incident"` (the setup-org-preferences endpoint
+   for the master is not exposed on this surface — `IncidentMgmtEnabled` /
+   `ITSMIncidentMgmtEnabled` both 404). If `status != "ENABLED"`, delegate to
+   `service-itsm-incident-mgmt-configure` inline to enable it (that skill runs its own
+   read-before-write + confirm-to-write against the same route), then resume Phase 1.
 4. The calling user has `CustomizeApplication` (View Setup + Setup Admin).
 
 If any precondition is unmet, the CLI surfaces the raw error verbatim — **do not fabricate state,
@@ -56,6 +59,7 @@ details, the picklist extraction recipe, and gotchas live in `references/sf-cli-
 
 | Concern | Transport | HTTP status |
 |---------|-----------|-------------|
+| Master Incident Mgmt pref (read) | `sf api request rest` GET on `/services/data/v67.0/connect/setup/discovery/features`, filter `apiName == "service-cloud-itsm-incident"` for `status` | 200 |
 | Matrix enable flag (read/write) | `sf api request rest` on `/services/data/v67.0/setup/org/preferences/IncPriorityMatrixEnabled` | 200 |
 | Manual override (read/write) | `sf api request rest` on `/services/data/v67.0/setup/org/preferences/IncPriorityOverrideEnabled` | 200 |
 | Matrix rows (read) | `sf data query --use-tooling-api` on `ServiceOpPriorityConfig` | 200 |
@@ -86,19 +90,56 @@ Ask only what you cannot infer:
 
 All steps are sequential. **Always read before you write.** All calls go through `sf` CLI.
 
+### Phase 0 — Reuse what the session already knows
+
+Each Phase 1 / Phase 2 read below carries a **skip-if-already-known** clause. Before
+calling any `sf` command, check whether an earlier turn in this session already produced
+the same fact **from a successful `sf` invocation tied to the current `--target-org`**
+(a prior run of this skill, or an earlier `sf` call in the same conversation). Session
+context here is per `--target-org <alias>`, so a different alias is a different session.
+**An explicit user statement is NOT cache-eligible** — the picklist values, pref
+booleans, matrix rows, and fallback priority all drive client-side validation and
+duplicate prevention on Phase-4 mutations, so a mistaken or stale user assertion can
+bypass those safeguards and create invalid or duplicate rows. When the only source is
+a user statement (or you cannot identify a specific prior `sf` response), re-read.
+
+- **`sf --version`** — if the CLI version was already reported this session, skip step 1.
+- **Incident `describe` (active `Impact` / `Urgency` / `Priority` picklists)** — if the
+  Incident describe was already read for the current `--target-org` this session and the
+  three picklists are in context, skip step 2 and reuse them.
+- **`IncPriorityMatrixEnabled` / `IncPriorityOverrideEnabled` pref values** — if either
+  was already read this session AND has not been PATCHed since, skip its Phase-2 read.
+- **`ServiceOpPriorityConfig` rows** — if the current-org Incident rows were already
+  read this session AND no `POST` / `PATCH` / `delete` on `ServiceOpPriorityConfig` has
+  been dispatched since, skip step 5 and reuse the row list.
+- **`StandardValueSet:IncidentPriority` default** — if the fallback priority was already
+  read this session AND no `StandardValueSet:IncidentPriority` deploy has run since,
+  skip step 6.
+
+**When in doubt, re-check.** Skip only when the earlier fact is unambiguously in context
+AND the target-org alias has not changed AND no write elsewhere in the session could
+have invalidated it (Phase-4 writes in this skill are the primary invalidators — a
+PATCH on a pref, a POST/PATCH/delete on a `ServiceOpPriorityConfig` row, or a
+`StandardValueSet:IncidentPriority` deploy all bust the cache for the matching read).
+If the user hints at a different org (or a different alias), re-run the read. A wrong
+skip on a live org write is worse than a duplicated read.
+
 ### Phase 1 — Preflight
 
-1. `sf --version` to confirm the CLI is available.
-2. `sf api request rest "/services/data/v67.0/sobjects/Incident/describe" --method GET --target-org <alias>`. A **200** with `Impact` / `Urgency` / `Priority` picklist fields confirms Incident Management is enabled. Extract active picklist values for later validation. If the describe response is large, dispatch a subagent (haiku tier) to extract just the three picklists.
+1. *(Skip if `sf --version` was already reported this session — see Phase 0.)* `sf --version` to confirm the CLI is available.
+2. **Master Incident Management pref — direct read** *(Skip only if the master pref was
+   already read this session for the current `--target-org` AND the value was `ENABLED`
+   AND no write elsewhere in this session could have flipped it — see Phase 0.)* `sf api request rest "/services/data/v67.0/connect/setup/discovery/features" --method GET --target-org <alias>`. Parse the response and filter the `features[]` array to the element where `apiName == "service-cloud-itsm-incident"`; read its `status` field. If `status == "ENABLED"`, proceed to step 3. **If `status != "ENABLED"`, delegate to `service-itsm-incident-mgmt-configure` inline to enable the master pref** (that skill runs its own confirm-to-write against the same route), then re-read this step to verify `status == "ENABLED"` before continuing. If the delegation is declined by the user, halt — Priority Matrix cannot function while the master is off. This is a **direct read of the master pref**, not a proxy — the Incident describe check that follows is a secondary sanity check, not the master-state signal.
+3. *(Skip if the Incident describe for the current `--target-org` — including active `Impact` / `Urgency` / `Priority` picklists — is already in context this session — see Phase 0.)* `sf api request rest "/services/data/v67.0/sobjects/Incident/describe" --method GET --target-org <alias>`. A **200** with `Impact` / `Urgency` / `Priority` picklist fields is a secondary sanity check. Extract active picklist values for later validation. If the describe response is large, dispatch a subagent (haiku tier) to extract just the three picklists.
 
 ### Phase 2 — Show current state (read-only)
 
 Dispatch these reads (all expected to return 200):
 
-3. `sf api request rest "/services/data/v67.0/setup/org/preferences/IncPriorityMatrixEnabled" --method GET --target-org <alias>` — matrix enable flag. Body: `{"isPreferenceEnabled": <bool>}`.
-4. `sf api request rest "/services/data/v67.0/setup/org/preferences/IncPriorityOverrideEnabled" --method GET --target-org <alias>` — manual-override flag. Same body shape.
-5. Matrix rows — `sf data query --use-tooling-api --target-org <alias> --query "SELECT Id, DeveloperName, ReferenceObject, Urgency, Impact, Priority FROM ServiceOpPriorityConfig WHERE ReferenceObject = 'Incident'"`. Returns zero or more rows. `DeveloperName` is required so the add step can derive a fresh unique suffix.
-6. Default fallback priority — `sf api request rest "/services/data/v67.0/tooling/query/?q=SELECT+Id,MasterLabel,Metadata+FROM+StandardValueSet+WHERE+MasterLabel='IncidentPriority'" --method GET --target-org <alias>`. Read `records[0].Metadata.standardValue`, find the entry with `default: true`, take its `valueName` — that is the fallback priority.
+3. *(Skip if `IncPriorityMatrixEnabled` for the current `--target-org` was already read this session AND has not been PATCHed since — see Phase 0.)* `sf api request rest "/services/data/v67.0/setup/org/preferences/IncPriorityMatrixEnabled" --method GET --target-org <alias>` — matrix enable flag. Body: `{"isPreferenceEnabled": <bool>}`.
+4. *(Skip if `IncPriorityOverrideEnabled` for the current `--target-org` was already read this session AND has not been PATCHed since — see Phase 0.)* `sf api request rest "/services/data/v67.0/setup/org/preferences/IncPriorityOverrideEnabled" --method GET --target-org <alias>` — manual-override flag. Same body shape.
+5. *(Skip if the Incident `ServiceOpPriorityConfig` rows for the current `--target-org` were already read this session AND no POST / PATCH / delete on this SObject has been dispatched since — see Phase 0.)* Matrix rows — `sf data query --use-tooling-api --target-org <alias> --query "SELECT Id, DeveloperName, ReferenceObject, Urgency, Impact, Priority FROM ServiceOpPriorityConfig WHERE ReferenceObject = 'Incident'"`. Returns zero or more rows. `DeveloperName` is required so the add step can derive a fresh unique suffix.
+6. *(Skip if the `StandardValueSet:IncidentPriority` default was already read this session AND no `StandardValueSet:IncidentPriority` deploy has run since — see Phase 0.)* Default fallback priority — `sf api request rest "/services/data/v67.0/tooling/query/?q=SELECT+Id,MasterLabel,Metadata+FROM+StandardValueSet+WHERE+MasterLabel='IncidentPriority'" --method GET --target-org <alias>`. Read `records[0].Metadata.standardValue`, find the entry with `default: true`, take its `valueName` — that is the fallback priority.
 
 Format the rows as an Impact × Urgency grid (see `examples/render-matrix.md`). Steps 3–6 together are the "view" operation and the before-snapshot.
 

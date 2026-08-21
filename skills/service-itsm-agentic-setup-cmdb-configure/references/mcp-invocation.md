@@ -83,8 +83,20 @@ user to confirm CMDB is licensed before proceeding.
 dispatch_readonly({ "url": "/services/data/v67.0/connect/tenantProvisioningStatus", "method": "GET" })
 ```
 
-Response includes `status` (e.g. `NOT_PROVISIONED`, `IN_PROGRESS`, `PROVISIONED`, `FAILED`),
-`triggeredAt`, `callbackReceivedAt`. If `status == PROVISIONED`, skip to Layer 2.
+Response includes `status` (observed values: `UNPROVISIONED`, `PROVISIONING_IN_PROGRESS`,
+`PROVISIONED`, `FAILED`), plus `triggeredAt` and `callbackReceivedAt` (the two timestamps the poll
+logic uses for elapsed-time math). Each status maps to a distinct action — **do not poll a status
+that has not been triggered:**
+
+| `status` | Meaning | Action |
+|----------|---------|--------|
+| `PROVISIONED` | Tenant already provisioned | Skip to Layer 2 — do not trigger, do not poll |
+| `UNPROVISIONED` | No provisioning job has run | **Trigger** (confirmed POST below), then poll. Never wait/poll on this state — waiting never starts the job and just burns the budget |
+| `PROVISIONING_IN_PROGRESS` | A job is already running | **Do not re-trigger** — go straight to wait/poll |
+| `FAILED` | Last job failed | Terminal — surface the reason, do not retry via API (see below) |
+
+Only `PROVISIONED` and `FAILED` are terminal. `UNPROVISIONED` requires the trigger; only
+`PROVISIONING_IN_PROGRESS` (i.e. *after* a trigger) is a "keep waiting" state.
 
 ### Trigger provisioning (write — confirm with the user first)
 
@@ -93,11 +105,38 @@ dispatch({ "url": "/services/data/v67.0/connect/tenantProvisioningStatus", "meth
 ```
 
 No request body. Response echoes the status object. Provisioning is **asynchronous** — the callback
-arrives later.
+arrives later. After the trigger, tell the user provisioning has started and typically takes **2+
+minutes**.
 
 ### Poll until PROVISIONED
 
-Re-issue the GET above **every 30 seconds for up to 10 minutes** (≈20 attempts). Exit the loop on:
+Provisioning reliably takes **2+ minutes** (measured completion on a licensed org clustered around
+**~2 min 40 s** — `callbackReceivedAt − triggeredAt`), so an immediate poll is a guaranteed no-op
+(confirmed: a re-check ~1 s after the trigger still read `PROVISIONING_IN_PROGRESS`). *Caveat: the
+~2:40 figure is a single on-org sample. It is used only as a floor — it skips guaranteed no-op polls
+and never shortens the 10-min budget, so a slower org is still handled — but re-measure it across a
+few CMDB-licensed orgs before treating it as canonical, so a naturally slower org isn't misread as
+anomalous.* **Anchor timing
+on the response's `triggeredAt`, not on when this run started** — you may enter here on a
+`PROVISIONING_IN_PROGRESS` job triggered by an earlier run, whose `triggeredAt` is already minutes
+old. Parse `triggeredAt` as a UTC epoch and compute `elapsed = max(0, now − triggeredAt)` — clamp
+to `≥ 0` so a server-vs-agent timezone mismatch or clock skew can't produce a negative `elapsed`
+(waits forever) or a false timeout. **If `triggeredAt` is missing or unparseable** (the POST
+response may not have populated it yet, or an earlier-run in-progress row may omit it), fall back to
+this run's start — treat `elapsed = 0` and serve the full ~2-min floor — so a branch always fires:
+
+- `elapsed < ~2 min` → wait until ~2 min after `triggeredAt`, then poll every 30 s.
+- `~2 min ≤ elapsed < 10 min` → **poll immediately** (initial wait already satisfied — do not wait a
+  fresh 2 min), then every 30 s.
+- `elapsed ≥ 10 min` → **do not start a fresh wait**; report the last-seen status as a timeout (see
+  the elapsed-window case below).
+
+The overall budget is **10 minutes from `triggeredAt`** (≈16 checks after the ~2-min floor). The
+~2-min floor skips the useless early polls yet still brackets the typical ~2:40 completion within a
+poll or two; do not stretch it longer. Do not poll during the initial wait. Where the runtime
+supports backgrounded work, run this wait-then-poll loop as a background task so the user can keep
+working; on a single-threaded turn (the production headless-360 / ADK path), poll inline. Exit the
+loop on:
 
 - `status == PROVISIONED` → success; advance to Layer 2.
 - `status == FAILED` → stop. Do NOT retry via the API. Surface to the user, in plain language:
@@ -112,7 +151,8 @@ Re-issue the GET above **every 30 seconds for up to 10 minutes** (≈20 attempts
 - 10-minute window elapsed → stop, report the last-seen status, let the user decide whether to
   keep waiting or investigate.
 
-Never spin past the 10-minute bound. Report progress to the user on each poll.
+Never spin past the 10-minute bound. If the user steps away and the turn ends, they can re-run the
+skill — Layer 1 resumes from the current status (an already `PROVISIONED` tenant skips to Layer 2).
 
 ---
 

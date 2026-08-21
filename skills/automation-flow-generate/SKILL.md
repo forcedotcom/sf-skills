@@ -2,9 +2,13 @@
 name: automation-flow-generate
 description: "Generate Salesforce Flows using the MCP tool execute_metadata_action. Use when the user asks to create, build, or generate a flow — including Screen, Autolaunched, Record-Triggered (before/after-save), Scheduled. Also trigger for flow-like requests such as \"when a record is created\", \"trigger daily at\", \"send an email when\", \"update the field when\", \"automate\", \"workflow\", or \"flow XML/metadata\". This is the only skill for Salesforce Flow generation."
 metadata:
-  version: "1.0"
+  version: "1.1"
   domains: ["Automation"]
   minApiVersion: "60.0"
+  mcpTools:
+    metadata-experts:
+      tools: ["execute_metadata_action"]
+      semver: ">=1.0.0"
 ---
 
 ## Goal
@@ -26,15 +30,6 @@ Use this skill when you need to:
 
 ## Overview
 Salesforce Flows are powerful automation tools that enable complex business process automation without code. Flows can collect and process data through interactive screens, execute logic and calculations, manipulate records, call external services, and trigger based on various events. Flow types include Screen Flows (user-guided), Autolaunched Flows (background processing), Record-Triggered Flows (database events) and Scheduled Flows (time-based).
-
-## Purpose
-- Automate complex business processes with declarative logic and branching
-- Guide users through multi-step data collection and decision workflows via Screen Flows
-- Perform CRUD operations on Salesforce records automatically
-- Execute background processing and integrations via Autolaunched Flows
-- React to record changes in real-time with Record-Triggered Flows
-- Schedule recurring tasks and batch operations with Scheduled Flows
-- Create reusable, maintainable automation that admins can modify without code
 
 ## Flow Generation Pipeline
 
@@ -201,6 +196,26 @@ When no custom objects needed:
     - NEVER use string `"[]"` - this is incorrect
     - NEVER use text descriptions - only structured object metadata
 
+## Flow Pattern Guidance
+
+The pipeline selects flow elements from your `userPrompt`. Vague prompts lead the pipeline to pick wrong structures, producing metadata that fails deployment. When the request matches one of the patterns below, make the intent explicit in the `userPrompt` you pass to Step 1 and Step 2 so the pipeline selects the correct elements.
+
+### Scheduled flows ("daily", "weekly", "every Sunday", "runs once a week at 10PM")
+
+A recurring, time-based flow is a **Scheduled** flow. The schedule lives on the **start element**: `triggerType` is `Scheduled` and a `<schedule>` block holds `<frequency>` (e.g. `Weekly`), `<startDate>`, and `<startTime>`. Do NOT expect `startDate`/`startTime` on a `FlowScheduledPath` element — a scheduled flow's cadence is on `<start><schedule>`, not a scheduled path.
+
+To select records for a scheduled flow, put the record criteria in the **start element's filters** (with `<object>` and `<filters>` on `<start>`), which runs the flow once per matching record with `$Record` bound to each. Prefer this over adding a Loop that re-queries and iterates the same object — a start-filtered scheduled flow does not need a Loop to walk the triggering object's records.
+
+When the prompt says "runs once a week / every Sunday / daily at a time", the `userPrompt` should state: scheduled trigger, the frequency, the start time, and the record filter on the triggering object.
+
+### Counting related records ("count all related X", "number of X")
+
+To store a count of records, use a **single** assignment element with `<operator>AssignCount</operator>`, assigning from the collection (the record-lookup result) into a Number variable. Do NOT emit two assignment elements for one count, and do NOT give two assignment elements the same `name` — duplicate assignment names, or two assignments doing one logical count, fail deployment. One lookup → one `AssignCount` assignment → one record update.
+
+### Do not invent actions the prompt did not request
+
+Generate only the elements the prompt asks for. If a prompt names a trigger but not an action (e.g. "create a flow for when a record is created" with no stated behavior), do NOT add a Chatter post, email, or other action that was not requested. An unrequested action such as a `chatterPost` produces metadata that references undefined types and fails deployment. When the requested behavior is genuinely absent, generate the minimal valid trigger without inventing side effects.
+
 ### MANDATORY: Multiple Flows = Multiple Separate Pipelines
 
 **FIRST: Before calling any pipeline step, check if the user's request contains multiple flows. If it does, you MUST split it into separate single-flow prompts. Each flow gets its own 3-step pipeline with its own `userPrompt` that describes ONLY that one flow.**
@@ -335,40 +350,14 @@ Call repeatedly with the same `operationId` until `isComplete` is `true` or erro
 ```
 Call repeatedly with the same `operationId` until `isComplete` is `true` or errors are returned. A flow can have any number of elements, so expect multiple iterations. When `isComplete` is `true`, extract the flow metadata from the `result` field. Use `"requestSource": "A4V"` to get flow metadata in XML format.
 
-## Mandatory Best Practices
-- **ALWAYS** follow the 3-step pipeline: fetchGroundedObjectMetadata → flowElementSelection → flowElementGeneration. This is the ONLY way to generate flow metadata. There are no alternatives.
-- Do NOT manually create flow metadata XML, JSON, or any other format outside of this pipeline.
-- **When the user explicitly requests fixes to validation or deployment errors** in an already-generated flow XML, you ARE permitted to make targeted manual edits to the XML to resolve those errors. This is the only exception to the "no manual metadata" rule.
-- Do NOT attempt to "optimize" by skipping steps or combining steps. Each step is atomic and required.
-- **NEVER** skip any step in the pipeline. All 3 steps are required.
-- **NEVER** try to generate flow metadata without calling all 3 steps.
-- **NEVER** deviate from this pipeline under any circumstance — even if you think you know the flow structure.
-- For single flow requests: you MUST use the user prompt as `userPrompt`.
-- For multiple flow requests: you MUST run a separate 3-step pipeline for each flow **SEQUENTIALLY (one after another, NEVER in parallel)**, and you MUST execute ALL of them — do NOT stop after the first flow.
-- You MUST put flow requirements in `userPrompt`, NOT in `inflightMetadata`.
-- `inflightMetadata` is ONLY for custom object/field metadata from local project (see above). No exceptions.
-- Step 3 MUST be called in a loop with the same `operationId` from Step 2 until `isComplete` is `true` or errors are returned. A flow can have any number of elements — do NOT stop early, do NOT pause to ask the user if they want to continue, regardless of how many iterations it takes.
-- You MUST only extract the flow metadata from the `result` field when `isComplete` is `true`.
-
 ## CRITICAL Verification Checklist (MUST VERIFY BEFORE AND AFTER EVERY FLOW GENERATION)
 
 **Failure to follow this checklist exactly will result in broken or missing flow metadata.**
 
-- [ ] **Pipeline**: ALL 3 steps are called in strict order (fetchGroundedObjectMetadata → flowElementSelection → flowElementGeneration). No step is skipped.
-- [ ] **No manual metadata**: Flow metadata is NOT manually created, modified, or generated outside of this pipeline by any means
-- [ ] **No deviation**: No alternative tools, APIs, or methods were used instead of or alongside this pipeline
-- [ ] **userPrompt** contains a **single** flow prompt. If user requested multiple flows, the request was split and each pipeline received a separate `userPrompt` describing only one flow
-- [ ] **userPrompt** is passed consistently to both Step 1 and Step 2 (same value)
-- [ ] **inflightMetadata** is ARRAY data type (NOT string)
-- [ ] **inflightMetadata** is `[]` when no custom objects needed
-- [ ] **inflightMetadata** contains structured objects extracted by scanning the local sfdx project for relevant custom objects/fields
-- [ ] **inflightMetadata** does NOT contain `"[]"` (string) - must be `[]` (array)
-- [ ] **inflightMetadata** does NOT contain text descriptions or instructions
-- [ ] **groundingMetadata** from Step 1 output is passed directly to Step 2 input (it is already a string — do NOT serialize it again)
-- [ ] **operationId** from Step 2 output is passed to Step 3 input
-- [ ] **requestSource** should be set to `"A4V"` always
-- [ ] **Step 3** is called in a loop with the same `operationId` from Step 2 until `isComplete` is `true` or errors are returned — **no pausing, no asking the user to continue, no matter how many iterations**
-- [ ] **Multi-flow**: Each flow's full pipeline is completed before starting the next flow's pipeline (no interleaving)
-- [ ] **result** field is used to extract the XML flow metadata only when `isComplete` is `true`
-- [ ] **No additions to XML**: NO elements, attributes, or properties were added that were not present in the original pipeline output. Nothing was inserted (no `<label>`, `<description>`, or any other node). The final XML must be identical to what the pipeline returned.
-- [ ] **Error fix exception**: If the user explicitly requested fixes to validation/deployment errors, targeted manual edits to the XML are permitted and the "No additions to XML" / "No manual metadata" constraints do not apply to those edits.
+- [ ] **Pipeline**: ALL 3 steps are called in strict order (fetchGroundedObjectMetadata → flowElementSelection → flowElementGeneration). No step is skipped, combined, or replaced by another tool/API. This pipeline is the ONLY way to generate flow metadata.
+- [ ] **No manual metadata**: Flow metadata is NOT created, modified, or generated outside the pipeline, and no elements/attributes were added to the returned XML (no `<label>`, `<description>`, or any other node). The final XML must be identical to what the pipeline returned. **Exception:** if the user explicitly requested fixes to validation/deployment errors in already-generated XML, targeted manual edits are permitted.
+- [ ] **userPrompt** contains a **single** flow prompt (multi-flow requests are split, one `userPrompt` each), holds the flow requirements (NOT `inflightMetadata`), and is passed identically to Step 1 and Step 2.
+- [ ] **inflightMetadata** is ARRAY data type (NOT the string `"[]"`), is `[]` when no custom objects are needed, and otherwise holds structured object/field metadata scanned from the local sfdx project — never text descriptions.
+- [ ] **groundingMetadata** from Step 1 output is passed directly to Step 2 input (already a string — do NOT serialize it again).
+- [ ] **Step 3** is called in a loop with the same `operationId` from Step 2, `requestSource` always `"A4V"`, until `isComplete` is `true` or errors are returned — no pausing, no asking the user to continue, no matter how many iterations. Extract the XML from `result` only when `isComplete` is `true`.
+- [ ] **Multi-flow**: Each flow's full pipeline is completed before starting the next, SEQUENTIALLY (never in parallel, never interleaved), and ALL requested flows are generated — do NOT stop after the first.

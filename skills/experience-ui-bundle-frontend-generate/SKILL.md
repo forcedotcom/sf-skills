@@ -12,6 +12,8 @@ metadata:
   cliTools:
     - tool: ["npm"]
       semver: ">=8.0.0"
+    - tool: ["npx"]
+      semver: ">=8.0.0"
     - tool: ["python3"]
       semver: ">=3.10.0"
 ---

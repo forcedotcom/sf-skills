@@ -1,6 +1,6 @@
 ---
 name: platform-dataspace-access-configure
-description: "Use this skill to configure Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, and optionally grants object-level access to specific DMO, DLO, or CIO objects via the Object Access Grants Connect API. TRIGGER when: user needs to create or update a permission set that includes DataSpace access, grant a permission set access to a specific dataspace, configure dataAccessLevel or objectAccessLevel for a dataspace scope, add RBAC object access grants for Data Cloud objects, or list or remove object access grants for a permission set and DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without any dataspace access (use platform-permission-set-generate), the request is about data ingestion or streams (use data360-prepare), or the work involves creating dataspaces themselves rather than granting access to them."
+description: "Use this skill to configure or inspect Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, optionally grants object-level access to DMO, DLO, or CIO objects via the Object Access Grants Connect API, and inspects existing scopes via read-only PermissionSet metadata retrieval. TRIGGER when: user needs to create or update a permission set with DataSpace access, grant access to a specific dataspace, list permission sets with access to a DataSpace, configure dataAccessLevel/objectAccessLevel, add RBAC object access grants, or list/remove object access grants for a permission set + DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without dataspace access (use platform-permission-set-generate), the request is about data ingestion/streams (use data360-prepare), or the work involves creating dataspaces themselves rather than granting access to them."
 metadata:
   version: "1.0"
   domains: ["Platform", "Data 360"]
@@ -8,6 +8,8 @@ metadata:
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6.0"
+    - tool: ["python3"]
+      semver: ">=3.6"
     - tool: ["sf"]
       semver: ">=2.0.0"
 ---
@@ -32,6 +34,7 @@ Pick exactly one case from the table below before writing any files. Each case h
 | **A. Create new permset with DS access** | "create a permission set called X with dataspace scope Y" | does NOT exist yet | `permissionsets/<Name>.permissionset-meta.xml` **and** `package.xml` |
 | **B. Add DS access to existing permset** | "grant existing permission set X access to dataspace Y" | already deployed (may contain other permissions) | patched `permissionsets/<Name>.permissionset-meta.xml` **and** `package.xml` — see Case B workflow below |
 | **C. Object-level grant only** | "grant permset X access to object Z (in dataspace Y)" — permset + scope already configured | already deployed with `dataspaceScopes` | `api-request.json` (Connect API body). NO permission set XML, NO `package.xml` |
+| **D. Inspect existing DS access** | "which permission sets have access to dataspace Y?" | any | chat/report only. NO deployable files, NO runtime API mutation |
 
 Only emit the files listed for the case you picked. Emitting Case A/B files for a Case C prompt (or vice versa) is a correctness failure — extra files change the deployment shape.
 
@@ -44,7 +47,7 @@ Only emit the files listed for the case you picked. Emitting Case A/B files for 
    sf project retrieve start --metadata PermissionSet:<Name> --target-org <alias>
    ```
 2. Open the retrieved `permissionsets/<Name>.permissionset-meta.xml`. Keep every element already there.
-3. Insert the `<dataspaceScopes>` block for the target DataSpace (element order in the file does not matter for MDAPI). If the file already has a `<dataspaceScopes>` block **for this same DataSpace**, replace only that block. Leave every `<dataspaceScopes>` block for other DataSpaces untouched — one block per DataSpace, and removing a block revokes that DataSpace grant.
+3. Insert the `<dataspaceScopes>` block for the target DataSpace (element order in the file does not matter for MDAPI). If the file already has a `<dataspaceScopes>` block **for this same DataSpace**, replace only that block. Leave every `<dataspaceScopes>` block for other DataSpaces untouched — one block per DataSpace. For a requested scope removal, remove only the matching block and deploy; omitting the block revokes that DataSpace grant. Verify by retrieving the PermissionSet and confirming the matching `<dataspaceScopes>` block is absent.
 4. Write `package.xml` listing the permset in `<members>`.
 5. Redeploy with `sf project deploy start`.
 
@@ -56,6 +59,7 @@ Trigger this skill when the user wants to:
 - Create a permission set that grants access to a Data Cloud DataSpace
 - Add or modify `dataspaceScopes` on an existing permission set
 - Grant a permission set access to specific DMO / DLO / CIO objects in a DataSpace
+- List which permission sets have a DataSpace scope and inspect its access levels
 - Configure `dataAccessLevel` and `objectAccessLevel` for a DataSpace scope
 - List or remove object access grants for a permission set + DataSpace pair
 
@@ -128,6 +132,50 @@ Deploy:
 ```bash
 sf project deploy start --source-dir force-app/main/default/permissionsets/ --target-org <alias>
 ```
+
+---
+
+## Read-Only DataSpace Scope Inspection — Case D
+
+Use Case D when the user asks which permission sets have access to a DataSpace,
+or asks to inspect `dataAccessLevel` and `objectAccessLevel` without making a
+change.
+
+**Never query `DataspaceScope` or `DataspaceScopeAccess` with SOQL.** Those
+objects are not a supported query surface for this relationship. Do not try
+SOQL as discovery, fallback, or troubleshooting.
+
+1. Retrieve PermissionSet metadata into an isolated temporary local project and
+   output directory. Do not retrieve into the user's existing metadata tree. Save
+   the skill repository path first (as an absolute path if possible):
+   ```bash
+   REPO_ROOT="<absolute/path/to/sf-skills-internal>"  # or $(pwd) if you're in the repo root
+   WORK_DIR=$(mktemp -d)
+   sf project generate --name dataspace-scope-inspection --output-dir "$WORK_DIR"
+   cd "$WORK_DIR/dataspace-scope-inspection"
+    sf project retrieve start --json \
+      --metadata "PermissionSet:*" --target-org <alias> \
+      --output-dir "$WORK_DIR/retrieved"
+    ```
+    Inspect the JSON result before continuing. A nonzero command status, a failed
+    `result.status`, warnings, or an unexpectedly low `result.fileProperties`
+    count means the retrieve may be incomplete. Report that limitation rather
+    than treating the result as empty, and do not fall back to SOQL.
+2. Run the inspection script from the skill directory (do not rely on relative paths
+   after `cd` changed the working directory). Supply the retrieved directory and optional DataSpace name:
+   ```bash
+   "$REPO_ROOT/skills/platform-dataspace-access-configure/scripts/inspect-dataspace-scopes.sh" \
+     "$WORK_DIR/retrieved" "<DataSpace API name, if given>"
+   ```
+   Report the output to the user, one result per line.
+
+Case D is read-only with respect to the org. Do not deploy metadata, assign a
+permission set, execute Apex, perform record DML, or make a POST, PUT, PATCH, or
+DELETE request. Do not generate `package.xml`, PermissionSet XML, or
+`api-request.json` in the user's workspace as part of inspection. Remove the
+temporary work directory after reporting: `rm -rf "$WORK_DIR"`. The scope-level
+`objectAccessLevel` is not an inventory of explicit object grants; inspect those
+separately with the read-only object-access-grants endpoint only when requested.
 
 ---
 
@@ -304,7 +352,7 @@ sf org api rest --target-org <alias> \
 | Prefer `BY_POLICY` when data governance policies exist | Delegates row/column filtering to central policy — no per-object grants needed |
 | One `<dataspaceScopes>` block per DataSpace | Repeat the block for multiple DataSpaces on the same permission set |
 | Org must have Data Cloud provisioned to deploy `<dataspaceScopes>` | On non-Data-Cloud orgs, the element is ignored or rejected |
-| Do not query `DataspaceScope` / `DataspaceScopeAccess` via SOQL | Not queryable; use MDAPI retrieve to inspect existing grants |
+| Do not query `DataspaceScope` / `DataspaceScopeAccess` via SOQL | Not queryable; use Case D PermissionSet Metadata API retrieval to inspect existing scopes. Never use SOQL as a fallback. |
 
 ---
 

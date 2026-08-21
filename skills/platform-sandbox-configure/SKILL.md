@@ -2,9 +2,12 @@
 name: platform-sandbox-configure
 description: "MUST USE this skill for ANY sandbox request — including simply getting a sandbox's details, status, license type, or pending-activation state by name or ID. TRIGGER when the user: types \"sandbox -help\"/\"sandbox help\"; mentions a sandbox ID (07E prefix); asks to list or show sandboxes; asks for the details, status, license type, or config of a sandbox by name or ID; activates or discards a completed refresh; deletes a sandbox; verifies activation or deletion; creates or refreshes a sandbox. DO NOT TRIGGER when: the user wants to clone a sandbox."
 metadata:
-  version: "1.0"
+  version: "1.1"
   domains: ["Platform"]
   minApiVersion: "66.0"
+  relatedSkills:
+    - "automation-sandbox-post-copy-config-generate"
+    - "automation-sandbox-post-copy-configure"
   accessCheck:
     - type: "userPerm"
       value: "ManageSandboxes"
@@ -31,6 +34,8 @@ Use `platform-sandbox-configure` when the work involves:
 
 Delegate elsewhere when the user is:
 - Cloning a sandbox → Tooling API (`SandboxInfo` sObject)
+- Generating a post-copy automation JSON config from an SOP → `automation-sandbox-post-copy-config-generate`
+- Applying/running a post-copy automation JSON config against a sandbox → `automation-sandbox-post-copy-configure`
 
 ---
 
@@ -60,6 +65,10 @@ The agent MUST respond with this exact markdown (not in a code block — render 
 - a. Verify activation status — Check if activate completed
 - b. Verify deletion status — Check if delete completed
 
+**5. Post-Copy Automation**
+- a. Create Post Copy Automation JSON Configs — Generate a config from an SOP
+- b. Run Post Copy Automation — Apply a config JSON to a sandbox
+
 Reply with a code (e.g. "3a") or describe what you need.
 
 **After the user replies, ask for the required input:**
@@ -76,8 +85,14 @@ Reply with a code (e.g. "3a") or describe what you need.
 | 3c | "Which sandbox? Provide a name or 07E ID." |
 | 4a | "Which sandbox did you activate? Provide a name or 07E ID." |
 | 4b | "Which sandbox did you delete? Provide a name or 07E ID." |
+| 5a | "Delegating to the post-copy config generator — please share the SOP (file, text, or screenshot)." |
+| 5b | "Delegating to the post-copy config runner — please share the config JSON file and the target sandbox." |
 
-Execute the corresponding operation from the Operations section below.
+Execute the corresponding operation from the Operations section below. **Exception: 5a and 5b delegate to a different skill instead of an in-skill operation:**
+- 5a → Invoke the `automation-sandbox-post-copy-config-generate` skill.
+- 5b → Invoke the `automation-sandbox-post-copy-configure` skill.
+
+This skill does not implement post-copy automation itself — it only routes to the two skills above. Do not attempt to generate or apply a post-copy config directly from this skill.
 
 ---
 

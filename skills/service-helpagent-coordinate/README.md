@@ -15,8 +15,10 @@ skills against a canonical spec — it does **not** author a new agent primitive
 | `assets/help-agent-spec.md` | The canonical Help Agent spec — the guided flow (source of truth), kept small |
 | `references/agent-script.md` | The canonical agent script + placeholders; loaded only at agent-creation time |
 | `references/channel-web-chat.md` | Web Chat channel provisioning detail; loaded only when Web Chat is chosen |
-| `references/channel-help-portal.md` | Help Portal channel (coming soon) — hard-stop guidance |
-| `references/channel-voice.md` | Voice channel (coming soon) — hard-stop guidance |
+| `references/channel-voice.md` | Voice channel wiring detail (existing `PstnVoice` numbers only); loaded only when Voice is chosen |
+| `references/output-report-format.md` | The two report shapes, templates, and scored-failure list; loaded when writing the final `report.md` |
+
+Help Portal is delegated end-to-end to the sibling skill `service-concierge-portal-generate` — no per-channel reference file lives here for that branch.
 
 The spec is split for **progressive disclosure**: the large agent script and the per-channel
 branches live in `references/` and are read only when the flow reaches them, keeping the
@@ -121,3 +123,7 @@ Verify: `! ls .agents/skills/` and `! cat skills-lock.json`.
 ## Related
 
 - ECA / OAuth setup skill: `integration-connectivity-connected-app-configure`
+- Channel setup vs. final agent wiring: `service-digital-engagement-channel-configure` deploys and
+  activates the MessagingChannel with initial Queue routing; `service-agentforce-channel-configure`
+  then replaces that routing with the agent binding (fallback queue + `sessionHandlerAsa`). This
+  skill coordinates both at Checkpoint 3.

@@ -1,0 +1,41 @@
+{
+  "_comment_validation": "Field-validation rejections (e.g. redundant/missing Edition) are returned synchronously by the create API. The CLI flattens the underlying sObject errors[] into the message string and sets result:null; the error code lands in name/code. There is no top-level result.errors[] on failure.",
+  "insertTimeValidationError": {
+    "status": 1,
+    "name": "INVALID_SIGNUP_OPTION",
+    "code": "INVALID_SIGNUP_OPTION",
+    "message": "Failed to create record. \nErrors:\n  TemplateId and Edition cannot both be specified; send exactly one.",
+    "result": null
+  },
+  "missingEditionError": {
+    "status": 1,
+    "name": "INVALID_SIGNUP_OPTION",
+    "code": "INVALID_SIGNUP_OPTION",
+    "message": "Failed to create record. \nErrors:\n  You must specify either an Edition or a TemplateId.",
+    "result": null
+  },
+  "_comment_missingOrgPerm": "Host org is not entitled to create trial orgs, so the SignupRequest entity is not exposed. The create API rejects it and the CLI emits a non-zero status with name/code NOT_FOUND (create REST path) or INVALID_TYPE (query path) and result:null. This is NOT retryable from the CLI; surface the raw error and point the user to Salesforce support.",
+  "missingOrgPermError": {
+    "status": 1,
+    "name": "NOT_FOUND",
+    "code": "NOT_FOUND",
+    "message": "The requested resource does not exist",
+    "result": null
+  },
+  "missingOrgPermViaQueryError": {
+    "status": 1,
+    "name": "INVALID_TYPE",
+    "code": "INVALID_TYPE",
+    "message": "sObject type 'SignupRequest' is not supported.",
+    "result": null
+  },
+  "asyncProvisioningError": {
+    "status": 0,
+    "result": {
+      "Id": "0SRxx0000000000",
+      "Status": "Error",
+      "CreatedOrgId": null,
+      "ErrorCode": "S-0007"
+    }
+  }
+}

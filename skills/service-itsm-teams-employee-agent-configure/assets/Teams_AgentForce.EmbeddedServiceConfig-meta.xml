@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Deployable EmbeddedServiceConfig source template for the Teams "Ask AI Agent" custom client.
+  Canonical guidance lives in references/teams-embedded-employee-agent.md §C — this file is the
+  same metadata as a ready-to-deploy asset; keep the two in sync if you edit either.
+  Place at: force-app/main/default/embeddedServiceConfigs/Teams_AgentForce.EmbeddedServiceConfig-meta.xml
+  Deploy with the "sf project deploy start" command shown in reference §C (kept out of this
+  comment because XML comments cannot contain a double-hyphen, which CLI flags use).
+
+  Placeholders / invariants:
+    - DeveloperName (the file's API name) MUST be exactly "Teams_AgentForce" — Teams hard-codes
+      esDeveloperName; do not rename per-org.
+    - <messagingChannel> below is a PLACEHOLDER: replace "Teams_AgentForce_Channel" with YOUR
+      MessagingChannel's metadata developer name (from §A of the reference) — it is NOT required to
+      equal the ESD name.
+    - Do NOT add a <site> element — a deploymentType=API custom-client ESD has none (correct).
+    - <isEnabled>true</isEnabled> is the equivalent of "published" for an API-type ESD.
+    - <masterLabel> is a human label; adjust freely.
+-->
+<EmbeddedServiceConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <areGuestUsersAllowed>false</areGuestUsersAllowed>
+    <deploymentFeature>EmbeddedMessaging</deploymentFeature>
+    <deploymentType>API</deploymentType>
+    <embeddedServiceMessagingChannel>
+        <isChatInvitationCustomizable>false</isChatInvitationCustomizable>
+        <isEnabled>true</isEnabled>
+        <isInvitationEnabled>false</isInvitationEnabled>
+        <isSendInvtAllowedAfterAccept>false</isSendInvtAllowedAfterAccept>
+        <isSendInvtAllowedAfterReject>false</isSendInvtAllowedAfterReject>
+        <messagingChannel>Teams_AgentForce_Channel</messagingChannel>
+        <shouldShowAgentforceTagline>false</shouldShowAgentforceTagline>
+        <shouldShowDeliveryReceipts>false</shouldShowDeliveryReceipts>
+        <shouldShowEmojiSelection>false</shouldShowEmojiSelection>
+        <shouldShowReadReceipts>false</shouldShowReadReceipts>
+        <shouldShowTypingIndicators>false</shouldShowTypingIndicators>
+        <shouldStartNewLineOnEnter>false</shouldStartNewLineOnEnter>
+    </embeddedServiceMessagingChannel>
+    <isEnabled>true</isEnabled>
+    <isTermsAndConditionsEnabled>false</isTermsAndConditionsEnabled>
+    <isTermsAndConditionsRequired>false</isTermsAndConditionsRequired>
+    <masterLabel>Teams AgentForce</masterLabel>
+    <shouldHideAuthDialog>false</shouldHideAuthDialog>
+</EmbeddedServiceConfig>
