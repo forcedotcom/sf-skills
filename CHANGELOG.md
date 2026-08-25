@@ -1,3 +1,13 @@
+# [1.42.0](https://github.com/forcedotcom/sf-skills/compare/1.41.0...1.42.0) (2026-08-25)
+
+
+### Features
+
+* @W-23953441 Integrate PRs [#1394](https://github.com/forcedotcom/sf-skills/issues/1394), [#1298](https://github.com/forcedotcom/sf-skills/issues/1298) to main ([2476476](https://github.com/forcedotcom/sf-skills/commit/2476476dda1b671762c6e963b9d10c4a7056f1c4))
+* Removing 7 data360-* skills @W-23980880@ ([0851d45](https://github.com/forcedotcom/sf-skills/commit/0851d45f78fdfa511bda12446c8cbe7c83c0d352))
+
+
+
 # [1.41.0](https://github.com/forcedotcom/sf-skills/compare/1.40.0...1.41.0) (2026-08-21)
 
 
