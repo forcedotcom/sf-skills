@@ -1,6 +1,6 @@
 ---
 name: platform-dataspace-access-configure
-description: "Use this skill to configure or inspect Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, optionally grants object-level access to DMO, DLO, or CIO objects via the Object Access Grants Connect API, and inspects existing scopes via read-only PermissionSet metadata retrieval. TRIGGER when: user needs to create or update a permission set with DataSpace access, grant access to a specific dataspace, list permission sets with access to a DataSpace, configure dataAccessLevel/objectAccessLevel, add RBAC object access grants, or list/remove object access grants for a permission set + DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without dataspace access (use platform-permission-set-generate), the request is about data ingestion/streams (use data360-prepare), or the work involves creating dataspaces themselves rather than granting access to them."
+description: "Use this skill to configure or inspect Salesforce Data Cloud DataSpace access for permission sets. Grants dataspace-level access via MDAPI PermissionSet XML with dataspaceScopes elements, optionally grants object-level access to DMO, DLO, or CIO objects via the Object Access Grants Connect API, and inspects existing scopes via read-only PermissionSet metadata retrieval. TRIGGER when: user needs to create or update a permission set with DataSpace access, grant access to a specific dataspace, list permission sets with access to a DataSpace, configure dataAccessLevel/objectAccessLevel, add RBAC object access grants, or list/remove object access grants for a permission set + DataSpace pair. DO NOT TRIGGER when: the task is a generic permission set without dataspace access (use platform-permission-set-generate), the request is about data ingestion/streams, or the work involves creating dataspaces themselves rather than granting access to them."
 metadata:
   version: "1.0"
   domains: ["Platform", "Data 360"]
@@ -65,8 +65,6 @@ Trigger this skill when the user wants to:
 
 Delegate elsewhere when:
 - The permission set has no DataSpace access at all → `platform-permission-set-generate`
-- The task is creating the DataSpace itself → `data360-orchestrate`
-- The task is ingesting data or configuring streams → `data360-prepare`
 
 ---
 

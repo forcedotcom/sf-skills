@@ -382,8 +382,8 @@ class CapabilityRegistryTests(unittest.TestCase):
         self.assertEqual(manifest["repository"], "https://github.com/forcedotcom/sf-skills.git")
         self.assertEqual(manifest["commit"], "32bf7846b96d4fcb1b2f5c7c06c09a1d9b3cea03")
         self.assertEqual(manifest["releaseRef"], "1.41.0")
-        self.assertEqual(manifest["counts"], {"public": 164})
-        self.assertEqual(len(manifest["skills"]), 164)
+        self.assertEqual(manifest["counts"], {"public": 157})
+        self.assertEqual(len(manifest["skills"]), 157)
         # accessCheck travels through the manifest as a tri-state (Option A). Every
         # row carries the key; at 1.41.0 a fixed set of skills declare a conditional
         # gate and the rest are undeclared (None) — never silently [], which would
@@ -502,12 +502,12 @@ class CapabilityRegistryTests(unittest.TestCase):
         self.assertEqual(data["schemaVersion"], "3.0")
         self.assertEqual(data["channel"], "public")
         self.assertEqual(data["counts"], {
-            "public": 164,
+            "public": 157,
             "foundation": 41,
             "overlap": 31,
-            "publicStandaloneAddable": 133,
+            "publicStandaloneAddable": 126,
             "foundationOnly": 10,
-            "visibleUnion": 174,
+            "visibleUnion": 167,
         })
         public = {row["name"] for row in manifest["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}

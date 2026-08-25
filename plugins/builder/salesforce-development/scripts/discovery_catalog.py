@@ -150,7 +150,6 @@ def example_prompt(name: str, description: str, domain: str) -> str:
 # a hero prompt mid-word; example_prompt remains the fallback for the rest.
 CURATED_EXAMPLES: dict[str, str] = {
     "agentforce-generate": "Build an Agentforce agent for order-status help.",
-    "data360-connect": "Connect a data stream from my order system.",
     "platform-apex-generate": "Create an Apex service to query Accounts.",
     "platform-apex-test-generate": "Generate Apex tests for my selector class.",
     "platform-custom-object-generate": "Create a custom object for service visits.",

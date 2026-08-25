@@ -511,7 +511,7 @@ class DiscoveryRuntimeTests(unittest.TestCase):
             code, index_out, _ = self.run_discovery(["index"], root, root / "home")
             self.assertEqual(code, 0)
             index_lines = index_out.strip().splitlines()
-            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 174)
+            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 167)
             self.assertTrue(all(catalog._terminal_cell_width(line) <= 80 for line in index_lines))
 
     def test_valid_standalone_directory_symlink_counts_as_installed(self):

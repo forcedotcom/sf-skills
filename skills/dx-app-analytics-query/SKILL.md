@@ -1,12 +1,11 @@
 ---
 name: dx-app-analytics-query
-description: "ISV App Analytics metadata types — AppAnalyticsQueryRequest and AppAnalyticsSettings. Use this skill when the user asks about retrieving managed package usage data, configuring App Analytics simulation mode, querying subscriber snapshots, or understanding the AppAnalyticsQueryRequest lifecycle (New → Pending → Complete → Expired). TRIGGER when: user mentions App Analytics, AppAnalyticsQueryRequest, AppAnalyticsSettings, package usage data, subscriber analytics, ISV analytics, or simulation mode for app analytics. DO NOT TRIGGER when: the task is about standard Salesforce reports/dashboards (use reporting skills), custom SOQL on Account/Contact (use platform-soql-query), or Data Cloud query/search (use data360-query)."
+description: "ISV App Analytics metadata types — AppAnalyticsQueryRequest and AppAnalyticsSettings. Use this skill when the user asks about retrieving managed package usage data, configuring App Analytics simulation mode, querying subscriber snapshots, or understanding the AppAnalyticsQueryRequest lifecycle (New → Pending → Complete → Expired). TRIGGER when: user mentions App Analytics, AppAnalyticsQueryRequest, AppAnalyticsSettings, package usage data, subscriber analytics, ISV analytics, or simulation mode for app analytics. DO NOT TRIGGER when: the task is about standard Salesforce reports/dashboards (use reporting skills), custom SOQL on Account/Contact (use platform-soql-query)."
 metadata:
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
   relatedSkills:
-    - "data360-query"
     - "platform-metadata-deploy"
     - "platform-soql-query"
   version: "1.0"
@@ -29,7 +28,6 @@ Use `dx-app-analytics-query` when the work involves:
 
 Delegate elsewhere when the user is:
 - Running standard CRM SOQL queries → platform-soql-query
-- Working with Data Cloud SQL or DMOs → data360-query
 - Building reports/dashboards on standard objects → reporting skills
 - Deploying or retrieving generic metadata XML → platform-metadata-deploy / retrieving-metadata
 
