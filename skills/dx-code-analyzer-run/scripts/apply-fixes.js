@@ -15,14 +15,39 @@ const filePath = process.argv[2];
 const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
 const runDir = data.runDir || "";
 
-// Group fixes by file
+// Fix targets are confined to the current working directory (the project being
+// fixed). loc.file and runDir come from the results JSON and are untrusted;
+// resolving each target against cwd and rejecting anything that escapes it
+// stops a crafted results file from writing arbitrary paths (e.g. /etc/passwd
+// or ../../outside-project).
+const baseDir = process.cwd();
+
+function safeResolve(candidate) {
+  if (typeof candidate !== "string" || !candidate) return null;
+  let rel = candidate;
+  // Engine output often uses absolute paths under the scan runDir; normalize
+  // those to project-relative before confinement.
+  if (runDir && rel.startsWith(runDir)) rel = rel.substring(runDir.length + 1);
+  const resolved = path.resolve(baseDir, rel);
+  const within = path.relative(baseDir, resolved);
+  if (within === "" || within.startsWith("..") || path.isAbsolute(within)) {
+    return null;
+  }
+  return resolved;
+}
+
+// Group fixes by confined, absolute file path
 const fileFixesMap = new Map();
+let fixesSkippedUnsafe = 0;
 data.violations.forEach(v => {
   if (v.fixes && v.fixes.length > 0) {
     v.fixes.forEach(fix => {
       const loc = fix.location;
-      let filePath = loc.file;
-      if (runDir && filePath.startsWith(runDir)) filePath = filePath.substring(runDir.length + 1);
+      const filePath = safeResolve(loc.file);
+      if (!filePath) {
+        fixesSkippedUnsafe++;
+        return;
+      }
 
       if (!fileFixesMap.has(filePath)) fileFixesMap.set(filePath, []);
       fileFixesMap.get(filePath).push({
@@ -83,4 +108,4 @@ fileFixesMap.forEach((fixes, filePath) => {
   }
 });
 
-console.log(JSON.stringify({ success: true, filesModified, fixesApplied, fixesSkipped, totalFixableFiles: fileFixesMap.size }));
+console.log(JSON.stringify({ success: true, filesModified, fixesApplied, fixesSkipped, fixesSkippedUnsafe, totalFixableFiles: fileFixesMap.size }));

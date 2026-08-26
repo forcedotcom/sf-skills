@@ -6,7 +6,7 @@
 //   npm run validate:skills                                        # validate all skills
 //   npm run validate:skills -- --changed --base=origin/main       # validate only skills changed vs base
 
-import { execSync } from "child_process"
+import { execFileSync } from "child_process"
 import fs from "fs"
 import path from "path"
 import { parseArgs } from "util"
@@ -458,7 +458,12 @@ function parseMetadataBlock(rawFrontmatter: string): Record<string, string> | "s
  * valid and requires no structural validation.
  */
 function getChangedSkillDirs(base: string): string[] {
-  const output = execSync(`git diff --name-only ${base}...HEAD`, { encoding: "utf8" })
+  // `base` is passed as a single argv element (not interpolated into a shell
+  // string), so a crafted --base value cannot inject shell commands. git will
+  // reject an invalid revision, but nothing executes.
+  const output = execFileSync("git", ["diff", "--name-only", `${base}...HEAD`], {
+    encoding: "utf8",
+  })
   return [
     ...new Set(
       output

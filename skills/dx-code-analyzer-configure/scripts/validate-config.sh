@@ -37,10 +37,11 @@ fi
 # Basic YAML syntax check (if python3 available)
 if command -v python3 &> /dev/null; then
     echo "Checking YAML syntax..."
-    if python3 -c "
+    if python3 - "$CONFIG_FILE" 2>&1 <<'PYEOF'; then
 import yaml, sys
+config_file = sys.argv[1]
 try:
-    with open('${CONFIG_FILE}', 'r') as f:
+    with open(config_file, 'r') as f:
         config = yaml.safe_load(f)
     if config is None:
         print('WARNING: Config file is empty or contains only comments')
@@ -50,10 +51,10 @@ try:
         sys.exit(1)
     print('YAML syntax: OK')
 except yaml.YAMLError as e:
-    print(f'ERROR: Invalid YAML syntax')
+    print('ERROR: Invalid YAML syntax')
     print(f'  {e}')
     sys.exit(1)
-" 2>&1; then
+PYEOF
         echo ""
     else
         echo ""
@@ -69,16 +70,19 @@ echo "Checking known fields..."
 VALID_TOP_LEVEL="config_root log_folder log_level rules engines ignores suppressions"
 
 if command -v python3 &> /dev/null; then
-    python3 -c "
+    python3 - "$CONFIG_FILE" "$VALID_TOP_LEVEL" 2>&1 <<'PYEOF'
 import yaml, sys
 
-with open('${CONFIG_FILE}', 'r') as f:
+config_file = sys.argv[1]
+valid_top_level = sys.argv[2]
+
+with open(config_file, 'r') as f:
     config = yaml.safe_load(f)
 
 if config is None:
     sys.exit(0)
 
-valid_fields = set('${VALID_TOP_LEVEL}'.split())
+valid_fields = set(valid_top_level.split())
 unknown = set(config.keys()) - valid_fields
 if unknown:
     print(f'WARNING: Unknown top-level fields: {sorted(unknown)}')
@@ -100,12 +104,12 @@ if 'engines' in config and config['engines']:
 # Check ignores section
 if 'ignores' in config and config['ignores']:
     if 'files' not in config['ignores']:
-        print('WARNING: ignores section should contain a \"files\" list')
+        print('WARNING: ignores section should contain a "files" list')
     elif not isinstance(config['ignores']['files'], list):
         print('ERROR: ignores.files must be a list of glob patterns')
         sys.exit(1)
     else:
-        print(f'Ignore patterns: {len(config[\"ignores\"][\"files\"])} patterns configured')
+        print(f'Ignore patterns: {len(config["ignores"]["files"])} patterns configured')
 
 # Check rules section
 if 'rules' in config and config['rules']:
@@ -120,7 +124,7 @@ if 'rules' in config and config['rules']:
                             print(f'WARNING: rules.{engine}.{rule_name}.severity = {sev} (expected 1-5 or Critical/High/Moderate/Low/Info)')
 
 print('')
-" 2>&1
+PYEOF
 fi
 
 # Run sf code-analyzer config validation (if sf CLI available)

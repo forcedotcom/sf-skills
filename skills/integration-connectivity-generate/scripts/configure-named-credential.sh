@@ -190,14 +190,14 @@ try {
     // Create the credential (first-time setup)
     ConnectApi.NamedCredentials.createCredential(newCredentials);
     System.debug('✓ External Credential configured successfully!');
-    System.debug('Principal: $PRINCIPAL_NAME');
+    System.debug('Principal: $PRINCIPAL_NAME_ESCAPED');
 } catch (Exception e) {
     // If already exists, try patching instead
     if (e.getMessage().contains('already exists')) {
         try {
             ConnectApi.NamedCredentials.patchCredential(newCredentials);
             System.debug('✓ External Credential updated successfully!');
-            System.debug('Principal: $PRINCIPAL_NAME');
+            System.debug('Principal: $PRINCIPAL_NAME_ESCAPED');
         } catch (Exception e2) {
             System.debug('✗ Error updating credential: ' + e2.getMessage());
             throw e2;
