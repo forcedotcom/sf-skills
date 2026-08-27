@@ -1,13 +1,13 @@
 {
   "name": "salesforce-development",
   "displayName": "Salesforce Development",
-  "version": "1.12.0",
+  "version": "2.0.0",
   "description": "Build Salesforce apps and agents using these core building blocks: metadata, Apex, deploy/retrieve, security, reporting, and generated installed-versus-available capability discovery.",
   "author": { "name": "Salesforce", "url": "https://github.com/forcedotcom/sf-skills" },
   "license": "Apache-2.0",
   "homepage": "https://github.com/forcedotcom/sf-skills/tree/main/plugins/builder/salesforce-development",
   "repository": "https://github.com/forcedotcom/sf-skills.git",
-  "keywords": ["salesforce", "apex", "flow", "soql", "metadata", "deploy", "agentforce"],
+  "keywords": ["salesforce", "apex", "flow", "soql", "metadata", "deploy"],
   "dependencies": [],
   "userConfig": {
     "ui_mode": {
@@ -15,6 +15,12 @@
       "title": "Salesforce development UI mode",
       "description": "Ambient UI: full (default), compact, plain semantic text, or off. Explicit commands and safety guidance remain available.",
       "default": "full"
+    },
+    "plugin_match_sensitivity": {
+      "type": "string",
+      "title": "Uninstalled-plugin recommendation sensitivity",
+      "description": "How readily this plugin proposes an uninstalled Salesforce plugin matching your task: off (never), low, standard (default), high, or a custom number from 1.0-10.0. Change it any time from within a session with /salesforce-development:plugin-recommendations.",
+      "default": "standard"
     }
   },
   "skills": "./skills/",
@@ -32,6 +38,10 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture session_start"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_plugin_hint.py\""
           }
         ]
       }
@@ -93,6 +103,16 @@
           {
             "type": "command",
             "if": "Bash(sf project generate manifest *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf project deploy *)",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
+          },
+          {
+            "type": "command",
+            "if": "Bash(sf org create *)",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context skills-first-advisory"
           },
           {
@@ -180,16 +200,6 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context resolution-trace"
-          }
-        ]
-      },
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}\"/hooks/scripts/agent-validator.py",
-            "timeout": 10
           }
         ]
       },

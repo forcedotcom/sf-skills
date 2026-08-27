@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Metadata-format manifest for deploying the Case settings singleton
+  (member name is always "Case" — CaseSettings is a per-org singleton).
+
+  WHY metadata format (not a source deploy that names Settings:Case directly):
+  a source deploy reads sourceApiVersion from sfdx-project.json, which the
+  api-version flag does NOT override. Deploying in metadata format lets this
+  manifest pin the version instead, so the user's sfdx-project.json is never
+  mutated (a source deploy would otherwise force a permanent sourceApiVersion
+  bump affecting all their later deploys).
+
+  NOTE: keep this comment free of double-hyphen tokens. This file is copied
+  verbatim (via sed) into the deploy package.xml, and the Metadata API rejects
+  a double-hyphen sequence inside an XML comment ("not permitted within
+  comments"), which fails the deploy.
+
+  Substitute {API_VERSION} with the org's resolved API version — which MUST be
+  68.0 or higher, since botEmailDefinition on a routing address is only exposed
+  to the Metadata API at v68.0+. The Case settings file is placed as:
+    (dir)/package.xml
+    (dir)/settings/Case.settings          (metadata format: NO -meta.xml suffix)
+-->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Case</members>
+        <name>Settings</name>
+    </types>
+    <version>{API_VERSION}</version>
+</Package>

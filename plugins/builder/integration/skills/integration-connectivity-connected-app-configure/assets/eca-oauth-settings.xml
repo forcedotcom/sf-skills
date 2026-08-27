@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template: External Client App - Instance OAuth Settings
+  Use Case: Configure OAuth scopes for the ECA
+
+  Replace placeholders:
+  - {{APP_NAME}}: The ExternalClientApplication API name (must match .eca file)
+  - {{LABEL}}: Display label for this OAuth settings configuration
+  - {{SCOPES}}: Comma-separated OAuth scopes (e.g., "Api, RefreshToken, OpenID")
+
+  Common Scope Combinations:
+  - API Integration: Api, RefreshToken
+  - Web App with Identity: Api, RefreshToken, OpenID, Profile, Email
+  - Server-to-Server: Api
+  - Mobile App: Api, RefreshToken, OpenID
+
+  Available Scopes:
+  - Api: REST/SOAP API access
+  - RefreshToken: Offline access via refresh token
+  - OpenID: OpenID Connect (user identity)
+  - Profile: User profile information
+  - Email: User email address
+  - Web: Web browser access
+  - ChatterApi: Chatter REST API
+  - CustomPermissions: Custom permission access
+
+  IMPORTANT: OAuth flows (Authorization Code, Client Credentials, etc.) are
+  configured via the Admin UI or ExtlClntAppOauthConfigurablePolicies, NOT here.
+
+  File Naming: [AppName].ecaOauth-meta.xml
+-->
+<ExtlClntAppOauthSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <commaSeparatedOauthScopes>{{SCOPES}}</commaSeparatedOauthScopes>
+    <externalClientApplication>{{APP_NAME}}</externalClientApplication>
+    <label>{{LABEL}}</label>
+</ExtlClntAppOauthSettings>

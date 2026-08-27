@@ -304,6 +304,22 @@ _ALLOWLIST = {
     "agent_dispatched": {"agent_type"},
     "exception": {"error_class", "kind"},
     "mcp_tool_used": {"mcp_server", "mcp_tool", "outcome"},
+    # plugin_loaded / plugin_suggestion_declined: the accept/decline halves of the
+    # same plugin-catalog proposal (dynamic-loading-strategy-plan.md Phase 4.5).
+    # `surface` (bypass-gate | discovery-command | session-start | user-prompt) is
+    # recovered from the session-scoped proposal marker at correlation time, not
+    # asserted by the caller.
+    "plugin_loaded": {"plugin", "origin", "confidence", "surface"},
+    "plugin_suggestion_declined": {"plugin", "origin", "confidence", "surface"},
+    # plugin_recommended / plugin_installed: additive to the accept/decline pair
+    # above (W-23856691). `plugin_recommended` fires once per plugin per session when
+    # a known-set plugin is surfaced to the user on any surface (bypass-gate |
+    # discovery-command | user-prompt | session-start). `plugin_installed` fires on
+    # any successful install of a known-set plugin, `surface` recovered from the
+    # proposal marker or "self-directed" when the user installed with no in-session
+    # proposal.
+    "plugin_recommended": {"plugin", "origin", "confidence", "surface"},
+    "plugin_installed": {"plugin", "origin", "confidence", "surface"},
 }
 
 # `error_class` is the one user-influenced value that reaches the wire (PDP componentId
@@ -375,7 +391,7 @@ _FIRST_PARTY_BINS = {
             "skills-first-advisory", "record-skill-dispatch", "reset-dispatch-turn",
             "feedback-nudge", "record-feedback-decision", "record-update-decision",
             "status", "status-org", "status-project", "telemetry", "telemetry-capture",
-            "telemetry-flush", "telemetry-transmit",
+            "telemetry-flush", "telemetry-transmit", "plugin-install",
         },
     },
     "sf-deploy-gate": {
@@ -752,11 +768,11 @@ def _suite_version() -> str:
 # The authoritative "ours" set is the plugin's own skills/ directory
 # (scripts/ -> ../skills), read once and cached. It's self-maintaining: a new
 # skill dir is recognized with no code change. Our skills are named
-# "<domain>-<action>" (agentforce-*, automation-*, dx-*, platform-*); the domain
+# "<domain>-<action>" (automation-*, dx-*, platform-*); the domain
 # is the leading segment. If the dir can't be read we fall back to the known
 # domain vocabulary so a transient read error never silently drops ALL skill
 # telemetry (fail-open to the coarse-but-correct signal).
-_SF_SKILL_DOMAINS = {"agentforce", "automation", "dx", "platform"}
+_SF_SKILL_DOMAINS = {"automation", "dx", "platform"}
 _SF_SKILLS_CACHE: Optional[set] = None
 
 
@@ -770,6 +786,52 @@ def _sf_skills() -> set:
         except OSError:
             _SF_SKILLS_CACHE = set()
     return _SF_SKILLS_CACHE
+
+
+# --- Which plugins are OURS (plugin_loaded / plugin_suggestion_declined gate) ----
+# Mirrors _sf_skills/_resolve_sf_skill: only a plugin name present in the generated
+# plugins.json (dynamic-loading-strategy-plan.md Phase 1) may ever be
+# recorded verbatim. A held/internal plugin is excluded from that artifact by
+# read_internal_plugin_holds at generation time, so it can never reach this map and
+# therefore can never appear on either event -- the identical closed-vocabulary
+# shape as skill_dispatched's catalog gate, just sourced from the plugin catalog
+# instead of the skills directory.
+_PLUGIN_CATALOG_CACHE: Optional[dict] = None
+
+
+def _plugin_catalog_origins() -> dict:
+    """Map of {plugin_name: origin} from catalog/plugins.json (cached).
+
+    The catalog no longer stores an ``origin`` field; it is derived from the
+    shape of each entry's verbatim marketplace ``source`` -- a relative-path
+    string is a plugin in this repo (``"local"``), a source object is one fetched
+    from elsewhere (``"external"``). This preserves both the closed-vocabulary
+    name gate (only a name present in the artifact validates) and the
+    origin dimension the plugin_loaded/plugin_suggestion_declined events record.
+
+    Fail-open to {} on a missing/corrupt artifact -- same discipline as
+    _sf_skills's OSError fallback -- so a plugin name simply fails to validate
+    (the event is dropped) rather than the capture crashing."""
+    global _PLUGIN_CATALOG_CACHE
+    if _PLUGIN_CATALOG_CACHE is None:
+        _PLUGIN_CATALOG_CACHE = {}
+        try:
+            catalog_path = Path(__file__).resolve().parent.parent / "catalog" / "plugins.json"
+            data = json.loads(catalog_path.read_text())
+            plugins = data.get("plugins") if isinstance(data, dict) else None
+            for entry in plugins or []:
+                if not isinstance(entry, dict):
+                    continue
+                name, source = entry.get("name"), entry.get("source")
+                if not isinstance(name, str) or not name:
+                    continue
+                if isinstance(source, str) and source:
+                    _PLUGIN_CATALOG_CACHE[name] = "local"
+                elif isinstance(source, dict) and source:
+                    _PLUGIN_CATALOG_CACHE[name] = "external"
+        except (OSError, json.JSONDecodeError, ValueError, AttributeError):
+            _PLUGIN_CATALOG_CACHE = {}
+    return _PLUGIN_CATALOG_CACHE
 
 
 def _resolve_sf_skill(skill: str) -> tuple:
@@ -801,7 +863,6 @@ def _resolve_sf_skill(skill: str) -> tuple:
 # directory (self-maintaining), with a small built-in fallback vocabulary for when
 # the dir can't be read.
 _SF_AGENTS_FALLBACK = frozenset({
-    "adlc-author", "adlc-engineer", "adlc-orchestrator", "adlc-qa",
     "architecture-review", "salesforce-dev",
 })
 _SF_AGENTS_CACHE: Optional[set] = None
@@ -1402,6 +1463,67 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             _write_event("exception", {"error_class": error_class, "kind": kind}, payload)
             return
 
+        if event in ("plugin_loaded", "plugin_suggestion_declined"):
+            # Both are in-process-only calls from sf_context.py::cmd_plugin_install
+            # (never a standalone hook), correlating against the session-scoped
+            # plugin-proposal marker -- see dynamic-loading-strategy-plan.md Phase
+            # 4.5. The caller passes plugin/confidence/surface already recovered
+            # from that marker; this gate only re-validates each against its closed
+            # vocabulary before it is ever buffered.
+            plugin = tool_input.get("plugin") if isinstance(tool_input, dict) else ""
+            confidence = tool_input.get("confidence") if isinstance(tool_input, dict) else ""
+            surface = tool_input.get("surface") if isinstance(tool_input, dict) else ""
+            origin = _plugin_catalog_origins().get(plugin)
+            if not origin or confidence not in ("high", "medium") \
+                    or surface not in (
+                        "bypass-gate", "discovery-command", "session-start", "user-prompt",
+                    ):
+                return  # not one of our catalog plugins / not a closed-vocab value -> record nothing
+            _write_event(event, {
+                "plugin": plugin, "origin": origin,
+                "confidence": confidence, "surface": surface,
+            }, payload)
+            return
+
+        if event in ("plugin_recommended", "plugin_installed"):
+            # Additive to the accept/decline pair above (W-23856691). Both are
+            # in-process-only calls (never a standalone hook): `plugin_recommended`
+            # is fired once per plugin per session when a known-set plugin is
+            # surfaced to the user (from _plugin_catalog_match for all four
+            # proposal surfaces; session_plugin_hint.py reaches it through the
+            # structured plugin-match command); `plugin_installed` is fired on any
+            # successful install of a known-set plugin. The caller passes
+            # plugin/confidence/surface; the origin dimension is re-derived here
+            # from the catalog so it can never be spoofed by the caller.
+            plugin = tool_input.get("plugin") if isinstance(tool_input, dict) else ""
+            confidence = tool_input.get("confidence") if isinstance(tool_input, dict) else ""
+            surface = tool_input.get("surface") if isinstance(tool_input, dict) else ""
+            origin = _plugin_catalog_origins().get(plugin)
+            # Each event carries its own closed surface/confidence vocabulary.
+            # Recommend fires on all four proposal surfaces. Install is attributed
+            # to any persisted proposal surface (bypass-gate | discovery-command |
+            # session-start | user-prompt) or, when there was no in-session
+            # proposal, "self-directed"/"none".
+            if event == "plugin_recommended":
+                allowed_surfaces = {
+                    "bypass-gate", "discovery-command", "user-prompt", "session-start",
+                }
+                allowed_confidence = {"high", "medium"}
+            else:  # plugin_installed
+                allowed_surfaces = {
+                    "bypass-gate", "discovery-command", "session-start", "user-prompt",
+                    "self-directed",
+                }
+                allowed_confidence = {"high", "medium", "none"}
+            if not origin or confidence not in allowed_confidence \
+                    or surface not in allowed_surfaces:
+                return  # not one of our catalog plugins / not a closed-vocab value -> record nothing
+            _write_event(event, {
+                "plugin": plugin, "origin": origin,
+                "confidence": confidence, "surface": surface,
+            }, payload)
+            return
+
     except Exception:
         pass  # fail-silent — never break a hook on a telemetry error
     finally:
@@ -1790,6 +1912,32 @@ def _to_pdp_event(record: dict, org_bucket: Optional[str] = None) -> Optional[di
         return {**base, "eventName": "mcpTool.used",
                 "componentId": (f"{server}.{tool}" if server else tool) or "mcp",
                 "contextName": "outcome", "contextValue": p.get("outcome") or ""}
+    if event == "plugin_loaded":
+        # componentId is the plugin name (the distinct-count dimension, same
+        # convention as skill.dispatched); origin/confidence/surface -- all closed
+        # vocabularies -- ride the composite context tuple, same shape used by
+        # session.started's os::org_bucket::model triple.
+        return {**base, "eventName": "plugin.loaded",
+                "componentId": p.get("plugin") or "plugin",
+                "contextName": "origin::confidence::surface",
+                "contextValue": f"{p.get('origin', '')}::{p.get('confidence', '')}::{p.get('surface', '')}"}
+    if event == "plugin_suggestion_declined":
+        return {**base, "eventName": "pluginSuggestion.declined",
+                "componentId": p.get("plugin") or "plugin",
+                "contextName": "origin::confidence::surface",
+                "contextValue": f"{p.get('origin', '')}::{p.get('confidence', '')}::{p.get('surface', '')}"}
+    if event == "plugin_recommended":
+        # Same componentId/context shape as plugin.loaded: the plugin name is the
+        # distinct-count dimension, origin/confidence/surface ride the composite tuple.
+        return {**base, "eventName": "plugin.recommended",
+                "componentId": p.get("plugin") or "plugin",
+                "contextName": "origin::confidence::surface",
+                "contextValue": f"{p.get('origin', '')}::{p.get('confidence', '')}::{p.get('surface', '')}"}
+    if event == "plugin_installed":
+        return {**base, "eventName": "plugin.installed",
+                "componentId": p.get("plugin") or "plugin",
+                "contextName": "origin::confidence::surface",
+                "contextValue": f"{p.get('origin', '')}::{p.get('confidence', '')}::{p.get('surface', '')}"}
     return None
 
 

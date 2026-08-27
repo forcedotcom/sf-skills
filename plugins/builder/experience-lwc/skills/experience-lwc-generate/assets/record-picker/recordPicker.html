@@ -1,0 +1,55 @@
+<template>
+    <div class="slds-form-element">
+        <!-- Record Picker -->
+        <lightning-record-picker
+            label={label}
+            placeholder={placeholder}
+            object-api-name={objectApiName}
+            display-info={displayInfo}
+            matching-info={matchingInfo}
+            filter={filter}
+            disabled={pickerDisabled}
+            required={required}
+            onchange={handleChange}>
+        </lightning-record-picker>
+
+        <!-- Multi-select Pills -->
+        <template lwc:if={showPills}>
+            <div class="slds-m-top_x-small">
+                <!-- Selection count -->
+                <div class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">
+                    {selectionCountMessage}
+                </div>
+
+                <!-- Pills container -->
+                <lightning-pill-container>
+                    <template for:each={_selectedRecords} for:item="record">
+                        <lightning-pill
+                            key={record.id}
+                            label={record.name}
+                            data-id={record.id}
+                            onremove={handleRemove}>
+                        </lightning-pill>
+                    </template>
+                </lightning-pill-container>
+
+                <!-- Clear All button -->
+                <template lwc:if={hasSelections}>
+                    <lightning-button
+                        label="Clear All"
+                        variant="base"
+                        class="slds-m-top_xx-small"
+                        onclick={handleClearAll}>
+                    </lightning-button>
+                </template>
+            </div>
+        </template>
+
+        <!-- Max selections warning -->
+        <template lwc:if={isMaxSelectionsReached}>
+            <div class="slds-text-color_weak slds-text-body_small slds-m-top_xx-small">
+                Maximum selections reached. Remove a selection to add more.
+            </div>
+        </template>
+    </div>
+</template>

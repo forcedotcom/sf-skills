@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
-"""Channel registry, canonical hashing, and internal-preview contracts."""
+"""Channel registry, canonical hashing, and public-release manifest contracts."""
 from __future__ import annotations
 
-import io
 import json
 import os
 import re
-import shutil
 import stat
 import subprocess
 import tempfile
 import unittest
-from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest import mock
 
@@ -21,16 +18,13 @@ SCRIPTS = Path(__file__).resolve().parent.parent
 PLUGIN_ROOT = SCRIPTS.parent
 REPO_ROOT = PLUGIN_ROOT.parents[2]
 REGISTRY_PATH = SCRIPTS / "capability_registry.py"
-CATALOG_PATH = SCRIPTS / "discovery_catalog.py"
 MANIFEST_PATH = PLUGIN_ROOT / "catalog/public-release-manifest.json"
-NOTICE = "INTERNAL PREVIEW — not publicly supported"
 
 
 class CapabilityRegistryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.registry = load_module(REGISTRY_PATH, "capability_registry_under_test")
-        cls.catalog = load_module(CATALOG_PATH, "channel_catalog_under_test")
 
     def test_windows_path_descriptor_identity_ignores_incompatible_ctime(self):
         path_stat = mock.Mock(
@@ -360,10 +354,9 @@ class CapabilityRegistryTests(unittest.TestCase):
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: "license"\n---\n')
 
     def test_public_check_detects_missing_snapshot_and_drift(self):
-        # check_public is the public-manifest digest-drift gate (the analog of
-        # discovery_catalog.check). Missing destination → surfaced; a fresh snapshot
-        # → current; any byte change → stale. All fail LOUD (RegistryError), never a
-        # silent "current".
+        # check_public is the public-manifest digest-drift gate. Missing destination
+        # → surfaced; a fresh snapshot → current; any byte change → stale. All fail
+        # LOUD (RegistryError), never a silent "current".
         with tempfile.TemporaryDirectory() as td:
             checkout = self._public_checkout_fixture(
                 Path(td), "git@github.com:forcedotcom/sf-skills.git"
@@ -377,7 +370,7 @@ class CapabilityRegistryTests(unittest.TestCase):
             with self.assertRaisesRegex(self.registry.RegistryError, "stale"):
                 self.registry.check_public(checkout, dest, "1.32.0")
 
-    def test_checked_public_manifest_and_v3_catalog_counts_and_sets(self):
+    def test_checked_public_manifest_counts_and_access_check_tri_state(self):
         manifest = self.registry.load_public_manifest(MANIFEST_PATH)
         self.assertEqual(manifest["repository"], "https://github.com/forcedotcom/sf-skills.git")
         self.assertEqual(manifest["commit"], "32bf7846b96d4fcb1b2f5c7c06c09a1d9b3cea03")
@@ -498,45 +491,6 @@ class CapabilityRegistryTests(unittest.TestCase):
                 {"type": "orgPref", "value": "ITSMTeamsEnabled"},
             ],
         })
-        data = self.catalog.load_catalog(PLUGIN_ROOT)
-        self.assertEqual(data["schemaVersion"], "3.0")
-        self.assertEqual(data["channel"], "public")
-        self.assertEqual(data["counts"], {
-            "public": 157,
-            "foundation": 41,
-            "overlap": 31,
-            "publicStandaloneAddable": 126,
-            "foundationOnly": 10,
-            "visibleUnion": 167,
-        })
-        public = {row["name"] for row in manifest["skills"]}
-        foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}
-        rows = {row["name"]: row for row in data["skills"]}
-        self.assertEqual(set(rows), public | foundation)
-        self.assertEqual({name for name, row in rows.items() if row["publicAvailable"]}, public)
-        self.assertEqual({name for name, row in rows.items() if row["foundationInstalled"]}, foundation)
-        for name, row in rows.items():
-            self.assertEqual(set(row["variants"]), ({"public"} if name in public else set()) | ({"foundation"} if name in foundation else set()))
-            for source, variant in row["variants"].items():
-                self.assertRegex(variant["skillMdSha256"], r"^[0-9a-f]{64}$")
-                self.assertRegex(variant["treeSha256"], r"^[0-9a-f]{64}$")
-                self.assertNotIn("description", variant)
-                self.assertIn("accessCheck", variant)
-                self.assertTrue(self.registry._valid_access_check(variant["accessCheck"]))
-                # Foundation skills (plugin dialect, no metadata block) are always
-                # structurally undeclared; only the public channel can carry a gate.
-                if source == "foundation":
-                    self.assertIsNone(variant["accessCheck"])
-        self.assertEqual(
-            rows["experience-ui-bundle-features-generate"]["variants"]["public"]["accessCheck"],
-            [
-                {"type": "license", "value": "Experience Cloud (Customer Community / Customer Community Plus)"},
-                {"type": "orgPref", "value": "Sites"},
-            ],
-        )
-        overlap = next(rows[name] for name in sorted(public & foundation))
-        public_record = next(row for row in manifest["skills"] if row["name"] == overlap["name"])
-        self.assertEqual(overlap["examplePrompt"], public_record["examplePrompt"])
 
     def test_public_manifest_loader_rejects_schema_count_order_and_hash_damage(self):
         baseline = self.registry.load_public_manifest(MANIFEST_PATH)
@@ -580,13 +534,12 @@ class CapabilityRegistryTests(unittest.TestCase):
 
     def test_public_artifacts_do_not_leak_internal_only_names_or_descriptions(self):
         manifest = self.registry.load_public_manifest(MANIFEST_PATH)
-        self.catalog.load_catalog(PLUGIN_ROOT)
         public = {row["name"] for row in manifest["skills"]}
         foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}
         authoring = {entry.name for entry in (REPO_ROOT / "skills").iterdir() if entry.is_dir()}
         internal_only = authoring - (public | foundation)
         evidence_root = REPO_ROOT / "evidence/channel-registry"
-        checked_files = [MANIFEST_PATH, PLUGIN_ROOT / "catalog/discovery.json"] + [
+        checked_files = [MANIFEST_PATH] + [
             path for path in evidence_root.rglob("*") if path.is_file()
         ]
         blob = "\n".join(path.read_text(encoding="utf-8") for path in checked_files)
@@ -617,156 +570,6 @@ class CapabilityRegistryTests(unittest.TestCase):
             description = self.registry.read_skill(source)["description"].encode("utf-8")
             leaked = [str(path.relative_to(PLUGIN_ROOT)) for path, blob in blobs if description in blob]
             self.assertEqual(leaked, [], f"{name} description leaked into publishable plugin tree")
-
-    def test_standalone_records_tolerates_missing_standalone_dirs(self):
-        # A user (or CI's clean checkout) without ~/.claude/skills / .agents/skills
-        # must not crash the internal overlay. iterdir() is a lazy generator whose
-        # os.listdir runs on first iteration, so a missing dir has to be guarded
-        # before iterating — regression for the Python-3.12 FileNotFoundError that
-        # escaped the try/except and only surfaced on CI's clean tree.
-        with tempfile.TemporaryDirectory() as td:
-            cwd, home = Path(td) / "cwd", Path(td) / "home"
-            cwd.mkdir()
-            home.mkdir()  # both exist, but neither has .claude/skills or .agents/skills
-            result = self.catalog._standalone_records(cwd, home, {"platform-widget-search": {}})
-        self.assertEqual(result, {"platform-widget-search": {"records": [], "observations": []}})
-
-    def test_internal_overlay_scans_standalone_roots_and_reports_variant_provenance(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            repo, plugin = root / "repo", root / "plugin"
-            authoring = repo / "skills/platform-widget-search"
-            public_source = root / "public/platform-widget-search"
-            for skill_dir, description, body in (
-                (authoring, "Use this authoring fixture to search platform widgets safely in internal preview.", "authoring"),
-                (public_source, "Use this public fixture to search platform widgets safely in internal preview.", "public"),
-            ):
-                skill_dir.mkdir(parents=True)
-                skill_dir.joinpath("SKILL.md").write_text(
-                    f'---\nname: platform-widget-search\ndescription: "{description}"\n---\n{body}\n',
-                    encoding="utf-8",
-                )
-            repo.joinpath("config.yml").write_text("internal: []\n", encoding="utf-8")
-            plugin.joinpath("skills").mkdir(parents=True)
-            manifest_path = plugin / self.registry.PUBLIC_MANIFEST_RELATIVE
-            manifest_path.parent.mkdir(parents=True)
-            public_variant = self.registry.source_variant(public_source)
-            manifest = {
-                "schemaVersion": self.registry.PUBLIC_MANIFEST_SCHEMA,
-                "channel": "public-release",
-                "repository": self.registry.PUBLIC_REPOSITORY,
-                "commit": "a" * 40,
-                "releaseRef": "1.32.0",
-                "counts": {"public": 1},
-                "skills": [{
-                    "name": "platform-widget-search",
-                    "domain": "platform",
-                    "examplePrompt": "Search for platform widgets safely.",
-                    "skillMdSha256": public_variant["skillMdSha256"],
-                    "treeSha256": public_variant["treeSha256"],
-                    "accessCheck": None,
-                }],
-            }
-            manifest_path.write_text(self.registry.serialize(manifest), encoding="utf-8")
-            cwd, home = root / "project", root / "home"
-            project_install = cwd / ".claude/skills/platform-widget-search"
-            project_install.parent.mkdir(parents=True)
-            shutil.copytree(authoring, project_install)
-
-            overlay = self.catalog.build_internal_overlay(repo, plugin, cwd=cwd, home=home)
-            row = overlay["skills"][0]
-            self.assertEqual(row["installedProvenance"]["state"], "authoring-exact")
-
-            user_install = home / ".claude/skills/platform-widget-search"
-            user_install.parent.mkdir(parents=True)
-            shutil.copytree(public_source, user_install)
-            overlay = self.catalog.build_internal_overlay(repo, plugin, cwd=cwd, home=home)
-            self.assertEqual(overlay["skills"][0]["installedProvenance"]["state"], "conflict")
-
-            shutil.rmtree(project_install)
-            overlay = self.catalog.build_internal_overlay(repo, plugin, cwd=cwd, home=home)
-            self.assertEqual(overlay["skills"][0]["installedProvenance"]["state"], "public-exact")
-            user_install.joinpath("changed.txt").write_text("changed", encoding="utf-8")
-            overlay = self.catalog.build_internal_overlay(repo, plugin, cwd=cwd, home=home)
-            self.assertEqual(overlay["skills"][0]["installedProvenance"]["state"], "modified")
-            shutil.rmtree(user_install)
-            overlay = self.catalog.build_internal_overlay(repo, plugin, cwd=cwd, home=home)
-            self.assertEqual(overlay["skills"][0]["installedProvenance"]["state"], "unknown")
-
-    def test_internal_preview_requires_both_gate_and_internal_checkout(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            for env in ({}, {"SF_SKILLS_INTERNAL_PREVIEW": "1"}):
-                out, err = io.StringIO(), io.StringIO()
-                with mock.patch.dict(os.environ, env, clear=True), redirect_stdout(out), redirect_stderr(err):
-                    code = self.catalog.run_discovery(
-                        ["internal-preview", "overview", "--json"],
-                        plugin_root=root / "plugin", cwd=root, home=root / "home",
-                    )
-                self.assertNotEqual(code, 0)
-                self.assertEqual(out.getvalue(), "")
-                self.assertNotIn("held", err.getvalue().lower())
-
-    def test_internal_preview_axes_banner_and_nonexecuting_install_plan(self):
-        held = self.catalog.read_internal_holds(REPO_ROOT / "config.yml")
-        public = {row["name"] for row in self.registry.load_public_manifest(MANIFEST_PATH)["skills"]}
-        foundation = {entry.name for entry in (PLUGIN_ROOT / "skills").iterdir() if entry.is_dir()}
-        authoring = {entry.name for entry in (REPO_ROOT / "skills").iterdir() if entry.is_dir()}
-        candidates = sorted((authoring & held) - public - foundation)
-        if not candidates:
-            self.skipTest("no locally-present internal[] skill to test against")
-        candidate = candidates[0]
-        out, err = io.StringIO(), io.StringIO()
-        with mock.patch.dict(os.environ, {"SF_SKILLS_INTERNAL_PREVIEW": "1"}, clear=False), redirect_stdout(out), redirect_stderr(err):
-            code = self.catalog.run_discovery(
-                ["internal-preview", "skill", candidate, "--json"],
-                plugin_root=PLUGIN_ROOT, cwd=REPO_ROOT, home=REPO_ROOT / ".test-home",
-            )
-        self.assertEqual((code, err.getvalue()), (0, ""))
-        detail = json.loads(out.getvalue())
-        self.assertEqual(detail["notice"], NOTICE)
-        self.assertEqual(detail["presence"], {"authoring": True, "foundation": False, "public": False})
-        self.assertIn(detail["holdPolicy"], {"held", "not-held"})
-        self.assertEqual(detail["publicMatch"], "not-public")
-        self.assertEqual(detail["evalEvidence"], "unverified")
-        self.assertEqual(detail["promotion"], "not-requested")
-        self.assertEqual(detail["installer"], "internal-preview-installable")
-        self.assertIn("authoring", detail["contentHashes"])
-
-        out = io.StringIO()
-        with mock.patch.dict(os.environ, {"SF_SKILLS_INTERNAL_PREVIEW": "1"}, clear=False), redirect_stdout(out):
-            code = self.catalog.run_discovery(
-                ["internal-preview", "install-plan", candidate, "--json"],
-                plugin_root=PLUGIN_ROOT, cwd=REPO_ROOT, home=REPO_ROOT / ".test-home",
-            )
-        plan = json.loads(out.getvalue())
-        self.assertEqual(code, 0)
-        self.assertEqual(plan["notice"], NOTICE)
-        self.assertFalse(plan["execute"])
-        self.assertEqual(plan["classification"], "internal-preview-installable")
-        self.assertEqual(plan["plan"]["command"], "npx")
-        self.assertEqual(plan["plan"]["args"][0], "skills@1.5.20")
-        self.assertEqual(plan["plan"]["source"], str(REPO_ROOT / "skills"))
-        self.assertIn("--copy", plan["plan"]["args"])
-        self.assertIn("--yes", plan["plan"]["args"])
-        self.assertEqual(plan["plan"]["scope"], "project")
-        overlay = self.catalog.build_internal_overlay(
-            REPO_ROOT, PLUGIN_ROOT, cwd=REPO_ROOT, home=REPO_ROOT / ".test-home"
-        )
-        frozen = [row for row in overlay["skills"] if row["holdPolicy"] == "held" and row["presence"]["public"]]
-        self.assertTrue(frozen)
-        self.assertTrue(all(row["label"] == "public-frozen" for row in frozen))
-        frozen_different = [row for row in frozen if row["publicMatch"] == "different" and not row["presence"]["foundation"]]
-        self.assertTrue(frozen_different)
-        self.assertTrue(all(row["installer"] == "internal-preview-installable" for row in frozen_different))
-        ordinary_unheld = [
-            row for row in overlay["skills"]
-            if row["holdPolicy"] == "not-held" and row["presence"]["authoring"]
-            and not row["presence"]["foundation"] and row["publicMatch"] in {"different", "not-public"}
-        ]
-        self.assertTrue(ordinary_unheld)
-        self.assertTrue(all(row["installer"] != "internal-preview-installable" for row in ordinary_unheld))
-        self.assertTrue(held)
 
 
 if __name__ == "__main__":

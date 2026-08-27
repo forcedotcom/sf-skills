@@ -22,6 +22,7 @@ import json
 import io
 import os
 import stat
+import sys
 import tempfile
 import types
 import unittest
@@ -2161,6 +2162,1390 @@ class TelemetryLoaderResilienceTests(unittest.TestCase):
                            side_effect=RuntimeError("fallback failure")):
             self.assertIsNone(sfx._load_sf_telemetry())  # None, not a traceback
 
+
+class ParsePluginMatchSensitivityTests(unittest.TestCase):
+    """`_parse_plugin_match_sensitivity` normalizes a raw env var / CLI arg /
+    persisted-JSON value into a canonical named level or an in-range float,
+    or None for anything else -- pure function, no I/O."""
+
+    def test_named_levels_are_case_and_whitespace_insensitive(self):
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("standard"), "standard")
+        self.assertEqual(sfx._parse_plugin_match_sensitivity(" HIGH \n"), "high")
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("Low"), "low")
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("OFF"), "off")
+
+    def test_numeric_string_in_range_parses_to_float(self):
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("5"), 5.0)
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("7.25"), 7.25)
+
+    def test_range_boundaries_are_inclusive(self):
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("1.0"), 1.0)
+        self.assertEqual(sfx._parse_plugin_match_sensitivity("10.0"), 10.0)
+
+    def test_numeric_string_out_of_range_is_none(self):
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity("0.999"))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity("10.01"))
+
+    def test_unrecognized_string_is_none(self):
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity("banana"))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity("medium"))
+
+    def test_blank_string_is_none(self):
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(""))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity("   "))
+
+    def test_int_and_float_input_pass_through_when_in_range(self):
+        self.assertEqual(sfx._parse_plugin_match_sensitivity(5), 5.0)
+        self.assertEqual(sfx._parse_plugin_match_sensitivity(4.2), 4.2)
+
+    def test_numeric_input_out_of_range_is_none(self):
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(0))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(11))
+
+    def test_bool_is_never_treated_as_a_number(self):
+        # bool is an int subclass in Python -- True/False must not silently
+        # resolve to a valid 1.0/0.0 sensitivity.
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(True))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(False))
+
+    def test_unsupported_types_are_none(self):
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(None))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity(["high"]))
+        self.assertIsNone(sfx._parse_plugin_match_sensitivity({"level": "high"}))
+
+
+class ResolvePluginMatchThresholdTests(unittest.TestCase):
+    """`_resolve_plugin_match_threshold` maps a resolved sensitivity to the
+    scorer's high/medium band threshold. Named levels are the *inverse* of
+    their number: `high` (most readily triggered) is the LOW end of the
+    range (3.0); `low` is the HIGH end (6.0)."""
+
+    def test_named_level_thresholds(self):
+        self.assertEqual(sfx._resolve_plugin_match_threshold("high"), 3.0)
+        self.assertEqual(sfx._resolve_plugin_match_threshold("low"), 6.0)
+
+    def test_standard_resolves_to_none_meaning_module_default(self):
+        self.assertIsNone(sfx._resolve_plugin_match_threshold("standard"))
+
+    def test_off_is_not_specially_handled_at_this_layer(self):
+        # The docstring is explicit: callers must check the "off" sentinel
+        # themselves before calling this -- at this layer it is just an
+        # unrecognized name and resolves to None (module default), not "off".
+        self.assertIsNone(sfx._resolve_plugin_match_threshold("off"))
+
+    def test_custom_numeric_sensitivity_is_used_directly_as_the_threshold(self):
+        self.assertEqual(sfx._resolve_plugin_match_threshold(4.2), 4.2)
+        self.assertEqual(sfx._resolve_plugin_match_threshold(7), 7.0)
+
+    def test_bool_is_never_treated_as_a_number(self):
+        self.assertIsNone(sfx._resolve_plugin_match_threshold(True))
+
+    def test_unrecognized_string_and_other_types_are_none(self):
+        self.assertIsNone(sfx._resolve_plugin_match_threshold("medium"))
+        self.assertIsNone(sfx._resolve_plugin_match_threshold(None))
+        self.assertIsNone(sfx._resolve_plugin_match_threshold(["high"]))
+
+
+class PluginMatchSensitivityPrecedenceTests(unittest.TestCase):
+    """`_plugin_match_sensitivity_with_source` -- precedence chain (highest
+    wins): SF_DISABLE_PLUGIN_MATCH -> SF_PLUGIN_MATCH_SENSITIVITY ->
+    persisted preference -> userConfig default -> "standard". The persisted
+    tier is mocked here (its own read/write round trip is covered by
+    PluginMatchOverridePersistenceTests) so this class isolates precedence
+    ordering from disk I/O."""
+
+    _ENV_KEYS = (
+        "SF_DISABLE_PLUGIN_MATCH", "SF_PLUGIN_MATCH_SENSITIVITY",
+        "CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY",
+    )
+
+    def _env(self, **overrides):
+        env = {k: v for k, v in sfx.os.environ.items() if k not in self._ENV_KEYS}
+        env.update(overrides)
+        return env
+
+    def setUp(self):
+        patch = mock.patch.object(sfx, "_load_plugin_match_override", return_value=None)
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_disable_env_var_wins_over_everything_else(self):
+        with mock.patch.dict(sfx.os.environ, self._env(
+                SF_DISABLE_PLUGIN_MATCH="1", SF_PLUGIN_MATCH_SENSITIVITY="low"), clear=True), \
+                mock.patch.object(sfx, "_load_plugin_match_override", return_value="high"):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(), ("off", "SF_DISABLE_PLUGIN_MATCH"))
+
+    def test_sensitivity_env_var_wins_over_persisted_and_option(self):
+        with mock.patch.dict(sfx.os.environ, self._env(
+                SF_PLUGIN_MATCH_SENSITIVITY="low",
+                CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY="high"), clear=True), \
+                mock.patch.object(sfx, "_load_plugin_match_override", return_value="high"):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(),
+                ("low", "SF_PLUGIN_MATCH_SENSITIVITY"))
+
+    def test_malformed_sensitivity_env_var_falls_through_to_persisted(self):
+        with mock.patch.dict(sfx.os.environ, self._env(
+                SF_PLUGIN_MATCH_SENSITIVITY="not-a-level"), clear=True), \
+                mock.patch.object(sfx, "_load_plugin_match_override", return_value="high"):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(), ("high", "your saved preference"))
+
+    def test_persisted_preference_wins_over_userconfig_option(self):
+        with mock.patch.dict(sfx.os.environ, self._env(
+                CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY="high"), clear=True), \
+                mock.patch.object(sfx, "_load_plugin_match_override", return_value="low"):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(), ("low", "your saved preference"))
+
+    def test_userconfig_option_used_when_nothing_else_set(self):
+        with mock.patch.dict(sfx.os.environ, self._env(
+                CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY="7.5"), clear=True):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(),
+                (7.5, "plugin default (userConfig)"))
+
+    def test_falls_all_the_way_through_to_built_in_default(self):
+        with mock.patch.dict(sfx.os.environ, self._env(), clear=True):
+            self.assertEqual(
+                sfx._plugin_match_sensitivity_with_source(), ("standard", "built-in default"))
+
+    def test_plugin_match_sensitivity_discards_the_source(self):
+        with mock.patch.dict(sfx.os.environ, self._env(SF_DISABLE_PLUGIN_MATCH="1"), clear=True):
+            self.assertEqual(sfx._plugin_match_sensitivity(), "off")
+
+
+class PluginMatchOverridePersistenceTests(unittest.TestCase):
+    """Round trip for the persisted per-user override
+    (`~/.sf/plugin-recommendations/config.json`): save -> load -> clear,
+    plus fail-open behavior on missing/corrupt state."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        patch = mock.patch.object(
+            sfx, "_PLUGIN_MATCH_CONFIG_DIR", Path(self._tmp.name) / "plugin-recommendations")
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def test_missing_file_loads_as_none(self):
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_save_then_load_round_trips_a_named_level(self):
+        self.assertTrue(sfx._save_plugin_match_override("low"))
+        self.assertEqual(sfx._load_plugin_match_override(), "low")
+
+    def test_save_then_load_round_trips_a_custom_float(self):
+        self.assertTrue(sfx._save_plugin_match_override(4.5))
+        self.assertEqual(sfx._load_plugin_match_override(), 4.5)
+
+    def test_clear_removes_the_file_and_load_reverts_to_none(self):
+        sfx._save_plugin_match_override("high")
+        self.assertTrue(sfx._clear_plugin_match_override())
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_clear_is_idempotent_when_nothing_was_saved(self):
+        self.assertTrue(sfx._clear_plugin_match_override())
+
+    def test_corrupt_json_fails_open_to_none(self):
+        config_dir = sfx._PLUGIN_MATCH_CONFIG_DIR
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.json").write_text("{not valid json", encoding="utf-8")
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_non_dict_json_fails_open_to_none(self):
+        config_dir = sfx._PLUGIN_MATCH_CONFIG_DIR
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.json").write_text("[1, 2, 3]", encoding="utf-8")
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_invalid_persisted_sensitivity_value_fails_open_to_none(self):
+        config_dir = sfx._PLUGIN_MATCH_CONFIG_DIR
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.json").write_text(
+            json.dumps({"sensitivity": "not-a-real-level"}), encoding="utf-8")
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+
+class CmdPluginMatchConfigTests(unittest.TestCase):
+    """`cmd_plugin_match_config` -- the `plugin-match-config on|off|status|set`
+    CLI dispatched behind `/salesforce-development:plugin-recommendations`."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        patches = [
+            mock.patch.object(
+                sfx, "_PLUGIN_MATCH_CONFIG_DIR", Path(self._tmp.name) / "plugin-recommendations"),
+            mock.patch.dict(sfx.os.environ, {
+                k: v for k, v in sfx.os.environ.items()
+                if k not in (
+                    "SF_DISABLE_PLUGIN_MATCH", "SF_PLUGIN_MATCH_SENSITIVITY",
+                    "CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY",
+                )
+            }, clear=True),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def test_status_defaults_to_standard_built_in(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["status"])
+        self.assertEqual(rc, 0)
+        self.assertIn("standard", out.getvalue())
+        self.assertIn("built-in default", out.getvalue())
+
+    def test_status_with_no_args_defaults_to_status(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config([])
+        self.assertEqual(rc, 0)
+        self.assertIn("Plugin recommendation sensitivity", out.getvalue())
+
+    def test_off_persists_and_status_then_reports_off(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["off"])
+        self.assertEqual(rc, 0)
+        self.assertIn("OFF", out.getvalue())
+        with redirect_stdout(io.StringIO()) as out:
+            sfx.cmd_plugin_match_config(["status"])
+        self.assertIn("OFF", out.getvalue())
+
+    def test_set_valid_named_level_persists(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["set", "low"])
+        self.assertEqual(rc, 0)
+        self.assertIn("low", out.getvalue())
+        self.assertIn("6.0", out.getvalue())
+        self.assertEqual(sfx._load_plugin_match_override(), "low")
+
+    def test_set_valid_custom_number_persists(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["set", "4.2"])
+        self.assertEqual(rc, 0)
+        self.assertIn("4.2", out.getvalue())
+        self.assertEqual(sfx._load_plugin_match_override(), 4.2)
+
+    def test_set_invalid_value_fails_loud_and_persists_nothing(self):
+        with redirect_stderr(io.StringIO()) as err:
+            rc = sfx.cmd_plugin_match_config(["set", "extreme"])
+        self.assertEqual(rc, 1)
+        self.assertIn("not a valid sensitivity", err.getvalue())
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_set_out_of_range_number_fails_loud(self):
+        with redirect_stderr(io.StringIO()) as err:
+            rc = sfx.cmd_plugin_match_config(["set", "99"])
+        self.assertEqual(rc, 1)
+        self.assertIn("not a valid sensitivity", err.getvalue())
+
+    def test_set_with_no_value_fails_loud(self):
+        with redirect_stderr(io.StringIO()) as err:
+            rc = sfx.cmd_plugin_match_config(["set"])
+        self.assertEqual(rc, 1)
+        self.assertIn("not a valid sensitivity", err.getvalue())
+
+    def test_on_clears_a_previously_saved_override(self):
+        with redirect_stdout(io.StringIO()):
+            sfx.cmd_plugin_match_config(["set", "low"])
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["on"])
+        self.assertEqual(rc, 0)
+        self.assertIn("default", out.getvalue().lower())
+        self.assertIsNone(sfx._load_plugin_match_override())
+
+    def test_on_succeeds_even_when_nothing_was_previously_saved(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["on"])
+        self.assertEqual(rc, 0)
+        self.assertIn("default", out.getvalue().lower())
+
+    def test_unknown_action_reports_usage_and_returns_2(self):
+        with redirect_stderr(io.StringIO()) as err:
+            rc = sfx.cmd_plugin_match_config(["bogus"])
+        self.assertEqual(rc, 2)
+        self.assertIn("Unknown plugin-match-config action", err.getvalue())
+
+    def test_action_is_case_insensitive(self):
+        with redirect_stdout(io.StringIO()) as out:
+            rc = sfx.cmd_plugin_match_config(["STATUS"])
+        self.assertEqual(rc, 0)
+        self.assertIn("Plugin recommendation sensitivity", out.getvalue())
+
+
+class PluginCatalogMatchTests(unittest.TestCase):
+    """Phase 3: `_plugin_catalog_match` (the shared matching-service entry point
+    behind UserPromptSubmit, the PreToolUse bypass gate, and the plugin-match
+    discovery command) and the session-scoped proposal marker it reads/writes.
+
+    A synthetic in-memory catalog module is injected via `_load_plugin_catalog_module`
+    so this doesn't depend on the real checked-in catalog's contents (which today
+    has exactly one uninstalled entry). `_PROMPT_RUNTIME_DIR`/`_PLUGIN_PROPOSAL_DIR`
+    are patched to a temp dir per test so runs never touch or collide with the real
+    system tempdir the bash integration tests use."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        runtime_dir = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime_dir),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime_dir / "plugin-proposals"),
+            mock.patch.object(sfx, "_enabled_plugin_names", return_value=None),
+            # Sensitivity resolution must not depend on the real machine's env
+            # vars or ~/.sf/plugin-recommendations/ -- pin it to "standard"
+            # (module default), same isolation intent as the marker dir above.
+            mock.patch.object(sfx, "_plugin_match_sensitivity", return_value="standard"),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    @staticmethod
+    def _match(name, band, score=5.0, matched_terms=frozenset()):
+        return types.SimpleNamespace(
+            plugin={
+                "name": name,
+                "match": {"description": f"Curated capability for {name}."},
+            },
+            band=band, score=score, matched_terms=matched_terms,
+        )
+
+    def _stub_catalog(self, matches_by_call):
+        """A fake `plugin_catalog` module whose `score_prompt_against_catalog`
+        returns the next queued result on each call (list of lists), so a test
+        can simulate the same prompt scoring differently across turns if needed."""
+        calls = list(matches_by_call)
+        names = sorted({
+            match.plugin["name"]
+            for batch in calls
+            for match in batch
+        })
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": name} for name in names]},
+            score_prompt_against_catalog=lambda text, catalog, **kwargs: (
+                calls.pop(0) if calls else []
+            ),
+        )
+        return module
+
+    def test_first_occurrence_true_and_marker_written(self):
+        module = self._stub_catalog([[self._match("agentforce-adlc", "high")]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            results = sfx._plugin_catalog_match("build an agent", "sess-1", surface="bypass-gate")
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["name"], "agentforce-adlc")
+        self.assertEqual(results[0]["band"], "high")
+        self.assertTrue(results[0]["first_occurrence"])
+        self.assertEqual(results[0]["install_command"],
+                          "/salesforce-development:plugin-install agentforce-adlc")
+        proposals = sfx._load_plugin_proposals("sess-1")
+        self.assertEqual(proposals["agentforce-adlc"],
+                          {"confidence": "high", "surface": "bypass-gate"})
+
+    def test_repeat_occurrence_false_and_band_updates_to_latest(self):
+        module = self._stub_catalog([
+            [self._match("agentforce-adlc", "high")],
+            [self._match("agentforce-adlc", "medium")],
+        ])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            first = sfx._plugin_catalog_match("x", "sess-2", surface="bypass-gate")
+            second = sfx._plugin_catalog_match("x", "sess-2", surface="bypass-gate")
+        self.assertTrue(first[0]["first_occurrence"])
+        self.assertFalse(second[0]["first_occurrence"])
+        # Confidence updates to the latest-observed band even though it downgraded.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-2")["agentforce-adlc"]["confidence"], "medium")
+
+    def test_surface_recorded_on_first_write_never_overwritten(self):
+        module = self._stub_catalog([
+            [self._match("agentforce-adlc", "medium")],
+            [self._match("agentforce-adlc", "high")],
+        ])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            sfx._plugin_catalog_match("x", "sess-3", surface="discovery-command")
+            sfx._plugin_catalog_match("x", "sess-3", surface="bypass-gate")
+        # The surface recorded is whichever surface FIRST proposed this plugin,
+        # not whichever call happened most recently.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-3")["agentforce-adlc"]["surface"],
+            "discovery-command")
+
+    def test_multiple_distinct_plugins_both_surfaced_independently(self):
+        module = self._stub_catalog([[
+            self._match("agentforce-adlc", "high"),
+            self._match("other-plugin", "medium"),
+        ]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            results = sfx._plugin_catalog_match("x", "sess-4", surface="bypass-gate")
+        names = {r["name"] for r in results}
+        self.assertEqual(names, {"agentforce-adlc", "other-plugin"})
+        self.assertTrue(all(r["first_occurrence"] for r in results))
+        proposals = sfx._load_plugin_proposals("sess-4")
+        self.assertEqual(set(proposals.keys()), {"agentforce-adlc", "other-plugin"})
+
+    def test_user_prompt_keeps_only_high_matches_and_curated_description(self):
+        module = self._stub_catalog([[
+            self._match("experience-cms", "high"),
+            self._match("experience-react", "medium"),
+        ]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            results = sfx._plugin_catalog_match(
+                "find stock imagery for an Experience Cloud CMS",
+                "sess-user-prompt",
+                surface="user-prompt",
+            )
+        self.assertEqual([row["name"] for row in results], ["experience-cms"])
+        self.assertEqual(
+            results[0]["description"], "Curated capability for experience-cms."
+        )
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-user-prompt"),
+            {"experience-cms": {"confidence": "high", "surface": "user-prompt"}},
+        )
+
+    def test_user_prompt_medium_only_is_silent_and_writes_no_marker(self):
+        module = self._stub_catalog([[
+            self._match("experience-cms", "medium"),
+        ]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match(
+                "content work", "sess-user-medium", surface="user-prompt"
+            )
+        self.assertEqual(results, [])
+        self.assertEqual(sfx._load_plugin_proposals("sess-user-medium"), {})
+        fired.assert_not_called()
+
+    def test_session_start_is_high_only_and_persists_its_surface(self):
+        module = self._stub_catalog([[
+            self._match("experience-cms", "high"),
+            self._match("experience-react", "medium"),
+        ]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            results = sfx._plugin_catalog_match(
+                "cms content media", "sess-start", surface="session-start"
+            )
+        self.assertEqual([row["name"] for row in results], ["experience-cms"])
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-start"),
+            {"experience-cms": {"confidence": "high", "surface": "session-start"}},
+        )
+
+    def test_anchor_terms_required_only_on_the_two_proactive_surfaces(self):
+        # require_anchor_terms must mirror the band filter's own surface split:
+        # True for session-start/user-prompt, False for discovery/bypass-gate --
+        # so a plugin whose anchor set doesn't cover a phrase still surfaces on
+        # the two surfaces where the user's own act of asking is the evidence.
+        seen_kwargs = []
+
+        def score(_text, _catalog, **kwargs):
+            seen_kwargs.append(kwargs)
+            return [self._match("agentforce-adlc", "high")]
+
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": "agentforce-adlc"}]},
+            score_prompt_against_catalog=score,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            for surface in ("session-start", "user-prompt", "discovery-command", "bypass-gate"):
+                sfx._plugin_catalog_match("x", f"sess-anchor-{surface}", surface=surface)
+        self.assertEqual(
+            [kwargs["require_anchor_terms"] for kwargs in seen_kwargs],
+            [True, True, False, False],
+        )
+
+    def test_enabled_plugins_stay_in_scoring_corpus_but_cannot_surface(self):
+        seen_plugins = []
+
+        def score(_text, catalog, **_kwargs):
+            seen_plugins.extend(row["name"] for row in catalog["plugins"])
+            return [
+                self._match("experience-cms", "high"),
+                self._match("experience-react", "medium"),
+            ]
+
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [
+                {"name": "experience-cms"},
+                {"name": "experience-react"},
+            ]},
+            score_prompt_against_catalog=score,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_enabled_plugin_names",
+                                  return_value={"experience-cms"}):
+            results = sfx._plugin_catalog_match(
+                "search CMS media", "sess-enabled", surface="user-prompt"
+            )
+        self.assertEqual(seen_plugins, ["experience-cms", "experience-react"])
+        self.assertEqual(results, [])
+        self.assertEqual(sfx._load_plugin_proposals("sess-enabled"), {})
+
+    def test_empty_candidates_returns_empty_list_and_writes_no_marker(self):
+        module = self._stub_catalog([[]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            results = sfx._plugin_catalog_match("nothing matches", "sess-5", surface="bypass-gate")
+        self.assertEqual(results, [])
+        self.assertEqual(sfx._load_plugin_proposals("sess-5"), {})
+
+    def test_fail_open_on_missing_catalog_module(self):
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=None):
+            self.assertEqual(
+                sfx._plugin_catalog_match("anything", "sess-6", surface="bypass-gate"), [])
+
+    def test_fail_open_when_scorer_raises(self):
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": "x"}]},
+            score_prompt_against_catalog=mock.Mock(side_effect=RuntimeError("boom")),
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            self.assertEqual(
+                sfx._plugin_catalog_match("anything", "sess-7", surface="bypass-gate"), [])
+
+    def test_rejects_unknown_surface(self):
+        module = self._stub_catalog([[self._match("agentforce-adlc", "high")]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module):
+            self.assertEqual(
+                sfx._plugin_catalog_match("x", "sess-8", surface="not-a-real-surface"), [])
+
+    def test_fail_open_on_blank_text(self):
+        self.assertEqual(sfx._plugin_catalog_match("", "sess-9", surface="bypass-gate"), [])
+        self.assertEqual(sfx._plugin_catalog_match("   ", "sess-9", surface="bypass-gate"), [])
+
+    def test_recommended_fires_once_per_plugin_on_first_occurrence(self):
+        # W-23856691: `plugin_recommended` fires the FIRST time a plugin surfaces on
+        # this session's marker, and not on a repeat occurrence of the same plugin.
+        module = self._stub_catalog([
+            [self._match("agentforce-adlc", "high")],
+            [self._match("agentforce-adlc", "medium")],
+        ])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_catalog_match("x", "sess-r1", surface="bypass-gate")
+            sfx._plugin_catalog_match("x", "sess-r1", surface="bypass-gate")
+        self.assertEqual(fired.call_count, 1)
+        args = fired.call_args[0]
+        self.assertEqual(args[0], "plugin_recommended")
+        self.assertEqual(args[1], "agentforce-adlc")
+        self.assertEqual(args[3], "high")            # confidence == band
+        self.assertEqual(args[4], "bypass-gate")     # surface
+        self.assertEqual(args[5], "sess-r1")         # session_id
+
+    def test_recommended_does_not_fire_without_a_session_id(self):
+        # Any caller without a session id is side-effect-free: it may render a match,
+        # but cannot write a marker or emit recommendation telemetry.
+        module = self._stub_catalog([[self._match("agentforce-adlc", "high")]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match("x", "", surface="bypass-gate")
+        self.assertEqual(len(results), 1)
+        self.assertTrue(results[0]["first_occurrence"])
+        fired.assert_not_called()
+
+
+class PluginProposalMarkerTests(unittest.TestCase):
+    """`_load_plugin_proposals`/`_save_plugin_proposals` — the session-scoped
+    proposal marker's own fail-open read/write discipline, independent of the
+    matcher that populates it."""
+
+    def test_cli_session_falls_back_to_claude_code_environment(self):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_CODE_SESSION_ID": "host-session-1"}, clear=False
+        ):
+            self.assertEqual(sfx._plugin_session_id(), "host-session-1")
+
+    def test_explicit_cli_session_stays_authoritative(self):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_CODE_SESSION_ID": "host-session-1"}, clear=False
+        ):
+            self.assertEqual(
+                sfx._plugin_session_id("explicit-session"), "explicit-session"
+            )
+
+    def test_invalid_environment_session_fails_closed(self):
+        with mock.patch.dict(
+            os.environ, {"CLAUDE_CODE_SESSION_ID": "not valid/unsafe"}, clear=False
+        ):
+            self.assertEqual(sfx._plugin_session_id(), "")
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        patch = mock.patch.object(
+            sfx, "_PLUGIN_PROPOSAL_DIR", Path(self._tmp.name) / "plugin-proposals")
+        patch.start()
+        self.addCleanup(patch.stop)
+        pending_patch = mock.patch.object(
+            sfx, "_PLUGIN_INSTALL_PENDING_DIR",
+            Path(self._tmp.name) / "plugin-install-pending",
+        )
+        pending_patch.start()
+        self.addCleanup(pending_patch.stop)
+        flow_patch = mock.patch.object(
+            sfx, "_PLUGIN_FLOW_DIR", Path(self._tmp.name) / "plugin-flows",
+        )
+        flow_patch.start()
+        self.addCleanup(flow_patch.stop)
+
+    def test_missing_marker_reads_as_empty_dict(self):
+        self.assertEqual(sfx._load_plugin_proposals("no-such-session"), {})
+
+    def test_round_trips_a_written_marker(self):
+        sfx._save_plugin_proposals("sess-a", {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-a"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+
+    def test_plugin_flow_round_trip_extends_one_session_start_batch(self):
+        self.assertTrue(sfx._open_plugin_flow(
+            "sess-flow", ["experience-react"], "session-start"
+        ))
+        self.assertTrue(sfx._open_plugin_flow(
+            "sess-flow", ["experience-cms"], "session-start"
+        ))
+        flow = sfx._load_plugin_flow("sess-flow")
+        self.assertEqual(
+            flow,
+            {
+                "candidates": ["experience-react", "experience-cms"],
+                "selected": None,
+                "state": "recommended",
+                "surface": "session-start",
+                "taskBacked": False,
+            },
+        )
+        self.assertIsNone(sfx._plugin_flow_plugin(flow))
+
+    def test_plugin_flow_preserves_task_backing_when_selected(self):
+        self.assertTrue(sfx._save_plugin_flow(
+            "sess-one", ["experience-react"], surface="user-prompt",
+            task_backed=True,
+        ))
+        self.assertEqual(
+            sfx._plugin_flow_plugin(sfx._load_plugin_flow("sess-one")),
+            "experience-react",
+        )
+        self.assertTrue(sfx._select_plugin_flow(
+            "sess-one", "experience-react", "awaiting-confirmation"
+        ))
+        self.assertEqual(
+            sfx._load_plugin_flow("sess-one")["state"],
+            "awaiting-confirmation",
+        )
+        self.assertTrue(sfx._load_plugin_flow("sess-one")["taskBacked"])
+        self.assertTrue(sfx._clear_plugin_flow("sess-one"))
+        self.assertIsNone(sfx._load_plugin_flow("sess-one"))
+
+    def test_task_backing_distinguishes_work_from_plugin_selection(self):
+        self.assertTrue(sfx._plugin_prompt_is_task_backed(
+            "Build a Salesforce React UI bundle with TSX and Tailwind"
+        ))
+        self.assertFalse(sfx._plugin_prompt_is_task_backed(
+            "Which plugin would help me build a Salesforce React UI bundle?"
+        ))
+        self.assertFalse(sfx._plugin_prompt_is_task_backed(
+            "Please recommend a plugin for Salesforce CMS media"
+        ))
+        self.assertFalse(sfx._plugin_prompt_is_task_backed("continue"))
+
+    def test_plugin_flow_rejects_corrupt_or_expired_state(self):
+        path = sfx._plugin_flow_path("sess-bad-flow")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('{"candidates":["../bad"],"state":"installed"}', encoding="utf-8")
+        self.assertIsNone(sfx._load_plugin_flow("sess-bad-flow"))
+        with mock.patch.object(sfx.time, "time", return_value=1000):
+            self.assertTrue(sfx._save_plugin_flow(
+                "sess-old-flow", ["experience-react"], surface="session-start"
+            ))
+        with mock.patch.object(
+            sfx.time, "time",
+            return_value=1000 + sfx._PLUGIN_FLOW_MAX_AGE_SECONDS + 1,
+        ):
+            self.assertIsNone(sfx._load_plugin_flow("sess-old-flow"))
+
+    def test_corrupt_marker_reads_as_empty_dict(self):
+        path = sfx._plugin_proposal_path("sess-b")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("not valid json{{{", encoding="utf-8")
+        self.assertEqual(sfx._load_plugin_proposals("sess-b"), {})
+
+    def test_non_dict_marker_reads_as_empty_dict(self):
+        path = sfx._plugin_proposal_path("sess-c")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("[1, 2, 3]", encoding="utf-8")
+        self.assertEqual(sfx._load_plugin_proposals("sess-c"), {})
+
+    def test_blank_session_id_is_a_no_op(self):
+        self.assertEqual(sfx._load_plugin_proposals(""), {})
+        self.assertFalse(sfx._save_plugin_proposals("", {"x": {"confidence": "high"}}))
+
+    def test_explicit_named_decline_resolves_only_prior_valid_proposal(self):
+        sfx._save_plugin_proposals(
+            "sess-decline",
+            {"experience-react": {"confidence": "high", "surface": "session-start"}},
+        )
+        self.assertEqual(
+            sfx._explicit_proposed_plugin_decline(
+                "no thanks, do not install experience-react", "sess-decline"
+            ),
+            "experience-react",
+        )
+
+    def test_decline_routing_ignores_unseen_or_non_declined_plugin(self):
+        sfx._save_plugin_proposals(
+            "sess-narrow",
+            {"experience-react": {"confidence": "high", "surface": "user-prompt"}},
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_decline(
+                "do not install experience-cms", "sess-narrow"
+            )
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_decline(
+                "please install experience-react", "sess-narrow"
+            )
+        )
+
+    def test_decline_routing_refuses_to_choose_between_multiple_named_proposals(self):
+        sfx._save_plugin_proposals(
+            "sess-multiple",
+            {
+                "experience-react": {"confidence": "high", "surface": "session-start"},
+                "experience-cms": {"confidence": "high", "surface": "user-prompt"},
+            },
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_decline(
+                "skip experience-react and experience-cms", "sess-multiple"
+            )
+        )
+
+    def test_explicit_named_install_resolves_only_prior_valid_proposal(self):
+        sfx._save_plugin_proposals(
+            "sess-install",
+            {"experience-react": {"confidence": "high", "surface": "user-prompt"}},
+        )
+        for prompt in (
+            "Install experience-react",
+            "I accept experience-react",
+            "yes, experience-react",
+            "go ahead with experience-react",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assertEqual(
+                    sfx._explicit_proposed_plugin_install(prompt, "sess-install"),
+                    "experience-react",
+                )
+
+    def test_generic_pending_decline_requires_a_whole_control_turn(self):
+        for prompt in (
+            "no thanks",
+            "decline it",
+            "skip it",
+            "don't install it",
+        ):
+            with self.subTest(prompt=prompt):
+                self.assertIsNotNone(
+                    sfx._PLUGIN_GENERIC_DECLINE_REPLY.fullmatch(prompt)
+                )
+        self.assertIsNone(
+            sfx._PLUGIN_GENERIC_DECLINE_REPLY.fullmatch(
+                "skip the tests and show the config"
+            )
+        )
+
+    def test_install_routing_ignores_declines_unseen_and_multiple_names(self):
+        sfx._save_plugin_proposals(
+            "sess-install-narrow",
+            {
+                "experience-react": {"confidence": "high", "surface": "session-start"},
+                "experience-cms": {"confidence": "high", "surface": "user-prompt"},
+            },
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_install(
+                "do not install experience-react", "sess-install-narrow"
+            )
+        )
+
+    def test_pending_confirmation_requires_fresh_same_session_dry_run(self):
+        nonce = "a" * 64
+        self.assertTrue(
+            sfx._save_plugin_install_pending(
+                "sess-confirm", "experience-react", nonce
+            )
+        )
+        for reply in (
+            "OK",
+            "Go",
+            "yes install it",
+            "OK, install it.",
+            "ok install",
+            "okay, proceed",
+            "please install",
+            "install",
+        ):
+            with self.subTest(reply=reply):
+                self.assertEqual(
+                    sfx._explicit_pending_plugin_confirmation(
+                        reply, "sess-confirm"
+                    ),
+                    ("experience-react", nonce),
+                )
+        self.assertEqual(
+            sfx._explicit_pending_plugin_confirmation(
+                "install experience-react", "sess-confirm"
+            ),
+            ("experience-react", nonce),
+        )
+        self.assertIsNone(
+            sfx._explicit_pending_plugin_confirmation(
+                "yes install it", "different-session"
+            )
+        )
+        self.assertIsNone(
+            sfx._explicit_pending_plugin_confirmation(
+                "do not install it", "sess-confirm"
+            )
+        )
+
+    def test_pending_confirmation_expires(self):
+        nonce = "b" * 64
+        with mock.patch.object(sfx.time, "time", return_value=1000):
+            self.assertTrue(
+                sfx._save_plugin_install_pending(
+                    "sess-stale", "experience-react", nonce
+                )
+            )
+        with mock.patch.object(
+            sfx.time, "time",
+            return_value=1000 + sfx._PLUGIN_INSTALL_PENDING_MAX_AGE_SECONDS + 1,
+        ):
+            self.assertIsNone(sfx._load_plugin_install_pending("sess-stale"))
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_install(
+                "install dx-org-lifecycle", "sess-install-narrow"
+            )
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_install(
+                "install experience-react and experience-cms", "sess-install-narrow"
+            )
+        )
+        self.assertIsNone(
+            sfx._explicit_proposed_plugin_install(
+                "tell me more about experience-react", "sess-install-narrow"
+            )
+        )
+
+    def test_plugin_install_control_command_requires_complete_fixed_grammar(self):
+        prefix = '"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context plugin-install experience-react'
+        valid_commands = (
+            prefix,
+            f"{prefix} --decline",
+            f"{prefix} --accept-proposed",
+            f"{prefix} --confirm {'a' * 64}",
+        )
+        for command in valid_commands:
+            with self.subTest(command=command):
+                self.assertTrue(
+                    sfx._is_plugin_install_control_command(
+                        "Bash", {"command": command}
+                    )
+                )
+        valid = {"command": f"{prefix} --decline"}
+        self.assertFalse(sfx._is_plugin_install_control_command("Edit", valid))
+        self.assertFalse(sfx._is_plugin_install_control_command(
+            "Bash", {"command": valid["command"] + "; sf data query --query x"}
+        ))
+        self.assertFalse(sfx._is_plugin_install_control_command(
+            "Bash", {"command": "echo sf-context plugin-install experience-react --decline"}
+        ))
+        for command in (
+            f"{prefix} --accept-proposed --decline",
+            f"{prefix} --accept-proposed --confirm {'a' * 64}",
+            f"{prefix} --accept-proposed; echo unsafe",
+        ):
+            with self.subTest(command=command):
+                self.assertFalse(sfx._is_plugin_install_control_command(
+                    "Bash", {"command": command},
+                ))
+
+    def test_decline_note_requires_no_tool_after_direct_recording(self):
+        note = sfx._plugin_decline_recorded_note("experience-react", True)
+        self.assertIn("was recorded for this session", note)
+        self.assertIn("Do not run a tool", note)
+        self.assertNotIn("plugin-install", note)
+
+    def test_install_route_uses_resolved_runtime_and_accepts_proposal(self):
+        note = sfx._plugin_install_route_note("experience-react")
+        expected = Path(sfx.__file__).resolve().parent / "sf-context"
+        self.assertIn(str(expected), note)
+        self.assertIn("plugin-install experience-react --accept-proposed", note)
+        self.assertIn("install immediately", note)
+        self.assertIn("external or mutable source", note)
+        self.assertIn("Do not add another confirmation", note)
+        self.assertNotIn("CLAUDE_PLUGIN_ROOT", note)
+        self.assertTrue(
+            sfx._is_plugin_install_control_command(
+                "Bash", {"command": f"{expected} plugin-install experience-react --accept-proposed"}
+            )
+        )
+
+    def test_pretool_allows_only_selected_trusted_proposal_acceptance(self):
+        name = "experience-react"
+        session_id = "sess-pretool-trusted"
+        entry = {"source": f"./plugins/builder/{name}", "origin": "local"}
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"}},
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], selected=name, state="selected",
+            surface="user-prompt", task_backed=True,
+        ))
+        payload = {
+            "tool_name": "Bash",
+            "tool_input": {
+                "command": f"sf-context plugin-install {name} --accept-proposed",
+            },
+            "session_id": session_id,
+        }
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_skills_first_advisory(), 0)
+        result = json.loads(stdout.getvalue())
+        self.assertEqual(
+            result["hookSpecificOutput"]["permissionDecision"], "allow"
+        )
+
+        external = {
+            "source": {"source": "url", "url": "https://example.test/plugin.git"},
+            "origin": "external",
+        }
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=external), \
+                mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_skills_first_advisory(), 0)
+        self.assertEqual(json.loads(stdout.getvalue()), {"continue": True})
+
+    def test_confirm_route_uses_exact_pending_nonce(self):
+        nonce = "c" * 64
+        note = sfx._plugin_confirm_route_note("experience-react", nonce)
+        expected = Path(sfx.__file__).resolve().parent / "sf-context"
+        command = f"{expected} plugin-install experience-react --confirm {nonce}"
+        self.assertIn(command, note)
+        self.assertIn("same-session source preview", note)
+        self.assertIn("do not recommend another plugin", note.lower())
+        self.assertNotIn("CLAUDE_PLUGIN_ROOT", note)
+        self.assertTrue(
+            sfx._is_plugin_install_control_command("Bash", {"command": command})
+        )
+
+
+class PluginInstallTelemetryTests(unittest.TestCase):
+    """Phase 4.5: the caller-side half of the plugin_loaded / plugin_suggestion_declined
+    correlation (`_fire_plugin_telemetry_event`, `_plugin_install_fire_loaded`,
+    `_cmd_plugin_install_decline`). `capture_event` itself already re-derives/validates
+    origin/confidence/surface server-side (covered by sf_telemetry's own tests); this
+    class asserts the caller fires it with the right arguments, and only when a marker
+    entry is genuinely present."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        patch = mock.patch.object(
+            sfx, "_PLUGIN_PROPOSAL_DIR", Path(self._tmp.name) / "plugin-proposals")
+        patch.start()
+        self.addCleanup(patch.stop)
+        pending_patch = mock.patch.object(
+            sfx, "_PLUGIN_INSTALL_PENDING_DIR",
+            Path(self._tmp.name) / "plugin-install-pending",
+        )
+        pending_patch.start()
+        self.addCleanup(pending_patch.stop)
+        flow_patch = mock.patch.object(
+            sfx, "_PLUGIN_FLOW_DIR", Path(self._tmp.name) / "plugin-flows",
+        )
+        flow_patch.start()
+        self.addCleanup(flow_patch.stop)
+        recorded = self._recorded = []
+
+        class _FakeTelemetry:
+            @staticmethod
+            def capture_event(event, outcome, payload):
+                recorded.append((event, outcome, payload))
+
+        patch2 = mock.patch.object(sfx, "_load_sf_telemetry", return_value=_FakeTelemetry)
+        patch2.start()
+        self.addCleanup(patch2.stop)
+
+    def test_fire_plugin_telemetry_event_calls_capture_event_with_expected_shape(self):
+        sfx._fire_plugin_telemetry_event(
+            "plugin_loaded", "agentforce-adlc", "external", "high", "bypass-gate", "sess-1")
+        self.assertEqual(len(self._recorded), 1)
+        event, outcome, payload = self._recorded[0]
+        self.assertEqual(event, "plugin_loaded")
+        self.assertEqual(outcome, "")
+        self.assertEqual(payload["session_id"], "sess-1")
+        self.assertEqual(
+            payload["tool_input"],
+            {"plugin": "agentforce-adlc", "origin": "external",
+             "confidence": "high", "surface": "bypass-gate"})
+
+    def test_dry_run_records_and_success_consumes_pending_confirmation(self):
+        name = "experience-react"
+        session_id = "sess-pending-install"
+        entry = {"source": "./plugins/builder/experience-react", "origin": "local"}
+        nonce = sfx._plugin_install_nonce(name, entry)
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"}},
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], surface="user-prompt", task_backed=True,
+        ))
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                redirect_stdout(io.StringIO()):
+            self.assertEqual(
+                sfx.cmd_plugin_install([name, "--session-id", session_id]), 0
+            )
+        self.assertEqual(
+            sfx._load_plugin_install_pending(session_id),
+            {"name": name, "nonce": nonce},
+        )
+        self.assertEqual(
+            sfx._load_plugin_flow(session_id)["state"],
+            "awaiting-confirmation",
+        )
+
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sfx, "_ensure_salesforce_marketplace_registered"), \
+                mock.patch.object(
+                    sfx, "_run_plugin_install_step",
+                    return_value=(True, {"exitCode": 0}),
+                ), \
+                mock.patch.object(sfx, "_plugin_install_fire_installed"), \
+                mock.patch.object(sfx, "_plugin_install_fire_loaded"), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(
+                sfx.cmd_plugin_install(
+                    [name, "--confirm", nonce, "--session-id", session_id]
+                ),
+                0,
+            )
+        self.assertIn(
+            'say "continue" to resume your original task', stdout.getvalue()
+        )
+        self.assertNotIn("submit a concrete task", stdout.getvalue())
+        self.assertIsNone(sfx._load_plugin_install_pending(session_id))
+        self.assertEqual(sfx._load_plugin_flow(session_id)["state"], "installed")
+
+    def test_accepted_same_marketplace_proposal_installs_in_one_call(self):
+        name = "experience-react"
+        session_id = "sess-trusted-accept"
+        entry = {"source": f"./plugins/builder/{name}", "origin": "local"}
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"}},
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], selected=name, state="selected",
+            surface="user-prompt", task_backed=True,
+        ))
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sfx, "_perform_plugin_install", return_value=0) as install:
+            self.assertEqual(sfx.cmd_plugin_install([
+                name, "--accept-proposed", "--session-id", session_id,
+            ]), 0)
+        install.assert_called_once_with(name, entry, session_id)
+        self.assertIsNone(sfx._load_plugin_install_pending(session_id))
+
+    def test_accepted_external_proposal_requires_source_confirmation(self):
+        name = "agentforce-adlc"
+        session_id = "sess-external-accept"
+        entry = {
+            "source": {"source": "url", "url": "https://example.test/plugin.git"},
+            "origin": "external",
+        }
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"}},
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], selected=name, state="selected",
+            surface="user-prompt", task_backed=True,
+        ))
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sfx, "_perform_plugin_install") as install, \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_plugin_install([
+                name, "--accept-proposed", "--session-id", session_id,
+            ]), 0)
+        install.assert_not_called()
+        self.assertIn("TRUST WARNING", stdout.getvalue())
+        pending = sfx._load_plugin_install_pending(session_id)
+        self.assertEqual(pending["name"], name)
+        self.assertEqual(sfx._load_plugin_flow(session_id)["state"], "awaiting-confirmation")
+
+    def test_accept_proposed_refuses_without_selected_same_session_flow(self):
+        name = "experience-react"
+        entry = {"source": f"./plugins/builder/{name}", "origin": "local"}
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sfx, "_perform_plugin_install") as install, \
+                redirect_stderr(io.StringIO()) as stderr:
+            self.assertEqual(sfx.cmd_plugin_install([
+                name, "--accept-proposed", "--session-id", "sess-unselected",
+            ]), 2)
+        install.assert_not_called()
+        self.assertIn("proposed and selected in the same session", stderr.getvalue())
+
+    def test_same_marketplace_classifier_requires_exact_generated_source(self):
+        name = "experience-react"
+        self.assertTrue(sfx._plugin_install_is_same_marketplace(
+            name, {"source": f"./plugins/builder/{name}"},
+        ))
+        for source in (
+            "./plugins/builder/experience-cms",
+            "./plugins/builder/../experience-react",
+            "/plugins/builder/experience-react",
+            {"source": "url", "url": "https://example.test/plugin.git"},
+        ):
+            with self.subTest(source=source):
+                self.assertFalse(sfx._plugin_install_is_same_marketplace(
+                    name, {"source": source},
+                ))
+
+    def test_success_without_task_backing_requests_a_concrete_task(self):
+        name = "experience-react"
+        session_id = "sess-recommendation-only-install"
+        entry = {"source": "./plugins/builder/experience-react", "origin": "local"}
+        nonce = sfx._plugin_install_nonce(name, entry)
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], selected=name, state="awaiting-confirmation",
+            surface="session-start", task_backed=False,
+        ))
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=entry), \
+                mock.patch.object(sfx, "_ensure_salesforce_marketplace_registered"), \
+                mock.patch.object(
+                    sfx, "_run_plugin_install_step",
+                    return_value=(True, {"exitCode": 0}),
+                ), \
+                mock.patch.object(sfx, "_plugin_install_fire_installed"), \
+                mock.patch.object(sfx, "_plugin_install_fire_loaded"), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(
+                sfx.cmd_plugin_install(
+                    [name, "--confirm", nonce, "--session-id", session_id]
+                ),
+                0,
+            )
+        self.assertIn("submit a concrete task to begin using it", stdout.getvalue())
+        self.assertNotIn("resume your original task", stdout.getvalue())
+
+    def test_fire_plugin_telemetry_event_is_fail_silent_when_telemetry_unavailable(self):
+        with mock.patch.object(sfx, "_load_sf_telemetry", return_value=None):
+            sfx._fire_plugin_telemetry_event(
+                "plugin_loaded", "x", "local", "high", "bypass-gate", "sess-1")  # must not raise
+        self.assertEqual(self._recorded, [])
+
+    def test_fire_plugin_telemetry_event_is_fail_silent_when_capture_event_raises(self):
+        class _RaisingTelemetry:
+            @staticmethod
+            def capture_event(event, outcome, payload):
+                raise RuntimeError("boom")
+
+        with mock.patch.object(sfx, "_load_sf_telemetry", return_value=_RaisingTelemetry):
+            sfx._fire_plugin_telemetry_event(
+                "plugin_loaded", "x", "local", "high", "bypass-gate", "sess-1")  # must not raise
+
+    def test_fire_loaded_fires_and_clears_marker_when_entry_present(self):
+        sfx._save_plugin_proposals(
+            "sess-2", {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+        sfx._plugin_install_fire_loaded(
+            "agentforce-adlc", {"origin": "external"}, "sess-2")
+        self.assertEqual(len(self._recorded), 1)
+        event, _outcome, payload = self._recorded[0]
+        self.assertEqual(event, "plugin_loaded")
+        self.assertEqual(payload["tool_input"],
+                          {"plugin": "agentforce-adlc", "origin": "external",
+                           "confidence": "high", "surface": "bypass-gate"})
+        self.assertEqual(sfx._load_plugin_proposals("sess-2"), {})
+
+    def test_fire_loaded_fires_nothing_when_no_prior_proposal(self):
+        sfx._plugin_install_fire_loaded("agentforce-adlc", {"origin": "external"}, "sess-3")
+        self.assertEqual(self._recorded, [])
+
+    def test_fire_loaded_fires_nothing_for_a_different_plugin(self):
+        sfx._save_plugin_proposals(
+            "sess-4", {"other-plugin": {"confidence": "high", "surface": "bypass-gate"}})
+        sfx._plugin_install_fire_loaded("agentforce-adlc", {"origin": "external"}, "sess-4")
+        self.assertEqual(self._recorded, [])
+        # The unrelated entry survives untouched.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-4"),
+            {"other-plugin": {"confidence": "high", "surface": "bypass-gate"}})
+
+    def test_fire_loaded_is_a_no_op_on_blank_session_id(self):
+        sfx._plugin_install_fire_loaded("agentforce-adlc", {"origin": "external"}, "")
+        self.assertEqual(self._recorded, [])
+
+    def test_fire_loaded_fires_nothing_when_marker_entry_is_malformed(self):
+        sfx._save_plugin_proposals(
+            "sess-5", {"agentforce-adlc": {"confidence": "not-a-real-band", "surface": "bypass-gate"}})
+        sfx._plugin_install_fire_loaded("agentforce-adlc", {"origin": "external"}, "sess-5")
+        self.assertEqual(self._recorded, [])
+
+    def test_fire_installed_recovers_surface_and_confidence_from_marker(self):
+        # W-23856691: an install that follows an in-session proposal attributes the
+        # `plugin_installed` event to the proposal's surface/confidence, read
+        # NON-DESTRUCTIVELY (the marker entry survives for _plugin_install_fire_loaded).
+        sfx._save_plugin_proposals(
+            "sess-i1", {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+        sfx._plugin_install_fire_installed("agentforce-adlc", {"origin": "external"}, "sess-i1")
+        self.assertEqual(len(self._recorded), 1)
+        event, _outcome, payload = self._recorded[0]
+        self.assertEqual(event, "plugin_installed")
+        self.assertEqual(payload["tool_input"],
+                          {"plugin": "agentforce-adlc", "origin": "external",
+                           "confidence": "high", "surface": "bypass-gate"})
+        # The marker entry is untouched, so _plugin_install_fire_loaded can still fire.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-i1"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+
+    def test_fire_installed_attributes_a_session_start_proposal(self):
+        sfx._save_plugin_proposals(
+            "sess-start-install",
+            {"experience-cms": {"confidence": "high", "surface": "session-start"}},
+        )
+        sfx._plugin_install_fire_installed(
+            "experience-cms", {"origin": "local"}, "sess-start-install"
+        )
+        _event, _outcome, payload = self._recorded[0]
+        self.assertEqual(
+            payload["tool_input"],
+            {"plugin": "experience-cms", "origin": "local",
+             "confidence": "high", "surface": "session-start"},
+        )
+
+    def test_fire_installed_records_self_directed_when_no_prior_proposal(self):
+        # A cold install has no marker entry -> surface "self-directed",
+        # confidence "none".
+        sfx._plugin_install_fire_installed("agentforce-adlc", {"origin": "external"}, "sess-i2")
+        self.assertEqual(len(self._recorded), 1)
+        event, _outcome, payload = self._recorded[0]
+        self.assertEqual(event, "plugin_installed")
+        self.assertEqual(payload["tool_input"],
+                          {"plugin": "agentforce-adlc", "origin": "external",
+                           "confidence": "none", "surface": "self-directed"})
+
+    def test_fire_installed_falls_back_to_self_directed_on_malformed_marker(self):
+        sfx._save_plugin_proposals(
+            "sess-i3", {"agentforce-adlc": {"confidence": "not-a-band", "surface": "bypass-gate"}})
+        sfx._plugin_install_fire_installed("agentforce-adlc", {"origin": "external"}, "sess-i3")
+        self.assertEqual(len(self._recorded), 1)
+        _event, _outcome, payload = self._recorded[0]
+        self.assertEqual(payload["tool_input"]["surface"], "self-directed")
+        self.assertEqual(payload["tool_input"]["confidence"], "none")
+
+    def test_fire_installed_fires_even_on_blank_session_id(self):
+        # Unlike _plugin_install_fire_loaded, an install ALWAYS reports (a cold
+        # install with no session still occurred); it records "self-directed"/"none".
+        sfx._plugin_install_fire_installed("agentforce-adlc", {"origin": "external"}, "")
+        self.assertEqual(len(self._recorded), 1)
+        _event, _outcome, payload = self._recorded[0]
+        self.assertEqual(payload["tool_input"]["surface"], "self-directed")
+
+    def test_decline_refuses_when_plugin_is_not_installable(self):
+        with mock.patch.object(sfx, "_plugin_install_lookup", return_value=None), \
+                redirect_stderr(io.StringIO()) as err:
+            rc = sfx._cmd_plugin_install_decline("unknown-plugin", "sess-6")
+        self.assertEqual(rc, 2)
+        self.assertIn("not a known", err.getvalue().lower())
+        self.assertEqual(self._recorded, [])
+
+    def test_decline_refuses_when_no_prior_proposal(self):
+        with mock.patch.object(sfx, "_plugin_install_lookup",
+                               return_value={"origin": "external"}), \
+                redirect_stderr(io.StringIO()) as err:
+            rc = sfx._cmd_plugin_install_decline("agentforce-adlc", "sess-7")
+        self.assertEqual(rc, 2)
+        self.assertIn("not proposed", err.getvalue().lower())
+        self.assertEqual(self._recorded, [])
+
+    def test_decline_fires_event_and_re_saves_marker_entry_unchanged(self):
+        sfx._save_plugin_proposals(
+            "sess-8", {"agentforce-adlc": {"confidence": "medium", "surface": "discovery-command"}})
+        with mock.patch.object(sfx, "_plugin_install_lookup",
+                               return_value={"origin": "external"}), \
+                redirect_stdout(io.StringIO()) as out:
+            rc = sfx._cmd_plugin_install_decline("agentforce-adlc", "sess-8")
+        self.assertEqual(rc, 0)
+        self.assertIn("declined", out.getvalue().lower())
+        self.assertEqual(len(self._recorded), 1)
+        event, _outcome, payload = self._recorded[0]
+        self.assertEqual(event, "plugin_suggestion_declined")
+        self.assertEqual(payload["tool_input"],
+                          {"plugin": "agentforce-adlc", "origin": "external",
+                           "confidence": "medium", "surface": "discovery-command"})
+        # The entry survives (unchanged) so a later occurrence still dedupes to warn.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-8"),
+            {"agentforce-adlc": {"confidence": "medium", "surface": "discovery-command"}})
+
+    def test_decline_refuses_when_marker_entry_is_malformed(self):
+        sfx._save_plugin_proposals(
+            "sess-9", {"agentforce-adlc": {"confidence": "not-a-real-band", "surface": "bypass-gate"}})
+        with mock.patch.object(sfx, "_plugin_install_lookup",
+                               return_value={"origin": "external"}), \
+                redirect_stderr(io.StringIO()) as err:
+            rc = sfx._cmd_plugin_install_decline("agentforce-adlc", "sess-9")
+        self.assertEqual(rc, 2)
+        self.assertIn("malformed", err.getvalue().lower())
+        self.assertEqual(self._recorded, [])
+
+
+class PromptTextCaptureTests(unittest.TestCase):
+    """Phase 3 prompt capture: `_record_prompt_text`/`_prompt_text` and the
+    bounded `prompt.txt` marker used by the reactive catalog matcher."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        patch = mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", Path(self._tmp.name) / "runtime")
+        patch.start()
+        self.addCleanup(patch.stop)
+
+    def _context(self, session_id="sess", prompt_id="p1"):
+        return sfx._prompt_context(
+            {"session_id": session_id, "prompt_id": prompt_id}, rotate_fallback=False)
+
+    def test_record_then_read_round_trips(self):
+        context = self._context()
+        sfx._record_prompt_text(context, "build me a service agent")
+        self.assertEqual(sfx._prompt_text(context), "build me a service agent")
+
+    def test_sanitize_strips_control_chars_and_caps_length(self):
+        raw = "line one\x00\x01\nline two" + ("x" * 3000)
+        sanitized = sfx._sanitize_prompt_text(raw)
+        self.assertNotIn("\x00", sanitized)
+        self.assertNotIn("\x01", sanitized)
+        self.assertLessEqual(len(sanitized), sfx._PROMPT_TEXT_MAX_BYTES)
+
+    def test_no_marker_written_returns_none(self):
+        context = self._context()
+        self.assertIsNone(sfx._prompt_text(context))
+
+    def test_record_is_a_no_op_for_none_context_or_empty_text(self):
+        # Must not raise on a missing context (e.g. an older host with no
+        # native prompt_id and no prior UserPromptSubmit rotation).
+        sfx._record_prompt_text(None, "text")
+        sfx._record_prompt_text(self._context(), "")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

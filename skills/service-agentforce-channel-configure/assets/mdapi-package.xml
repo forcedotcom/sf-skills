@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Metadata-format manifest for deploying a BotEmailDefinition.
+
+  WHY metadata format: BotEmailDefinition is NOT in the Salesforce CLI's
+  source-deploy-retrieve (SDR) registry, so a source deploy naming the type
+  directly fails with:
+    "Missing metadata type definition in registry for id 'BotEmailDefinition'".
+  Deploy it in METADATA format instead (the deploy "metadata-dir" path), with
+  this package.xml and the component file placed as:
+    (dir)/package.xml
+    (dir)/botEmailDefinitions/(DeveloperName).botEmailDefinition
+  Note the metadata-format file has NO "meta.xml" suffix.
+
+  Substitute {BOT_EMAIL_DEFINITION_DEVELOPER_NAME} with the fullName (file name)
+  and {API_VERSION} with the org's resolved API version — which MUST be 68.0 or
+  higher, since BotEmailDefinition is only exposed to the Metadata API at v68.0+.
+-->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>{BOT_EMAIL_DEFINITION_DEVELOPER_NAME}</members>
+        <name>BotEmailDefinition</name>
+    </types>
+    <version>{API_VERSION}</version>
+</Package>

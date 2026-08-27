@@ -1,0 +1,11 @@
+{
+  "_note": "Bulk creation dispatches N separate `create_cms_content` calls in parallel — one per approved topic. Each call carries this exact 1-element `inputs` shape. Server-side generation via the `prompt` channel; do NOT include `contentBody` (mutually exclusive with `prompt`). Do NOT combine multiple topics into a single multi-element `inputs` array — the hard rule is one call per item. See references/bulk-batching.md.",
+  "inputs": [
+    {
+      "contentType": "<FQN>",
+      "contentSpaceOrFolderId": "<ID from Step 3>",
+      "title": "<agent-generated title for this topic>",
+      "prompt": "<approved topic prompt verbatim>"
+    }
+  ]
+}

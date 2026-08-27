@@ -2,8 +2,8 @@
 """Channel-aware Salesforce capability registry primitives.
 
 The public release manifest is the only release-channel input to the checked
-catalog. Internal authoring inventory is read only for an explicitly gated,
-in-memory preview and is never serialized by this module.
+catalog. This module hashes skill trees and builds, snapshots, and verifies
+that manifest; it never serializes internal authoring inventory.
 
 Canonical tree hash policy (``sf-skill-tree-v1``): entries use sorted POSIX
 relative paths. Directories, regular files, and symbolic links have distinct
@@ -38,6 +38,16 @@ TREE_SCAN_MAX_ENTRIES = 4096
 TREE_SCAN_MAX_DEPTH = 32
 TREE_SCAN_MAX_FILE_BYTES = 8 * 1024 * 1024
 TREE_SCAN_MAX_TOTAL_BYTES = 64 * 1024 * 1024
+
+# Opt-in only (default stays empty so existing skill-tree callers are
+# unaffected): directory names a caller may ask to prune from the scan
+# entirely — not entered, not hashed. Authored skill/plugin content never
+# contains these; they are interpreter- or test-generated runtime state
+# (both gitignored at the repo root) that would otherwise make a tree hash
+# depend on unrelated local tool invocations (e.g. running the Python test
+# suite populates ``__pycache__``, and the journey/phase-history tests write
+# a relative ``.sf/`` runtime dir under ``scripts/test/``).
+BUILD_ARTIFACT_DIR_NAMES = frozenset({"__pycache__", ".sf"})
 TREE_SCAN_CHUNK_BYTES = 1024 * 1024
 TREE_SCAN_DIR_FD_SUPPORTED = (
     os.name != "nt"
@@ -174,6 +184,7 @@ def inspect_skill_tree(
     root: Path, *, safety_root: Optional[Path] = None,
     budget: Optional[dict[str, int]] = None,
     executable_paths: Optional[set[str]] = None,
+    exclude_dir_names: Optional[frozenset[str]] = None,
 ) -> dict:
     """Hash one tree and capture its SKILL.md bytes in the same bounded scan.
 
@@ -217,6 +228,9 @@ def inspect_skill_tree(
                         metadata = path.lstat()
                     except OSError as exc:
                         raise RegistryError(f"{path}: cannot inspect tree entry: {exc}") from exc
+                    if (exclude_dir_names and child.name in exclude_dir_names
+                            and stat.S_ISDIR(metadata.st_mode)):
+                        continue
                     relative = path.relative_to(root).as_posix()
                     entries.append((relative, path, metadata))
                     if stat.S_ISDIR(metadata.st_mode):
@@ -375,10 +389,12 @@ def inspect_skill_tree(
 def canonical_tree_sha256(
     root: Path, *, safety_root: Optional[Path] = None,
     executable_paths: Optional[set[str]] = None,
+    exclude_dir_names: Optional[frozenset[str]] = None,
 ) -> str:
     """Return the canonical ``sf-skill-tree-v1`` hash for a directory tree."""
     observation = inspect_skill_tree(
-        root, safety_root=safety_root, executable_paths=executable_paths
+        root, safety_root=safety_root, executable_paths=executable_paths,
+        exclude_dir_names=exclude_dir_names,
     )
     if not observation["stable"]:
         raise RegistryError(f"{root}: tree changed during scan")
@@ -642,22 +658,6 @@ def skill_directories(root: Path) -> dict[str, Path]:
             raise RegistryError(f"{skill_file}: inventory name mismatch")
         result[entry.name] = entry
     return result
-
-
-def source_variant(
-    skill_dir: Path, *, safety_root: Optional[Path] = None,
-    executable_paths: Optional[set[str]] = None,
-) -> dict[str, str]:
-    record = read_skill(skill_dir / "SKILL.md")
-    return {
-        "description": record["description"],
-        "skillMdSha256": sha256_file(skill_dir / "SKILL.md"),
-        "treeSha256": canonical_tree_sha256(
-            skill_dir,
-            safety_root=safety_root,
-            executable_paths=executable_paths,
-        ),
-    }
 
 
 def normalize_public_repository(origin: str) -> str:

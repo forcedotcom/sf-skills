@@ -5,19 +5,50 @@ All notable changes to this plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
 
 ### Added
 
-- Dynamic plugin loading will replace dynamic skill loading.  Rather than installing individual
-  skills, the plugin will be able to discover, suggest, and install other Salesforce
-  plugins - with your permission - directly from what you ask for.
 - Support for the Codex agent, alongside Claude Code.
+
+- A "test-drive" plugin to help demonstrate the possibilities of developing and interacting
+  with Salesforce orgs.
+
+## [2.0.0] — 2026-08-26
+
+### Added
+
+- **Plugin discovery, recommendation, and installation.** Capability matching now works
+  with a curated list of Salesforce marketplace plugins. When a task doesn't match any
+  skill you already have installed, this plugin can suggest a marketplace plugin that
+  does — at the start of a session, as you type a prompt, or when you explicitly ask with
+  `discovery plugins <text>`. Accepting a suggestion walks you through a guarded install: a
+  plugin from this same marketplace installs with one confirmation, while a plugin from
+  outside this repo (e.g., agentforce-adlc) shows you its source and a trust warning and
+  asks you to confirm it before installing.
+
+  Control how readily plugins get suggested with
+  `/salesforce-development:plugin-recommendations on|off|status|set <level-or-number>` (or
+  the `plugin_match_sensitivity` install-level setting). `off` turns suggestions off
+  entirely. `low` (6.0), `standard` (3.5; the default), and `high` (3.0) run from least to
+  most likely to suggest a plugin — `high` suggests more often, `low` holds back for more
+  obvious matches. You can also set a precise number from `1.0` to `10.0`, which runs the
+  opposite direction: `10.0` sets a very high bar and needs a very strong match before suggesting
+  anything, while numbers closer to `1.0` suggest more readily.
+
+  See [`.claude-plugin/marketplace.json`](https://github.com/forcedotcom/sf-skills/blob/main/.claude-plugin/marketplace.json)
+  in the `forcedotcom/sf-skills` repo for the current list of plugins eligible for
+  recommendation.
 
 ### Removed
 
-- Dynamic skill loading will be removed in favor of discovering, suggesting, and installing
-  other approved Salesforce plugins.
+- The `agentforce-generate`, `agentforce-observe`, and `agentforce-test` skills, and the
+  `adlc-author`, `adlc-engineer`, `adlc-orchestrator`, and `adlc-qa` agents, are no longer
+  bundled with this plugin. Agentforce ADLC assistance now comes from the separate
+  `agentforce-adlc` plugin, discoverable through Salesforce plugin suggestions.
+
+- Individual Salesforce skill discovery and installation has been replaced with Salesforce plugin
+  discovery, suggestion, and installation.
 
 ## [1.12.0] — 2026-08-21
 

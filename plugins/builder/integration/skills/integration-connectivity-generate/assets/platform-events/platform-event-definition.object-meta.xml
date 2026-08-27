@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Platform Event Definition Template
+
+    Use Case: Asynchronous, event-driven communication
+    - Real-time notifications
+    - Decoupled system integrations
+    - High-volume data streaming
+    - Trigger external processes
+
+    Event Types:
+    - StandardVolume: ~2,000 events/hour, standard delivery
+    - HighVolume: Millions/day, at-least-once delivery, 24-hour retention
+
+    Publish Behaviors:
+    - PublishAfterCommit: Event published after transaction commits (default)
+    - PublishImmediately: Event published immediately (use for rollback scenarios)
+
+    Setup Steps:
+    1. Replace all {{placeholder}} values
+    2. Add fields as needed
+    3. Deploy to org
+    4. Create publisher (Apex, Flow, Process Builder)
+    5. Create subscriber (Trigger, Flow, External via CometD)
+
+    File Location: force-app/main/default/objects/{{EventName}}__e/{{EventName}}__e.object-meta.xml
+-->
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Deployment status -->
+    <deploymentStatus>Deployed</deploymentStatus>
+
+    <!--
+    Event Type:
+    - StandardVolume: Up to 2,000 events per hour (included in licenses)
+    - HighVolume: Up to millions per day (may require additional entitlement)
+
+    Use HighVolume for:
+    - Large-scale integrations
+    - IoT data streaming
+    - High-throughput scenarios
+    -->
+    <eventType>HighVolume</eventType>
+
+    <!-- Display labels -->
+    <label>{{EventLabel}}</label>
+    <pluralLabel>{{EventPluralLabel}}</pluralLabel>
+
+    <!--
+    Publish Behavior:
+    - PublishAfterCommit: Publish when transaction commits (RECOMMENDED)
+      Ensures event only fires if data save succeeds
+    - PublishImmediately: Publish right away
+      Use when you need event even if transaction rolls back
+    -->
+    <publishBehavior>PublishAfterCommit</publishBehavior>
+
+    <!-- Event Fields -->
+
+    <!-- Record ID field - link to triggering record -->
+    <fields>
+        <fullName>Record_Id__c</fullName>
+        <label>Record ID</label>
+        <description>ID of the Salesforce record that triggered this event</description>
+        <type>Text</type>
+        <length>18</length>
+        <externalId>false</externalId>
+    </fields>
+
+    <!-- Operation type field -->
+    <fields>
+        <fullName>Operation__c</fullName>
+        <label>Operation</label>
+        <description>The operation that occurred: CREATE, UPDATE, DELETE</description>
+        <type>Text</type>
+        <length>20</length>
+        <externalId>false</externalId>
+    </fields>
+
+    <!-- Payload field - JSON data -->
+    <fields>
+        <fullName>Payload__c</fullName>
+        <label>Payload</label>
+        <description>JSON payload containing event data</description>
+        <type>LongTextArea</type>
+        <length>131072</length>
+        <visibleLines>5</visibleLines>
+    </fields>
+
+    <!-- Correlation ID for tracking -->
+    <fields>
+        <fullName>Correlation_Id__c</fullName>
+        <label>Correlation ID</label>
+        <description>Unique ID for tracking related events across systems</description>
+        <type>Text</type>
+        <length>50</length>
+        <externalId>true</externalId>
+    </fields>
+
+    <!-- Timestamp field -->
+    <fields>
+        <fullName>Event_Timestamp__c</fullName>
+        <label>Event Timestamp</label>
+        <description>When the event occurred</description>
+        <type>DateTime</type>
+    </fields>
+
+    <!--
+    Add more fields as needed for your use case.
+
+    Field Types Supported:
+    - Text (up to 255 chars)
+    - LongTextArea (up to 131,072 chars)
+    - Number
+    - Checkbox
+    - DateTime
+    - Date
+
+    NOT Supported:
+    - Lookup/Master-Detail (no relationships)
+    - Formula
+    - Roll-up Summary
+    - Picklist (use Text instead)
+    -->
+</CustomObject>

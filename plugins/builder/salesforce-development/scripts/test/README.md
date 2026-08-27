@@ -103,6 +103,45 @@ suppression once the owning skill has dispatched — including the no-deadlock
 invariant that an allow-listed op is allowed through (not denied) after its
 owning skill runs.
 
+## Plugin recommendation — project-scoped surfaces (W-23856691)
+
+The three automatic/reactive surfaces that can propose an **uninstalled** plugin are scoped to a
+Salesforce project — outside one (`sfdx-project.json` absent in cwd) the plugin is
+global and must not presume, matching the `cmd_detect` banner gate. Only the explicit
+`plugin-match` query (an on-demand user command) is un-gated.
+
+**`prompt-plugin-recommendation.test.sh`** — the proactive UserPromptSubmit surface:
+the two exact CMS prompts from a hesitant live session recommend `experience-cms` before
+the model answers; strong LWC and React prompts retain their established singular routes;
+medium/generic, out-of-project, and already-enabled cases stay quiet. Prompt paint is
+high-confidence-only and includes curated capability text plus the confirm-gated install command.
+
+**`skills-first-advisory.test.sh`** (tier-2 section) — when no installed skill owns a
+bypass-prone op, the captured prompt is scored against the uninstalled-plugin catalog:
+high-confidence + first-occurrence can **deny** when no earlier surface proposed it;
+medium or repeat **warns**, generic stays silent. In a current host, UserPromptSubmit
+normally consumes the first occurrence for a high match, so the later bypass gate warns
+instead of interrupting the user twice. The suite also guards the project gate directly.
+
+**`plugin-match.test.sh`** — the explicit `sf-context plugin-match <text>`
+(discovery-command) surface: renders ranked uninstalled candidates, never denies, and
+uses Claude Code's `CLAUDE_CODE_SESSION_ID` subprocess environment (or an explicit
+`--session-id` outside the host) to write the shared proposal marker. A later same-session
+bypass-gate hit warns instead of re-denying, and a later explicit decline is accepted only
+for a candidate this or another user-visible surface recorded. Not project-gated.
+
+**`session-plugin-hint-gate.test.sh`** — the SessionStart nudge
+(`session_plugin_hint.py`): concrete Agentforce, CMS, LWC, and React project-file signals
+stay **silent outside a project** and route only to their high-confidence owning plugin
+inside one. It also proves the SessionStart proposal marker suppresses a duplicate CMS
+recommendation on the next exact task prompt.
+
+All recommendation suites pin a **hermetic** `CLAUDE_CONFIG_DIR`, independent of the
+developer's real `~/.claude` state. The tier-2/explicit-query suites mark LWC and React
+enabled to isolate Agentforce/CMS behavior; the prompt and SessionStart routing suites
+leave every add-on uninstalled so CMS, LWC, React, and Agentforce compete in the real
+stable scoring corpus.
+
 ## Port adaptations (source ⇄ this repo)
 
 These suites were translated from the source repo, not copied verbatim. Two

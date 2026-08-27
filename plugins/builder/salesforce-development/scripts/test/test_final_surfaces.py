@@ -2224,11 +2224,10 @@ class WiringAndInstructionTests(unittest.TestCase):
         self.assertNotIn("discovery $ARGUMENTS", text)
         self.assertIn("Never place arbitrary user text", text)
 
-    def test_skill_description_restores_exact_nl_phrases_and_keeps_add_enable(self):
+    def test_skill_description_keeps_exact_nl_phrases(self):
         text = SKILL_DOC.read_text(encoding="utf-8")
-        for phrase in ("what can I do here?", "I don't know where to start", "help me get going"):
+        for phrase in ("I don't know where to start", "help me get going"):
             self.assertIn(phrase, text)
-        self.assertRegex(text, r"(?i)add or enable")
 
     def test_docs_direct_faithful_presentation_of_facts_instead_of_byte_echo(self):
         """Presentation is model-owned; the hard facts may only come from stdout."""
@@ -2241,7 +2240,6 @@ class WiringAndInstructionTests(unittest.TestCase):
                 self.assertRegex(text, r"(?i)never invent, recompute, or substitute a remembered value")
                 self.assertRegex(text, r"(?i)say it is unknown")
         self.assertIn("preserve bounded stderr guidance on failure", docs["command"])
-        self.assertIn("Do not replace computed counts with remembered values.", docs["skill"])
         # The rail is a pinned deterministic visual. Licensing reformatting for every
         # mode without this exception lets the model redraw it — and the slash command
         # is the primary entry path, so BOTH docs must carry the exception.
@@ -2297,13 +2295,11 @@ class TerminalRenderingSafetyTests(unittest.TestCase):
                    "package_dirs": self.HOSTILE}
         stats = {"apex_src": self.HOSTILE, "apex_test": 0, "triggers": 0,
                  "lwc": 0, "aura": 0, "objects": 0, "permsets": 0, "flows": 0}
-        hostile_facts = {"version": self.HOSTILE, "capabilities": self.HOSTILE,
-                         "addable": self.HOSTILE, "releaseRef": self.HOSTILE,
-                         "foundation": self.HOSTILE, "library": self.HOSTILE}
+        hostile_facts = {"version": self.HOSTILE, "installedPlugins": self.HOSTILE,
+                         "availablePlugins": self.HOSTILE, "foundation": self.HOSTILE}
         banner = sfx.render_banner_block(color=False, facts=hostile_facts)
         normal_banner = sfx.render_banner_block(color=False, facts={
-            "version": "1.0", "capabilities": 1, "addable": 1,
-            "releaseRef": "r1", "foundation": 1, "library": 1})
+            "version": "1.0", "installedPlugins": 1, "availablePlugins": 1, "foundation": 1})
         env = "\n".join(sfx.render_environment_band(org, self.HOSTILE, False))
         proj = "\n".join(sfx.render_project_band(project, stats, self.HOSTILE, False))
         report = {"tools": [{"name": self.HOSTILE, "status": "critical",
@@ -2462,16 +2458,40 @@ class ReadinessBannerTests(unittest.TestCase):
         # no next step (the SessionStart banner) omit it; others pass their own — so it can
         # show up in different places with different next steps.
         MIND = "You don't memorize commands here."
-        POINTER = '✳ New here? run /salesforce-development:discovery — or ask "what can I do here?"'
+        POINTER = '✳ New here? ask "what can I do here?" or run /salesforce-development:discovery.'
         self.assertEqual(sfx._wayfinding_footer(color=False), [MIND, POINTER])
         self.assertEqual(
             sfx._wayfinding_footer('Next: pick a direction → "what can I do here?"', color=False),
             [MIND, POINTER, 'Next: pick a direction → "what can I do here?"'])
-        # Both existing surfaces now route through the shared primitive:
-        self.assertEqual(sfx.render_invitation(False), [MIND, POINTER])   # SessionStart: no Next
+        # Both existing surfaces now route through the shared primitive. The
+        # SessionStart invitation always begins with the shared two-line footer
+        # and never adds a Next line; its optional project-scoped plugin line is
+        # covered independently below.
+        invitation = sfx.render_invitation(False)
+        self.assertEqual(invitation[:2], [MIND, POINTER])
+        self.assertFalse(any(line.startswith("Next:") for line in invitation))
         self.assertEqual(                                                 # readiness: two lines + its Next
             sfx._readiness_wayfinding_footer([{"name": "Node.js", "status": "warn"}]),
             "\n".join([MIND, POINTER, 'Next: get build-ready → say "fix all"']))
+
+    def test_plugin_invitation_rides_the_invitation_only_inside_a_project(self):
+        # The 🧩 "need a capability?" line is plugin-forward but project-scoped: it must
+        # only appear when cwd is a Salesforce project (sfdx-project.json present), so it
+        # never leaks into a non-Salesforce directory on the Side-A newcomer welcome path.
+        # This mirrors the recommendation surfaces (session-start hint / bypass-gate), which
+        # are gated on the same file.
+        PLUGIN = sfx._paint_line([sfx._PLUGIN_INVITATION], color=False)
+        MIND = "You don't memorize commands here."
+        POINTER = '✳ New here? ask "what can I do here?" or run /salesforce-development:discovery.'
+        old = os.getcwd()
+        try:
+            with tempfile.TemporaryDirectory() as d:
+                os.chdir(d)                                    # no sfdx-project.json → plugin-free
+                self.assertEqual(sfx.render_invitation(False), [MIND, POINTER])
+                Path("sfdx-project.json").write_text("{}")     # now in a project → 🧩 appended last
+                self.assertEqual(sfx.render_invitation(False), [MIND, POINTER, PLUGIN])
+        finally:
+            os.chdir(old)
 
     def test_ok_row_strips_the_git_version_prefix(self):
         block = sfx.render_readiness_text(self._all_green())

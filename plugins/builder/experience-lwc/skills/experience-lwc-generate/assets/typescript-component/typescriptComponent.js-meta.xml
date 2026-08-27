@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    TYPESCRIPT LWC COMPONENT TEMPLATE - METADATA
+
+    This template demonstrates TypeScript usage in LWC.
+
+    Requirements:
+    - API 66.0+ (Spring '26)
+    - @salesforce/lightning-types npm package
+    - TypeScript 5.4.5+
+
+    Note: TypeScript files must be compiled to JavaScript before deployment.
+    The Salesforce platform does not store TypeScript source code.
+-->
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>TypeScript Component</masterLabel>
+    <description>TypeScript-based LWC demonstrating type-safe patterns with @salesforce/lightning-types</description>
+
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightning__FlowScreen</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+            </objects>
+            <property
+                name="maxRecords"
+                type="Integer"
+                label="Maximum Records"
+                description="Maximum number of records to display"
+                default="10"
+                min="1"
+                max="100"/>
+        </targetConfig>
+
+        <targetConfig targets="lightning__AppPage,lightning__HomePage">
+            <property
+                name="maxRecords"
+                type="Integer"
+                label="Maximum Records"
+                default="10"
+                min="1"
+                max="100"/>
+        </targetConfig>
+
+        <targetConfig targets="lightning__FlowScreen">
+            <property
+                name="recordId"
+                type="String"
+                label="Record ID"
+                description="ID of the account record"
+                role="inputOnly"/>
+
+            <property
+                name="selectedAccountId"
+                type="String"
+                label="Selected Account ID"
+                role="outputOnly"/>
+
+            <property
+                name="maxRecords"
+                type="Integer"
+                label="Maximum Records"
+                default="10"
+                role="inputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

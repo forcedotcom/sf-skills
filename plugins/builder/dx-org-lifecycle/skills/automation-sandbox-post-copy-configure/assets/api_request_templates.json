@@ -1,0 +1,89 @@
+{
+  "note": "Generic template — this skill does not carry a per-ConfigurationName mapping. Every entry runs through the same 5-step recipe. Replace only the documented placeholders; do not add per-type keys here. See references/api_endpoints.md for the walkthrough.",
+  "stepA_deriveCandidate": {
+    "input": "ConfigurationName from the config entry",
+    "output": "<Candidate> — one or two plausible Tooling API sobject names, using Salesforce knowledge (usually the singular of ConfigurationName, sometimes with a Workflow- prefix or -Proxy suffix)",
+    "note": "Do not commit to a candidate here; Step B verifies against the live org."
+  },
+  "stepB_describeVerify": {
+    "method": "GET",
+    "path": "/services/data/<apiVersion>/tooling/sobjects/<Candidate>/describe/",
+    "acceptIf": [
+      "HTTP 200",
+      "response.fields[] contains an entry with name == 'Metadata'"
+    ],
+    "rejectOutcome": "API_NOT_IDENTIFIED",
+    "note": "Cache the verified sobject name per-ConfigurationName; do not re-describe on every entry."
+  },
+  "stepC_resolveId": {
+    "channel": "Tooling API SOQL over REST",
+    "soql": "SELECT Id, FullName FROM <VerifiedSobject> WHERE <UniqueFilter>",
+    "uniqueFilterHints": {
+      "rowExposesFullName": "Filter by EntityDefinition.QualifiedApiName = '<Fields.Object>' when the entry has Fields.Object, then pick the row whose FullName == '<Fields.Object>.<Label>' client-side (SOQL cannot filter on FullName).",
+      "rowExposesQueryableUniqueField": "Filter directly by that field = '<Label>' (e.g. SiteName, DeveloperName)."
+    },
+    "outcomes": {
+      "zeroRows": "NOT_FOUND",
+      "multipleRowsAfterFilter": "AMBIGUOUS",
+      "exactlyOneRow": "proceed to Step D"
+    }
+  },
+  "stepD_getPatch": {
+    "getCurrentMetadata": {
+      "method": "GET",
+      "path": "/services/data/<apiVersion>/tooling/sobjects/<VerifiedSobject>/<Id>",
+      "extract": ".Metadata",
+      "note": "Preserve every key already in this block — the Metadata field is replace-in-full on PATCH."
+    },
+    "fieldMapping": {
+      "convention": "camelCase (lowercase first letter of the config's Fields.<Xxx> key)",
+      "examples": {
+        "EndpointUrl": "endpointUrl",
+        "IsActive": "isActive",
+        "Description": "description"
+      },
+      "exceptionsNote": "Some ConfigurationName types rename fields between the customer-facing config and the Metadata API (e.g. RemoteSiteSettings.Fields.RemoteSiteUrl -> RemoteProxy.Metadata.url, not remoteSiteUrl). If the derived camelCase key is NOT present in the current Metadata block from the GET, mark the entry FIELD_MAP_UNKNOWN and stop.",
+      "rejectOutcome": "FIELD_MAP_UNKNOWN"
+    },
+    "patch": {
+      "method": "PATCH",
+      "path": "/services/data/<apiVersion>/tooling/sobjects/<VerifiedSobject>/<Id>",
+      "bodyTemplate": {
+        "Metadata": "<the full block from GET, with mutated camelCase keys overwritten>"
+      },
+      "success": "HTTP 204 (empty body)",
+      "failure": "FAILED — capture the JSON error message"
+    }
+  },
+  "stepE_verify": {
+    "channel": "prefer SOQL SELECT by Id when the mutated field is a direct-queryable column; otherwise GET the record and inspect .Metadata.<mappedKey>",
+    "readBackMismatchOutcome": "FAILED_VERIFY"
+  },
+  "isActiveHandling": {
+    "true": "apply the PATCH as described",
+    "false": "SKIPPED_INACTIVE — no PATCH; add a Follow-ups bullet to the summary"
+  },
+  "placeholders": {
+    "<apiVersion>": "vXX.0 from sf org display result.apiVersion",
+    "<Candidate>": "Step A output — one candidate Tooling sobject name",
+    "<VerifiedSobject>": "the candidate that passed Step B; cached per-ConfigurationName for the run",
+    "<Id>": "the record Id returned by Step C",
+    "<UniqueFilter>": "Step C filter derived from the sobject's queryable fields",
+    "<mappedKey>": "camelCase key inside the Metadata block, derived from Fields.<Xxx>",
+    "<ConfigValue>": "the value of Fields.<Xxx> from the config entry, sent verbatim"
+  },
+  "outcomeVocabulary": [
+    "SUCCESS",
+    "NOT_FOUND",
+    "AMBIGUOUS",
+    "API_NOT_IDENTIFIED",
+    "FIELD_MAP_UNKNOWN",
+    "FAILED",
+    "FAILED_VERIFY",
+    "SKIPPED_INACTIVE",
+    "SKIPPED",
+    "DRY_RUN",
+    "DELETE_NOT_SUPPORTED",
+    "NOT_ATTEMPTED"
+  ]
+}

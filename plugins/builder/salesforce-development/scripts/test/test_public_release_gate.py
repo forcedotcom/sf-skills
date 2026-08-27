@@ -50,6 +50,15 @@ class PublicReleaseGateTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("public plugin release gate passed", result.stdout)
 
+    def test_stale_plugin_catalog_artifact_fails_before_the_leak_scan(self):
+        with tempfile.TemporaryDirectory() as td:
+            plugin = Path(td) / "salesforce-development"
+            self.copy_release_candidate(plugin)
+            (plugin / "catalog/plugins.json").write_text("{}\n", encoding="utf-8")
+            result = self.run_gate(plugin)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("plugin catalog artifact is stale", result.stderr.lower())
+
     def test_public_only_description_anywhere_in_release_tree_fails(self):
         with tempfile.TemporaryDirectory() as td:
             plugin = Path(td) / "salesforce-development"
@@ -172,16 +181,6 @@ class PublicReleaseGateTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("transient", result.stderr.lower())
         self.assertIn(".sf", result.stderr)
-
-    def test_stale_discovery_catalog_fails(self):
-        with tempfile.TemporaryDirectory() as td:
-            plugin = Path(td) / "salesforce-development"
-            self.copy_release_candidate(plugin)
-            artifact = plugin / "catalog/discovery.json"
-            artifact.write_text(artifact.read_text(encoding="utf-8") + "\n", encoding="utf-8")
-            result = self.run_gate(plugin)
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("stale", result.stderr.lower())
 
     def test_publish_workflow_runs_source_pre_copy_and_copied_gates_in_order(self):
         workflow = WORKFLOW.read_text(encoding="utf-8")

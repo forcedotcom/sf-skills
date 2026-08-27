@@ -1,0 +1,98 @@
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,12 +1,12 @@
+ ---
+ name: commerce-b2b-open-code-components-replace
+-description: "Replace OOTB (out-of-the-box) B2B Commerce components with open source equivalents in site metadata content.json files, or look up the equivalent open code `site:` component for OOTB definitions. Use when users mention \"replace OOTB components\", \"replace commerce components with open code\", \"swap OOTB for open source\", \"replace commerce_builder:\", \"replace OOTB in site\", \"replace component in site metadata\", \"replace component definition\", \"find open code equivalent\", \"equivalent open code component\", \"OOTB to open code mapping\", \"what is the site component for\", components \"in this view\" or \"for a given view\", or a specific list of component names — and want to update or only discover mappings in their store metadata."
+-allowed-tools: Bash(grep:*) Bash(ls:*) Read Write
++description: "Map OOTB Salesforce B2B Commerce component definitions to open source `site:` equivalents, or replace those definitions in site metadata `content.json` files. Use this skill for lookup-only and replacement workflows. TRIGGER when: the user asks for an OOTB-to-open-code mapping, names `commerce_builder:` definitions, requests equivalent `site:` components, or wants selected definitions replaced in a store or view. DO NOT TRIGGER when: the user needs to install or copy the official component library (use commerce-b2b-open-code-components-integrate), create or retrieve a B2B store (use commerce-b2b-store-create), author custom LWCs, or make general Experience Builder changes unrelated to OOTB-to-open-code mapping."
++allowed-tools: Bash(grep:*) Bash(ls:*) Bash(python3:*) Read Write
+ metadata:
+-  relatedSkills:
+-    - "commerce-b2b-open-code-components-integrate"
+   version: "1.0"
+   domains: ["Commerce", "Experience"]
++  relatedSkills:
++    - "commerce-b2b-open-code-components-integrate"
+ ---
+ 
+ # Replacing OOTB B2B Commerce Components with Open Code
+@@ -23,8 +23,14 @@
+ 
+ ### Resolve `<package-dir>`
+ 
+-Read `sfdx-project.json` and pick the active package directory. Extract `packageDirectories[]` and use the entry with `"default": true`; if no entry is flagged default, use the first entry. Use this value as `<package-dir>` everywhere below. If `sfdx-project.json` is missing or has no `packageDirectories`, tell the user and abort.
++Run the plugin's deterministic resolver from the Salesforce project root:
+ 
++```bash
++python3 "${CLAUDE_PLUGIN_ROOT}/scripts/resolve-package-directory.py"
++```
++
++Use its single stdout line as `<package-dir>` everywhere below. The resolver selects the `packageDirectories[]` entry with `"default": true`, or the first entry when no default is declared. If it exits nonzero, relay its diagnostic to the user and abort; do not guess a package directory or reimplement the selection logic inline.
++
+ ### Delegate setup
+ 
+ Before replacing components, delegate to the **commerce-b2b-open-code-components-integrate** skill to ensure:
+@@ -94,10 +100,10 @@
+ ```text
+ Which components would you like to replace?
+ 
+-☐ commerce_builder:heading → site:productHeading
+-☐ commerce_builder:cartBadge → site:cartBadge
+-☐ commerce_builder:searchInput → site:searchInput
+-☐ All of the above
++[ ] commerce_builder:heading → site:productHeading
++[ ] commerce_builder:cartBadge → site:cartBadge
++[ ] commerce_builder:searchInput → site:searchInput
++[ ] All of the above
+ ```
+ 
+ If user provided specific component name(s) in the original request, pre-filter to those and skip the selection prompt.
+@@ -119,7 +125,7 @@
+ ### Step 3: Report
+ 
+ ```text
+-✅ Replacement Complete!
++Replacement Complete!
+ 
+ Replaced X components across Y files:
+ - commerce_builder:heading → site:productHeading (3 files)
+@@ -152,9 +158,9 @@
+ **User:** "Replace OOTB components with open code versions"
+ 
+ **Agent:** "Before replacing components, I need to verify that the open code components are set up in your store. Let me check..."
+-- ✓ Open source repo cloned
+-- ✓ Store metadata available for My_B2B_Store1
+-- ✓ Open code components are integrated
++- [done] Open source repo cloned
++- [done] Store metadata available for My_B2B_Store1
++- [done] Open code components are integrated
+ 
+ **Agent:** "I'm scanning your store's site metadata to find all OOTB commerce components and checking which have open code equivalents."
+ 
+@@ -174,11 +180,11 @@
+ ```text
+ Which components would you like to replace?
+ 
+-☐ commerce_builder:heading → site:productHeading
+-☐ commerce_builder:cartBadge → site:cartBadge
+-☐ commerce_builder:searchInput → site:searchInput
+-☐ commerce_builder:cartSummary → site:cartSummary
+-☐ All of the above
++[ ] commerce_builder:heading → site:productHeading
++[ ] commerce_builder:cartBadge → site:cartBadge
++[ ] commerce_builder:searchInput → site:searchInput
++[ ] commerce_builder:cartSummary → site:cartSummary
++[ ] All of the above
+ ```
+ 
+ **User:** _(selects heading and cartBadge)_
+@@ -188,7 +194,7 @@
+ _(Files already known from scan — one Read/Write pass per affected file, all replacements batched)_
+ 
+ ```text
+-✅ Replacement Complete!
++Replacement Complete!
+ 
+ Replaced 2 components across 5 files:
+ - commerce_builder:heading → site:productHeading (3 files)

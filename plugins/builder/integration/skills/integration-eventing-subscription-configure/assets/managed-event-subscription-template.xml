@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ManagedEventSubscription xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Required: EARLIEST or LATEST — replay position on normal startup -->
+    <defaultReplay>{DEFAULT_REPLAY}</defaultReplay>
+    <!-- Required: EARLIEST or LATEST — replay position after an error recovery -->
+    <errorRecoveryReplay>{ERROR_RECOVERY_REPLAY}</errorRecoveryReplay>
+    <!-- Required: Human-readable label -->
+    <label>{LABEL}</label>
+    <!-- Required: RUN (active) or STOP (inactive) — PAUSE is reserved for internal use and will be rejected -->
+    <state>{STATE}</state>
+    <!-- Required: Event channel path — see references/topic-name-formats.md for valid formats
+         Platform event:            /event/Name__e
+         Custom PE channel:         /event/Name__chn
+         All-objects change events: /data/ChangeEvents
+         Single-object change event:/data/ObjectNameChangeEvent
+         Custom change channel:     /data/Name__chn -->
+    <topicName>{TOPIC_NAME}</topicName>
+    <!-- Required: Metadata API version (e.g. 67.0) -->
+    <version>{VERSION}</version>
+</ManagedEventSubscription>

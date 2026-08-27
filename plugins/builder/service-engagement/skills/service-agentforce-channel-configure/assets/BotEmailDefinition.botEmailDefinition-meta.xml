@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BotEmailDefinition source file — links an Agentforce Service Agent to Service
+  Email (API v68.0+) so the agent can reply to Email-to-Case messages. Deploy it
+  via metadata format (the deploy "metadata-dir" path), NOT source format:
+  BotEmailDefinition is absent from the CLI's source-deploy-retrieve registry
+  (see references/botemaildefinition.md). Then bind the Email-to-Case routing address
+  to it by setting the routing address's <botEmailDefinition> to this component's
+  fullName (the file name without the suffix).
+
+  fullName is the FILE NAME, not a child element. Name the file
+  <DeveloperName>.botEmailDefinition-meta.xml and do NOT add a <fullName> element.
+
+  All six fields below are REQUIRED (the WSDL marks none optional) and none are
+  platform-generated/read-only. legalDisclaimer and signature must each be at
+  least 10 characters (save-time MinLengthNotMet check).
+-->
+<BotEmailDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Developer/API name of the AgentforceServiceAgent (Bot) to link. Must
+         already exist, be published/active, be of type EinsteinServiceAgent, and
+         have a bot user holding the agentforceServiceAgentUser permission. -->
+    <botDefinition>{AGENT_DEVELOPER_NAME}</botDefinition>
+    <!-- FOLDER-QUALIFIED developer name of the reply email template (must exist,
+         uiType=SFX, HTML, public, and contain both ASA tokens). A bare name is
+         rejected ("no EmailTemplate named X found"); qualify it with the folder,
+         e.g. unfiled$public/AgentforceForServiceEmailTemplate. -->
+    <emailTemplate>{EMAIL_TEMPLATE_FOLDER}/{EMAIL_TEMPLATE_DEVELOPER_NAME}</emailTemplate>
+    <!-- Display label for this email definition. -->
+    <label>{LABEL}</label>
+    <!-- Legal disclosure / footer text appended to the agent's replies (>= 10 chars). -->
+    <legalDisclaimer>{LEGAL_DISCLAIMER_TEXT}</legalDisclaimer>
+    <!-- true = reply-all; false = reply to sender only. -->
+    <replyAll>false</replyAll>
+    <!-- Email signature block (>= 10 chars). -->
+    <signature>{SIGNATURE_TEXT}</signature>
+</BotEmailDefinition>

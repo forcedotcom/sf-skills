@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Key-management settings (Shield Platform Encryption).
+  All fields are optional booleans; include only the ones you intend to change.
+    enableCacheOnlyKeys            make the Cache-Only Key Service available
+    enableReplayDetection          protect cache-only key callouts with a nonce
+                                   REQUIRES enableCacheOnlyKeys=true first (one-way dependency).
+    canExternalKeyManagement       allow External Key Management (EKM) connections   [API 63.0+]
+    canManageDataCloudKeys         enable Data 360 key management + initial root key  [API 63.0+]
+    canEncryptTransactionalDatabase  enable transactional database encryption          [API 63.0+]
+    canOptOutOfDerivationWithBYOK  allow opting out of key derivation per uploaded key
+-->
+<EncryptionKeySettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableCacheOnlyKeys>true</enableCacheOnlyKeys>
+    <enableReplayDetection>true</enableReplayDetection>
+    <canOptOutOfDerivationWithBYOK>false</canOptOutOfDerivationWithBYOK>
+</EncryptionKeySettings>

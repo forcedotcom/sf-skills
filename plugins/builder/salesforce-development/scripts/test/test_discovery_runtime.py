@@ -22,9 +22,9 @@ from _test_support import load_module, strip_ansi
 SCRIPTS = Path(__file__).resolve().parent.parent
 PLUGIN_ROOT = SCRIPTS.parent
 SF_CONTEXT_PATH = SCRIPTS / "sf_context.py"
-CATALOG_PATH = SCRIPTS / "discovery_catalog.py"
+SESSION_PLUGIN_HINT_PATH = SCRIPTS / "session_plugin_hint.py"
 PLUGIN_JSON = PLUGIN_ROOT / ".claude-plugin/plugin.json"
-CATALOG_ARTIFACT = PLUGIN_ROOT / "catalog/discovery.json"
+PLUGIN_CATALOG_ARTIFACT = PLUGIN_ROOT / "catalog/plugins.json"
 POINTER = 'Ask “what can I do here?” or run /salesforce-development:discovery.'
 # The visible SessionStart banner, the degraded banners, AND the readiness footer now
 # all close with the shared "✳ New here?" wayfinding footer (_wayfinding_footer, unified
@@ -33,851 +33,44 @@ POINTER = 'Ask “what can I do here?” or run /salesforce-development:discover
 # note. On any visible banner the discovery command token appears exactly once — the
 # "single pointer" invariant.
 DISCOVERY_CMD = "/salesforce-development:discovery"
-INSTALL = "npx skills@1.5.20 add forcedotcom/sf-skills#1.41.0 --skill {name} --agent claude-code --yes"
 TAGLINE = "headless Salesforce development, from inside the agent"
 
-catalog = load_module(CATALOG_PATH, "discovery_runtime_catalog")
 sfx = load_module(SF_CONTEXT_PATH, "discovery_runtime_context")
+session_hint = load_module(SESSION_PLUGIN_HINT_PATH, "session_plugin_hint_context")
+
+
+class SessionPluginHintTests(unittest.TestCase):
+    def test_plugin_match_fails_open_on_nonzero_subprocess_exit(self):
+        failure = subprocess.CompletedProcess(
+            args=[],
+            returncode=2,
+            stdout=json.dumps({"matches": [{"name": "experience-cms"}]}),
+            stderr="invalid surface",
+        )
+        with mock.patch.object(session_hint.subprocess, "run", return_value=failure):
+            self.assertEqual(
+                session_hint._plugin_match(Path("/tmp/sf-context"), "cms content"),
+                [],
+            )
 
 
 class DiscoveryRuntimeTests(unittest.TestCase):
-    def run_discovery(self, args, cwd, home, org_presence=None):
-        out, err = io.StringIO(), io.StringIO()
-        with redirect_stdout(out), redirect_stderr(err):
-            code = catalog.run_discovery(
-                args, plugin_root=PLUGIN_ROOT, cwd=cwd, home=home, org_presence=org_presence
-            )
-        return code, out.getvalue(), err.getvalue()
-
-    def overview_sections(self, text: str) -> dict[str, list[str]]:
-        """Split the human overview into its two labelled sections of domain rows."""
-        sections: dict[str, list[str]] = {}
-        heading = None
-        for line in text.splitlines():
-            if line.startswith(("INSTALLED", "AVAILABLE TO ADD")):
-                heading = line.split(" —")[0]
-                sections[heading] = []
-            elif heading and line.startswith("  "):
-                sections[heading].append(line)
-        return sections
-
-    def test_overview_human_is_grouped_bounded_and_leak_free(self):
-        """The human overview is model-presented catalog content: labels and bounds only.
-
-        The exact-count contract lives on the JSON surface below. The numbers this
-        text does state are still asserted here, but derived from the artifact in
-        the test — enough to catch a swapped or recomputed count without pinning
-        the model-presented wording around it.
-        """
-        artifact = catalog.load_catalog(PLUGIN_ROOT)
-        self.assertNotIn('"description"', json.dumps(artifact))
-        # Nothing is installed standalone under a temporary root, so the bundled
-        # foundation roster is exactly the installed set for this render.
-        installed = [row for row in artifact["skills"] if row["foundationInstalled"]]
-        addable = [
-            row for row in artifact["skills"]
-            if row["publicAvailable"] and not row["foundationInstalled"]
-        ]
-        with tempfile.TemporaryDirectory() as td:
-            code, out, err = self.run_discovery(["overview"], Path(td), Path(td) / "home")
-        self.assertEqual((code, err), (0, ""))
-        self.assertIn("INSTALLED", out)
-        self.assertIn("AVAILABLE TO ADD", out)
-        self.assertIn(artifact["publicRelease"]["releaseRef"], out)
-        self.assertNotIn("spike", out.lower())
-        self.assertNotIn("sf-context", out)
-        self.assertLess(len(out.splitlines()), 80)
-        self.assertNotIn("\t", out)
-        sections = self.overview_sections(out)
-        self.assertEqual(sorted(sections), ["AVAILABLE TO ADD", "INSTALLED"])
-        headings = {line.split(" —")[0]: line for line in out.splitlines()
-                    if line.startswith(("INSTALLED", "AVAILABLE TO ADD"))}
-        self.assertIn(str(len(installed)), headings["INSTALLED"])
-        self.assertIn(str(len(addable)), headings["AVAILABLE TO ADD"])
-        # Each section lists exactly the domains that actually have rows in it, so
-        # dropping the empty-group guard cannot pad a section with 0-count domains.
-        # Rows render the first-party FRIENDLY label, not the raw prefix; parse the
-        # fixed-width label cell (never the example) and rsplit off the count paren
-        # so labels that themselves contain " (" (e.g. "Automation (Flow)") survive.
-        def row_label(row):
-            return row[2:2 + catalog._DOMAIN_CELL].rstrip().rsplit(" (", 1)[0]
-        for heading, group in (("INSTALLED", installed), ("AVAILABLE TO ADD", addable)):
-            with self.subTest(section=heading):
-                expected = sorted({catalog._display(row["domain"])["label"] for row in group})
-                self.assertEqual(sorted(row_label(row) for row in sections[heading]), expected)
-        # The hero human surface must fit an 80-column terminal without wrapping.
-        self.assertEqual([line for line in out.splitlines() if len(line) > 80], [])
-
-    def test_overview_text_matches_the_printed_block_and_the_paint_helper(self):
-        # The refactor split _overview_text (a string) out of _print_overview (stdout)
-        # and reuses it in render_overview_text (the Tier-1 paint hook). All three must
-        # agree byte-for-byte, so the geometry goldens hold on whichever path emits the
-        # block — the command's stdout (model-reproduced fallback) or the systemMessage.
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            cat, rows = catalog._runtime_rows(PLUGIN_ROOT, root, root / "home")
-            data = catalog._overview(cat, rows, org_presence="none")
-            out = io.StringIO()
-            with redirect_stdout(out):
-                catalog._print_overview(data)
-            printed = out.getvalue()
-            text = catalog._overview_text(data)
-            self.assertEqual(printed, text + "\n")   # print() adds exactly one trailing \n
-            helper = catalog.render_overview_text(
-                PLUGIN_ROOT, cwd=root, home=root / "home", org_presence="none")
-            self.assertEqual(helper, text)           # the paint hook renders the same block
-            self.assertNotIn("\x1b", helper)         # default path is plain — color is opt-in
-
-    def test_overview_color_strips_to_the_plain_block_with_the_expected_hues(self):
-        """The colored overview is the plain block plus the mock's vocabulary, and
-        nothing else: strip it and you get the byte-identical monochrome block the
-        command prints and the model reproduces. Mirrors the rail's color golden — the
-        paint hook is the ONLY caller that opts into color (render_overview_text /
-        _overview_text default to plain), so the whole golden geometry rides through
-        color=True unchanged, and NO_COLOR forces plain even when color is requested."""
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            cat, rows = catalog._runtime_rows(PLUGIN_ROOT, root, root / "home")
-            data = catalog._overview(cat, rows, org_presence="none")
-        plain = catalog._overview_text(data)
-        colored = catalog._overview_text(data, color=True)
-        self.assertNotIn("\x1b", plain)                        # default render carries no ANSI
-        self.assertEqual(strip_ansi(colored), plain)           # color is purely additive
-        # Every color is pulled from the theme — NO hard-coded truecolor (\x1b[38;2;r;g;b)
-        # nor the colon-subparameter form, the two encodings CC renders as absolute RGB.
-        self.assertNotIn("\x1b[38;2", colored)
-        self.assertNotRegex(colored, r"\x1b\[[0-9;]*:")
-        # The accents are 16-color palette + attributes, undim-prefixed so they read
-        # above the muted baseline: bold title, green INSTALLED, amber ADD, cyan links.
-        for code in ("\x1b[1m", "\x1b[32m", "\x1b[33m", "\x1b[36m", "\x1b[22m"):
-            self.assertIn(code, colored)
-        # Retired: the connect affordance's magenta ▶, the link underline (read as
-        # clickable), and any explicit grey — the muted tone is now plain (below).
-        self.assertNotIn("\x1b[35m", colored)                  # no magenta ▶
-        self.assertNotIn("\x1b[4m", colored)                   # links are cyan, never underlined
-        self.assertNotIn("\x1b[90m", colored)                  # no bright-black grey
-        # The muted/secondary tone carries NO SGR at all: emitted plain, it inherits
-        # CC's systemMessage dimming (the theme's own dimmed foreground — the banner's
-        # gray). Fully-muted lines therefore have zero ANSI: the top provenance, and
-        # — as of the right-column pass — the Try nudge and the Next command too.
-        for prefix in ("Public release", "Try:", "Next:"):
-            line = next(l for l in colored.splitlines() if strip_ansi(l).startswith(prefix))
-            self.assertNotIn("\x1b", line, prefix)
-        # An INSTALLED row carries cyan ONLY on its label; the right-column example is
-        # muted (plain), not a cyan link — so the row line has exactly one cyan span.
-        row = next(l for l in colored.splitlines() if "build an Agentforce agent" in strip_ansi(l))
-        self.assertEqual(row.count("\x1b[36m"), 1)
-        # Color is zero-width: the 80-column bound the plain block satisfies still holds.
-        self.assertEqual([l for l in strip_ansi(colored).splitlines() if len(l) > 80], [])
-        with mock.patch.dict(os.environ, {"NO_COLOR": "1"}):
-            self.assertEqual(catalog._overview_text(data, color=True), plain)
-
-    def test_overview_json_counts_are_exact_and_agree_with_the_domain_rows(self):
-        """The JSON overview is the exact-count home; expectations come from the artifact."""
-        artifact_counts = catalog.load_catalog(PLUGIN_ROOT)["counts"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, out, err = self.run_discovery(["overview", "--json"], root, root / "home")
-        self.assertEqual((code, err), (0, ""))
-        data = json.loads(out)
-        counts = data["counts"]
-        self.assertEqual({key: counts[key] for key in artifact_counts}, artifact_counts)
-        self.assertEqual(set(counts) - set(artifact_counts), {"installedVisible", "addableVisible"})
-        self.assertEqual(counts["installedVisible"], sum(row["installed"] for row in data["domains"]))
-        self.assertEqual(counts["addableVisible"], sum(row["addable"] for row in data["domains"]))
-        self.assertEqual(counts["visibleUnion"], sum(row["total"] for row in data["domains"]))
-
-    def test_overview_json_carries_release_ref_and_derived_per_domain_examples(self):
-        artifact = catalog.load_catalog(PLUGIN_ROOT)
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, out, err = self.run_discovery(["overview", "--json"], root, root / "home")
-        self.assertEqual((code, err), (0, ""))
-        data = json.loads(out)
-        self.assertEqual(data["releaseRef"], artifact["publicRelease"]["releaseRef"])
-        for entry in data["domains"]:
-            with self.subTest(domain=entry["domain"]):
-                # Nothing is installed standalone under the temporary roots, so the
-                # bundled foundation roster is exactly the installed set here.
-                group = [row for row in artifact["skills"] if row["domain"] == entry["domain"]]
-                installed = [row for row in group if row["foundationInstalled"]]
-                addable = [row for row in group if row["publicAvailable"] and not row["foundationInstalled"]]
-                self.assertEqual(entry["installed"], len(installed))
-                self.assertEqual(entry["addable"], len(addable))
-                # installedExample prefers the authored curated example, falling back
-                # to the first installed skill's live examplePrompt; None when nothing
-                # is installed. addableExample stays the first addable's live prompt.
-                disp = catalog._display(entry["domain"])
-                expected_installed = (
-                    (disp.get("installedExample") or installed[0]["examplePrompt"])
-                    if installed else None
-                )
-                self.assertEqual(entry["installedExample"], expected_installed)
-                self.assertEqual(
-                    entry["addableExample"], addable[0]["examplePrompt"] if addable else None
-                )
-
-    def test_overview_domain_examples_fall_back_to_none_with_no_installed_or_addable(self):
-        """installedExample/addableExample are None, not fabricated, when a domain's
-        live catalog has zero rows on that side — exercised with a synthetic catalog
-        rather than relying on any real domain happening to be lopsided today."""
-        cat = {"counts": {"public": 1, "foundation": 1, "overlap": 0, "publicStandaloneAddable": 0,
-                           "foundationOnly": 1, "visibleUnion": 1},
-               "publicRelease": {"releaseRef": "0.0.0"},
-               "skills": [{"name": "platform-widget-search", "domain": "platform", "variants": {
-                   "foundation": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64, "accessCheck": None},
-               }}]}
-        rows = [{
-            "name": "platform-widget-search", "domain": "platform", "status": "installed",
-            "publicAvailable": False, "foundationInstalled": True, "examplePrompt": "search widgets",
-            "variants": {"foundation": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64}},
-        }]
-        data = catalog._overview(cat, rows, org_presence="none")
-        entry = next(e for e in data["domains"] if e["domain"] == "platform")
-        self.assertIsNone(entry["addableExample"])
-
-        rows[0].update(status="available", foundationInstalled=False, publicAvailable=True)
-        cat["skills"][0]["variants"] = {"public": {"skillMdSha256": "a" * 64, "treeSha256": "b" * 64, "accessCheck": None}}
-        data = catalog._overview(cat, rows, org_presence="none")
-        entry = next(e for e in data["domains"] if e["domain"] == "platform")
-        self.assertIsNone(entry["installedExample"])
-
-    def test_overview_omits_the_connect_affordance_even_when_no_org(self):
-        """The connect-an-org affordance was removed (org connection can't yet tailor
-        the catalog): even with no org connected, the overview shows no connect lead —
-        just the honest full catalog, both labelled sections with exact counts, still
-        80-column and leak-free."""
-        artifact = catalog.load_catalog(PLUGIN_ROOT)
-        installed = [row for row in artifact["skills"] if row["foundationInstalled"]]
-        addable = [row for row in artifact["skills"]
-                   if row["publicAvailable"] and not row["foundationInstalled"]]
-        with tempfile.TemporaryDirectory() as td:
-            code, out, err = self.run_discovery(
-                ["overview"], Path(td), Path(td) / "home", org_presence="none")
-        self.assertEqual((code, err), (0, ""))
-        # No connect affordance anywhere: no honesty warning, no pitch, no CTA/command.
-        self.assertNotIn("No org connected", out)
-        self.assertNotIn("Why connect an org first?", out)
-        self.assertNotIn('"connect an org"', out)
-        self.assertNotIn("sf org list", out)
-        self.assertNotIn("connect an org to see which apply to you", out)
-        # The honest full catalog: both sections, exact counts intact.
-        sections = self.overview_sections(out)
-        self.assertEqual(sorted(sections), ["AVAILABLE TO ADD", "INSTALLED"])
-        headings = {line.split(" —")[0]: line for line in out.splitlines()
-                    if line.startswith(("INSTALLED", "AVAILABLE TO ADD"))}
-        self.assertIn(str(len(installed)), headings["INSTALLED"])
-        self.assertIn(str(len(addable)), headings["AVAILABLE TO ADD"])
-        # Same hard invariants as the neutral overview: 80-col and leak-free.
-        self.assertEqual([line for line in out.splitlines() if len(line) > 80], [])
-        self.assertNotIn("sf-context", out)
-        self.assertNotIn("spike", out.lower())
-
-    def test_overview_json_carries_org_presence_without_perturbing_counts(self):
-        """org-presence is a runtime lead hint on the JSON surface; it must never
-        change the exact counts contract."""
-        artifact_counts = catalog.load_catalog(PLUGIN_ROOT)["counts"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, out, err = self.run_discovery(
-                ["overview", "--json"], root, root / "home", org_presence="none")
-        self.assertEqual((code, err), (0, ""))
-        data = json.loads(out)
-        self.assertEqual(data["orgPresence"], "none")
-        self.assertEqual({key: data["counts"][key] for key in artifact_counts}, artifact_counts)
-
-    def test_overview_is_org_neutral_across_every_presence(self):
-        """The overview no longer varies on org presence: none, connected, unknown,
-        and the default (org-presence unresolved) all render the same neutral block —
-        no connect lead, the neutral INSTALLED heading, and both sections."""
-        for presence in ("none", "connected", "unknown", None):
-            with self.subTest(presence=presence):
-                with tempfile.TemporaryDirectory() as td:
-                    code, out, err = self.run_discovery(
-                        ["overview"], Path(td), Path(td) / "home", org_presence=presence)
-                self.assertEqual((code, err), (0, ""))
-                self.assertNotIn("No org connected", out)
-                self.assertNotIn("Why connect an org first?", out)
-                self.assertNotIn('"connect an org"', out)
-                self.assertIn("ready in this session", out)   # neutral INSTALLED heading
-                self.assertIn("INSTALLED", out)
-                self.assertIn("AVAILABLE TO ADD", out)
-
-    def test_overview_human_renders_friendly_labels_and_taglines_not_raw_prefixes(self):
-        """The two-tier block presents first-party display copy: friendly labels on
-        both sections, taglines on AVAILABLE-TO-ADD rows, and a concrete example on
-        INSTALLED rows — never the raw domain prefix, still within 80 columns."""
-        with tempfile.TemporaryDirectory() as td:
-            code, out, err = self.run_discovery(["overview"], Path(td), Path(td) / "home")
-        self.assertEqual((code, err), (0, ""))
-        # A sampling of friendly labels (including ones the raw prefix would mangle).
-        for label in ("Platform Core", "Data Cloud (Data 360)", "OmniStudio", "Diagrams"):
-            self.assertIn(label, out)
-        # A tagline (drives an AVAILABLE-TO-ADD row) and an installed example.
-        self.assertIn("OmniScripts, FlexCards, Integration Procedures.", out)
-        self.assertIn("write an AccountService class", out)
-        # Raw prefixes must never surface as a row label ("<prefix> (N)").
-        for raw in ("data360", "design-systems", "omnistudio", "external", "platform"):
-            self.assertNotIn(f"{raw} (", out)
-        self.assertEqual([line for line in out.splitlines() if len(line) > 80], [])
-
-    def test_overview_rows_stay_bounded_for_wide_unicode_cells(self):
-        data = {
-            "counts": {"public": 1, "foundation": 1, "overlap": 0, "visibleUnion": 1,
-                       "installedVisible": 1, "addableVisible": 1},
-            "releaseRef": "0.0.0",
-            "availability": None,
-            "domains": [{
-                "domain": "platform", "label": "界" * 20,
-                "installed": 1, "addable": 1,
-                "installedExample": "界" * 48, "tagline": "界" * 48,
-            }],
-        }
-        block = catalog._overview_text(data)
-        self.assertTrue(all(
-            catalog._terminal_cell_width(line) <= 80 for line in block.splitlines()
-        ), block)
-
-    def test_overview_rows_stay_bounded_when_a_catalog_prompt_is_overlong(self):
-        """No live prompt is long enough to clamp, so drive the clamp with a synthetic one."""
-        overlong = "Ask the platform to generate something " * 8
-        data = {
-            "counts": {
-                "public": 1, "foundation": 1, "overlap": 0, "visibleUnion": 1,
-                "installedVisible": 1, "addableVisible": 1,
-            },
-            "releaseRef": "0.0.0",
-            # The INSTALLED cell is the (overlong) installedExample; the AVAILABLE
-            # cell is the (overlong) tagline. Both must clamp to the example cell.
-            "domains": [{
-                "domain": "platform", "label": "Platform Core",
-                "installed": 1, "addable": 1,
-                "installedExample": overlong, "tagline": overlong,
-            }],
-        }
-        out = io.StringIO()
-        with redirect_stdout(out):
-            catalog._print_overview(data)
-        width = 2 + catalog._DOMAIN_CELL + 1 + catalog._EXAMPLE_CELL
-        rows = [line for line in out.getvalue().splitlines() if line.startswith("  ")]
-        self.assertEqual(len(rows), 2)
-        for row in rows:
-            with self.subTest(row=row):
-                self.assertTrue(row.endswith("…"), row)
-                self.assertLessEqual(len(row), width)
-        self.assertNotIn(overlong, out.getvalue())
-
-    def test_access_state_classifies_the_tristate_by_shape_not_truthiness(self):
-        # [] and None are both falsy: classify by isinstance, never truthiness. A
-        # truthiness collapse would fold "applies to any org" into "undeclared" and,
-        # worse, read an absent declaration as org-agnostic. Any non-list shape is
-        # undeclared — the safe direction, never a positive org-agnostic claim.
-        self.assertEqual(catalog._access_state(None), "undeclared")
-        self.assertEqual(catalog._access_state([]), "any-org")
-        self.assertEqual(
-            catalog._access_state([{"type": "license", "value": "X"}]), "conditional"
-        )
-        self.assertEqual(catalog._access_state("license"), "undeclared")
-
-    def test_overview_availability_partition_matches_the_offline_catalog(self):
-        """The JSON availability partition is derived offline from each skill's own
-        accessCheck (public-preferred), sums to visibleUnion, and is basis-tagged."""
-        artifact = catalog.load_catalog(PLUGIN_ROOT)
-        expected = {"any-org": 0, "conditional": 0, "undeclared": 0}
-        for row in artifact["skills"]:
-            expected[catalog._access_state(catalog._selected_access_check(row))] += 1
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, out, err = self.run_discovery(["overview", "--json"], root, root / "home")
-        self.assertEqual((code, err), (0, ""))
-        availability = json.loads(out)["availability"]
-        self.assertEqual(availability["basis"], "declared-offline")
-        self.assertEqual(availability["anyOrg"], expected["any-org"])
-        self.assertEqual(availability["conditional"], expected["conditional"])
-        self.assertEqual(availability["undeclared"], expected["undeclared"])
-        self.assertEqual(
-            availability["anyOrg"] + availability["conditional"] + availability["undeclared"],
-            artifact["counts"]["visibleUnion"],
-        )
-        self.assertEqual(availability["total"], artifact["counts"]["visibleUnion"])
-        # A truthiness-based classifier would misfile the [] any-org skills; the
-        # real catalog carries at least one declared gate, so the partition is not
-        # trivially all-undeclared.
-        self.assertGreaterEqual(availability["conditional"] + availability["anyOrg"], 1)
-
-    def test_overview_availability_is_org_independent(self):
-        """Availability is what each skill declares offline, never a probe of the
-        connected org — so it renders identically for every org-presence state."""
-        partitions = {}
-        for presence in ("connected", "none", "unknown"):
-            with tempfile.TemporaryDirectory() as td:
-                root = Path(td)
-                _, out, err = self.run_discovery(
-                    ["overview", "--json"], root, root / "home", org_presence=presence)
-            self.assertEqual(err, "")
-            partitions[presence] = json.loads(out)["availability"]
-        self.assertEqual(partitions["connected"], partitions["none"])
-        self.assertEqual(partitions["connected"], partitions["unknown"])
-
-    def test_overview_human_shows_declared_availability_with_the_unknown_disclaimer(self):
-        """The real catalog declares posture on at least one skill today, so the
-        offline availability block renders — and while any skill is still
-        undeclared the 'not yet declared means unknown' disclaimer rides with it."""
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            _, out, err = self.run_discovery(["overview"], root, root / "home")
-        self.assertEqual(err, "")
-        self.assertIn("Declared availability (offline — not an org check)", out)
-        self.assertIn("conditional", out)
-        self.assertIn("not yet declared", out)
-        self.assertIn('never read it as "applies to any org."', out)
-        self.assertEqual([line for line in out.splitlines() if len(line) > 80], [])
-
-    def test_overview_hides_declared_availability_until_a_skill_declares_posture(self):
-        """Pre-backfill every skill is undeclared and a '0 · 0 · N' line is noise, so
-        the printed block is gated on a real signal (anyOrg+conditional>0). The JSON
-        key is still always present (asserted in the partition test above)."""
-        base = {
-            "counts": {"public": 1, "foundation": 0, "overlap": 0, "visibleUnion": 1,
-                       "installedVisible": 0, "addableVisible": 1},
-            "releaseRef": "0.0.0",
-            "domains": [],
-        }
-        all_undeclared = {**base, "availability": {
-            "basis": "declared-offline", "anyOrg": 0, "conditional": 0,
-            "undeclared": 1, "total": 1}}
-        out = io.StringIO()
-        with redirect_stdout(out):
-            catalog._print_overview(all_undeclared)
-        self.assertNotIn("Declared availability", out.getvalue())
-        with_signal = {**base, "availability": {
-            "basis": "declared-offline", "anyOrg": 2, "conditional": 0,
-            "undeclared": 1, "total": 3}}
-        out = io.StringIO()
-        with redirect_stdout(out):
-            catalog._print_overview(with_signal)
-        self.assertIn("Declared availability", out.getvalue())
-        self.assertIn("2 apply to any org", out.getvalue())
-        self.assertIn("not yet declared", out.getvalue())
-
-    def test_domain_human_keeps_every_row_and_footers_only_the_first_capability(self):
-        """Domain rows stay complete while wrapping; footer names only the first capability."""
-        by_domain: dict[str, list[str]] = {}
-        for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]:
-            by_domain.setdefault(row["domain"], []).append(row["name"])
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            for domain, names in by_domain.items():
-                with self.subTest(domain=domain):
-                    code, out, err = self.run_discovery(["domain", domain], root, root / "home")
-                    self.assertEqual((code, err), (0, ""))
-                    for name in names:
-                        self.assertIn(f"- {name} [", out)
-                    self.assertIn(
-                        f"Next: /salesforce-development:discovery skill {min(names)}",
-                        " ".join(out.split()),
-                    )
-                    self.assertTrue(all(
-                        catalog._terminal_cell_width(line) <= 80
-                        for line in out.splitlines()
-                    ))
-                    self.assertNotIn("sf-context", out)
-                    self.assertNotIn("Try:", out)
-                    self.assertNotIn("npx skills", out)
-
-    def test_json_modes_and_available_skill_instruction(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, overview, _ = self.run_discovery(["--json"], root, root / "home")
-            overview_data = json.loads(overview)
-            self.assertEqual(code, 0)
-            self.assertEqual(overview_data["mode"], "overview")
-            domain = overview_data["domains"][0]["domain"]
-            code, domain_out, _ = self.run_discovery(["domain", domain, "--json"], root, root / "home")
-            domain_data = json.loads(domain_out)
-            self.assertEqual(code, 0)
-            self.assertEqual(domain_data["mode"], "domain")
-            self.assertTrue(domain_data["skills"])
-            available = next(
-                row for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-                if not row["foundationInstalled"] and row["publicAvailable"]
-            )
-            code, detail_out, _ = self.run_discovery(["skill", available["name"], "--json"], root, root / "home")
-            detail = json.loads(detail_out)
-            self.assertEqual(code, 0)
-            self.assertEqual(detail["status"], "available")
-            self.assertEqual(detail["installInstruction"], INSTALL.format(name=available["name"]))
-            self.assertIn("fresh Claude session", detail["sessionRequirement"])
-            code, index_out, _ = self.run_discovery(["index"], root, root / "home")
-            self.assertEqual(code, 0)
-            index_lines = index_out.strip().splitlines()
-            self.assertEqual(sum(not line.startswith("  ") for line in index_lines), 167)
-            self.assertTrue(all(catalog._terminal_cell_width(line) <= 80 for line in index_lines))
-
-    def test_valid_standalone_directory_symlink_counts_as_installed(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            cwd, home = root / "project", root / "home"
-            available_name = next(
-                row["name"] for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-                if not row["foundationInstalled"] and row["publicAvailable"]
-            )
-            source = root / available_name
-            source.mkdir(parents=True)
-            source.joinpath("SKILL.md").write_text(
-                f'---\nname: {available_name}\ndescription: "Use this standalone skill for capability testing."\n---\n',
-                encoding="utf-8",
-            )
-            project_skills = cwd / ".claude/skills"
-            project_skills.mkdir(parents=True)
-            project_skills.joinpath(available_name).symlink_to(source, target_is_directory=True)
-            code, out, _ = self.run_discovery(["skill", available_name, "--json"], cwd, home)
-        self.assertEqual(code, 0)
-        detail = json.loads(out)
-        self.assertEqual(detail["status"], "installed")
-        self.assertEqual(detail["provenance"]["state"], "modified")
-        self.assertEqual(detail["provenance"]["observations"], [])
-
-    def test_invalid_same_name_entries_do_not_install_or_suppress_public_add(self):
-        available_name = next(
-            row["name"] for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-            if not row["foundationInstalled"] and row["publicAvailable"]
-        )
-        for kind in ("malformed", "file", "dangling"):
-            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as td:
-                root = Path(td)
-                cwd, home = root / "project", root / "home"
-                target = cwd / ".claude/skills" / available_name
-                target.parent.mkdir(parents=True)
-                if kind == "malformed":
-                    target.mkdir()
-                    target.joinpath("SKILL.md").write_text("not frontmatter", encoding="utf-8")
-                elif kind == "file":
-                    target.write_text("not a directory", encoding="utf-8")
-                else:
-                    target.symlink_to(root / "missing", target_is_directory=True)
-                code, out, err = self.run_discovery(["skill", available_name, "--json"], cwd, home)
-                detail = json.loads(out)
-                self.assertEqual((code, err), (0, ""))
-                self.assertEqual(detail["status"], "available")
-                self.assertEqual(detail["installInstruction"], INSTALL.format(name=available_name))
-                self.assertEqual(detail["provenance"]["records"], [])
-                self.assertEqual(detail["provenance"]["state"], "unknown")
-                self.assertEqual(detail["provenance"]["observations"][0]["state"], "invalid")
-
-    def test_unreadable_same_name_directory_is_unknown_and_not_installed(self):
-        available_name = next(
-            row["name"] for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-            if not row["foundationInstalled"] and row["publicAvailable"]
-        )
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            target = root / "project/.claude/skills" / available_name
-            target.mkdir(parents=True)
-            target.joinpath("SKILL.md").write_text(
-                f'---\nname: {available_name}\ndescription: "Use this fixture to test unreadable installed observations safely."\n---\n',
-                encoding="utf-8",
-            )
-            with mock.patch.object(catalog.registry, "inspect_skill_tree", side_effect=OSError("denied")):
-                code, out, err = self.run_discovery(
-                    ["skill", available_name, "--json"], root / "project", root / "home"
-                )
-        detail = json.loads(out)
-        self.assertEqual((code, err), (0, ""))
-        self.assertEqual(detail["status"], "available")
-        self.assertEqual(detail["provenance"]["state"], "unknown")
-        self.assertEqual(detail["provenance"]["observations"][0]["state"], "unknown")
-
-    def test_tree_hash_provenance_public_exact_modified_unknown_and_conflict(self):
-        baseline = catalog.load_catalog(PLUGIN_ROOT)
-        source_row = next(
-            row for row in baseline["skills"]
-            if row["publicAvailable"] and not row["foundationInstalled"]
-        )
-        name = source_row["name"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            installed = root / "project/.claude/skills" / name
-            installed.mkdir(parents=True)
-            skill_text = (
-                f'---\nname: {name}\n'
-                'description: "Use this exact public fixture to test installed provenance safely."\n'
-                '---\nbody\n'
-            )
-            (installed / "SKILL.md").write_text(skill_text, encoding="utf-8")
-            altered = copy.deepcopy(baseline)
-            row = next(item for item in altered["skills"] if item["name"] == name)
-            row["variants"]["public"]["treeSha256"] = catalog.registry.canonical_tree_sha256(installed)
-            row["variants"]["public"]["skillMdSha256"] = catalog.registry.sha256_file(installed / "SKILL.md")
-            artifact.write_text(json.dumps(altered), encoding="utf-8")
-
-            code, out, err = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            self.assertEqual((code, err), (0, ""))
-            exact = json.loads(out)
-            self.assertEqual(exact["provenance"]["state"], "public-exact")
-            self.assertEqual(
-                exact["description"],
-                "Use this exact public fixture to test installed provenance safely.",
-            )
-
-            (installed / "extra.txt").write_text("modified", encoding="utf-8")
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            modified = json.loads(out)
-            self.assertEqual(modified["provenance"]["state"], "modified")
-            self.assertNotIn("description", modified)
-
-            user_copy = root / "home/.claude/skills" / name
-            user_copy.mkdir(parents=True)
-            (user_copy / "SKILL.md").write_text(skill_text, encoding="utf-8")
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            self.assertEqual(json.loads(out)["provenance"]["state"], "conflict")
-
-            (installed / "SKILL.md").write_text("malformed", encoding="utf-8")
-            user_copy.joinpath("SKILL.md").write_text("malformed", encoding="utf-8")
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            unknown = json.loads(out)
-            self.assertEqual(unknown["provenance"]["state"], "unknown")
-            self.assertEqual(unknown["status"], "available")
-            self.assertEqual(len(unknown["provenance"]["observations"]), 2)
-
-    def test_raced_scan_is_rejected_as_invalid_not_classified_exact(self):
-        # A scan the tree changed *during* (stable=False) is failed closed: even when
-        # its torn hash still matches the trusted variant, it is NEVER classified
-        # installed/exact — it is retained as an invalid observation, matching the
-        # build-time canonical_tree_sha256 gate. Supersedes the earlier "preserve
-        # classification but omit description" behavior (Prizm A9).
-        baseline = catalog.load_catalog(PLUGIN_ROOT)
-        source_row = next(
-            row for row in baseline["skills"]
-            if row["publicAvailable"] and not row["foundationInstalled"]
-        )
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            artifact.write_text(json.dumps(baseline), encoding="utf-8")
-            installed = root / "project/.claude/skills" / source_row["name"]
-            installed.mkdir(parents=True)
-            expected = source_row["variants"]["public"]["treeSha256"]
-            with mock.patch.object(
-                catalog.registry,
-                "inspect_skill_tree",
-                return_value={"treeSha256": expected, "skillMdBytes": None, "stable": False},
-            ):
-                _, out, _ = self.run_discovery_with_plugin(
-                    ["skill", source_row["name"], "--json"],
-                    plugin,
-                    root / "project",
-                    root / "home",
-                )
-        detail = json.loads(out)
-        self.assertEqual(detail["status"], "available")
-        self.assertEqual(detail["provenance"]["state"], "unknown")
-        self.assertEqual(detail["provenance"]["records"], [])
-        self.assertEqual(detail["provenance"]["observations"][0]["state"], "invalid")
-        self.assertNotIn("description", detail)
-        self.assertIn("catalogMetadataNotice", detail)
-
-    def test_raced_bundled_foundation_scan_is_rejected_not_classified_exact(self):
-        # The bundled-foundation path fails closed too: an unstable scan of the plugin's
-        # own skill tree is an invalid observation, never a raced foundation-exact.
-        baseline = catalog.load_catalog(PLUGIN_ROOT)
-        foundation_row = next(row for row in baseline["skills"] if row["foundationInstalled"])
-        name = foundation_row["name"]
-        expected = foundation_row["variants"]["foundation"]["treeSha256"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            artifact.write_text(json.dumps(baseline), encoding="utf-8")
-            bundled = plugin / "skills" / name
-            bundled.parent.mkdir(parents=True)
-            shutil.copytree(PLUGIN_ROOT / "skills" / name, bundled)
-            with mock.patch.object(
-                catalog.registry,
-                "inspect_skill_tree",
-                return_value={"treeSha256": expected, "skillMdBytes": None, "stable": False},
-            ):
-                _, out, _ = self.run_discovery_with_plugin(
-                    ["skill", name, "--json"], plugin, root / "project", root / "home"
-                )
-        detail = json.loads(out)
-        self.assertEqual(detail["status"], "available")
-        self.assertEqual(detail["provenance"]["state"], "unknown")
-        self.assertEqual(detail["provenance"]["records"], [])
-        self.assertEqual(detail["provenance"]["observations"][0]["state"], "invalid")
-        self.assertNotIn("description", detail)
-
-    def test_unsafe_same_name_observation_suppresses_other_exact_description(self):
-        baseline = catalog.load_catalog(PLUGIN_ROOT)
-        source_row = next(
-            row for row in baseline["skills"]
-            if row["publicAvailable"] and not row["foundationInstalled"]
-        )
-        name = source_row["name"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            exact = root / "home/.claude/skills" / name
-            exact.mkdir(parents=True)
-            skill_text = (
-                f'---\nname: {name}\n'
-                'description: "Use this exact public fixture without trusting an unsafe peer."\n'
-                '---\nbody\n'
-            )
-            (exact / "SKILL.md").write_text(skill_text, encoding="utf-8")
-            altered = copy.deepcopy(baseline)
-            row = next(item for item in altered["skills"] if item["name"] == name)
-            row["variants"]["public"]["treeSha256"] = catalog.registry.canonical_tree_sha256(exact)
-            row["variants"]["public"]["skillMdSha256"] = catalog.registry.sha256_file(exact / "SKILL.md")
-            artifact.write_text(json.dumps(altered), encoding="utf-8")
-            unsafe = root / "project/.claude/skills" / name
-            unsafe.parent.mkdir(parents=True)
-            unsafe.symlink_to(root / "missing", target_is_directory=True)
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-        detail = json.loads(out)
-        self.assertEqual(detail["status"], "installed")
-        self.assertEqual(detail["provenance"]["state"], "conflict")
-        self.assertNotIn("description", detail)
-        self.assertIn("catalogMetadataNotice", detail)
-        self.assertEqual(detail["provenance"]["observations"][0]["state"], "invalid")
-
-    def test_bundled_foundation_is_hashed_at_runtime_and_symlink_is_unknown(self):
-        baseline = catalog.load_catalog(PLUGIN_ROOT)
-        foundation_row = next(row for row in baseline["skills"] if row["foundationInstalled"])
-        name = foundation_row["name"]
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            artifact.write_text(json.dumps(baseline), encoding="utf-8")
-            bundled = plugin / "skills" / name
-            bundled.parent.mkdir(parents=True)
-            shutil.copytree(PLUGIN_ROOT / "skills" / name, bundled)
-
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            exact = json.loads(out)
-            self.assertEqual(exact["provenance"]["state"], "foundation-exact")
-            self.assertEqual(exact["status"], "installed")
-
-            bundled.joinpath("runtime-mutation.txt").write_text("changed", encoding="utf-8")
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            modified = json.loads(out)
-            self.assertEqual(modified["provenance"]["state"], "modified")
-            self.assertNotIn("description", modified)
-
-            shutil.rmtree(bundled)
-            external = root / "external"
-            shutil.copytree(PLUGIN_ROOT / "skills" / name, external)
-            bundled.symlink_to(external, target_is_directory=True)
-            _, out, _ = self.run_discovery_with_plugin(
-                ["skill", name, "--json"], plugin, root / "project", root / "home"
-            )
-            unknown = json.loads(out)
-            self.assertEqual(unknown["provenance"]["state"], "unknown")
-            self.assertEqual(unknown["status"], "available")
-            self.assertEqual(unknown["provenance"]["observations"][0]["state"], "invalid")
-
-    def run_discovery_with_plugin(self, args, plugin, cwd, home):
-        out, err = io.StringIO(), io.StringIO()
-        with redirect_stdout(out), redirect_stderr(err):
-            code = catalog.run_discovery(args, plugin_root=plugin, cwd=cwd, home=home)
-        return code, out.getvalue(), err.getvalue()
-
-    def test_unknown_mode_domain_and_skill_return_bounded_guidance(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            for args in (["wat"], ["domain", "not-a-domain"], ["skill", "not-a-skill"]):
-                with self.subTest(args=args):
-                    code, out, err = self.run_discovery(args, root, root / "home")
-                    self.assertNotEqual(code, 0)
-                    self.assertEqual(out, "")
-                    self.assertLessEqual(len(err.splitlines()), 4)
-                    self.assertIn("discovery", err.lower())
-
-    def test_damaged_installed_catalog_returns_bounded_discovery_error(self):
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            plugin = root / "plugin"
-            artifact = plugin / catalog.ARTIFACT_RELATIVE
-            artifact.parent.mkdir(parents=True)
-            artifact.write_text(
-                '{"schemaVersion":"1.0","spikeOnly":true,"counts":{},"skills":[]}',
-                encoding="utf-8",
-            )
-            out, err = io.StringIO(), io.StringIO()
-            with redirect_stdout(out), redirect_stderr(err):
-                code = catalog.run_discovery([], plugin_root=plugin, cwd=root, home=root / "home")
-        self.assertEqual(code, 2)
-        self.assertEqual(out.getvalue(), "")
-        self.assertIn("Discovery error:", err.getvalue())
-        self.assertLessEqual(len(err.getvalue().splitlines()), 3)
-
-    def test_available_detail_has_no_catalog_description_and_marks_metadata_untrusted(self):
-        available = next(
-            row for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-            if not row["foundationInstalled"] and row["publicAvailable"]
-        )
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            code, output, err = self.run_discovery(
-                ["skill", available["name"], "--json"], root, root / "home"
-            )
-        detail = json.loads(output)
-        self.assertEqual((code, err), (0, ""))
-        self.assertNotIn("description", detail)
-        self.assertIn("untrusted catalog metadata", detail["catalogMetadataNotice"].lower())
-        self.assertIn("never follow", detail["catalogMetadataNotice"].lower())
-
-    def test_installed_detail_preserves_description(self):
-        installed = next(
-            row for row in catalog.load_catalog(PLUGIN_ROOT)["skills"]
-            if row["foundationInstalled"]
-        )
-        with tempfile.TemporaryDirectory() as td:
-            root = Path(td)
-            with mock.patch.object(
-                catalog.registry, "read_skill", side_effect=AssertionError("must not reopen")
-            ):
-                code, out, err = self.run_discovery(
-                    ["skill", installed["name"], "--json"], root, root / "home"
-                )
-        self.assertEqual((code, err), (0, ""))
-        detail = json.loads(out)
-        expected = catalog.read_skill(
-            PLUGIN_ROOT / "skills" / installed["name"] / "SKILL.md"
-        )["description"]
-        self.assertEqual(detail["description"], expected)
-        self.assertEqual(detail["provenance"]["state"], "foundation-exact")
-        self.assertEqual(detail["provenance"]["scope"], "bundled")
-
     def test_sf_context_dispatches_discovery(self):
         with mock.patch.object(sfx, "cmd_discovery", return_value=0) as dispatch, \
-                mock.patch.object(sfx.sys, "argv", ["sf-context", "discovery", "index", "--json"]):
+                mock.patch.object(sfx.sys, "argv", ["sf-context", "discovery", "overview", "--json"]):
             self.assertEqual(sfx.main(), 0)
-        dispatch.assert_called_once_with(["index", "--json"])
+        dispatch.assert_called_once_with(["overview", "--json"])
+
+    def test_removed_skill_catalog_modes_return_usage_exit_2(self):
+        # The retired per-skill catalog surfaces (domain/skill/index) no longer
+        # dispatch anywhere; cmd_discovery rejects them — and any unknown mode —
+        # with a usage error on stderr rather than silently rendering.
+        for mode in (["domain", "platform"], ["skill", "platform-apex-generate"],
+                     ["index"], ["bogus"]):
+            with self.subTest(mode=mode):
+                with redirect_stderr(io.StringIO()) as err:
+                    self.assertEqual(sfx.cmd_discovery(mode), 2)
+                self.assertIn("Usage: sf-context discovery", err.getvalue())
 
     def test_journey_and_where_both_resolve_to_the_journey_signpost(self):
         cases = ((["journey"], []), (["journey", "--json"], ["--json"]),
@@ -897,9 +90,7 @@ class DiscoveryRuntimeTests(unittest.TestCase):
         feature_probe.assert_called_once_with(["--target-org", "fixture", "--refresh", "--json"])
 
         with mock.patch.object(sfx, "cmd_features") as feature_probe:
-            with tempfile.TemporaryDirectory() as td:
-                code, _, _ = self.run_discovery(["overview"], Path(td), Path(td) / "home")
-            self.assertEqual(code, 0)
+            self.assertEqual(sfx.cmd_discovery(["overview"]), 0)
         feature_probe.assert_not_called()
 
     def test_cmd_discovery_overview_is_org_neutral_and_never_reads_target_org(self):
@@ -937,18 +128,28 @@ class BannerProvenanceTests(unittest.TestCase):
     Its art and layout are golden; its identity facts are read from the checked
     artifacts, so every expected value here is derived from those artifacts in
     the test rather than restated as a literal that could drift.
+
+    `_enabled_plugin_names` is patched to `None` (unknown) so the installed/
+    available split is derived purely from the checked-in catalog's plugin
+    names vs. this plugin's own name, independent of whatever
+    `~/.claude/settings.json` happens to say on the machine running the test —
+    the same fail-open "unknown" state `_plugin_catalog_match`'s own tests use.
     """
 
     def setUp(self):
+        patch = mock.patch.object(sfx, "_enabled_plugin_names", return_value=None)
+        patch.start()
+        self.addCleanup(patch.stop)
         self.version = json.loads(PLUGIN_JSON.read_text(encoding="utf-8"))["version"]
-        artifact = json.loads(CATALOG_ARTIFACT.read_text(encoding="utf-8"))
-        self.counts = artifact["counts"]
-        self.release = artifact["publicRelease"]["releaseRef"]
+        current_name = json.loads(PLUGIN_JSON.read_text(encoding="utf-8"))["name"]
+        plugins = json.loads(PLUGIN_CATALOG_ARTIFACT.read_text(encoding="utf-8"))["plugins"]
+        self.installed = sum(1 for p in plugins if p["name"] == current_name)
+        self.available = len(plugins) - self.installed
 
     def provenance_line(self):
         return (
-            f"{self.counts['visibleUnion']} capabilities · "
-            f"{self.counts['publicStandaloneAddable']} addable · release {self.release}"
+            f"{self.installed} Salesforce plugin(s) installed\n"
+            f"{self.available} Salesforce plugin(s) available to add"
         )
 
     def test_banner_block_is_headless_360_with_artifact_derived_identity(self):
@@ -957,7 +158,7 @@ class BannerProvenanceTests(unittest.TestCase):
         block = strip_ansi(sfx.render_banner_block())
         self.assertIn(sfx.BANNER, block)
         self.assertIn(f"{sfx.BANNER_WORDMARK}   ·   v{self.version}", block)
-        self.assertIn(TAGLINE, block)
+        self.assertNotIn(TAGLINE, block)
         self.assertIn(self.provenance_line(), block)
         self.assertNotIn("Salesforce DX", block)
 
@@ -998,39 +199,35 @@ class BannerProvenanceTests(unittest.TestCase):
             damaged.joinpath(".claude-plugin").mkdir(parents=True)
             damaged.joinpath(".claude-plugin/plugin.json").write_text("{not json", encoding="utf-8")
             damaged.joinpath("catalog").mkdir()
-            damaged.joinpath("catalog/discovery.json").write_text(
-                '{"counts":{"visibleUnion":"many"},"publicRelease":{}}', encoding="utf-8"
+            damaged.joinpath("catalog/plugins.json").write_text(
+                '{"plugins": "not-a-list"}', encoding="utf-8"
             )
             for root in (missing, damaged):
                 with self.subTest(root=root.name):
                     facts = sfx._banner_provenance(root)
                     self.assertEqual(facts["version"], "?")
-                    self.assertIsNone(facts["capabilities"])
-                    self.assertIsNone(facts["addable"])
-                    self.assertIsNone(facts["releaseRef"])
+                    self.assertIsNone(facts["foundation"])
+                    self.assertIsNone(facts["installedPlugins"])
+                    self.assertIsNone(facts["availablePlugins"])
                     block = strip_ansi(sfx.render_banner_block(root))
                     self.assertIn(sfx.BANNER, block)
                     self.assertIn("v?", block)
-                    self.assertIn(TAGLINE, block)
-                    self.assertNotIn("release", block)
+                    self.assertNotIn(TAGLINE, block)
+                    self.assertNotIn("installed", block)
 
     def test_banner_stays_within_eighty_columns_on_absurd_artifact_values(self):
-        """The ≤80 lockup is a contract, so artifact strings it interpolates are bounded."""
+        """The ≤80 lockup is a contract, so catalog-derived counts it interpolates are bounded."""
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             root.joinpath(".claude-plugin").mkdir()
             root.joinpath(".claude-plugin/plugin.json").write_text(
-                json.dumps({"version": "9." + "9" * 200}), encoding="utf-8"
+                json.dumps({"version": "9." + "9" * 200, "name": "x"}), encoding="utf-8"
             )
-            root.joinpath("catalog").mkdir()
-            root.joinpath("catalog/discovery.json").write_text(
-                json.dumps({
-                    "counts": {"visibleUnion": 10 ** 40, "publicStandaloneAddable": 10 ** 40},
-                    "publicRelease": {"releaseRef": "1." + "2" * 200},
-                }),
-                encoding="utf-8",
+            stub = types.SimpleNamespace(
+                load_catalog=lambda _root: {"plugins": [{"name": "shared"}] * 1_000_000}
             )
-            block = strip_ansi(sfx.render_banner_block(root))
+            with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=stub):
+                block = strip_ansi(sfx.render_banner_block(root))
         self.assertTrue(all(len(line) <= 80 for line in block.splitlines()), block)
         self.assertIn(sfx.BANNER, block)
 
@@ -1038,7 +235,7 @@ class BannerProvenanceTests(unittest.TestCase):
         raw = sfx.render_degraded_banner("No Default Org", ["No target-org is set."])
         degraded = strip_ansi(raw)
         self.assertIn(sfx.BANNER, degraded)
-        self.assertIn(TAGLINE, degraded)
+        self.assertNotIn(TAGLINE, degraded)
         self.assertIn(self.provenance_line(), degraded)
         # Now closes with the shared wayfinding footer (unified with the connected banner),
         # not the lone one-liner pointer; the discovery command token still appears once.
@@ -1053,7 +250,6 @@ class EnvironmentBandTests(unittest.TestCase):
     restated as a literal, and the band never fabricates an MCP health check."""
 
     def setUp(self):
-        self.counts = json.loads(CATALOG_ARTIFACT.read_text(encoding="utf-8"))["counts"]
         self.org = {
             "alias": "acme-dev", "edition": "Developer Edition (Sandbox)", "apiVersion": "63.0",
             "instanceUrl": "https://acme-dev.my.salesforce.com", "username": "jdoe@acme.example.com",
@@ -1067,15 +263,15 @@ class EnvironmentBandTests(unittest.TestCase):
         return strip_ansi(sfx.render_banner_message(org, self.project, self.stats, "4 file(s) changed", "connecting"))
 
     def test_install_summary_counts_are_artifact_derived(self):
-        skills = self.counts["foundation"]
-        library = self.counts["visibleUnion"]
+        skills = sum(1 for p in (PLUGIN_ROOT / "skills").iterdir()
+                     if p.is_dir() and (p / "SKILL.md").is_file())
         commands = len(list((PLUGIN_ROOT / "commands").glob("*.md")))
         agents = len(list((PLUGIN_ROOT / "agents").glob("*.md")))
         servers = len(json.loads((PLUGIN_ROOT / ".mcp.json").read_text(encoding="utf-8"))["mcpServers"])
         msg = self.message()
         self.assertIn("✓ Installed salesforce-development", msg)
         self.assertIn(
-            f"{skills} skills installed · {library} in library · "
+            f"{skills} skills installed · "
             f"{commands} commands · {agents} agents · {servers} MCP servers", msg)
 
     def test_install_summary_fails_open_on_missing_artifacts(self):
@@ -1087,6 +283,9 @@ class EnvironmentBandTests(unittest.TestCase):
             self.assertNotRegex(summary, r"\d+\s+skills")  # no fabricated count
 
     def test_catalog_facts_fail_open_independently(self):
+        # `foundation` (filesystem-derived) and `installedPlugins`/`availablePlugins`
+        # (catalog-derived) are two independent fact pairs — each must fail open
+        # on its own artifact trouble without dragging the other one down.
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             root.joinpath(".claude-plugin").mkdir()
@@ -1094,36 +293,36 @@ class EnvironmentBandTests(unittest.TestCase):
                 json.dumps({"name": "salesforce-development", "version": "1.9.0"}),
                 encoding="utf-8",
             )
-            catalog_dir = root / "catalog"
-            catalog_dir.mkdir()
-            artifact = catalog_dir / "discovery.json"
-
-            artifact.write_text(
-                json.dumps({
-                    "counts": {"visibleUnion": 114, "foundation": 41},
-                    "publicRelease": {"releaseRef": "1.32.0"},
-                }),
-                encoding="utf-8",
+            stub = types.SimpleNamespace(
+                load_catalog=lambda _root: {
+                    "plugins": [{"name": "salesforce-development"}, {"name": "other"}]
+                }
             )
-            facts = sfx._banner_provenance(root)
-            self.assertIsNone(facts["capabilities"])
-            summary = "\n".join(sfx.render_install_summary(False, root, facts=facts))
-            self.assertIn("41 skills installed · 114 in library", summary)
+            with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=stub), \
+                 mock.patch.object(sfx, "_enabled_plugin_names", return_value=None):
+                # No skills/ tree yet: foundation fails open, but a valid catalog
+                # still yields real installed/available counts.
+                facts = sfx._banner_provenance(root)
+                self.assertIsNone(facts["foundation"])
+                self.assertEqual(facts["installedPlugins"], 1)
+                self.assertEqual(facts["availablePlugins"], 1)
+                summary = "\n".join(sfx.render_install_summary(False, root, facts=facts))
+                self.assertNotRegex(summary, r"\d+\s+skills")
+                self.assertIn("1 Salesforce plugin(s) installed\n1 Salesforce plugin(s) available to add",
+                              sfx.render_banner_block(root, facts=facts))
 
-            artifact.write_text(
-                json.dumps({
-                    "counts": {
-                        "visibleUnion": 114,
-                        "foundation": "many",
-                        "publicStandaloneAddable": 73,
-                    },
-                    "publicRelease": {"releaseRef": "1.32.0"},
-                }),
-                encoding="utf-8",
-            )
-            facts = sfx._banner_provenance(root)
-            self.assertIsNone(facts["foundation"])
-            self.assertIn("114 capabilities · 73 addable · release 1.32.0", sfx.render_banner_block(root, facts=facts))
+                # Now the skills/ tree exists but the catalog is malformed: foundation
+                # is real while the plugin counts fail open, in the other direction.
+                skills_dir = root / "skills" / "platform-apex-generate"
+                skills_dir.mkdir(parents=True)
+                (skills_dir / "SKILL.md").write_text("---\nname: x\n---\n", encoding="utf-8")
+                stub.load_catalog = lambda _root: {"plugins": "not-a-list"}
+                facts = sfx._banner_provenance(root)
+                self.assertEqual(facts["foundation"], 1)
+                self.assertIsNone(facts["installedPlugins"])
+                summary = "\n".join(sfx.render_install_summary(False, root, facts=facts))
+                self.assertIn("1 skills installed", summary)
+                self.assertNotIn("plugin(s) installed", sfx.render_banner_block(root, facts=facts))
 
     def test_install_summary_drops_the_comp_fictions(self):
         msg = self.message()
@@ -1187,7 +386,7 @@ class EnvironmentBandTests(unittest.TestCase):
         # the install summary, the library/addable totals in the provenance line.
         msg = self.message()
         self.assertIn("You don't memorize commands here.", msg)   # the mindset line
-        self.assertIn('✳ New here? run /salesforce-development:discovery — or ask "what can I do here?"', msg)
+        self.assertIn('✳ New here? ask "what can I do here?" or run /salesforce-development:discovery.', msg)
         self.assertEqual(msg.count(DISCOVERY_CMD), 1)   # exactly one discovery pointer
         self.assertNotIn("in the library", msg)   # no third printing of the counts
 
@@ -1530,7 +729,7 @@ class SessionStartPointerTests(unittest.TestCase):
         self.assertNotIn("◉", context)
         self.assertNotIn("○", context)
         self.assertNotIn("\x1b", context)
-        for fact in ("salesforce-development", "catalog", "project:", "org:",
+        for fact in ("salesforce-development", "plugins:", "project:", "org:",
                      "current stage:", "reached:", "no evidence:", "next action:",
                      "Skills first", POINTER):
             self.assertIn(fact, context)
@@ -2151,14 +1350,23 @@ class OrientationPaintTests(unittest.TestCase):
         # first-message (entered) nudge has its own test.
         self._orig_marker_dir = sfx._WELCOME_MARKER_DIR
         self._orig_runtime_dir = sfx._PROMPT_RUNTIME_DIR
+        self._orig_plugin_proposal_dir = sfx._PLUGIN_PROPOSAL_DIR
+        self._orig_plugin_flow_dir = sfx._PLUGIN_FLOW_DIR
         sfx._WELCOME_MARKER_DIR = Path(self.tmp.name)
         sfx._PROMPT_RUNTIME_DIR = Path(self.tmp.name) / "runtime"
+        # _PLUGIN_PROPOSAL_DIR is derived at import time, so redirect it
+        # explicitly with the prompt runtime. Otherwise prompt recommendation
+        # state for the fixed test session id ("s1") leaks between test runs.
+        sfx._PLUGIN_PROPOSAL_DIR = sfx._PROMPT_RUNTIME_DIR / "plugin-proposals"
+        sfx._PLUGIN_FLOW_DIR = sfx._PROMPT_RUNTIME_DIR / "plugin-flows"
         sfx._record_welcomed("s1")
         sfx._record_entered("s1")
 
     def tearDown(self):
         sfx._WELCOME_MARKER_DIR = self._orig_marker_dir
         sfx._PROMPT_RUNTIME_DIR = self._orig_runtime_dir
+        sfx._PLUGIN_PROPOSAL_DIR = self._orig_plugin_proposal_dir
+        sfx._PLUGIN_FLOW_DIR = self._orig_plugin_flow_dir
         os.chdir(self.old_cwd)
         self.tmp.cleanup()
 
@@ -2317,6 +1525,163 @@ class OrientationPaintTests(unittest.TestCase):
         self.assertRegex(note, r"(?i)ambient")
         self.assertRegex(note, r"(?i)proceed with")
         self.assertEqual(second, {"continue": True})               # once only
+
+    def test_prompt_plugin_recommendation_defers_but_does_not_consume_ambient_rail(self):
+        # A first-turn recommendation owns that turn's visible surface. It must not
+        # permanently consume the first-message orientation rail: the proposal
+        # ledger dedupes the plugin on turn two, which then paints the ambient rail.
+        sfx._session_marker("s1", "entered").unlink(missing_ok=True)
+        candidate = {
+            "name": "experience-cms",
+            "description": "Curated CMS content and media workflows.",
+            "band": "high",
+            "first_occurrence": True,
+            "install_command": "/salesforce-development:plugin-install experience-cms",
+        }
+        with mock.patch.object(
+            sfx, "_plugin_catalog_match", side_effect=[[candidate], []]
+        ):
+            _, recommendation = self.capture("search Salesforce CMS media")
+            self.assertIn("Recommended plugin for this task", recommendation["systemMessage"])
+            self.assertFalse(sfx._entered_this_session("s1"))
+            self.assertTrue(sfx._load_plugin_flow("s1")["taskBacked"])
+
+            _, next_turn = self.capture("show me the results")
+
+        self.assertIn("build", next_turn["systemMessage"])
+        note = next_turn["hookSpecificOutput"]["additionalContext"]
+        self.assertRegex(note, r"(?i)ambient")
+        self.assertTrue(sfx._entered_this_session("s1"))
+
+    def test_explicit_named_plugin_decline_routes_before_recommendation_scoring(self):
+        # A decline is a control reply to the already-visible proposal. In the live
+        # regression, scoring this text surfaced CMS from "experience" and org
+        # lifecycle from "install". Route the exact prior proposal instead, with
+        # no replacement recommendation and no hook-side telemetry mutation.
+        proposal = {
+            "experience-react": {"confidence": "high", "surface": "session-start"}
+        }
+        self.assertTrue(sfx._save_plugin_proposals("s1", proposal))
+        with mock.patch.object(sfx, "_plugin_catalog_match") as matcher, \
+                mock.patch.object(
+                    sfx, "_record_plugin_decline", return_value=(True, "")
+                ) as recorder:
+            _, result = self.capture(
+                "no thanks, do not install experience-react"
+            )
+
+        matcher.assert_not_called()
+        recorder.assert_called_once_with("experience-react", "s1")
+        self.assertNotIn("systemMessage", result)
+        note = result["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("was recorded for this session", note)
+        self.assertRegex(note, r"(?i)do not run a tool")
+        self.assertRegex(note, r"(?i)do not recommend another plugin")
+        self.assertEqual(sfx._load_plugin_proposals("s1"), proposal)
+
+    def test_session_start_flow_routes_terse_acceptance_before_a_dry_run(self):
+        proposal = {
+            "experience-react": {"confidence": "high", "surface": "session-start"}
+        }
+        self.assertTrue(sfx._save_plugin_proposals("s1", proposal))
+        self.assertTrue(sfx._open_plugin_flow(
+            "s1", ["experience-react"], "session-start"
+        ))
+        with mock.patch.object(sfx, "_plugin_catalog_match") as matcher:
+            _, result = self.capture("ok install it")
+
+        matcher.assert_not_called()
+        self.assertNotIn("systemMessage", result)
+        note = result["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("plugin-install experience-react --accept-proposed", note)
+        self.assertIn("install immediately", note)
+        self.assertRegex(note, r"(?i)do not recommend another plugin")
+        self.assertEqual(
+            sfx._load_plugin_flow("s1")["state"], "selected"
+        )
+
+    def test_concrete_task_promotes_matching_session_start_flow_to_task_backed(self):
+        proposal = {
+            "experience-react": {"confidence": "high", "surface": "session-start"}
+        }
+        candidate = {
+            "name": "experience-react",
+            "description": "Build Salesforce React UI bundles.",
+            "band": "high",
+            "first_occurrence": False,
+            "install_command": "/salesforce-development:plugin-install experience-react",
+        }
+        self.assertTrue(sfx._save_plugin_proposals("s1", proposal))
+        self.assertTrue(sfx._open_plugin_flow(
+            "s1", ["experience-react"], "session-start"
+        ))
+        with mock.patch.object(
+            sfx, "_plugin_catalog_match", return_value=[candidate]
+        ) as matcher:
+            _, result = self.capture(
+                "Build the existing Salesforce React UI bundle with TSX and Tailwind"
+            )
+
+        matcher.assert_called_once()
+        self.assertIn("Recommended plugin for this task", result["systemMessage"])
+        flow = sfx._load_plugin_flow("s1")
+        self.assertTrue(flow["taskBacked"])
+        self.assertEqual(flow["surface"], "user-prompt")
+        self.assertEqual(flow["candidates"], ["experience-react"])
+
+    def test_recommendation_only_flow_waits_for_a_new_task_after_activation(self):
+        self.assertTrue(sfx._save_plugin_flow(
+            "s1", ["experience-react"], selected="experience-react",
+            state="installed", surface="session-start", task_backed=False,
+        ))
+        with mock.patch.object(sfx, "_plugin_catalog_match") as matcher:
+            _, control = self.capture("continue")
+        matcher.assert_not_called()
+        self.assertNotIn("systemMessage", control)
+        note = control["hookSpecificOutput"]["additionalContext"]
+        self.assertRegex(note, r"(?i)not a new substantive task")
+        self.assertRegex(note, r"(?i)briefly confirm activation")
+        self.assertRegex(note, r"(?i)do not inspect the project")
+        self.assertRegex(note, r"(?i)ask the user for a new concrete task")
+        self.assertIsNotNone(sfx._load_plugin_flow("s1"))
+
+        with mock.patch.object(sfx, "_plugin_catalog_match", return_value=[]) as matcher:
+            _, task = self.capture("create a custom object for conference sessions")
+        matcher.assert_called_once()
+        self.assertEqual(task, {"continue": True})
+        self.assertIsNone(sfx._load_plugin_flow("s1"))
+
+    def test_task_backed_flow_resumes_the_interrupted_task_after_activation(self):
+        self.assertTrue(sfx._save_plugin_flow(
+            "s1", ["experience-react"], selected="experience-react",
+            state="installed", surface="user-prompt", task_backed=True,
+        ))
+        with mock.patch.object(sfx, "_plugin_catalog_match") as matcher:
+            _, control = self.capture("continue")
+        matcher.assert_not_called()
+        self.assertNotIn("systemMessage", control)
+        note = control["hookSpecificOutput"]["additionalContext"]
+        self.assertRegex(note, r"(?i)interrupted a concrete earlier task")
+        self.assertRegex(note, r"(?i)resume only that same earlier task")
+        self.assertRegex(note, r"(?i)appropriate installed skill")
+        self.assertNotRegex(note, r"(?i)ask the user for a new concrete task")
+        self.assertTrue(sfx._load_plugin_flow("s1")["taskBacked"])
+
+    def test_task_backed_terminal_status_and_ok_do_not_resume_or_reinstall(self):
+        self.assertTrue(sfx._save_plugin_flow(
+            "s1", ["experience-react"], selected="experience-react",
+            state="installed", surface="user-prompt", task_backed=True,
+        ))
+        for prompt in ("is the plugin active?", "OK"):
+            with self.subTest(prompt=prompt), \
+                    mock.patch.object(sfx, "_plugin_catalog_match") as matcher:
+                _, control = self.capture(prompt)
+            matcher.assert_not_called()
+            note = control["hookSpecificOutput"]["additionalContext"]
+            self.assertRegex(note, r"(?i)did not explicitly ask to resume")
+            self.assertRegex(note, r"(?i)do not .*resume implementation")
+            self.assertIn("`continue`", note)
+            self.assertNotIn("plugin-install experience-react", note)
 
     def test_connect_intent_with_sf_absent_routes_to_setup_and_never_logs_in(self):
         # D9: on connect intent the plugin does the cheap `sf`-on-PATH check FIRST.
@@ -2560,8 +1925,8 @@ class OrientationPaintTests(unittest.TestCase):
         ])
 
     def test_render_overview_paint_renders_a_bounded_colored_block_from_the_real_catalog(self):
-        # Integration: the paint helper loads the checked-in catalog and returns the
-        # visible-channel block — colored with the overview palette (this is the paint
+        # Integration: the paint helper loads the checked-in plugin catalog and returns
+        # the visible-channel block — colored with the overview palette (this is the paint
         # path, so color=True), stripping to the same bounded block the command prints.
         # The helper is wholly offline; no org-presence read or CLI patch is needed.
         block = sfx._render_overview_paint(Path(self.tmp.name))
@@ -2575,13 +1940,9 @@ class OrientationPaintTests(unittest.TestCase):
         self.assertEqual([l for l in plain.splitlines() if len(l) > 80], [])
 
     def test_render_overview_paint_returns_none_on_any_render_failure(self):
-        # Fail open: any catalog-render error resolves to None so the hook stays a
-        # silent continue — never a stack trace on the user's prompt. Inject the
-        # renderer through sys.modules so the test covers both normal and fallback
-        # import environments without depending on sys.path.
-        failing_catalog = types.ModuleType("discovery_catalog")
-        failing_catalog.render_overview_text = mock.Mock(side_effect=Exception("boom"))
-        with mock.patch.dict("sys.modules", {"discovery_catalog": failing_catalog}):
+        # Fail open: any overview-render error resolves to None so the hook stays a
+        # silent continue — never a stack trace on the user's prompt.
+        with mock.patch.object(sfx, "_capability_overview_facts", side_effect=Exception("boom")):
             self.assertIsNone(sfx._render_overview_paint(Path(self.tmp.name)))
 
     def test_discovery_overview_intent_hits_and_misses(self):

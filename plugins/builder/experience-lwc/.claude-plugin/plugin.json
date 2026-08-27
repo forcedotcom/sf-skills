@@ -1,0 +1,24 @@
+{
+  "name": "experience-lwc",
+  "displayName": "Salesforce LWC",
+  "version": "0.1.0",
+  "description": "Build and validate Lightning Web Components (LWC): generate components with the PICKLES methodology and 165-point scoring, scaffold a fresh LWC from a Figma design or a PRD, wire-service and Jest test patterns, SLDS styling, WCAG/ARIA accessibility validation, and RTL/TypeScript migration. Use when creating, editing, or reviewing LWC components — touching lwc/**/*.js, .html, .css, or .js-meta.xml files, or asking about wire service, base components, SLDS, Jest LWC tests, or component accessibility.",
+  "author": { "name": "Salesforce" },
+  "license": "Apache-2.0",
+  "keywords": ["lwc", "lightning web components", "jest", "slds", "wire service", "accessibility", "wcag", "figma", "typescript"],
+  "dependencies": [],
+  "skills": "./skills/",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/skills/experience-lwc-generate/scripts/post-tool-validate.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

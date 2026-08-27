@@ -1,0 +1,72 @@
+/**
+ * BASIC LWC COMPONENT TEMPLATE - CSS
+ *
+ * CSS in LWC is automatically scoped to the component.
+ * Use SLDS (Salesforce Lightning Design System) classes when possible.
+ *
+ * CSS Custom Properties (variables) can be exposed for theming.
+ */
+
+/* Host element styling */
+:host {
+    display: block;
+}
+
+/* Custom properties for theming */
+:host {
+    --card-background: var(--lwc-colorBackground, #ffffff);
+    --card-border-radius: var(--lwc-borderRadiusMedium, 0.25rem);
+    --item-hover-background: var(--lwc-colorBackgroundRowHover, #f3f3f3);
+}
+
+/* List item hover effect */
+.slds-item:hover {
+    background-color: var(--item-hover-background);
+    cursor: pointer;
+}
+
+/* Smooth transitions */
+.slds-tile {
+    transition: background-color 0.2s ease;
+}
+
+/* Loading state fade */
+.slds-spinner {
+    opacity: 0.8;
+}
+
+/* Error state styling */
+.slds-alert_error {
+    border-radius: var(--card-border-radius);
+}
+
+/* Empty state styling */
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .slds-tile__detail {
+        padding: 0.5rem;
+    }
+
+    .slds-text-heading_small {
+        font-size: 0.875rem;
+    }
+}
+
+/* Focus states for accessibility */
+a:focus {
+    outline: 2px solid var(--lwc-colorBorderBrand, #1589ee);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .slds-item:hover {
+        background-color: highlight;
+    }
+}

@@ -1,0 +1,95 @@
+<template>
+    <lightning-card title="TypeScript Component" icon-name="standard:account">
+        <!-- Loading State -->
+        <template lwc:if={isLoading}>
+            <div class="slds-p-around_medium slds-align_absolute-center">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template lwc:elseif={hasError}>
+            <div class="slds-p-around_medium">
+                <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                    <span class="slds-assistive-text">Error</span>
+                    <lightning-icon icon-name="utility:error" alternative-text="Error" size="small"></lightning-icon>
+                    <span class="slds-m-left_small">{errorMessage}</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- Content -->
+        <template lwc:else>
+            <!-- Account List -->
+            <template lwc:if={hasAccounts}>
+                <ul class="slds-has-dividers_bottom-space slds-p-horizontal_medium">
+                    <template for:each={accounts} for:item="account">
+                        <li key={account.Id} class="slds-item slds-p-vertical_small">
+                            <a
+                                href="#"
+                                data-id={account.Id}
+                                onclick={handleAccountSelect}
+                                class="slds-text-link_reset">
+                                <div class="slds-grid slds-grid_vertical-align-center">
+                                    <div class="slds-col slds-grow">
+                                        <span class="slds-text-heading_small">{account.Name}</span>
+                                        <template lwc:if={account.Industry}>
+                                            <span class="slds-text-body_small slds-text-color_weak slds-m-left_small">
+                                                {account.Industry}
+                                            </span>
+                                        </template>
+                                    </div>
+                                    <div class="slds-col slds-shrink">
+                                        <lightning-icon
+                                            icon-name="utility:chevronright"
+                                            size="x-small"
+                                            alternative-text="View">
+                                        </lightning-icon>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+
+            <!-- Empty State -->
+            <template lwc:else>
+                <div class="slds-p-around_medium slds-text-align_center">
+                    <lightning-icon
+                        icon-name="utility:info"
+                        alternative-text="Info"
+                        size="large"
+                        class="slds-m-bottom_small">
+                    </lightning-icon>
+                    <p class="slds-text-color_weak">No accounts found</p>
+                </div>
+            </template>
+
+            <!-- Selected Account Details -->
+            <template lwc:if={_selectedAccount}>
+                <div class="slds-box slds-m-around_medium slds-theme_shade">
+                    <h3 class="slds-text-heading_small slds-m-bottom_small">
+                        Selected Account
+                    </h3>
+                    <dl class="slds-list_horizontal slds-wrap">
+                        <dt class="slds-item_label slds-text-color_weak">Name:</dt>
+                        <dd class="slds-item_detail">{selectedAccountName}</dd>
+                        <dt class="slds-item_label slds-text-color_weak">Revenue:</dt>
+                        <dd class="slds-item_detail">{formattedRevenue}</dd>
+                    </dl>
+                </div>
+            </template>
+        </template>
+
+        <!-- Footer Actions -->
+        <div slot="footer">
+            <lightning-button
+                label="Refresh"
+                icon-name="utility:refresh"
+                onclick={handleRefresh}
+                disabled={isLoading}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

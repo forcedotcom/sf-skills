@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fallback ASA-compliant email template for Email-to-Case Agentforce replies.
+  Deployed by Branch C ONLY when the user does not name an existing template.
+
+  Placed under email/unfiled$public/ so it lands in the org-wide PUBLIC email
+  template folder — BotEmailDefinition rejects a template in a private (user)
+  folder. The companion AgentforceForServiceEmailTemplate.email holds the HTML
+  body with the required [[[GENERATED_CONTENT]]] and [[[LEGAL_DISCLOSURE]]] tokens.
+
+  Key required attributes for ASA validity (see references/botemaildefinition.md):
+    uiType = SFX     -> Lightning email template (a classic 'Aloha' template is rejected).
+                        uiType is SET-ONCE: it cannot be changed after create.
+    type   = custom  -> HTML/custom body (not 'text' or 'visualforce').
+    style  = none    -> REQUIRED by the deploy ("Required field is missing: style").
+                        'none' is valid for a custom HTML template.
+
+  The deploying user needs Lightning (SFX) email-template permission and write
+  access to public templates (editPublicTemplates), plus org HTML email enabled.
+-->
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <name>Agentforce for Service Email Template</name>
+    <uiType>SFX</uiType>
+    <type>custom</type>
+    <style>none</style>
+    <encodingKey>UTF-8</encodingKey>
+    <subject>Re: your support request</subject>
+    <available>true</available>
+</EmailTemplate>

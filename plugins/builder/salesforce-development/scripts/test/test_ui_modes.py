@@ -34,10 +34,10 @@ STATE = {
 
 
 class UiModeContracts(unittest.TestCase):
-    def test_manifest_declares_one_string_option_with_full_default(self):
+    def test_manifest_declares_ui_mode_string_option_with_full_default(self):
         plugin = json.loads(PLUGIN_JSON.read_text(encoding="utf-8"))
         config = plugin["userConfig"]
-        self.assertEqual(set(config), {"ui_mode"})
+        self.assertIn("ui_mode", config)
         self.assertEqual(config["ui_mode"]["type"], "string")
         self.assertEqual(config["ui_mode"]["default"], "full")
         self.assertIn("full", config["ui_mode"]["description"])

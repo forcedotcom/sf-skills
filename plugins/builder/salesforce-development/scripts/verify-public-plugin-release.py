@@ -15,7 +15,7 @@ from typing import Iterator, Optional
 sys.dont_write_bytecode = True
 
 import capability_registry as registry
-import discovery_catalog as catalog
+import plugin_catalog
 
 _TRANSIENT_DIRS = {"__pycache__", ".pytest_cache", ".sf"}
 _RELEASE_MAX_ENTRIES = 4096
@@ -195,7 +195,8 @@ def verify(
     authoring_root = Path(authoring_root).resolve(strict=True)
     public_root = Path(public_root).resolve(strict=True) if public_root is not None else None
     manifest = registry.load_public_manifest(plugin_root / registry.PUBLIC_MANIFEST_RELATIVE)
-    catalog.check(authoring_root.parent, plugin_root)
+    repo_root = authoring_root.parent
+    plugin_catalog.check(repo_root, plugin_root)
 
     public = {row["name"] for row in manifest["skills"]}
     foundation = set(registry.skill_directories(plugin_root / "skills"))
@@ -218,6 +219,13 @@ def verify(
                 continue
             seen_descriptions.add(identity)
             protected.append((name, description, description.encode("utf-8")))
+
+    for name, description in plugin_catalog.held_plugin_descriptions(repo_root, plugin_root).items():
+        identity = (name, description)
+        if identity in seen_descriptions:
+            continue
+        seen_descriptions.add(identity)
+        protected.append((name, description, description.encode("utf-8")))
 
     file_count = 0
     leaks: list[str] = []

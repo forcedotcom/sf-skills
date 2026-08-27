@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>66.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Flow Screen Component</masterLabel>
+    <description>Component demonstrating complete Flow integration patterns with FlowAttributeChangeEvent and FlowNavigationFinishEvent</description>
+
+    <targets>
+        <!-- Primary target: Flow Screens -->
+        <target>lightning__FlowScreen</target>
+    </targets>
+
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <!--
+            ═══════════════════════════════════════════════════════════════════════════
+            INPUT PROPERTIES (Flow → Component)
+            These receive values FROM the Flow.
+
+            Roles:
+            - inputOnly: Flow can set, component cannot change (default for inputs)
+            - outputOnly: Component sets, Flow receives
+            - (no role): Bidirectional - not recommended, use explicit roles
+            ═══════════════════════════════════════════════════════════════════════════
+            -->
+            <property
+                name="recordId"
+                type="String"
+                label="Record ID"
+                description="ID of the parent record for context (e.g., from $Record.Id)"
+                role="inputOnly"/>
+
+            <property
+                name="objectApiName"
+                type="String"
+                label="Object API Name"
+                description="API name of the object (e.g., from $Record.Object)"
+                role="inputOnly"/>
+
+            <property
+                name="inputLabel"
+                type="String"
+                label="Display Label"
+                description="Label to display in the component header"
+                default="Select a Record"
+                role="inputOnly"/>
+
+            <!--
+            ═══════════════════════════════════════════════════════════════════════════
+            OUTPUT PROPERTIES (Component → Flow)
+            These send values BACK to the Flow.
+            Component must dispatch FlowAttributeChangeEvent to update these.
+
+            Flow accesses these via: {!Get_Screen.outputPropertyName}
+            ═══════════════════════════════════════════════════════════════════════════
+            -->
+            <property
+                name="selectedRecordId"
+                type="String"
+                label="Selected Record ID"
+                description="ID of the record selected by the user"
+                role="outputOnly"/>
+
+            <property
+                name="selectedRecordName"
+                type="String"
+                label="Selected Record Name"
+                description="Name of the selected record"
+                role="outputOnly"/>
+
+            <property
+                name="isComplete"
+                type="Boolean"
+                label="Is Complete"
+                description="Whether the user has completed their selection"
+                default="false"
+                role="outputOnly"/>
+
+            <property
+                name="errorMessage"
+                type="String"
+                label="Error Message"
+                description="Error message if validation fails"
+                role="outputOnly"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

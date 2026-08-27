@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Enables the "Allow using standard external profiles for self-registration,
+  user creation, and login" org setting (field enableOotbProfExtUserOpsEnable).
+
+  Ported VERBATIM from reference org-setup.mjs enableExternalProfiles (lines
+  581-586). Required so SSO registration handlers can create users on standard
+  community profiles (e.g. "Customer Community User"); without it, auth providers
+  fail user insert with FIELD_INTEGRITY_EXCEPTION.
+
+  This is sub-step 1 of SKILL.md step 6b. Deploy this file via Metadata API
+  (the REST/Tooling approaches fail on many org types). See
+  references/social-login.md for the exact deploy invocation and the throwaway
+  minimal-project layout it needs. If the deploy warns that the setting is
+  already active, treat it as a non-fatal skip.
+-->
+<CommunitiesSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableOotbProfExtUserOpsEnable>true</enableOotbProfExtUserOpsEnable>
+</CommunitiesSettings>
