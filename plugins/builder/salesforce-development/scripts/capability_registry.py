@@ -825,8 +825,8 @@ def _valid_hash(value) -> bool:
 
 def _valid_access_check(value) -> bool:
     """Validate the tri-state accessCheck: ``None`` (undeclared) or a list of
-    ``{type, value}`` entries (``[]`` = any org). Mirrors the canonical schema in
-    scripts/validate-skills.ts exactly: ``type`` in the fixed enum, ``value`` any
+    ``{type, value}`` entries (``[]`` = any org). Enforces the accessCheck schema
+    directly: ``type`` in the fixed ``_ACCESS_CHECK_TYPES`` enum, ``value`` any
     string (no emptiness or control-character constraint), exact ``{type, value}``
     keys. ``None`` and ``[]`` are kept distinct — never collapsed."""
     if value is None:
