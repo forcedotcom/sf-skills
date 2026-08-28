@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Template for headless Email-to-Case config. Fill in, then emit a COMMENT-FREE
+     source file (see SKILL.md step 3). fullName is implicitly "Case". Do not set
+     emailAddress (supply via --routing-email), emailServicesAddress, or isVerified. -->
+<CaseSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Support Settings (siblings of emailToCase). Set inline whatever the user
+         names; omit the rest. Default Case Owner: defaultCaseOwner (a Username or
+         Queue DeveloperName) with its defaultCaseOwnerType (User or Queue).
+         Automated Case User — pick ONE, they are mutually exclusive:
+           - a named person -> defaultCaseUser (a Username), OR
+           - the org's System user -> useSystemUserAsDefaultCaseUser true, plus
+             systemUserEmail when the user gives an email (do NOT also set
+             defaultCaseUser in this case).
+         apply-casesettings.py can also supply/validate these via flags and
+         preserves existing org values. Emit these fields ONLY when the user
+         names a value; a defaultCaseOwnerType without a defaultCaseOwner (or the
+         reverse) is a half-filled owner the platform rejects. -->
+
+    <!-- "Enable Email Drafts" — plural, top-level. Remove if the user opts out. -->
+    <enableDraftEmails>true</enableDraftEmails>
+
+    <emailToCase>
+        <!-- Required. On-Demand must be on before addresses bind. -->
+        <enableEmailToCase>true</enableEmailToCase>
+        <enableOnDemandEmailToCase>true</enableOnDemandEmailToCase>
+
+        <!-- Optional convenience toggles (on by default). Remove any the user opts out of. -->
+        <enableHtmlEmail>true</enableHtmlEmail>
+        <notifyOwnerOnNewCaseEmail>true</notifyOwnerOnNewCaseEmail>
+        <enableE2CDeduplicateAttachments>true</enableE2CDeduplicateAttachments>
+        <showWordCountInComposer>true</showWordCountInComposer>
+
+        <!-- One routingAddresses block per address. addressType: EmailToCase | Outlook
+             | GmailOAuth. Optional per-address caseOwner + caseOwnerType (opt-in, paired)
+             — see SKILL.md step 6. Placeholders below are filled per address. -->
+        <routingAddresses>
+            <addressType>EmailToCase</addressType>
+            <routingName>ROUTING_NAME</routingName>
+            <caseOrigin>CASE_ORIGIN</caseOrigin>
+            <casePriority>CASE_PRIORITY</casePriority>
+            <createTask>false</createTask>
+            <saveEmailHeaders>true</saveEmailHeaders>
+        </routingAddresses>
+    </emailToCase>
+</CaseSettings>

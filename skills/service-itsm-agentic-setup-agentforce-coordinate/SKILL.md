@@ -1,8 +1,8 @@
 ---
 name: service-itsm-agentic-setup-agentforce-coordinate
-description: "Orchestrator for setting up Agentforce in Salesforce Service Cloud ITSM — Agentforce Studio enablement, the IT Service Fulfiller agent lifecycle, and the IT Service Employee agent lifecycle. Use when the user asks to set up Agentforce for ITSM, enable Studio and the Fulfiller/Employee agents together, wants a guided Agentforce ITSM walkthrough, or asks what Agentforce features are available for IT Service. Presents available Agentforce capabilities and delegates each selection to a specialized child skill while tracking progress. Triggers on: set up agentforce for itsm, configure agentforce studio and fulfiller, agentforce itsm walkthrough, what agentforce features for it service. DO NOT TRIGGER when: the user asks to enable Agentforce Studio alone, asks to create or activate the Fulfiller or Employee agent alone, or asks about CMDB, Incident Management, Teams, or general ITSM setup without Agentforce intent."
+description: "Orchestrator for setting up Agentforce in Salesforce Service Cloud ITSM — Agentforce Studio enablement, the IT Service Fulfiller agent, and the IT Service Employee agent. Use when the user asks to set up Agentforce for ITSM, enable Studio and the Fulfiller/Employee agents together, wants a guided Agentforce ITSM walkthrough, or asks what Agentforce features are available for IT Service. Presents available Agentforce capabilities and delegates each selection to a specialized child skill while tracking progress. Triggers on: set up agentforce for itsm, configure agentforce studio and fulfiller, agentforce itsm walkthrough, what agentforce features for it service. DO NOT TRIGGER when: the user asks to enable Agentforce Studio alone, asks to create or activate the Fulfiller or Employee agent alone, or asks about CMDB, Incident Management, Teams, or general ITSM setup without Agentforce intent."
 metadata:
-  version: "1.2"
+  version: "1.6"
   domains: ["Service", "Agentforce"]
   relatedSkills:
     - "service-itsm-agentic-setup-agentforce-studio-configure"
@@ -46,21 +46,27 @@ explicit confirmation of the org.
 
 ### 3. Present the Agentforce feature menu as a multi-select
 
-Show the user what's available and what's done. Only features with a working child skill appear in the menu — use the **Feature menu** template in `examples/output-templates.md`. Collect the user's selections through a single multi-select prompt (use `AskUserQuestion` with `multiSelect: true` when tooling permits, otherwise ask the user to reply with a list of numbers such as `1, 2`). Do NOT show placeholder features that cannot be executed.
+Show the user what's available and what's done, organized into the **two sequential setup stages** —
+**Stage 1: enable platform features** (Agentforce Studio enablement) and **Stage 2: install &
+activate agent templates** (the Fulfiller and Employee agents). This separation is load-bearing:
+Stage 1 *enables* org-level platform toggles/preferences, while Stage 2 *installs and activates*
+agents from a template — they are distinct kinds of action and must read as distinct stages, not one
+undifferentiated list. Only features with a working child skill appear in the menu — use the
+**Feature menu** template in `examples/output-templates.md`. Collect the user's selections through a single multi-select prompt (use `AskUserQuestion` with `multiSelect: true` when tooling permits, otherwise ask the user to reply with a list of numbers such as `1, 2`). Use the **exact Item names from the Feature menu table** as the multi-select option labels — verbatim, including each item's parenthetical note and the word "Agent" and its capitalization (`Agentforce Studio enablement (Foundation for both agents)`, `IT Service Fulfiller Agent`, `IT Service Employee Agent`) — so the picker options and the table never diverge. Each item's **Description column matches the wording on the Salesforce Setup → Agentforce for IT Service page** (the Fulfiller and Employee agent-template descriptions are used verbatim) so a user evaluating which template to install reads the same purpose/scope here as they would in Setup — do not paraphrase or shorten that product copy. For the two Stage 2 agent templates, follow the verbatim product copy with one short trailing `Setup:` line stating what installing does (`Setup: creates the agent from this template and activates a version.`) so a single row carries purpose, scope, and the install action together. When raising `AskUserQuestion`, put that same Description text (product copy + the `Setup:` line) in each option's `description` field so the picker carries the detail too. Do NOT show placeholder features that cannot be executed.
 
 **Report file (harness / non-interactive runs).** If a `${outputDir}` is provided (via the harness's generated-file location directive), write the menu emission (attribution header + feature table with status + delegation targets + dependency signal + the multi-select prompt itself) to `${outputDir}/report.md` **before** raising `AskUserQuestion` — so the report file always exists even when the harness parks at the confirmation gate. Overwrite the same file after each feature completes with the updated status table. Skip these writes when running interactively for a user in a chat surface — write only when `${outputDir}` was passed as an explicit destination.
 
 ### 4. Delegate to child skills in dependency order
 
-**Studio-first rule (unconditional).** If Agentforce Studio enablement (#1) is in the user's selection and not already done, run it **first**, always — regardless of the order the user listed their numbers in. Both the Fulfiller Agent (#2) and Employee Agent (#3) lifecycles depend on Studio being enabled and will fail if attempted first. Reorder the queue silently so Studio runs before either agent lifecycle. This rule is non-negotiable and applies whether the user selected two features (Studio + one agent) or all three.
+**Studio-first rule (unconditional).** If Agentforce Studio enablement (#1) is in the user's selection and not already done, run it **first**, always — regardless of the order the user listed their numbers in. Both the Fulfiller Agent (#2) and Employee Agent (#3) depend on Studio being enabled and will fail if attempted first. Reorder the queue silently so Studio runs before either agent. This rule is non-negotiable and applies whether the user selected two features (Studio + one agent) or all three.
 
 **User-order rule (between #2 and #3 only).** Fulfiller Agent (#2) and Employee Agent (#3) are independent of each other — neither depends on the other. If **both** are selected, run them in the order the user listed them (default 2 → 3 when unspecified). This rule applies **only** to the ordering between #2 and #3; it never overrides the Studio-first rule above.
 
 | # | Feature | Child Skill |
 |---|---------|-------------|
-| 1 | Agentforce Studio enablement | `service-itsm-agentic-setup-agentforce-studio-configure` |
-| 2 | Fulfiller Agent lifecycle | `service-itsm-agentic-setup-fulfiller-agent-configure` |
-| 3 | Employee Agent lifecycle (broad or specialized template) | `service-itsm-agentic-setup-employee-agent-configure` |
+| 1 | Agentforce Studio enablement (Foundation for both agents) | `service-itsm-agentic-setup-agentforce-studio-configure` |
+| 2 | IT Service Fulfiller Agent | `service-itsm-agentic-setup-fulfiller-agent-configure` |
+| 3 | IT Service Employee Agent | `service-itsm-agentic-setup-employee-agent-configure` |
 
 `service-itsm-agentic-setup-agentforce-studio-configure` performs its own read-and-classify
 preflight (reading live toggle state before writing) rather than delegating to
@@ -91,15 +97,26 @@ When the user says they're done (or all available features are configured), pres
 
 ---
 
-## Feature Dependencies & Recommended Order
+## Setup Stages & Recommended Order
+
+Setup runs in **two sequential stages**. Stage 1 (enable platform features) must complete before
+Stage 2 (install & activate agent templates).
 
 ```text
-1. Agentforce Studio enablement   (foundation — org-level Agentforce and Einstein GenAI toggles)
-2. Fulfiller Agent lifecycle      (create, commit, activate the IT Service Fulfiller agent)
-3. Employee Agent lifecycle       (create, commit, activate the IT Service Employee agent)
+Stage 1 — Foundation: enable platform features
+  1. Agentforce Studio enablement (Foundation for both agents)   (turn ON org-level Agentforce + Einstein GenAI feature toggles)
+
+Stage 2 — Agent templates: install & activate   (only after Stage 1)
+  2. IT Service Fulfiller Agent     (install from template, commit, and activate the agent)
+  3. IT Service Employee Agent      (install from template, commit, and activate the agent)
 ```
 
-Agentforce Studio enablement is the foundation: it turns on the org-level Agentforce and Einstein GenAI features that both the Fulfiller and Employee agents depend on. Configure Studio first — attempting to create or activate either agent before Studio is enabled will fail. Fulfiller and Employee are independent siblings (neither depends on the other) — both can be selected together and run in either order after Studio.
+Stage 1 (Agentforce Studio enablement) is the **foundation**: it turns on the org-level Agentforce
+and Einstein GenAI feature toggles that both the Fulfiller and Employee agents are **built on top
+of**. Enable it first — attempting to install or activate either agent before this foundation is
+enabled will fail. The two Stage 2 items (Fulfiller and Employee) are independent siblings (neither
+depends on the other) — both can be selected together and installed in either order once Stage 1 is
+done.
 
 ---
 
@@ -115,8 +132,8 @@ Agentforce Studio enablement is the foundation: it turns on the org-level Agentf
 - NEVER advance to the next feature in the queue if the current one failed or only partially
   succeeded — stop and surface the failure in plain language instead
 - If Agentforce Studio enablement reports the org lacks the Agentforce license (`accessCheck`), STOP
-  the whole flow — this is a license/edition prerequisite no API can grant, and neither the
-  Fulfiller nor the Employee Agent lifecycle can succeed without it
+  the whole flow — this is a license/edition requirement no API can grant, and neither the
+  Fulfiller nor the Employee Agent can succeed without it
 - ALWAYS confirm the target org before delegating to any child skill, and state that the org will be modified
 - Do NOT expose internal technical jargon in user-facing output. This includes Salesforce record
   IDs and org IDs, raw HTTP status codes (403, 500, …), API error codes (`FUNCTIONALITY_NOT_ENABLED`,
@@ -137,6 +154,7 @@ Before emitting any menu or summary in this skill, mentally confirm each of the 
 - [ ] Only features with a working child skill are shown; placeholder features are hidden
 - [ ] The feature menu is presented as a multi-select (single-select only if the user has already named a specific feature)
 - [ ] Each feature row's `Status` column reflects the actual tracked state from the conversation (`Not done`, `In progress`, or `Done`) — not a hard-coded default
+- [ ] Each feature row's `Description` matches the Salesforce Setup → Agentforce for IT Service page wording (Fulfiller and Employee agent-template descriptions verbatim, not paraphrased), the two Stage 2 rows end with the short `Setup:` install line, and the `AskUserQuestion` option descriptions carry the same text
 - [ ] For a completion summary, the header line and closing line are chosen by the rubric in `examples/output-templates.md` (all `Done` → *Complete*; any `Not done`/`In progress` → *Finished*)
 - [ ] A feature is being configured only because the user explicitly selected it (or is being walked through sequentially with confirmation under an "all" / "everything" request)
 - [ ] Studio enablement is verified done before delegating to the Fulfiller Agent or Employee Agent child skill
@@ -149,5 +167,5 @@ Before emitting any menu or summary in this skill, mentally confirm each of the 
 
 | File | When to read |
 |------|--------------|
-| `examples/output-templates.md` | Behavior steps 2, 4, and 5 — feature menu (multi-select), post-feature progress, and completion summary text blocks |
+| `examples/output-templates.md` | Behavior steps 3, 5, and 6 — feature menu (two-stage, multi-select), post-feature progress, and completion summary text blocks |
 | `scripts/verify-child-verdict.mjs` | Behavior step 5 — run via `Bash` (`node`) to check a child skill's verdict deterministically before advancing the queue |

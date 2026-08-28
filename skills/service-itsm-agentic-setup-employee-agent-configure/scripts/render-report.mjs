@@ -165,6 +165,15 @@ const NEXT_STEPS = {
       : 'Review the observed error and remediate. Enablement of missing prerequisites is a Setup-UI/admin action outside this skill\'s scope — use `service-itsm-agentic-setup-agentforce-studio-validate` or `service-itsm-agentic-setup-agentforce-studio-configure` to check/enable readiness first. Re-run this skill once the blocker is resolved.',
 };
 
+// Escape a value for a Markdown table cell — a literal pipe or newline would
+// break the row. The stage-detail values are enumerated/controlled, so this is
+// belt-and-braces, but it keeps the table well-formed against any future field.
+const cell = (v) => String(v).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
+const confirmDetail =
+  confirm === 'true' && (devName !== '<pending>' || label !== '<pending>')
+    ? `; confirmed developerName=${devName}, label="${label}"`
+    : '';
+
 const report = `# Employee Agent — Create & Activate
 
 IT Service Employee Agent Creation (via service-itsm-agentic-setup-employee-agent-configure)
@@ -174,13 +183,17 @@ Template: ${tmplLabel} (id=${tmplId}) — ${tmplKind}
 Source:   ${tmplId} Agent Script
 Agent:    ${devName} ("${label}") — NGA-native bundle
 
-  Preflight  ......................... Studio hasAccess=${preStudio}; template agentScript present=${preTmpl}; verdict=${preVerdict}
-  Enumerate  ......................... target agent exists before write=${enumExists}; latest version status=${enumVer}; verdict=${enumVerdict}
-  Confirm-to-write ................... user-confirmed=${confirm}${(confirm === 'true' && (devName !== '<pending>' || label !== '<pending>')) ? `; confirmed developerName=${devName}, label="${label}"` : ''}
-  Create bundle ...................... ${createBundle}
-  Publish ............................ ${publish}
-  Activate ........................... ${activate}
-  Verify ............................. ${verify}
+Stage 2 — install & activate the agent from its template:
+
+| Stage | Status |
+| --- | --- |
+| Preflight | ${cell(`Studio hasAccess=${preStudio}; template agentScript present=${preTmpl}; verdict=${preVerdict}`)} |
+| Enumerate | ${cell(`target agent exists before write=${enumExists}; latest version status=${enumVer}; verdict=${enumVerdict}`)} |
+| Confirm-to-write | ${cell(`user-confirmed=${confirm}${confirmDetail}`)} |
+| Create bundle | ${cell(createBundle)} |
+| Publish | ${cell(publish)} |
+| Activate | ${cell(activate)} |
+| Verify | ${cell(verify)} |
 
 Verdict: ${verdict}
 Reason:  ${reason}

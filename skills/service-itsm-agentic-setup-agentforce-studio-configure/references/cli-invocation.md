@@ -31,10 +31,12 @@ Every call this skill makes — read and write — is a plain
 |-----------|----------------|------------|
 | Einstein Generative AI | `sales-cloud-einstein-generative-ai` | none |
 | Turn on Agentforce Studio | `sales-cloud-agent-studio` | Einstein GenAI |
-| Agentforce for IT Service (parent umbrella) | `service-cloud-agentforce-for-itsm` | Studio, Einstein GenAI |
-| IT Service Fulfiller (template) | `service-cloud-it-fulfiller-agent` | parent umbrella |
-| IT Service Employee (template) | `service-cloud-requestor-agent` | parent umbrella |
+| Agentforce for IT Service | `service-cloud-agentforce-for-itsm` | Studio, Einstein GenAI |
+| IT Service Fulfiller Template | `service-cloud-it-fulfiller-agent` | parent umbrella |
+| IT Service Employee Template | `service-cloud-requestor-agent` | parent umbrella |
 | Specialized Agent Templates for Employee | `service-cloud-it-service-employee-agent` | parent umbrella |
+
+**Label rule (report output).** Render every toggle by its report label — `Einstein Generative AI`, `Agentforce Studio`, `Agentforce for IT Service`, `IT Service Fulfiller Template`, `IT Service Employee Template`, `Specialized Agent Templates for Employee` — verbatim, and identical across every report and both toggling skills (`-configure` and `-validate`). These match the first-column labels above, except the Studio row: its Go-page toggle reads "Turn on Agentforce Studio", but the rendered report label is simply `Agentforce Studio`. The `Template` suffix on the two agent-template toggles is the authoritative, deliberate report label — it intentionally differs from the shorter setup-page toggle caption (`IT Service Fulfiller` / `IT Service Employee`), the same way the Studio row's caption `Turn on Agentforce Studio` renders simply as `Agentforce Studio`. It marks these as the agent templates enabled at this stage, distinct from the installed agent that the agent-configure skills name `IT Service Fulfiller Agent` / `IT Service Employee Agent` (no `Template`) — do not simplify the report label to the bare caption. Never add an invented role qualifier such as "Requestor", "Specialized", or "parent" to a label. The fulfiller path shows one path-specific row (`IT Service Fulfiller Template`); the employee path shows two (`IT Service Employee Template` **and** `Specialized Agent Templates for Employee`) — never collapse them to a single row or disambiguate them with any other suffix.
 
 Enable order: Einstein GenAI → Studio → parent umbrella → path-specific
 template(s). The read response echoes unmet dependencies in

@@ -1,14 +1,14 @@
 ---
 name: service-itsm-agentic-setup-configure
-description: "Top-level orchestrator for setting up IT Service Management (ITSM) in Salesforce Service Cloud. Use when the user asks to set up ITSM, configure service management, enable ITSM capabilities, wants a guided walkthrough, or asks what is needed to get ITSM running. Presents a multi-select track menu and delegates to domain sub-orchestrators — Incident Management, Agentforce for ITSM (Studio + Fulfiller), CMDB, and Microsoft Teams (IT Desk / IT Service / Swarming). Any prerequisites (such as the Incident Management master switch for Track 1) are owned and enforced inside the relevant sub-orchestrator, not at this level. Triggers on: set up ITSM, configure service management, ITSM setup, get ITSM running, walkthrough, set up CMDB / Teams / Agentforce for ITSM. DO NOT TRIGGER when: the user asks about a specific feature directly (e.g., the priority matrix alone), asks only about Case management, wants to create a single user, or asks general ITSM questions without setup intent."
+description: "Top-level orchestrator for setting up IT Service Management (ITSM) in Salesforce Service Cloud. Use when the user asks to set up ITSM, configure service management, enable ITSM capabilities, wants a guided walkthrough, or asks what is needed to get ITSM running. Presents a multi-select track menu and delegates to domain sub-orchestrators — Incident Management, Agentforce for ITSM (Studio + Fulfiller), CMDB, and Channels (Portal, Notifications, Microsoft Teams, Slack). Any prerequisites (such as the Incident Management master switch for Track 1) are owned and enforced inside the relevant sub-orchestrator, not at this level. Triggers on: set up ITSM, configure service management, ITSM setup, get ITSM running, walkthrough, set up CMDB / channels / Teams / Slack / Agentforce for ITSM. DO NOT TRIGGER when: the user asks about a specific feature directly (e.g., the priority matrix alone), asks only about Case management, wants to create a single user, or asks general ITSM questions without setup intent."
 metadata:
-  version: "1.2"
+  version: "1.3"
   domains: ["Service"]
   relatedSkills:
     - "service-itsm-agentic-setup-agentforce-coordinate"
     - "service-itsm-agentic-setup-cmdb-coordinate"
     - "service-itsm-agentic-setup-incident-management"
-    - "service-itsm-teams-coordinate"
+    - "service-itsm-channels-coordinate"
 allowed-tools: Read AskUserQuestion
 ---
 
@@ -29,9 +29,9 @@ Only tracks with a working sub-orchestrator appear in the menu — use the **Tra
 | # | Track | Sub-Orchestrator Skill | Features |
 |---|-------|------------------------|----------|
 | 1 | Incident Management | `service-itsm-agentic-setup-incident-management` | SLA & Milestones |
-| 2 | Agentforce for ITSM | `service-itsm-agentic-setup-agentforce-coordinate` | Agentforce Studio enablement, Fulfiller Agent lifecycle, Employee Agent lifecycle |
+| 2 | Agentforce for ITSM | `service-itsm-agentic-setup-agentforce-coordinate` | Agentforce Studio enablement, Fulfiller Agent, Employee Agent |
 | 3 | CMDB (Configuration Management Database) | `service-itsm-agentic-setup-cmdb-coordinate` | CMDB feature enablement, CMDB Foundation bundle, User CMDB access |
-| 4 | Microsoft Teams Integration | `service-itsm-teams-coordinate` | Teams for Employee Service enablement, IT Desk checklist, IT Service checklist, Swarming |
+| 4 | Channels | `service-itsm-channels-coordinate` | Employee Service channel setup — Portal, Notifications, Microsoft Teams (IT Desk / IT Service / embedded agent), and Slack |
 
 Additional ITSM setup tracks (e.g. employee provisioning) will be added here as their sub-orchestrators become available.
 

@@ -4,13 +4,13 @@ All four scripts are deterministic, side-effect-free JSON classifiers (A9). They
 
 ## `scripts/classify-permset-availability.mjs`
 
-Decides Branch A vs Branch B (assign vs hand-off) AND emits per-persona `needsPsl` flags. Fulfiller-only — the four persona names are hard-coded.
+Decides Branch A vs Branch B (assign vs hand-off) AND emits per-persona `needsPsl` flags. Fulfiller-only — the three persona names are hard-coded.
 
 ### Input
 
 One file path (positional):
 
-1. `permsets.json` — `sf data query --json` capture of `PermissionSet` filtered to the four Fulfiller persona `Name` values (see `permset-topology.md`). Unrelated rows are filtered out by the classifier.
+1. `permsets.json` — `sf data query --json` capture of `PermissionSet` filtered to the three Fulfiller persona `Name` values (see `permset-topology.md`). Unrelated rows are filtered out by the classifier.
 
 Must be the raw stdout capture (the `{status, result: {records: [...]}}` envelope). An unparseable / non-envelope body produces `verdict:"CANNOT-CONFIRM"` with the raw error in `reasons[]`.
 
@@ -19,7 +19,7 @@ Must be the raw stdout capture (the `{status, result: {records: [...]}}` envelop
 ```json
 {
   "personasFound": ["IncidentFulfiller"],
-  "personasMissing": ["ProblemFulfillerPermSet","ChangeRequestFulfillerPermSet","ReleaseManagerPermSet"],
+  "personasMissing": ["ProblemFulfillerPermSet","ChangeRequestFulfillerPermSet"],
   "candidates": [
     { "Id": "0PS...", "Name": "IncidentFulfiller", "Label": "Incident Fulfiller", "LicenseId": "0PL...", "needsPsl": true }
   ],
@@ -28,16 +28,16 @@ Must be the raw stdout capture (the `{status, result: {records: [...]}}` envelop
 }
 ```
 
-- `candidates[]` lists ONLY rows whose `Name` matches one of the four known Fulfiller personas. Unrelated rows in the query result are dropped.
+- `candidates[]` lists ONLY rows whose `Name` matches one of the three known Fulfiller personas. Unrelated rows in the query result are dropped.
 - `needsPsl` is derived per-row from `LicenseId !== null` — read it from the SELECTED persona in the workflow.
-- `personasFound` preserves the canonical order (Incident, Problem, Change, Release) so the AskUserQuestion menu is stable across runs.
+- `personasFound` preserves the canonical order (Incident, Problem, Change) so the AskUserQuestion menu is stable across runs.
 
 Verdict values:
 
 | verdict | Meaning | Caller action |
 |---|---|---|
 | `ASSIGN` | ≥1 Fulfiller persona present on the org | Continue to Phase 2. AskUserQuestion which persona to assign; read `needsPsl` off that persona to gate PSL SOQL + POST |
-| `HAND-OFF` | None of the four personas present | Skip Phase 2 entirely; go to Phase 3 (delegate to `service-itsm-agentic-setup-agentforce-studio-validate`) |
+| `HAND-OFF` | None of the three personas present | Skip Phase 2 entirely; go to Phase 3 (delegate to `service-itsm-agentic-setup-agentforce-studio-validate`) |
 | `CANNOT-CONFIRM` | The query envelope was unparseable | Surface `reasons[]` verbatim and stop |
 
 **Never auto-select** from `candidates[]` — a Fulfiller commonly needs only one persona (e.g. Incident) even when several are provisioned. Present the list and let the user pick.

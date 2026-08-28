@@ -10,7 +10,7 @@ Every read and write in this skill uses the **Salesforce CLI (`sf`)** against th
 
 ## Discovery read (Phase 1)
 
-Fixed-lookup query over the four Core-shipped Fulfiller persona `PermissionSet.Name` values (see `permset-topology.md`). The namespace on all four is `force` — do NOT filter by `NamespacePrefix`.
+Fixed-lookup query over the three Core-shipped Fulfiller persona `PermissionSet.Name` values (see `permset-topology.md`). The namespace on all three is `force` — do NOT filter by `NamespacePrefix`.
 
 ```bash
 sf data query \
@@ -19,8 +19,7 @@ sf data query \
       WHERE Name IN ( \
         'IncidentFulfiller', \
         'ProblemFulfillerPermSet', \
-        'ChangeRequestFulfillerPermSet', \
-        'ReleaseManagerPermSet' \
+        'ChangeRequestFulfillerPermSet' \
       )" \
   --target-org <alias> --json
 ```
@@ -60,7 +59,7 @@ sf data query -q "SELECT Id FROM PermissionSetLicenseAssign WHERE AssigneeId = '
   --target-org <alias> --json > /tmp/psla-existing.json
 ```
 
-When the selected persona's `needsPsl:false` (e.g. `ReleaseManagerPermSet`), SKIP the PSLA query — pass the sentinel `NO-PSL` to `classify-assignment-state.mjs`.
+When the selected persona's `needsPsl:false` (its `PermissionSet` has no backing `LicenseId`), SKIP the PSLA query — pass the sentinel `NO-PSL` to `classify-assignment-state.mjs`.
 
 ## Writes (Phase 2d)
 

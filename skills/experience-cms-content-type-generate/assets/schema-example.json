@@ -1,0 +1,70 @@
+{
+  "title": "Press Release",
+  "description": "A press release with headline, body, publish date, hero image, and source URL.",
+  "lightning:type": "lightning__objectType",
+  "lightning:mixinTypes": {
+    "sfdc_cms:metadataContent": {}
+  },
+  "properties": {
+    "headline": {
+      "title": "Headline",
+      "lightning:type": "lightning__textType"
+    },
+    "summary": {
+      "title": "Summary",
+      "lightning:type": "lightning__multilineTextType"
+    },
+    "body": {
+      "title": "Body",
+      "lightning:type": "lightning__richTextType"
+    },
+    "sourceUrl": {
+      "title": "Source URL",
+      "lightning:type": "lightning__urlType",
+      "lightning:allowedUrlSchemes": ["https"]
+    },
+    "publishDate": {
+      "title": "Publish Date",
+      "lightning:type": "lightning__dateType"
+    },
+    "publishedAt": {
+      "title": "Published At",
+      "lightning:type": "lightning__dateTimeType"
+    },
+    "featured": {
+      "title": "Featured",
+      "lightning:type": "lightning__booleanType"
+    },
+    "priority": {
+      "title": "Priority",
+      "lightning:type": "lightning__integerType"
+    },
+    "rating": {
+      "title": "Rating",
+      "lightning:type": "lightning__numberType"
+    },
+    "heroImage": {
+      "title": "Hero Image",
+      "lightning:type": "lightning__imageType"
+    },
+    "headlineWithPlaceholder": {
+      "title": "Headline (with placeholder example)",
+      "lightning:type": "lightning__textType",
+      "lightning:uiOptions": { "placeholderText": "Enter the headline" }
+    },
+    "headlineWithBounds": {
+      "title": "Headline (with length bounds — only when user asked)",
+      "lightning:type": "lightning__textType",
+      "minLength": 5,
+      "maxLength": 120
+    },
+    "priorityWithRange": {
+      "title": "Priority (with range — only when user asked)",
+      "lightning:type": "lightning__integerType",
+      "minimum": 1,
+      "maximum": 10
+    }
+  },
+  "unevaluatedProperties": false,
+  "required": ["headline", "summary", "body", "publishDate"]
+}

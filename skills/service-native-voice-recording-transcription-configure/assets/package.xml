@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Metadata API manifest for retrieving/deploying ThunderbirdVoiceSettings via the
+  sf CLI Settings container. scripts/enable-recording-transcription.sh generates
+  this manifest into a temporary SFDX project (substituting the API version).
+
+  Key points:
+    - The type is the generic `Settings` container (which IS in the sf CLI
+      metadata registry) — NOT `ThunderbirdVoiceSettings` (which is not a
+      retrievable top-level type name).
+    - The member is the mdApiType WITHOUT the trailing `Settings`, i.e.
+      `ThunderbirdVoice`.
+    - version MUST be >= 68.0. ThunderbirdVoiceSettings fields are not exposed at
+      any lower version, so a retrieve at v64-67 returns the type empty/absent.
+-->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>ThunderbirdVoice</members>
+        <name>Settings</name>
+    </types>
+    <version>68.0</version>
+</Package>

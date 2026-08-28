@@ -19,9 +19,9 @@ ITSM Setup (via service-itsm-agentic-setup-configure)
 │ 3 │ CMDB                     │ Enable the Configuration Management Database         │ Not done │
 │   │                          │ feature, deploy the CMDB Foundation content bundle,  │          │
 │   │                          │ and grant users CMDB access                          │          │
-│ 4 │ Microsoft Teams          │ Enable Microsoft Teams for ITSM — IT Desk and IT     │ Not done │
-│   │                          │ Service checklists, plus Swarming for agent          │          │
-│   │                          │ collaboration                                        │          │
+│ 4 │ Channels                 │ Set up Employee Service channels — Portal,           │ Not done │
+│   │                          │ Notifications, Microsoft Teams (IT Desk / IT         │          │
+│   │                          │ Service), and Slack                                  │          │
 │ A │ Full guided setup        │ Run every available track in dependency order —      │ —        │
 │   │                          │ per-track confirmation between them so you can stop  │          │
 │   │                          │ any time. Mutually exclusive with per-track picks.   │          │
@@ -44,7 +44,7 @@ they are finished — even if some tracks are still `Not done`. When rendering:
   - All `Done` → `Your ITSM setup is complete.`
   - Otherwise → `You have finished the tracks you selected. The remaining tracks can be resumed later by re-invoking this orchestrator.`
 
-Example — user finished after only Incident Management and Agentforce (the two tracks they chose to set up in this session; CMDB and Microsoft Teams stayed `Not done`):
+Example — user finished after only Incident Management and Agentforce (the two tracks they chose to set up in this session; CMDB and Channels stayed `Not done`):
 
 ```text
 ITSM Setup — Finished
@@ -56,7 +56,7 @@ ITSM Setup — Finished
 │ Incident Management      │ Done     │
 │ Agentforce for ITSM      │ Done     │
 │ CMDB                     │ Not done │
-│ Microsoft Teams          │ Not done │
+│ Channels                 │ Not done │
 └──────────────────────────┴──────────┘
 
 You have finished the tracks you selected. The remaining tracks can be resumed

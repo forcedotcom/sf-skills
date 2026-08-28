@@ -10,6 +10,7 @@ metadata:
     - "agentforce-generate"
     - "service-digital-engagement-channel-configure"
     - "service-digital-engagement-deployment-configure"
+    - "service-email-to-case-configure"
     - "service-helpagent-coordinate"
   cliTools:
     - tool: ["python3"]

@@ -1,8 +1,8 @@
 ---
 name: service-itsm-agentic-setup-agentforce-studio-validate
-description: "Validate the Agentforce for IT Service prerequisites for a Fulfiller or Employee agent, using the Salesforce CLI (sf). The READ-ONLY prerequisite check: it reads the Salesforce Go feature toggles behind the Agentforce for IT Service setup page (Agentforce Studio, the IT Service Fulfiller / IT Service Employee templates, Specialized Agent Templates for Employee) via one Connect API call, then a helper script classifies the chosen path into a READY / NOT-READY verdict. It never enables anything; when a toggle is off it hands off to the agentforce-studio-configure skill to turn it on. Use when asked to check Agentforce prerequisites, validate the org is ready for an ITSM agent, or verify Agentforce Studio is enabled. Triggers: check agentforce prerequisites, validate agentforce readiness, is my org ready for the fulfiller agent, verify agentforce studio enabled. DO NOT TRIGGER: enabling or turning on the toggles, creating the fulfiller agent (service-itsm-agentic-setup-fulfiller-agent-configure), or CMDB CRUD."
+description: "Validate the Agentforce for IT Service prerequisites for a Fulfiller or Employee agent, using the Salesforce CLI (sf). The READ-ONLY prerequisite check: it reads the Salesforce Go feature toggles behind the Agentforce for IT Service setup page (Agentforce Studio, the IT Service Fulfiller Template / IT Service Employee Template, Specialized Agent Templates for Employee) via one Connect API call, then a helper script classifies the chosen path into a READY / NOT-READY verdict. It never enables anything; when a toggle is off it hands off to agentforce-studio-configure to enable it. Use when asked to check Agentforce prerequisites, validate the org is ready for an ITSM agent, or verify Agentforce Studio is enabled. Triggers: check agentforce prerequisites, validate agentforce readiness, is my org ready for the fulfiller agent, verify agentforce studio enabled. DO NOT TRIGGER: enabling or turning on the toggles, creating the fulfiller agent (service-itsm-agentic-setup-fulfiller-agent-configure), or CMDB CRUD."
 metadata:
-  version: "2.1"
+  version: "2.2"
   domains: ["Service", "Agentforce"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -42,9 +42,9 @@ The feature toggles and their real `featureApiName`s:
 | Go-page toggle | featureApiName | Required for |
 |----------------|----------------|--------------|
 | Turn on Agentforce Studio | `sales-cloud-agent-studio` | both paths (shared) |
-| Agentforce for IT Service (parent umbrella) | `service-cloud-agentforce-for-itsm` | both paths (shared) |
-| IT Service Fulfiller | `service-cloud-it-fulfiller-agent` | **fulfiller** |
-| IT Service Employee | `service-cloud-requestor-agent` | **employee** |
+| Agentforce for IT Service | `service-cloud-agentforce-for-itsm` | both paths (shared) |
+| IT Service Fulfiller Template | `service-cloud-it-fulfiller-agent` | **fulfiller** |
+| IT Service Employee Template | `service-cloud-requestor-agent` | **employee** |
 | Specialized Agent Templates for Employee | `service-cloud-it-service-employee-agent` | **employee** |
 
 All are **Connect API** features (`/connect/setup/discovery/...`) — the read goes through `sf api request rest`, no Headless360 dispatcher required. The classification is **deterministic** and lives in `scripts/classify-readiness.mjs` (invoked via `Bash`), not in prose.
@@ -184,7 +184,7 @@ Org:          <org-alias> (API v67.0)
 Agent path:   fulfiller | employee
 
   [PASS|FAIL] Agentforce Studio ......................... ENABLED | NOT_ENABLED (sales-cloud-agent-studio)
-  [PASS|FAIL] Agentforce for IT Service (parent) ........ ENABLED | NOT_ENABLED (service-cloud-agentforce-for-itsm)
+  [PASS|FAIL] Agentforce for IT Service ................. ENABLED | NOT_ENABLED (service-cloud-agentforce-for-itsm)
   [PASS|FAIL] <path-specific toggle(s)> ................. ENABLED | NOT_ENABLED (<featureApiName>)
 
 Verdict: READY  |  NOT-READY  |  CANNOT-CONFIRM  |  ERROR
@@ -196,6 +196,8 @@ Next steps:
 ```
 
 This skill is **read-only** — no org state is written. The only file it produces is the temporary response capture handed to the classifier.
+
+Use each toggle's report label verbatim — `Agentforce Studio`, `Agentforce for IT Service`, `IT Service Fulfiller Template`, `IT Service Employee Template`, and `Specialized Agent Templates for Employee` — identical across this skill and `service-itsm-agentic-setup-agentforce-studio-configure`. (In the toggle table above, the Studio row's Go-page toggle reads "Turn on Agentforce Studio"; its rendered report label is simply `Agentforce Studio`.) The `Template` suffix on the two agent-template toggles is the deliberate, authoritative report label — it intentionally differs from the shorter setup-page toggle caption (`IT Service Fulfiller` / `IT Service Employee`), exactly like the Studio row above; the installed agent is named separately by the agent-configure skills (`IT Service Fulfiller Agent` / `IT Service Employee Agent`, no `Template`). The path-specific rows are `IT Service Fulfiller Template` (fulfiller path), or `IT Service Employee Template` **and** `Specialized Agent Templates for Employee` (employee path). Never add an invented role qualifier such as "Requestor", "Specialized", or "parent" to a label.
 
 ---
 

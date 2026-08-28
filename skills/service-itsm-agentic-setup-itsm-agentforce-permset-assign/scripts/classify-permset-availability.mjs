@@ -2,19 +2,18 @@
 // Deterministic branch classifier for the Fulfiller persona permset-assign flow.
 //
 // Reads ONE input:
-//   - PermissionSet query capture (from `sf data query --json`) for the four
+//   - PermissionSet query capture (from `sf data query --json`) for the three
 //     Core-shipped Fulfiller persona permsets:
 //       * IncidentFulfiller
 //       * ProblemFulfillerPermSet
 //       * ChangeRequestFulfillerPermSet
-//       * ReleaseManagerPermSet
 //     (namespace `force`, not a managed-package namespace)
 //
 // Rules (A9):
-//   - `verdict:"ASSIGN"`      — ≥1 of the four personas is present. Caller
+//   - `verdict:"ASSIGN"`      — ≥1 of the three personas is present. Caller
 //                                asks the user which persona to assign; do NOT
 //                                auto-select.
-//   - `verdict:"HAND-OFF"`    — none of the four present. The ITSM AddOn(s)
+//   - `verdict:"HAND-OFF"`    — none of the three present. The ITSM AddOn(s)
 //                                are not provisioned; permset-assign is a
 //                                no-op. Hand off to the studio validate skill
 //                                so the AddOn(s) can be enabled first.
@@ -29,7 +28,7 @@
 //     candidates: [{ Id, Name, Label, LicenseId, needsPsl }, ...],
 //     verdict: "ASSIGN" | "HAND-OFF" | "CANNOT-CONFIRM",
 //     reasons: [...] }
-// `candidates` includes only rows for the four known persona Names; unrelated
+// `candidates` includes only rows for the three known persona Names; unrelated
 // rows in the query result are filtered out. `needsPsl` is derived per-row
 // from `LicenseId !== null`. Exit is always 0 on parseable bodies; verdict
 // carries the branch decision. Exit 2 on missing argv.
@@ -40,7 +39,6 @@ const KNOWN_PERSONAS = [
   'IncidentFulfiller',
   'ProblemFulfillerPermSet',
   'ChangeRequestFulfillerPermSet',
-  'ReleaseManagerPermSet',
 ];
 
 function readEnvelope(path) {
@@ -78,7 +76,7 @@ if (!ps.ok) {
   process.exit(0);
 }
 
-// Filter to only the five known persona Names — drop any unrelated rows.
+// Filter to only the three known persona Names — drop any unrelated rows.
 const knownRows = ps.records.filter((r) => KNOWN_PERSONAS.includes(r?.Name));
 const foundNames = knownRows.map((r) => r.Name);
 const personasFound = KNOWN_PERSONAS.filter((n) => foundNames.includes(n));
@@ -96,11 +94,11 @@ const reasons = [];
 let verdict;
 if (personasFound.length === 0) {
   verdict = 'HAND-OFF';
-  reasons.push('None of the four Core-shipped Fulfiller persona permsets (IncidentFulfiller, ProblemFulfillerPermSet, ChangeRequestFulfillerPermSet, ReleaseManagerPermSet) is present on this org — the ITSM AddOn(s) are not provisioned.');
+  reasons.push('None of the three Core-shipped Fulfiller persona permsets (IncidentFulfiller, ProblemFulfillerPermSet, ChangeRequestFulfillerPermSet) is present on this org — the ITSM AddOn(s) are not provisioned.');
   reasons.push('Permset-assign cannot fix this; hand off to service-itsm-agentic-setup-agentforce-studio-validate.');
 } else {
   verdict = 'ASSIGN';
-  reasons.push(`Found ${personasFound.length} of 4 Fulfiller persona permset(s) on this org: ${personasFound.join(', ')}.`);
+  reasons.push(`Found ${personasFound.length} of 3 Fulfiller persona permset(s) on this org: ${personasFound.join(', ')}.`);
   if (personasMissing.length > 0) {
     reasons.push(`Not provisioned (AddOn(s) missing for these personas): ${personasMissing.join(', ')}.`);
   }

@@ -1,6 +1,6 @@
 # Matrix Operations — CLI Invocation Templates
 
-Every mutation is a single `sf` CLI command. Unlike the earlier Aura-dispatcher path (`save-details` replace-whole), the Tooling REST endpoints operate on **one row at a time** — the read-modify-write step is client-side only. Add, change, and remove are three distinct wire calls, not one replace.
+Every mutation is a single `sf` CLI command. The Tooling REST endpoints operate on **one row at a time** — the read-modify-write step is client-side only. Add, change, and remove are three distinct wire calls, not one replace.
 
 Templates below start from this hypothetical current matrix (Tooling SOQL result):
 
@@ -198,3 +198,29 @@ The XML shape after editing (default `High`):
 ```
 
 Validate the target value against the Phase-1 active picklist first.
+
+---
+
+## Mark the Salesforce Go setup step complete (Phase 5, after a mutation)
+
+Once a functional write above has been dispatched **and** the Phase-5 verify confirms it landed,
+flip the "Define Priority Matrix" tile in the Salesforce Go setup checklist to Done. This step is a
+user-override step: configuring the matrix functionally does **not** move its checkmark — the
+completion has to be written explicitly (route 10 in `references/sf-cli-invocation.md`).
+
+```bash
+sf api request rest \
+  "/services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-incident/configuration/step/definePriorityMatrix/progress" \
+  --method PUT \
+  --header "Content-Type:application/json" \
+  --body '{"isComplete": true}' \
+  --target-org <alias>
+```
+
+Response: `200` with the updated step progress. Notes:
+
+- **`isComplete` is required** — omitting it returns HTTP 500, not 400.
+- Send it **only when Phase 4 actually wrote something**. On a view-only read or an idempotent
+  no-op (e.g. disabling an already-disabled matrix), dispatch nothing — the PUT is itself a mutation.
+- It rides on the confirmation the user already gave for the functional change; it is not a
+  separately-confirmed write.

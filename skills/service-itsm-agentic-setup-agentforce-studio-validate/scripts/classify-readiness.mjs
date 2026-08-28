@@ -52,11 +52,19 @@ const REQUIRED = {
   employee: [STUDIO, PARENT, REQUESTOR, SPECIALIZED],
 };
 
+// Report labels — the authoritative strings these reports render. The two
+// agent-template rows intentionally differ from their shorter Salesforce Go
+// setup-page toggle caption, the same way the Studio caption "Turn on
+// Agentforce Studio" renders as "Agentforce Studio": these toggles enable agent
+// *templates*, so their report label carries a deliberate "Template" suffix. By
+// design — do not simplify it to the bare caption. It is also distinct from the
+// installed agent the agent-configure skills create ("IT Service Fulfiller
+// Agent" / "IT Service Employee Agent", no "Template").
 const LABEL = {
   [STUDIO]: 'Agentforce Studio',
-  [PARENT]: 'Agentforce for IT Service (parent)',
-  [FULFILLER]: 'IT Service Fulfiller template',
-  [REQUESTOR]: 'IT Service Employee template',
+  [PARENT]: 'Agentforce for IT Service',
+  [FULFILLER]: 'IT Service Fulfiller Template',
+  [REQUESTOR]: 'IT Service Employee Template',
   [SPECIALIZED]: 'Specialized Agent Templates for Employee',
 };
 

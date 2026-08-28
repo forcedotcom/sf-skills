@@ -1,11 +1,11 @@
 # Action-availability preflight + activate-result classification
 
-The Fulfiller template's Agent Script references `svc_itsm_intelligence__*` invocable actions via `source:` and `target: generatePromptResponse://...`. `activate` returns **HTTP 200** with `{success:false, messages:[{... "does not exist"}]}` (silent-failure body) when any referenced action isn't surfaced for the running user by `/actions/custom/generatePromptResponse`. Two helpers catch this — one before the write, one after.
+Each action block in the Fulfiller template's Agent Script is a `source:` / `target:` pair — `source:` is the planner-facing agent-action alias, `target:` is the real invocation URI (`generatePromptResponse://<name>`, `flow://<name>`, `apex://<name>`, or `standardInvocableAction://<name>`). The alias and the target name **routinely differ for the same action** (e.g. `source: …CreateIncidentResolutionSummary` → `target: generatePromptResponse://…IncidentResolutionSummarizationPrompt`; `source: …CreateIncidentRootCauseSummary` → `target: flow://…CreaIncRootCse`, an abbreviated flow API name). `activate` returns **HTTP 200** with `{success:false, messages:[{… "does not exist"}]}` (silent-failure body) when a **`generatePromptResponse://` target** isn't surfaced for the running user by `/actions/custom/generatePromptResponse` (the ITSM Intelligence permset gates exactly those prompt-response actions). Only those targets are checkable here — `flow://`, `apex://`, and `standardInvocableAction://` targets live in other action buckets the endpoint never lists, and the `source:` alias is never itself a `generatePromptResponse` entry, so the gate keys on the **`generatePromptResponse://` target name** and ignores aliases and non-prompt targets (checking either of those false-flagged an alias whose real target was present and blocked a valid activation). Two helpers catch the real gap — one before the write, one after.
 
 ## Phase 2c — `scripts/classify-action-availability.mjs`
 
 Called on the **create path only** — after Phase 2 (idempotency) returns `exists:false`, and before Phase 3 (confirm-to-write). An already-existing **Active** agent (ALREADY-CREATED) skips this gate entirely: its actions are already wired, so re-checking availability would wrongly park a no-op run. A reactivation (Phase 2b) relies on the activate-result classifier below rather than this preflight. Reads:
-- `/tmp/agent-templates.json` (Phase-1 capture — the decoded template `agentScript` is the source of truth for the referenced actions).
+- `/tmp/agent-templates.json` (Phase-1 capture — the decoded template `agentScript` is the source of truth for the referenced `generatePromptResponse://` targets). **The classifier strips the Release Management subagent first (`strip-release-management.mjs`) — the identical strip `build-create-body.mjs` applies — so `generatePromptResponse://svc_itsm_intelligence__SummarizeRelease` is not in the checkable set and never blocks activation. Both scripts must stay in lock-step.**
 - `/tmp/generate-prompt-response.json` — a fresh GET of `/services/data/v67.0/actions/custom/generatePromptResponse` (the two response shapes are `{actions:[{name,...}]}` and `{actions:{<name>:{...}}}`; the classifier handles both).
 
 Invocation:
@@ -17,15 +17,15 @@ node "<skill_dir>/scripts/classify-action-availability.mjs" \
   /tmp/agent-templates.json "IT Service Fulfiller" /tmp/generate-prompt-response.json
 ```
 
-Emits `{ referenced, present, missing, verdict, reasons }`. Branching:
+Emits `{ referenced, present, missing, skippedNonPromptTargets, verdict, reasons }` — `referenced` is the `generatePromptResponse://` target set this gate verifies; `skippedNonPromptTargets` is the recorded-but-unchecked `flow://` / `apex://` / `standardInvocableAction://` targets. Branching:
 
 | verdict | Meaning | Caller action |
 |---|---|---|
-| `READY` | `missing.length === 0` | Continue to Phase 3 (confirm-to-write) |
-| `NOT-READY` | ≥1 referenced action absent from `generatePromptResponse` | Offer permset hand-off (below) — no writes |
-| `CANNOT-CONFIRM` | `generatePromptResponse` returned an unexpected shape | Surface reasons; proceed with caution — Phase 6 activate-result will catch a silent-failure body |
+| `READY` | `missing.length === 0` (all `generatePromptResponse://` targets present), or the template references only non-prompt targets (nothing this gate governs) | Continue to Phase 3 (confirm-to-write) |
+| `NOT-READY` | ≥1 `generatePromptResponse://` target absent from `generatePromptResponse` | Present under an **"Attention"** heading (never label it "Blocker"); offer permset hand-off (below) — no writes |
+| `CANNOT-CONFIRM` | no `target:` URIs parsed at all (unexpected script shape / decode failure) | Surface reasons; proceed with caution — Phase 6 activate-result will catch a silent-failure body |
 
-**Hand-off wording on `NOT-READY`** (via `AskUserQuestion`):
+**Hand-off wording on `NOT-READY`** — present this outcome under an **"Attention"** heading, never the word "Blocker" (it is a resolvable prerequisite gap, not a hard blocker), then raise the `AskUserQuestion`:
 
 > "`missing.length` invocable action(s) referenced by the Fulfiller template are not available on this org for your user (e.g. `<first 3 of missing>`). Run `service-itsm-agentic-setup-itsm-agentforce-permset-assign` to assign the ITSM Intelligence permission set (if installed) or to route you to the content-bundle step (if the package isn't installed)?" (options: **Yes, resolve action availability** / **No, stop here**)
 

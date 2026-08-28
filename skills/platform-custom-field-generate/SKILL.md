@@ -33,7 +33,7 @@ Every generated field must include these tags:
 | `<description>` | Always include | Explain the business reason *why* this field exists. |
 | `<inlineHelpText>` | Always include | Actionable end-user guidance that adds value beyond the label (e.g., "Enter the value in USD including tax", not "The amount"). |
 
-`<description>` and `<inlineHelpText>` are mandatory outputs even though the Metadata API does not enforce them — omitting them produces low-quality metadata.
+`<description>` and `<inlineHelpText>` are mandatory even though the Metadata API does not enforce them — omitting them yields low-quality metadata.
 
 **File path (SFDX source format):** save each field as `force-app/main/default/objects/<Object>/fields/<FieldName>__c.field-meta.xml`, where `<Object>` is the object's API name (`Account`, `Opportunity`, or a custom `Inventory_Item__c`). A correct XML at the wrong path is never seen by the Metadata API.
 
@@ -57,7 +57,7 @@ To ensure deployment success, follow these mathematical constraints:
 
 ### The "Fixed 255" Rule
 
-**TextArea: do NOT include `<length>`** — the Metadata API fixes the length at 255 implicitly and **rejects an explicit `<length>` value** with "Can not specify 'length' for a CustomField of type TextArea". Omit `<length>` entirely; the field only needs `<fullName>`, `<label>`, and `<type>TextArea</type>`.
+**TextArea: do NOT include `<length>`** — the API fixes it at 255 implicitly and rejects an explicit value ("Can not specify 'length' for a CustomField of type TextArea"). The field needs only `<fullName>`, `<label>`, and `<type>TextArea</type>`.
 
 ### Visible Lines
 
@@ -321,7 +321,7 @@ ChildObjectAPIName__c.FieldAPIName__c
 </CustomField>
 ```
 
-**COUNT:** identical structure to SUM but **omit `<summarizedField>` entirely** (and keep `<summaryForeignKey>`). **MIN / MAX:** identical to SUM — just `<summaryOperation>min</summaryOperation>` or `max`, with `<summarizedField>` pointing at the field to find the minimum/maximum of. The Quick Reference table below covers all four.
+**COUNT:** like SUM but **omit `<summarizedField>`** (keep `<summaryForeignKey>`). **MIN / MAX:** like SUM with `<summaryOperation>min</summaryOperation>` or `max`.
 
 ### Roll-Up Summary Quick Reference
 
@@ -344,12 +344,13 @@ ChildObjectAPIName__c.FieldAPIName__c
 
 ### Formula Result Types
 
-A Formula is not a type itself. The `<formula>` tag is added to a field whose `<type>` is set to the **result data type**:
-- `Checkbox`, `Currency`, `Date`, `DateTime`, `Number`, `Percent`, `Text`
+A Formula is not a type itself. The `<formula>` tag is added to a field whose `<type>` is the **result data type** (`Checkbox`, `Currency`, `Date`, `DateTime`, `Number`, `Percent`, `Text`).
+
+- **A formula field never carries `<length>`** — not even a Text-result formula. The API rejects it: `Can not specify a length for CustomFields that have a formula`.
 
 ### Formula XML Generation Rules
 
-- The contents of the `<formula>` tag MUST be wrapped in a `<![CDATA[ ... ]]>` section. This prevents the XML parser from interpreting formula operators (like `&`, `<`, `>`) as XML markup.
+- The contents of the `<formula>` tag MUST be wrapped in `<![CDATA[ ... ]]>`, so the parser does not read formula operators (`&`, `<`, `>`) as XML markup.
 - If the formula text itself contains the literal sequence `]]>`, escape it by breaking the CDATA block: e.g., `<![CDATA[Text_Field__c & "]]]]><![CDATA[>"]]>`
 - NEVER use an attribute or tag named `returnType`. This does not exist in the Metadata API. The `<type>` tag defines the return data type of the formula result.
 
@@ -451,6 +452,7 @@ Before generating CustomField XML, verify:
 - [ ] Is `<type>` set to result type (NOT "Formula")?
 - [ ] Is `<formula>` content wrapped in `<![CDATA[ ... ]]>`?
 - [ ] Is `<returnType>` attribute ABSENT? (does not exist in Metadata API)
+- [ ] Is `<length>` ABSENT? (formula fields never carry a length, even Text-result formulas)
 - [ ] Is `<formulaTreatBlanksAs>` set to `BlankAsZero` for numeric results or `BlankAsBlank` for text/date results?
 - [ ] Do all referenced fields exist and deploy before this field?
 

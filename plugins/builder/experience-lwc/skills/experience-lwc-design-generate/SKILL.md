@@ -15,6 +15,7 @@ metadata:
     - design-systems-slds-apply
     - experience-lds-best-practices-apply
     - experience-lds-data-requirements-generate
+    - experience-lwc-accessibility-jest-run
     - experience-accessibility-validate
     - experience-lwc-base-components-integrate
     - experience-lwc-generate

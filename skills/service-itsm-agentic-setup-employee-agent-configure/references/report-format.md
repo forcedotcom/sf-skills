@@ -16,13 +16,17 @@ Template: <resolvedMasterLabel> (id=<resolvedId>) — <broad umbrella|specialize
 Source:   <resolvedId> Agent Script
 Agent:    <developerName> ("<label>") — NGA-native bundle
 
-  Preflight  ......................... Studio hasAccess=<true|false|cannot-confirm>; template agentScript present=<yes|no>
-  Enumerate  ......................... target agent exists before write=<yes|no>; latest version status=<Active|Inactive|n/a>
-  Confirm-to-write ................... user-confirmed=<true|false|pending>
-  Create bundle ...................... <bundleVersionId=... | ALREADY-CREATED | skipped (reactivation path) | pending confirmation | FAILED>
-  Publish ............................ <publishedBotId=... | skipped | pending confirmation | FAILED>
-  Activate ........................... <succeeded (created) | succeeded (reactivated existing) | skipped | pending confirmation | FAILED>
-  Verify ............................. <BotDefinition present: yes|no; latest version Active: yes|no | skipped>
+Stage 2 — install & activate the agent from its template:
+
+| Stage | Status |
+| --- | --- |
+| Preflight | Studio hasAccess=<true/false/cannot-confirm>; template agentScript present=<yes/no>; verdict=<READY/NOT-READY/CANNOT-CONFIRM> |
+| Enumerate | target agent exists before write=<yes/no>; latest version status=<Active/Inactive/n/a>; verdict=<exists:...> |
+| Confirm-to-write | user-confirmed=<true/false/pending> |
+| Create bundle | <bundleVersionId=... / ALREADY-CREATED / skipped (reactivation path) / pending confirmation / FAILED> |
+| Publish | <publishedBotId=... / skipped / pending confirmation / FAILED> |
+| Activate | <succeeded (created) / succeeded (reactivated existing) / skipped / pending confirmation / FAILED> |
+| Verify | <BotDefinition present: yes/no; latest version Active: yes/no / skipped> |
 
 Verdict: CREATED | ALREADY-CREATED | ACTIVATED | PENDING CONFIRMATION | DECLINED | FAILED
 Reason:  <plain-language explanation naming the atomicity constraint, the idempotency decision, and any decline/skip reasoning — the caller populates this before invoking the helper, so it can be as rubric-facing as the situation warrants without repeating raw API calls>

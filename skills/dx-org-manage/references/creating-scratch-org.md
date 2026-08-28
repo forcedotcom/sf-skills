@@ -36,9 +36,12 @@ Determine which approach based on user request:
 
 ### 2. Verify Dev Hub authentication
 
-Check if Dev Hub is authenticated:
+Check if Dev Hub is authenticated (this mirrors the canonical Step 2 in `SKILL.md` — follow that as the source of truth):
 - If `--target-dev-hub` not provided, check `sf config get target-dev-hub`
-- If no Dev Hub configured, prompt user to authenticate: `sf org login web --set-default-dev-hub`
+- If that is empty, enumerate every `sf org list --json` bucket (`devHubs`, `nonScratchOrgs`, `other`, `sandboxes`, `scratchOrgs`) for entries with `isDevHub: true`, then resolve by count:
+  - **Exactly one** → use that username.
+  - **Two or more** → ask the user which one; never pick arbitrarily.
+  - **Zero** → no hub is authenticated. Do NOT run `sf org create` (there is nothing to pass to `--target-dev-hub`). Stop and advise the user to authenticate: `sf org login web --set-default-dev-hub`.
 
 ### 3. Build the command
 

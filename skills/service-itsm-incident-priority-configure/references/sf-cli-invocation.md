@@ -6,7 +6,7 @@ This skill invokes every read and write through the **`sf` CLI**. Two transports
 - `sf data query --use-tooling-api` / `sf data delete record --use-tooling-api` — Tooling API convenience wrappers with better parsing than raw REST.
 - `sf project retrieve start` + `sf project deploy start` — for the `StandardValueSet` metadata that carries the default fallback priority.
 
-Every invocation below was verified 200 (or `Succeeded` for the metadata deploy) against `orgfarm-afdcaf38b6` on 2026-08-04. Path prefixes are load-bearing; do not strip `/services/data/v67.0/` or `/services/data/v67.0/tooling/`.
+Every invocation below reflects the exact request and response shapes returned by the platform. Path prefixes are load-bearing; do not strip `/services/data/v67.0/` or `/services/data/v67.0/tooling/`.
 
 ## Authentication
 
@@ -88,7 +88,7 @@ sf data query \
   --query "SELECT Id, DeveloperName, ReferenceObject, Urgency, Impact, Priority FROM ServiceOpPriorityConfig WHERE ReferenceObject = 'Incident'"
 ```
 
-Zero to `|Impact| × |Urgency|` rows returned. Row keys are PascalCase (`Id`, `DeveloperName`, `ReferenceObject`, `Urgency`, `Impact`, `Priority`) — these are Tooling SObject field names, not the lowercase JSON keys the Aura controller used. `DeveloperName` is included so the add step can derive a fresh unique suffix from existing rows.
+Zero to `|Impact| × |Urgency|` rows returned. Row keys are PascalCase (`Id`, `DeveloperName`, `ReferenceObject`, `Urgency`, `Impact`, `Priority`) — these are Tooling SObject field names. `DeveloperName` is included so the add step can derive a fresh unique suffix from existing rows.
 
 For programmatic scripts, add `--json` and parse `result.records[]`.
 
@@ -111,9 +111,9 @@ Suffix pattern: pattern-match the existing rows' `DeveloperName` values from the
 
 **Important:** The Tooling REST endpoint does NOT enforce picklist validation on `Urgency`, `Impact`, `Priority`. Garbage values are accepted at the wire level but the runtime matrix evaluator refuses to use them. Validate every value against the Phase-1 picklist values before dispatch.
 
-**Duplicates:** the server does NOT enforce `(ReferenceObject, Urgency, Impact)` uniqueness — a second POST on the same coordinate is accepted as a separate row (verified 2026-08-04 on `itsm-eval-org`: two rows with identical `(Incident, Medium, High)` both persisted with distinct `Id`s). Client-side dedup against the Phase-2 snapshot is the ONLY guard against duplicate matrix cells; if you skip it, the runtime picks one of the duplicates non-deterministically.
+**Duplicates:** the server does NOT enforce `(ReferenceObject, Urgency, Impact)` uniqueness — a second POST on the same coordinate is accepted as a separate row (for example, two rows with identical `(Incident, Medium, High)` coordinates will both persist with distinct `Id`s). Client-side dedup against the Phase-2 snapshot is the ONLY guard against duplicate matrix cells; if you skip it, the runtime picks one of the duplicates non-deterministically.
 
-**ReferenceObject:** the server accepts any string for `ReferenceObject` (verified: a `Problem` row inserted successfully). `ServiceOpPriorityConfig` is the shared SObject for Incident / Problem / ChangeRequest matrices. Scope to `Incident` is skill-enforced only — refuse any other value client-side.
+**ReferenceObject:** the server accepts any string for `ReferenceObject` (for example, a `Problem` row can be inserted successfully). `ServiceOpPriorityConfig` is the shared SObject for Incident / Problem / ChangeRequest matrices. Scope to `Incident` is skill-enforced only — refuse any other value client-side.
 
 ### 6. Matrix rows — change
 
@@ -218,6 +218,36 @@ The XML shape is:
 
 Exactly one `<default>true</default>` should be present at deploy time.
 
+### 10. Salesforce Go setup-step completion — write (after a mutation only)
+
+The "Define Priority Matrix" tile in the Salesforce Go setup checklist (feature
+`service-cloud-itsm-incident`, step `definePriorityMatrix`) is a **user-override** step: its
+"Done" checkmark is a user-supplied `StepProgress` record, **not** derived from org state.
+Writing the matrix config (prefs, rows, default) functionally is invisible to the checklist —
+the completion must be written explicitly, exactly as the guided modal does on save.
+
+```bash
+sf api request rest \
+  "/services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-incident/configuration/step/definePriorityMatrix/progress" \
+  --method PUT \
+  --header "Content-Type:application/json" \
+  --body '{"isComplete": true}' \
+  --target-org <alias>
+```
+
+**Expected:** HTTP 200 with the updated progress. The endpoint is idempotent — re-asserting
+`isComplete: true` when already complete is a harmless 200, so no read-before-write is needed.
+
+- **`isComplete` is REQUIRED.** Omitting it returns **HTTP 500** (server-side NPE), not a 400.
+- **Fire only after a functional Phase-4 write has landed** (a pref PATCH, a row POST/PATCH/delete,
+  or a `StandardValueSet` deploy). On a view-only read or an idempotent no-op, dispatch **nothing** —
+  there is no configuration action to mark done, and the completion PUT is itself a mutation.
+- This is the same feature the master-pref preflight reads via `/connect/setup/discovery/features`
+  (filter `apiName == "service-cloud-itsm-incident"`); here the singular `.../feature/service-cloud-itsm-incident/...`
+  subresource carries the per-step progress.
+- Rely on the 200 success signal. Any non-200 surfaces verbatim through the skill's standard error
+  handling — the completion PUT is not special-cased.
+
 ---
 
 ## Idempotency contract
@@ -230,8 +260,9 @@ Exactly one `<default>true</default>` should be present at deploy time.
 | Change a cell | The Phase-2 row's `Priority` already equals the requested value |
 | Remove a cell | No Phase-2 row matches `(ReferenceObject, Urgency, Impact)` |
 | Default fallback priority | The Phase-2 `default: true` entry's `valueName` already equals the requested value |
+| Salesforce Go step completion (route 10) | No functional Phase-4 write was dispatched this run — i.e. the request was view-only, or every targeted concern was itself an idempotent no-op. The PUT is also idempotent server-side, so re-asserting `isComplete: true` after a real write is harmless |
 
-When idempotent, report `ALREADY-<state>` and skip Phase 4 entirely.
+When a functional concern (the first six rows) is idempotent, report `ALREADY-<state>` and skip Phase 4 entirely. Route 10 is a Phase-5 action, not a Phase-4 concern — it has no `ALREADY-<state>` report.
 
 ---
 
@@ -259,6 +290,6 @@ For an uncustomized org the defaults are `High/Medium/Low` on `Impact` and `Urge
 | Duplicate `(ReferenceObject, Urgency, Impact)` rows | Accepted silently at the wire level — the server does NOT enforce uniqueness. Both rows persist and the runtime picks one non-deterministically. Deduplicate against the Phase-2 snapshot before POST; this check is the only guard. |
 | `ReferenceObject` accepts any string | The `ServiceOpPriorityConfig` SObject is shared with `Problem` and `ChangeRequest` matrices; the server accepts any value in `ReferenceObject`. Scope to `Incident` is skill-enforced only — refuse other values client-side. |
 | `sf api request rest ... --method DELETE` on Tooling | Fails with `SfError: No 'mode' found in 'body' entry` (sf CLI 2.143). Use `sf data delete record --use-tooling-api` instead. |
-| `/headless/invoke/service/service-itsm/...` returns 404 through `sf api request rest` | Those routes are Aura-dispatcher only; not addressable via the REST API host. Use the Tooling SObject and Setup Connect API prefs instead — that's what this skill does. |
 | Direct PATCH on `StandardValueSet/<Id>` via Tooling REST | Returns `FIELD_INTEGRITY_EXCEPTION: Unable to load specified entity`. Metadata deploy is the canonical path for picklist defaults. |
 | Existing Incidents' Priority | Not re-derived on matrix change. New writes use the new matrix; the stamped Priority on existing Incident records stays put. |
+| Salesforce Go "Define Priority Matrix" step stays "not done" after configuring the matrix | The step is user-override — its checkmark is a `StepProgress` record, not derived from org state, so functional writes alone never flip it. Send route 10's completion PUT after the write (see step 8 in the SKILL Workflow). Omitting `isComplete` in the body → HTTP 500, not 400. |

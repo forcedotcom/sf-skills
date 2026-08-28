@@ -9,7 +9,7 @@ Core (namespace `force`).
 
 **Employee agent is out of scope for this skill.** The Employee agent's access
 model is separate (org-preferences + a different persona layer) and does not
-map onto these four permsets.
+map onto these three permsets.
 
 ## Fulfiller persona ↔ AddOn ↔ PSL ↔ PermSet
 
@@ -18,7 +18,6 @@ map onto these four permsets.
 | Incident Fulfiller | `IncidentManagementAddOn-1` | `IncidentFulfillerPsl-1` | **`IncidentFulfiller`** | `IncidentFulfillerUser` |
 | Problem Fulfiller | `ProblemManagementAddOn-1` | `ProblemFulfillerPsl-1` | **`ProblemFulfillerPermSet`** | `ProblemFulfillerUser` |
 | Change Fulfiller | `ChangeManagementAddOn-1` | `ChangeRequestFulfillerPsl-1` | **`ChangeRequestFulfillerPermSet`** | `ChangeFulfillerPerm` |
-| Release Manager | `ReleaseManagementAddOn-1` | `ReleaseManagerPsl-1` | **`ReleaseManagerPermSet`** | (org-perm-gated only) |
 
 ### Key facts
 
@@ -26,14 +25,9 @@ map onto these four permsets.
   in the previous version of this skill (`svc_itsm_intelligence`) never
   returns any of these rows.
 - **Naming inconsistency**: `IncidentFulfiller` has NO `PermSet` suffix; the
-  other three DO. The classifier's fixed-name list reflects this exactly —
+  other two DO. The classifier's fixed-name list reflects this exactly —
   do not "normalize" the Incident name to `IncidentFulfillerPermSet`, it does
   not exist on the org.
-- **`ReleaseManagerPermSet`** ships as a permset but its Fulfiller user permission
-  lives on the OrgPreference layer (org-perm-gated). Assigning the permset
-  still works and is the correct write; the runtime effect activates once the
-  org toggle is on. Downstream, `service-itsm-agentic-setup-agentforce-studio-validate`
-  is the skill that toggles the org preference.
 - **CMDB access is a separate concern** — the CMDB read/write permsets are
   handled by `service-itsm-agentic-setup-cmdb-access-assign` and are not
   gated by any `svc_itsm_intelligence__*` prompt-template invocable, so they
@@ -47,8 +41,7 @@ FROM PermissionSet
 WHERE Name IN (
   'IncidentFulfiller',
   'ProblemFulfillerPermSet',
-  'ChangeRequestFulfillerPermSet',
-  'ReleaseManagerPermSet'
+  'ChangeRequestFulfillerPermSet'
 )
 ```
 

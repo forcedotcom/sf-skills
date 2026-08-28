@@ -2,7 +2,7 @@
 name: service-itsm-agentic-setup-employee-agent-configure
 description: "Create and activate an IT Service Employee agent as a Next-Gen Authoring (NGA) native agent from an ITSM Employee agent template's Agent Script, via the Salesforce CLI (sf): read the template, check idempotency, create the NGA bundle then publish and activate, verify live. Defaults to the broad IT Service Employee template; when the user names a specialized Employee template (Password Manager Assistance, Certificate Management, Onboarding, Hardware Request, and ~47 others catalogued in references/specialized-templates.md — all under the `svc_emp_intelligence__` namespace), pins that one instead. Idempotent per developer name. TRIGGER when the user asks to create/set up/provision/activate the Employee agent, the IT Service Employee agent, or a specialized Employee agent (password manager, certificate, onboarding, hardware request, etc.). DO NOT TRIGGER: prerequisite checks (service-itsm-agentic-setup-agentforce-studio-validate), CMDB CRUD, Fulfiller setup (service-itsm-agentic-setup-fulfiller-agent-configure)."
 metadata:
-  version: "2.1"
+  version: "2.3"
   domains: ["Service", "Agentforce"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -58,7 +58,7 @@ If any of these are unmet, `sf` surfaces an auth error or a `401`/`403`/`404`; *
 
 | Concern | Command | Notes |
 |---------|---------|-------|
-| Studio access (precondition read) | `sf api request rest "/services/data/v67.0/agentforce-studio/access/Agents" --method GET -o <alias>` | `hasAccess=false` ⇒ prereq hand-off |
+| Studio access (precondition read) | `sf api request rest "/services/data/v67.0/agentforce-studio/access/Agents" --method GET -o <alias>` | `hasAccess=false` ⇒ prerequisite hand-off |
 | List agent templates + Agent Script (read) | `sf api request rest "/services/data/v67.0/connect/service-itsm/agent-templates?agentType=AgentforceEmployeeAgent" --method GET -o <alias>` | `agentType=AgentforceEmployeeAgent` required; confirms resolved `<masterLabel>` template + non-empty `agentScript` |
 | Enumerate existing agent + latest version status (read) | `sf data query -q "SELECT Id,DeveloperName,MasterLabel,(SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1) FROM BotDefinition WHERE Id='<botDefinitionId>' OR DeveloperName='<developerName>'" -o <alias> --json` | Keyed PRIMARILY on the template's `botDefinitionId` (Phase-1 row); the `OR DeveloperName=` clause is both the null-`botDefinitionId` fallback AND the guard for a dangling Id link (deleted target). Classified by `scripts/classify-agent-existence.mjs`; Active latest ⇒ ALREADY-CREATED; Inactive latest ⇒ offer reactivation |
 | **Create the NGA bundle** (write) | `sf api request rest "/services/data/v67.0/nextgen-authoring/bundles" --method POST --body @<body-file> -o <alias>` | Body built by `scripts/build-create-body.mjs`; response `id` = the bundle **version** Id |

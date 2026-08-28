@@ -2,9 +2,9 @@
 name: service-itsm-incident-priority-configure
 description: "Configures the Incident Priority Matrix for Salesforce ITSM through the sf CLI — enabling or disabling the matrix, shaping the Impact x Urgency grid that derives Priority on Incident records, toggling the manual-override preference, and reading or setting the default fallback priority. Reads every value before writing, is idempotent, and requires explicit user confirmation before any mutation. Use when the user wants to view, enable, disable, set up, seed, add to, change, or remove priority matrix configuration for Incident records, change the default incident priority, or asks about incident priority setup, impact/urgency mapping, override, or the ITSM incident priority matrix. DO NOT TRIGGER for Problem or ChangeRequest priority matrices, Case priority fields, standard Priority picklists outside ITSM, SLA or milestone configuration, or enabling Incident Management itself (use the service-itsm-incident-mgmt-configure skill)."
 metadata:
+  version: "1.4"
   relatedSkills:
     - "service-itsm-incident-mgmt-configure"
-  version: "1.3"
   domains: ["Service"]
   minApiVersion: "67.0"
   cliTools:
@@ -21,7 +21,7 @@ allowed-tools: |
 
 Configures the **Incident Priority Matrix** for Salesforce ITSM — the grid that derives an Incident's **Priority** from its **Impact** and **Urgency**. Covers viewing the matrix, enabling / disabling it, adding / changing / removing / seeding cells, toggling the manual-override preference, and reading / setting the default (fallback) priority.
 
-Every read and write dispatches through the **`sf` CLI** — no MCP dispatcher, no `/headless/invoke/*` route, no Aura controller. This means the skill works on any org with the Incident Management license enabled, without the `api.agentic.access.enableHeadless360McpServer` gate.
+Every read and write dispatches through the **`sf` CLI**, so this skill works on any org with the Incident Management license enabled.
 
 Writes are **idempotent** (skipped when the current state already matches the target), the skill always **reads before it writes**, and an explicit **confirm-to-write** checkpoint is required before any mutation.
 
@@ -56,7 +56,7 @@ surface the raw error and stop.**
 
 ## Routes at a glance
 
-Every route is called through `sf` — no `curl`, no MCP server. Full method / path / body / response
+Every route is called through the `sf` CLI. Full method / path / body / response
 details, the picklist extraction recipe, and gotchas live in `references/sf-cli-invocation.md`.
 
 | Concern | Transport | HTTP status |
@@ -71,6 +71,7 @@ details, the picklist extraction recipe, and gotchas live in `references/sf-cli-
 | Default fallback priority (read) | `sf api request rest` GET on `/services/data/v67.0/tooling/query/?q=...StandardValueSet...` | 200 |
 | Default fallback priority (write) | `sf project retrieve start` + edit + `sf project deploy start` on `StandardValueSet:IncidentPriority` | deploy Succeeded |
 | Picklist values (Incident) | `sf api request rest` GET on `/services/data/v67.0/sobjects/Incident/describe` | 200 |
+| Salesforce Go step "Done" (write, after a mutation) | `sf api request rest` PUT on `/services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-incident/configuration/step/definePriorityMatrix/progress` | 200 |
 
 **Path prefixes are load-bearing — do NOT strip them.** Setup Connect API paths MUST start with
 `/services/data/v67.0/`. Tooling REST paths MUST start with `/services/data/v67.0/tooling/`.
@@ -118,13 +119,10 @@ a user statement (or you cannot identify a specific prior `sf` response), re-rea
   read this session AND no `StandardValueSet:IncidentPriority` deploy has run since,
   skip step 6.
 
-**When in doubt, re-check.** Skip only when the earlier fact is unambiguously in context
-AND the target-org alias has not changed AND no write elsewhere in the session could
-have invalidated it (Phase-4 writes in this skill are the primary invalidators — a
-PATCH on a pref, a POST/PATCH/delete on a `ServiceOpPriorityConfig` row, or a
-`StandardValueSet:IncidentPriority` deploy all bust the cache for the matching read).
-If the user hints at a different org (or a different alias), re-run the read. A wrong
-skip on a live org write is worse than a duplicated read.
+**When in doubt, re-check.** Skip only when the fact is unambiguously in context, the
+`--target-org` alias is unchanged, and no Phase-4 write since (a pref PATCH, a
+`ServiceOpPriorityConfig` POST/PATCH/delete, or a `StandardValueSet:IncidentPriority`
+deploy) could have invalidated it. A wrong skip on a live org is worse than a re-read.
 
 ### Phase 1 — Preflight
 
@@ -166,7 +164,8 @@ Read the current value of the same concern first (Phase 2 covers this), confirm 
 ### Phase 5 — Verify and present
 
 7. Re-read the concern that was mutated (matrix rows via Tooling SOQL; default priority via `StandardValueSet` query; prefs are echoed on PATCH response). If the observed state does not match the requested state, treat it as a failed write and report the raw server response verbatim.
-8. Present before/after (Impact × Urgency grid via `examples/render-matrix.md`) plus a one-line summary (e.g. `Incident matrix: High/High → Critical added`). Matrix changes affect only Incidents created **after** the write; disabling the matrix does not clear stored rows or the default priority.
+8. **Mark the Salesforce Go step Done — only if a Phase-4 functional write actually landed.** The "Define Priority Matrix" step is user-override: its checkmark is **not** derived from org state, so configuring the matrix alone never flips it — completion must be written. After step 7 verifies the write, PUT the completion once (`references/sf-cli-invocation.md` route 10; body `{"isComplete": true}`, flag REQUIRED). It rides on the Phase-3 confirmation — no separate `AskUserQuestion`. **Skip entirely on view-only reads and idempotent no-ops.**
+9. Present before/after (Impact × Urgency grid via `examples/render-matrix.md`) plus a one-line summary (e.g. `Incident matrix: High/High → Critical added`). Matrix changes affect only Incidents created **after** the write; disabling the matrix does not clear stored rows or the default priority.
 
 ---
 
@@ -174,7 +173,7 @@ Read the current value of the same concern first (Phase 2 covers this), confirm 
 
 | Constraint | Rationale |
 |-----------|-----------|
-| All operations run through `sf` CLI | The user-selected transport for this skill; no MCP dispatcher; no `/headless/invoke/*` route |
+| All operations run through `sf` CLI | Works on any org with Incident Management enabled; requires no additional setup |
 | Always API v67.0 minimum | The Setup Connect API pref routes require v67+ |
 | Read live state before writing | The Phase-2 snapshot is the source of truth for the confirmation prompt, the idempotency check, and the Phase-5 verify |
 | **REQUIRED confirm-to-write checkpoint** before any mutation | Toggling prefs or changing matrix rows mutates org state; user must approve the exact plan |
@@ -184,6 +183,7 @@ Read the current value of the same concern first (Phase 2 covers this), confirm 
 | Refuse any `ReferenceObject` other than `Incident` (`Problem`, `ChangeRequest`, anything else) | `ServiceOpPriorityConfig` is shared with the Problem / ChangeRequest matrices at the wire level — the server accepts any `ReferenceObject` string. Scope to `Incident` is skill-enforced only. |
 | On Change / Remove, if the target coordinate resolves to more than one row, do NOT dispatch — require an explicit `Id` or a confirmed consolidation plan | The server allows duplicate `(ReferenceObject, Urgency, Impact)` rows. Picking "the row Id" arbitrarily would mutate one duplicate and leave the other in place, keeping the matrix non-deterministic. |
 | Report exact error text from the CLI response | The CLI surfaces the underlying error message verbatim |
+| After a functional write, PUT the Salesforce Go step-progress completion (route 10); skip on view / no-op | The "Define Priority Matrix" step is user-override — its checkmark isn't derived from org state, so config writes alone leave the Go checklist stuck |
 
 ---
 
@@ -198,6 +198,7 @@ Before reporting completion of any mutation, confirm each of the following. If a
 - [ ] Every `Impact`, `Urgency`, `Priority` in any add / change payload was validated against the Phase-1 picklist values before dispatch. Duplicates on `(ReferenceObject, Urgency, Impact)` were caught client-side against the Phase-2 snapshot — the server does NOT reject duplicates. Every add payload had `ReferenceObject == "Incident"`.
 - [ ] Phase 4 writes used the exact CLI invocations from `references/sf-cli-invocation.md`; on any `4xx` / `5xx` (or non-`Succeeded` deploy), the raw response was surfaced and the run halted.
 - [ ] Phase 5 verify re-read the affected concerns; any diff was reported as `write FAILED — server state differs from request` with the raw response.
+- [ ] If a Phase-4 functional write landed, the Go step-progress completion PUT (route 10) was sent after verify. On view-only reads and idempotent no-ops, no completion PUT was dispatched.
 - [ ] The final report gave a before/after with the Impact × Urgency grid and a one-line summary.
 
 ---

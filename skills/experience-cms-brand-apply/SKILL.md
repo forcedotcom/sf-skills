@@ -2,10 +2,11 @@
 name: experience-cms-brand-apply
 description: "Extracts, retrieves, and applies CMS brand guidelines (voice, tone, style, colors, typography) to generated content. Use this skill ANY TIME a user request involves branding, brand voice, brand tone, brand guidelines, brand identity, brand styling, or applying a brand to content. Triggers for requests like \"apply my brand\", \"use our brand voice\", \"match our brand guidelines\", \"find my brand\", \"search for brand\", \"get brand instructions\", \"apply brand tone\". Handles the full workflow: searching for brands in Salesforce CMS, extracting brand instructions, and applying brand voice/tone/guidelines to generated content. Does not apply to media/image search (use experience-content-media-search skill), logo search, or creating new brand definitions."
 metadata:
-  relatedSkills:
-    - "experience-content-media-search"
   version: "1.0"
   domains: ["Experience"]
+  relatedSkills:
+    - "experience-cms-brand-create"
+    - "experience-content-media-search"
 ---
 
 # Applying CMS Brand
@@ -26,7 +27,7 @@ Universal skill for searching, extracting, and applying CMS brand guidelines to 
 
 **DO NOT use this skill when the user wants to:**
 - Search for images or media (use experience-content-media-search skill)
-- Create a new brand from scratch
+- Create a new brand from scratch (use experience-cms-brand-create skill)
 - Edit brand definitions in CMS
 - Generate logos or visual brand assets
 

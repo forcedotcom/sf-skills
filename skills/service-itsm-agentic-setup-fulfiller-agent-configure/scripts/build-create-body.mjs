@@ -25,27 +25,12 @@
 // Exits 2 on missing/bad args, 3 if the template or its agentScript can't be found.
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { stripReleaseManagement, decodeAgentScriptEntities } from './strip-release-management.mjs';
 
 const [templatesPath, masterLabel, developerName, label, outPath] = process.argv.slice(2);
 if (!templatesPath || !masterLabel || !developerName || !label || !outPath) {
   process.stderr.write('usage: node build-create-body.mjs <agent-templates.json> <masterLabel> <developerName> <label> <outPath>\n');
   process.exit(2);
-}
-
-function decodeHtmlEntities(text) {
-  let prev = text;
-  for (let pass = 0; pass < 4; pass += 1) {
-    const next = prev
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)));
-    if (next === prev) break;
-    prev = next;
-  }
-  return prev;
 }
 
 let templatesData;
@@ -76,7 +61,29 @@ function yamlDoubleQuoteEscape(text) {
   return String(text).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
 
-const decoded = decodeHtmlEntities(match.agentScript);
+const decodedRaw = decodeAgentScriptEntities(match.agentScript);
+
+// Strip the Release Management subagent so the created agent never
+// references `svc_itsm_intelligence__SummarizeRelease` — that action is gated
+// behind Release Management (`ReleaseManagementPref`) and would otherwise make
+// `activate` fail with a `{success:false}` silent-failure body on any org that
+// has not enabled the pref. The strip is a no-op if the block is absent.
+const { text: decoded, removed } = stripReleaseManagement(decodedRaw);
+if (removed.topic > 0) {
+  process.stderr.write(
+    `note: stripped Release Management subagent (topic:${removed.topic} goto:${removed.goto} bullet:${removed.bullet} lines)\n`,
+  );
+}
+// Completeness guard: if a ReleaseManagement/SummarizeRelease reference survives
+// the strip (e.g. a future template references the gated action outside the
+// three stripped surfaces), the shipped bundle would dangle it and `activate`
+// could still return the {success:false} silent-failure body. Warn loudly.
+if (removed.residual > 0) {
+  process.stderr.write(
+    `warning: ${removed.residual} residual ReleaseManagement/SummarizeRelease token(s) survive after strip — the template may reference the gated action outside the three stripped surfaces; the created agent's activation could still fail\n`,
+  );
+}
+
 const developerNameEscaped = yamlDoubleQuoteEscape(developerName);
 const labelEscaped = yamlDoubleQuoteEscape(label);
 

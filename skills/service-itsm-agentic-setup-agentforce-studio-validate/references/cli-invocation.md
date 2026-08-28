@@ -43,9 +43,9 @@ column is what the API uses:
 | UI toggle | featureApiName | Required for |
 |-----------|----------------|--------------|
 | Turn on Agentforce Studio | `sales-cloud-agent-studio` | both paths |
-| Agentforce for IT Service (parent umbrella) | `service-cloud-agentforce-for-itsm` | both paths |
-| IT Service Fulfiller | `service-cloud-it-fulfiller-agent` | fulfiller |
-| IT Service Employee | `service-cloud-requestor-agent` | employee |
+| Agentforce for IT Service | `service-cloud-agentforce-for-itsm` | both paths |
+| IT Service Fulfiller Template | `service-cloud-it-fulfiller-agent` | fulfiller |
+| IT Service Employee Template | `service-cloud-requestor-agent` | employee |
 | Specialized Agent Templates for Employee | `service-cloud-it-service-employee-agent` | employee |
 
 Dependency chain (enable order): `sales-cloud-einstein-generative-ai` →

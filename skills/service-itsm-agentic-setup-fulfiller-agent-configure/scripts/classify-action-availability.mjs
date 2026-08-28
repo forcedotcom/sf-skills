@@ -12,16 +12,39 @@
 // after the fact is expensive; this classifier flags the mismatch BEFORE the
 // activate call.
 //
-// Two fixed rules (A9 — no prose interpretation):
-//   1. Enumerate every `svc_*__<ActionName>` token that appears inside a
-//      `source:` or `target:` line of the decoded Agent Script.
+// Availability model (A9 — no prose interpretation):
+//   Each action block in the Agent Script is a `source:` / `target:` pair:
+//     source: "svc_..._<AgentActionName>"           # the planner-facing alias
+//     target: "<scheme>://<InvocationTargetName>"    # the real invocation target
+//   The `source:` value is the agent-action alias; the `target:` URI names the
+//   thing actually invoked. These two names routinely DIFFER for the SAME action
+//   — e.g. source `CreateIncidentResolutionSummary` →
+//   target `generatePromptResponse://...IncidentResolutionSummarizationPrompt`,
+//   or source `CreateIncidentRootCauseSummary` → target `flow://...CreaIncRootCse`
+//   (an abbreviated flow API name). Treating the alias and the target as two
+//   separate required actions (the old behaviour) false-flagged the alias as
+//   "missing" and blocked a valid activation.
+//
+//   Only `generatePromptResponse://` targets are surfaced by
+//   `/actions/custom/generatePromptResponse`; `flow://`, `apex://`, and
+//   `standardInvocableAction://` targets live in other action buckets the
+//   endpoint never lists (their names are often not even namespace-prefixed,
+//   e.g. `associateSvcMgmntRecords`). So this gate can only verify the
+//   `generatePromptResponse://` targets, keyed on the TARGET name — never the
+//   source alias, never a non-prompt target. Rules:
+//   1. Parse every `target:` URI; split by scheme. The checkable set is the
+//      `generatePromptResponse://` target names. Non-gPR targets are recorded
+//      and SKIPPED (this endpoint has no jurisdiction over them).
 //   2. Enumerate every action name exposed by
 //      `/actions/custom/generatePromptResponse` — accepts both response shapes:
 //        (a) legacy `{ actions: [ { name, ... }, ... ] }`
 //        (b) newer  `{ actions: { <fullyQualifiedName>: {...}, ... } }`
-//   Emit `missing = referenced - present`. If missing.length > 0 ⇒ verdict
-//   NOT-READY. On non-parseable inputs, verdict is CANNOT-CONFIRM (never block
-//   on unreadable state — surface it and let the workflow decide).
+//   Emit `missing = <generatePromptResponse targets> - present`. missing.length
+//   > 0 ⇒ NOT-READY (the ITSM Intelligence permset that surfaces these
+//   prompt-response actions is not assigned for the running user). Zero gPR
+//   targets referenced but other targets present ⇒ READY (nothing this gate
+//   governs). No target: lines at all / non-parseable inputs ⇒ CANNOT-CONFIRM
+//   (never block on unreadable state — surface it and let the workflow decide).
 //
 // Usage:
 //   node classify-action-availability.mjs \
@@ -30,7 +53,8 @@
 // <agent-templates.json>          — Phase-1 `agent-templates` capture; the matched
 //                                    template's `agentScript` is decoded exactly
 //                                    like build-create-body.mjs decodes it, then
-//                                    scanned for source:/target: action tokens.
+//                                    its `target:` invocation URIs are parsed and
+//                                    split by scheme.
 // <masterLabel>                   — the display label of the target template
 //                                    (e.g. "IT Service Fulfiller").
 // <generate-prompt-response.json> — GET
@@ -38,9 +62,10 @@
 //                                    response body.
 //
 // Emits a single JSON object to stdout:
-//   { referenced: [...],
-//     present:    [...],
-//     missing:    [...],
+//   { referenced: [...],   // generatePromptResponse:// target names this gate verifies
+//     present:    [...],   // action names surfaced by generatePromptResponse
+//     missing:    [...],   // referenced - present
+//     skippedNonPromptTargets: [ { scheme, name }, ... ], // flow/apex/standard — not gate-checkable
 //     verdict: "READY" | "NOT-READY" | "CANNOT-CONFIRM",
 //     reasons: [...] }
 // Exit is always 0 on parseable inputs; the verdict is carried in the payload.
@@ -49,6 +74,7 @@
 // READY.
 
 import { readFileSync } from 'node:fs';
+import { stripReleaseManagement, decodeAgentScriptEntities } from './strip-release-management.mjs';
 
 function readJson(path) {
   try {
@@ -60,52 +86,46 @@ function readJson(path) {
   }
 }
 
-// Multi-pass HTML entity decode — matches build-create-body.mjs so both see the
-// same script content. Connect API bodies can be double-encoded.
-const NAMED = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', '#39': "'", nbsp: ' ' };
-function decodeEntitiesOnce(s) {
-  return s.replace(/&(#?\w+);/g, (m, ref) => {
-    if (ref.startsWith('#')) {
-      const n = ref[1] === 'x' || ref[1] === 'X' ? parseInt(ref.slice(2), 16) : parseInt(ref.slice(1), 10);
-      return Number.isFinite(n) ? String.fromCodePoint(n) : m;
-    }
-    return Object.prototype.hasOwnProperty.call(NAMED, ref) ? NAMED[ref] : m;
-  });
-}
-function decodeEntities(s) {
-  let prev = s, next = decodeEntitiesOnce(s);
-  while (next !== prev) { prev = next; next = decodeEntitiesOnce(next); }
-  return next;
-}
-
-function extractReferencedActions(scriptText) {
-  // Only lines whose YAML key is `source` or `target` are load-bearing — a
-  // namespace-prefixed action name mentioned inside a description, instruction,
-  // or comment is documentation, not a required invocation. Scanning globally
-  // would mis-flag such a mention as NOT-READY and block a valid activation.
+function extractTargets(scriptText) {
+  // Each action block pairs a `source:` alias with a `target:` invocation URI:
+  //   source: "svc_itsm_intelligence__CreateIncidentResolutionSummary"
+  //   target: "generatePromptResponse://svc_itsm_intelligence__IncidentResolutionSummarizationPrompt"
   //
-  // Agent Script YAML forms observed:
-  //   source: "svc_itsm_intelligence__SummarizeIncident"
-  //   source: svc_itsm_intelligence__SummarizeIncident
-  //   target: "generatePromptResponse://svc_itsm_intelligence__SummarizeIncident"
-  //   - source: "..."
+  // Only the `target:` names the thing actually invoked, and only a
+  // `generatePromptResponse://` target is surfaced (or withheld, per the ITSM
+  // Intelligence permset) by /actions/custom/generatePromptResponse. `flow://`,
+  // `apex://`, and `standardInvocableAction://` targets are surfaced through
+  // other mechanisms and never appear in that endpoint, so they are recorded and
+  // skipped rather than mis-flagged as missing. The `source:` alias is never
+  // itself a generatePromptResponse entry — it is not part of the checkable set;
+  // scanning it (the old behaviour) false-flagged aliases whose real target IS
+  // present, blocking a valid activation.
   //
-  // The key line regex tolerates leading whitespace, an optional YAML list dash,
-  // and both quoted and unquoted scalar values (single line). Block scalars
-  // (`source: |`) are extraordinarily rare for these fields and safely fall
-  // through to CANNOT-CONFIRM when nothing is extracted.
-  const referenced = new Set();
-  const tokenRe = /\bsvc_[a-z0-9_]+__[A-Za-z][A-Za-z0-9_]*\b/g;
-  const keyLineRe = /^[ \t]*-?[ \t]*(?:source|target)[ \t]*:[ \t]*(.*)$/;
+  // The regex tolerates leading whitespace, an optional YAML list dash, and the
+  // scalar value in ANY of its YAML quote forms — unquoted, single-quoted, or
+  // double-quoted. The opening quote (if any) is captured in group 1 and the same
+  // character is re-checked as the optional closing quote via a backreference, so
+  // `target: 'generatePromptResponse://Name'` parses exactly like the double-quoted
+  // and unquoted forms (accepting only `"?` before was a regression: a
+  // single-quoted target silently fell through to CANNOT-CONFIRM, and the workflow
+  // then proceeded to create an agent whose activation fails). The name after `://`
+  // is captured up to the next quote (either style) or whitespace. A target with no
+  // `scheme://` shape simply does not match and contributes nothing.
+  const gpr = new Set();
+  const other = [];
+  const targetLineRe = /^[ \t]*-?[ \t]*target[ \t]*:[ \t]*(['"]?)([A-Za-z][A-Za-z0-9]*):\/\/([^'"\s]+)\1?/;
   for (const rawLine of scriptText.split(/\r?\n/)) {
-    const km = keyLineRe.exec(rawLine);
-    if (!km) continue;
-    const value = km[1];
-    for (const m of value.matchAll(tokenRe)) {
-      referenced.add(m[0]);
+    const m = targetLineRe.exec(rawLine);
+    if (!m) continue;
+    const scheme = m[2];
+    const name = m[3];
+    if (scheme === 'generatePromptResponse') {
+      gpr.add(name);
+    } else {
+      other.push({ scheme, name });
     }
   }
-  return [...referenced].sort();
+  return { gprTargets: [...gpr].sort(), otherTargets: other };
 }
 
 function extractPresentActions(actionsData) {
@@ -136,7 +156,12 @@ function findTemplateScript(agentTemplatesData, masterLabel) {
   const wanted = String(masterLabel).trim().toLowerCase();
   const match = items.find((it) => String(it?.masterLabel ?? '').trim().toLowerCase() === wanted);
   if (!match || typeof match.agentScript !== 'string' || !match.agentScript.trim()) return null;
-  return decodeEntities(match.agentScript);
+  // Scan the SAME script the create actually ships — with the Release
+  // Management subagent stripped. build-create-body.mjs removes it, so
+  // `svc_itsm_intelligence__SummarizeRelease` is never referenced by the created
+  // agent; leaving it in the scanned text here would false-flag it as "missing"
+  // and block the very flow the strip unblocks on an org without ReleaseManagementPref.
+  return stripReleaseManagement(decodeAgentScriptEntities(match.agentScript)).text;
 }
 
 const [templatesPath, rawLabel, actionsPath] = process.argv.slice(2);
@@ -175,27 +200,42 @@ if (!scriptText) {
   process.exit(0);
 }
 
-const referenced = extractReferencedActions(scriptText);
+const { gprTargets: referenced, otherTargets } = extractTargets(scriptText);
 const present = extractPresentActions(actionsRead.data);
 const presentSet = new Set(present);
 const missing = referenced.filter((r) => !presentSet.has(r));
+const skippedNonPromptTargets = otherTargets;
 
 let verdict, reasons;
 if (referenced.length === 0) {
-  verdict = 'CANNOT-CONFIRM';
-  reasons = ['No svc_*__ action tokens were found in the decoded Agent Script — either the script does not use namespace-prefixed invocables or decoding failed. Surface and continue with caution.'];
+  if (otherTargets.length > 0) {
+    // The template references only flow/apex/standard-invocable targets — none of
+    // which /actions/custom/generatePromptResponse governs. There is nothing for
+    // this permset gate to verify, so it must not block.
+    verdict = 'READY';
+    reasons = [
+      `No generatePromptResponse-backed actions are referenced by the template; the ${otherTargets.length} non-prompt target(s) (flow/apex/standard-invocable) are surfaced through other mechanisms and are outside this gate.`,
+    ];
+  } else {
+    verdict = 'CANNOT-CONFIRM';
+    reasons = ['No target: invocation URIs were found in the decoded Agent Script — either the script shape is unexpected or decoding failed. Surface and continue with caution.'];
+  }
 } else if (missing.length === 0) {
   verdict = 'READY';
-  reasons = [`All ${referenced.length} template-referenced invocable action(s) are surfaced by /actions/custom/generatePromptResponse for the running user.`];
+  reasons = [
+    `All ${referenced.length} generatePromptResponse-backed action(s) referenced by the template are surfaced by /actions/custom/generatePromptResponse for the running user${
+      otherTargets.length ? ` (${otherTargets.length} non-prompt flow/standard-invocable target(s) are outside this gate and were not checked)` : ''
+    }.`,
+  ];
 } else {
   verdict = 'NOT-READY';
   reasons = [
-    `${missing.length} of ${referenced.length} template-referenced invocable action(s) are NOT surfaced by /actions/custom/generatePromptResponse for the running user.`,
+    `${missing.length} of ${referenced.length} generatePromptResponse-backed action(s) referenced by the template are NOT surfaced by /actions/custom/generatePromptResponse for the running user.`,
     `Missing: ${missing.join(', ')}`,
     'Activate will succeed at the HTTP level but return {success:false, messages:[...]} — the agent will not be usable. Offer to hand off to service-itsm-agentic-setup-itsm-agentforce-permset-assign, which handles both the permset-not-assigned case and the package-not-installed case.',
   ];
 }
 
 process.stdout.write(JSON.stringify({
-  referenced, present, missing, verdict, reasons,
+  referenced, present, missing, skippedNonPromptTargets, verdict, reasons,
 }, null, 2) + '\n');

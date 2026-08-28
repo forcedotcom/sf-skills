@@ -2,7 +2,7 @@
 name: service-itsm-agentic-setup-agentforce-studio-configure
 description: "Enable the Agentforce for IT Service Salesforce Go feature toggles (Agentforce Studio, Einstein Generative AI, the parent umbrella, and the Fulfiller/Employee agent templates) using the Salesforce CLI (sf). Turns ON org prefs via the Setup Discovery feature/{apiName}/enable Connect API route. Write-capable, idempotent, dependency-ordered, confirm-to-write required. Use when asked to enable Agentforce Studio, turn on Agentforce for IT Service, enable Einstein generative AI, or configure the org-level Agentforce for IT Service prerequisites. Triggers: enable agentforce studio, turn on agentforce for it service, enable einstein generative ai, configure agentforce org prefs. DO NOT TRIGGER: read-only prerequisite check (service-itsm-agentic-setup-agentforce-studio-validate), create/activate an agent (service-itsm-agentic-setup-fulfiller-agent-configure), or assigning permission sets."
 metadata:
-  version: "1.0"
+  version: "1.3"
   domains: ["Service", "Agentforce"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -25,7 +25,7 @@ allowed-tools: |
 
 # Enable Agentforce for IT Service Prerequisites
 
-Enable the **Agentforce for IT Service** Salesforce Go feature toggles — **Einstein Generative AI**, **Agentforce Studio**, the **parent umbrella**, and the path-specific agent template (**Fulfiller** or **Employee**) — entirely through the **Salesforce CLI (`sf`)**. This is the **write-capable** step in a three-skill flow; every write goes through the Setup Discovery `POST /connect/setup/discovery/feature/{apiName}/enable` Connect API route — the only correct write path for these toggles. Each toggle is enabled **idempotently** (skipped if already `ENABLED`), dependencies are enabled first, and explicit confirmation is required before any write.
+Enable the **Agentforce for IT Service** Salesforce Go feature toggles — **Einstein Generative AI**, **Agentforce Studio**, the **parent umbrella**, and the path-specific agent template (**Fulfiller** or **Employee**) — entirely through the **Salesforce CLI (`sf`)**. These toggles are the **prerequisites for creating the Fulfiller/Employee agent**; this **write-capable** step turns them on via the Setup Discovery `POST /connect/setup/discovery/feature/{apiName}/enable` Connect API route. Each toggle is enabled **idempotently** (skipped if already `ENABLED`), dependencies are enabled first, and explicit confirmation is required before any write.
 
 | Step | Skill | What it does |
 |------|-------|--------------|
@@ -218,7 +218,6 @@ Substitute `<alias>` with the target org alias. `<agentType>` is `fulfiller` or 
 | `updateOrgPref` → 500 `Invalid prefName` for an agent pref | Wrong write path — use the Setup Discovery `feature/{apiName}/enable` endpoint instead |
 | Auth error from `sf api request rest` | The target org's session needs re-authentication (`sf org login web`) |
 | Treating an auth/permission/empty-body read failure as "not wired" | Pass the captured `$?` as the classifier's 3rd arg — only a confirmed 404 is CANNOT-CONFIRM; anything else is ERROR (surface `rawError`, stop) |
-| Trusting the Phase-2 `blocked` list for the entire Phase-4 loop | It is a snapshot before any write — re-read + reclassify before each toggle attempt instead, or a dependency-blocked child gets reported FAILED even after its blocker was just cleared |
 | Reporting `ALL-ENABLED` because `pending` is empty | Also check `unconfirmed` — a required toggle missing from the response or with an unrecognized status is neither confirmed ENABLED nor NOT_ENABLED |
 | Re-deriving the per-feature / overall verdict in prose from the before/after JSON | Run `scripts/classify-final-report.mjs` — the aggregation is fixed comparison logic (authoring standard A9), not a judgment call |
 | Setting the feature-status request body in a shell variable in Phase 1 and expecting it in Phase 4/5 | Each `Bash` invocation may run in a fresh shell where the variable is unset, silently sending an empty body — persist it to `/tmp/feature-status-body.json` once and read it back with `--body "$(cat /tmp/feature-status-body.json)"` in every phase |
@@ -240,27 +239,33 @@ Substitute `<alias>` with the target org alias. `<agentType>` is `fulfiller` or 
 
 ## Output Format
 
-Present the enablement report as:
+Present the enablement report as a **table** — this is **Stage 1 (Foundation)**, the platform
+enablement that Stage 2 (install & activate the agent) is built on. Each Status is one of
+ENABLED / ALREADY-ENABLED / FAILED / CANNOT-CONFIRM:
 
 ```text
-Agentforce for IT Service — Enable Prerequisites (via service-itsm-agentic-setup-agentforce-studio-configure)
+Agentforce for IT Service — Stage 1: Enable Platform Features (via service-itsm-agentic-setup-agentforce-studio-configure)
 
 Org:          <org-alias> (API v67.0)
 Agent path:   fulfiller | employee
 
-  [1] Einstein Generative AI ................. ENABLED | ALREADY-ENABLED | FAILED | CANNOT-CONFIRM
-  [2] Agentforce Studio ...................... ENABLED | ALREADY-ENABLED | FAILED | CANNOT-CONFIRM
-  [3] Agentforce for IT Service (parent) ..... ENABLED | ALREADY-ENABLED | FAILED | CANNOT-CONFIRM
-  [4] <path-specific template(s)> ............ ENABLED | ALREADY-ENABLED | FAILED | CANNOT-CONFIRM
+| # | Platform feature | Status |
+| --- | --- | --- |
+| 1 | Einstein Generative AI | <status> |
+| 2 | Agentforce Studio | <status> |
+| 3 | Agentforce for IT Service | <status> |
+| 4 | <path-specific toggle(s)> | <status> |
 
-Verdict: SUCCESS  |  PARTIAL  |  FAILED  |  CANNOT-CONFIRM  |  ERROR
+Verdict: SUCCESS | PARTIAL | FAILED | CANNOT-CONFIRM | ERROR
 
 Next steps:
-  - <If SUCCESS: "Org satisfies the prerequisites for the <path> agent. Create it via service-itsm-agentic-setup-fulfiller-agent-configure (fulfiller) / the employee-agent skill.">
+  - <If SUCCESS: "Stage 1 (foundation) complete — proceed to Stage 2: install + activate the <path> agent via service-itsm-agentic-setup-fulfiller-agent-configure (fulfiller) / the employee-agent skill.">
   - <If PARTIAL/FAILED/CANNOT-CONFIRM/ERROR: list the affected toggle(s) + reason (enableBlockedReasons, unconfirmed status, or read error) + remediation steps>
 ```
 
-Render `overall` and each feature's `finalStatus` from `scripts/classify-final-report.mjs` verbatim — do not recompute them. No files are produced beyond the temporary response captures used by the classifiers.
+Render `overall` and each feature's `finalStatus` from `scripts/classify-final-report.mjs` verbatim (substitute into each `<status>` cell) — do not recompute them. No files are produced beyond the temporary response captures used by the classifiers.
+
+Label rows exactly as the classifier emits them — never add `Requestor`, `Specialized`, or `parent`.
 
 ---
 

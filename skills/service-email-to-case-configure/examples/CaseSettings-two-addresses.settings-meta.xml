@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Example: Email-to-Case enabled with two routing addresses (EmailToCase + Outlook).
+  This is the source-file shape that apply-casesettings.py consumes.
+
+  Note what is and is NOT here:
+    1. The two required emailToCase switches (enableEmailToCase + enableOnDemandEmailToCase)
+       and, on each address, the required addressType / routingName / caseOrigin / casePriority.
+    2. NO emailAddress on either address. The customer-facing emails are supplied at apply
+       time via one routing-email option per address, in this document order (first the
+       Support Inbox email, then the Sales Outlook Inbox email). See SKILL.md step 9.
+    3. Support Settings (Default Case Owner / Automated Case User) appear here only when the
+       user names them — this example names none, so none are set. When named, write the
+       paired fields (defaultCaseOwner + defaultCaseOwnerType, etc.); fields the org already
+       has are preserved when omitted. Never defaulted to the authenticated user.
+-->
+<CaseSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <emailToCase>
+        <enableEmailToCase>true</enableEmailToCase>
+        <enableOnDemandEmailToCase>true</enableOnDemandEmailToCase>
+        <routingAddresses>
+            <addressType>EmailToCase</addressType>
+            <routingName>Support Inbox</routingName>
+            <caseOrigin>Email</caseOrigin>
+            <casePriority>Medium</casePriority>
+            <createTask>false</createTask>
+            <saveEmailHeaders>true</saveEmailHeaders>
+        </routingAddresses>
+        <routingAddresses>
+            <addressType>Outlook</addressType>
+            <routingName>Sales Outlook Inbox</routingName>
+            <caseOrigin>Email</caseOrigin>
+            <casePriority>High</casePriority>
+        </routingAddresses>
+    </emailToCase>
+</CaseSettings>
