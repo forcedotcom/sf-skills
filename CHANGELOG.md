@@ -1,3 +1,14 @@
+# [1.43.0](https://github.com/forcedotcom/sf-skills/compare/1.42.0...1.43.0) (2026-08-28)
+
+
+### Features
+
+* @W-23921501@ declare relatedSkills in SKILL.md frontmatter (sync [#138](https://github.com/forcedotcom/sf-skills/issues/138)… ([90dbced](https://github.com/forcedotcom/sf-skills/commit/90dbcedf589103ffc3d5f26fee7f3f37f837bf6a))
+* Merge pull request [#1535](https://github.com/forcedotcom/sf-skills/issues/1535) from salesforce-internal/auto-integration/pr-1521 ([0ec9697](https://github.com/forcedotcom/sf-skills/commit/0ec96979d104df41537a094424dceca508ca5bfb))
+* Release to main: 16 new + 14 updated skills (1 removed) @W-24006609@ ([08bb9a5](https://github.com/forcedotcom/sf-skills/commit/08bb9a5599241b57301bd2d49880b9b5602413be))
+
+
+
 # [1.42.0](https://github.com/forcedotcom/sf-skills/compare/1.41.0...1.42.0) (2026-08-25)
 
 
