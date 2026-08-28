@@ -2,6 +2,8 @@
 name: platform-custom-application-generate
 description: "Use this skill when users need to create or configure tab-based Salesforce Custom Applications with navigation, branding, and action overrides. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Do NOT use when the goal is hosting a React UI bundle in the App Launcher — use experience-ui-bundle-custom-app-generate for that case."
 metadata:
+  relatedSkills:
+    - "experience-ui-bundle-custom-app-generate"
   version: "1.0"
   domains: ["Platform"]
   minApiVersion: "60.0"

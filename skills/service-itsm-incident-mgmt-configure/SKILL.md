@@ -2,6 +2,8 @@
 name: service-itsm-incident-mgmt-configure
 description: "Reads and toggles the master Incident Management setting on a Salesforce ITSM org — the org-level switch that turns Incident Management on or off. Reads current state before writing, is idempotent, and requires explicit user confirmation before any change. Use when the user wants to enable, disable, toggle, view, or turn on/off Incident Management (Service ITSM) at the org level. DO NOT TRIGGER for Default Field Validations for Incidents, Auto Closure of Child Incidents, Email-to-Incident sub-toggles, Problem Management, Change Management, Case Management, ITSM External Client App setup, or Incident Priority Matrix configuration (use the service-itsm-incident-priority-configure skill)."
 metadata:
+  relatedSkills:
+    - "service-itsm-incident-priority-configure"
   version: "1.1"
   domains: ["Service"]
   minApiVersion: "67.0"

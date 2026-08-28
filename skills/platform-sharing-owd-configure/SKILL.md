@@ -2,6 +2,9 @@
 name: platform-sharing-owd-configure
 description: "Use when the user wants to retrieve or update Organization-Wide Default (OWD) sharing settings for Salesforce objects. TRIGGER when: user asks to check current OWD settings, view sharing defaults, change default access levels (Private, Public Read Only, Public Read/Write, Controlled by Parent), configure internal or external access for standard or custom objects, mentions org-wide defaults, wants to make records private or restrict who can see records, wants to control default record visibility for an object, or references .settings-meta.xml sharing fields or sharingModel in .object-meta.xml files. DO NOT TRIGGER when: user asks about sharing rules, criteria-based sharing, role hierarchy, or manual sharing — delegate to platform-sharing-rules-generate."
 metadata:
+  relatedSkills:
+    - "platform-metadata-deploy"
+    - "platform-sharing-rules-generate"
   version: "1.2"
   domains: ["Platform"]
   cliTools:
