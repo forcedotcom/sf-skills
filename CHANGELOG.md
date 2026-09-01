@@ -1,3 +1,12 @@
+# [1.44.0](https://github.com/forcedotcom/sf-skills/compare/1.43.0...1.44.0) (2026-09-01)
+
+
+### Features
+
+* @W-23921501@ sync validator, model vocabulary & authoring docs to main ([e266d36](https://github.com/forcedotcom/sf-skills/commit/e266d36252d69f482d0b08ab07e24c18d44e212d))
+
+
+
 # [1.43.0](https://github.com/forcedotcom/sf-skills/compare/1.42.0...1.43.0) (2026-08-28)
 
 
