@@ -5,6 +5,8 @@ metadata:
   version: "1.1"
   domains: ["Experience"]
   minApiVersion: "64.0"
+  relatedSkills:
+    - "experience-cms-content-type-generate"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
