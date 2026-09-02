@@ -1,8 +1,8 @@
 ---
 name: service-itsm-agentic-setup-agentforce-coordinate
-description: "Orchestrator for setting up Agentforce in Salesforce Service Cloud ITSM — Agentforce Studio enablement, the IT Service Fulfiller agent, and the IT Service Employee agent. Use when the user asks to set up Agentforce for ITSM, enable Studio and the Fulfiller/Employee agents together, wants a guided Agentforce ITSM walkthrough, or asks what Agentforce features are available for IT Service. Presents available Agentforce capabilities and delegates each selection to a specialized child skill while tracking progress. Triggers on: set up agentforce for itsm, configure agentforce studio and fulfiller, agentforce itsm walkthrough, what agentforce features for it service. DO NOT TRIGGER when: the user asks to enable Agentforce Studio alone, asks to create or activate the Fulfiller or Employee agent alone, or asks about CMDB, Incident Management, Teams, or general ITSM setup without Agentforce intent."
+description: "Orchestrator for setting up Agentforce in Salesforce Service Cloud ITSM — Agentforce Studio enablement, the IT Service Fulfiller agent, the IT Service Employee agent, and specialized employee agents. Use when the user asks to set up Agentforce for ITSM, enable Studio and the Fulfiller/Employee agents together, wants a guided Agentforce ITSM walkthrough, or asks what Agentforce features are available for IT Service. Presents available Agentforce capabilities and delegates each selection to a specialized child skill while tracking progress. Triggers on: set up agentforce for itsm, configure agentforce studio and fulfiller, agentforce itsm walkthrough, what agentforce features for it service. DO NOT TRIGGER when: the user asks to enable Agentforce Studio alone, asks to create or activate the Fulfiller or Employee agent alone, or asks about CMDB, Incident Management, Teams, or general ITSM setup without Agentforce intent."
 metadata:
-  version: "1.6"
+  version: "1.7"
   domains: ["Service", "Agentforce"]
   relatedSkills:
     - "service-itsm-agentic-setup-agentforce-studio-configure"
@@ -20,7 +20,7 @@ allowed-tools: Read Bash Write AskUserQuestion
 
 # Agentforce for ITSM Setup Orchestrator
 
-Guide the user through setting up Agentforce Studio, the IT Service Fulfiller agent, and the IT Service Employee agent in Salesforce Service Cloud ITSM by presenting the available capabilities, delegating to specialized child skills, and tracking progress.
+Guide the user through setting up Agentforce Studio, the IT Service Fulfiller agent, the IT Service Employee agent, and specialized employee agents in Salesforce Service Cloud ITSM by presenting the available capabilities, delegating to specialized child skills, and tracking progress.
 
 ## Goal
 
@@ -52,21 +52,37 @@ activate agent templates** (the Fulfiller and Employee agents). This separation 
 Stage 1 *enables* org-level platform toggles/preferences, while Stage 2 *installs and activates*
 agents from a template — they are distinct kinds of action and must read as distinct stages, not one
 undifferentiated list. Only features with a working child skill appear in the menu — use the
-**Feature menu** template in `examples/output-templates.md`. Collect the user's selections through a single multi-select prompt (use `AskUserQuestion` with `multiSelect: true` when tooling permits, otherwise ask the user to reply with a list of numbers such as `1, 2`). Use the **exact Item names from the Feature menu table** as the multi-select option labels — verbatim, including each item's parenthetical note and the word "Agent" and its capitalization (`Agentforce Studio enablement (Foundation for both agents)`, `IT Service Fulfiller Agent`, `IT Service Employee Agent`) — so the picker options and the table never diverge. Each item's **Description column matches the wording on the Salesforce Setup → Agentforce for IT Service page** (the Fulfiller and Employee agent-template descriptions are used verbatim) so a user evaluating which template to install reads the same purpose/scope here as they would in Setup — do not paraphrase or shorten that product copy. For the two Stage 2 agent templates, follow the verbatim product copy with one short trailing `Setup:` line stating what installing does (`Setup: creates the agent from this template and activates a version.`) so a single row carries purpose, scope, and the install action together. When raising `AskUserQuestion`, put that same Description text (product copy + the `Setup:` line) in each option's `description` field so the picker carries the detail too. Do NOT show placeholder features that cannot be executed.
+**Feature menu** template in `examples/output-templates.md`. Collect the user's selections through a single multi-select prompt (use `AskUserQuestion` with `multiSelect: true` when tooling permits, otherwise ask the user to reply with a list of numbers such as `1, 2`). Use the **exact Item names from the Feature menu table** as the multi-select option labels — verbatim, including each item's parenthetical note and the word "Agent" and its capitalization (`Agentforce Studio enablement (Foundation for all agents)`, `IT Service Fulfiller Agent`, `IT Service Employee Agent`, `Specialized Agents for Employee`) — so the picker options and the table never diverge. Each item's **Description column matches the wording on the Salesforce Setup → Agentforce for IT Service page** (the Fulfiller and Employee agent-template descriptions and the Specialized Agents for Employee text are used verbatim) so a user evaluating which template to install reads the same purpose/scope here as they would in Setup — do not paraphrase or shorten that product copy. For the three Stage 2 agent items, follow the verbatim product copy with one short trailing `Setup:` line stating what installing does (`Setup: creates the agent from this template and activates a version.` for the Fulfiller and Employee agents; `Setup: pick one specialized template (e.g. Password Manager, Onboarding), then create and activate that standalone agent. Re-run this item to add more.` for Specialized Agents for Employee, for which you first ask the user which specialized template they want and pass that name to the child skill) so a single row carries purpose, scope, and the install action together. The Stage 1 row (Agentforce Studio enablement) is a platform-enablement toggle, not a template install, so it carries no `Setup:` line. When raising `AskUserQuestion`, put that same Description text (product copy + the `Setup:` line) in each option's `description` field so the picker carries the detail too. Do NOT show placeholder features that cannot be executed.
 
 **Report file (harness / non-interactive runs).** If a `${outputDir}` is provided (via the harness's generated-file location directive), write the menu emission (attribution header + feature table with status + delegation targets + dependency signal + the multi-select prompt itself) to `${outputDir}/report.md` **before** raising `AskUserQuestion` — so the report file always exists even when the harness parks at the confirmation gate. Overwrite the same file after each feature completes with the updated status table. Skip these writes when running interactively for a user in a chat surface — write only when `${outputDir}` was passed as an explicit destination.
 
 ### 4. Delegate to child skills in dependency order
 
-**Studio-first rule (unconditional).** If Agentforce Studio enablement (#1) is in the user's selection and not already done, run it **first**, always — regardless of the order the user listed their numbers in. Both the Fulfiller Agent (#2) and Employee Agent (#3) depend on Studio being enabled and will fail if attempted first. Reorder the queue silently so Studio runs before either agent. This rule is non-negotiable and applies whether the user selected two features (Studio + one agent) or all three.
+**Studio-first rule (unconditional).** If Agentforce Studio enablement (#1) is in the user's selection and not already done, run it **first**, always — regardless of the order the user listed their numbers in. The Fulfiller Agent (#2), Employee Agent (#3), and Specialized Agents for Employee (#4) all depend on Studio being enabled and will fail if attempted first. Reorder the queue silently so Studio runs before any agent. This rule is non-negotiable and applies whether the user selected two features (Studio + one agent) or everything.
 
-**User-order rule (between #2 and #3 only).** Fulfiller Agent (#2) and Employee Agent (#3) are independent of each other — neither depends on the other. If **both** are selected, run them in the order the user listed them (default 2 → 3 when unspecified). This rule applies **only** to the ordering between #2 and #3; it never overrides the Studio-first rule above.
+**User-order rule (among #2, #3, and #4 only).** The Fulfiller Agent (#2), Employee Agent (#3), and Specialized Agents for Employee (#4) are independent of each other — none depends on the others. If more than one is selected, run them in the order the user listed them (default 2 → 3 → 4 when unspecified). This rule applies **only** to the ordering among #2, #3, and #4; it never overrides the Studio-first rule above.
 
-| # | Feature | Child Skill |
-|---|---------|-------------|
-| 1 | Agentforce Studio enablement (Foundation for both agents) | `service-itsm-agentic-setup-agentforce-studio-configure` |
-| 2 | IT Service Fulfiller Agent | `service-itsm-agentic-setup-fulfiller-agent-configure` |
-| 3 | IT Service Employee Agent | `service-itsm-agentic-setup-employee-agent-configure` |
+| # | Feature | Stage | Child Skill |
+|---|---------|-------|-------------|
+| 1 | Agentforce Studio enablement (Foundation for all agents) | 1 | `service-itsm-agentic-setup-agentforce-studio-configure` |
+| 2 | IT Service Fulfiller Agent | 2 | `service-itsm-agentic-setup-fulfiller-agent-configure` |
+| 3 | IT Service Employee Agent | 2 | `service-itsm-agentic-setup-employee-agent-configure` |
+| 4 | Specialized Agents for Employee | 2 | `service-itsm-agentic-setup-employee-agent-configure` |
+
+**How #3 and #4 relate.** Both #3 and #4 delegate to the same child skill,
+`service-itsm-agentic-setup-employee-agent-configure` — the difference is which template it installs.
+#3 (IT Service Employee Agent) installs the **broad, ready-to-go** employee agent, which is the child
+skill's default whenever no specialization is named. #4 (Specialized Agents for Employee) installs a
+**specialized** employee agent instead — but the child skill only takes the specialized path when it
+is handed the name of a specialized template; handed nothing, it silently falls back to the broad
+agent, which would just re-create #3. So when the user selects #4, **ask which specialized employee
+agent they want before delegating** — offer common examples (Password Manager, Certificate Management,
+Onboarding, Hardware Request) and note that more are available; the child skill holds the full catalog
+and will disambiguate a partial or ambiguous name. Then delegate to the child skill **with that named
+specialization**, and it will pin the matching template (the chosen template names the agent it
+creates). **Never delegate #4 without a named specialization** — that is the one case that produces a
+duplicate broad agent. The specialized templates themselves are turned on in Stage 1 (Agentforce
+Studio enablement); #4 is where an agent is built and activated from one of them.
 
 `service-itsm-agentic-setup-agentforce-studio-configure` performs its own read-and-classify
 preflight (reading live toggle state before writing) rather than delegating to
@@ -104,19 +120,22 @@ Stage 2 (install & activate agent templates).
 
 ```text
 Stage 1 — Foundation: enable platform features
-  1. Agentforce Studio enablement (Foundation for both agents)   (turn ON org-level Agentforce + Einstein GenAI feature toggles)
+  1. Agentforce Studio enablement (Foundation for all agents)   (turn ON org-level Agentforce + Einstein GenAI feature toggles)
 
 Stage 2 — Agent templates: install & activate   (only after Stage 1)
-  2. IT Service Fulfiller Agent     (install from template, commit, and activate the agent)
-  3. IT Service Employee Agent      (install from template, commit, and activate the agent)
+  2. IT Service Fulfiller Agent          (install from template, commit, and activate the agent)
+  3. IT Service Employee Agent           (install the broad employee agent from its template and activate it)
+  4. Specialized Agents for Employee     (install a specialized employee agent — user picks the template — and activate it)
 ```
 
 Stage 1 (Agentforce Studio enablement) is the **foundation**: it turns on the org-level Agentforce
-and Einstein GenAI feature toggles that both the Fulfiller and Employee agents are **built on top
-of**. Enable it first — attempting to install or activate either agent before this foundation is
-enabled will fail. The two Stage 2 items (Fulfiller and Employee) are independent siblings (neither
-depends on the other) — both can be selected together and installed in either order once Stage 1 is
-done.
+and Einstein GenAI feature toggles that all the agents are **built on top of** (including the
+specialized employee templates). Enable it first — attempting to install or activate any agent
+before this foundation is enabled will fail. The three Stage 2 items (Fulfiller, Employee, and
+Specialized Agents for Employee) are independent siblings (none depends on the others) — they can be
+selected together and installed in any order once Stage 1 is done. Specialized Agents for Employee
+is listed right after the IT Service Employee Agent because both build employee agents from the same
+child skill: #3 the broad default, #4 a specialized template the user chooses.
 
 ---
 
@@ -129,6 +148,7 @@ done.
 - NEVER show features that do not have a working child skill
 - If the user says "set up everything" or "all", walk through each available feature sequentially in the recommended order, confirming between each step
 - Track progress across the conversation — do not re-present completed features as "Not done"
+- Specialized Agents for Employee (#4) is **re-selectable** — each run builds a *different* specialized employee agent from a template the user picks. Mark the agent just built as `Done`, but keep #4 available to run again for additional specialized agents; do not treat a completed #4 as permanently finished the way #1–#3 are. If the user picks #4 again, ask which specialized template to use next
 - NEVER advance to the next feature in the queue if the current one failed or only partially
   succeeded — stop and surface the failure in plain language instead
 - If Agentforce Studio enablement reports the org lacks the Agentforce license (`accessCheck`), STOP
@@ -154,10 +174,11 @@ Before emitting any menu or summary in this skill, mentally confirm each of the 
 - [ ] Only features with a working child skill are shown; placeholder features are hidden
 - [ ] The feature menu is presented as a multi-select (single-select only if the user has already named a specific feature)
 - [ ] Each feature row's `Status` column reflects the actual tracked state from the conversation (`Not done`, `In progress`, or `Done`) — not a hard-coded default
-- [ ] Each feature row's `Description` matches the Salesforce Setup → Agentforce for IT Service page wording (Fulfiller and Employee agent-template descriptions verbatim, not paraphrased), the two Stage 2 rows end with the short `Setup:` install line, and the `AskUserQuestion` option descriptions carry the same text
+- [ ] Each feature row's `Description` matches the Salesforce Setup → Agentforce for IT Service page wording (Fulfiller and Employee agent-template descriptions verbatim, not paraphrased), the three Stage 2 rows each end with a short `Setup:` install line, and the `AskUserQuestion` option descriptions carry the same text
+- [ ] The Specialized Agents for Employee row is present as a Stage 2 item shown right after the IT Service Employee Agent, and #4 is never delegated to `service-itsm-agentic-setup-employee-agent-configure` without first asking the user which specialized template they want (handed no name, the child skill defaults to the broad agent and duplicates #3), and it carries its `Setup:` install line
 - [ ] For a completion summary, the header line and closing line are chosen by the rubric in `examples/output-templates.md` (all `Done` → *Complete*; any `Not done`/`In progress` → *Finished*)
 - [ ] A feature is being configured only because the user explicitly selected it (or is being walked through sequentially with confirmation under an "all" / "everything" request)
-- [ ] Studio enablement is verified done before delegating to the Fulfiller Agent or Employee Agent child skill
+- [ ] Studio enablement is verified done before delegating to any Stage 2 agent (Fulfiller, Employee, or Specialized Agents for Employee)
 - [ ] The next action delegates to a child skill, never configures a feature inline
 - [ ] No Salesforce record IDs appear in the output — human-readable names only
 

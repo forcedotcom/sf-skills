@@ -148,13 +148,19 @@ if (
 
 const reason = String(state.reason ?? '').trim();
 
+// The "set up access" next step below is the handoff to the
+// `service-itsm-agentic-setup-agent-runtime-access-assign` skill (declared in
+// this skill's metadata.relatedSkills). We deliberately surface it in plain
+// admin language ("grant this agent's runtime access") rather than by raw skill
+// name — the routing metadata carries the linkage, so the user-facing report
+// stays friendly while the relationship remains discoverable.
 const NEXT_STEPS = {
   'CREATED':
-    'The IT Service Employee agent is live as an NGA-native agent (no external-link icon in Agentforce Studio). No new agent was provisioned beyond the one just created. Verify end-to-end in Agentforce Studio\'s Agents list.',
+    'The IT Service Employee agent is live as an NGA-native agent (no external-link icon in Agentforce Studio). No new agent was provisioned beyond the one just created. Verify end-to-end in Agentforce Studio\'s Agents list. **Next — set up access:** before anyone can use the agent, the user needs the runtime permissions the agent\'s actions use (Prompt Templates, Data Cloud, or Unified Catalog, depending on what is provisioned). Just ask to **grant this agent\'s runtime access** and those feature permissions — plus an "Agent Access" permission set covering the agent — will be set up for the user(s) you choose.',
   'ALREADY-CREATED':
-    'The IT Service Employee agent was already present and active — no new agent was provisioned. Verify end-to-end in Agentforce Studio\'s Agents list.',
+    'The IT Service Employee agent was already present and active — no new agent was provisioned. Verify end-to-end in Agentforce Studio\'s Agents list. **Next — set up access:** before anyone can use the agent, the user needs the runtime permissions the agent\'s actions use (Prompt Templates, Data Cloud, or Unified Catalog, depending on what is provisioned). Just ask to **grant this agent\'s runtime access** and those feature permissions — plus an "Agent Access" permission set covering the agent — will be set up for the user(s) you choose.',
   'ACTIVATED':
-    'The existing IT Service Employee agent was found inactive and has been activated — no new agent was provisioned. Verify end-to-end in Agentforce Studio\'s Agents list.',
+    'The existing IT Service Employee agent was found inactive and has been activated — no new agent was provisioned. Verify end-to-end in Agentforce Studio\'s Agents list. **Next — set up access:** before anyone can use the agent, the user needs the runtime permissions the agent\'s actions use (Prompt Templates, Data Cloud, or Unified Catalog, depending on what is provisioned). Just ask to **grant this agent\'s runtime access** and those feature permissions — plus an "Agent Access" permission set covering the agent — will be set up for the user(s) you choose.',
   'PENDING CONFIRMATION':
     'The run is paused at the confirm-to-write gate. In this skill, create + publish + activate happen as one atomic sequence gated by a single confirmation — there is no supported create-only or publish-without-activate mode, and no partial "create-only" mode of any kind. Re-run and reply "yes" when you are ready for the agent to go live.',
   'DECLINED':

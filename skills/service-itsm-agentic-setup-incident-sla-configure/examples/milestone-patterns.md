@@ -35,9 +35,9 @@ All strategies share these defaults unless overridden:
 
 - `businessHoursId`: the default BusinessHours resolved in Phase 1 step 4
 - `startTimeBasedOn`: `SlaProcessCreatedDate`
-- `milestoneState`: `Active`
-- `milestoneAgreementType`: `Warning`
-- `filterType`: `RuleFilter`
+- `milestoneAgreementType`: `SLA` — inside each `milestoneCriteria[]` item (mandatory per the UI). Valid UI values are `SLA` (customer-facing) or `OLA` (internal); the API accepts any string because the underlying field is `Text(40)` with no server-side picklist, but the UI renders unrecognized values as blank (W-23959162)
+- `milestoneState`: `Active` (inside `milestoneCriteria[]`)
+- `filterType`: `RuleFilter` (inside `milestoneCriteria[]`)
 - Base filter row: `Incident.Status NotEqual Closed` (keeps every milestone alive until the
   Incident closes; ANDs with pattern-specific criteria below)
 
@@ -143,8 +143,10 @@ Incident create (e.g. via the Priority Matrix), the milestone re-evaluates on th
 | 3 | Incident Executive Escalation | 480 | *(none)* |
 
 All three run concurrently from `SlaProcessCreatedDate` — the "ladder" is enforced by the timers,
-not by chaining. Strictly sequential escalation requires workflow SLA actions
-(`POST /connect/workflow-sla-actions/execute-actions`), which is out of scope for this skill.
+not by chaining. To fire automation at a milestone's warning/violation checkpoint (warn before
+target, escalate on breach), attach a **milestone action** in Phase 2.5 — see
+`references/mcp-invocation.md` (Milestone Actions). (Strictly *sequential* chaining across separate
+milestones is a different mechanism — workflow SLA actions — and remains out of scope.)
 
 ---
 
@@ -179,6 +181,27 @@ explicit "yes" before dispatching the create loop.
 For rows 2 and 3, first confirm `Category` is present on the org's Incident picklist and that the
 values are active — if not, ask the user which category values they actually want to filter on
 before creating the MilestoneType or attaching the milestone.
+
+---
+
+## Predefined preset — "Standard Support for Incidents" (OOB)
+
+This is Salesforce's out-of-box predefined Incident SLA policy — a fixed priority-tiered preset offered
+at the Phase 0.6 fork (not one of the Phase 1.4 custom options above). It pairs an **Acknowledge Within**
+and a **Resolve Within** milestone per priority tier:
+
+| tier | Acknowledge Within | Resolve Within |
+|------|--------------------|----------------|
+| Critical        | 30 min  | 120 min |
+| High            | 60 min  | 240 min |
+| Moderate or Low | 240 min | 960 min |
+
+Seed it verbatim from `assets/predefined-incident-policy.json` following the recipe in
+`references/mcp-invocation.md` (Predefined Incident Policy) — detect-before-seed (the policy AND the
+pre-seeded MilestoneType catalog: reuse `Resolve Within` etc. by name, create only what is missing),
+`active: true` on create, validate Priority/Status against the live picklist, and map the mid tier to
+the org's real label (`Moderate` or `Medium`). Unlike the custom patterns above, when the user picks
+this at the fork the skill seeds → verifies → **stops** (no custom milestone offer after).
 
 ---
 

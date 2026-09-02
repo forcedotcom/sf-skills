@@ -1,0 +1,51 @@
+{
+  "_notes": "Phase 2.5 request-body templates for POST /connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions. Send EXACTLY ONE action sub-object per call. timeLength/timeUnit live INSIDE checkpoint. timeUnit is Minutes|Hours|Days only. Never send isInitiationCheckpoint. Confirm success from body.success + non-empty body.actionMappings (+ triggerId for timed checkpoints), not the 201. UNIQUENESS: the actionFieldUpdate name/developerName must be unique per milestone (a WorkflowFieldUpdate DeveloperName is unique on the Incident object) — attaching the same-named action to a second milestone fails with DUPLICATE_DEVELOPER_NAME. Suffix both with the milestone (e.g. _FR for First Response, _RES for Resolution). These mirror the live-validated 'Proven bodies' in references/mcp-invocation.md (Milestone Actions) — keep the two in sync.",
+
+  "warningAction": {
+    "_notes": "Warn BEFORE target. timeLength = round(targetMinutes * (1 - X/100)). 2-hr (120-min) milestone, warn at 75% -> 30 min before. Default action = Field Update setting Priority = High. Replace <MS> in name/developerName with a per-milestone suffix. For a custom-field target, put its 00N... CustomField id in columnEnumOrId (not the __c API name).",
+    "isSuccessCheckpoint": false,
+    "checkpoint": { "isWarning": true, "timeLength": 30, "timeUnit": "Minutes" },
+    "entityName": "Incident",
+    "actionFieldUpdate": {
+      "name": "SLA Warn 75pct <MS>",
+      "sourceTable": "Incident",
+      "targetTable": "Incident",
+      "columnEnumOrId": "Priority",
+      "developerName": "SLA_Warn_75_<MS>",
+      "operationString": "LITERAL",
+      "literal": "High"
+    }
+  },
+
+  "violationAction": {
+    "_notes": "Escalate ON breach = Violation with timeLength 0 (fires at target). Default: set Priority = Critical. Replace <MS> in name/developerName with the same per-milestone suffix used for the warning.",
+    "isSuccessCheckpoint": false,
+    "checkpoint": { "isWarning": false, "timeLength": 0, "timeUnit": "Minutes" },
+    "entityName": "Incident",
+    "actionFieldUpdate": {
+      "name": "SLA Escalate on Breach <MS>",
+      "sourceTable": "Incident",
+      "targetTable": "Incident",
+      "columnEnumOrId": "Priority",
+      "developerName": "SLA_Escalate_Breach_<MS>",
+      "operationString": "LITERAL",
+      "literal": "Critical"
+    }
+  },
+
+  "istBusinessHours": {
+    "_notes": "'IST business hours' is a POLICY-level BusinessHours, not a milestone-action field. Resolve-then-create: reuse an existing BusinessHours with TimeZoneSidKey='Asia/Kolkata' if present, else POST /sobjects/BusinessHours with this body (confirm first; BusinessHours is NOT API-deletable). Attach via the policy/Entitlement BusinessHoursId. If the org has ignoreMilestoneBusinessHours=true, milestone timers run 24/7 and ignore this - disclose that.",
+    "Name": "IST Business Hours",
+    "TimeZoneSidKey": "Asia/Kolkata",
+    "MondayStartTime": "09:00:00.000Z",
+    "MondayEndTime": "18:00:00.000Z",
+    "TuesdayStartTime": "09:00:00.000Z",
+    "TuesdayEndTime": "18:00:00.000Z",
+    "WednesdayStartTime": "09:00:00.000Z",
+    "WednesdayEndTime": "18:00:00.000Z",
+    "ThursdayStartTime": "09:00:00.000Z",
+    "ThursdayEndTime": "18:00:00.000Z",
+    "FridayStartTime": "09:00:00.000Z",
+    "FridayEndTime": "18:00:00.000Z"
+  }
+}

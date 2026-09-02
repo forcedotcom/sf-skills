@@ -1,0 +1,120 @@
+{
+  "_comment": "Out-of-box 'Standard Support for Incidents' predefined SLA policy — the exact template Salesforce ITSM seeds when a customer clicks 'Create Predefined Policies' in Setup (Incident process type only). Source of truth for Phase 2-OOB. This is a DATA template, not a ready-to-POST body: substitute <businessHoursId> / <AccountId> at runtime and translate the criteria per the recipe in references/mcp-invocation.md (Predefined Incident Policy). Modeled on core service-itsm-impl default-sla-policies/incident.json + shared_core_ui_labels/incident-management.xml (DefaultSeededSla). The core template groups Moderate+Low into one Priority In[Moderate,Low] tier (6 milestones); this template expresses it as 8 milestones (Moderate and Low as separate Priority Equals rows) because the public /connect/sla-management milestone-criteria route has no In operator — behavior-equivalent, and this is the shape the headless seed produces.",
+
+  "policy": {
+    "name": "Standard Support for Incidents",
+    "description": "Standard Support for Incidents",
+    "processType": "Incident",
+    "businessHourId": "<default active BusinessHours Id>",
+    "createdDateEntryCriteria": true,
+    "closedExitCriteria": true,
+    "versionDefault": true,
+    "active": true,
+    "_recordTypeApplied": false,
+    "_slaType": "SLA",
+    "_activeNote": "The OOB backend creates the SlaProcess with active:false, then flips it active:true during auto-entitlement activation. When replicating via the public /connect/sla-management/sla-policies POST, create it directly with active:true (same as the custom Phase 2 flow) to avoid the Connect activate PATCH, which can 500 headless."
+  },
+
+  "_milestoneTypesNote": "DETECT BEFORE CREATE. Enabling the SLA Management feature pre-seeds a default MilestoneType catalog (commonly First Response, Follow Up, Periodic Update, and Resolve Within). A blind POST for a name that already exists returns HTTP 500 ('already exists') and half-seeds the policy. First read the catalog (SOQL SELECT Id, Name FROM MilestoneType WHERE Name IN ('Acknowledge Within','Resolve Within'), or GET .../milestone-types), reuse any match by id, and POST only the missing name(s). See references/mcp-invocation.md (Predefined Incident Policy, seed step 1).",
+  "milestoneTypes": [
+    { "name": "Acknowledge Within", "description": "Acknowledge Within", "recurrenceType": "OneTime" },
+    { "name": "Resolve Within",     "description": "Resolve Within",     "recurrenceType": "OneTime" }
+  ],
+
+  "milestones": [
+    {
+      "order": 1,
+      "milestoneType": "Acknowledge Within",
+      "timeTrigger": 30,
+      "priorityTier": "Critical",
+      "activeWhen":     { "field": "Priority", "operator": "Equals",   "value": "Critical" },
+      "completeWhen":   { "field": "Status",   "operator": "NotEqual", "value": "New" },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Critical" }
+    },
+    {
+      "order": 2,
+      "milestoneType": "Resolve Within",
+      "timeTrigger": 120,
+      "priorityTier": "Critical",
+      "activeWhen":     { "field": "Priority", "operator": "Equals", "value": "Critical" },
+      "completeWhen":   { "field": "Status",   "filterLogic": "1 OR 2 OR 3", "rows": [ { "operator": "Equals", "value": "Resolved" }, { "operator": "Equals", "value": "Completed" }, { "operator": "Equals", "value": "Closed" } ] },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Critical" }
+    },
+    {
+      "order": 3,
+      "milestoneType": "Acknowledge Within",
+      "timeTrigger": 60,
+      "priorityTier": "High",
+      "activeWhen":     { "field": "Priority", "operator": "Equals",   "value": "High" },
+      "completeWhen":   { "field": "Status",   "operator": "NotEqual", "value": "New" },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "High" }
+    },
+    {
+      "order": 4,
+      "milestoneType": "Resolve Within",
+      "timeTrigger": 240,
+      "priorityTier": "High",
+      "activeWhen":     { "field": "Priority", "operator": "Equals", "value": "High" },
+      "completeWhen":   { "field": "Status",   "filterLogic": "1 OR 2 OR 3", "rows": [ { "operator": "Equals", "value": "Resolved" }, { "operator": "Equals", "value": "Completed" }, { "operator": "Equals", "value": "Closed" } ] },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "High" }
+    },
+    {
+      "order": 5,
+      "milestoneType": "Acknowledge Within",
+      "timeTrigger": 240,
+      "priorityTier": "Moderate",
+      "activeWhen":     { "field": "Priority", "operator": "Equals",   "value": "Moderate" },
+      "completeWhen":   { "field": "Status",   "operator": "NotEqual", "value": "New" },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Moderate" }
+    },
+    {
+      "order": 6,
+      "milestoneType": "Resolve Within",
+      "timeTrigger": 960,
+      "priorityTier": "Moderate",
+      "activeWhen":     { "field": "Priority", "operator": "Equals", "value": "Moderate" },
+      "completeWhen":   { "field": "Status",   "filterLogic": "1 OR 2 OR 3", "rows": [ { "operator": "Equals", "value": "Resolved" }, { "operator": "Equals", "value": "Completed" }, { "operator": "Equals", "value": "Closed" } ] },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Moderate" }
+    },
+    {
+      "order": 7,
+      "milestoneType": "Acknowledge Within",
+      "timeTrigger": 240,
+      "priorityTier": "Low",
+      "activeWhen":     { "field": "Priority", "operator": "Equals",   "value": "Low" },
+      "completeWhen":   { "field": "Status",   "operator": "NotEqual", "value": "New" },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Low" }
+    },
+    {
+      "order": 8,
+      "milestoneType": "Resolve Within",
+      "timeTrigger": 960,
+      "priorityTier": "Low",
+      "activeWhen":     { "field": "Priority", "operator": "Equals", "value": "Low" },
+      "completeWhen":   { "field": "Status",   "filterLogic": "1 OR 2 OR 3", "rows": [ { "operator": "Equals", "value": "Resolved" }, { "operator": "Equals", "value": "Completed" }, { "operator": "Equals", "value": "Closed" } ] },
+      "cancelWhen":     { "field": "Priority", "operator": "NotEqual", "value": "Low" }
+    }
+  ],
+
+  "entitlement": {
+    "_note": "The OOB backend auto-creates the Entitlement during activation. When replicating headless, create it via POST /sobjects/Entitlement on the resolved Account (same as the custom Phase 2 flow), SlaProcessId = the seeded policy, backdated StartDate for immediate engagement.",
+    "name": "Standard Support for Incidents",
+    "matchAllCriterion": {
+      "_note": "The OOB seeds an always-true entitlement criterion so every Incident matches automatically. ATTEMPT to replicate it via POST /connect/sla-management/entitlement-criteria: `describe` the route FIRST and send its exact input fields — it rejects `filterType`, and a wrong body returns a 400 (a wrong-payload error, NOT a platform gap). Only if the create still 400s after using the described schema, fall back to the date-windowed Entitlement alone and REPORT only the engagement-scope consequence: the policy then engages on Incidents wired to this Entitlement (EntitlementId set), not automatically on every Incident. Do NOT tell the user the route is 'unreachable' or 'undiscoverable' — it works; the body just needs its correct fields. The date-windowed Entitlement + the milestone criteria above are still sufficient to engage the Phase 3 test Incident.",
+      "field": "Subject",
+      "operator": "NotEqual",
+      "value": "!iw6vnffW1Pt:CQbS/0cwh!17G,Gj##H",
+      "priorityOrder": 98,
+      "criteriaType": "AND"
+    }
+  },
+
+  "_replicationNotes": {
+    "table": "Every criterion filters the Incident table (filterItems[].table = \"Incident\").",
+    "activeCriterion": "The public Attach-Milestone route's milestoneCriteria carries the ACTIVE criterion — filterType RuleFilter, milestoneState Active, milestoneAgreementType SLA (customer-facing; OLA is the internal alternative — W-23959162). The priority-tier row IS this active criterion.",
+    "completionAndCancel": "The OOB completion (Status In resolved-set) and cancel (Priority NotEqual tier) criteria use milestoneState Complete / Cancel. Confirm the public milestone-criteria route accepts those states in the live smoke test; if it accepts only the Active criterion, seeding the priority-tiered Active criterion still engages each milestone (matches examples/milestone-patterns.md Pattern 3).",
+    "orClause": "The core OOB template groups Moderate+Low into one Priority In[Moderate,Low] tier. Because the public route's filterItems AND by default and Priority has no In operator, this template already splits that tier into separate Priority Equals Moderate (orders 5-6) and Priority Equals Low (orders 7-8) milestones with the same timeTriggers — behavior-equivalent to the merged core tier. Seed all 8 as listed.",
+    "statusIn": "Status 'In [Resolved, Completed, Closed]' has no single-row In operator, so each completeWhen above is already PRE-SPLIT into a filterLogic ('1 OR 2 OR 3') across three Status Equals rows — the data file never carries a route-rejected In operator. If the route rejects filterLogic, split into one Status Equals row per value (behavior-equivalent). Validate each Status/Priority value against the live Incident picklist before seeding.",
+    "midTier": "Map the mid tier to the org's ACTUAL mid-priority label — 'Moderate' on the standard ITSM picklist, but many orgs label it 'Medium'. Seed orders 5-6 with whichever the live Incident.Priority picklist carries rather than dropping the tier; drop a row only when its value is genuinely absent, and note any dropped/relabeled tier in the report."
+  }
+}

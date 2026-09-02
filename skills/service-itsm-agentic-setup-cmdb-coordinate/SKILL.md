@@ -61,6 +61,8 @@ Before presenting options, scan chat history for:
 - Which layers are already done (skip or mark as done)
 - Any constraints the user mentioned (e.g. "just enable it, we'll assign users later")
 
+Derive layer status from the **most recent** layer activity in the transcript. On a long or **resumed** conversation (e.g. a headless session continued later), do not treat an earlier-highlighted layer as still current — re-derive which layer is active from the latest child-skill result, and if it is ambiguous, re-confirm with the user before re-presenting the menu.
+
 ### 2. Confirm the target org
 
 CMDB enablement performs **writes against a real org** (tenant provisioning, feature enable,
@@ -179,7 +181,7 @@ cannot succeed until Layer 1 reaches `PROVISIONED`. Present them as one step.
   license/edition prerequisite that no API can grant
 - If a child skill reports a prerequisite gap or a failure, relay it to the user in friendly,
   actionable terms — do not bury the error
-- Track progress across the conversation — do not re-present completed layers as "Pending"
+- Track progress across the conversation — do not re-present completed layers as "Pending". Re-derive the current layer from the latest child-skill activity, not from a previously rendered highlight; on a resumed or long conversation, do not assume the last-highlighted layer is still current — if ambiguous, re-confirm with the user
 - Do NOT expose internal technical jargon in user-facing output. This includes Salesforce record
   IDs and org IDs, raw HTTP status codes (403, 500, …), API error codes (`FUNCTIONALITY_NOT_ENABLED`,
   `DUPLICATE_VALUE`, …), internal endpoint/API names (`bundleListView`, `tenantProvisioningStatus`, …),

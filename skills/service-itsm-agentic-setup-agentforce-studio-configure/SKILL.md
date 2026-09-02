@@ -2,7 +2,7 @@
 name: service-itsm-agentic-setup-agentforce-studio-configure
 description: "Enable the Agentforce for IT Service Salesforce Go feature toggles (Agentforce Studio, Einstein Generative AI, the parent umbrella, and the Fulfiller/Employee agent templates) using the Salesforce CLI (sf). Turns ON org prefs via the Setup Discovery feature/{apiName}/enable Connect API route. Write-capable, idempotent, dependency-ordered, confirm-to-write required. Use when asked to enable Agentforce Studio, turn on Agentforce for IT Service, enable Einstein generative AI, or configure the org-level Agentforce for IT Service prerequisites. Triggers: enable agentforce studio, turn on agentforce for it service, enable einstein generative ai, configure agentforce org prefs. DO NOT TRIGGER: read-only prerequisite check (service-itsm-agentic-setup-agentforce-studio-validate), create/activate an agent (service-itsm-agentic-setup-fulfiller-agent-configure), or assigning permission sets."
 metadata:
-  version: "1.3"
+  version: "1.4"
   domains: ["Service", "Agentforce"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -239,31 +239,30 @@ Substitute `<alias>` with the target org alias. `<agentType>` is `fulfiller` or 
 
 ## Output Format
 
-Present the enablement report as a **table** — this is **Stage 1 (Foundation)**, the platform
-enablement that Stage 2 (install & activate the agent) is built on. Each Status is one of
-ENABLED / ALREADY-ENABLED / FAILED / CANNOT-CONFIRM:
+Emit the report as **live Markdown — never inside a code fence** (a fenced table shows raw
+`|` pipes, not a table). This is **Stage 1 (Foundation)** that Stage 2 (install & activate the
+agent) builds on; each Status is ENABLED / ALREADY-ENABLED / FAILED / CANNOT-CONFIRM. Lay it
+out exactly like this:
 
-```text
-Agentforce for IT Service — Stage 1: Enable Platform Features (via service-itsm-agentic-setup-agentforce-studio-configure)
+**Agentforce for IT Service — Stage 1: Enable Platform Features** (via `service-itsm-agentic-setup-agentforce-studio-configure`)
 
-Org:          <org-alias> (API v67.0)
-Agent path:   fulfiller | employee
+- **Org:** `<org-alias>` (API v67.0)
+- **Agent path:** fulfiller | employee
 
 | # | Platform feature | Status |
 | --- | --- | --- |
-| 1 | Einstein Generative AI | <status> |
-| 2 | Agentforce Studio | <status> |
-| 3 | Agentforce for IT Service | <status> |
-| 4 | <path-specific toggle(s)> | <status> |
+| 1 | Einstein Generative AI | `<status>` |
+| 2 | Agentforce Studio | `<status>` |
+| 3 | Agentforce for IT Service | `<status>` |
+| 4 | `<path-specific toggle(s)>` | `<status>` |
 
-Verdict: SUCCESS | PARTIAL | FAILED | CANNOT-CONFIRM | ERROR
+**Verdict:** SUCCESS | PARTIAL | FAILED | CANNOT-CONFIRM | ERROR
 
-Next steps:
-  - <If SUCCESS: "Stage 1 (foundation) complete — proceed to Stage 2: install + activate the <path> agent via service-itsm-agentic-setup-fulfiller-agent-configure (fulfiller) / the employee-agent skill.">
-  - <If PARTIAL/FAILED/CANNOT-CONFIRM/ERROR: list the affected toggle(s) + reason (enableBlockedReasons, unconfirmed status, or read error) + remediation steps>
-```
+**Next steps:**
+- If SUCCESS: "Stage 1 (foundation) complete — proceed to Stage 2: install + activate the `<path>` agent via `service-itsm-agentic-setup-fulfiller-agent-configure` (fulfiller) / the employee-agent skill."
+- If PARTIAL/FAILED/CANNOT-CONFIRM/ERROR: list the affected toggle(s) + reason (`enableBlockedReasons`, unconfirmed status, or read error) + remediation steps
 
-Render `overall` and each feature's `finalStatus` from `scripts/classify-final-report.mjs` verbatim (substitute into each `<status>` cell) — do not recompute them. No files are produced beyond the temporary response captures used by the classifiers.
+Substitute `overall` and each feature's `finalStatus` from `scripts/classify-final-report.mjs` into the `<status>` cells verbatim — do not recompute. No files are produced beyond the classifiers' temporary response captures.
 
 Label rows exactly as the classifier emits them — never add `Requestor`, `Specialized`, or `parent`.
 

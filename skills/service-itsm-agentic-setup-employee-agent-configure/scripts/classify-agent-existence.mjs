@@ -3,50 +3,66 @@
 //
 // Idempotency for this flow is keyed PRIMARILY on the TEMPLATE's own
 // `botDefinitionId` — the platform's authoritative link from an `agent-templates`
-// row to the live `BotDefinition` it was instantiated into — and FALLS BACK to a
-// `DeveloperName`-keyed read when that row carries no `botDefinitionId`.
+// row to the live `BotDefinition` it was instantiated into — and FALLS BACK
+// first to the BotDefinition's own `AgentTemplate` field (the OOTB, namespaced
+// source-template API name it was instantiated from, e.g.
+// `svc_emp_intelligence__ItEmployeeAssistance`), then to a `DeveloperName`-keyed
+// read.
 // The broad "IT Service Employee" agent is pre-provisioned+active under
 // DeveloperName `IT_Service_Employee`, which does NOT match this skill's default
-// collected developerName `IT_Service_Employee_Agent`; a DeveloperName-only read
-// false-negatives on THAT agent (exists:false) and the create then collides on
-// `apiName` with `DUPLICATE_VALUE` — hence botDefinitionId is the primary key.
-// But botDefinitionId is back-filled onto the template row ONLY for platform-
-// pre-provisioned agents: the ITSM create path never stamps `templateName`, so
-// agents THIS skill creates keep a null template botDefinitionId forever, and a
-// DeveloperName-keyed read is the reliable guard for them — used as the FALLBACK.
-// (Preflight emits `template.botDefinitionId`; the workflow passes it as the
-// primary key and the collected developerName as the fallback key.)
+// collected developerName `IT_Service_Employee_Agent`, and its template row
+// carries a NULL botDefinitionId — so a read keyed on botDefinitionId + collected
+// DeveloperName false-negatives (exists:false) and the create then collides on
+// `apiName` with `DUPLICATE_VALUE`. `AgentTemplate` is what closes that gap: the
+// live pre-provisioned agent carries `AgentTemplate=svc_emp_intelligence__ItEmployeeAssistance`
+// (the exact template id the skill installs — preflight `template.id`), so matching
+// on it recovers the agent regardless of its DeveloperName. This is far more
+// reliable than a display name (MasterLabel) — AgentTemplate is the platform-
+// stamped source template, immune to renames, and namespaced OOTB. botDefinitionId
+// is back-filled onto the template row ONLY for platform-pre-provisioned agents:
+// the ITSM create path never stamps `templateName`, so agents THIS skill creates
+// keep BOTH a null template botDefinitionId AND a null `AgentTemplate` forever —
+// for those, the DeveloperName-keyed read is the reliable guard, used as the last
+// FALLBACK. (Preflight emits `template.botDefinitionId`, `template.id`, and the
+// collected developerName; the workflow passes the botDefinitionId as the primary
+// key, template.id as the AgentTemplate key, and the developerName as the fallback.)
 //
 // This classifier consumes the raw JSON of a `sf data query ... --json` read of
-// BotDefinition (BY Id primarily, BY DeveloperName on the fallback) and decides
+// BotDefinition (BY Id primarily, BY AgentTemplate then DeveloperName on the
+// fallback) and decides
 // whether the agent already exists — and if so, whether its latest BotVersion is
 // Inactive (so the workflow can offer to activate it instead of creating a
 // duplicate). This is the deterministic decision that gates whether the write is
 // skipped — it MUST NOT be interpreted by the model in prose (authoring standard A9).
 //
 // Usage:
-//   node classify-agent-existence.mjs <bot-query.json> <botDefinitionId> [developerName]
+//   node classify-agent-existence.mjs <bot-query.json> <botDefinitionId> [developerName] [agentTemplate]
 //
 // When <botDefinitionId> is empty, `-`, or the literal `null`/`undefined` (the
-// matched template carries no botDefinitionId), the classifier FALLS BACK to
-// keying on <developerName>, and <bot-query.json> must be a DeveloperName-keyed
-// BotDefinition read: self-created agents are never back-filled with a
-// botDefinitionId (the ITSM create path doesn't stamp `templateName`, so the
-// platform never joins the agent-templates row to its BotDefinition), so
-// DeveloperName is the only idempotency guard left for them. Only when BOTH
-// <botDefinitionId> and <developerName> are absent is exists:false emitted
-// without reading a query file. Otherwise <bot-query.json> is a FILE PATH to the
-// stdout captured from:
-//   sf data query -q "SELECT Id,DeveloperName,MasterLabel,
+// matched template carries no botDefinitionId — the normal Employee case), the
+// classifier FALLS BACK to keying on <agentTemplate> (the source template API
+// name — this is what catches the pre-provisioned `IT_Service_Employee`), and then
+// to <developerName> when the AgentTemplate misses too. <bot-query.json> must
+// therefore be a read that ORs all three keys together: self-created agents are
+// never back-filled with a botDefinitionId AND carry a null AgentTemplate (the
+// ITSM create path doesn't stamp `templateName`), so DeveloperName is their only
+// idempotency guard; the pre-provisioned broad agent — whose DeveloperName differs
+// from this skill's collected guess — is caught by AgentTemplate. Only when ALL of
+// <botDefinitionId>, <agentTemplate>, and <developerName> are absent is
+// exists:false emitted without reading a query file. Otherwise <bot-query.json> is
+// a FILE PATH to the stdout captured from:
+//   sf data query -q "SELECT Id,DeveloperName,MasterLabel,AgentTemplate,
 //     (SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1)
-//     FROM BotDefinition WHERE Id='<botDefinitionId>' OR DeveloperName='<developerName>'" \
+//     FROM BotDefinition WHERE Id='<botDefinitionId>' OR AgentTemplate='<agentTemplate>'
+//       OR DeveloperName='<developerName>'" \
 //     --target-org <org> --json > file.json
-// (The present-id read ORs in DeveloperName so a DANGLING template→BotDefinition
-// link — a botDefinitionId whose target BotDefinition was since deleted — still
-// surfaces the live same-name agent: the classifier tries the Id first, then
-// falls back to the name on the SAME records. The pure FALLBACK read, taken when
-// the template row carries no botDefinitionId at all, keys on
-// `DeveloperName='<developerName>'` only; everything else is identical.
+// (The present-id read ORs in AgentTemplate AND DeveloperName so a DANGLING
+// template→BotDefinition link — a botDefinitionId whose target BotDefinition was
+// since deleted — still surfaces the live agent: the classifier tries the Id
+// first, then the AgentTemplate, then the DeveloperName on the SAME records. The
+// pure FALLBACK read, taken when the template row carries no botDefinitionId at
+// all, keys on `AgentTemplate='<agentTemplate>' OR DeveloperName='<developerName>'`;
+// everything else is identical.
 // `sf data query --json` wraps results in a `.result.records[]` envelope. The
 // BotVersions subquery is required so this classifier can see the latest
 // version's Status — a query without it leaves latestVersionStatus null and
@@ -61,16 +77,17 @@
 // child row was returned), and needsActivation is true only when exists is true
 // AND latestVersionStatus is "Inactive" — the signal to offer activating the
 // existing version instead of creating a new agent. `matchedBy` is
-// "botDefinitionId" | "developerName" | null, recording which key hit. Exit code
+// "botDefinitionId" | "agentTemplate" | "developerName" | null, recording which
+// key hit. Exit code
 // is always 0 on a parseable body (or when neither key is supplied); the verdict
 // is carried in the payload. On an unparseable/failed query it exits 3 so the
 // workflow surfaces the raw error rather than assuming NOT-EXISTS.
 
 import { readFileSync } from 'node:fs';
 
-const [queryPath, rawBotDefinitionId, rawDeveloperName] = process.argv.slice(2);
+const [queryPath, rawBotDefinitionId, rawDeveloperName, rawAgentTemplate] = process.argv.slice(2);
 if (!queryPath) {
-  process.stderr.write('usage: node classify-agent-existence.mjs <bot-query.json> <botDefinitionId> [developerName]\n');
+  process.stderr.write('usage: node classify-agent-existence.mjs <bot-query.json> <botDefinitionId> [developerName] [agentTemplate]\n');
   process.exit(2);
 }
 
@@ -88,8 +105,10 @@ function notSet(v) {
 
 const botDefinitionId = String(rawBotDefinitionId ?? '').trim();
 const developerName = String(rawDeveloperName ?? '').trim();
+const agentTemplate = String(rawAgentTemplate ?? '').trim();
 const noId = notSet(botDefinitionId);
 const noName = notSet(developerName);
+const noTemplate = notSet(agentTemplate);
 
 const NOT_EXISTS = {
   exists: false,
@@ -103,11 +122,12 @@ const NOT_EXISTS = {
   needsActivation: false,
 };
 
-// Nothing to key on — no botDefinitionId AND no developerName fallback. There is
-// no way to detect an existing agent, so this is the create path. (The workflow
-// should always pass the collected developerName so the fallback below can run;
-// this bare branch only fires when neither key is supplied.)
-if (noId && noName) {
+// Nothing to key on — no botDefinitionId AND no AgentTemplate fallback AND no
+// DeveloperName fallback. There is no way to detect an existing agent, so this is
+// the create path. (The workflow should always pass the collected developerName
+// and the template's id/AgentTemplate so the fallbacks below can run; this bare
+// branch only fires when none of the three keys is supplied.)
+if (noId && noTemplate && noName) {
   process.stdout.write(JSON.stringify(NOT_EXISTS, null, 2) + '\n');
   process.exit(0);
 }
@@ -131,19 +151,26 @@ if (!data || (typeof data.status === 'number' && data.status !== 0) || data.resu
 const records = Array.isArray(data.result?.records) ? data.result.records : [];
 
 // PRIMARY key: the template's `botDefinitionId` (the platform's authoritative
-// template→BotDefinition link) — catches the pre-provisioned broad agent whose
-// live DeveloperName differs from this skill's collected guess.
-// FALLBACK: the collected DeveloperName. Self-created agents are NOT
-// back-filled — the ITSM create path never stamps `templateName`, so the
-// platform never joins the agent-templates row to its BotDefinition and
-// `botDefinitionId` stays null on every later read — so DeveloperName is their
-// only guard. We ALSO fall back to DeveloperName when a PRESENT botDefinitionId
-// matches nothing (a dangling link whose target BotDefinition was deleted): the
-// present-id Phase-2 SOQL reads `WHERE Id=... OR DeveloperName=...`, so a stale
-// link still surfaces the live same-name agent instead of slipping through to the
-// create path and colliding with DUPLICATE_VALUE. Try the Id first, then the
-// name; each filter is self-checking on top of the SOQL WHERE so a wrong-keyed
-// read can't false-positive.
+// template→BotDefinition link) — catches a pre-provisioned agent whose live
+// DeveloperName differs from this skill's collected guess. For the broad Employee
+// agent this is null (see header), so in practice the AgentTemplate fallback below
+// is what fires.
+// FALLBACK: the BotDefinition's own `AgentTemplate`, then the collected
+// DeveloperName. `AgentTemplate` is the OOTB source-template API name the platform
+// stamps on a template-instantiated agent — the reliable "an agent from THIS
+// template already exists" signal for the pre-provisioned broad/specialized
+// agents, independent of any DeveloperName rename (the pre-provisioned
+// `IT_Service_Employee` carries `AgentTemplate=svc_emp_intelligence__ItEmployeeAssistance`
+// even though its DeveloperName differs from this skill's guess). Self-created
+// agents are NOT stamped (the ITSM create path never sets `templateName`), so their
+// `AgentTemplate` is null and DeveloperName is their guard. We ALSO fall back this
+// way when a PRESENT botDefinitionId matches nothing (a dangling link whose target
+// BotDefinition was deleted): the present-id Phase-2 SOQL reads `WHERE Id=... OR
+// AgentTemplate=... OR DeveloperName=...`, so a stale link still surfaces the live
+// agent instead of slipping through to the create path and colliding with
+// DUPLICATE_VALUE. Try the Id first, then the template, then the name; each filter
+// is self-checking on top of the SOQL WHERE so a wrong-keyed read can't
+// false-positive.
 let matches = [];
 let matchedBy = null;
 if (!noId) {
@@ -151,11 +178,39 @@ if (!noId) {
   matches = records.filter((r) => idKey(r?.Id) === wantedIdKey);
   if (matches.length) matchedBy = 'botDefinitionId';
 }
+// FIRST FALLBACK: the BotDefinition's `AgentTemplate` (source template API name).
+// The broad pre-provisioned "IT Service Employee" agent lives under DeveloperName
+// `IT_Service_Employee` — which the DeveloperName filter below misses when this
+// skill collects its default `IT_Service_Employee_Agent` — while its template row
+// carries no botDefinitionId, so the Id and DeveloperName keys both miss and the
+// create then collides with DUPLICATE_VALUE. Its `AgentTemplate` is
+// `svc_emp_intelligence__ItEmployeeAssistance` (the template this skill installs),
+// so matching on it recovers the live agent reliably. SOQL text comparison is
+// case-insensitive, so compare the same way. `AgentTemplate` is NOT unique (a
+// template can be instantiated more than once), so if more than one record shares
+// it we keep them all but surface an Active version first (see below) — the report
+// should treat the already-active one as the real match.
+if (!matches.length && !noTemplate) {
+  const wantedTemplate = agentTemplate.toLowerCase();
+  matches = records.filter((r) => String(r?.AgentTemplate ?? '').trim().toLowerCase() === wantedTemplate);
+  if (matches.length) matchedBy = 'agentTemplate';
+}
+// SECOND FALLBACK: the collected DeveloperName — the guard for self-created agents
+// (null AgentTemplate). DeveloperName uniqueness is case-insensitive; compare
+// accordingly.
 if (!matches.length && !noName) {
-  // DeveloperName uniqueness is case-insensitive; compare accordingly.
   const wantedName = developerName.toLowerCase();
   matches = records.filter((r) => String(r?.DeveloperName ?? '').trim().toLowerCase() === wantedName);
   if (matches.length) matchedBy = 'developerName';
+}
+if (matchedBy === 'agentTemplate' && matches.length > 1) {
+  // Prefer a record whose latest BotVersion is Active so `matches[0]` (used for
+  // latestVersion/agentId below) reflects the live agent rather than a stale draft.
+  matches = [...matches].sort((a, b) => {
+    const aActive = a?.BotVersions?.records?.[0]?.Status === 'Active' ? 0 : 1;
+    const bActive = b?.BotVersions?.records?.[0]?.Status === 'Active' ? 0 : 1;
+    return aActive - bActive;
+  });
 }
 const exists = matches.length > 0;
 
@@ -171,12 +226,15 @@ const needsActivation = exists && latestVersionStatus === 'Inactive';
 process.stdout.write(JSON.stringify({
   exists,
   count: matches.length,
-  // Which key matched — `botDefinitionId` (primary) or `developerName` (the
-  // fallback for self-created agents). null when nothing matched.
+  // Which key matched — `botDefinitionId` (primary), `agentTemplate` (the
+  // reliable catcher for the pre-provisioned broad agent whose DeveloperName
+  // differs from the collected guess), or `developerName` (the fallback for
+  // self-created agents). null when nothing matched.
   matchedBy: exists ? matchedBy : null,
   agentId: exists ? (matches[0].Id ?? null) : null,
-  // On a DeveloperName-fallback hit this surfaces the live BotDefinition Id the
-  // template row was missing; on the Id path it echoes the queried id.
+  // On an AgentTemplate- or DeveloperName-fallback hit this surfaces the live
+  // BotDefinition Id the template row was missing; on the Id path it echoes the
+  // queried id.
   botDefinitionId: exists ? (matches[0].Id ?? null) : (noId ? null : botDefinitionId),
   developerName: exists ? (matches[0].DeveloperName ?? null) : null,
   latestVersionId: latestVersion?.Id ?? null,

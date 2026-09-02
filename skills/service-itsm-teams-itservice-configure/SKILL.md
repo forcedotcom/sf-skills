@@ -6,6 +6,7 @@ metadata:
   domains: ["Service", "Experience"]
   minApiVersion: "67.0"
   relatedSkills:
+    - "experience-portal-create"
     - "service-itsm-channels-coordinate"
     - "service-itsm-teams-configure"
     - "service-itsm-teams-debug"
@@ -36,8 +37,8 @@ dispatches through **headless-360**.
 ## Scope
 
 - **In scope**: Turning on the `OrgHasEmployeeServiceTeams` preference; giving the user the
-  exact Teams marketplace link + help doc for the IT Service app install; assigning
-  `TeamsForEmployeeUser`/`MicrosoftGraphAccess` permission sets to confirmed users; selecting the
+  exact Teams marketplace link + help doc for the IT Service app install; assigning the
+  `TeamsForEmployeeUser` permission set to confirmed users; selecting the
   Digital Experience Site to link with Teams via the `SLACK_PREFERRED_SITE` org value.
 - **Out of scope**: The base Teams Salesforce Go page toggle (`ITSMTeamsEnabled`), Azure/Entra app
   registration, Named Credential population, and Teams extension/preferred-site registration —
@@ -91,12 +92,10 @@ fabricate the confirmation.
 
 ### Step 3 — Manage User Access
 
-"Manage User Access" ("Manage" button on the Go page) assigns two permission sets — verified
+"Manage User Access" ("Manage" button on the Go page) assigns the permission set — verified
 live from the "Manage Microsoft Teams for Employee Service User Access" dialog:
 
 - `TeamsForEmployeeUser` (label **"Teams for Employee"**, backed by PSL `TeamsForEmployeePsl`)
-- `MicrosoftGraphAccess` (label **"MicrosoftGraphAccess"**) — assigned alongside it in the same
-  dialog.
 
 **Do not just assign every active user.** Ask the user which specific user(s) should get access.
 If they want to see the list of users first (rather than naming them), page it — **show at most
@@ -111,28 +110,31 @@ mcp__headless-360__dispatch_readonly(
 )
 ```
 
-**Verified gotcha:** in scratch/test orgs (and possibly some real orgs), the first page(s) of
-this query are often dominated by non-employee system/integration accounts — e.g. `Automated
-Process`, `Bot User`, `Insights Integration`, `*.ext` integration users, `ESW_*` / `*Site Guest
-User` guest users, and `DigitalAgent.*` agent users. When presenting a page to the user, flag
-these as likely-not-employee accounts (don't silently filter them out of the list — the user may
-still want one assigned — but call out which rows look like system accounts so the user doesn't
-have to guess). If the user says a listed batch is "not employee users, skip," move on to the
-next page rather than assigning any of them.
+**Who to assign — warn the user up front:** the target must be a **real employee / UEL user** whose
+**email exists on the Azure/Entra side** (a Microsoft account in the same tenant). Login is SSO
+(MS UPN → the Salesforce `Username`), so assigning it to a user with no matching Azure account — or
+a misaligned email/UPN — **fails login silently** (see the UPN↔`Username` note above). State this
+before assigning; never assign system/integration accounts.
 
-Once the user confirms specific user(s), look up each permission set's `Id` (they are stable per
-org but don't hardcode them — query fresh):
+**Verified gotcha (spotting who NOT to pick):** in scratch/test orgs the first page(s) are often
+dominated by non-employee accounts — e.g. `Automated Process`, `Bot User`, `Insights Integration`,
+`*.ext` integration users, `ESW_*` / `*Site Guest User` guests, `DigitalAgent.*` agents — none are
+employee/UEL users or have an Azure identity. Flag such rows as likely-not-employee (don't silently
+filter — call them out); if the user says "not employee users, skip," move to the next page.
+
+Once the user confirms specific user(s), look up the permission set's `Id` (it is stable per
+org but don't hardcode it — query fresh):
 
 ```text
 mcp__headless-360__dispatch_readonly(
   method: "GET",
   url:    "/services/data/v67.0/query",
-  queryParams: { "q": "SELECT Id, Name FROM PermissionSet WHERE Name IN ('TeamsForEmployeeUser','MicrosoftGraphAccess')" }
+  queryParams: { "q": "SELECT Id, Name FROM PermissionSet WHERE Name = 'TeamsForEmployeeUser'" }
 )
 ```
 
-Then assign both permission sets to each confirmed user via `PermissionSetAssignment` (one record
-per user/permset pair — batch with as many calls as needed, there is no bulk-assign endpoint
+Then assign the permission set to each confirmed user via `PermissionSetAssignment` (one record
+per user — batch with as many calls as needed, there is no bulk-assign endpoint
 exposed here):
 
 ```text
@@ -149,7 +151,7 @@ from the assignment call plus a `SELECT ... FROM PermissionSetAssignment WHERE A
 
 #### Login prerequisites (required for the user to actually sign in to IT Service in Teams)
 
-Assigning the two permission sets above is necessary but **not sufficient** — a UEL user who
+Assigning the permission set above is necessary but **not sufficient** — a UEL user who
 opens the IT Service app in Teams can still hit a silent login failure unless all three of the
 following are also in place. Verify (and set) these as part of enabling a user:
 
@@ -178,10 +180,14 @@ following are also in place. Verify (and set) these as part of enabling a user:
      `teams.cloud.microsoft` is present), the browser blocks the asset/OAuth preflight and login
      silently fails. After adding it, have the user hard-refresh / clear the Teams app cache.
 
-3. **"API Enabled"** system permission on the user. The UEL user must have the **API Enabled**
-   system permission — grant it via a permission set (create/choose a permission set → **System
-   Settings** → check **API Enabled** → assign to the user), not just the base profile. Without
-   it the embedded app's API calls are rejected and the user can't sign in.
+3. **"API Enabled"** system permission on the user (`PermissionsApiEnabled = true`) via a
+   permission set — not just the base profile — or the embedded app's API calls are rejected and
+   the user can't sign in. Use the **same org-wide, created-once permset IT Desk uses** (commonly
+   `Teams_Employee_ApiAccess`): query `PermissionSet WHERE Name = 'Teams_Employee_ApiAccess'`, and
+   if absent create it once (`POST /sobjects/PermissionSet`
+   `{"Name":"Teams_Employee_ApiAccess","Label":"Teams Employee API Access","PermissionsApiEnabled":true}`);
+   then assign. Don't create a duplicate. See `service-itsm-teams-itdesk-configure`'s *Login
+   prerequisite*.
 
 If a user reports "can't log in to IT Service in Teams" and Steps 1–4 all look done, walk these
 three prerequisites first — they are the most common silent-login blockers. For the full pass/fail
@@ -190,18 +196,18 @@ see [Troubleshooting: Teams for Employee Service login & agent](#troubleshooting
 
 ### Step 4 — Select a Digital Experience Site
 
-This checklist item ("Digital Experience Site Name" dropdown, currently "None" until set) is
-**not** the same API as `service-itsm-teams-configure`'s Teams extension registration
-(`/connect/service-itsm-teams/graph-api/extensions`) — that one requires the Azure/Entra
-credential and is gated by the `MsTeamsAppApiFamily` license blocker (see that skill's Gotchas).
-This checklist item instead reads/writes the org-value `SLACK_PREFERRED_SITE` — the same
-`OrgValueUtil.OrgValues` Java-enum mechanism as Swarming's `SWARM_COLLABORATION_TOOL` — and is
-**not gated by any Teams license**, so it works even when the extension registration is blocked.
+This checklist item ("Digital Experience Site Name" dropdown, currently "None" until set)
+reads/writes the org-value `SLACK_PREFERRED_SITE` — the same `OrgValueUtil.OrgValues` Java-enum
+mechanism as Swarming's `SWARM_COLLABORATION_TOOL` — and is **not gated by any Teams license or
+Azure/Entra credential**, so it works independently of the rest of the Teams setup.
 
 1. List all Digital Experience sites in the org:
    ```text
    mcp__headless-360__dispatch_readonly(method: "GET", url: "/services/data/v67.0/connect/communities")
    ```
+   **If the org has no Digital Experience site yet** (empty list), one must be created before this
+   step can be completed — hand off to **`experience-portal-create`** to provision a new site (an
+   employee-service / IT-support portal fits this use case), then return here with its `Id`.
 2. Present the full list to the user and ask them to pick one. **If they don't choose, pick one
    yourself** (the only site if there's exactly one, otherwise a sensible default such as the most
    recently modified `Live` site) **and explicitly tell the user which one you picked** — don't
@@ -262,10 +268,10 @@ Slack's preferred site.
 |-------|--------|
 | Requires the Teams Salesforce Go page feature first | `OrgHasEmployeeServiceTeams` does not gate or depend on `ITSMTeamsEnabled` directly, but the Go page checklist only appears once `service-cloud-itsm-teams-integration` is enabled — run `service-itsm-teams-configure` first. |
 | `OrgHasEmployeeServiceTeams` does not unblock `ITSMTeamsEnabled` | These are separate bits — enabling this preference does not itself unblock the Teams Salesforce Go page toggle preference, and vice versa. |
-| "Select a Digital Experience Site" ≠ Teams extension registration — two different site-related APIs, don't conflate | This checklist item writes the org-value `SLACK_PREFERRED_SITE` via `PATCH /services/data/v67.0/setup/org/values/SLACK_PREFERRED_SITE` (body `{"orgValue": "<site Id>"}`) — **not gated by `MsTeamsAppApiFamily`**, works with no Azure/Entra credential required. `service-itsm-teams-configure`'s `POST /connect/service-itsm-teams/graph-api/extensions` is a *different* mechanism (Teams "extension" registration) that **does** require the Azure credential and **is** gated by `MsTeamsAppApiFamily`. Verified live: `PATCH .../setup/org/values/SLACK_PREFERRED_SITE` with a site's Network `Id` succeeded (`200`) in an org where `post-teams-extension` was still blocked with "Unable to fetch tenant ID." Also note despite the `SLACK_` name, this org-value is shared with the Slack ITSM integration's equivalent picker — not Teams-exclusive. |
-| Permission sets / PSLs | `TeamsForEmployeeUser`, `MicrosoftGraphAccess` (permission sets) and PSL `TeamsForEmployeePsl` auto-provisioned and were confirmed `Active` (10 licenses) immediately after the feature-enable in this session — no manual PSL/permset creation needed once `TeamsITSrvcsAddOn`+`IncidentManagementAddOn` are licensed. |
+| "Select a Digital Experience Site" writes an org-value, not a Teams API | This checklist item writes the org-value `SLACK_PREFERRED_SITE` via `PATCH /services/data/v67.0/setup/org/values/SLACK_PREFERRED_SITE` (body `{"orgValue": "<site Id>"}`) — no Azure/Entra credential and no Teams license required. Verified live: `PATCH` with a site's Network `Id` succeeded (`200`) independently of the rest of the Teams setup. If the org has no Digital Experience site, create one first via `experience-portal-create`. Note despite the `SLACK_` name, this org-value is shared with the Slack ITSM integration's equivalent picker — not Teams-exclusive. |
+| Permission sets / PSLs | `TeamsForEmployeeUser` (permission set) and PSL `TeamsForEmployeePsl` auto-provisioned and were confirmed `Active` (10 licenses) immediately after the feature-enable in this session — no manual PSL/permset creation needed once `TeamsITSrvcsAddOn`+`IncidentManagementAddOn` are licensed. |
 | Version prefix required | headless-360 `dispatch`/`dispatch_readonly` do not resolve API versions — always pass the full `/services/data/vXX.0/...` prefix. |
-| UEL user can't log in to IT Service in Teams | Assigning `TeamsForEmployeeUser`/`MicrosoftGraphAccess` is not enough. Three additional prerequisites gate login (see [Step 3 → Login prerequisites](#login-prerequisites-required-for-the-user-to-actually-sign-in-to-it-service-in-teams)): **Allow OAuth for employees** on the login profile (**Setup-UI-only** — no working Metadata/SObject/Tooling write path; verified all fail), CORS Allowed Origins containing both `https://teams.cloud.microsoft` **and** `https://cdn.scs.static.lightning.force.com`, and the **API Enabled** system permission on the user. Each is independently a confirmed silent-login blocker. |
+| UEL user can't log in to IT Service in Teams | Assigning `TeamsForEmployeeUser` is not enough. Three additional prerequisites gate login (see [Step 3 → Login prerequisites](#login-prerequisites-required-for-the-user-to-actually-sign-in-to-it-service-in-teams)): **Allow OAuth for employees** on the login profile (**Setup-UI-only** — no working Metadata/SObject/Tooling write path; verified all fail), CORS Allowed Origins containing both `https://teams.cloud.microsoft` **and** `https://cdn.scs.static.lightning.force.com`, and the **API Enabled** system permission on the user. Each is independently a confirmed silent-login blocker. |
 
 ---
 
@@ -327,48 +333,28 @@ SELECT Id, AppName, UserId, User.Username, CreatedDate FROM OauthToken
   `/<sitePrefix>/setup/secur/RemoteAccessAuthorizationPage`. Work through **D**.
 
 > **Diagnostic tell (verified):** if a **Standard-profile** user mints a `ServiceCloudMSTeamsEca`
-> token but a **Unified Employee (UEL) / portal** user does not — even with identical permission
-> sets — the blocker is specific to the portal-user OAuth authorize path (profile OAuth flag, or
-> the ECA self-authorization page being served on the community host), **not** the ECA
-> authorization grant. In the verified org the Standard user minted a token *without* even holding
-> the ECA-authorizing permission set, while the UEL user holding everything did not — so an
-> identical permission-set/SetupEntityAccess config does **not** explain the difference.
+> token but a **UEL / portal** user does not — even with identical permission sets — the blocker is
+> the portal-user OAuth authorize path (profile OAuth flag, or the self-approval page served on the
+> community host), **not** any ECA permission grant. In the verified org the Standard user minted a
+> token with zero `SetupEntityAccess` rows while the UEL user holding everything did not, so
+> ECA `SetupEntityAccess` config does **not** explain the difference.
 
-### D. ECA (External Client App) OAuth self-authorization
+### D. Portal-user OAuth authorize (self-approval page on the community host)
 
-The `ServiceCloudMSTeamsEca` External Client App gates the OAuth authorize. Symptom: the Teams
-popup titled **"Service Not Available / An unexpected connection error occurred"** at
+The `ServiceCloudMSTeamsEca` External Client App is **auto-installed by the Go-page toggle and needs
+no configuration** — do **not** change its OAuth policy or add `SetupEntityAccess` rows. Symptom: the
+Teams popup titled **"Service Not Available / An unexpected connection error occurred"** at
 `/<sitePrefix>/setup/secur/RemoteAccessAuthorizationPage`, and/or an access-check error body
 **`{"acc":8}`** on the streaming endpoint.
 
-1. **Policy must be `AdminApprovedPreAuthorized`** (not `AllSelfAuthorized`):
-   ```text
-   SELECT Id, PermittedUsersPolicyType FROM ExtlClntAppOauthPlcyCnfg
-     WHERE ExternalClientApplicationId='<ecaId>'   (Tooling)
-   ```
-   `AllSelfAuthorized` forces every user through the self-approval page, which **communities
-   cannot serve** (`/setup/secur/*` is a Setup page) → the connection error. Fix by editing the
-   `ExternalClientApplication`'s OAuth policy **via Metadata** (the Tooling object is read-only —
-   `update` → `CANNOT_INSERT_UPDATE_ACTIVATE_ENTITY`): retrieve
-   `ExtlClntAppOauthConfigurablePolicies:<Eca>_oauth_defaultPolicy`, set
-   `<permittedUsersPolicyType>AdminApprovedPreAuthorized</permittedUsersPolicyType>`, redeploy.
-   (Valid enum values are only `AllSelfAuthorized` and `AdminApprovedPreAuthorized` — `AdminApproved`
-   is invalid.)
-2. **Pre-authorize the ECA to a permission set the user holds** — `AdminApprovedPreAuthorized`
-   denies everyone not explicitly authorized (surfaces as `{"acc":8}`):
-   ```text
-   SELECT ParentId, SetupEntityType FROM SetupEntityAccess WHERE SetupEntityId='<ecaId>'
-   ```
-   If missing, create `SetupEntityAccess {ParentId=<permsetId the user has>, SetupEntityId=<ecaId>}`
-   (no `SetupEntityType` — it auto-resolves to `ExternalClientApplication`).
-3. **If policy is `AdminApprovedPreAuthorized`, the user holds an authorized permission set, and
-   "Allow OAuth for employees" is on — yet the token still doesn't mint for the portal user
-   (per C):** the remaining suspect is that the OAuth authorize is being routed to the
-   **community host** (`https://<org>.my.site.com/<prefix>/setup/secur/...`), which cannot render
-   the authorization page, rather than to My Domain. This ECA is **packaged/first-party** — do NOT
-   hand-edit its `callbackUrl`/`isFirstPartyAppEnabled`/`oauthLink`. At this point capture the exact
-   popup URL + any `acc` code and escalate to the Teams ITSM / ECA product team; it is beyond a
-   configurable-setting fix.
+This failure is **portal/UEL-specific** and is **not** an ECA-permission problem (per the Diagnostic
+tell above, a Standard user mints a token with zero `SetupEntityAccess` rows). The OAuth authorize is
+being routed to the **community host** (`https://<org>.my.site.com/<prefix>/setup/secur/...`), which
+can't render the self-approval page, rather than to My Domain. The ECA is **packaged/first-party** —
+do NOT hand-edit its OAuth policy, `callbackUrl`, `isFirstPartyAppEnabled`, or `oauthLink`. Confirm
+"Allow OAuth for employees" (B) and API Enabled (C) first; if the portal token still won't mint,
+capture the popup URL + any `acc` code and escalate to the Teams ITSM product team — it's beyond a
+configurable-setting fix.
 
 ### E. Embedded Agentforce agent joins then leaves (no reply)
 

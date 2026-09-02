@@ -48,8 +48,8 @@ Microsoft Teams. Every operation dispatches through **headless-360**.
   afterward; explaining why the direct org-preference PATCH route fails and why this route
   works instead; disabling the feature if requested; giving the user step-by-step instructions
   for the Azure/Entra app registration (Step 4a) since no Salesforce API can perform that part;
-  once the user provides the resulting Client ID/Tenant ID (in chat) and the Client Secret (via the
-  `TEAMS_ENTRA_CLIENT_SECRET` env var / secret file, never in chat), writing them
+  once the user provides the resulting Client ID/Tenant ID (in chat) and the Client Secret (written
+  to a gitignored secret file via the copy-paste command in Step 4a, never in chat), writing them
   directly into the `MSTeamsSetupClientCredentialsEC` Named Credential via API — this
   Salesforce-side write is always automated by this skill, never deferred back to the user;
   registering the Experience Cloud site as the Teams "preferred site" extension via
@@ -160,13 +160,12 @@ inaccessible via direct PATCH — is now enabled as a side effect of the feature
 ### Step 4 — Report *interim* status (setup is NOT complete yet)
 
 Report feature status and whether `ITSMTeamsEnabled` reads `true` — but **frame this as progress,
-not completion.** Enabling the Go feature is only the first half. The integration is **not
-functional** until the Microsoft Entra app is registered, its credentials are written into the
-Named Credential + Auth Provider, and admin consent is granted (Step 4a). Do **not** call this an
-"optional manual tail," do **not** mark Teams "Done"/"configured"/"complete," and do **not** hand
-back to any coordinator as done. State plainly: *"The Salesforce feature is enabled; Teams
-integration is not yet complete — the required Microsoft Entra app registration comes next."* Then
-proceed directly into Step 4a. See the **Completion contract** below for what "complete" requires.
+not completion.** Enabling the Go feature is only the first half; the integration is **not
+functional** until the Microsoft Entra app is registered, its credentials are written into the Named
+Credential + Auth Provider, and admin consent is granted (Step 4a). Do **not** mark Teams
+"Done"/"complete" or hand back to a coordinator as done. State plainly: *"The Salesforce feature is
+enabled; Teams integration is not yet complete — the Microsoft Entra app registration comes next."*
+Then proceed into Step 4a. See the **Completion contract** below for what "complete" requires.
 
 ### Step 4a — Follow the Go page's own order: Create Entra app → Configure Named Credentials → Grant consent
 
@@ -182,26 +181,39 @@ order; do not skip ahead to Named Credentials before the Entra app exists, and d
    clicks and wait for them to provide the resulting values:
    - **portal.azure.com** → **Microsoft Entra ID** → **App registrations** → **New registration**.
      Name it something identifiable (e.g. `Salesforce ITSM Teams Integration`); single-tenant is
-     fine unless the user's org spans multiple tenants; no redirect URI is needed for the
-     client-credentials flow used here.
+     fine unless the user's org spans multiple tenants. Leave the redirect URI blank at creation —
+     the Delegated Graph permissions below require one, but it's added later as the Auth Provider
+     callback (Step 5; see `references/azure-credential-population.md`).
    - From the app's **Overview** page, note the **Application (client) ID** and **Directory
      (tenant) ID**.
    - **Certificates & secrets** → **New client secret** → copy the secret **value** immediately
      (unrecoverable after leaving the page).
-   - **API permissions** → **Add a permission** → **Microsoft Graph** → **Application
-     permissions** → add the Graph permissions this integration needs (at minimum
-     `ChannelMessage.Send`, `Team.ReadBasic.All`, `Channel.ReadBasic.All`,
-     `TeamworkAppSettings.ReadWrite.All` — confirm against the org's current Teams for Employee
-     Service documentation, since required scopes can change between releases).
-   - Provide the credentials **without exposing the secret in chat**: the **Client ID** and
-     **Tenant ID** are non-secret identifiers and may be given in the conversation, but the
-     **Client Secret is a confidential credential — NEVER ask for it in chat and never accept it
-     there.** The user places the secret in the `TEAMS_ENTRA_CLIENT_SECRET` environment variable
-     (or a gitignored secret file whose path they give you); you read it from that source at write
-     time and never print, echo, or log its value.
+   - **API permissions** → **Add a permission** → **Microsoft Graph** → **Delegated
+     permissions** → add all 17 below, then click **Grant admin consent** so every row reads
+     *Granted*. These are **Delegated** (not Application) — verified working set:
+     `Channel.Create`, `Channel.ReadBasic.All`, `ChannelMember.Read.All`,
+     `ChannelMember.ReadWrite.All`, `ChannelMessage.Edit`, `ChannelMessage.Read.All`,
+     `ChannelMessage.ReadWrite`, `ChannelMessage.Send`, `Team.Create`, `Team.ReadBasic.All`,
+     `Group.Read.All`, `Group.ReadWrite.All`, `openid`, `profile`, `email`, `offline_access`,
+     `User.Read`. Several require admin consent (*Admin consent required = Yes*), so the **Grant
+     admin consent** click is mandatory — ungranted consent-required rows make Teams calls fail
+     (see the AccessDenied gotcha). Do **not** add `TeamworkAppSettings.ReadWrite.All` (not in the
+     working set). Scopes can change between releases — if MS docs list more, add and re-grant.
+   - Provide the credentials **without exposing the secret in chat**: **Client ID** and **Tenant
+     ID** are non-secret and may be given in the conversation; the **Client Secret is confidential —
+     NEVER ask for it in chat.** Have the user write it to a **gitignored file**: substitute the
+     job/temp path for `<secret-file>` (e.g. `$CLAUDE_JOB_DIR/tmp/teams-secret`), then hand them exactly
+     this to copy-paste into the Claude Code prompt (secret Value, not the Secret ID, between the quotes):
+     ```bash
+     ! umask 077; printf '%s' 'PASTE-CLIENT-SECRET-HERE' > <secret-file> && echo written
+     ```
+     Keep the leading `!` — it runs the line in this session's Bash so the file persists. It prints
+     `written`; then read it from `<secret-file>` at write time (Step 5) and never echo or log it.
+     > **Note:** the `!`-prefix line is echoed into the chat transcript — if the secret shows up there,
+     > treat it as compromised and have the user rotate it in Azure after setup works.
 2. **Configure Setup Named Credentials** ("Go to Setup" button on the Go page — the manual
    equivalent of what this skill automates). **Once you have the Client ID / Tenant ID and the
-   secret is available in the env var / file, do not tell the user to enter anything into Setup —
+   secret is available in the secret file, do not tell the user to enter anything into Setup —
    call the Named Credential APIs directly**, per "Populating `MSTeamsSetupClientCredentialsEC`
    given a user-supplied client ID/secret" under Step 5 below. **This same set of values must ALSO be written into the
    `microsoft_auth_provider` Auth Provider** (the inbound-SSO side, distinct from the outbound-Graph
@@ -225,7 +237,7 @@ order; do not skip ahead to Named Credentials before the Entra app exists, and d
 
 Everything the user does above (steps 1's Azure clicks and step 3's consent click) is their
 manual responsibility because no Salesforce API reaches Azure/Entra. Everything Salesforce-side —
-writing the supplied credential (secret read from the env var / secret file, never from chat) into
+writing the supplied credential (secret read from the gitignored secret file, never from chat) into
 the Named Credential in step 2 — is this skill's job to automate; that division of labor is the
 entire point of this skill.
 
@@ -281,27 +293,18 @@ If this returns `400 UNKNOWN_EXCEPTION "...external credential \"MSTeamsSetupCli
 might not exist"`, the Azure/Entra step (Gotchas) has not been completed yet — this is not a bug
 in the call itself.
 
-If instead it returns `AccessDenied` (or `400 UNKNOWN_EXCEPTION "Exception while creating Teams
-extension: Unable to fetch tenant ID"`) **even after** the external credential shows
-`authenticationStatus: "Configured"`, the cause is almost always the **Azure app's Graph
-permissions being of type _Delegated_ rather than _Application_** (client-credentials token flow
-cannot use delegated-only permissions). This is a **fixable Azure/Entra misconfiguration, not a
-hard license wall** — verified live this session: the same call went from `AccessDenied` to
-`201 Success` (`com_sf_itsm_teams_config`) after two changes on the Azure side, with no license
-change:
-
-1. In the Azure app registration → **API permissions**, ensure the Microsoft Graph permissions are
-   the **Application** type (not Delegated), then click **"Grant admin consent"** for the tenant.
-2. **Repopulate the credential** (see "Populating..." below) — re-provisioning or any feature
-   re-enable can leave the EC/Auth Provider empty; a freshly-populated `MSTeamsSetupClientCredentialsEC`
-   showing `authenticationStatus: "Configured"` is required at the moment of the retry.
-
-Retry Step 5 after both. Only treat this as a genuine org-license blocker (the `MsTeamsAppApiFamily`
-gotcha below) if the call **still** fails once Application-type Graph permissions + admin consent
-are confirmed and the credential is freshly `Configured`.
+If instead it returns `AccessDenied` (or `400 UNKNOWN_EXCEPTION "...Unable to fetch tenant ID"`)
+**even after** the EC shows `authenticationStatus: "Configured"`, the cause is almost always an
+**incomplete Azure/Entra grant** — fixable, not a license wall (verified: same call went
+`AccessDenied` → `201 Success` after these). Check, in order: (1) **admin consent not granted** —
+several Step 4a scopes read *Admin consent required = Yes* and surface as `AccessDenied` until an
+admin clicks **Grant admin consent**; confirm every row reads *Granted*. (2) **credential empty** —
+a re-provision can empty the EC; it must read `Configured` at retry, so **repopulate** it. Retry
+Step 5 after both. **Do not "fix" this by switching Delegated → Application** — the verified working
+integration is Delegated + admin consent; flipping to Application diverges from the known-good setup.
 
 Once you have the Azure Client ID and Tenant ID (given in chat) and the Client Secret (read from the
-`TEAMS_ENTRA_CLIENT_SECRET` env var / secret file — never requested in chat; Step 4a), do the
+gitignored secret file written in Step 4a — never requested in chat), do the
 Salesforce-side writes yourself — do not tell the user to enter values in Setup. The full verified
 recipe (populating `MSTeamsSetupClientCredentialsEC`, populating the `microsoft_auth_provider` Auth
 Provider for inbound SSO via the Metadata API, matching the portal user's `Username` to the Microsoft
@@ -324,8 +327,8 @@ optional tail. Report **complete only when every item below is verified** (not m
 1. **Feature enabled** — `service-cloud-itsm-teams-integration` reads `ENABLED` and
    `ITSMTeamsEnabled` reads `true` (Steps 1–3).
 2. **Microsoft Entra app registered** — the user has completed Step 4a's Azure clicks and provided
-   the Client ID and Tenant ID (in chat) with the Client Secret placed in the
-   `TEAMS_ENTRA_CLIENT_SECRET` env var / secret file (never pasted in chat). Until they do, **stop
+   the Client ID and Tenant ID (in chat) with the Client Secret written to the gitignored secret
+   file via the Step 4a copy-paste command (never pasted in chat). Until they do, **stop
    and wait** — this is a hard gate; you cannot proceed past it, and you must not report completion
    around it.
 3. **Credentials populated (Salesforce-side, automated by this skill)** — `MSTeamsSetupClientCredentialsEC`
@@ -375,8 +378,8 @@ not instead of, the Step 2 feature-enable call if the user wants both Hubs.
 ## Gotchas
 
 The verified, load-bearing pitfalls (direct-PATCH 401, empty Auth Provider, Azure Web-vs-SPA
-redirect, Username=UPN handler, portal API-Enabled, static consent link, `MsTeamsAppApiFamily`
-403 hard gate, version-prefix requirement, and more) are catalogued in
+redirect, Username=UPN handler, portal API-Enabled, static consent link, version-prefix
+requirement, and more) are catalogued in
 [`references/gotchas.md`](references/gotchas.md). Read it before reporting a step as failed or
 retrying an enablement guess.
 

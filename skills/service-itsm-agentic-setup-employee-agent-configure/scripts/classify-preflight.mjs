@@ -20,16 +20,21 @@
 //
 // Emits a single JSON object to stdout:
 //   { studio: { hasAccess, signal, reason },
-//     template: { present, id, hasAgentScript, botDefinitionId, signal, reason },
+//     template: { present, id, hasAgentScript, botDefinitionId, masterLabel, signal, reason },
 //     verdict, reasons: [...] }
 // `botDefinitionId` is copied from the matched agent-templates row and passed to
 // the Phase-2 idempotency read as the PRIMARY key (the platform's authoritative
-// template→BotDefinition link); the collected developerName is the FALLBACK key
-// there. See classify-agent-existence.mjs for why. (The template row's
-// `isInstalled`/`isActivated` flags are NOT emitted: they ride the same
-// AgentTemplate join as botDefinitionId, so for agents this skill creates — which
-// never stamp `templateName` — they read false even after the agent exists, and
-// nothing downstream consumes them.)
+// template→BotDefinition link); `id` (the template's OOTB namespaced API name) is
+// passed as the AgentTemplate fallback key — it matches `BotDefinition.AgentTemplate`
+// on the pre-provisioned broad `IT_Service_Employee` agent regardless of its
+// DeveloperName, so it is THE key that catches it — and the collected developerName
+// is the last fallback (the guard for self-created agents, which carry a null
+// AgentTemplate). `masterLabel` is echoed only for the report's display label; it
+// is NOT an idempotency key (a display name is renamable and non-unique). See
+// classify-agent-existence.mjs for why. (The template row's `isInstalled`/`isActivated`
+// flags are NOT emitted: they ride the same AgentTemplate join as botDefinitionId,
+// so for agents this skill creates — which never stamp `templateName` — they read
+// false even after the agent exists, and nothing downstream consumes them.)
 // where signal is PASS | FAIL | CANNOT-CONFIRM | ERROR and verdict is
 // READY | NOT-READY | CANNOT-CONFIRM | ERROR. Exit is always 0 on usable args.
 // ERROR (studio only) means the Studio-access read returned a parseable but
@@ -117,16 +122,19 @@ function classifyTemplate(res, masterLabel) {
   }
   // Idempotency identity carried by the matched row — the platform's own link
   // from this template to the BotDefinition it was instantiated into. A populated
-  // botDefinitionId is the reliable idempotency signal for PRE-PROVISIONED agents
-  // (see classify-agent-existence.mjs): it means the agent already exists
-  // regardless of what DeveloperName this skill would have guessed. Agents this
-  // skill creates never stamp `templateName`, so their row's botDefinitionId stays
-  // null — the Phase-2 read falls back to a DeveloperName key for that case.
+  // botDefinitionId is a direct link for PRE-PROVISIONED agents; for the broad
+  // Employee agent it is null, so the template's own `id` (matched against
+  // `BotDefinition.AgentTemplate` in Phase 2) is what catches the pre-provisioned
+  // `IT_Service_Employee` regardless of what DeveloperName this skill would have
+  // guessed (see classify-agent-existence.mjs). Agents this skill creates never
+  // stamp `templateName`, so they carry BOTH a null row botDefinitionId AND a null
+  // AgentTemplate — the Phase-2 read falls back to the collected DeveloperName key
+  // for that case.
   const botDefinitionId = typeof match.botDefinitionId === 'string' && match.botDefinitionId.trim() ? match.botDefinitionId : null;
   if (!match.agentScript || typeof match.agentScript !== 'string' || !match.agentScript.trim()) {
     return { present: true, id: match.id ?? null, hasAgentScript: false, botDefinitionId, signal: 'CANNOT-CONFIRM', reason: `Matched "${masterLabel}" (id=${match.id}) but it had no agentScript field — the NGA bundle create needs the template's Agent Script content.` };
   }
-  return { present: true, id: match.id ?? null, hasAgentScript: true, botDefinitionId, signal: 'PASS', reason: `Template "${masterLabel}" present (id=${match.id}) with a non-empty agentScript${botDefinitionId ? `; already instantiated (botDefinitionId=${botDefinitionId})` : '; not yet instantiated (no botDefinitionId — the Phase-2 read falls back to DeveloperName)'} — feed it to scripts/build-create-body.mjs for the NGA bundle create.` };
+  return { present: true, id: match.id ?? null, hasAgentScript: true, botDefinitionId, signal: 'PASS', reason: `Template "${masterLabel}" present (id=${match.id}) with a non-empty agentScript${botDefinitionId ? `; already instantiated (botDefinitionId=${botDefinitionId})` : '; not yet instantiated (no botDefinitionId — the Phase-2 read keys on AgentTemplate=id, then DeveloperName)'} — feed it to scripts/build-create-body.mjs for the NGA bundle create.` };
 }
 
 const [studioPath, templatePath, rawLabel] = process.argv.slice(2);
@@ -155,11 +163,19 @@ process.stdout.write(JSON.stringify({
     id: template.id,
     hasAgentScript: template.hasAgentScript,
     // Idempotency identity (from the matched agent-templates row): the Phase-2
-    // read uses botDefinitionId as the PRIMARY key and the collected developerName
-    // as the FALLBACK. A populated botDefinitionId is the load-bearing "agent
-    // already exists" signal for pre-provisioned agents; null just means this
-    // template row was never joined (e.g. a self-created agent) — not "no agent".
+    // read uses botDefinitionId as the PRIMARY key, `id` (the template's namespaced
+    // API name) as the AgentTemplate key, and the collected developerName as the
+    // last fallback. A populated botDefinitionId is a direct "agent already exists"
+    // link; null just means this template row was never joined (e.g. a self-created
+    // agent) — not "no agent". `id` is the load-bearing catcher for the
+    // pre-provisioned broad `IT_Service_Employee`, whose DeveloperName differs from
+    // this skill's collected guess: it matches `BotDefinition.AgentTemplate`, the
+    // platform-stamped source template. `masterLabel` is echoed only for the
+    // report's display label (NOT an idempotency key). The workflow passes
+    // botDefinitionId, `id`, and the collected developerName to
+    // classify-agent-existence.mjs from this single source.
     botDefinitionId: template.botDefinitionId ?? null,
+    masterLabel,
     signal: template.signal,
     reason: template.reason,
   },

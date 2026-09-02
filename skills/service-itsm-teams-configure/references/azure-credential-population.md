@@ -2,19 +2,21 @@
 
 Reference for `service-itsm-teams-configure` Step 5. Once the org has an external credential named
 `MSTeamsSetupClientCredentialsEC` and the user has supplied their Azure **Client ID** and **Tenant
-ID** (non-secret identifiers, given in chat) and placed the **Client Secret** in the
-`TEAMS_ENTRA_CLIENT_SECRET` environment variable or a gitignored secret file (Step 4a — **never ask
-for the secret in chat**), these are the Salesforce-side writes that populate the outbound Graph
-credential, the inbound-SSO Auth Provider, and the portal-user access that make the Teams IT Service
-/ IT Desk apps actually work. Read the secret from that env var / file at write time; never print,
-echo, or log its value, and never send the literal `$TEAMS_ENTRA_CLIENT_SECRET` token to an API —
-always resolve it to its actual value first (see the Secret-substitution note in Step 2). Do all of
-these yourself — the user's manual responsibility ends at the Azure admin center.
+ID** (non-secret identifiers, given in chat) and written the **Client Secret** to a **gitignored
+secret file** via the Step 4a copy-paste command (**never ask for the secret in chat**; do NOT use an
+`export`-to-env-var route — an interactive `!`-prefix export runs in a different shell than the
+agent's tool calls, so the value never reaches the agent), these are the Salesforce-side writes that
+populate the outbound Graph credential, the inbound-SSO Auth Provider, and the portal-user access
+that make the Teams IT Service / IT Desk apps actually work. Read the secret from that file at write
+time (`cat <secret-file>` into an in-memory variable); never print, echo, or log its value, and never
+send a literal `$TEAMS_ENTRA_CLIENT_SECRET` token to an API — always resolve it to its actual value
+first (see the Secret-substitution note in Step 2). Do all of these yourself — the user's manual
+responsibility ends at the Azure admin center.
 
 ## Populating `MSTeamsSetupClientCredentialsEC` given a user-supplied client ID/secret
 
 **Once the user supplies the Client ID and Tenant ID (in chat) and the Client Secret is available in
-the `TEAMS_ENTRA_CLIENT_SECRET` env var / secret file (Step 4a — never in chat), write them into
+the gitignored secret file (Step 4a — never in chat), write them into
 Salesforce yourself via the calls below. Do not respond by telling the user to open Setup and enter
 the values manually — that defeats the purpose of this skill.** The user's manual responsibility
 ends at the Azure admin center (Step 4a); every Salesforce-side write, including this one, is this
@@ -32,16 +34,17 @@ skill's job.
    This endpoint is full-replace — GET the EC first and mutate, don't send a partial body.
 2. Set the principal's client ID + secret (both required together in one call; there is no
    partial-update path for just the client ID):
-   **Secret substitution — read this first.** `mcp__headless-360__dispatch` is a JSON API call, **not
-   a shell**: it does **not** expand `$TEAMS_ENTRA_CLIENT_SECRET`. Passing the literal string
-   `"$TEAMS_ENTRA_CLIENT_SECRET"` in the body stores that literal text as the OAuth client secret and
-   Graph authentication then fails after an apparently-successful configuration. You must resolve the
-   env var to its **actual value** and place that value into `clientSecret.value` at call time. Read it
-   with a **non-logging** read (e.g. a single `printenv TEAMS_ENTRA_CLIENT_SECRET` captured into an
-   in-memory variable, or read the secret file) — never `echo`/print it, never place the resolved
-   secret in any text you emit to the user or into a log, and never write it to disk. The `<secret
-   value read from $TEAMS_ENTRA_CLIENT_SECRET>` placeholder below denotes that resolved value, not a
-   literal to send:
+   **Secret substitution — read this first.** The credential API body is JSON, **not a shell**: it
+   does **not** expand any `$TEAMS_ENTRA_CLIENT_SECRET`-style token. Passing such a literal string in
+   the body stores that literal text as the OAuth client secret and Graph authentication then fails
+   after an apparently-successful configuration. You must read the secret's **actual value from the
+   gitignored secret file** (Step 4a) and place that value into `clientSecret.value` at call time. Do
+   it with a **non-logging** read — `cat <secret-file>` captured into an in-memory variable, or build
+   the JSON body with a small script that reads the file (as done for the `MSTeamsSetupClientCredentialsEC`
+   POST) — never `echo`/print it, never place the resolved secret in any text you emit to the user or
+   into a log, and delete any temp body file that held it immediately after the call. The `<secret
+   value read from the secret file>` placeholder below denotes that resolved value, not a literal to
+   send:
    ```text
    mcp__headless-360__dispatch(
      method: "POST",   // or PUT (update-credential) if credentials already exist for this principal
@@ -52,10 +55,10 @@ skill's job.
        "principalType": "NamedPrincipal",
        "authenticationProtocol": "OAuth",
        "authenticationProtocolVariant": "ClientCredentialsClientSecretBasic",
-       // clientSecret.value MUST be the resolved secret read from the TEAMS_ENTRA_CLIENT_SECRET env
-       // var / secret file — NOT the literal "$TEAMS_ENTRA_CLIENT_SECRET" token (dispatch does not
-       // expand shell variables). Resolve in memory via a non-logging read; never echo it.
-       "credentials": { "clientId": {"value": "<client id>"}, "clientSecret": {"value": "<secret value read from $TEAMS_ENTRA_CLIENT_SECRET>"} }
+       // clientSecret.value MUST be the actual secret read from the gitignored secret file (Step 4a)
+       // — NOT a literal "$TEAMS_ENTRA_CLIENT_SECRET" token (the JSON body does not expand variables).
+       // Read it in memory via a non-logging read (cat the file); never echo it.
+       "credentials": { "clientId": {"value": "<client id>"}, "clientSecret": {"value": "<secret value read from the secret file>"} }
      }
    )
    ```
@@ -73,7 +76,7 @@ Enabling the Teams feature also provisions a Microsoft-type **Auth Provider** na
 Consumer Secret, or endpoint URLs). This is the **inbound SSO** side — it authenticates employees
 logging into the Experience Cloud portal that the Teams IT Service app embeds. It is a *separate
 artifact* from the outbound-Graph `MSTeamsSetupClientCredentialsEC` Named Credential, but takes the
-**same three values** the user supplied (secret from the env var / file, never chat). Populate it automatically in the same pass — a previous run
+**same three values** the user supplied (secret read from the gitignored secret file, never chat). Populate it automatically in the same pass — a previous run
 of this skill forgot this step, leaving portal SSO login broken even though the Named Credential
 was configured.
 
@@ -90,7 +93,7 @@ deploy it (this sets every field, including the secret, with no UI):
 <AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
     <authorizeUrl>https://login.microsoftonline.com/<TENANT_ID>/oauth2/v2.0/authorize</authorizeUrl>
     <consumerKey><CLIENT_ID></consumerKey>
-    <consumerSecret>${TEAMS_ENTRA_CLIENT_SECRET}</consumerSecret>
+    <consumerSecret>__SECRET_PLACEHOLDER__</consumerSecret>
     <defaultScopes>openid profile email offline_access https://graph.microsoft.com/.default</defaultScopes>
     <friendlyName>microsoft_auth_provider</friendlyName>
     <includeOrgIdInIdentifier>false</includeOrgIdInIdentifier>
@@ -106,9 +109,20 @@ sf project deploy start --source-dir force-app --target-org <org-alias>
 ```
 
 **Secret handling:** substitute `<TENANT_ID>` / `<CLIENT_ID>` (non-secret) directly, but inject the
-`<consumerSecret>` value from `$TEAMS_ENTRA_CLIENT_SECRET` at build time (e.g. `envsubst` into a
-gitignored temp copy under a scratch dir, deploy that, then delete it). **Never commit the populated
-file** and never echo the secret. The secret comes from the env var / secret file — not from chat.
+`<consumerSecret>` value **read from the gitignored secret file** (Step 4a) at build time into a
+gitignored temp copy under a scratch dir, deploy that, then delete the whole scratch dir. A verified
+non-logging way to do the substitution (the secret only ever lives in a transient shell var and the
+scratch file, never in emitted text):
+```bash
+# template has __SECRET_PLACEHOLDER__ where <consumerSecret> should be; <TENANT_ID>/<CLIENT_ID> already filled in
+SECRET="$(cat <secret-file>)" perl -pe 's/__SECRET_PLACEHOLDER__/$ENV{SECRET}/' template.xml \
+  > force-app/main/default/authproviders/microsoft_auth_provider.authprovider-meta.xml
+sf project deploy start --source-dir force-app --target-org <org-alias>
+rm -f force-app/main/default/authproviders/microsoft_auth_provider.authprovider-meta.xml   # shred secret-bearing file
+```
+**Never commit the populated file** and never echo the secret. The secret comes from the gitignored
+secret file — not from chat, and not from an env var (the interactive `!`-prefix export does not
+reach the agent's shell).
 
 Notes:
 - Use the **tenant-specific** `/…/<TENANT_ID>/oauth2/v2.0/…` endpoints, not `/common/` or

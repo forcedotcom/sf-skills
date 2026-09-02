@@ -36,8 +36,9 @@ dispatches through **headless-360**.
 
 - **In scope**: Turning on the `OrgHasITSMFulfillerTeams` preference; giving the user the exact
   Teams marketplace link + help doc for the IT Desk app install; assigning
-  `TeamsForITSrvcsUser`/`MicrosoftGraphAccess` permission sets to confirmed users; delegating
-  "Set Teams as Collaboration Tool for Swarming" to `service-itsm-swarming-configure`.
+  `TeamsForITSrvcsUser`/`MicrosoftGraphAccess` permission sets to confirmed users **plus
+  provisioning the org-wide API-Enabled login permission set** (created once, required to sign in);
+  delegating "Set Teams as Collaboration Tool for Swarming" to `service-itsm-swarming-configure`.
 - **Out of scope**: The base Teams Salesforce Go page toggle (`ITSMTeamsEnabled`), Azure/Entra app
   registration, Named Credential population, and Teams extension/preferred-site registration —
   use `service-itsm-teams-configure` (a prerequisite for this skill). The IT Service/employee
@@ -103,6 +104,17 @@ live from the "Manage Microsoft Teams for Employee Service User Access" dialog:
 - `MicrosoftGraphAccess` (label **"MicrosoftGraphAccess"**) — assigned alongside it in the same
   dialog.
 
+**A third, "login" permission set is also required — one you provision once per org.** The two
+dialog permsets provision the IT Desk *surface* but **do not let the fulfiller sign in**: both read
+`PermissionsApiEnabled = false`, so the embedded app's Connect calls 403 and login fails with
+"server not reachable." The fulfiller needs a permission set carrying the **API Enabled** system
+permission. Some orgs already have one named `Teams_Employee_ApiAccess` (a **custom** permset — do
+**not** assume a fresh customer org has it); otherwise create it. It is a **shared, org-wide
+artifact** — the same permset also covers IT Service login, so **create it only once** and just
+*assign* it wherever needed. The resolve-or-create-then-assign recipe is in
+[Login prerequisite](#login-prerequisite--provision-the-login-permission-set-verified) below. Do
+this as part of this step; don't wait for login to break.
+
 **Do not just assign every active user.** Ask the user which specific user(s) should get access.
 If they want to see the list of users first (rather than naming them), page it — **show at most
 10 users per page**, then ask "want to see more?" before showing the next page, since orgs can
@@ -125,8 +137,9 @@ still want one assigned — but call out which rows look like system accounts so
 have to guess). If the user says a listed batch is "not employee users, skip," move on to the
 next page rather than assigning any of them.
 
-Once the user confirms specific user(s), look up each permission set's `Id` (they are stable per
-org but don't hardcode them — query fresh):
+Once the user confirms specific user(s), look up the two dialog permission sets' `Id`s (they are
+stable per org but don't hardcode them — query fresh; the third "login" permset is resolved in the
+Login prerequisite below):
 
 ```text
 mcp__headless-360__dispatch_readonly(
@@ -152,46 +165,49 @@ Verify by re-querying `PermissionSetAssignment` for that `AssigneeId`, or simply
 from the assignment call plus a `SELECT ... FROM PermissionSetAssignment WHERE AssigneeId =
 '<user id>' AND PermissionSetId = '<permset id>'` readback.
 
-#### Login prerequisite — the two Manage-User-Access permsets are NOT enough to sign in (verified)
+#### Login prerequisite — provision the login permission set (verified)
 
-Assigning `TeamsForITSrvcsUser` + `MicrosoftGraphAccess` provisions the IT Desk *surface*, but a
-fulfiller who opens the IT Desk app in Teams can still hit **"server not reachable"** on the login
-page. The verified root cause is the **`ServiceCloudMSTeamsEca` External Client App OAuth
-authorize being denied** — `LoginHistory` for the user shows
-`Application = ServiceCloudMSTeamsEca`, `Status = Failed: Not approved for access`
-(`LoginType = Remote Access 2.0`). Neither `TeamsForITSrvcsUser` nor `MicrosoftGraphAccess` clears
-this, because:
+With only `TeamsForITSrvcsUser` + `MicrosoftGraphAccess` the IT Desk *surface* is provisioned, but a
+fulfiller who opens the IT Desk app in Teams hits **"server not reachable"** on the login page. The
+verified blocker is **API Enabled**: both dialog permsets read `PermissionsApiEnabled = false`
+(verified live), so the embedded app's Connect calls 403. Assigning the fulfiller a permission set
+with `PermissionsApiEnabled = true` resolves the login. That permset is **org-wide, created once**
+and shared with IT Service — resolve-or-create, then assign:
 
-1. **They are not pre-authorized to the ECA.** The ECA's policy is `AdminApprovedPreAuthorized`
-   (verified: `SELECT PermittedUsersPolicyType FROM ExtlClntAppOauthPlcyCnfg WHERE
-   ExternalClientApplicationId = '<ecaId>'` — Tooling), so **only** users holding a permission set
-   explicitly pre-authorized on the ECA can complete OAuth. Check which permset that is:
-   `SELECT ParentId, Parent.Name FROM SetupEntityAccess WHERE SetupEntityId = '<ecaId>'` — in the
-   verified org the sole authorized set was **`Teams_Employee_ApiAccess`**, and the IT Desk agent did
-   not hold it.
-2. **They do not grant API Enabled.** Both read `PermissionsApiEnabled = false`; the embedded app's
-   Connect calls need the **API Enabled** system permission or they 403.
+1. **Reuse if it already exists** (an API-Enabled permset — commonly `Teams_Employee_ApiAccess`):
+   `SELECT Id, Name, PermissionsApiEnabled FROM PermissionSet WHERE Name = 'Teams_Employee_ApiAccess'`.
+   If found with `PermissionsApiEnabled = true`, take its `Id` and skip to step 3.
+2. **Otherwise create it once** (`PermissionsApiEnabled` is createable — verified):
+   ```text
+   mcp__headless-360__dispatch(
+     method: "POST",
+     url:    "/services/data/v67.0/sobjects/PermissionSet",
+     body:   { "Name": "Teams_Employee_ApiAccess", "Label": "Teams Employee API Access", "PermissionsApiEnabled": true }
+   )
+   ```
+   Capture the returned `Id`. Because it's shared org-wide, don't recreate it if a later run (or the
+   IT Service skill) already made it — step 1's query is the guard.
+3. **Assign it** to each confirmed fulfiller, alongside the two dialog permsets:
+   ```text
+   mcp__headless-360__dispatch(
+     method: "POST",
+     url:    "/services/data/v67.0/sobjects/PermissionSetAssignment",
+     body:   { "AssigneeId": "<user id>", "PermissionSetId": "<login permset Id>" }
+   )
+   ```
 
-**Fix (verified to resolve the login):** also assign the fulfiller the **`Teams_Employee_ApiAccess`**
-permission set — it is simultaneously the ECA-pre-authorized set **and** carries
-`PermissionsApiEnabled = true`, so it clears both blockers in one assignment:
+After assigning, have the user **fully close and reopen the Teams app** (the OAuth authorize is
+cached client-side). Also confirm **CORS Allowed Origins** contains both `https://teams.cloud.microsoft`
+and `https://cdn.scs.static.lightning.force.com` (`SELECT UrlPattern FROM CorsWhitelistEntry`).
 
-```text
-mcp__headless-360__dispatch(
-  method: "POST",
-  url:    "/services/data/v67.0/sobjects/PermissionSetAssignment",
-  body:   { "AssigneeId": "<user id>", "PermissionSetId": "<Teams_Employee_ApiAccess Id>" }
-)
-```
+The `ServiceCloudMSTeamsEca` External Client App that backs Teams login is **auto-installed by the
+Go-page toggle and needs no configuration** — `Teams_Employee_ApiAccess` grants API Enabled and is
+unrelated to the ECA. Do not add `SetupEntityAccess` rows or change the ECA's OAuth policy.
 
-After assigning, have the user **fully close and reopen the Teams app** (the ECA authorize is cached
-client-side). Also confirm **CORS Allowed Origins** contains both `https://teams.cloud.microsoft`
-and `https://cdn.scs.static.lightning.force.com` (`SELECT UrlPattern FROM CorsWhitelistEntry`). If
-login still fails in a fresh session after the ECA-authorized permset is assigned, the remaining
+If login still fails in a fresh session after the API-Enabled permset is assigned, the remaining
 suspect is the **"Allow OAuth for employees"** profile checkbox (Setup-UI-only — no API write path).
-See `service-itsm-teams-itservice-configure`'s *Login prerequisites* and its Troubleshooting
-section D (ECA self-authorization) for the full pass/fail diagnostic chain — the same ECA gates both
-the fulfiller (IT Desk) and employee (IT Service) apps.
+See `service-itsm-teams-itservice-configure`'s *Login prerequisites* for the full pass/fail
+diagnostic chain.
 
 ### Step 4 — Set Teams as Collaboration Tool for Swarming (delegate)
 
@@ -217,7 +233,7 @@ is now fully automated end-to-end, no manual "Go to Feature Page" click required
 | `OrgHasITSMFulfillerTeams` does not unblock `ITSMTeamsEnabled` | These are separate bits — enabling this preference does not itself unblock the Teams Salesforce Go page toggle preference, and vice versa. |
 | "Set Teams as Collaboration Tool for Swarming" needs `service-cloud-swarming` enabled first | Delegate to `service-itsm-swarming-configure` rather than enabling that feature inline. That skill both enables the feature and writes `SWARM_COLLABORATION_TOOL` to `"Teams"` — the whole checklist item is API-reachable, not just the base feature enable. |
 | Permission sets / PSLs | `TeamsForITSrvcsUser`, `MicrosoftGraphAccess` (permission sets) and PSL `TeamsForITSrvcsPsl` auto-provisioned and were confirmed `Active` (10 licenses) immediately after the feature-enable in this session — no manual PSL/permset creation needed once `TeamsITSrvcsAddOn`+`IncidentManagementAddOn` are licensed. |
-| Manage-User-Access permsets don't cover login — assign `Teams_Employee_ApiAccess` too | Verified: after assigning `TeamsForITSrvcsUser` + `MicrosoftGraphAccess`, the IT Desk agent still failed Teams login with **"server not reachable"**; `LoginHistory` showed `ServiceCloudMSTeamsEca` = **"Failed: Not approved for access."** The `ServiceCloudMSTeamsEca` ECA is `AdminApprovedPreAuthorized` and its only pre-authorized permset was `Teams_Employee_ApiAccess`; neither Manage-User-Access set is authorized on the ECA, and both have `PermissionsApiEnabled = false`. Assigning `Teams_Employee_ApiAccess` (ECA-pre-authorized **and** grants API Enabled) resolved the login. See [Step 3 → Login prerequisite](#login-prerequisite--the-two-manage-user-access-permsets-are-not-enough-to-sign-in-verified). |
+| Manage-User-Access permsets don't cover login — assign an API-Enabled permset | Verified: after assigning `TeamsForITSrvcsUser` + `MicrosoftGraphAccess`, the IT Desk agent still failed Teams login with **"server not reachable"** — both dialog permsets have `PermissionsApiEnabled = false`, so the embedded app's Connect calls 403. The fix is an **API-Enabled** permission set (`PermissionsApiEnabled = true`), commonly `Teams_Employee_ApiAccess` — a **custom, org-wide** permset shared with IT Service, so **create it once** then assign. A test org may already have it; **a fresh customer org won't**, so resolve-or-create. (The `ServiceCloudMSTeamsEca` ECA is auto-installed by the Go-page toggle and needs no configuration — it does not gate login and `Teams_Employee_ApiAccess` is unrelated to it.) See [Step 3 → Login prerequisite](#login-prerequisite--provision-the-login-permission-set-verified). |
 | Version prefix required | headless-360 `dispatch`/`dispatch_readonly` do not resolve API versions — always pass the full `/services/data/vXX.0/...` prefix. |
 
 ---

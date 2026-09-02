@@ -26,10 +26,12 @@ Microsoft Teams for ITSM Setup (via service-itsm-teams-coordinate)
 │ 8 │ Build IT Service embedded agent (optional) │ Not started          │
 └───┴────────────────────────────────────────────┴──────────────────────┘
 
-Next: send me the Azure app's Client ID and Tenant ID, and put the Client Secret in the
-TEAMS_ENTRA_CLIENT_SECRET environment variable (or a secret file — tell me the path). Don't paste
-the secret here. I'll read it from there and write everything into the Named Credential and Auth
-Provider automatically.
+Next: send me the Azure app's Client ID and Tenant ID here. For the Client Secret, DON'T paste it in
+chat — instead copy-paste this one command into the prompt (put your secret's Value between the
+single quotes), then tell me it's done:
+  ! umask 077; printf '%s' 'PASTE-CLIENT-SECRET-HERE' > <secret-file> && echo written
+I'll read it from that file and write everything into the Named Credential and Auth Provider
+automatically.
 ```
 
 Status values: `Not started`, `In progress`, `Waiting (<what for>)`, `Blocked`, `Done`.
@@ -37,11 +39,12 @@ Status values: `Not started`, `In progress`, `Waiting (<what for>)`, `Blocked`, 
 ## Halt messages
 
 - **HALT 1 (Stage 2 — Azure/Entra app):** deliver the child's app-registration instructions
-  (including the Microsoft Graph Application permissions) and end with: *"Send me the **Client ID**
-  and **Tenant ID** here, and put the **Client Secret** in the `TEAMS_ENTRA_CLIENT_SECRET`
-  environment variable (or a secret file — tell me the path). Please don't paste the secret in chat.
-  I'll read it from there and populate the Named Credential and Auth Provider automatically — no
-  manual Setup entry needed."* Then wait.
+  (including the Microsoft Graph permissions) and end with: *"Send me the **Client ID**
+  and **Tenant ID** here. For the **Client Secret**, please don't paste it in chat — copy-paste this
+  one command into the prompt with your secret's Value between the single quotes, then tell me it's
+  done: `! umask 077; printf '%s' 'PASTE-CLIENT-SECRET-HERE' > <secret-file> && echo written`. I'll
+  read it from that file and populate the Named Credential and Auth Provider automatically — no
+  manual Setup entry needed."* (Substitute the real job/temp path for `<secret-file>`.) Then wait.
 - **HALT 2 / HALT 3 (Stages 3 & 4 — app install):** deliver the Microsoft Marketplace link + help
   doc, then: *"Install the app in your Microsoft Teams admin center, then reply **installed** and
   I'll continue. Note: the Azure/Microsoft email the user signs in with must match that Salesforce

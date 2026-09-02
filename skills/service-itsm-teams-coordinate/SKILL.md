@@ -11,10 +11,6 @@ metadata:
     - "service-itsm-teams-employee-agent-configure"
     - "service-itsm-teams-itdesk-configure"
     - "service-itsm-teams-itservice-configure"
-  # No accessCheck gate: this orchestrator's Stage 1 is what enables ITSMTeamsEnabled,
-  # so it must be invokable on a brand-new org before that preference exists. Downstream
-  # child skills retain their own accessCheck. Empty array = applies to any org.
-  accessCheck: []
 allowed-tools: Read AskUserQuestion
 ---
 
@@ -43,9 +39,11 @@ There are exactly **three mandatory halts** and **one branch** in the whole flow
 - **HALT 1 — Azure/Entra app** (Stage 2): you give the user the app-registration instructions and
   **wait** for them to register the app and provide the credentials. No Salesforce API can do this.
   The **Client ID** and **Tenant ID** are non-secret identifiers and may be given in chat; the
-  **Client Secret is a confidential credential — NEVER ask for it in the conversation.** The user
-  places it in the `TEAMS_ENTRA_CLIENT_SECRET` environment variable (or a gitignored secret file the
-  agent is told the path to); the agent reads it from there and never prints, echoes, or logs it.
+  **Client Secret is a confidential credential — NEVER ask for it in the conversation.** The agent
+  gives the user one exact copy-paste command that writes the secret to a gitignored secret file
+  (`! umask 077; printf '%s' 'PASTE-SECRET' > <secret-file> && echo written`) and reads it from that
+  file. Keep the leading `!` — it runs the line in this session's Bash so the file persists. The agent
+  never prints, echoes, or logs the value.
 - **HALT 2 — IT Desk app install** (Stage 3): you give the Microsoft Marketplace link and **wait**
   for the user to reply **"installed"**. No API installs a Teams app into a tenant catalog.
 - **HALT 3 — IT Service app install** (Stage 4): same as HALT 2, for the IT Service app.
@@ -70,16 +68,17 @@ then continue straight into Stage 2 — do **not** stop here.
 
 ### Stage 2 — Microsoft Entra app + Named Credentials  ⟶ HALT 1
 Still within **`service-itsm-teams-configure`** (its Step 4a): give the user the exact Azure/Entra
-app-registration clicks **including the Microsoft Graph Application permissions** it lists, and
+app-registration clicks **including the Microsoft Graph permissions** it lists, and
 **HALT** until they provide the credentials. The **Client ID** and **Tenant ID** are non-secret
 identifiers — accept them in chat. The **Client Secret is confidential: never request it in the
-conversation.** Instruct the user to set it in the `TEAMS_ENTRA_CLIENT_SECRET` environment variable
-(or a gitignored secret file, and tell you the path); read it from there. Never print or echo it.
-The moment the identifiers are given and the secret is in the env/file:
+conversation.** Give the user one exact copy-paste command that writes it to a gitignored secret file
+(`! umask 077; printf '%s' 'PASTE-SECRET' > <secret-file> && echo written`) and read it from that
+file. Keep the leading `!` — it runs the line in this session's Bash so the file persists. Never
+print or echo it. The moment the identifiers are given and the secret is in the file:
 - Write those values into the `MSTeamsSetupClientCredentialsEC` Named Credential **and** the
   `microsoft_auth_provider` Auth Provider **yourself, via API — nothing manual** (the child skill's
-  Step 5 and its azure-credential-population reference carry the exact API bodies). Reference the
-  secret by its env var / file path in the API call — do not inline the raw value into any logged text.
+  Step 5 and its azure-credential-population reference carry the exact API bodies). Read the
+  secret from the file at call time — do not inline the raw value into any logged text.
 - Give the user the static **Grant Admin Consent** link and register the preferred site (child Step 5).
 Then continue to Stage 3 automatically.
 
@@ -87,8 +86,8 @@ Then continue to Stage 3 automatically.
 Invoke **`service-itsm-teams-itdesk-configure`**. Drive its whole checklist:
 - Turn on the `OrgHasITSMFulfillerTeams` org preference (via API).
 - **Manage User Access** — assign the fulfiller permission sets to the confirmed user(s):
-  `TeamsForITSrvcsUser` + `MicrosoftGraphAccess`, **plus `Teams_Employee_ApiAccess`** (the ECA-
-  pre-authorized set that also grants **API Enabled** — required for login, not optional).
+  `TeamsForITSrvcsUser` + `MicrosoftGraphAccess`, **plus the API Enabled login permission set**
+  (commonly `Teams_Employee_ApiAccess`) — required for login, not optional.
 - **Turn on Swarming** — this stage includes `service-itsm-swarming-configure`
   (enables `service-cloud-swarming` and sets `SWARM_COLLABORATION_TOOL = "Teams"`).
 - Give the **IT Desk Microsoft Marketplace link** + help doc, tell the user **the Azure account
@@ -98,9 +97,9 @@ Invoke **`service-itsm-teams-itdesk-configure`**. Drive its whole checklist:
 ### Stage 4 — Set up IT Service (employee side)  ⟶ HALT 3
 Invoke **`service-itsm-teams-itservice-configure`**. Drive its whole checklist:
 - Turn on the `OrgHasEmployeeServiceTeams` org preference (via API).
-- **Manage User Access** — assign the employee permission sets to the confirmed UEL user(s):
-  `TeamsForEmployeeUser` + `MicrosoftGraphAccess`, **plus the API Enabled + ECA-authorized access**
-  the child's login prerequisites require.
+- **Manage User Access** — assign the employee permission set to the confirmed UEL user(s):
+  `TeamsForEmployeeUser` (the dialog assigns only this one — **not** `MicrosoftGraphAccess`), **plus
+  the API Enabled login permission set** the child's login prerequisites require.
 - **Select the Digital Experience Site** (`SLACK_PREFERRED_SITE`) via API.
 - Give the **IT Service Microsoft Marketplace link** + help doc, repeat the **email-must-match** note,
   and **HALT** until the user replies **"installed."** Then continue to Stage 5.
@@ -133,6 +132,11 @@ portal user. Then tell the user to **retest from a brand-new Teams chat** to con
   the Entra app is unregistered, or a halt awaiting "installed"), keep that stage **`Blocked`/waiting**
   and hold at the halt — do not mark it done and do not skip ahead.
 - Do not re-present a menu. State what just finished and what you're doing next, then do it.
+- **Keep the report tight — summarize, don't transcribe.** Report each stage as a one-line status in
+  the stage-progress table plus at most a short sentence of context; do **not** paste the child skill's
+  API request/response bodies, tool-call logs, or step-by-step internals into the report — that detail
+  lives in the child skill, and re-narrating it here is the single biggest source of a bloated,
+  low-signal report. The reader needs *what happened and what's next*, not a replay of every call.
 
 ## Completion summary
 

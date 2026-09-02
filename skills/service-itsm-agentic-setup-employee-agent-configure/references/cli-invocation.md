@@ -151,13 +151,13 @@ Classifier output:
 ```json
 {
   "studio":   { "hasAccess": true, "signal": "PASS|FAIL|CANNOT-CONFIRM|ERROR", "reason": "..." },
-  "template": { "present": true, "id": "svc_emp_intelligence__ItEmployeeAssistance", "hasAgentScript": true, "botDefinitionId": "0Xx...", "signal": "PASS|FAIL|CANNOT-CONFIRM", "reason": "..." },
+  "template": { "present": true, "id": "svc_emp_intelligence__ItEmployeeAssistance", "hasAgentScript": true, "botDefinitionId": "0Xx...", "masterLabel": "IT Service Employee", "signal": "PASS|FAIL|CANNOT-CONFIRM", "reason": "..." },
   "verdict": "READY | NOT-READY | CANNOT-CONFIRM | ERROR",
   "reasons": ["..."]
 }
 ```
 
-`template.botDefinitionId` is copied from the matched `agent-templates` row. **`botDefinitionId` is the PRIMARY Phase-2 idempotency key** — a populated value means the template has already been instantiated into a live `BotDefinition` (the broad Employee agent ships pre-provisioned this way); `null` means either it has not been created yet OR it was created by this skill (a self-created agent never back-fills the template row — see Phase 2). Capture `botDefinitionId` for the Phase-2 read below and always carry the collected `<developerName>` as the fallback key. (`isInstalled`/`isActivated` are no longer emitted: they ride the same AgentTemplate join as `botDefinitionId`, so they read false for self-created agents and nothing consumes them.)
+`template.botDefinitionId`, `template.id`, and `template.masterLabel` are copied from the matched `agent-templates` row. **`botDefinitionId` is the PRIMARY Phase-2 idempotency key** — a populated value means the template has already been instantiated into a live `BotDefinition`; `null` means it has not been created yet OR it was created by this skill (a self-created agent never back-fills the template row) OR — as with the broad pre-provisioned Employee agent — the platform instantiated it without joining the template row back (see Phase 2). Capture `botDefinitionId` for the Phase-2 read below and always carry `template.id` (the BotDefinition's `AgentTemplate` — the first fallback) and the collected `<developerName>` (the last fallback) as the fallback keys; `masterLabel` is the report's display label, not an idempotency key. (`isInstalled`/`isActivated` are no longer emitted: they ride the same AgentTemplate join as `botDefinitionId`, so they read false for self-created agents and nothing consumes them.)
 
 `verdict=ERROR` (`studio.signal="ERROR"` — a parseable non-404 Studio-access
 error, e.g. `401`/`403`) ⇒ surface the raw error and stop; takes priority over
@@ -165,53 +165,65 @@ template state so a present template cannot outrun a failed prerequisite read.
 `verdict=NOT-READY` (studio FAIL or template FAIL) ⇒ hand off / stop.
 `verdict=READY` ⇒ proceed to Phase 2. It exits `0` on usable args.
 
-## Enumerate the existing agent — SOQL on `BotDefinition` BY Id (falling back to DeveloperName)
+## Enumerate the existing agent — SOQL on `BotDefinition` BY Id (falling back to AgentTemplate, then DeveloperName)
 
 Idempotency is keyed **PRIMARILY** on the template's `botDefinitionId` (from the
-Phase-1 row) and **FALLS BACK** to the collected `<developerName>`. The broad
-"IT Service Employee" agent ships pre-provisioned+active under DeveloperName
-`IT_Service_Employee`, which never matches this skill's default guess
-`IT_Service_Employee_Agent`; a name-only read false-negatives on THAT agent
-(`exists:false`) and the create then collides on `apiName` with
-`DUPLICATE_VALUE` — so `botDefinitionId` (the platform's authoritative link from
-the template to the `BotDefinition` it was instantiated into) is the primary key.
-But that link is back-filled onto the template row **only** for pre-provisioned
-agents: an agent THIS skill creates never stamps `templateName`, so its template
-`botDefinitionId` stays `null` on every later read. For that self-created case a
-`DeveloperName`-keyed read is the reliable guard — so use it as the fallback,
-never short-circuit straight to create when `botDefinitionId` is absent.
+Phase-1 row), **FALLS BACK** first to the BotDefinition's `AgentTemplate` (the
+OOTB namespaced source template = Phase-1 `template.id`), and then to the
+collected `<developerName>`. The broad "IT Service Employee" agent ships
+pre-provisioned+active under DeveloperName `IT_Service_Employee` **with a `null`
+template `botDefinitionId`** (the platform instantiated it without joining the
+template row back), and `IT_Service_Employee` never matches this skill's default
+guess `IT_Service_Employee_Agent` — so both the primary key AND the
+`DeveloperName` fallback miss on THAT agent, a create is attempted, and it
+collides on `apiName` with `DUPLICATE_VALUE`. The `AgentTemplate`-keyed fallback
+closes that gap far more reliably than a display name would: the live
+pre-provisioned agent carries `AgentTemplate=svc_emp_intelligence__ItEmployeeAssistance`
+(the exact template id this skill installs), the platform-stamped source template,
+immune to any `DeveloperName` rename. `botDefinitionId` remains the
+primary key for a genuinely joined instantiation, and the `DeveloperName`
+fallback is the guard for a self-created repeat (an agent THIS skill creates never
+stamps `templateName`, so BOTH its template `botDefinitionId` AND its
+`AgentTemplate` stay `null`). Never short-circuit straight to create when
+`botDefinitionId` is absent.
 
-- **`botDefinitionId` empty/null** (template row never joined — either not
-  created yet, or created by this skill) ⇒ fall back to a DeveloperName-keyed
-  read and let the classifier match on it:
+- **`botDefinitionId` empty/null** (the broad pre-provisioned agent, and every
+  agent this skill creates) ⇒ fall back to an `AgentTemplate` **`OR` `DeveloperName`**
+  read and let the classifier match on either:
   ```bash
-  sf data query -q "SELECT Id,DeveloperName,MasterLabel,(SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1) FROM BotDefinition WHERE DeveloperName='<developerName>'" \
+  sf data query -q "SELECT Id,DeveloperName,MasterLabel,AgentTemplate,(SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1) FROM BotDefinition WHERE AgentTemplate='<agentTemplate>' OR DeveloperName='<developerName>'" \
     --target-org <alias> --json > ${SCRATCH_DIR}/bot-existing.json 2>${SCRATCH_DIR}/bot-existing.err || true
-  node "<skill_dir>/scripts/classify-agent-existence.mjs" ${SCRATCH_DIR}/bot-existing.json "" "<developerName>"
+  node "<skill_dir>/scripts/classify-agent-existence.mjs" ${SCRATCH_DIR}/bot-existing.json "" "<developerName>" "<agentTemplate>"
   ```
 - **`botDefinitionId` present** ⇒ read the `BotDefinition` by Id **`OR` by the
-  collected `<developerName>`** in one query, then classify. The `OR DeveloperName=`
-  clause catches a **dangling** link — a `botDefinitionId` whose target row was
-  since deleted: the by-Id half returns nothing, the live same-name agent still
-  surfaces, and the classifier falls back to it (`matchedBy:"developerName"`)
-  rather than concluding `exists:false` and colliding with `DUPLICATE_VALUE`:
+  template's `AgentTemplate` `OR` by the collected `<developerName>`** in one
+  query, then classify. The `OR AgentTemplate=` clause is what catches the
+  pre-provisioned agent by its platform-stamped source template
+  (`matchedBy:"agentTemplate"`) regardless of its DeveloperName. The `OR
+  DeveloperName=` clause catches a **dangling** link — a `botDefinitionId` whose
+  target row was since deleted: the by-Id half returns nothing, the live same-name
+  agent still surfaces, and the classifier falls back to it
+  (`matchedBy:"developerName"`) rather than concluding `exists:false` and
+  colliding with `DUPLICATE_VALUE`:
   ```bash
-  sf data query -q "SELECT Id,DeveloperName,MasterLabel,(SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1) FROM BotDefinition WHERE Id='<botDefinitionId>' OR DeveloperName='<developerName>'" \
+  sf data query -q "SELECT Id,DeveloperName,MasterLabel,AgentTemplate,(SELECT Id,Status FROM BotVersions ORDER BY VersionNumber DESC LIMIT 1) FROM BotDefinition WHERE Id='<botDefinitionId>' OR AgentTemplate='<agentTemplate>' OR DeveloperName='<developerName>'" \
     --target-org <alias> --json > ${SCRATCH_DIR}/bot-existing.json 2>${SCRATCH_DIR}/bot-existing.err || true
-  node "<skill_dir>/scripts/classify-agent-existence.mjs" ${SCRATCH_DIR}/bot-existing.json "<botDefinitionId>" "<developerName>"
+  node "<skill_dir>/scripts/classify-agent-existence.mjs" ${SCRATCH_DIR}/bot-existing.json "<botDefinitionId>" "<developerName>" "<agentTemplate>"
   ```
 
-Only when **both** `botDefinitionId` and `<developerName>` are absent does the
-classifier return `exists:false` without reading a query file — in practice the
-collected `<developerName>` is always present, so the fallback read always runs.
+Only when **all** of `botDefinitionId`, `<agentTemplate>`, and `<developerName>`
+are absent does the classifier return `exists:false` without reading a query
+file — in practice the collected `<developerName>` and `template.id` (AgentTemplate)
+are always present, so the fallback read always runs.
 
 The `BotVersions` subquery (child relationship on `BotDefinition`) is what lets
 the classifier see the latest version's `Status` — omit it and
 `latestVersionStatus`/`needsActivation` come back `null`/`false` even when the
 existing agent is actually inactive. The classifier prints
 `{ exists, count, matchedBy, agentId, botDefinitionId, developerName, latestVersionId, latestVersionStatus, needsActivation }`
-(`matchedBy` is `"botDefinitionId"` | `"developerName"` | `null`; `developerName`
-is the ACTUAL live agent's DeveloperName read from the record — surface it in the
+(`matchedBy` is `"botDefinitionId"` | `"agentTemplate"` | `"developerName"` | `null`;
+`developerName` is the ACTUAL live agent's DeveloperName read from the record —
+surface it in the
 report instead of the collected guess):
 - `exists:false` ⇒ proceed to create.
 - `exists:true` and `needsActivation:false` (latest version `Active`) ⇒

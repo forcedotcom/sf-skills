@@ -9,12 +9,14 @@ just reactivate what's already there".
 ## When this path fires
 
 `scripts/classify-agent-existence.mjs` (called with the template's
-`botDefinitionId` as the PRIMARY idempotency key and the collected
-`DeveloperName` as the FALLBACK — see `cli-invocation.md` → "Enumerate the
-existing agent") returns
+`botDefinitionId` as the PRIMARY idempotency key, the BotDefinition's
+`AgentTemplate` — the template's OOTB source id — as the first FALLBACK, and the
+collected `DeveloperName` as the last FALLBACK —
+see `cli-invocation.md` → "Enumerate the existing agent") returns
 `{ exists:true, needsActivation:true, latestVersionId, latestVersionStatus:"Inactive" }`.
 That means a `BotDefinition` matching the collected `DeveloperName` (the
-Fulfiller's template `botDefinitionId` is null, so the fallback is what matches)
+Fulfiller's template `botDefinitionId` AND `AgentTemplate` are both null, so the
+`DeveloperName` fallback is what matches)
 already exists from a prior run of this skill but its most-recent `BotVersion` is
 inactive; creating a new bundle would produce a duplicate. Instead, flip the
 existing version to `Active`.
