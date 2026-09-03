@@ -1,3 +1,12 @@
+# [1.46.0](https://github.com/forcedotcom/sf-skills/compare/1.45.0...1.46.0) (2026-09-03)
+
+
+### Features
+
+* Release salesforce-development 2.1.0; allowlist salesforce-test-drive for public release @W-24080114@ ([dc9f278](https://github.com/forcedotcom/sf-skills/commit/dc9f27889890a11652fc36223bd1eba20154eaac))
+
+
+
 # [1.45.0](https://github.com/forcedotcom/sf-skills/compare/1.44.0...1.45.0) (2026-09-02)
 
 
