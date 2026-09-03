@@ -1,8 +1,6 @@
 import type { RouteObject } from 'react-router';
 import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
-import AccountSearch from "./features/object-search/__examples__/pages/AccountSearch";
-import AccountObjectDetail from "./features/object-search/__examples__/pages/AccountObjectDetailPage";
 import AuthAppLayout from "./features/authentication/layouts/AuthAppLayout";
 import Login from "./features/authentication/pages/Login";
 import Register from "./features/authentication/pages/Register";
@@ -29,14 +27,6 @@ export const routes: RouteObject[] = [
         index: true,
         element: <Home />,
         handle: { showInNavigation: true, label: "Home" }
-      },
-      {
-        path: "accounts/:recordId",
-        element: <AccountObjectDetail />
-      },
-      {
-        path: "accounts",
-        element: <AccountSearch />
       },
       {
         path: ROUTES.LOGIN.PATH,

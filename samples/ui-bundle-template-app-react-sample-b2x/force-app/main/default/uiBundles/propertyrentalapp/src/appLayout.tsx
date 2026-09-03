@@ -4,10 +4,16 @@ import { TopBar } from "@/components/layout/TopBar";
 import { VerticalNav } from "@/components/layout/VerticalNav";
 import { Toaster } from "@/components/ui/sonner";
 import { TenantAccessProvider } from "@/context/TenantAccessContext";
+import { ROUTES } from "@/features/authentication/authenticationConfig";
 
 const APP_NAME = "ZENLEASE";
 
 const atPath = (base: string) => (p: string) => p === base || p.startsWith(`${base}/`);
+
+const AUTH_TITLES = Object.values(ROUTES).map((route) => ({
+	match: (p: string) => p === route.PATH,
+	title: route.TITLE.split("|")[0].trim(),
+}));
 
 const PAGE_TITLES: { match: (path: string) => boolean; title: string }[] = [
 	{ match: (p) => p === "/", title: "Home" },
@@ -20,6 +26,7 @@ const PAGE_TITLES: { match: (path: string) => boolean; title: string }[] = [
 	{ match: atPath("/maintenance"), title: "Maintenance" },
 	{ match: atPath("/contact"), title: "Contact" },
 	{ match: atPath("/application"), title: "Application" },
+	...AUTH_TITLES,
 ];
 
 function pageTitleFor(pathname: string): string {

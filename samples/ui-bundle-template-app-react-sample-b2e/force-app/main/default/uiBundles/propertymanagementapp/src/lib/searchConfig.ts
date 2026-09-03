@@ -76,8 +76,8 @@ export const searchConfig: SearchConfig = {
 			filterBy: [
 				{ field: "Status__c", label: "Status", type: "multipicklist" },
 				{ field: "Type__c", label: "Type", type: "multipicklist" },
-				{ field: "Monthly_Rent__c", label: "Monthly Rent", type: "numeric" },
-				{ field: "Bedrooms__c", label: "Bedrooms", type: "numeric" },
+				{ field: "Monthly_Rent__c", label: "Monthly Rent", type: "numeric", min: 0 },
+				{ field: "Bedrooms__c", label: "Bedrooms", type: "numeric", min: 0 },
 			],
 			sortBy: [
 				{ field: "Name", label: "Name" },
@@ -145,7 +145,7 @@ export const searchConfig: SearchConfig = {
 			filterBy: [
 				{ field: "Employment_Type__c", label: "Employment Type", type: "multipicklist" },
 				{ field: "Location__c", label: "Location", type: "text", placeholder: "Location" },
-				{ field: "Hourly_Rate__c", label: "Hourly Rate", type: "numeric" },
+				{ field: "Hourly_Rate__c", label: "Hourly Rate", type: "numeric", min: 0 },
 				{ field: "CreatedDate", label: "Created Date", type: "datetime" },
 			],
 			sortBy: [

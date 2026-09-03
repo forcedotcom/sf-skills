@@ -5,7 +5,8 @@
  *
  * The `$cmsContentTypeFQNs` declaration, its `contentTypeFQNs:` argument, and
  * its variable value are all emitted only when a non-empty content-type list is
- * passed; on the bootstrap call (no types known) they are omitted entirely.
+ * passed; on the bootstrap call (no types known) they are omitted entirely. The
+ * `$cmsLanguage` pieces follow the same conditional pattern.
  */
 
 import type { QueryFragmentContribution } from "../types";
@@ -26,6 +27,8 @@ export interface BuildCmsFragmentParams {
 	 * `isValidCmsFqn`-validated values.
 	 */
 	contentTypes?: string[] | null;
+	/** User language tag for the `language` argument; emitted only when a non-empty string. */
+	language?: string | null;
 }
 
 /**
@@ -33,9 +36,10 @@ export interface BuildCmsFragmentParams {
  * included only when `params.contentTypes` is a non-empty array.
  */
 export function buildCmsQueryFragment(params: BuildCmsFragmentParams): QueryFragmentContribution {
-	const { keyword, uiBundleId, offset, limit, contentTypes } = params;
+	const { keyword, uiBundleId, offset, limit, contentTypes, language } = params;
 
 	const hasContentTypes = Array.isArray(contentTypes) && contentTypes.length > 0;
+	const hasLanguage = typeof language === "string" && language.length > 0;
 
 	const variableDeclarations = [
 		"$cmsKeyword: String!",
@@ -61,12 +65,19 @@ export function buildCmsQueryFragment(params: BuildCmsFragmentParams): QueryFrag
 		variables.cmsContentTypeFQNs = contentTypes;
 	}
 
+	// Top-level `language: String` arg, emitted only when a non-empty tag is provided.
+	const languageArg = hasLanguage ? "\n          language: $cmsLanguage" : "";
+	if (hasLanguage) {
+		variableDeclarations.push("$cmsLanguage: String");
+		variables.cmsLanguage = language;
+	}
+
 	const fragment = `managed_content {
   search {
     searchContentInChannels(
       searchIdentifiers: { uibundleIds: [$UIBundleId] }
       keyword: $cmsKeyword
-      pagination: { limit: $cmsLimit, offset: $cmsOffset }${contentTypesArg}
+      pagination: { limit: $cmsLimit, offset: $cmsOffset }${languageArg}${contentTypesArg}
     ) {
       total
       offset

@@ -180,3 +180,99 @@ export function enableSelfRegInXml(xml, selfRegProfile) {
   );
   return { xml: updated, changed: true };
 }
+
+/**
+ * Indentation of the first indented child element, so an inserted node matches
+ * the file's own formatting — byte-faithful on 2-space and 4-space files alike.
+ * Falls back to 4 spaces when the document has no indented child to sample.
+ */
+function firstChildIndent(xml) {
+  const m = xml.match(/\n([ \t]+)</);
+  return m ? m[1] : '    ';
+}
+
+/**
+ * Assert a logout URL is safe to interpolate into the network metadata as-is.
+ *
+ * Mirrors assertSafeProfileName: the value is developer-authored config, so a
+ * character that would need XML entity-escaping (& < > " ') signals a mistake to
+ * surface loudly rather than silently rewrite. A logout landing URL is a site
+ * home path/URL and legitimately needs none of these. Throws NetworkXmlError
+ * (mapped by callers to their fail mode) otherwise.
+ */
+export function assertSafeLogoutUrl(url) {
+  const s = String(url);
+  if (XML_SPECIAL_CHARS.test(s)) {
+    throw new NetworkXmlError(
+      `logoutUrl "${url}" contains an XML-special character (& < > " '); ` +
+        `use a URL without these characters in org-setup.config.json`,
+    );
+  }
+  return s;
+}
+
+/**
+ * Set <logoutUrl> so members land on THIS site after logging out, instead of the
+ * org's default-site logout — which, in an org hosting multiple Experience Cloud
+ * sites, can drop a member on a different community's login page.
+ *
+ * `url` MUST already be an absolute URL: the platform rejects a relative value at
+ * deploy time ("The logout page URL must be an absolute URL."). A shipped
+ * site-relative config path is resolved to an absolute URL before this is called
+ * (see org-setup-url.mjs, driven by ensureLogoutUrl in org-setup.mjs).
+ *
+ * Asserts this is a Network document (throws NetworkXmlError otherwise). Returns
+ * `{ xml, changed }`:
+ *   - `changed: false` (input returned unchanged) when <logoutUrl> already equals
+ *     `url` — a configured re-run is a true byte-for-byte no-op.
+ *   - present-but-different: the value is replaced in place (position preserved).
+ *   - absent: a <logoutUrl> node is inserted in the CANONICAL position the Metadata
+ *     API emits. Network's top-level elements serialize in alphabetical order, so
+ *     the node is placed immediately before the first existing sibling that sorts
+ *     after "logoutUrl" (or as the last child, before </Network>, when none does).
+ *     Inserting where a later retrieve would place it keeps this org-deployed file
+ *     free of reorder churn. The node adopts the file's own indentation and every
+ *     untouched region is preserved byte-for-byte.
+ *
+ * Assumes an existing <logoutUrl> is a paired, non-empty node (the shipped sparse
+ * network omits it entirely; a deployed org carries a paired value) — the case
+ * this productizes.
+ */
+export function setLogoutUrl(xml, url) {
+  const network = parseNetwork(xml);
+  // Reject XML-special characters rather than escaping them (see
+  // assertSafeLogoutUrl) before interpolating raw.
+  const safeUrl = assertSafeLogoutUrl(url);
+  const current = 'logoutUrl' in network ? String(network.logoutUrl) : null;
+  if (current === safeUrl) {
+    return { xml, changed: false };
+  }
+  const node = `<logoutUrl>${safeUrl}</logoutUrl>`;
+  // Present-but-different — replace the value in place (preserves position).
+  if (/<logoutUrl>[^<]*<\/logoutUrl>/.test(xml)) {
+    return { xml: xml.replace(/<logoutUrl>[^<]*<\/logoutUrl>/, node), changed: true };
+  }
+  // Absent — insert in alphabetical order among the Network's top-level children to
+  // match the canonical Metadata API serialization. parseNetwork's keys are the
+  // direct child element names; drop fast-xml-parser's attribute (@_*) and text
+  // (#*) pseudo-keys.
+  const siblings = Object.keys(network).filter((k) => !k.startsWith('@_') && !k.startsWith('#'));
+  // The first sibling that sorts AFTER "logoutUrl" — the node goes just before it.
+  const successor = siblings.filter((name) => name > 'logoutUrl').sort()[0];
+  if (successor) {
+    const beforeSuccessor = new RegExp(`(\\n[ \\t]*)(<${successor}\\b)`);
+    if (beforeSuccessor.test(xml)) {
+      // Reuse the successor's own leading whitespace so the node adopts its indent.
+      return { xml: xml.replace(beforeSuccessor, `$1${node}$1$2`), changed: true };
+    }
+  }
+  // No later-sorting sibling (or its tag wasn't found) — insert as the last child,
+  // right before </Network>, at the file's own indent.
+  const indent = firstChildIndent(xml);
+  const beforeClose = /(\n)([ \t]*<\/Network>)/;
+  if (beforeClose.test(xml)) {
+    return { xml: xml.replace(beforeClose, `\n${indent}${node}$1$2`), changed: true };
+  }
+  // Degenerate single-line / rootless form — fall back to just after the open tag.
+  return { xml: xml.replace(/(<Network\b[^>]*>)/, `$1\n${indent}${node}`), changed: true };
+}

@@ -46,8 +46,9 @@ export default function Login() {
 				});
 				const result = await handleApiResponse<AuthResponse>(response);
 				if (result?.redirectUrl) {
-					// Hard navigate to the URL which establishes the server session cookie
-					window.location.replace(result.redirectUrl);
+					// Hard navigate with assign (not replace) so /login stays in history and the
+					// browser Back button returns here after an MFA/verification screen.
+					window.location.assign(result.redirectUrl);
 				} else {
 					// In case redirectUrl is null, navigate to home
 					navigate("/", { replace: true });

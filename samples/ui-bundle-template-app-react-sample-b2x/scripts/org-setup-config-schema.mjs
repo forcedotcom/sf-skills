@@ -72,13 +72,25 @@ export const ConfigSchema = z
         // Required because React (Site Container) sites hide SSO config in Admin UI.
         authProviderNames: z.array(z.string().min(1)).min(1),
         // Permission set to assign to community users created via SSO.
-        // Required because getCurrentUser() calls /chatter/users/me which needs
-        // API access (PermissionsApiEnabled) that the community profile lacks.
+        // Required because getCurrentUser() calls UI API GraphQL (uiapi.currentUser)
+        // which needs API access (PermissionsApiEnabled) that the community profile lacks.
         // Typically the app's "*_Guest_User_Api_Access" permset.
         communityUserPermset: z.string().min(1).optional(),
       })
       .strict()
       .optional(),
+    // URL members are redirected to after logging out, written to the site's
+    // <logoutUrl> network metadata (a post-deploy step). Steers logout back to THIS
+    // site so members aren't dropped on the org default-site login (which, in an
+    // org hosting multiple sites, can be a different community). Prefer a
+    // site-relative path (e.g. "/myapp/"): it is domain-independent, so the same
+    // shipped value is valid on every org. The platform REQUIRES an absolute logout
+    // URL, so org-setup resolves a relative path against the site's Experience Cloud
+    // origin (discovered from the org at deploy time) before writing it; an
+    // already-absolute value is used as-is. Kept a permissive non-empty string (not
+    // z.string().url()) so relative paths are valid; character-safety for raw XML
+    // interpolation is enforced at write time.
+    logoutUrl: z.string().min(1).optional(),
   })
   .strict();
 

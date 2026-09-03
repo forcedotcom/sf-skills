@@ -1,20 +1,4 @@
-/**
- * filterUtils.ts
- *
- * Centralizes all filter-related transformations for the object search feature.
- * This module handles two distinct concerns:
- *
- * 1. **URL serialization** — Converting filter/sort state to and from
- *    URLSearchParams so that search criteria can be bookmarked, shared, and
- *    restored on page load.
- *
- * 2. **GraphQL query building** — Converting the same filter state into the
- *    `where` clause shape expected by the GraphQL API.
- *
- * Both concerns operate on the shared {@link ActiveFilterValue} type, which
- * represents a single active filter with a field name, filter type, and one or
- * more values (value, min, max).
- */
+/** Filter state transformations: URL param serialization and GraphQL where-clause building. */
 
 import type { SortState } from "./sortUtils";
 
@@ -55,13 +39,7 @@ export type ActiveFilterValue<TFieldName extends string = string> = {
 // URL Serialization
 // ---------------------------------------------------------------------------
 
-/**
- * Prefix applied to all filter-related URL search params.
- * This namespaces filter params so they don't collide with other query params
- * (e.g. pagination, feature flags).
- *
- * @example "f.Industry=Technology" or "f.AnnualRevenue.min=1000000"
- */
+/** Prefix applied to all filter-related URL search param keys. */
 const FILTER_PREFIX = "f.";
 
 /** URL param key for the multi-field search term. */
@@ -77,29 +55,7 @@ const DIR_KEY = "dir";
 const PAGE_SIZE_KEY = "ps";
 const PAGE_KEY = "page";
 
-/**
- * Serializes filter and sort state into URLSearchParams.
- *
- * Encoding scheme:
- *   - Simple values (text, picklist, boolean, multipicklist):
- *       `f.<field>=<value>`
- *   - Range values (numeric, date, daterange):
- *       `f.<field>.min=<min>` and/or `f.<field>.max=<max>`
- *   - Sort: `sort=<field>&dir=ASC|DESC`
- *
- * @param filters - The currently active filters to serialize.
- * @param sort    - The current sort state, or null if no sort is applied.
- * @returns A URLSearchParams instance representing the full search state.
- *
- * @example
- * ```ts
- * const params = filtersToSearchParams(
- *   [{ field: "Industry", type: "picklist", value: "Technology" }],
- *   { field: "Name", direction: "ASC" },
- * );
- * // params.toString() => "f.Industry=Technology&sort=Name&dir=ASC"
- * ```
- */
+/** Serializes filter and sort state into URLSearchParams so search criteria can be bookmarked and shared. */
 export function filtersToSearchParams(
 	filters: ActiveFilterValue[],
 	sort: SortState | null,
@@ -140,25 +96,7 @@ export function filtersToSearchParams(
 	return params;
 }
 
-/**
- * Deserializes URLSearchParams back into filter and sort state.
- *
- * Requires the full list of filter configs so it knows which URL params to look
- * for and what type each filter is. Params that don't match a known config are
- * silently ignored, making this safe against stale or hand-edited URLs.
- *
- * @param params  - The URLSearchParams to parse (typically from the browser URL).
- * @param configs - The filter field configurations defining available filters.
- * @returns An object containing the deserialized `filters` array and `sort` state.
- *
- * @example
- * ```ts
- * const url = new URLSearchParams("f.Industry=Technology&sort=Name&dir=ASC");
- * const { filters, sort } = searchParamsToFilters(url, filterConfigs);
- * // filters => [{ field: "Industry", type: "picklist", value: "Technology" }]
- * // sort    => { field: "Name", direction: "ASC" }
- * ```
- */
+/** Deserializes URLSearchParams back into filter and sort state, ignoring params that don't match a known config. */
 export function searchParamsToFilters(
 	params: URLSearchParams,
 	configs: FilterFieldConfig[],
@@ -222,30 +160,7 @@ export function searchParamsToFilters(
 // GraphQL Filter Building
 // ---------------------------------------------------------------------------
 
-/**
- * Converts an array of active filter values into a GraphQL `where` clause.
- *
- * Each filter is individually converted to a clause via {@link buildSingleFilter},
- * then multiple clauses are combined with a top-level `and` operator. This ensures
- * all active filters are applied simultaneously (intersection semantics).
- *
- * @typeParam TFilter - The GraphQL filter input type (e.g. `AccountFilterInput`).
- * @param filters - The active filters to convert.
- * @returns A filter object for the GraphQL `where` variable, or `undefined` if
- *          no filters are active (which tells the API to return unfiltered results).
- *
- * @example
- * ```ts
- * const where = buildFilter<AccountFilterInput>([
- *   { field: "Industry", type: "picklist", value: "Technology" },
- *   { field: "AnnualRevenue", type: "numeric", min: "1000000" },
- * ]);
- * // where => { and: [
- * //   { Industry: { eq: "Technology" } },
- * //   { AnnualRevenue: { gte: 1000000 } },
- * // ]}
- * ```
- */
+/** Combines active filters into a single GraphQL where clause, ANDing multiple filters together. */
 export function buildFilter<TFilter>(
 	filters: ActiveFilterValue[],
 	configs: FilterFieldConfig[],
@@ -263,47 +178,17 @@ export function buildFilter<TFilter>(
 	return { and: clauses } as TFilter;
 }
 
-/**
- * Converts a YYYY-MM-DD date string to a full ISO-8601 datetime at midnight UTC.
- * Used as the inclusive lower bound for date range queries.
- */
+/** Converts a YYYY-MM-DD date string to an ISO-8601 datetime at midnight UTC (inclusive lower bound). */
 function toStartOfDay(dateStr: string): string {
 	return `${dateStr}T00:00:00.000Z`;
 }
 
-/**
- * Converts a YYYY-MM-DD date string to a full ISO-8601 datetime at the last
- * millisecond of the day in UTC. Used as the inclusive upper bound for date
- * range queries.
- */
+/** Converts a YYYY-MM-DD date string to an ISO-8601 datetime at the last millisecond of the day UTC (inclusive upper bound). */
 function toEndOfDay(dateStr: string): string {
 	return `${dateStr}T23:59:59.999Z`;
 }
 
-/**
- * Converts a single active filter value into a GraphQL filter clause.
- *
- * Supported filter types and their GraphQL mappings:
- *
- * | Type            | GraphQL operator(s) | Example output                                           |
- * |-----------------|---------------------|----------------------------------------------------------|
- * | `text`          | `like`              | `{ Name: { like: "%Acme%" } }`                           |
- * | `picklist`      | `eq`                | `{ Industry: { eq: "Technology" } }`                      |
- * | `multipicklist` | `eq` or `in`        | `{ Type: { in: ["A", "B"] } }`                            |
- * | `numeric`       | `gte` / `lte`       | `{ Revenue: { gte: 1000, lte: 5000 } }`                   |
- * | `boolean`       | `eq`                | `{ IsActive: { eq: true } }`                              |
- * | `date`          | dynamic operator    | `{ CreatedDate: { gte: { value: "..." } } }`              |
- * | `daterange`     | `gte` + `lte`       | Combined with `and` if both bounds set                    |
- * | `search`        | `like` + `or`       | `{ or: [{ Name: { like: "%x%" } }, { Phone: { like: "%x%" } }] }` |
- *
- * The `search` type uses `config.searchFields` to build an `or` clause that
- * matches the search term across multiple fields simultaneously (union semantics).
- *
- * @param filter - The active filter value to convert.
- * @param config - The corresponding field config. Required for `search` type
- *                 (provides `searchFields`); optional for all other types.
- * @returns A single filter clause, or `null` if the filter has no meaningful value.
- */
+/** Converts a single active filter value into a GraphQL filter clause based on its type. */
 function buildSingleFilter<TFilter>(
 	filter: ActiveFilterValue,
 	config?: FilterFieldConfig,

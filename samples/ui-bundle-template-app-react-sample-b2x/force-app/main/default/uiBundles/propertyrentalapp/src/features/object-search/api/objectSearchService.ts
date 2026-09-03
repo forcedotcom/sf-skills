@@ -9,10 +9,7 @@ export interface ObjectSearchOptions<TWhere, TOrderBy> {
 
 export type PicklistOption = { value: string; label: string };
 
-/**
- * Executes a GraphQL search query and extracts the result for the given object name
- * from the standard `uiapi.query.<ObjectName>` response shape.
- */
+/** Runs a GraphQL search query and extracts the result for the given object name from the `uiapi.query.<ObjectName>` response shape. */
 export async function searchObjects<TResult, TQuery, TVariables>(
 	query: string,
 	objectName: string,
@@ -45,10 +42,7 @@ export async function searchObjects<TResult, TQuery, TVariables>(
 	return queryResult;
 }
 
-/**
- * Executes a GraphQL aggregate/groupBy query and extracts picklist options
- * from the standard `uiapi.aggregate.<ObjectName>` response shape.
- */
+/** Runs a GraphQL aggregate/groupBy query and extracts picklist options from the `uiapi.aggregate.<ObjectName>` response shape. */
 export async function fetchDistinctValues<TQuery>(
 	query: string,
 	objectName: string,

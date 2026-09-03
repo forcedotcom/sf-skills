@@ -49,6 +49,9 @@ export type FilterFieldConfig<TFieldName extends string = string> = {
 	/** Date-family only — see {@link DateFilterMode}. Defaults to `"comparison"`. */
 	dateMode?: DateFilterMode;
 	helpText?: string;
+	// Numeric-family only.
+	min?: number;
+	max?: number;
 };
 
 export type ActiveFilterValue<TFieldName extends string = string> = {
@@ -205,12 +208,17 @@ function toEndOfDay(d: string) {
 	return `${d}T23:59:59.999Z`;
 }
 
-function buildSingleFilter(filter: ActiveFilterValue, _config?: FilterFieldConfig): unknown {
+/** Escapes LIKE metacharacters (`\`, `%`, `_`) so user input is matched literally. */
+function escapeLikePattern(value: string): string {
+	return value.replace(/[\\%_]/g, "\\$&");
+}
+
+function buildSingleFilter(filter: ActiveFilterValue, config?: FilterFieldConfig): unknown {
 	const { field, type, value, min, max } = filter;
 	switch (type) {
 		case "text": {
 			if (!value) return null;
-			return { [field]: { like: `%${value}%` } };
+			return { [field]: { like: `%${escapeLikePattern(value)}%` } };
 		}
 		case "picklist": {
 			if (!value) return null;
@@ -219,8 +227,19 @@ function buildSingleFilter(filter: ActiveFilterValue, _config?: FilterFieldConfi
 		case "numeric": {
 			if (!min && !max) return null;
 			const ops: Record<string, number> = {};
-			if (min) ops.gte = Number(min);
-			if (max) ops.lte = Number(max);
+			// clamp both endpoints into the declared [min,max] bounds
+			const clamp = (n: number) => {
+				if (config?.min != null) n = Math.max(n, config.min);
+				if (config?.max != null) n = Math.min(n, config.max);
+				return n;
+			};
+			// Drop any endpoint that isn't finite — NaN/Infinity serialize to null on the wire.
+			const lo = Number(min);
+			if (min && Number.isFinite(lo)) ops.gte = clamp(lo);
+			const hi = Number(max);
+			if (max && Number.isFinite(hi)) ops.lte = clamp(hi);
+			// If both endpoints were dropped as invalid, emit no clause at all.
+			if (Object.keys(ops).length === 0) return null;
 			return { [field]: ops };
 		}
 		case "boolean": {
@@ -275,7 +294,7 @@ export function buildGlobalQueryClause(q: string, searchableFields: string[]): u
 	if (!trimmed || searchableFields.length === 0) return undefined;
 	const clauses = searchableFields.map((path) => {
 		const parts = path.split(".");
-		let clause: Record<string, unknown> = { like: `%${trimmed}%` };
+		let clause: Record<string, unknown> = { like: `%${escapeLikePattern(trimmed)}%` };
 		for (let i = parts.length - 1; i >= 0; i--) {
 			clause = { [parts[i]]: clause };
 		}

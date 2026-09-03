@@ -80,6 +80,7 @@ export function SearchResults({
 						renderFilters={resolvedRenderFilters}
 						hideFilterChrome={filtersHidden}
 						emptyMessage={emptyMessages?.[key]}
+						q={handle.q}
 					/>
 				);
 			})}

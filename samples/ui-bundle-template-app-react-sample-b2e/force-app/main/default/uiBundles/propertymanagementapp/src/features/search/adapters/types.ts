@@ -81,6 +81,8 @@ export interface SourceRequest<T extends SourceConfig = SourceConfig> {
 	 * synchronous. Ignored by non-CMS adapters.
 	 */
 	uiBundleId?: string;
+	/** CMS-only, optional. The current user's language tag fed to the CMS search `language` argument. */
+	language?: string;
 }
 
 /**

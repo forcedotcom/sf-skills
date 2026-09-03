@@ -58,8 +58,14 @@ import { validateConfig } from './org-setup-config-schema.mjs';
 import {
   addProfileToMemberGroups,
   enableSelfRegInXml,
+  setLogoutUrl,
   NetworkXmlError,
 } from './org-setup-xml.mjs';
+import {
+  isAbsoluteLogoutUrl,
+  pickCommunityBaseUrl,
+  resolveLogoutUrl,
+} from './org-setup-url.mjs';
 import {
   discoverAllUIBundleDirs as discoverAllUIBundleDirsIn,
   discoverUIBundleDir as discoverUIBundleDirIn,
@@ -540,7 +546,7 @@ function loadSelfRegConfig(config) {
  * - communityMemberProfile: profile added to NetworkMemberGroup (required for access)
  * - authProviderNames: DeveloperNames of AuthProvider (OAuth) or SamlSsoConfig (SAML) records to link to site
  * - communityUserPermset: permset assigned to community users so getCurrentUser()
- *   works (requires PermissionsApiEnabled for /chatter/users/me via /sf/api/)
+ *   works (requires PermissionsApiEnabled for UI API GraphQL via /sf/api/)
  *
  * Returns null if no "socialLogin" section exists in config (the step is hidden).
  */
@@ -552,6 +558,15 @@ function loadSocialLoginConfig(config) {
     authProviderNames: section.authProviderNames,
     communityUserPermset: section.communityUserPermset || null,
   };
+}
+
+/**
+ * Logout URL config, read from the already-validated config. Returns the string
+ * (a site-relative path like "/myapp/", or an absolute URL) or null when no
+ * "logoutUrl" is set (the step is then a no-op).
+ */
+function loadLogoutUrlConfig(config) {
+  return config.logoutUrl ?? null;
 }
 
 /**
@@ -706,6 +721,32 @@ if (allProviders.isEmpty()) {
 }
 System.debug('TOTAL_PROVIDERS_FOUND:' + allProviders.size());
 
+// Fail fast if any requested provider name did not resolve to an AuthProvider
+// (OAuth) or SamlSsoConfig (SAML) record. The isEmpty() check above only catches
+// the case where NONE resolve; comparing the found DeveloperNames against the
+// requested list also catches the strict-subset case (e.g. ["Google","Typo"]
+// links Google but must not silently drop "Typo"). This runs BEFORE any junction
+// record is created, so linking is all-or-nothing. Case-insensitive because SOQL
+// "DeveloperName IN (...)" matches case-insensitively, so a stored DeveloperName
+// may differ in case from the configured value and must not read as "missing".
+Set<String> foundProviderNames = new Set<String>();
+for (AuthProvider ap : oauthProviders) {
+    foundProviderNames.add(ap.DeveloperName.toLowerCase());
+}
+for (SamlSsoConfig sp : samlProviders) {
+    foundProviderNames.add(sp.DeveloperName.toLowerCase());
+}
+List<String> missingProviderNames = new List<String>();
+for (String requestedName : new List<String>{${providerNamesLiteral}}) {
+    if (!foundProviderNames.contains(requestedName.toLowerCase())) {
+        missingProviderNames.add(requestedName);
+    }
+}
+if (!missingProviderNames.isEmpty()) {
+    System.debug('MISSING_PROVIDERS:' + String.join(missingProviderNames, ','));
+    return;
+}
+
 // Step 4: Check existing AuthConfigProviders to avoid duplicates
 Set<Id> existingProviderIds = new Set<Id>();
 for (AuthConfigProviders acp : [
@@ -767,6 +808,18 @@ if (inserted == 0 && existingProviderIds.size() >= allProviders.size()) {
   }
   if (apexOut.match(/\|DEBUG\|ERROR_NO_PROVIDERS/)) {
     throw new StepError(`no AuthProvider or SamlSsoConfig records found for names: ${authProviderNames.join(', ')} — create them in Setup first`);
+  }
+  // A SOQL `DeveloperName IN (…)` query silently returns fewer rows for names
+  // that don't exist, so the ERROR_NO_PROVIDERS guard above (which only fires
+  // when NONE resolve) let a single typo'd name slip through unnoticed whenever
+  // at least one other name matched. The Apex now diffs the requested names
+  // against the resolved ones (case-insensitively, since SOQL matches that way)
+  // and emits MISSING_PROVIDERS naming the offenders — nothing is linked when it
+  // fires (all-or-nothing, checked before any insert).
+  const missingMatch = apexOut.match(/\|DEBUG\|MISSING_PROVIDERS:([^\n]+)/);
+  if (missingMatch) {
+    const missing = missingMatch[1].trim();
+    throw new StepError(`some configured auth providers were not found: ${missing} — check for typos, or create them in Setup first (nothing was linked)`);
   }
 
   // Check for insert failures
@@ -884,7 +937,7 @@ function addCommunityMemberProfile(profileName, siteName, targetOrg) {
  * Assign a permission set to all existing community users with a given profile.
  *
  * After SSO login, community users need the app's API-enabled permset so that
- * getCurrentUser() (which calls /chatter/users/me via the /sf/api/ proxy) works.
+ * getCurrentUser() (which calls UI API GraphQL via the /sf/api/ proxy) works.
  * Without PermissionsApiEnabled the proxy returns API_DISABLED_FOR_ORG and the
  * React app treats the user as unauthenticated.
  *
@@ -996,6 +1049,123 @@ function ensureNetworkMemberProfile(selfRegConfig, siteName) {
   }
   writeFileSync(networkXmlPath, result.xml);
   console.log(`  Added profile "${selfRegProfile}" to networkMemberGroups in ${siteName}.network-meta.xml`);
+}
+
+const CONNECT_API_VERSION = '62.0';
+
+/**
+ * Fetch the org's Experience Cloud communities via the Connect API and return the
+ * `communities` array (possibly empty). Used to discover a site's public origin so
+ * a shipped, site-relative logout path can be resolved to the absolute URL the
+ * platform requires. Throws on transport/parse failure so the caller degrades to a
+ * loud skip. (v62.0 is a safe floor — the /connect/communities resource is stable
+ * across API versions.)
+ */
+function fetchCommunities(targetOrg) {
+  const res = spawnSync('sf', [
+    'api', 'request', 'rest',
+    `/services/data/v${CONNECT_API_VERSION}/connect/communities`,
+    '--target-org', targetOrg,
+  ], { cwd: ROOT, encoding: 'utf8', timeout: 60000 });
+  if (res.status !== 0) {
+    throw new Error(`Connect communities query failed (sf exit ${res.status ?? 1})`);
+  }
+  let json;
+  try {
+    json = JSON.parse(res.stdout);
+  } catch {
+    throw new Error('could not parse the Connect communities response as JSON');
+  }
+  return Array.isArray(json.communities) ? json.communities : [];
+}
+
+/**
+ * Set the site's <logoutUrl> in the network metadata AFTER the initial deploy, then
+ * re-deploy just the network — mirroring the self-registration step.
+ *
+ * Post-deploy (not folded into the main deploy) because the value must be an
+ * ABSOLUTE URL: the platform rejects a relative logout URL at deploy ("The logout
+ * page URL must be an absolute URL."). Apps ship a domain-independent, site-relative
+ * path in org-setup.config.json; it is resolved here against the site's Experience
+ * Cloud origin, which is only discoverable (via the Connect communities API) once
+ * the site exists — i.e. after the main deploy. An already-absolute config value is
+ * used as-is (no lookup).
+ *
+ * Best-effort, mirroring ensureNetworkMemberProfile: a missing network file, a
+ * failure to resolve the absolute URL, a malformed-XML NetworkXmlError, or a failed
+ * network re-deploy each log a LOUD console.error but do NOT throw — the logout URL
+ * is a convenience that must not abort the whole setup. In particular, if the org's
+ * Network emailSenderAddress has drifted from the shipped value, that field blocks
+ * the network deploy; the message then points the operator at the site's
+ * Administration settings. The helper's idempotency check makes a configured re-run
+ * a byte-for-byte no-op with no deploy.
+ */
+function ensureLogoutUrl(logoutUrl, siteName, targetOrg) {
+  if (!siteName || !logoutUrl) return;
+
+  const networkXmlPath = resolve(SFDX_SOURCE, 'networks', `${siteName}.network-meta.xml`);
+  if (!existsSync(networkXmlPath)) {
+    console.log(`  Network metadata not found: ${networkXmlPath}; skipping logout URL update.`);
+    return;
+  }
+
+  // Resolve the shipped (site-relative or absolute) config value to the absolute
+  // URL the platform requires. A relative value needs the site's Experience Cloud
+  // origin, discovered from the org's communities.
+  let absoluteUrl;
+  try {
+    let baseUrl = null;
+    if (!isAbsoluteLogoutUrl(logoutUrl)) {
+      baseUrl = pickCommunityBaseUrl(fetchCommunities(targetOrg), logoutUrl, siteName);
+    }
+    absoluteUrl = resolveLogoutUrl(logoutUrl, baseUrl);
+  } catch (e) {
+    console.error(
+      `  ERROR: cannot resolve an absolute logout URL for "${siteName}" — ${e.message}. ` +
+      `Skipping; set the logout URL manually in the site's Administration settings.`,
+    );
+    return;
+  }
+
+  const xml = readFileSync(networkXmlPath, 'utf8');
+  let result;
+  try {
+    result = setLogoutUrl(xml, absoluteUrl);
+  } catch (e) {
+    if (e instanceof NetworkXmlError) {
+      console.error(
+        `  ERROR: cannot set logout URL in ${siteName}.network-meta.xml — ${e.message}. ` +
+        `Skipping; set <logoutUrl> manually in the site's Administration settings.`,
+      );
+      return;
+    }
+    throw e;
+  }
+
+  if (!result.changed) {
+    console.log(`  Logout URL already set to "${absoluteUrl}" in ${siteName}.network-meta.xml; no update needed.`);
+    return;
+  }
+  writeFileSync(networkXmlPath, result.xml);
+  console.log(`  Set <logoutUrl>${absoluteUrl}</logoutUrl> in ${siteName}.network-meta.xml`);
+
+  // Re-deploy ONLY the network file (mirrors enableSelfRegistration). Best-effort:
+  // a non-zero exit (e.g. the org's emailSenderAddress differs from the shipped
+  // value and can't be updated) logs loudly and continues.
+  const deployResult = spawnSync('sf', [
+    'project', 'deploy', 'start',
+    '--target-org', targetOrg,
+    '--source-dir', networkXmlPath,
+  ], { cwd: ROOT, stdio: 'inherit', shell: true, timeout: 120000 });
+  if (deployResult.status !== 0) {
+    console.error(
+      `  ERROR: failed to deploy <logoutUrl> for "${siteName}" (sf exit ${deployResult.status ?? 1}). ` +
+      `If the org's Network emailSenderAddress differs from the shipped value it blocks this deploy — ` +
+      `set the logout URL manually in the site's Administration settings.`,
+    );
+    return;
+  }
+  console.log(`  Deployed <logoutUrl> for "${siteName}".`);
 }
 
 /**
@@ -1788,6 +1958,7 @@ async function main() {
   const hasSelfRegConfig = selfRegConfig !== null;
   const socialLoginConfig = loadSocialLoginConfig(config);
   const hasSocialLoginConfig = socialLoginConfig !== null;
+  const logoutUrl = loadLogoutUrlConfig(config);
 
   // Validate the selfRegProfile name for SOQL-safety up front, alongside the
   // config validation and BEFORE any org mutation (login/deploy). A quote /
@@ -1955,6 +2126,27 @@ async function main() {
     recordSkipped(deployStep, 'not selected');
   }
 
+  // Set the site's logout URL AFTER deploy so members land back on THIS site after
+  // logging out (not the org default-site login, which in a multi-site org can be a
+  // different community). Post-deploy because the deployed value must be an ABSOLUTE
+  // URL (the platform rejects a relative one) and the shipped site-relative path is
+  // resolved against the site's community origin — which only exists once the site
+  // is deployed. Independent of self-reg; best-effort (a failure logs loudly, does
+  // not abort). An ambiguous multi-network app can't auto-target a single site, so
+  // derivation failure skips it.
+  if (!skipDeploy && logoutUrl) {
+    let logoutSiteName = null;
+    try {
+      logoutSiteName = deriveSiteName();
+    } catch {
+      // ambiguous derivation (multiple network files) — skip logout URL prep
+    }
+    if (logoutSiteName) {
+      console.log('\n--- Ensure logout URL (post-deploy) ---');
+      ensureLogoutUrl(logoutUrl, logoutSiteName, targetOrg);
+    }
+  }
+
   const permsetStep = stepDefs.find((s) => s.key === 'permset');
   if (!skipPermset) {
     await runStep(permsetStep, targetOrg, async () => {
@@ -2117,7 +2309,7 @@ async function main() {
       addCommunityMemberProfile(socialLoginConfig.communityMemberProfile, siteName, targetOrg);
 
       // Sub-step 4 (optional): Assign API-enabled permset to community users.
-      // Without this, getCurrentUser() fails because /chatter/users/me requires
+      // Without this, getCurrentUser() fails because UI API GraphQL requires
       // PermissionsApiEnabled which the standard community profile lacks.
       if (socialLoginConfig.communityUserPermset) {
         console.log(`  [4/${totalSubSteps}] Assigning API permset to community users...`);
