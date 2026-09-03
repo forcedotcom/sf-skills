@@ -231,16 +231,9 @@ class CapabilityRegistryTests(unittest.TestCase):
             '---\nname: platform-widget-search\ndescription: "Use this public fixture to search for platform widgets safely and deterministically."\n---\nbody\n',
             encoding="utf-8",
         )
-        # Two more skills exercise the accessCheck tri-state through the real
-        # snapshot path: an explicit empty list (applies to any org) and a
-        # conditional license/preference gate. platform-widget-search stays the
-        # undeclared (no metadata block) case.
-        empty_access = checkout / "skills/platform-empty-access-search"
-        empty_access.mkdir(parents=True)
-        empty_access.joinpath("SKILL.md").write_text(
-            '---\nname: platform-empty-access-search\ndescription: "Use this public fixture to confirm an explicit empty accessCheck marks a skill as applying to any org."\nmetadata:\n  version: "1.0"\n  accessCheck: []\n---\nbody\n',
-            encoding="utf-8",
-        )
+        # One more skill exercises the accessCheck binary state through the real
+        # snapshot path: a conditional license/preference gate. platform-widget-search
+        # stays the undeclared (no metadata block) case.
         gated = checkout / "skills/platform-gated-search"
         gated.mkdir(parents=True)
         gated.joinpath("SKILL.md").write_text(
@@ -299,11 +292,11 @@ class CapabilityRegistryTests(unittest.TestCase):
                     with self.assertRaises(self.registry.RegistryError):
                         self.registry.build_public_manifest(checkout, release_ref)
 
-    def test_public_manifest_carries_accesscheck_tristate(self):
-        # The snapshot must preserve the accessCheck tri-state distinctly: undeclared
-        # (None, no metadata block), any-org ([]), and conditional (a typed list).
-        # None and [] are both falsy — a truthiness collapse here is the documented
-        # "falsely claims org-agnostic" bug, so this asserts them as separate values.
+    def test_public_manifest_carries_accesscheck_binary_state(self):
+        # The snapshot must preserve the accessCheck binary state distinctly:
+        # undeclared (None, no metadata block) vs. conditional (a typed list).
+        # accessCheck: [] is no longer a valid third state — read_access_check
+        # rejects it outright (see test_read_access_check_reads_binary_state_and_fails_loud_on_damage).
         with tempfile.TemporaryDirectory() as td:
             checkout = self._public_checkout_fixture(
                 Path(td), "git@github.com:forcedotcom/sf-skills.git"
@@ -313,7 +306,6 @@ class CapabilityRegistryTests(unittest.TestCase):
             for row in manifest["skills"]:
                 self.assertIn("accessCheck", row)
             self.assertIsNone(access["platform-widget-search"])
-            self.assertEqual(access["platform-empty-access-search"], [])
             self.assertEqual(
                 access["platform-gated-search"],
                 [
@@ -322,7 +314,7 @@ class CapabilityRegistryTests(unittest.TestCase):
                 ],
             )
 
-    def test_read_access_check_reads_tristate_and_fails_loud_on_damage(self):
+    def test_read_access_check_reads_binary_state_and_fails_loud_on_damage(self):
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "SKILL.md"
 
@@ -333,8 +325,6 @@ class CapabilityRegistryTests(unittest.TestCase):
             # Undeclared: no metadata block, and a metadata block without the key.
             self.assertIsNone(parse('---\nname: x\ndescription: "d"\n---\nbody\n'))
             self.assertIsNone(parse('---\nname: x\ndescription: "d"\nmetadata:\n  version: "1.0"\n---\n'))
-            # Any-org: explicit inline empty list.
-            self.assertEqual(parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: []\n---\n'), [])
             # Conditional: block-style typed entries and an inline JSON array.
             self.assertEqual(
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    - type: "license"\n      value: "Foo"\n    - type: "orgPref"\n      value: "Bar"\n---\n'),
@@ -344,14 +334,76 @@ class CapabilityRegistryTests(unittest.TestCase):
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: [{"type": "userPerm", "value": "Baz"}]\n---\n'),
                 [{"type": "userPerm", "value": "Baz"}],
             )
-            # Fail loud, never silently "undeclared": a present-but-empty bare key
-            # (must be [] for any-org), a malformed block entry, and an inline scalar.
-            with self.assertRaisesRegex(self.registry.RegistryError, r"\[\] for any-org"):
+            # Fail loud, never silently "undeclared": an empty inline list, a
+            # present-but-empty bare key, a malformed block entry, and an inline
+            # scalar are all rejected outright — accessCheck: [] carries no meaning
+            # (same rationale as cliTools/relatedSkills), so omit the field entirely
+            # instead.
+            with self.assertRaisesRegex(self.registry.RegistryError, "omit the field"):
+                parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: []\n---\n')
+            with self.assertRaisesRegex(self.registry.RegistryError, "omit the field"):
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n---\n')
             with self.assertRaisesRegex(self.registry.RegistryError, "malformed accessCheck"):
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    type: "license"\n---\n')
             with self.assertRaisesRegex(self.registry.RegistryError, "must be an array"):
                 parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: "license"\n---\n')
+
+    def test_read_access_check_enforces_entry_content_rules(self):
+        # Content-quality checks on populated entries, mirroring
+        # scripts/validate-skills.ts: no empty/whitespace-only value, no
+        # leading/trailing whitespace, no embedded whitespace in
+        # userPerm/orgPerm/orgPref, no duplicate {type, value} pairs. These
+        # apply to both the block-style and inline-JSON parse paths.
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "SKILL.md"
+
+            def parse(body: str):
+                path.write_text(body, encoding="utf-8")
+                return self.registry.read_access_check(path)
+
+            # Clean, distinct, well-formed entries pass.
+            self.assertEqual(
+                parse(
+                    '---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n'
+                    '    - type: "license"\n      value: "DataCloud"\n'
+                    '    - type: "userPerm"\n      value: "UserPermissions.ResetPasswords"\n---\n'
+                ),
+                [
+                    {"type": "license", "value": "DataCloud"},
+                    {"type": "userPerm", "value": "UserPermissions.ResetPasswords"},
+                ],
+            )
+
+            with self.assertRaisesRegex(self.registry.RegistryError, "empty or whitespace-only value"):
+                parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    - type: "license"\n      value: "   "\n---\n')
+
+            with self.assertRaisesRegex(self.registry.RegistryError, "leading/trailing whitespace"):
+                parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    - type: "license"\n      value: " DataCloud "\n---\n')
+
+            for t in ("userPerm", "orgPerm", "orgPref"):
+                with self.assertRaisesRegex(self.registry.RegistryError, "embedded whitespace"):
+                    parse(f'---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    - type: "{t}"\n      value: "Foo Bar"\n---\n')
+
+            # license/accessCheck types are not subject to the embedded-whitespace rule.
+            for t in ("license", "accessCheck"):
+                parse(f'---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n    - type: "{t}"\n      value: "Foo Bar"\n---\n')
+
+            with self.assertRaisesRegex(self.registry.RegistryError, "duplicate entries"):
+                parse(
+                    '---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck:\n'
+                    '    - type: "license"\n      value: "DataCloud"\n'
+                    '    - type: "license"\n      value: "DataCloud"\n---\n'
+                )
+
+            # Note: unlike validate-skills.ts (which collects all lint errors before
+            # reporting), read_access_check fails fast on the first violation — an
+            # entry with both surrounding whitespace AND a duplicate value raises on
+            # the whitespace check first, never reaching the duplicate check. That is
+            # covered directly above; no separate "duplicate after trim" case here.
+
+            # Same rules apply on the inline-JSON parse path.
+            with self.assertRaisesRegex(self.registry.RegistryError, "empty or whitespace-only value"):
+                parse('---\nname: x\ndescription: "d"\nmetadata:\n  accessCheck: [{"type": "license", "value": "   "}]\n---\n')
 
     def test_public_check_detects_missing_snapshot_and_drift(self):
         # check_public is the public-manifest digest-drift gate. Missing destination

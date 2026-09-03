@@ -475,7 +475,7 @@ def _emit_error(message: str, json_mode: bool) -> int:
                          separators=(",", ":")))
     else:
         print(f"Feature detection error: {message}", file=sys.stderr)
-        print("Use: sf-context discovery features [--target-org <alias>] [--refresh] [--json]",
+        print("Use: sf-context discover features [--target-org <alias>] [--refresh] [--json]",
               file=sys.stderr)
     return 2
 

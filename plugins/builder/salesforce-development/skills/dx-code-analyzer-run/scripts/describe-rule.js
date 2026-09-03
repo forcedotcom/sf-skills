@@ -15,7 +15,32 @@
 //       resource:    https://...
 //       description: Some description text
 
-const { execSync } = require("child_process");
+const { execFileSync } = require("child_process");
+
+/**
+ * Run `sf code-analyzer rules ...` safely.
+ *
+ * Arguments are passed as an argv array (NOT a shell string), so a rule name
+ * or --engine value can never be interpreted as shell syntax. Returns the
+ * command's stdout as text; never throws (a non-zero exit still yields the
+ * output the caller wants to parse).
+ */
+function runCodeAnalyzerRules(extraArgs) {
+  try {
+    return execFileSync("sf", ["code-analyzer", "rules", ...extraArgs], {
+      encoding: "utf8",
+      timeout: 60000,
+      maxBuffer: 2 * 1024 * 1024,
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  } catch (err) {
+    // Preserve the original `2>&1` behavior: a non-zero exit that emitted
+    // partial stdout plus a diagnostic on stderr must surface BOTH streams, in
+    // order, so a genuine failure isn't misparsed as "rule not found".
+    const combined = String(err.stdout || "") + String(err.stderr || "");
+    return combined || (err.output && err.output.filter(Boolean).join("")) || "";
+  }
+}
 
 function printUsage() {
   console.error(`Usage: node describe-rule.js <rule-name> [--engine <engine>]
@@ -52,25 +77,21 @@ for (let i = 1; i < args.length; i++) {
 // Build the rule selector for the lookup
 const selector = engine ? `${engine}:${ruleName}` : ruleName;
 
-// Run `sf code-analyzer rules` with --view detail to get full rule info
-let rawOutput;
-try {
-  const cmd = `sf code-analyzer rules --rule-selector "${selector}" --view detail 2>&1`;
-  rawOutput = execSync(cmd, {
-    encoding: "utf8",
-    timeout: 60000,
-    maxBuffer: 2 * 1024 * 1024,
-  });
-} catch (err) {
-  // execSync throws on non-zero exit, but we still want the output
-  rawOutput = err.stdout || err.stderr || (err.output && err.output.join("")) || "";
-  if (!rawOutput) {
-    console.log(JSON.stringify({
-      status: "error",
-      message: `Failed to run sf code-analyzer rules: ${err.message}`,
-    }));
-    process.exit(0);
-  }
+// Run `sf code-analyzer rules` with --view detail to get full rule info.
+// `selector` is passed as a single argv element, so it cannot inject shell
+// commands even if it contains metacharacters.
+const rawOutput = runCodeAnalyzerRules([
+  "--rule-selector",
+  selector,
+  "--view",
+  "detail",
+]);
+if (!rawOutput) {
+  console.log(JSON.stringify({
+    status: "error",
+    message: `Failed to run sf code-analyzer rules for selector "${selector}"`,
+  }));
+  process.exit(0);
 }
 
 // Parse the detail view output
@@ -224,12 +245,16 @@ function parseDetailOutput(output) {
 function tryGrepFallback(ruleName, engine) {
   try {
     const sel = engine || "Recommended";
-    const cmd = `sf code-analyzer rules --rule-selector "${sel}" 2>&1 | grep -i "${ruleName}"`;
-    const grepOutput = execSync(cmd, {
-      encoding: "utf8",
-      timeout: 60000,
-      maxBuffer: 2 * 1024 * 1024,
-    });
+    const output = runCodeAnalyzerRules(["--rule-selector", sel]);
+
+    // Case-insensitive substring filter done in JS. Previously this shelled out
+    // to `... | grep -i "${ruleName}"`, interpolating the untrusted rule name
+    // into a shell command; matching here removes that injection sink.
+    const needle = ruleName.toLowerCase();
+    const grepOutput = output
+      .split("\n")
+      .filter((line) => line.toLowerCase().includes(needle))
+      .join("\n");
 
     if (!grepOutput.trim()) return null;
 
@@ -273,12 +298,7 @@ function tryGrepFallback(ruleName, engine) {
 function tryFuzzyFallback(ruleName, engine) {
   try {
     const sel = engine || "Recommended";
-    const cmd = `sf code-analyzer rules --rule-selector "${sel}" 2>&1`;
-    const output = execSync(cmd, {
-      encoding: "utf8",
-      timeout: 60000,
-      maxBuffer: 2 * 1024 * 1024,
-    });
+    const output = runCodeAnalyzerRules(["--rule-selector", sel]);
 
     // Extract rule names from table output
     // Lines with rule data have: index  name  engine  severity  tags

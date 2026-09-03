@@ -22,23 +22,27 @@ PLUGIN_ROOT = SCRIPTS.parent
 REPO_ROOT = PLUGIN_ROOT.parents[2]
 MODULE_PATH = SCRIPTS / "sf_context.py"
 PLUGIN_JSON = PLUGIN_ROOT / ".claude-plugin/plugin.json"
-COMMAND_DOC = PLUGIN_ROOT / "commands/discovery.md"
+COMMAND_DOC = PLUGIN_ROOT / "commands/discover.md"
 SKILL_DOC = PLUGIN_ROOT / "skills/platform-capability-search/SKILL.md"
 STAGES = ["Connect", "Project", "Build", "Test", "Deploy", "Observe"]
 TRACE_COMMAND = '"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context resolution-trace'
-# The rail is one of the two pinned deterministic visuals, so its geometry and
-# glyph vocabulary are golden here rather than derived from the renderer. There is
-# no `unknown` glyph any more: every stage lights from its own evidence or stays ○.
-# Front-of-journey redesign: Setup left the rail and Project joined it, so the rail
-# is still six stages — the geometry is unchanged, only the front labels moved.
-GLYPHS = {"complete": "●", "current": "◉", "future": "○"}
+# The rail is one of the two pinned deterministic visuals, so its geometry and glyph
+# vocabulary are golden here rather than derived from the renderer. The derived STATUS
+# is still three-way (complete / current / future) and feeds the model context, but the
+# VISIBLE rail keys off evidence: a reached stage is filled (● earlier, ◉ for the latest
+# reached — the frontier) and an unreached stage is ○, with no cursor glyph (owner
+# direction 2026-09-01). The single green accent is that ◉; cmd_journey strips color, so
+# these golden rows are the plain shapes — the frontier still shows as a ◉ by shape alone.
+# Front-of-journey redesign: Setup left the rail and Project joined it, so the rail is
+# still six stages — the geometry is unchanged, only the front labels moved.
+REACHED, FRONTIER, UNREACHED = "●", "◉", "○"
 CONNECTOR = "──────────"
 CELL = 11
-# The cursor rests on Build when Connect + Project are lit (a target org set and a
-# DX project present) but no source has been created yet — Build is the first stage
-# still lacking its own evidence. The glyph row is identical to the old Setup·Connect
-# lead (two ● then the ◉ cursor); only the labels beneath it changed.
-BUILD_GLYPH_ROW = "●──────────●──────────◉──────────○──────────○──────────○"
+# Connect + Project lit (a target org set and a DX project present) but no source yet:
+# Build is the first stage still lacking evidence, so it is the derived cursor — but the
+# visible rail no longer marks the cursor. Connect is an earlier reach (●); Project is the
+# latest reach, so it is the frontier ◉ (green in color, stripped here); then all ○.
+BUILD_GLYPH_ROW = "●──────────◉──────────○──────────○──────────○──────────○"
 STAGE_LABEL_ROW = "connect    project    build      test       deploy     observe"
 
 sfx = load_module(MODULE_PATH, "sf_context_final_surfaces")
@@ -268,7 +272,7 @@ class PromptRuntimeTests(WorkingDirectoryTest):
             self.assertEqual(sfx.cmd_prompt_dispatch(), 0)
         self.assertIn("systemMessage", json.loads(first_out.getvalue()))
 
-        later = {**payload, "tool_input": {"command": "sf-context discovery journey"}}
+        later = {**payload, "tool_input": {"command": "sf-context discover journey"}}
         later_out = io.StringIO()
         with mock.patch.object(sfx, "_journey_state", return_value=self.STATE), \
                 mock.patch.object(sfx.sys, "stdin", io.StringIO(json.dumps(later))), \
@@ -480,32 +484,44 @@ class JourneyTests(WorkingDirectoryTest):
         self.assertEqual((code, err), (0, ""))
         row = self.glyph_row(out)
         self.assertIn(CONNECTOR, row)
-        # Source lights Build ●; with no owning tests yet the cursor rests on Test ◉.
-        self.assertEqual(row[STAGES.index("Build") * CELL], GLYPHS["complete"])
-        self.assertEqual(row[STAGES.index("Test") * CELL], GLYPHS["current"])
+        # Source lights Build, now the latest reached, so it is the accented frontier ◉;
+        # with no owning tests yet the cursor is Test, which renders a plain ○ — the
+        # visible rail no longer marks the cursor.
+        self.assertEqual(row[STAGES.index("Build") * CELL], FRONTIER)
+        self.assertEqual(row[STAGES.index("Test") * CELL], UNREACHED)
         self.assertIn(STAGE_LABEL_ROW, out)
-        self.assertNotIn("you are here", out)  # marker removed — stage reads from the ◉ glyph
+        self.assertNotIn("you are here", out)  # marker removed — the rail shows only evidence
         self.assertIn(f"sfdx project: {self.root.name}", out)
         self.assertIn("org: fixture ✓", out)
         self.assertIn("source-tracking …", out)
-        self.assertIn("likely next", out)
+        self.assertNotIn("likely next", out)  # below-rail next-step line left the visible rail
         self.assertNotIn("Deploy and Observe stay unknown", out)  # old unknown footnote is gone
         self.assertNotIn("legend", out)  # legend removed — glyph shapes + labels carry state
         self.assertLessEqual(len(out.splitlines()), 12)
 
-    def test_rail_glyph_row_is_pinned_to_the_stage_status_sequence(self):
-        """Every glyph is derived from a stage status, so nothing can be faked. The
-        GLYPHS map has no `unknown` key, so any stage that ever resolved to `unknown`
-        would KeyError here rather than pass silently."""
+    def test_rail_glyph_row_is_pinned_to_the_evidence_sequence(self):
+        """Every glyph is derived from evidence — a reached stage is filled (● earlier,
+        ◉ for the latest reached), an unreached stage is ○ — so nothing can be faked. A
+        stage that resolved to a stray status would surface as an unexpected shape here
+        rather than pass silently."""
         for stage in STAGES:
             with self.subTest(stage=stage):
                 human, state = self.capture_both_surfaces(*self.arrange_stage(stage))
                 self.assertEqual(state["currentStage"], stage)
                 row = self.glyph_row(human)
-                self.assertEqual(row, CONNECTOR.join(GLYPHS[s["status"]] for s in state["stages"]))
-                # The current stage reads from its ◉ glyph position in the row (the
-                # "you are here" marker was removed — it jumbled the layout).
-                self.assertEqual(row[STAGES.index(stage) * CELL], GLYPHS["current"])
+                reached_order = [s["name"] for s in state["stages"] if s["status"] == "complete"]
+                reached = set(reached_order)
+                frontier = reached_order[-1] if reached_order else None
+                self.assertEqual(row, CONNECTOR.join(
+                    FRONTIER if s["name"] == frontier
+                    else REACHED if s["name"] in reached
+                    else UNREACHED
+                    for s in state["stages"]))
+                # The cursor is NOT painted on the visible rail: the first-unreached
+                # stage renders a plain ○, the same shape as any later ○ (the "you are
+                # here" marker is gone, and ◉ now marks the reached frontier, never the
+                # cursor — so the cursor can never be a ◉).
+                self.assertEqual(row[STAGES.index(stage) * CELL], UNREACHED)
                 self.assertNotIn("you are here", human)
                 if stage == "Build":
                     self.assertEqual(row, BUILD_GLYPH_ROW)
@@ -648,19 +664,20 @@ class JourneyTests(WorkingDirectoryTest):
                 self.assertIn("source-tracking …", lines[0])
                 self.assertIn("sfdx project:", lines[0])
 
-    def test_rail_greens_only_the_current_stage_and_stdout_stays_plain(self):
-        """The rail greens ONLY the current stage — its dot and label — as the one
-        accent. `/discovery journey` stdout is model-reproduced, so it's stripped
-        fully plain. color=True is the (dormant) full palette. All ≤80."""
+    def test_rail_greens_only_the_latest_reached_stage_and_stdout_stays_plain(self):
+        """The rail greens ONLY the latest reached stage — its dot and label — as the
+        one accent (here Project: arrange_stage("Build") leaves Connect + Project lit and
+        Build as the unmarked cursor). `/discover journey` stdout is model-reproduced,
+        so it's stripped fully plain. color=True is the (dormant) full palette. All ≤80."""
         human, state = self.capture_both_surfaces(*self.arrange_stage("Build"))
         # Model-reproduced stdout: fully plain, geometry ≤80.
         self.assertNotIn("\x1b", human)
         self.assertEqual([l for l in human.splitlines() if len(l) > 80], [])
-        # systemMessage form: green on the current stage only — exactly the dot + label.
+        # systemMessage form: green on the latest reached stage only — its dot + label.
         rail = sfx._render_journey_rail(state)
-        self.assertIn("\x1b[32m", rail)               # current-stage palette green
-        # Two greens: the cursor dot and its stage label — nothing else greens now
-        # that the legend (whose ◉ key carried a third green) is gone.
+        self.assertIn("\x1b[32m", rail)               # latest-reached palette green
+        # Two greens: the ◉ frontier dot and its stage label — nothing else greens (no
+        # legend, and earlier reached ● stages ride the muted label tone, not green).
         self.assertEqual(rail.count("\x1b[32m"), 2)
         self.assertEqual(strip_ansi(rail), human.rstrip("\n"))     # strip == the plain stdout
         # color=True is the full palette — several distinct theme-adaptive spans, and
@@ -790,7 +807,9 @@ class JourneyTests(WorkingDirectoryTest):
     def test_cursor_can_rest_behind_a_lit_later_stage(self):
         """The honest cyclical case: each stage lights from its OWN evidence, so a gap
         is shown as a gap. Source (no tests) + durable deploy + observe events light
-        Build/Deploy/Observe ● while the cursor ◉ sits on the still-unreached Test."""
+        Build/Deploy/Observe while the still-unreached Test — the cursor — renders a
+        plain ○ sitting BEHIND those lit stages (the visible rail no longer marks the
+        cursor; the green ◉ frontier falls on Observe, the latest reached)."""
         self.make_project()
         source = self.root / "force-app/main/default/classes/Example.cls"
         source.parent.mkdir(parents=True)
@@ -808,16 +827,20 @@ class JourneyTests(WorkingDirectoryTest):
         self.assertEqual(statuses["Test"], "current")
         self.assertEqual((statuses["Build"], statuses["Deploy"], statuses["Observe"]),
                          ("complete", "complete", "complete"))
-        # The ◉ cursor is literally behind two lit ● glyphs in the pinned row.
+        # The unmarked cursor (Test) renders ○, literally behind a lit ● (Deploy) and
+        # the green ◉ frontier (Observe, the latest reached).
         self.assertEqual(self.glyph_row(human),
-                         "●──────────●──────────●──────────◉──────────●──────────●")
-        # The text summary must AGREE with the glyphs: the unreached ◉ cursor (Test)
-        # belongs in `no evidence`, never in `reached`. A no-`future` rail is NOT a
-        # fully-reached rail — regression guard for deriving `current_is_reached` from
-        # `allReached` rather than an "all stages non-future" proxy.
-        self.assertIn("reached: Connect, Project, Build, Deploy, Observe", human)
-        self.assertIn("no evidence: Test", human)
-        self.assertNotIn("no evidence: none", human)
+                         "●──────────●──────────●──────────○──────────●──────────◉")
+        # The derivation must AGREE with the glyphs: the unreached cursor (Test)
+        # belongs OUTSIDE `reached`, never in it, even though it has no `future` stage
+        # after it. A no-`future` rail is NOT a fully-reached rail — regression guard
+        # for deriving reached from per-stage status, not an "all stages non-future"
+        # proxy. (The visible rail is signpost-only now; this fact lives on the state.)
+        self.assertEqual(state["reached"], ["Connect", "Project", "Build", "Deploy", "Observe"])
+        self.assertNotIn("Test", state["reached"])
+        self.assertFalse(state["allReached"])
+        self.assertNotIn("reached:", human)          # no below-rail text summary to disagree
+        self.assertNotIn("no evidence:", human)
 
     def test_tier_a_tests_on_disk_light_test_and_advance_the_cursor(self):
         """Pushed-up owning tests are a live filesystem fact (Tier A), so Test lights ●
@@ -1936,7 +1959,7 @@ class PostBashDispatcherTests(unittest.TestCase):
     ROUTES = (
         ("sf-context check-tools", "cmd_readiness_paint"),
         ("sf org login web --set-default", "cmd_wayfinder"),
-        ("sf-context discovery journey", "cmd_journey_paint"),
+        ("sf-context discover journey", "cmd_journey_paint"),
         ("sf project deploy start --source-dir force-app", "cmd_post_deploy"),
         ("sf apex run test --synchronous --class-names ExampleTest", "cmd_post_test_run"),
         ("sf apex tail log --color", "cmd_post_observe"),
@@ -1989,10 +2012,10 @@ class PostBashDispatcherTests(unittest.TestCase):
         commands = (
             "echo 'sf org login web'",
             "printf 'sf-context check-tools'",
-            "grep 'sf-context discovery journey' README.md",
+            "grep 'sf-context discover journey' README.md",
             "sf org login web && echo done",
             "sf-context check-tools # mention only",
-            "sf-context discovery journey | cat",
+            "sf-context discover journey | cat",
         )
         visible_handlers = ("cmd_wayfinder", "cmd_readiness_paint", "cmd_journey_paint")
         for command in commands:
@@ -2200,29 +2223,35 @@ class WiringAndInstructionTests(unittest.TestCase):
         self.assertTrue(bash_blocks[0]["hooks"][0]["command"].endswith("sf-context post-bash"))
         # The self-gate matches the model-run journey command (any path spelling) and
         # excludes the --json machine form and every ordinary command.
-        for cmd in ('"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context discovery journey',
-                    "/path/to/sf-context   discovery   journey"):
+        for cmd in ('"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context discover journey',
+                    "/path/to/sf-context   discover   journey"):
             self.assertTrue(sfx._JOURNEY_PAINT_COMMAND.search(cmd), cmd)
-        for cmd in ('"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context discovery journey --json',
-                    "sf-context discovery where", "cd /tmp && grep foo",
+        for cmd in ('"${CLAUDE_PLUGIN_ROOT}"/scripts/sf-context discover journey --json',
+                    "sf-context discover where", "cd /tmp && grep foo",
                     "sf project deploy start"):
             self.assertFalse(sfx._JOURNEY_PAINT_COMMAND.search(cmd), cmd)
 
     def test_discovery_doc_defers_to_a_prepainted_rail(self):
-        # The slash-command path must also skip reproducing the rail when the paint
-        # hook has already shown it, or /discovery journey double-prints it.
+        # One consistent contract (no dual-mode): the hook ALWAYS paints the rail, so it
+        # is already shown and the command body defers — the model never reproduces it
+        # and never runs the journey command just to redraw, so /discover can't
+        # double-print. (The prior "if already displayed, skip reproducing" conditional
+        # was removed with the dual-mode; see .context/command-nl-paint-parity-plan.md.)
         text = COMMAND_DOC.read_text(encoding="utf-8")
-        self.assertRegex(text, r"(?i)already displayed the rail")
-        self.assertRegex(text, r"(?i)skip reproducing it")
+        self.assertRegex(text, r"(?i)pinned deterministic visual")
+        self.assertRegex(text, r"(?i)already shown")
+        self.assertRegex(text, r"(?i)do not run a command, redraw")
 
     def test_discovery_instructions_map_only_fixed_journey_phrases(self):
         text = COMMAND_DOC.read_text(encoding="utf-8")
         self.assertIn("`journey`", text)
         self.assertIn("`where`", text)
         self.assertIn("where am I?", text)
-        self.assertIn("sf-context discovery journey", text)
+        self.assertIn("sf-context discover journey", text)
         self.assertNotIn("discovery $ARGUMENTS", text)
-        self.assertIn("Never place arbitrary user text", text)
+        # The no-injection rule reads mid-sentence now ("…and never place arbitrary
+        # user text in a shell command"), so match case-insensitively.
+        self.assertRegex(text, r"(?i)never place arbitrary user text")
 
     def test_skill_description_keeps_exact_nl_phrases(self):
         text = SKILL_DOC.read_text(encoding="utf-8")
@@ -2240,15 +2269,21 @@ class WiringAndInstructionTests(unittest.TestCase):
                 self.assertRegex(text, r"(?i)never invent, recompute, or substitute a remembered value")
                 self.assertRegex(text, r"(?i)say it is unknown")
         self.assertIn("preserve bounded stderr guidance on failure", docs["command"])
-        # The rail is a pinned deterministic visual. Licensing reformatting for every
-        # mode without this exception lets the model redraw it — and the slash command
-        # is the primary entry path, so BOTH docs must carry the exception.
+        # The rail is a pinned deterministic visual neither doc may let the model
+        # redraw, and both must end with the model adding its own read. Both front
+        # doors now carry the SAME hook-owns-the-surface contract: the hook has
+        # already painted the rail, so the model never reproduces it and never runs
+        # the journey command just to redraw it (the command still runs for an
+        # explicit --json / inspect / reset). Assert each doc's rail contract, plus
+        # the shared "add your own read" close. (See .context/command-nl-paint-parity-plan.md §8.)
+        rail_contract = {
+            "command": r"(?i)do not run a command, redraw",            # hook already painted it; never reproduce
+            "skill": r"(?i)do not run the journey command to redraw",  # same contract, NL front door
+        }
         for label, text in docs.items():
             with self.subTest(doc=label):
-                self.assertRegex(text, r"(?i)glyphs and stage labels")
-                # Both halves are required: the rail grounds every session identically,
-                # then the model adds the relevance the rail cannot carry.
-                self.assertRegex(text, r"(?i)then add your own")
+                self.assertRegex(text, rail_contract[label])
+                self.assertRegex(text, r"(?i)add (only )?your own")
 
 
 class TerminalRenderingSafetyTests(unittest.TestCase):
@@ -2295,11 +2330,13 @@ class TerminalRenderingSafetyTests(unittest.TestCase):
                    "package_dirs": self.HOSTILE}
         stats = {"apex_src": self.HOSTILE, "apex_test": 0, "triggers": 0,
                  "lwc": 0, "aura": 0, "objects": 0, "permsets": 0, "flows": 0}
+        # render_banner_block reads only `version` now (counts moved to slot 2);
+        # the extra count keys are ignored but kept here to prove no key injects.
         hostile_facts = {"version": self.HOSTILE, "installedPlugins": self.HOSTILE,
-                         "availablePlugins": self.HOSTILE, "foundation": self.HOSTILE}
+                         "availablePlugins": self.HOSTILE}
         banner = sfx.render_banner_block(color=False, facts=hostile_facts)
         normal_banner = sfx.render_banner_block(color=False, facts={
-            "version": "1.0", "installedPlugins": 1, "availablePlugins": 1, "foundation": 1})
+            "version": "1.0", "installedPlugins": 1, "availablePlugins": 1})
         env = "\n".join(sfx.render_environment_band(org, self.HOSTILE, False))
         proj = "\n".join(sfx.render_project_band(project, stats, self.HOSTILE, False))
         report = {"tools": [{"name": self.HOSTILE, "status": "critical",
@@ -2320,7 +2357,10 @@ class TerminalRenderingSafetyTests(unittest.TestCase):
         self.assertEqual(len(env.splitlines()), 5)
         self.assertEqual(len(proj.splitlines()), 5)
 
-    def test_rail_has_plain_semantic_state_summary(self):
+    def test_rail_is_signpost_only_with_no_state_summary(self):
+        # The visible rail is just the six-stage signpost now (glyph bar + labels); the
+        # current/reached/no-evidence summary and the `likely next` line moved out of the
+        # visible surface into the model-facing context (owner direction 2026-09-01).
         state = {"currentStage": "Build", "context": {}, "stages": [
             {"name": "Connect", "status": "complete"},
             {"name": "Project", "status": "complete"},
@@ -2328,9 +2368,15 @@ class TerminalRenderingSafetyTests(unittest.TestCase):
             {"name": "Test", "status": "future"},
         ]}
         rail = strip_ansi(sfx._render_journey_rail(state, color=False, include_context=False))
-        self.assertIn("current: Build", rail)
-        self.assertIn("reached: Connect, Project", rail)
-        self.assertIn("no evidence: Build, Test", rail)
+        self.assertIn("connect", rail)          # the stage labels still render
+        self.assertIn("build", rail)
+        self.assertIn("●", rail)                # an earlier reached stage renders ●
+        self.assertIn("◉", rail)                # the frontier (latest reached) renders ◉
+        self.assertIn("○", rail)                # unreached stages render empty
+        self.assertNotIn("current:", rail)      # …but no below-rail text summary
+        self.assertNotIn("reached:", rail)
+        self.assertNotIn("no evidence:", rail)
+        self.assertNotIn("likely next", rail)
         self.assertTrue(all(sfx._terminal_cell_width(line) <= 80 for line in rail.splitlines()))
 
     def test_long_readiness_messages_stay_on_one_line_per_tool(self):
@@ -2364,7 +2410,7 @@ class TerminalRenderingSafetyTests(unittest.TestCase):
             self.assertIn(word, block)
         # The frame (rules, header, footer verdict) still holds ≤80; only the free-text
         # detail rows are exempt so they can run to their natural width on one line.
-        frame = [l for l in lines if l not in dot_lines]
+        frame = [l for l in lines if l not in dot_lines and l not in sfx._WIDTH_EXEMPT_PLAIN_LINES]
         self.assertTrue(all(sfx._terminal_cell_width(l) <= 80 for l in frame))
 
 
@@ -2435,7 +2481,8 @@ class ReadinessBannerTests(unittest.TestCase):
         self.assertIn("✓ toolchain ready", footer[0])
         self.assertEqual(sfx._terminal_cell_width(footer[0]), 80)  # tag right-aligned in frame
         self.assertTrue(block.endswith('Next: start building → "create a Salesforce project"'))
-        self.assertIn("You don't memorize commands here.", block)
+        # Slot-6 pointer rides just above the Next line; the old mindset line is gone.
+        self.assertIn('✳ New here? ask "what can I do here?" or run /salesforce-development:discover overview.', block)
 
     def test_mixed_tool_and_org_verdict_counts_and_fix_all(self):
         block = sfx.render_readiness_text(self._mixed())
@@ -2453,45 +2500,25 @@ class ReadinessBannerTests(unittest.TestCase):
         self.assertTrue(block.endswith('Next: connect an org → "connect an org"'))
 
     def test_wayfinding_footer_is_one_reusable_paint_with_a_dynamic_next(self):
-        # The "you don't memorize commands" footer is now a single reusable paint: two
-        # fixed lines + an OPTIONAL dynamic "Next:" line the caller passes. Surfaces with
-        # no next step (the SessionStart banner) omit it; others pass their own — so it can
-        # show up in different places with different next steps.
-        MIND = "You don't memorize commands here."
-        POINTER = '✳ New here? ask "what can I do here?" or run /salesforce-development:discovery.'
-        self.assertEqual(sfx._wayfinding_footer(color=False), [MIND, POINTER])
+        # The wayfinding footer is a single reusable paint: ONE fixed line (the ✳
+        # discovery pointer) + an OPTIONAL dynamic "Next:" line the caller passes.
+        # Surfaces with no next step (the SessionStart banner, whose rail already
+        # prints `likely next`) omit it; others pass their own. The old "you don't
+        # memorize commands" mindset line and the generic plugin invitation were
+        # both dropped on ALL surfaces (owner direction 2026-08-31).
+        POINTER = '✳ New here? ask "what can I do here?" or run /salesforce-development:discover overview.'
+        self.assertEqual(sfx._wayfinding_footer(color=False), [POINTER])
         self.assertEqual(
             sfx._wayfinding_footer('Next: pick a direction → "what can I do here?"', color=False),
-            [MIND, POINTER, 'Next: pick a direction → "what can I do here?"'])
-        # Both existing surfaces now route through the shared primitive. The
-        # SessionStart invitation always begins with the shared two-line footer
-        # and never adds a Next line; its optional project-scoped plugin line is
-        # covered independently below.
+            [POINTER, 'Next: pick a direction → "what can I do here?"'])
+        # The SessionStart invitation is exactly the shared footer with no Next line
+        # and — crucially — no plugin line: the concrete 🧩 recommendation now rides
+        # slot 7 (folded into cmd_detect's emit), covered by the discovery-runtime suite.
         invitation = sfx.render_invitation(False)
-        self.assertEqual(invitation[:2], [MIND, POINTER])
-        self.assertFalse(any(line.startswith("Next:") for line in invitation))
-        self.assertEqual(                                                 # readiness: two lines + its Next
+        self.assertEqual(invitation, [POINTER])
+        self.assertEqual(                                                 # readiness: pointer + its Next
             sfx._readiness_wayfinding_footer([{"name": "Node.js", "status": "warn"}]),
-            "\n".join([MIND, POINTER, 'Next: get build-ready → say "fix all"']))
-
-    def test_plugin_invitation_rides_the_invitation_only_inside_a_project(self):
-        # The 🧩 "need a capability?" line is plugin-forward but project-scoped: it must
-        # only appear when cwd is a Salesforce project (sfdx-project.json present), so it
-        # never leaks into a non-Salesforce directory on the Side-A newcomer welcome path.
-        # This mirrors the recommendation surfaces (session-start hint / bypass-gate), which
-        # are gated on the same file.
-        PLUGIN = sfx._paint_line([sfx._PLUGIN_INVITATION], color=False)
-        MIND = "You don't memorize commands here."
-        POINTER = '✳ New here? ask "what can I do here?" or run /salesforce-development:discovery.'
-        old = os.getcwd()
-        try:
-            with tempfile.TemporaryDirectory() as d:
-                os.chdir(d)                                    # no sfdx-project.json → plugin-free
-                self.assertEqual(sfx.render_invitation(False), [MIND, POINTER])
-                Path("sfdx-project.json").write_text("{}")     # now in a project → 🧩 appended last
-                self.assertEqual(sfx.render_invitation(False), [MIND, POINTER, PLUGIN])
-        finally:
-            os.chdir(old)
+            "\n".join([POINTER, 'Next: get build-ready → say "fix all"']))
 
     def test_ok_row_strips_the_git_version_prefix(self):
         block = sfx.render_readiness_text(self._all_green())

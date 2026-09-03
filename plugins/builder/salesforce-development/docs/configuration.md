@@ -1,7 +1,7 @@
 # Configuration Reference
 
-Advanced configuration for the `salesforce-development` plugin: ambient UI modes, the optional
-status line, and deploy/delete guard rails. Everyday usage only needs the [Quick
+Advanced configuration for the `salesforce-development` plugin: ambient UI modes and
+deploy/delete guard rails. Everyday usage only needs the [Quick
 Start](../README.md#quick-start) — start here if you want to customize the experience or
 understand a safety prompt.
 
@@ -19,31 +19,6 @@ Ambient SessionStart output is configured by plugin `userConfig.ui_mode` (transp
 
 `NO_COLOR` removes ANSI without changing mode. Explicit status, setup, discovery, safety
 advisories/gates, failures, and install guidance remain available in every mode.
-
-## Optional Main Status Line
-
-You can opt in to a main status line showing your current project context. Copy the helper to a
-stable user path so plugin updates cannot invalidate the configured command:
-
-```bash
-mkdir -p "$HOME/.claude/statusline"
-cp "${CLAUDE_PLUGIN_ROOT}/scripts/salesforce-statusline.py" \
-  "$HOME/.claude/statusline/salesforce-development.py"
-```
-
-Then manually add this to `~/.claude/settings.json`:
-
-```json
-{
-  "statusLine": {
-    "type": "command",
-    "command": "python3 ~/.claude/statusline/salesforce-development.py"
-  }
-}
-```
-
-The plugin never edits or writes user settings — this is a manual, reversible opt-in. Remove the
-`statusLine` entry and copied file to opt out.
 
 ## Guard Rails vs. Claude Code's Auto-Mode Classifier
 

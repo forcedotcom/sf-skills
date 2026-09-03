@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Release documentation and design-link contracts for plugin 2.0.0."""
+"""Release documentation and design-link contracts for plugin 2.1.0."""
 from __future__ import annotations
 
 import json
@@ -14,7 +14,7 @@ DESIGN = REPO / "docs/design"
 README = PLUGIN / "README.md"
 CONFIG_DOC = PLUGIN / "docs/configuration.md"
 CHANGELOG = PLUGIN / "CHANGELOG.md"
-COMMAND = PLUGIN / "commands/discovery.md"
+COMMAND = PLUGIN / "commands/discover.md"
 SKILL = PLUGIN / "skills/platform-capability-search/SKILL.md"
 STAGES = "Connect → Project → Build → Test → Deploy → Observe"
 
@@ -25,10 +25,10 @@ class DocumentationContractTests(unittest.TestCase):
 
     def test_release_version_minimum_and_changelog_are_reconciled(self):
         plugin = json.loads((PLUGIN / ".claude-plugin/plugin.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"], "2.0.0")
+        self.assertEqual(plugin["version"], "2.1.0")
         readme = self.text(README)
         self.assertIn("Claude Code 2.1.222 or later", readme)
-        self.assertIn("## [2.0.0]", self.text(CHANGELOG))
+        self.assertIn("## [2.1.0]", self.text(CHANGELOG))
 
     def test_current_docs_share_the_six_stage_contract(self):
         paths = [README, DESIGN / "README.md", DESIGN / "headless-360-pov.md",
@@ -45,15 +45,12 @@ class DocumentationContractTests(unittest.TestCase):
         text = self.text(README)
         self.assertIn("docs/configuration.md", text)
 
-    def test_configuration_doc_documents_modes_no_color_and_manual_status_line(self):
+    def test_configuration_doc_documents_modes_and_no_color(self):
         text = self.text(CONFIG_DOC)
         for mode in ("`full`", "`compact`", "`plain`", "`off`"):
             self.assertIn(mode, text)
         self.assertIn("CLAUDE_PLUGIN_OPTION_UI_MODE", text)
         self.assertIn("NO_COLOR", text)
-        self.assertIn("~/.claude/statusline/salesforce-development.py", text)
-        self.assertIn("salesforce-statusline.py", text)
-        self.assertRegex(text, r"(?i)never (?:edits|modify|writes) .*settings")
         self.assertRegex(text, r"(?i)explicit.*status.*setup.*discovery")
 
     def test_docs_cover_runtime_truth_and_schema_transitions(self):

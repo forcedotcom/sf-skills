@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Salesforce Test Drive Catalog (test-drives.json)",
+  "description": "Contribution-safety grammar for the test-drive catalog. Product teams add one entry per test drive. Entries are strict (additionalProperties: false) so a typo'd field is caught at authoring time rather than silently ignored by the engine; extend the contract by PR to this schema, the same way the skills model vocabulary is extended. The root stays open so catalog-level metadata can be added over time. Value-level policy that a JSON Schema cannot express (prompt file exists on disk, orderedSkills name real skills provided by salesforce-development or a requires.plugins plugin, requires.plugins name real marketplace plugins, owner contact is reachable) is intended to live in a future imperative lint gate — see AUTHORING.md.",
+  "version": "0.1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["testDrives"],
+  "properties": {
+    "testDrives": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/testDrive" }
+    }
+  },
+  "definitions": {
+    "testDrive": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "description", "owner", "requires", "promptPath", "handoff"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Stable kebab-case identifier. Used for direct launch (/salesforce-test-drive:start <id>) and as the default promptPath stem. Must be unique within the catalog."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Menu label shown to the user, e.g. 'Service help agent (website chat widget)'."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "One-line, chooser-facing summary of what this drive builds and the end result."
+        },
+        "owner": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["team", "contact"],
+          "description": "The product team that owns this drive's prompt and manifest. The framework owns the engine; the owning team owns whether their prompt sings.",
+          "properties": {
+            "team": { "type": "string", "minLength": 1 },
+            "contact": {
+              "type": "string",
+              "minLength": 1,
+              "description": "A durable contact — a Slack channel, email alias, or GUS team — not an individual."
+            }
+          }
+        },
+        "requires": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "What the connected org must satisfy for this drive to succeed. The engine gates on this in Step 4 and surfaces gaps as actionable feedback.",
+          "properties": {
+            "minApiVersion": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.0$",
+              "description": "Minimum org API version, e.g. '66.0'."
+            },
+            "licenses": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "License names the org must have (e.g. an Agentforce/Einstein license)."
+            },
+            "userPerms": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "User permissions the running user needs."
+            },
+            "orgPerms": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Org permissions/preferences that must be enabled."
+            },
+            "provisioningTier": {
+              "type": "string",
+              "enum": ["any", "developer-edition", "agentforce"],
+              "description": "Which provisioning path satisfies this drive, so the engine can route a user with no org: 'any' = any authenticated org; 'developer-edition' = a full Developer Edition org; 'agentforce' = an Agentforce-enabled org (e.g. free Agentforce Developer Edition)."
+            },
+            "plugins": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Marketplace plugin ids this drive needs installed BEYOND the base 'salesforce-development' companion (which every drive requires and the engine verifies in Step 0). Example: 'agentforce-adlc', which ships the Agentforce authoring skills (agentforce-generate) — these are NOT part of salesforce-development. The engine checks each id is installed at the top of Step 4; if one is missing it routes into the companion's confirm-then-install (Dynamic Plugin Loading) flow rather than hard-stopping, then has the user run /reload-plugins and re-run. Each name must match a plugin in the Salesforce marketplace catalog."
+            },
+            "orderedSkills": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "The skills this drive choreographs, in build order — provided either by the base 'salesforce-development' companion or by a plugin declared in requires.plugins (e.g. agentforce-generate comes from agentforce-adlc). Advisory for the engine and reviewers; the prompt is the source of truth for execution."
+            }
+          }
+        },
+        "presetInputs": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Plumbing answers the engine injects so the run doesn't stall on mechanical setup (output paths, naming defaults). Do NOT pre-answer the target org here: the engine targets the org it settled on during readiness (the user's default org, under whatever alias THEY use), so a hardcoded org alias would misfire for anyone whose org isn't named that. And do NOT pre-answer showcase design questions — live collaboration on those is the demo."
+        },
+        "promptPath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to the steel-thread prompt, relative to the plugin's prompts/ directory, e.g. 'service-help-agent.md'."
+        },
+        "handoff": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Scripted next-step shown when the build finishes — how the user sees the result work (e.g. 'Open your org, go to the chat widget, and ask it a question'). Use `<angle-bracket>` placeholders for values the engine resolves at handoff time: `<targetOrg>` (the alias/username of the org it settled on); `<projectDir>` (the absolute path of the DX project the build scaffolded/used — prefix any directory-sensitive command with `cd <projectDir> && …` since the build often scaffolds a nested, drive-named project); and, for values the build produces, a descriptive token such as `<agentApiName>` (the created agent's API name). Match commands to the lifecycle state the engine leaves the build in — the engine is draft-first (deploys but never publishes/activates), so an Agentforce preview must use `--authoring-bundle <agentApiName>`, not `--api-name` (which only resolves for a published+activated agent and fails on a draft with `SingleRecordQuery_NoRecords`). The engine substitutes every placeholder before showing the command, so it's copy-pasteable against the user's org. Never hardcode an org alias, and never leave a value the engine can't resolve as a bare `<…>` token — unresolved angle brackets paste into a shell as redirection and fail."
+        }
+      }
+    }
+  }
+}

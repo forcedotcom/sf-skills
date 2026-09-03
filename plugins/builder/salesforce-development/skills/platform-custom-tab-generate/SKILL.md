@@ -81,7 +81,7 @@ Also forbidden:
     <motif>Custom98: Truck</motif>
 </CustomTab>
 ```
-- **❌ WRONG** — do NOT add `<sobjectName>`, `<name>`, `<fullName>`, or `<label>`:
+- **WRONG** — do NOT add `<sobjectName>`, `<name>`, `<fullName>`, or `<label>`:
 ```xml
 <CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
     <sobjectName>Space_Station__c</sobjectName>  <!-- DEPLOYMENT ERROR -->

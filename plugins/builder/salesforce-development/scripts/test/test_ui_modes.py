@@ -270,7 +270,9 @@ class UiModeContracts(unittest.TestCase):
                 self.assertEqual(SFX.cmd_journey([]), 0)
             outputs.append(out.getvalue())
         self.assertEqual(len(set(outputs)), 1)
-        self.assertIn("current: Build", outputs[0])
+        # The visible rail is signpost-only now (no state summary); assert a mode-invariant
+        # signpost label rather than the removed "current: Build" summary line.
+        self.assertIn("build", outputs[0])
 
 
 if __name__ == "__main__":

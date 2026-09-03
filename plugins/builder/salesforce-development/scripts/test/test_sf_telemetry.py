@@ -746,6 +746,11 @@ class CommandTierTests(TelemetryCaptureTestBase):
     def test_first_party_subcommand_allowlisted(self):
         binary, cat, sub = self._cls("sf-context status-org")
         self.assertEqual((binary, cat, sub), ("sf-context", "plugin_command", "status-org"))
+        binary, cat, sub = self._cls("sf-context discover overview")
+        self.assertEqual((binary, cat, sub), ("sf-context", "plugin_command", "discover"))
+        rec = {"event": "command_invoked", "payload": {
+            "binary": binary, "category": cat, "subcommand": sub, "outcome": "success"}}
+        self.assertEqual(sft._to_pdp_event(rec)["componentId"], "sf-context.discover")
         # an unknown subcommand is dropped, not stored raw
         self.assertEqual(self._cls("sf-context frobnicate-SECRET")[2], "")
 
@@ -1456,8 +1461,9 @@ class ManifestWiringTests(unittest.TestCase):
     # command_invoked's post-bash success leg, but with no distinguishable command
     # substring to detect here -- so there is nothing for this manifest scan to find.
     # plugin_recommended / plugin_installed (W-23856691) are likewise in-process
-    # capture_event(...) calls -- from _plugin_catalog_match / session_plugin_hint.py
-    # (recommend) and cmd_plugin_install (install) -- never a `telemetry-capture
+    # capture_event(...) calls -- from _plugin_catalog_match / the SessionStart banner
+    # slot _session_start_plugin_slot (recommend) and cmd_plugin_install (install) --
+    # never a `telemetry-capture
     # <event>` manifest hook, so this substring scan has nothing to find for them.
     _NEVER_HOOK_WIRED = {
         "plugin_loaded", "plugin_suggestion_declined",
@@ -1892,6 +1898,67 @@ class A4dDatasetAlignmentTests(unittest.TestCase):
         rec = self._record("session_start", {"is_first_run": True})
         self.assertEqual(sft._to_a4d_event(rec)["attributes"]["harness"], "")
 
+    def test_event_time_on_every_uip_event_only(self):
+        cases = (
+            ("session_start", {"is_first_run": True}),
+            ("session_end", {"duration_ms": 10, "event_count": 1}),
+            ("command_invoked", {"binary": "sf-context", "category": "plugin_command",
+                                 "subcommand": "status-org", "outcome": "success"}),
+            ("skill_dispatched", {"skill": "platform-apex-generate",
+                                  "skill_domain": "platform"}),
+            ("agent_dispatched", {"agent_type": "salesforce-dev"}),
+            ("mcp_tool_used", {"mcp_server": "salesforce-lsp", "mcp_tool": "query",
+                               "outcome": "success"}),
+            ("exception", {"error_class": "rate_limit", "kind": "api_error"}),
+        )
+        for event, payload in cases:
+            rec = self._record(event, payload, timestamp=1724170000000)
+            self.assertEqual(sft._to_a4d_event(rec)["attributes"]["eventTime"],
+                             "1724170000000", event)
+            self.assertNotIn("eventTime", json.dumps(sft._to_pdp_event(rec)), event)
+
+    def test_event_time_empty_when_timestamp_missing(self):
+        rec = self._record("session_start", {"is_first_run": True})
+        self.assertEqual(sft._to_a4d_event(rec)["attributes"]["eventTime"], "")
+
+    def test_is_first_run_only_on_session_started(self):
+        first = self._record("session_start", {"is_first_run": True})
+        later = self._record("session_start", {"is_first_run": False})
+        self.assertEqual(sft._to_a4d_event(first)["attributes"]["is_first_run"], "true")
+        self.assertEqual(sft._to_a4d_event(later)["attributes"]["is_first_run"], "false")
+        ended = self._record("session_end", {"duration_ms": 10, "event_count": 1})
+        self.assertNotIn("is_first_run", sft._to_a4d_event(ended)["attributes"])
+        self.assertNotIn("is_first_run", json.dumps(sft._to_pdp_event(first)))
+
+    def test_command_surface_is_derived_on_command_invoked_only(self):
+        def surface(subcommand):
+            rec = self._record("command_invoked", {
+                "binary": "sf-context", "category": "plugin_command",
+                "subcommand": subcommand, "outcome": "success"})
+            return rec, sft._to_a4d_event(rec)["attributes"]["commandSurface"]
+
+        user, user_surface = surface("status-org")
+        plugin_install, plugin_install_surface = surface("plugin-install")
+        hook, hook_surface = surface("telemetry-flush")
+        unknown, unknown_surface = surface("")
+        self.assertEqual(user_surface, "user")
+        self.assertEqual(plugin_install_surface, "user")
+        self.assertEqual(hook_surface, "hook")
+        self.assertEqual(unknown_surface, "unknown")
+        for rec in (user, plugin_install, hook, unknown):
+            self.assertNotIn("commandSurface", json.dumps(sft._to_pdp_event(rec)))
+        session = self._record("session_start", {"is_first_run": True})
+        self.assertNotIn("commandSurface", sft._to_a4d_event(session)["attributes"])
+
+    def test_deploy_gate_commands_are_hook_surface(self):
+        for subcommand in ("prod-check", "destructive", "auto-deploy"):
+            rec = self._record("command_invoked", {
+                "binary": "sf-deploy-gate", "category": "plugin_command",
+                "subcommand": subcommand, "outcome": "success"})
+            attrs = sft._to_a4d_event(rec)["attributes"]
+            self.assertEqual(attrs["commandSurface"], "hook", subcommand)
+            self.assertNotIn("commandSurface", json.dumps(sft._to_pdp_event(rec)))
+
 
 class GoldenWireShapeTests(unittest.TestCase):
     """CHARACTERIZATION safety net: pin the EXACT PDP + UIP wire shapes for every
@@ -1966,20 +2033,23 @@ class GoldenWireShapeTests(unittest.TestCase):
             "plugin_name": "salesforce-development", "plugin_version": "1.11.0",
             "org_bucket": "production", "model": "claude-opus-4-8", "ci": "false",
             "machine_id": "MID123", "harness": "claude-code",
+            "eventTime": "",
             "skillSource": "salesforce-development", "modelId": "claude-opus-4-8",
             "user_Id": "MID123",
         }
 
     def test_uip_wire_shape_golden(self):
         expected = {
-            "session_start": {"eventName": "session.started", "attributes":
-                self._uip_common("claude-opus-4-8", "os::org_bucket::model",
-                                 "darwin::production::claude-opus-4-8")},
+            "session_start": {"eventName": "session.started", "attributes": {
+                **self._uip_common("claude-opus-4-8", "os::org_bucket::model",
+                                   "darwin::production::claude-opus-4-8"),
+                "is_first_run": "true"}},
             "session_end": {"eventName": "session.ended", "attributes": {
                 **self._uip_common("session", "duration_ms", "2500"), "eventVolume": 7}},
-            "command_invoked": {"eventName": "command.invoked", "attributes":
-                self._uip_common("sf-context.status-org", "outcome::category",
-                                 "success::plugin_command")},
+            "command_invoked": {"eventName": "command.invoked", "attributes": {
+                **self._uip_common("sf-context.status-org", "outcome::category",
+                                   "success::plugin_command"),
+                "commandSurface": "user"}},
             "skill_dispatched": {"eventName": "skill.dispatched", "attributes": {
                 **self._uip_common("platform-apex-generate", "skill_domain", "platform"),
                 "skillName": "platform-apex-generate"}},

@@ -1,0 +1,31 @@
+{
+  "$schema": "./test-drive.schema.json",
+  "_note": "The service-help-agent entry's requires.licenses and orderedSkills were validated by the feasibility spike (.context/test-drive-spike, 2026-08-24): the build runs end-to-end (author → local compile → deploy Apex → validate → deploy AiAuthoringBundle) and the agent's actions were verified against real org data. The conversational 'try it out' is interactive-only (sf agent preview is a TTY UI with no scriptable/headless mode), so it is a user-driven handoff step, never engine-verified. Channel wiring (website widget) and email-to-case are manual Setup steps, not skills — narrated as checkpoints at runtime.",
+  "testDrives": [
+    {
+      "id": "service-help-agent",
+      "title": "Service help agent (website chat widget)",
+      "description": "Build an Agentforce service agent that answers common customer questions, manages support cases, and hands off to a human — delivered as a chat widget on your website.",
+      "owner": {
+        "team": "Service Cloud",
+        "contact": "#service-cloud-agentforce (placeholder — confirm the owning team's durable channel)"
+      },
+      "requires": {
+        "minApiVersion": "66.0",
+        "licenses": [
+          "Agentforce Service Agent User",
+          "Agentforce Service Agent Builder"
+        ],
+        "provisioningTier": "agentforce",
+        "plugins": [
+          "agentforce-adlc"
+        ],
+        "orderedSkills": [
+          "agentforce-generate"
+        ]
+      },
+      "promptPath": "service-help-agent.md",
+      "handoff": "Try it immediately with the interactive preview. The agent is deployed as a draft (not published or activated), so you preview it straight from its local authoring bundle — run this one line: `cd \"<projectDir>\" && sf agent preview --target-org <targetOrg> --authoring-bundle <agentApiName> --use-live-actions`. The `cd` matters: `--authoring-bundle` reads the Agent Script bundle from inside the DX project, so the command must run from the project root — not `--api-name`, which only resolves for a published + activated agent and would fail here with `SingleRecordQuery_NoRecords`. (`sf agent preview` is an interactive terminal session; run it yourself.) Then ask a common question, ask it to open a support case, and ask to talk to a human — you'll see all three behaviors live. To put it in front of real customers, finish the narrated Setup step that wires the agent to a Messaging for Web / Embedded Service channel on your website."
+    }
+  ]
+}

@@ -2,11 +2,11 @@
 name: platform-custom-application-generate
 description: "Use this skill when users need to create or configure tab-based Salesforce Custom Applications with navigation, branding, and action overrides. Trigger when users mention custom apps, application metadata, app navigation, or organizing tabs into applications. Use when users want to create app containers for tabs and pages. Do NOT use when the goal is hosting a React UI bundle in the App Launcher — use experience-ui-bundle-custom-app-generate for that case."
 metadata:
-  relatedSkills:
-    - "experience-ui-bundle-custom-app-generate"
   version: "1.0"
   domains: ["Platform"]
   minApiVersion: "60.0"
+  relatedSkills:
+    - "experience-ui-bundle-custom-app-generate"
 ---
 
 ## When to Use This Skill
@@ -48,8 +48,8 @@ Custom applications (Lightning Apps) that group tabs and functionality to provid
 - **description**: Brief description of the application's purpose
 - **tabs**: Array of tab names to include
 - **utilityBar**: API name of the Utility Bar configuration
-- **brand**: ⚠️ HIGHLY RECOMMENDED - Branding configuration object (headerColor, shouldOverrideOrgTheme, footerColor)
-- **actionOverrides**: ⚠️ REQUIRED when custom record pages exist - Action override configuration (actionName, content, formFactor, type, pageOrSobjectType)
+- **brand**: HIGHLY RECOMMENDED - Branding configuration object (headerColor, shouldOverrideOrgTheme, footerColor)
+- **actionOverrides**: REQUIRED when custom record pages exist - Action override configuration (actionName, content, formFactor, type, pageOrSobjectType)
 - **profileActionOverrides**: Profile-specific action overrides (actionName, content, formFactor, pageOrSobjectType, type, profile)
 - **isNavAutoTempTabsDisabled**: Navigation behavior setting (default: false)
 - **isNavPersonalizationDisabled**: Personalization setting (default: false)

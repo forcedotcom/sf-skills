@@ -11,6 +11,10 @@ metadata:
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.126.4"
+  mcpTools:
+    metadata-experts:
+      tools: ["execute_metadata_action"]
+      semver: ">=1.0.0"
 ---
 
 ## When to Use This Skill

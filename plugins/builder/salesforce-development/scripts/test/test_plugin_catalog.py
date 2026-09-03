@@ -40,6 +40,65 @@ class PluginCatalogGenerationTests(unittest.TestCase):
             with self.assertRaisesRegex(self.mod.PluginCatalogError, "stale"):
                 self.mod.check(REPO_ROOT, PLUGIN_ROOT, stale)
 
+    def test_provenance_hash_is_the_sha256_of_the_marketplace_bytes(self):
+        # The provenance digest is the whole point of the generated artifact: it
+        # binds the catalog to the exact marketplace bytes it was built from. Pin
+        # that it is literally sha256(marketplace file bytes) -- not sha256 of the
+        # serialized catalog, not a placeholder constant, both of which would also
+        # be 64 hex chars and pass the shape check in _validate_catalog.
+        import hashlib
+        marketplace_bytes = (REPO_ROOT / self.mod.MARKETPLACE_RELATIVE).read_bytes()
+        data = self.mod.build_catalog(REPO_ROOT, PLUGIN_ROOT)
+        self.assertEqual(
+            data["generatedFrom"]["marketplaceSha256"],
+            hashlib.sha256(marketplace_bytes).hexdigest(),
+        )
+
+    def test_check_detects_a_marketplace_edit_invisible_to_the_flattened_rows(self):
+        # check() must go stale on ANY marketplace content change, including one
+        # that leaves every flattened plugin row byte-identical (reformatted
+        # whitespace / reordered top-level keys). The provenance sha is the ONLY
+        # signal that catches this class of drift -- the flattened rows alone
+        # wouldn't -- so this proves the digest is actually consulted by check(),
+        # not just emitted. Built on a synthetic repo so the real marketplace is
+        # never mutated.
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+            (repo_root / ".claude-plugin").mkdir(parents=True)
+            (repo_root / "skills").mkdir()
+            marketplace_path = repo_root / self.mod.MARKETPLACE_RELATIVE
+            entry = {
+                "name": "sample-plugin",
+                "source": "./plugins/sample-plugin",
+                "description": "A sample plugin for provenance testing.",
+                "keywords": ["sample"],
+                "metadata": {"match": {"examplePrompts": ["test the sample plugin"]}},
+            }
+            marketplace = {"name": "test-marketplace", "plugins": [entry]}
+            marketplace_path.write_text(
+                json.dumps(marketplace, indent=2), encoding="utf-8"
+            )
+            (repo_root / "config.yml").write_text("internalPlugins: []\n", encoding="utf-8")
+            artifact = repo_root / self.mod.ARTIFACT_RELATIVE
+            artifact.parent.mkdir(parents=True)
+            # Write the artifact via _serialized rather than generate(), which uses
+            # write_text(newline=...) (Python 3.10+) -- these tests run on the 3.9
+            # CI baseline. The bytes are identical to what generate() emits on a
+            # POSIX runner.
+            artifact.write_text(
+                self.mod._serialized(self.mod.build_catalog(repo_root, repo_root)),
+                encoding="utf-8",
+            )
+            self.assertTrue(self.mod.check(repo_root, repo_root, artifact))
+
+            # Reformat the marketplace bytes only -- same parsed object, same
+            # flattened rows, DIFFERENT bytes => different sha => stale.
+            reformatted = json.dumps(marketplace, indent=4) + "\n"
+            self.assertNotEqual(reformatted.encode("utf-8"), marketplace_path.read_bytes())
+            marketplace_path.write_text(reformatted, encoding="utf-8")
+            with self.assertRaisesRegex(self.mod.PluginCatalogError, "stale"):
+                self.mod.check(repo_root, repo_root, artifact)
+
     def test_real_catalog_shape_is_single_source_and_flattened(self):
         data = self.mod.build_catalog(REPO_ROOT, PLUGIN_ROOT)
         self.assertEqual(data["schemaVersion"], "1.0")
@@ -54,9 +113,10 @@ class PluginCatalogGenerationTests(unittest.TestCase):
         names = [row["name"] for row in data["plugins"]]
         self.assertEqual(names, sorted(names))
         required_match_keys = {"description", "keywords", "examplePrompts"}
+        optional_match_keys = {"anchorTerms", "anchorCompanions", "entryCommand"}
         for row in data["plugins"]:
             self.assertEqual(set(row), {"name", "source", "match"})
-            self.assertTrue(required_match_keys <= set(row["match"]) <= required_match_keys | {"anchorTerms"})
+            self.assertTrue(required_match_keys <= set(row["match"]) <= required_match_keys | optional_match_keys)
             # No pin/origin/marketplace/trust survive into the flattened row.
             self.assertNotIn("pin", row)
             self.assertNotIn("origin", row)
@@ -357,10 +417,13 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
     def setUpClass(cls):
         cls.mod = load_module(MODULE_PATH, "plugin_catalog_under_test_score")
 
-    def _plugin(self, name, description, keywords, example_prompts, source="./x", anchor_terms=None):
+    def _plugin(self, name, description, keywords, example_prompts, source="./x",
+                anchor_terms=None, anchor_companions=None):
         match = {"description": description, "keywords": keywords, "examplePrompts": example_prompts}
         if anchor_terms:
             match["anchorTerms"] = anchor_terms
+        if anchor_companions:
+            match["anchorCompanions"] = anchor_companions
         return {"name": name, "source": source, "match": match}
 
     def test_anchor_terms_require_at_least_one_to_be_present_in_the_prompt(self):
@@ -392,6 +455,81 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
             "configure a DevOps Center test pipeline", catalog_data
         )
         self.assertIn("devops-plugin", {match.plugin["name"] for match in matches})
+
+    def test_anchor_companion_gates_a_common_word_anchor_on_a_corroborating_token(self):
+        # An anchor term that is itself an everyday word ("drive", a verb in
+        # "drive adoption/revenue") declares anchorCompanions so it only anchors
+        # when a corroborating token is co-present -- proxying the bigram
+        # "test drive" via the token "test". This is the mechanism behind
+        # test-drive's leak fix, isolated from BM25 corpus noise. Score alone
+        # cannot separate the leak from the keeper; the companion token can.
+        gated = self._plugin(
+            "drive-plugin",
+            "Take a guided test drive of a rehearsable end-to-end product build.",
+            ["test drive", "guided walkthrough", "rehearsable build"],
+            ["take Service Cloud for a test drive"],
+            anchor_terms=["drive", "walkthrough"],
+            anchor_companions={"drive": ["test"]},
+        )
+        # A disjoint second plugin gives BM25 idf something to work with.
+        unrelated = self._plugin(
+            "flow-plugin",
+            "Build and automate record-triggered Salesforce Flows.",
+            ["flow", "automation"],
+            ["build a record-triggered flow"],
+        )
+        catalog_data = {"plugins": [gated, unrelated]}
+
+        # Bare "drive" as a verb, no "test" companion -> the anchor does not fire
+        # even though "drive" is a matched term that would otherwise clear score.
+        matches = self.mod.score_prompt_against_catalog(
+            "drive adoption of a rehearsable build across the team", catalog_data
+        )
+        self.assertNotIn("drive-plugin", {match.plugin["name"] for match in matches})
+
+        # The "test" companion present -> the "drive" anchor fires and it surfaces.
+        matches = self.mod.score_prompt_against_catalog(
+            "take a test drive of the rehearsable build", catalog_data
+        )
+        self.assertIn("drive-plugin", {match.plugin["name"] for match in matches})
+
+        # A companion-less anchor on the SAME plugin ("walkthrough") still fires
+        # on its own -- companions gate only the term that declares them.
+        matches = self.mod.score_prompt_against_catalog(
+            "give me a guided walkthrough of the rehearsable build", catalog_data
+        )
+        self.assertIn("drive-plugin", {match.plugin["name"] for match in matches})
+
+    def test_real_test_drive_catalog_declares_the_drive_companion(self):
+        # Lock the leak fix into the checked-in artifact: if someone strips
+        # anchorCompanions from salesforce-test-drive, bare "drive" starts
+        # leaking onto the proactive surfaces again. Guard both the data and the
+        # end-to-end behavioural consequence.
+        data = self.mod.load_catalog(PLUGIN_ROOT)
+        row = next(p for p in data["plugins"] if p["name"] == "salesforce-test-drive")
+        self.assertEqual(row["match"].get("anchorCompanions"), {"drive": ["test"]})
+        self.assertIn("drive", row["match"].get("anchorTerms", []))
+
+        # Mirror the proactive surface: the always-active foundation plugin is
+        # excluded from the candidate corpus before scoring.
+        data = {
+            **data,
+            "plugins": [p for p in data["plugins"] if p["name"] != "salesforce-development"],
+        }
+        # Isolate the "drive" companion: a near-identical prompt pair where
+        # "drive" is the ONLY anchor candidate (no "walkthrough"/"rehearsable"
+        # to fire on their own), differing only by the "test" companion token.
+        # The bigram present -> high; strip "test" and the anchor is gated out.
+        without_test = "take Service Cloud for a drive"
+        with_test = "take Service Cloud for a test drive"
+        self.assertFalse(any(
+            m.plugin["name"] == "salesforce-test-drive" and m.band == "high"
+            for m in self.mod.score_prompt_against_catalog(without_test, data)
+        ))
+        self.assertTrue(any(
+            m.plugin["name"] == "salesforce-test-drive" and m.band == "high"
+            for m in self.mod.score_prompt_against_catalog(with_test, data)
+        ))
 
     def test_require_anchor_terms_false_restores_plain_high_and_medium_recall(self):
         # Surfaces that pass require_anchor_terms=False (explicit discovery, the
@@ -685,6 +823,249 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
             match.plugin["name"] == "mobile-development" and match.band == "high"
             for match in matches
         ))
+
+    def test_test_drive_only_surfaces_on_explicit_walkthrough_intent(self):
+        # salesforce-test-drive is deliberately shy. On the proactive surfaces
+        # (UserPromptSubmit / SessionStart, which score with
+        # require_anchor_terms=True) it may interrupt a developer ONLY when the
+        # prompt carries explicit "test drive" / "guided walkthrough" /
+        # "rehearsable build" intent. A serious developer who knows what they
+        # want -- deploying Apex, building a flow -- or who merely says "drive"
+        # / "guided" / "Google Drive" in passing must never have this
+        # learning-engine plugin proposed at them unprompted. Its anchor set is
+        # kept to the distinctive tokens {drive, walkthrough, rehearsable} for
+        # exactly this reason ("demo"/"guided" are intentionally NOT anchors:
+        # both collide with everyday developer phrasing and the former also
+        # eroded dx-org-lifecycle's precision on "trial org for this demo").
+        data = self.mod.load_catalog(PLUGIN_ROOT)
+        # Mirror the real proactive surface: the foundation plugin is always
+        # active and excluded from the candidate corpus before scoring (see
+        # test_real_tranche_prompts_have_one_high_confidence_product_route).
+        data = {
+            **data,
+            "plugins": [p for p in data["plugins"] if p["name"] != "salesforce-development"],
+        }
+
+        explicit_requests = [
+            "take Service Cloud for a test drive",
+            "test drive the service help agent",
+            "I want to test drive building a website chat widget",
+            "give me a guided walkthrough of building a Service help agent",
+            "show me a rehearsable end-to-end Salesforce build I can follow",
+        ]
+        for prompt in explicit_requests:
+            with self.subTest(explicit=prompt):
+                matches = self.mod.score_prompt_against_catalog(prompt, data)
+                self.assertTrue(any(
+                    match.plugin["name"] == "salesforce-test-drive" and match.band == "high"
+                    for match in matches
+                ))
+
+        serious_developer_prompts = [
+            "drive adoption of my new feature",              # "drive" as a verb
+            "read the quarterly report from Google Drive",   # unrelated "drive"
+            "guided setup for my scratch org",               # "guided" is common
+            "deploy my Apex classes to production",          # knows what they want
+            "build a record-triggered flow for approvals",
+        ]
+        for prompt in serious_developer_prompts:
+            with self.subTest(serious=prompt):
+                matches = self.mod.score_prompt_against_catalog(prompt, data)
+                self.assertFalse(any(
+                    match.plugin["name"] == "salesforce-test-drive" and match.band == "high"
+                    for match in matches
+                ))
+
+    def test_tokenize_lowercases_and_drops_stopwords_and_single_chars(self):
+        # _tokenize is the front door of the scorer: everything the BM25 pass
+        # sees is what survives here. Three filters run, each load-bearing:
+        # (1) lowercase, so casing never splits a term; (2) the _GENERIC_MATCH_TERMS
+        # stoplist, so request scaffolding ("build", "a", "with") is not product
+        # evidence; (3) the `len(token) > 1` short-token drop, so a lone letter or
+        # digit ("x", "5") cannot become a scored term. This last filter is
+        # exercised nowhere else -- relaxing it to `>= 1` would readmit single
+        # chars as evidence with no other test failing.
+        self.assertEqual(
+            self.mod._tokenize("Build a FLOW with X 5 Approvals"),
+            ["flow", "approvals"],
+        )
+        # A non-stoplisted single character alone tokenizes to nothing (proving the
+        # drop is the length filter, not stoplist membership).
+        self.assertEqual(self.mod._tokenize("z"), [])
+        self.assertEqual(self.mod._tokenize("7"), [])
+        # Punctuation is a separator, not a token; distinctive multi-char words
+        # survive regardless of surrounding noise.
+        self.assertEqual(self.mod._tokenize("LWC, React!! shadcn"), ["lwc", "react", "shadcn"])
+
+    def test_bm25_idf_is_monotonic_in_document_frequency(self):
+        # The load-bearing ranking property, tested at the seam: holding term
+        # frequency, doc length, and corpus size constant, a term's BM25 score
+        # must strictly DECREASE as it appears in more documents. This is why a
+        # distinctive product word (rare across the catalog) outweighs a generic
+        # word shared by every plugin -- and why matching degenerates in a tiny
+        # corpus (every term is "common", its idf collapses).
+        doc_tokens = ["zephyr", "widget", "widget"]
+        common = dict(
+            query_terms={"zephyr"}, doc_tokens=doc_tokens, avg_doc_len=3.0, total_docs=20
+        )
+        rare, _ = self.mod._bm25_score(doc_freq={"zephyr": 1}, **common)
+        mid, _ = self.mod._bm25_score(doc_freq={"zephyr": 10}, **common)
+        ubiquitous, _ = self.mod._bm25_score(doc_freq={"zephyr": 20}, **common)
+        self.assertGreater(rare, mid)
+        self.assertGreater(mid, ubiquitous)
+        self.assertGreaterEqual(ubiquitous, 0.0)  # idf never goes negative here
+
+    def test_bm25_term_frequency_saturates_sub_linearly(self):
+        # BM25_K1 is the term-frequency saturation knob: repeating a query term
+        # in a document must raise the score (more evidence) but with DIMINISHING
+        # returns -- never linearly. Hold idf (doc_freq), doc length, and corpus
+        # size constant by padding every document to the same length, so the ONLY
+        # variable is how many times the matched term appears. If a regression set
+        # K1 absurdly high (approaching raw-count scoring) or removed the
+        # saturation denominator, doubling the frequency would ~double the score
+        # and this guard would fire.
+        common = dict(
+            query_terms={"zephyr"}, doc_freq={"zephyr": 1}, avg_doc_len=10.0, total_docs=20
+        )
+        once, _ = self.mod._bm25_score(doc_tokens=["zephyr"] + ["pad"] * 9, **common)
+        twice, _ = self.mod._bm25_score(doc_tokens=["zephyr", "zephyr"] + ["pad"] * 8, **common)
+        four, _ = self.mod._bm25_score(doc_tokens=["zephyr"] * 4 + ["pad"] * 6, **common)
+        self.assertGreater(twice, once)              # more frequency => more score
+        self.assertLess(twice, 2 * once)             # ...but strictly sub-linear
+        self.assertLess(four - twice, twice - once)  # marginal gain diminishes
+
+    def test_bm25_penalizes_longer_documents_at_equal_term_frequency(self):
+        # BM25_B is the length-normalization knob: at IDENTICAL raw term
+        # frequency, a term occurring in a short focused document must outscore
+        # the same term buried in a long padded one, so a sprawling marketplace
+        # description cannot out-rank a tight one just by being longer. B=0 would
+        # disable this normalization entirely (short == long) -- this guard pins
+        # that the penalty is active.
+        common = dict(
+            query_terms={"zephyr"}, doc_freq={"zephyr": 1}, avg_doc_len=10.0, total_docs=20
+        )
+        short, _ = self.mod._bm25_score(doc_tokens=["zephyr"] + ["pad"] * 4, **common)
+        long, _ = self.mod._bm25_score(doc_tokens=["zephyr"] + ["pad"] * 19, **common)
+        self.assertGreater(short, long)
+
+    def test_jaccard_overlap_ratio_and_empty_union_guard(self):
+        # _jaccard is the evidence-agreement signal the dedup gate multiplies
+        # against the score margin. Pin its exact ratios and the empty-union
+        # guard (its `if not union: return 0.0` short-circuit is unreachable from
+        # the scorer's only caller, since every scored candidate matched >=1 term,
+        # so it is asserted directly here or not at all). An off-by-one in the
+        # intersection/union arithmetic would silently reshape every collapse
+        # decision.
+        self.assertEqual(self.mod._jaccard(frozenset(), frozenset()), 0.0)
+        self.assertEqual(self.mod._jaccard(frozenset({"a", "b"}), frozenset({"a", "b"})), 1.0)
+        self.assertEqual(self.mod._jaccard(frozenset({"a", "b", "c"}), frozenset({"a"})), 1 / 3)
+        self.assertEqual(self.mod._jaccard(frozenset({"a"}), frozenset({"b"})), 0.0)
+        # The exact 0.6 threshold boundary the collapse gate keys on.
+        self.assertEqual(
+            self.mod._jaccard(frozenset({"a", "b", "c", "d"}), frozenset({"a", "b", "c", "e"})), 0.6
+        )
+
+    def test_collapse_keeps_both_when_overlap_is_high_but_score_gap_is_wide(self):
+        # The load-bearing half of _collapse_near_duplicates' documented AND
+        # condition: two candidates matched on substantially the SAME evidence
+        # (Jaccard >= 0.6) must still BOTH survive when their scores differ by
+        # more than DEDUP_SCORE_MARGIN (1.0). Every other collapse test uses
+        # identical plugins (gap 0, full overlap -> collapse) or disjoint vocab
+        # (overlap 0 -> keep); none exercises "high overlap, wide score gap ->
+        # keep both". A regression that collapsed on overlap ALONE (dropping the
+        # score-margin conjunct) would silently suppress a legitimately strong
+        # plugin behind a weak one sharing its evidence -- and pass every existing
+        # test. Built by calling the collapse fn directly with hand-made Matches
+        # so the score gap and overlap are controlled independently.
+        Match = self.mod.Match
+        shared = frozenset({"flow", "automation", "record"})
+        strong = Match(plugin={"name": "strong"}, score=5.0, band="high", matched_terms=shared)
+        weak = Match(plugin={"name": "weak"}, score=3.0, band="medium", matched_terms=shared)
+        kept = self.mod._collapse_near_duplicates(
+            [strong, weak],
+            margin=self.mod.DEDUP_SCORE_MARGIN,
+            overlap_threshold=self.mod.DEDUP_OVERLAP_THRESHOLD,
+        )
+        self.assertEqual([m.plugin["name"] for m in kept], ["strong", "weak"])
+
+        # Boundary mirror: the score-margin comparison is inclusive (`<=`), so a
+        # gap of EXACTLY the margin with the same high overlap DOES collapse --
+        # the lower-scoring twin is suppressed. This pins the `<=` (not `<`).
+        weak_at_margin = Match(
+            plugin={"name": "weak"}, score=4.0, band="high", matched_terms=shared
+        )
+        collapsed = self.mod._collapse_near_duplicates(
+            [strong, weak_at_margin],
+            margin=self.mod.DEDUP_SCORE_MARGIN,
+            overlap_threshold=self.mod.DEDUP_OVERLAP_THRESHOLD,
+        )
+        self.assertEqual([m.plugin["name"] for m in collapsed], ["strong"])
+
+    def test_collapse_boundary_is_inclusive_at_the_overlap_threshold(self):
+        # The overlap side of the AND: at a small score gap (<= margin), overlap
+        # EXACTLY at DEDUP_OVERLAP_THRESHOLD (0.6) collapses, and overlap just
+        # below it (0.5) keeps both. Together with the test above this pins both
+        # conjuncts of the gate at their boundaries -- the seam most vulnerable to
+        # a `>=`/`>` or `<=`/`<` off-by-one regression.
+        Match = self.mod.Match
+        # Jaccard == 0.6 (>= threshold) -> collapse the lower-scoring twin.
+        at = [
+            Match(plugin={"name": "hi"}, score=5.0, band="high",
+                  matched_terms=frozenset({"a", "b", "c", "d"})),
+            Match(plugin={"name": "lo"}, score=4.5, band="high",
+                  matched_terms=frozenset({"a", "b", "c", "e"})),
+        ]
+        kept_at = self.mod._collapse_near_duplicates(
+            at, margin=self.mod.DEDUP_SCORE_MARGIN, overlap_threshold=self.mod.DEDUP_OVERLAP_THRESHOLD
+        )
+        self.assertEqual([m.plugin["name"] for m in kept_at], ["hi"])
+        # Jaccard == 0.5 (< threshold) -> both distinct plugins survive.
+        below = [
+            Match(plugin={"name": "hi"}, score=5.0, band="high",
+                  matched_terms=frozenset({"a", "b", "c"})),
+            Match(plugin={"name": "lo"}, score=4.5, band="high",
+                  matched_terms=frozenset({"a", "b", "d"})),
+        ]
+        kept_below = self.mod._collapse_near_duplicates(
+            below, margin=self.mod.DEDUP_SCORE_MARGIN, overlap_threshold=self.mod.DEDUP_OVERLAP_THRESHOLD
+        )
+        self.assertEqual([m.plugin["name"] for m in kept_below], ["hi", "lo"])
+
+    def test_scoring_is_deterministic_and_sorted_descending(self):
+        # No set-iteration nondeterminism may leak into the output: the same
+        # prompt against the same catalog must return byte-identical results
+        # across runs (scores are order-independent sums; the final sort is
+        # stable), and the ranking must be non-increasing by score.
+        data = self.mod.load_catalog(PLUGIN_ROOT)
+        prompt = "configure a DevOps Center test pipeline and promote a work item"
+        first = self.mod.score_prompt_against_catalog(prompt, data)
+        for _ in range(5):
+            again = self.mod.score_prompt_against_catalog(prompt, data)
+            self.assertEqual(
+                [(m.plugin["name"], m.score, m.band, m.matched_terms) for m in first],
+                [(m.plugin["name"], m.score, m.band, m.matched_terms) for m in again],
+            )
+        scores = [m.score for m in first]
+        self.assertEqual(scores, sorted(scores, reverse=True))
+
+    def test_equal_scoring_distinct_plugins_keep_catalog_order(self):
+        # Tie-break is the stable sort's contract: two distinct plugins that
+        # score identically (disjoint vocab -> not collapsed by dedup) must
+        # preserve their catalog input order, not reorder run-to-run. Built as
+        # mirror-image plugins so both score exactly the same on a two-term
+        # prompt naming one distinctive word from each.
+        left = self._plugin(
+            "alpha-plugin", "Alpha zephyr tooling.", ["zephyr"], ["use zephyr"]
+        )
+        right = self._plugin(
+            "beta-plugin", "Beta quokka tooling.", ["quokka"], ["use quokka"]
+        )
+        catalog_data = {"plugins": [left, right]}
+        matches = self.mod.score_prompt_against_catalog(
+            "zephyr and quokka", catalog_data, require_anchor_terms=False
+        )
+        self.assertEqual([m.plugin["name"] for m in matches], ["alpha-plugin", "beta-plugin"])
+        self.assertEqual(matches[0].score, matches[1].score)
 
     def test_empty_catalog_yields_an_empty_list(self):
         self.assertEqual(

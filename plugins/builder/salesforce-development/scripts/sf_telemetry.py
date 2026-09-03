@@ -377,26 +377,45 @@ def _clamp_error_class(value, kind: str) -> str:
 # /salesforce-development:* slash commands (e.g. /salesforce-development:org ->
 # `sf-context status-org`). Recognized so a dev using a slash command reads as
 # real activity, not anonymous "other". Each maps to a coarse category plus the
-# set of subcommands that are OUR OWN fixed vocabulary — so recording the exact
-# subcommand is safe (no free-form user input, paths, or secrets). A subcommand
-# not on its bin's list is recorded as the binary with subcommand dropped — never
-# the raw token. This is what lets us capture "which slash command" without ever
-# capturing an arbitrary string. Keep each bin's set in sync with that bin's own
-# dispatch (sf_context.main() / sf-deploy-gate).
+# map of subcommands that are OUR OWN fixed vocabulary to their user/hook surface —
+# so recording the exact subcommand is safe (no free-form user input, paths, or
+# secrets). A subcommand not on its bin's map is recorded as the binary with
+# subcommand dropped — never the raw token. This is what lets us capture "which
+# slash command" without ever capturing an arbitrary string. Keep each bin's map
+# in sync with that bin's own dispatch (sf_context.main() / sf-deploy-gate).
 _FIRST_PARTY_BINS = {
     "sf-context": {
         "category": "plugin_command",
         "subcommands": {
-            "detect", "verify-org", "check-tools", "post-deploy", "post-deploy-failure",
-            "skills-first-advisory", "record-skill-dispatch", "reset-dispatch-turn",
-            "feedback-nudge", "record-feedback-decision", "record-update-decision",
-            "status", "status-org", "status-project", "telemetry", "telemetry-capture",
-            "telemetry-flush", "telemetry-transmit", "plugin-install",
+            "detect": "hook",
+            "verify-org": "hook",
+            "check-tools": "user",
+            "post-deploy": "hook",
+            "post-deploy-failure": "hook",
+            "skills-first-advisory": "hook",
+            "record-skill-dispatch": "hook",
+            "reset-dispatch-turn": "hook",
+            "feedback-nudge": "hook",
+            "record-feedback-decision": "hook",
+            "record-update-decision": "hook",
+            "status": "user",
+            "status-org": "user",
+            "status-project": "user",
+            "telemetry": "user",
+            "telemetry-capture": "hook",
+            "telemetry-flush": "hook",
+            "telemetry-transmit": "hook",
+            "discover": "user",
+            "plugin-install": "user",
         },
     },
     "sf-deploy-gate": {
         "category": "plugin_command",
-        "subcommands": {"prod-check", "destructive", "auto-deploy"},
+        "subcommands": {
+            "prod-check": "hook",
+            "destructive": "hook",
+            "auto-deploy": "hook",
+        },
     },
 }
 
@@ -464,6 +483,14 @@ def _segment_binary(tokens: list) -> tuple[str, str, str]:
         subcommand = nxt if nxt in fp["subcommands"] else ""
         return base, fp["category"], subcommand
     return "other", "other", ""
+
+
+def _command_surface(binary: str, subcommand: str) -> str:
+    """Return the closed user/hook surface for an allowlisted plugin command."""
+    fp = _FIRST_PARTY_BINS.get(binary)
+    if fp is None or not subcommand:
+        return "unknown"
+    return fp["subcommands"].get(subcommand, "unknown")
 
 
 def _classify_command(cmd: str) -> tuple[list, str, str, str]:
@@ -1490,8 +1517,8 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             # in-process-only calls (never a standalone hook): `plugin_recommended`
             # is fired once per plugin per session when a known-set plugin is
             # surfaced to the user (from _plugin_catalog_match for all four
-            # proposal surfaces; session_plugin_hint.py reaches it through the
-            # structured plugin-match command); `plugin_installed` is fired on any
+            # proposal surfaces, including the in-process SessionStart banner slot
+            # `_session_start_plugin_slot`); `plugin_installed` is fired on any
             # successful install of a known-set plugin. The caller passes
             # plugin/confidence/surface; the origin dimension is re-derived here
             # from the catalog so it can never be spoofed by the caller.
@@ -1994,6 +2021,11 @@ def _to_a4d_event(record: dict, org_bucket: Optional[str] = None,
         # to the PDP shape (_to_pdp_event stays unchanged). Read downstream as
         # $.properties.harness.
         "harness": str(rec.get("harness", "")),
+        # Capture epoch-ms, string-normalized for JSON_EXTRACT_SCALAR consumers.
+        # UIP-only: the fixed PDP shape remains unchanged.
+        "eventTime": (str(rec.get("timestamp"))
+                      if isinstance(rec.get("timestamp"), (int, float))
+                      and not isinstance(rec.get("timestamp"), bool) else ""),
         # --- UIP dataset-alignment keys (Skills dashboard contract) ----------
         # These align our UIP attribute bag with the EXACT column names the shared
         # Skills dashboard (UIP Hive -> Tableau) extracts from $.properties, so a
@@ -2017,6 +2049,11 @@ def _to_a4d_event(record: dict, org_bucket: Optional[str] = None,
         # counts itself, with no new/PII data — it is already what we transmit.
         "user_Id": str(rec.get("machine_id", "")),
     }
+    if rec.get("event") == "session_start":
+        attributes["is_first_run"] = "true" if p.get("is_first_run") else "false"
+    if rec.get("event") == "command_invoked":
+        attributes["commandSurface"] = _command_surface(
+            p.get("binary"), p.get("subcommand"))
     # skillName: the per-skill dimension the board's Top-Skills charts key on
     # (JSON_EXTRACT_SCALAR(msg, '$.properties.skillName')). Only skill.dispatched
     # carries a real skill name (payload.skill); other event types are not skills,

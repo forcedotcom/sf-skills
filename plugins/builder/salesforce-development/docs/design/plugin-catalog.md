@@ -2,11 +2,10 @@
 
 Design rationale for the plugin-level extension to Headless 360 discovery: when no installed
 skill matches a task, a new tier proposes installing an **uninstalled plugin** whose curated
-description matches the prompt. This note captures the plugin-specific decisions; the full phased
-implementation plan lives in
-[`docs/dev-notes/dynamic-loading-strategy-plan.md`](../../../../docs/dev-notes/dynamic-loading-strategy-plan.md)
-and the cross-cutting invariant reinterpretations are recorded in
-[`docs/design/README.md`](../../../../docs/design/README.md). Read both before modifying
+description matches the prompt. This note captures the plugin-specific decisions; the broader phased
+implementation plan is tracked separately as a design-plans working document, and the cross-cutting
+invariant reinterpretations are recorded in
+[`docs/design/README.md`](../../../../../docs/design/README.md). Read the latter before modifying
 `plugin_catalog.py`, the `UserPromptSubmit`/`PreToolUse` consumers in `sf_context.py`, the
 SessionStart project-signal hint, or the discovery-command plugin-match mode.
 
@@ -45,16 +44,43 @@ Two properties are load-bearing and easy to erode by accident during future edit
 - **Project scoped, except when explicitly asked.** UserPromptSubmit, SessionStart, and the bypass
   gate require `sfdx-project.json` in cwd. The explicit `plugin-match` query remains un-gated because
   invoking it is itself sufficient intent. This keeps a globally installed foundation plugin from
-  presuming that an unrelated React tree or a generic media request is Salesforce work.
-- **Installation state never changes confidence.** BM25 scores use the stable registry add-on
-  corpus, then enabled plugins are removed from the returned candidates. Filtering the scoring
-  corpus first changes IDF and can promote a weak neighboring match from medium to high simply
-  because the correct plugin is already installed. Enabled state controls eligibility only.
+  presuming that an unrelated React tree or a generic media request is Salesforce work. One further
+  out-of-project path exists and is deliberately narrow: when a user with no project names Salesforce
+  or CRM (its product category), the getting-started welcome fires, and that welcome reuses the *same* UserPromptSubmit
+  scorer at its full proactive bar (high band + `require_anchor_terms=True`) to fold at most a
+  one-line install recommendation into the welcome it is already painting. Naming the product or its category out of
+  a project is the sufficient-intent signal here — the exact parallel to explicit discovery — but the
+  high+anchor bar still governs, so a bare product-cue mention (`salesforce` / `crm`) with no strong capability match adds
+  nothing. It is install-only (like SessionStart it never points at an installed plugin's command)
+  and opens the same one decision workflow, so a subsequent sole-candidate `yes` installs through the
+  ordinary accepted-proposal path. This is not a fifth surface: it is the UserPromptSubmit proactive
+  match reached from the getting-started branch, so every evidence-bar knob is identical.
+- **Installation state never changes confidence — it decides eligibility only.** BM25 scores use the
+  stable registry add-on corpus, then enabled plugins are removed from the returned candidates.
+  Filtering the scoring corpus first changes IDF and can promote a weak neighboring match from medium
+  to high simply because the correct plugin is already installed. Enabled state therefore controls
+  eligibility, never confidence — and **recommendations are uninstalled-only**: an already-installed
+  match has nothing to install, so it is dropped after scoring and never surfaces. The whole point of
+  dynamic plugin loading is to surface plugins the user does *not* have; a user who already has the
+  plugin just runs its command, with no recommendation in the way. Dropping the top-ranked installed
+  match still leaves any weaker *uninstalled* neighbor eligible to be proposed in its place (matching
+  develop's pre-existing behavior), because the drop happens *after* the full corpus was scored, so it
+  never changes a band. Fail-open `enabled is None` (settings unreadable) treats every candidate as
+  uninstalled, so the recommender stays useful rather than going silent when it cannot confirm install
+  state. (This reverses the short-lived "you already have this — run its command" routing; see the
+  decision-log entry "Recommendations are uninstalled-only", 2026-08-31.)
 - **Request scaffolding is not product evidence.** The scorer removes common function words,
   generic action verbs, and the shared `Salesforce` umbrella term from both prompts and registry
   documents before scoring. A follow-up such as "add a field to it" therefore cannot accumulate a
   high React score from marketplace prose; confidence must come from substantive vocabulary such
   as `CMS`, `media asset`, `LWC`, `React`, `ui bundle`, or `Agentforce`.
+- **Capability evidence is not task intent.** Exact product vocabulary can produce a strong
+  catalog score in an informational question, comparison, historical observation, or bare
+  declaration. `UserPromptSubmit` therefore requires a conservative deterministic action-request
+  shape before invoking the scorer. Imperatives, explicit requests, and diagnostic questions can
+  proceed; definitions, comparisons, product mentions, and ambiguous statements stay quiet.
+  Explicit discovery and the reactive bypass gate do not use this prompt gate because invoking
+  those surfaces already supplies the missing intent. SessionStart remains project-signal driven.
 - **Tool syntax is not user intent.** The reactive gate scores only the bounded prompt captured by
   UserPromptSubmit. If no prompt marker is available, it stays quiet rather than treating a raw
   command or file path as the task; terms such as `project`, `source`, or `app` otherwise create
@@ -73,7 +99,15 @@ Two properties are load-bearing and easy to erode by accident during future edit
   because the user's own act of invoking those surfaces is itself the missing evidence. A plugin's
   anchor set can therefore still be too narrow to cover every phrase a user would reasonably type
   into explicit discovery — that is an authoring quality issue to fix by broadening the anchor set,
-  not a gap in this surface split. Author anchor terms by hand, checked against that plugin's own
+  not a gap in this surface split. When an anchor term is *itself* an everyday word — test-drive's
+  `drive` is a verb in "drive adoption/revenue/traffic" — the anchor gate alone still leaks, because
+  the term matches the corpus on its own. Score thresholds cannot separate the leaks from the
+  must-keeps (their ranges overlap); the real signal is a *bigram* like "test drive". Such a term
+  therefore declares `metadata.match.anchorCompanions` (`{"drive": ["test"]}`): an anchor with
+  companions counts as a hit only when at least one companion token is also present in the prompt, so
+  bare "drive" is gated while "test drive" fires. This is scorer-general (any anchor may declare
+  companions), and a companion-less anchor on the same plugin (`walkthrough`, `rehearsable`) still
+  fires on its own. Author anchor terms by hand, checked against that plugin's own
   `examplePrompts`/`keywords` so an anchor set never silently makes an example unmatchable.
 - **Sensitivity is one configurable value, not a separate on/off switch.** `off` is simply the most
   conservative point on the same scale as the high/medium band threshold, resolved with precedence
@@ -95,10 +129,13 @@ Two properties are load-bearing and easy to erode by accident during future edit
 - **One session proposal ledger.** SessionStart, prompt, discovery, and bypass consumers reconcile
   against the same per-session plugin marker. The first surface owns telemetry and incidental
   paint; later prompt/tool surfaces must not deny, repaint, or count it again. Explicit discovery
-  queries and SessionStart resume/compact replays may still render because they are solicited or
-  lifecycle replays, but remain side-effect-free. This matters most for proactive paths: once the
-  user has already seen an install choice at startup or before the model answers, the next prompt
-  or tool gate must not turn that same choice into another interruption.
+  queries may still render because they are solicited. SessionStart project hints run only for
+  known fresh-context sources (`startup`, `clear`, and legacy blank payloads); `/clear` deliberately
+  repaints because the prior conversation is absent. `resume`, `compact`, and unknown future sources
+  return before project scanning or matching: they neither render nor touch proposal/telemetry
+  state. This matters most for proactive paths: once the user has already seen an install choice
+  at startup or before the model answers, a lifecycle replay, next prompt, or tool gate must not
+  turn that same choice into another interruption.
 
 ## Security boundary: what text may be exposed
 
@@ -156,12 +193,16 @@ state advances from `recommended` to `selected`, then directly to `installed` fo
 or through `awaiting-confirmation` for an external/self-directed source, and finally to `installed`
 or `declined`. A SessionStart batch can hold several candidates, but a generic reply can select one
 only when exactly one candidate remains unambiguous; an explicitly named valid proposal can always
-select itself. The marker contains only plugin names, state, and one boolean stating whether the
+select itself. When a generic acceptance arrives against more than one open proposal, the runtime
+neither picks one nor falls silent: it returns a disambiguation instruction that names the open
+candidates and asks the user to name the single plugin they mean (a named acceptance then selects
+itself). This preserves the direct-leaf "no best pick" rule while keeping a terse `yes` from
+dead-ending in a bare missing-selection refusal that a model would otherwise be tempted to retry. The marker contains only plugin names, state, and one boolean stating whether the
 recommendation interrupted a concrete task. Marketplace instructions and the user's prompt/task
 text are never persisted.
 
 If SessionStart or an explicit discovery query opened a recommendation-only flow and the user then
-submits a concrete task matching one of those candidates, UserPromptSubmit promotes that candidate
+submits an explicit action request matching one of those candidates, UserPromptSubmit promotes it
 to a task-backed flow and surfaces it for the task. This promotion intentionally bypasses only the
 proposal ledger's first-occurrence display deduplication; it does not bypass source classification
 or the same-session selected-proposal checks.

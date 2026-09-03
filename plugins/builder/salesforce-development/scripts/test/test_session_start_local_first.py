@@ -126,7 +126,7 @@ class SessionStartLocalFirstTests(unittest.TestCase):
         (source / "Widget.cls").write_text("public class Widget {}", encoding="utf-8")
         result = self.detect()
         visible = strip_ansi(result["systemMessage"])
-        self.assertIn("No Default Org", visible)
+        self.assertIn("org: none set", visible)   # lean no-org line, not a titled band
         self.assertIn("local-first", visible)
         self.assertIn("Apex 1 src / 0 test", visible)
         self.assertIn("/salesforce-development:login", visible)

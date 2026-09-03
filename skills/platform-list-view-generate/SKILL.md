@@ -4,6 +4,7 @@ description: "Use this skill when users need to create, generate, or validate Sa
 metadata:
   version: "1.0"
   domains: ["Platform"]
+  minApiVersion: "51.0"
 ---
 
 ## When to Use This Skill

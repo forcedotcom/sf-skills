@@ -78,11 +78,10 @@ Generates flow metadata element by element. This step is **mandatory** and must 
 - **result** (STRING): Result of the flow element generation. Contains the final flow metadata **only when `isComplete` is `true`**.
 
 **MANDATORY: Loop until complete. NEVER pause or ask the user to confirm continuation.**
-- A flow can have **any number of elements** (10, 15, or more). Each call generates one element at a time, so you may need **many** iterations. This is expected and normal.
+- A flow can have **any number of elements**. Each call generates one element at a time, so you may need **many** iterations.
 - Call `flowElementGeneration` with the `operationId` from Step 2 and `requestSource` (use `"A4V"` for XML output, empty string or other value for JSON).
 - Check the `isComplete` output and the `result` field after each call.
-- If `isComplete` is `false` **and no errors are returned**, you **MUST** call `flowElementGeneration` again with the **same `operationId`** from Step 2. **Do NOT ask the user if they want to continue. Do NOT pause. Do NOT summarize progress mid-loop. Just keep calling.**
-- **Do NOT stop** until `isComplete` is `true` **or** the invocable action returns errors. There is **no maximum** number of iterations — keep going regardless of how many calls it takes.
+- If `isComplete` is `false` **and no errors are returned**, you **MUST** call `flowElementGeneration` again with the **same `operationId`** from Step 2. **Do NOT ask the user if they want to continue. Do NOT pause. Do NOT summarize progress mid-loop. Just keep calling** — there is **no maximum** number of iterations.
 - When `isComplete` is `true`, extract the flow metadata from the `result` field.
 - If errors are returned, stop the loop and surface the error to the user.
 
@@ -90,6 +89,8 @@ Generates flow metadata element by element. This step is **mandatory** and must 
 - DO NOT modify the content, values, or child nodes inside any block.
 - DO NOT add new nodes, tags, attributes, or text (do not add missing labels, X/Y coordinates, etc.).
 - DO NOT remove any existing nodes.
+
+**Canvas mode.** A net-new canvas-based flow needs a `<processMetadataValues>` `CanvasMode`=`AUTO_LAYOUT_CANVAS` entry (independent of `BuilderType`) or it opens in **Free-Form**. STRICT CONSTRAINTS forbid hand-editing the XML, so this must come from the generation pipeline — if the returned XML lacks it, surface a pipeline gap; do NOT hand-edit. (Non-canvas types like `CustomerLifecycle` carry none — don't flag those.)
 
 ## inflightMetadata Format
 **DATA TYPE: ARRAY (not string)**
@@ -208,6 +209,10 @@ To select records for a scheduled flow, put the record criteria in the **start e
 
 When the prompt says "runs once a week / every Sunday / daily at a time", the `userPrompt` should state: scheduled trigger, the frequency, the start time, and the record filter on the triggering object.
 
+### "Autolaunched" is literal
+
+An **"autolaunched"**/"no-trigger" request builds a **no-trigger** flow (no `triggerType`, `object`, or `<schedule>` on start) — put "for each…/when X"/timing intent in the **body**, not the trigger; add one only if asked.
+
 ### Counting related records ("count all related X", "number of X")
 
 To store a count of records, use a **single** assignment element with `<operator>AssignCount</operator>`, assigning from the collection (the record-lookup result) into a Number variable. Do NOT emit two assignment elements for one count, and do NOT give two assignment elements the same `name` — duplicate assignment names, or two assignments doing one logical count, fail deployment. One lookup → one `AssignCount` assignment → one record update.
@@ -299,7 +304,7 @@ Then call Step 2 and Step 3 for this flow.
   "requestSource": "A4V"
 }
 ```
-Call repeatedly with the same `operationId` until `isComplete` is `true` or errors are returned. A flow can have any number of elements, so expect multiple iterations. When `isComplete` is `true`, extract the flow metadata from the `result` field. Use `"requestSource": "A4V"` to get flow metadata in XML format.
+Loop as in Step 3 (same `operationId`, `requestSource: "A4V"`) until `isComplete` is `true` or errors return; extract the XML from `result` then.
 
 **Example 2: With custom objects from local sfdx project**
 
@@ -348,7 +353,7 @@ Call repeatedly with the same `operationId` until `isComplete` is `true` or erro
   "requestSource": "A4V"
 }
 ```
-Call repeatedly with the same `operationId` until `isComplete` is `true` or errors are returned. A flow can have any number of elements, so expect multiple iterations. When `isComplete` is `true`, extract the flow metadata from the `result` field. Use `"requestSource": "A4V"` to get flow metadata in XML format.
+Loop exactly as in Example 1's Step 3.
 
 ## CRITICAL Verification Checklist (MUST VERIFY BEFORE AND AFTER EVERY FLOW GENERATION)
 
@@ -361,3 +366,4 @@ Call repeatedly with the same `operationId` until `isComplete` is `true` or erro
 - [ ] **groundingMetadata** from Step 1 output is passed directly to Step 2 input (already a string — do NOT serialize it again).
 - [ ] **Step 3** is called in a loop with the same `operationId` from Step 2, `requestSource` always `"A4V"`, until `isComplete` is `true` or errors are returned — no pausing, no asking the user to continue, no matter how many iterations. Extract the XML from `result` only when `isComplete` is `true`.
 - [ ] **Multi-flow**: Each flow's full pipeline is completed before starting the next, SEQUENTIALLY (never in parallel, never interleaved), and ALL requested flows are generated — do NOT stop after the first.
+- [ ] **Canvas mode (read-only)**: a canvas-based net-new flow's XML carries a `<processMetadataValues>` `CanvasMode`=`AUTO_LAYOUT_CANVAS` entry. If absent, surface a pipeline gap — do NOT hand-edit (STRICT CONSTRAINTS forbid it). Non-canvas types like `CustomerLifecycle` carry none — don't flag those.

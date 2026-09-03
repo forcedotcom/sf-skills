@@ -25,7 +25,7 @@ This document defines the mandatory constraints for generating CustomObject meta
 
 **File extension:** `.object-meta.xml`
 
-> **🔔 Description freshness — applies to EVERY object change, fields AND validation rules:** Whenever you add, update, or delete a field **or a validation rule** on an object, the `<description>` may now be stale. Before finishing, refresh it per **Section 3.B** (propose, confirm with the user, write). A validation-rule change counts exactly like a field change — the change is **not** done until the description has been reconciled. This is easy to forget on validation-rule edits/deletes — don't.
+> **Description freshness — applies to EVERY object change, fields AND validation rules:** Whenever you add, update, or delete a field **or a validation rule** on an object, the `<description>` may now be stale. Before finishing, refresh it per **Section 3.B** (propose, confirm with the user, write). A validation-rule change counts exactly like a field change — the change is **not** done until the description has been reconciled. This is easy to forget on validation-rule edits/deletes — don't.
 
 ---
 
@@ -57,7 +57,7 @@ The following constraints must be true for the XML body to deploy successfully.
 - IF object has Master-Detail field → use `ControlledByParent`
 - IF a Master-Detail field is being added to an existing child object → that existing object's `<sharingModel>` must also be updated to `ControlledByParent`
 
-**❌ INCORRECT** — Will cause error: `Cannot set sharingModel to ReadWrite on a CustomObject with a MasterDetail relationship field`
+**INCORRECT** — Will cause error: `Cannot set sharingModel to ReadWrite on a CustomObject with a MasterDetail relationship field`
 ```xml
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
   <label>Order Line Item</label>
@@ -67,7 +67,7 @@ The following constraints must be true for the XML body to deploy successfully.
 </CustomObject>
 ```
 
-**✅ CORRECT:**
+**CORRECT:**
 ```xml
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
   <label>Order Line Item</label>
@@ -191,7 +191,7 @@ Do not create more than **2 Master-Detail relationships** for a single object. I
 
 Do NOT include the `<fullName>` tag at the root of the `.object-meta.xml` file. The API name is derived from the filename.
 
-**❌ INCORRECT:**
+**INCORRECT:**
 ```xml
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
   <fullName>Vehicle__c</fullName>  <!-- WRONG: Remove this -->
@@ -199,7 +199,7 @@ Do NOT include the `<fullName>` tag at the root of the `.object-meta.xml` file. 
 </CustomObject>
 ```
 
-**✅ CORRECT:**
+**CORRECT:**
 ```xml
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
   <label>Vehicle</label>
@@ -218,7 +218,7 @@ Validation rule names follow different conventions than custom fields.
 - Cannot contain two consecutive underscores
 - **Must NOT end with `__c`** (unlike custom fields)
 
-**❌ INCORRECT:**
+**INCORRECT:**
 ```xml
 <validationRules>
   <fullName>Require_Start_Date__c</fullName>  <!-- WRONG: Has __c suffix -->
@@ -229,7 +229,7 @@ Validation rule names follow different conventions than custom fields.
 ```
 **Error:** `The validation name can only contain alphanumeric characters, must begin with a letter, cannot end with an underscore...`
 
-**✅ CORRECT:**
+**CORRECT:**
 ```xml
 <validationRules>
   <fullName>Require_Start_Date</fullName>  <!-- CORRECT: No __c suffix -->

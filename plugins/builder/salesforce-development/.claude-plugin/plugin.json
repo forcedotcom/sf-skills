@@ -1,7 +1,7 @@
 {
   "name": "salesforce-development",
   "displayName": "Salesforce Development",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Build Salesforce apps and agents using these core building blocks: metadata, Apex, deploy/retrieve, security, reporting, and generated installed-versus-available capability discovery.",
   "author": { "name": "Salesforce", "url": "https://github.com/forcedotcom/sf-skills" },
   "license": "Apache-2.0",
@@ -38,10 +38,6 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context telemetry-capture session_start"
-          },
-          {
-            "type": "command",
-            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/session_plugin_hint.py\""
           }
         ]
       }
@@ -155,6 +151,16 @@
       }
     ],
     "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}\"/scripts/sf-context prompt-dispatch"
+          }
+        ]
+      }
+    ],
+    "UserPromptExpansion": [
       {
         "hooks": [
           {

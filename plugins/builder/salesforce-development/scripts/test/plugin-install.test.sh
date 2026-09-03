@@ -13,8 +13,8 @@
 # asserts, fully offline (`claude` itself is stubbed -- no real install runs):
 #   - the dry run names the plugin, its source, and the external trust warning,
 #     and emits a nonce -- without ever invoking `claude`
-#   - a wrong or malformed nonce refuses; an unknown/held/already-installed
-#     name refuses; an unreadable/missing settings.json (unknown "enabled"
+#   - a wrong or malformed nonce refuses; an unknown/current/already-installed
+#     plugin name refuses; an unreadable/missing settings.json (unknown "enabled"
 #     state) still allows the dry run rather than refusing, matching
 #     discovery's fail-open read of the same state
 #   - the confirmed path shell-outs `claude` twice with the expected argv -- a
@@ -168,11 +168,12 @@ CODE_DRY=$?
 NONCE=$(extract_nonce "$OUT_DRY")
 if [ "$CODE_DRY" -eq 0 ] \
    && echo "$OUT_DRY" | grep -q "Plugin: $NAME" \
+   && echo "$OUT_DRY" | grep -q "Installs from: $NAME@claude-plugins-official" \
    && echo "$OUT_DRY" | grep -qi "TRUST WARNING" \
    && echo "$OUT_DRY" | grep -q "must run /reload-plugins" \
    && [ -n "$NONCE" ] \
    && [ ! -s "$STUB_LOG" ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → names plugin + trust warning + nonce, no claude call\n' "dry run"
+  PASS=$((PASS + 1)); printf '  ok   %-60s → names plugin + install target + trust warning + nonce, no claude call\n' "dry run"
 else
   FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s nonce=%s log=%s out=%s\n' "dry run" "$CODE_DRY" "$NONCE" "$(cat "$STUB_LOG")" "$OUT_DRY"
 fi
@@ -210,19 +211,24 @@ fi
 # --- an unknown name refuses -------------------------------------------------
 OUT_UNKNOWN=$("$CTX" plugin-install "totally-unknown-plugin-$$-$RANDOM" 2>&1)
 CODE_UNKNOWN=$?
-if [ "$CODE_UNKNOWN" -eq 2 ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → %s\n' "unknown name refuses" "exit=$CODE_UNKNOWN"
+if [ "$CODE_UNKNOWN" -eq 2 ] \
+   && echo "$OUT_UNKNOWN" | grep -q "not found in the plugin catalog" \
+   && echo "$OUT_UNKNOWN" | grep -q "requires.plugins"; then
+  PASS=$((PASS + 1)); printf '  ok   %-60s → reason is actionable\n' "unknown name refuses"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s\n' "unknown name refuses" "$CODE_UNKNOWN"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s out=%s\n' \
+    "unknown name refuses" "$CODE_UNKNOWN" "$OUT_UNKNOWN"
 fi
 
-# --- the plugin currently running this code (held/self) refuses ------------
+# --- the plugin currently running this code (self) refuses -----------------
 OUT_SELF=$("$CTX" plugin-install salesforce-development 2>&1)
 CODE_SELF=$?
-if [ "$CODE_SELF" -eq 2 ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → %s\n' "self/held name refuses" "exit=$CODE_SELF"
+if [ "$CODE_SELF" -eq 2 ] \
+   && echo "$OUT_SELF" | grep -q "cannot install itself"; then
+  PASS=$((PASS + 1)); printf '  ok   %-60s → reason identifies self\n' "current plugin refuses"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s\n' "self/held name refuses" "$CODE_SELF"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s out=%s\n' \
+    "current plugin refuses" "$CODE_SELF" "$OUT_SELF"
 fi
 
 # --- an already-installed name refuses --------------------------------------
@@ -233,10 +239,14 @@ EOF
 OUT_INSTALLED=$(CLAUDE_CONFIG_DIR="$CONFIG_DIR" "$CTX" plugin-install "$NAME" 2>&1)
 CODE_INSTALLED=$?
 rm -rf "$CONFIG_DIR"
-if [ "$CODE_INSTALLED" -eq 2 ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → %s\n' "already-installed name refuses" "exit=$CODE_INSTALLED"
+if [ "$CODE_INSTALLED" -eq 2 ] \
+   && echo "$OUT_INSTALLED" | grep -q "already installed" \
+   && echo "$OUT_INSTALLED" | grep -q "no installation is needed"; then
+  PASS=$((PASS + 1)); printf '  ok   %-60s → reason identifies installed state\n' \
+    "already-installed name refuses"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s\n' "already-installed name refuses" "$CODE_INSTALLED"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s out=%s\n' \
+    "already-installed name refuses" "$CODE_INSTALLED" "$OUT_INSTALLED"
 fi
 
 # --- unreadable/missing settings.json still allows the dry run (fail-open,
@@ -252,17 +262,19 @@ else
   FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s out=%s\n' "missing settings.json still allows dry run (fail-open)" "$CODE_NOSETTINGS" "$OUT_NOSETTINGS"
 fi
 
-# --- confirmed install: claude is shelled out twice, with the expected argv --
-# first a best-effort `marketplace add` of this repo's own checkout (so a
-# --plugin-dir dev session, which never registered "salesforce", gets it
-# registered before the install call needs it), then the install itself ------
+# --- confirmed install of an EXTERNAL-source plugin: claude is shelled out
+# exactly ONCE, routed to the pre-registered official marketplace
+# (`@claude-plugins-official`) with NO `salesforce` marketplace registration --
+# agentforce-adlc lives in the official marketplace, not this repo's. The
+# local-source register-then-install two-call flow (`marketplace add` this
+# repo's checkout, then `<name>@salesforce`) is covered by the "trusted
+# proposed install" (experience-react) case above. --------------------------
 write_stub 0
 NONCE_OK=$(extract_nonce "$("$CTX" plugin-install "$NAME")")
 OUT_OK=$(stubbed_ctx plugin-install "$NAME" --confirm "$NONCE_OK")
 CODE_OK=$?
 CALL1=$(sed -n '1p' "$STUB_LOG")
 CALL2=$(sed -n '2p' "$STUB_LOG")
-CALL3=$(sed -n '3p' "$STUB_LOG")
 if [ "$CODE_OK" -eq 0 ] \
    && echo "$OUT_OK" | grep -q "Installed $NAME on disk" \
    && echo "$OUT_OK" | grep -q "not active in this session yet" \
@@ -271,12 +283,11 @@ if [ "$CODE_OK" -eq 0 ] \
    && echo "$OUT_OK" | grep -q "start a fresh session" \
    && echo "$OUT_OK" | grep -q "submit a concrete task to begin using it" \
    && ! echo "$OUT_OK" | grep -q "resume your original task" \
-   && [ "$CALL1" = "plugin marketplace add $MONOREPO_ROOT" ] \
-   && [ "$CALL2" = "plugin install $NAME@salesforce --yes" ] \
-   && [ -z "$CALL3" ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → marketplace-add then install argv correct, success message\n' "confirmed install shells out claude"
+   && [ "$CALL1" = "plugin install $NAME@claude-plugins-official --yes" ] \
+   && [ -z "$CALL2" ]; then
+  PASS=$((PASS + 1)); printf '  ok   %-60s → official-marketplace single-call argv, success message\n' "confirmed external install shells out claude once"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s call1=%s call2=%s call3=%s out=%s\n' "confirmed install shells out claude" "$CODE_OK" "$CALL1" "$CALL2" "$CALL3" "$OUT_OK"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s call1=%s call2=%s out=%s\n' "confirmed external install shells out claude once" "$CODE_OK" "$CALL1" "$CALL2" "$OUT_OK"
 fi
 
 # --- a failed claude call surfaces only exit-code metadata, never raw text -

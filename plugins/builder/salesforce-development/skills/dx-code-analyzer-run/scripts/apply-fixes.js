@@ -15,14 +15,55 @@ const filePath = process.argv[2];
 const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
 const runDir = data.runDir || "";
 
-// Group fixes by file
+// Fix targets are confined to the current working directory (the project being
+// fixed). loc.file and runDir come from the results JSON and are untrusted;
+// resolving each target against cwd and rejecting anything that escapes it
+// stops a crafted results file from writing arbitrary paths (e.g. /etc/passwd
+// or ../../outside-project).
+const baseDir = fs.realpathSync(process.cwd());
+
+function isOutside(base, target) {
+  const rel = path.relative(base, target);
+  return rel === "" || rel.startsWith("..") || path.isAbsolute(rel);
+}
+
+function safeResolve(candidate) {
+  if (typeof candidate !== "string" || !candidate) return null;
+  let rel = candidate;
+  // Engine output often uses absolute paths under the scan runDir; normalize
+  // those to project-relative before confinement.
+  if (runDir && rel.startsWith(runDir)) rel = rel.substring(runDir.length + 1);
+  const resolved = path.resolve(baseDir, rel);
+  // Lexical guard: rejects absolute paths and `..` traversal.
+  if (isOutside(baseDir, resolved)) return null;
+  // Symlink-aware guard: path.resolve/relative do not follow symlinks, so a
+  // symlinked path component (e.g. `link/victim` where `link` -> outside the
+  // tree) would pass the lexical check and let writeFileSync escape. Fix
+  // targets are read before being written, so the file exists — resolve its
+  // real path and re-check. Writing to the realpath also avoids following a
+  // symlink at write time. A missing target (realpathSync throws) is skipped.
+  let real;
+  try {
+    real = fs.realpathSync(resolved);
+  } catch {
+    return null;
+  }
+  if (isOutside(baseDir, real)) return null;
+  return real;
+}
+
+// Group fixes by confined, absolute file path
 const fileFixesMap = new Map();
+let fixesSkippedUnsafe = 0;
 data.violations.forEach(v => {
   if (v.fixes && v.fixes.length > 0) {
     v.fixes.forEach(fix => {
       const loc = fix.location;
-      let filePath = loc.file;
-      if (runDir && filePath.startsWith(runDir)) filePath = filePath.substring(runDir.length + 1);
+      const filePath = safeResolve(loc.file);
+      if (!filePath) {
+        fixesSkippedUnsafe++;
+        return;
+      }
 
       if (!fileFixesMap.has(filePath)) fileFixesMap.set(filePath, []);
       fileFixesMap.get(filePath).push({
@@ -83,4 +124,4 @@ fileFixesMap.forEach((fixes, filePath) => {
   }
 });
 
-console.log(JSON.stringify({ success: true, filesModified, fixesApplied, fixesSkipped, totalFixableFiles: fileFixesMap.size }));
+console.log(JSON.stringify({ success: true, filesModified, fixesApplied, fixesSkipped, fixesSkippedUnsafe, totalFixableFiles: fileFixesMap.size }));

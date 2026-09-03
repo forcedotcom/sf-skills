@@ -29,6 +29,13 @@ CFG="$(mktemp -d)"
 printf '{"enabledPlugins":{"experience-lwc@salesforce":true,"experience-react@salesforce":true}}' \
   > "$CFG/settings.json"
 export CLAUDE_CONFIG_DIR="$CFG"
+# Hermetic session: the tranche cases below deliberately omit --session-id to
+# exercise the "no explicit id still renders" path. Without this unset they fall
+# back to the ambient CLAUDE_CODE_SESSION_ID, so running the suite from inside a
+# live Claude Code session adopts that session's already-open plugin flow and
+# `plugin-match` suppresses every tranche match to [] (10 spurious failures).
+# Unsetting it makes the id resolve empty -> no flow is loaded or written.
+unset CLAUDE_CODE_SESSION_ID
 trap 'rm -rf "$CFG" "${PROJDIR:-}"' EXIT
 
 HIGH_PROMPT="I need to author, discover, scaffold, deploy, test, secure, and optimize Agentforce .agent files for a new employee agent"

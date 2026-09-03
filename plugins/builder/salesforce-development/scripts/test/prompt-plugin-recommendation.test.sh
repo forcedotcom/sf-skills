@@ -45,7 +45,7 @@ assert_route() {
   # assert_route <description> <expected-plugin> <unexpected-regex> <prompt>
   local desc="$1" expected="$2" unexpected="$3" prompt="$4" out
   out=$(run_prompt "$PROJ" "prompt-route-${PASS}-${FAIL}-$$-$RANDOM" "$prompt")
-  if echo "$out" | grep -q "Recommended plugin for this task" \
+  if echo "$out" | grep -q "Recommended plugin" \
      && echo "$out" | grep -q "$expected" \
      && echo "$out" | grep -q "high confidence" \
      && echo "$out" | grep -q "/salesforce-development:plugin-install ${expected}" \
@@ -61,7 +61,7 @@ assert_quiet() {
   # assert_quiet <description> <prompt>
   local desc="$1" prompt="$2" out
   out=$(run_prompt "$PROJ" "prompt-quiet-${PASS}-${FAIL}-$$-$RANDOM" "$prompt")
-  if ! echo "$out" | grep -q "Recommended plugin for this task"; then
+  if ! echo "$out" | grep -q "Recommended plugin"; then
     PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "$desc"
   else
     FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "$desc" "$out"
@@ -115,11 +115,11 @@ SID_SESSION_FLOW="prompt-session-flow-$$-$RANDOM"
 OUT_FLOW_QUESTION=$(run_prompt "$PROJ" "$SID_SESSION_FLOW" \
   "Which plugin would help me build a Salesforce React UI bundle with tsx, tailwind, and shadcn?")
 OUT_FLOW_ACCEPT=$(run_prompt "$PROJ" "$SID_SESSION_FLOW" "ok install it")
-if ! echo "$OUT_FLOW_QUESTION" | grep -q "Recommended plugin for this task" \
+if ! echo "$OUT_FLOW_QUESTION" | grep -q "Recommended plugin" \
    && echo "$OUT_FLOW_ACCEPT" \
      | grep -q "plugin-install experience-react --accept-proposed" \
    && echo "$OUT_FLOW_ACCEPT" | grep -qi "install immediately" \
-   && ! echo "$OUT_FLOW_ACCEPT" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_FLOW_ACCEPT" | grep -q "Recommended plugin" \
    && ! echo "$OUT_FLOW_ACCEPT" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → locked React acceptance, no replacements\n' \
@@ -141,7 +141,7 @@ OUT_OUTSIDE_ACCEPT=$(run_prompt "$NONPROJ" "$SID_OUTSIDE_ACCEPT" \
 if echo "$OUT_OUTSIDE_ACCEPT" \
      | grep -q "plugin-install experience-react --accept-proposed" \
    && echo "$OUT_OUTSIDE_ACCEPT" | grep -qi "install immediately" \
-   && ! echo "$OUT_OUTSIDE_ACCEPT" | grep -q "Recommended plugin for this task"; then
+   && ! echo "$OUT_OUTSIDE_ACCEPT" | grep -q "Recommended plugin"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed acceptance outside project\n' \
     "discovery proposal can be accepted outside a project"
 else
@@ -157,7 +157,7 @@ OUT_OUTSIDE_DECLINE=$(run_prompt "$NONPROJ" "$SID_OUTSIDE_DECLINE" \
 if echo "$OUT_OUTSIDE_DECLINE" | grep -q "was recorded for this session" \
    && echo "$OUT_OUTSIDE_DECLINE" | grep -qi "do not run a tool" \
    && ! echo "$OUT_OUTSIDE_DECLINE" | grep -q "plugin-install" \
-   && ! echo "$OUT_OUTSIDE_DECLINE" | grep -q "Recommended plugin for this task"; then
+   && ! echo "$OUT_OUTSIDE_DECLINE" | grep -q "Recommended plugin"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed decline outside project\n' \
     "discovery proposal can be declined outside a project"
 else
@@ -178,7 +178,7 @@ OUT_DECLINE=$(run_prompt "$PROJ" "$SID_DECLINE" \
 if echo "$OUT_DECLINE" | grep -q "was recorded for this session" \
    && echo "$OUT_DECLINE" | grep -qi "do not run a tool" \
    && ! echo "$OUT_DECLINE" | grep -q "plugin-install" \
-   && ! echo "$OUT_DECLINE" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_DECLINE" | grep -q "Recommended plugin" \
    && ! echo "$OUT_DECLINE" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed decline, no replacements\n' \
@@ -199,7 +199,7 @@ OUT_DECLINE_PENDING=$(run_prompt "$PROJ" "$SID_DECLINE_PENDING" "no thanks")
 if echo "$OUT_DECLINE_PENDING" | grep -q "was recorded for this session" \
    && echo "$OUT_DECLINE_PENDING" | grep -qi "do not run a tool" \
    && ! echo "$OUT_DECLINE_PENDING" | grep -q "plugin-install" \
-   && ! echo "$OUT_DECLINE_PENDING" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_DECLINE_PENDING" | grep -q "Recommended plugin" \
    && ! echo "$OUT_DECLINE_PENDING" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed decline, no replacements\n' \
@@ -220,7 +220,7 @@ OUT_INSTALL=$(run_prompt "$PROJ" "$SID_INSTALL" "Install experience-react")
 if echo "$OUT_INSTALL" \
      | grep -q "plugin-install experience-react --accept-proposed" \
    && echo "$OUT_INSTALL" | grep -qi "install immediately" \
-   && ! echo "$OUT_INSTALL" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_INSTALL" | grep -q "Recommended plugin" \
    && ! echo "$OUT_INSTALL" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed acceptance, no replacements\n' \
@@ -245,7 +245,7 @@ OUT_BARE=$(run_prompt "$PROJ" "$SID_BARE" "experience-react")
 if echo "$OUT_BARE" \
      | grep -q "plugin-install experience-react --accept-proposed" \
    && echo "$OUT_BARE" | grep -qi "install immediately" \
-   && ! echo "$OUT_BARE" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_BARE" | grep -q "Recommended plugin" \
    && ! echo "$OUT_BARE" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed acceptance, no replacements\n' \
@@ -287,7 +287,7 @@ if [ -n "$NONCE_CONFIRM" ] \
    && echo "$OUT_CONFIRM" \
      | grep -q "plugin-install experience-react --confirm $NONCE_CONFIRM" \
    && echo "$OUT_CONFIRM" | grep -qi "same-session source preview" \
-   && ! echo "$OUT_CONFIRM" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_CONFIRM" | grep -q "Recommended plugin" \
    && ! echo "$OUT_CONFIRM" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed confirm, no replacements\n' \
@@ -311,7 +311,7 @@ OUT_CONFIRM_SHORT=$(run_prompt "$PROJ" "$SID_CONFIRM_SHORT" "ok install")
 if [ -n "$NONCE_CONFIRM_SHORT" ] \
    && echo "$OUT_CONFIRM_SHORT" \
      | grep -q "plugin-install experience-react --confirm $NONCE_CONFIRM_SHORT" \
-   && ! echo "$OUT_CONFIRM_SHORT" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_CONFIRM_SHORT" | grep -q "Recommended plugin" \
    && ! echo "$OUT_CONFIRM_SHORT" | grep -Eq \
      "/salesforce-development:plugin-install (experience-cms|dx-org-lifecycle)"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → routed confirm, no replacements\n' \
@@ -333,7 +333,7 @@ NONCE_CONFIRM_STATUS=$(printf '%s' "$DRY_CONFIRM_STATUS" \
 OUT_CONFIRM_STATUS=$(run_prompt "$PROJ" "$SID_CONFIRM_STATUS" "is it installed?")
 OUT_CONFIRM_AFTER_STATUS=$(run_prompt "$PROJ" "$SID_CONFIRM_STATUS" "OK")
 if [ -n "$NONCE_CONFIRM_STATUS" ] \
-   && ! echo "$OUT_CONFIRM_STATUS" | grep -q "Recommended plugin for this task" \
+   && ! echo "$OUT_CONFIRM_STATUS" | grep -q "Recommended plugin" \
    && echo "$OUT_CONFIRM_AFTER_STATUS" \
      | grep -q "plugin-install experience-react --confirm $NONCE_CONFIRM_STATUS"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → pending nonce preserved\n' \
@@ -482,6 +482,11 @@ assert_route \
   "dx-devops" "agentforce-adlc|experience-(cms|lwc|react) —|dx-org-lifecycle|${TAIL_PLUGINS}" \
   "analyze why my DevOps Center pipeline tests failed"
 
+assert_route \
+  "what-is-causing diagnostic recommends DevOps Center" \
+  "dx-devops" "agentforce-adlc|experience-(cms|lwc|react) —|dx-org-lifecycle|${TAIL_PLUGINS}" \
+  "what is causing my DevOps Center test pipeline to fail?"
+
 # Reduced Trust and Security boundary covers Shield Platform Encryption and
 # operations on already-archived data, but not Salesforce Data Mask.
 assert_route \
@@ -540,7 +545,7 @@ assert_route \
 assert_route \
   "App Analytics request recommends ISV and Partner" \
   "dx-isv-partner" "${CORE_PLUGINS}|commerce-b2b|mobile-development|platform-observability|platform-trust-security" \
-  "AppAnalyticsQueryRequest PackageUsageSummary SubscriberSnapshot"
+  "submit an AppAnalyticsQueryRequest for PackageUsageSummary SubscriberSnapshot"
 
 assert_route \
   "Dev Hub allocation recommends org lifecycle" \
@@ -555,13 +560,79 @@ assert_route \
 # Prompt-time proactivity is high-confidence-only. A medium catalog match remains
 # available to explicit discovery / the reactive gate but does not paint early.
 OUT_MED=$(run_prompt "$PROJ" "prompt-medium-$$-$RANDOM" "build me a bot")
-if ! echo "$OUT_MED" | grep -q "Recommended plugin for this task"; then
+if ! echo "$OUT_MED" | grep -q "Recommended plugin"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "medium match does not create prompt-time noise"
 else
   FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "medium match does not create prompt-time noise" "$OUT_MED"
 fi
 
 assert_quiet "generic prompt stays recommendation-free" "calculate seven factorial"
+
+# Product vocabulary alone is not an actionable request. These deliberately
+# run at the most eager named sensitivity: raising sensitivity may recover weak
+# tasks, but it must never turn an informational or declarative utterance into
+# an unsolicited plugin decision.
+export SF_PLUGIN_MATCH_SENSITIVITY=high
+assert_quiet \
+  "informational CMS question stays recommendation-free" \
+  "tell me about Salesforce CMS"
+assert_quiet \
+  "React and LWC comparison stays recommendation-free" \
+  "what is the difference between React and LWC?"
+assert_quiet \
+  "historical Connected App statement stays recommendation-free" \
+  "I saw a Salesforce Connected App error yesterday"
+assert_quiet \
+  "DevOps Center declaration stays recommendation-free" \
+  "the team uses DevOps Center"
+assert_quiet \
+  "GET request observation stays recommendation-free" \
+  "Get requests are failing against the DevOps Center API"
+assert_quiet \
+  "build failure observation stays recommendation-free" \
+  "Build failed in DevOps Center"
+assert_quiet \
+  "run failure observation stays recommendation-free" \
+  "Run failed in DevOps Center yesterday"
+assert_quiet \
+  "open-items observation stays recommendation-free" \
+  "Open items remain blocked in DevOps Center"
+assert_quiet \
+  "update-notes observation stays recommendation-free" \
+  "Update notes mention a regression in DevOps Center"
+assert_quiet \
+  "find-results observation stays recommendation-free" \
+  "Find results are stale in Salesforce CMS"
+assert_quiet \
+  "deploy-scripts observation stays recommendation-free" \
+  "Deploy scripts failed in DevOps Center"
+assert_quiet \
+  "install-scripts observation stays recommendation-free" \
+  "Install scripts failed in DevOps Center"
+assert_route \
+  "new action verb still recommends LWC" \
+  "experience-lwc" "agentforce-adlc|experience-(cms|react) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
+  "convert my Aura component to LWC"
+assert_route \
+  "information-led compound task recommends DevOps" \
+  "dx-devops" "agentforce-adlc|experience-(cms|lwc|react) —|dx-org-lifecycle|${TAIL_PLUGINS}" \
+  "What is DevOps Center? Set up a test pipeline."
+assert_quiet \
+  "mobile app declaration stays recommendation-free" \
+  "we have a mobile app"
+unset SF_PLUGIN_MATCH_SENSITIVITY
+
+# Explicit discovery remains match-driven. Invoking it is itself intent to ask
+# which add-on covers the named capability, so the proactive action gate must
+# not narrow this surface.
+OUT_EXPLICIT_INFO=$("$CTX" plugin-match "tell me about Salesforce CMS")
+if echo "$OUT_EXPLICIT_INFO" | grep -q "experience-cms"; then
+  PASS=$((PASS + 1)); printf '  ok   %-62s → %s\n' \
+    "explicit discovery still matches informational wording" "experience-cms"
+else
+  FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' \
+    "explicit discovery still matches informational wording" "$OUT_EXPLICIT_INFO"
+fi
 
 assert_quiet \
   "custom-object creation remains a foundation task" \
@@ -614,18 +685,37 @@ assert_plugin_absent \
 # Canonical task verbs alone are deliberately not product evidence. A short
 # "search" request must not be captured by CMS without a CMS/Experience signal.
 OUT_AMBIGUOUS=$(run_prompt "$PROJ" "prompt-ambiguous-$$-$RANDOM" "search for a logo")
-if ! echo "$OUT_AMBIGUOUS" | grep -q "Recommended plugin for this task"; then
+if ! echo "$OUT_AMBIGUOUS" | grep -q "Recommended plugin"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "ambiguous search verb does not imply CMS"
 else
   FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "ambiguous search verb does not imply CMS" "$OUT_AMBIGUOUS"
 fi
 
+# Out of a Salesforce project, NAMING Salesforce is the sufficient-intent signal
+# that stands in for the project file: the getting-started welcome fires, and its
+# welcome bridge reuses the SAME high+anchor catalog scorer to fold a one-line
+# install rec into the welcome (docs/design/plugin-catalog.md — the narrow
+# "Project scoped, except when explicitly asked" exception). So a CMS task that
+# names Salesforce now surfaces experience-cms IN the welcome; it is no longer
+# swallowed merely for being outside a project.
 OUT_OUTSIDE=$(run_prompt "$NONPROJ" "prompt-outside-$$-$RANDOM" \
   "I need to search Salesforce CMS for an existing media asset")
-if ! echo "$OUT_OUTSIDE" | grep -q "Recommended plugin for this task"; then
-  PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "CMS prompt outside a Salesforce project stays scoped"
+if echo "$OUT_OUTSIDE" | grep -q "Recommended plugin"; then
+  PASS=$((PASS + 1)); printf '  ok   %-62s → experience-cms folded into welcome\n' "CMS prompt naming Salesforce outside a project bridges the welcome"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "CMS prompt outside a Salesforce project stays scoped" "$OUT_OUTSIDE"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "CMS prompt naming Salesforce outside a project bridges the welcome" "$OUT_OUTSIDE"
+fi
+
+# The negative that keeps the folder scoped: drop the Salesforce word and the same
+# CMS task in a non-project dir trips no welcome (the plugin is global — a bare
+# folder is never presumed to be Salesforce work), so nothing is scored or
+# recommended. This preserves the guarantee the case above used to carry.
+OUT_OUTSIDE_QUIET=$(run_prompt "$NONPROJ" "prompt-outside-quiet-$$-$RANDOM" \
+  "I need to search a CMS for an existing media asset")
+if ! echo "$OUT_OUTSIDE_QUIET" | grep -q "Recommended plugin"; then
+  PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "CMS prompt without a Salesforce mention outside a project stays quiet"
+else
+  FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "CMS prompt without a Salesforce mention outside a project stays quiet" "$OUT_OUTSIDE_QUIET"
 fi
 
 # An enabled plugin is not a recommendation candidate.
@@ -633,7 +723,7 @@ printf '{"enabledPlugins":{"salesforce-development@salesforce":true,"experience-
   > "$CFG/settings.json"
 OUT_INSTALLED=$(run_prompt "$PROJ" "prompt-installed-$$-$RANDOM" \
   "I need to search Salesforce CMS for an existing media asset")
-if ! echo "$OUT_INSTALLED" | grep -q "Recommended plugin for this task"; then
+if ! echo "$OUT_INSTALLED" | grep -q "Recommended plugin"; then
   PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "enabled CMS plugin is not recommended again"
 else
   FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "enabled CMS plugin is not recommended again" "$OUT_INSTALLED"
@@ -677,7 +767,7 @@ assert_route \
 # regression this tranche introduces, so this assertion checks service-engagement
 # is offered at high confidence without requiring full isolation.
 OUT_WEBCHAT=$(run_prompt "$PROJ" "prompt-webchat-$$-$RANDOM" "configure a Service Cloud web chat deployment")
-if echo "$OUT_WEBCHAT" | grep -Eq "Recommended plugins? for this task" \
+if echo "$OUT_WEBCHAT" | grep -q "Recommended plugin" \
    && echo "$OUT_WEBCHAT" | grep -q "service-engagement" \
    && echo "$OUT_WEBCHAT" | grep -q "/salesforce-development:plugin-install service-engagement" \
    && ! echo "$OUT_WEBCHAT" | grep -Eq "agentforce-adlc|dx-org-lifecycle|dx-devops|integration —|platform-lightning-widgets —"; then

@@ -7,12 +7,52 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- We're working to trim down the number of skills in the salesforce-development plugin
+  to provide more context for additional plugins and skills. As part of this effort, we're
+  also reducing the size of skill descriptions without sacrificing effectiveness.
+
+- We're working on an easy way to provide feedback on this plugin to continually improve the
+  development experience.
+
+## [2.1.0] — 2026-09-02
+
 ### Added
 
-- Support for the Codex agent, alongside Claude Code.
+- **A new companion plugin: `salesforce-test-drive`.** Install it alongside this plugin to pick a
+  curated, end-to-end build from a menu and watch it run start to finish against your own org —
+  built for running a live demo and for learning the platform by watching the real thing get
+  built. The first drive, **Service help agent**, builds an Agentforce service agent that answers
+  customer questions, manages support cases, and hands off to a human, then deploys it as a
+  website chat widget. The engine checks your setup, helps you connect or provision an org
+  (including a free Agentforce Developer Edition if you need one), and only pauses for the choices
+  that matter — then choreographs this plugin's skills to do the build. If you start a drive and
+  come back later, it offers to resume where you left off instead of starting over.
 
-- A "test-drive" plugin to help demonstrate the possibilities of developing and interacting
-  with Salesforce orgs.
+  Try it out with:
+
+  ```text
+  /salesforce-test-drive:start
+  ```
+
+  Not sure where to start? This plugin's capability overview and welcome screen now point you at a
+  test drive directly.
+
+### Changed
+
+- The `discovery` command is now `/salesforce-development:discover`. If you had
+  `/salesforce-development:discovery` memorized, use `/salesforce-development:discover` going
+  forward — the old token now returns a usage error. The underlying `discovery` concept and its
+  natural-language triggers (`what can I do here?`, `where am I?`) are unchanged.
+- Plugin recommendations now only ever suggest a plugin you haven't already installed — a match
+  against something you already have no longer surfaces a recommendation.
+- Refreshed the SessionStart banner: the ASCII-art lockup now spells **SALESFORCE**, with
+  **headless · 360** as the wordmark underneath.
+
+### Fixed
+
+- The session-start summary of your discovery journey no longer claims you're currently at a stage
+  you haven't actually reached — it now reports the last stage you completed as current, and
+  separately calls out the next stage when there's a gap.
 
 ## [2.0.0] — 2026-08-26
 
@@ -107,7 +147,6 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 - New ambient UI modes — `full`, `compact`, `plain`, or `off` — so you can match the plugin's
   visual style to your terminal or accessibility needs.
-- A status line option that shows your current Salesforce project context at a glance.
 - Friendlier progress messages while the plugin loads your project context at the start of a
   session.
 

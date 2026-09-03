@@ -174,6 +174,20 @@ def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
             and all(type(item) is str and item for item in anchor_terms)
         ):
             raise PluginCatalogError(f"{marketplace_path}: {name!r} has invalid metadata.match.anchorTerms")
+        anchor_companions = match_meta.get("anchorCompanions") if isinstance(match_meta, dict) else None
+        if anchor_companions is not None and not (
+            isinstance(anchor_companions, dict) and anchor_companions
+            and all(
+                type(key) is str and key in (anchor_terms or [])
+                and isinstance(value, list) and value
+                and all(type(item) is str and item for item in value)
+                for key, value in anchor_companions.items()
+            )
+        ):
+            raise PluginCatalogError(f"{marketplace_path}: {name!r} has invalid metadata.match.anchorCompanions")
+        entry_command = match_meta.get("entryCommand") if isinstance(match_meta, dict) else None
+        if entry_command is not None and not (type(entry_command) is str and entry_command):
+            raise PluginCatalogError(f"{marketplace_path}: {name!r} has invalid metadata.match.entryCommand")
         match = {
             "description": description,
             "keywords": list(keywords),
@@ -181,6 +195,10 @@ def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
         }
         if anchor_terms:
             match["anchorTerms"] = list(anchor_terms)
+        if anchor_companions:
+            match["anchorCompanions"] = {key: list(value) for key, value in anchor_companions.items()}
+        if entry_command:
+            match["entryCommand"] = entry_command
         plugins.append({
             "name": name,
             "source": copy.deepcopy(source),
@@ -254,7 +272,7 @@ _TOP_KEYS = {"schemaVersion", "generatedFrom", "plugins"}
 _GENERATED_FROM_KEYS = {"marketplace", "marketplaceSha256"}
 _PLUGIN_KEYS = {"name", "source", "match"}
 _MATCH_REQUIRED_KEYS = {"description", "keywords", "examplePrompts"}
-_MATCH_OPTIONAL_KEYS = {"anchorTerms"}
+_MATCH_OPTIONAL_KEYS = {"anchorTerms", "anchorCompanions", "entryCommand"}
 _MATCH_KEYS = _MATCH_REQUIRED_KEYS | _MATCH_OPTIONAL_KEYS
 
 
@@ -306,6 +324,22 @@ def _validate_catalog(data, context: str) -> None:
                     or not all(type(item) is str and _TOKEN_PATTERN.fullmatch(item) for item in anchor_terms)
                     or len(anchor_terms) != len(set(anchor_terms))):
                 raise PluginCatalogError(f"{row_context}: invalid match anchorTerms")
+        if "anchorCompanions" in match:
+            companions = match["anchorCompanions"]
+            anchors = set(match.get("anchorTerms", ()))
+            if (type(companions) is not dict or not companions
+                    or not all(
+                        type(key) is str and key in anchors
+                        and type(value) is list and value
+                        and all(type(item) is str and _TOKEN_PATTERN.fullmatch(item) for item in value)
+                        and len(value) == len(set(value))
+                        for key, value in companions.items()
+                    )):
+                raise PluginCatalogError(f"{row_context}: invalid match anchorCompanions")
+        if "entryCommand" in match:
+            entry_command = match["entryCommand"]
+            if type(entry_command) is not str or len(entry_command) > 64 or not _ENTRY_COMMAND_PATTERN.fullmatch(entry_command):
+                raise PluginCatalogError(f"{row_context}: invalid match entryCommand")
         names.append(name)
     if names != sorted(names) or len(names) != len(set(names)):
         raise PluginCatalogError(f"{context}: plugin names must be unique and sorted")
@@ -338,6 +372,10 @@ HIGH_CONFIDENCE_THRESHOLD = 3.5
 DEDUP_SCORE_MARGIN = 1.0
 DEDUP_OVERLAP_THRESHOLD = 0.6
 _TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+# A plugin's own entry command (e.g. `/salesforce-test-drive:start`) -- the
+# single slash command a returning user runs when the plugin is already
+# installed. Curated first-party data, so a malformed value fails the build.
+_ENTRY_COMMAND_PATTERN = re.compile(r"/[a-z0-9]+(?:-[a-z0-9]+)*(?::[a-z0-9]+(?:-[a-z0-9]+)*)?")
 # Common request scaffolding is not product evidence. Leaving these terms in
 # the BM25 query lets short follow-ups such as "add a field to it" accumulate a
 # high score from words repeated in a marketplace description even though the
@@ -475,12 +513,23 @@ def score_prompt_against_catalog(
         # A plugin declaring anchorTerms only counts as matched when the prompt's
         # evidence includes at least one of its own anchor terms -- a generic
         # word shared with the rest of the corpus can never carry the match alone.
-        # Callers that already require explicit user intent to reach the scorer
+        # An anchor term may itself be a common English word (e.g. test-drive's
+        # "drive", a verb in "drive adoption/traffic/results"); such a term
+        # declares `anchorCompanions` so it only anchors when a corroborating
+        # companion is also present in the prompt -- proxying the "test drive"
+        # phrase via the token "test" rather than firing on bare "drive". Callers
+        # that already require explicit user intent to reach the scorer
         # (require_anchor_terms=False) skip this gate; it exists to stop a
         # generic-word coincidence from *interrupting* the user unprompted.
         anchor_terms = plugin["match"].get("anchorTerms")
-        if require_anchor_terms and anchor_terms and matched_terms.isdisjoint(anchor_terms):
-            continue
+        if require_anchor_terms and anchor_terms:
+            companions = plugin["match"].get("anchorCompanions") or {}
+            anchor_hits = {
+                term for term in matched_terms.intersection(anchor_terms)
+                if not companions.get(term) or not query_terms.isdisjoint(companions[term])
+            }
+            if not anchor_hits:
+                continue
         band = "high" if score >= threshold else "medium"
         candidates.append(Match(plugin=plugin, score=score, band=band, matched_terms=matched_terms))
     candidates.sort(key=lambda item: item.score, reverse=True)
