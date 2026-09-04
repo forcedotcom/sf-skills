@@ -1,0 +1,2022 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Showcase of every Data Capture screen component — themed as a Field Service Site Visit Report.</description>
+    <environments>Offline</environments>
+    <interviewLabel>Data Capture Showcase {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Data Capture Showcase</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value><stringValue>AUTO_LAYOUT_CANVAS</stringValue></value>
+    </processMetadataValues>
+    <processType>DataCaptureFlow</processType>
+
+    <!-- ══════════════════════════════════════════════════════════
+         CHOICES
+    ══════════════════════════════════════════════════════════ -->
+
+    <!-- Mode: New vs Continue -->
+    <choices>
+        <name>Mode_New</name>
+        <choiceText>✨ Start a New Form</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>New</stringValue></value>
+    </choices>
+    <choices>
+        <name>Mode_Continue</name>
+        <choiceText>📂 Continue an Existing Form</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Continue</stringValue></value>
+    </choices>
+
+    <!-- Priority (Radio Buttons) -->
+    <choices>
+        <name>Priority_High</name>
+        <choiceText>🔴 High — Safety risk, immediate action required</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>High</stringValue></value>
+    </choices>
+    <choices>
+        <name>Priority_Medium</name>
+        <choiceText>🟡 Medium — Repair within 48 hours</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Medium</stringValue></value>
+    </choices>
+    <choices>
+        <name>Priority_Low</name>
+        <choiceText>🟢 Low — Scheduled maintenance</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Low</stringValue></value>
+    </choices>
+
+    <!-- Visit Status (Compact Picklist) -->
+    <choices>
+        <name>Status_InProgress</name>
+        <choiceText>In Progress</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>In Progress</stringValue></value>
+    </choices>
+    <choices>
+        <name>Status_OnHold</name>
+        <choiceText>On Hold</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>On Hold</stringValue></value>
+    </choices>
+    <choices>
+        <name>Status_Completed</name>
+        <choiceText>Completed</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Completed</stringValue></value>
+    </choices>
+    <choices>
+        <name>Status_FollowUp</name>
+        <choiceText>Follow-Up</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Follow-Up Needed</stringValue></value>
+    </choices>
+
+    <!-- Issue Type (Picklist Single) -->
+    <choices>
+        <name>Issue_Electrical</name>
+        <choiceText>⚡ Electrical Fault</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Electrical</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Mechanical</name>
+        <choiceText>⚙️ Mechanical Failure</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Mechanical</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Plumbing</name>
+        <choiceText>🔧 Plumbing / HVAC</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Plumbing/HVAC</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Structural</name>
+        <choiceText>🏗️ Structural Damage</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Structural</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Safety</name>
+        <choiceText>⚠️ Safety Hazard</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Safety</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Cosmetic</name>
+        <choiceText>🎨 Cosmetic / Aesthetic</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Cosmetic</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Preventive</name>
+        <choiceText>🛡️ Preventive Maintenance</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Preventive</stringValue></value>
+    </choices>
+    <choices>
+        <name>Issue_Other</name>
+        <choiceText>📋 Other</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Other</stringValue></value>
+    </choices>
+
+    <!-- Affected Areas (Picklist Multiple) -->
+    <choices>
+        <name>Area_Reception</name>
+        <choiceText>Reception / Lobby</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Reception</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Server</name>
+        <choiceText>Server Room</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Server Room</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Offices</name>
+        <choiceText>Open Office Area</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Offices</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Restrooms</name>
+        <choiceText>Restrooms</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Restrooms</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Parking</name>
+        <choiceText>Parking / Exterior</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Parking</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Roof</name>
+        <choiceText>Roof / Plant Room</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Roof</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Basement</name>
+        <choiceText>Basement / Utilities</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Basement</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Kitchen</name>
+        <choiceText>Kitchen / Break Room</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Kitchen</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Boardroom</name>
+        <choiceText>Boardroom / Meeting Rooms</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Boardroom</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Warehouse</name>
+        <choiceText>Warehouse / Loading Bay</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Warehouse</stringValue></value>
+    </choices>
+    <choices>
+        <name>Area_Other</name>
+        <choiceText>Other</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Other</stringValue></value>
+    </choices>
+
+    <!-- Safety Equipment (Checkbox Group) -->
+    <choices>
+        <name>Safety_Helmet</name>
+        <choiceText>⛑️ Hard Hat</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Helmet</stringValue></value>
+    </choices>
+    <choices>
+        <name>Safety_Gloves</name>
+        <choiceText>🧤 Gloves</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Gloves</stringValue></value>
+    </choices>
+    <choices>
+        <name>Safety_Vest</name>
+        <choiceText>🦺 Hi-Vis Vest</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Vest</stringValue></value>
+    </choices>
+    <choices>
+        <name>Safety_Harness</name>
+        <choiceText>🪢 Safety Harness</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Harness</stringValue></value>
+    </choices>
+    <choices>
+        <name>Safety_Boots</name>
+        <choiceText>🥾 Steel-Toe Boots</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Boots</stringValue></value>
+    </choices>
+    <choices>
+        <name>Safety_Goggles</name>
+        <choiceText>🥽 Safety Goggles</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Goggles</stringValue></value>
+    </choices>
+
+    <!-- Condition rating (Matrix columns) -->
+    <choices>
+        <name>Cond_Good</name>
+        <choiceText>Good</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Good</stringValue></value>
+    </choices>
+    <choices>
+        <name>Cond_Fair</name>
+        <choiceText>Fair</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Fair</stringValue></value>
+    </choices>
+    <choices>
+        <name>Cond_Poor</name>
+        <choiceText>Poor</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Poor</stringValue></value>
+    </choices>
+
+    <!-- Part availability (Compact Picklist in 2-col layout) -->
+    <choices>
+        <name>Parts_InStock</name>
+        <choiceText>In Stock</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>In Stock</stringValue></value>
+    </choices>
+    <choices>
+        <name>Parts_OrderRequired</name>
+        <choiceText>Order Required</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>Order Required</stringValue></value>
+    </choices>
+    <choices>
+        <name>Parts_NA</name>
+        <choiceText>N/A</choiceText>
+        <dataType>String</dataType>
+        <value><stringValue>N/A</stringValue></value>
+    </choices>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SCREENS
+    ══════════════════════════════════════════════════════════ -->
+
+    <!-- ── Screen 0: Choose Mode (intro) ─────────────────────────
+         Radio: New vs Continue. Lookup: existing CustomForm__c.
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_ChooseMode</name>
+        <label>Start</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Decision_Mode</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_ChooseMode_Hero</name>
+            <fieldText>&lt;div style="background: linear-gradient(135deg, #2E844A 0%, #0176D3 100%); color: white; padding: 20px; border-radius: 10px; margin: 0 0 12px 0; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.15);"&gt;&lt;p style="margin: 0; font-size: 22px;"&gt;&lt;strong&gt;🔧 Site Visit Report&lt;/strong&gt;&lt;/p&gt;&lt;p style="margin: 4px 0 0 0; font-size: 13px; opacity: 0.92;"&gt;Field Service Mobile · Data Capture Showcase&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Hdr_ChooseMode</name>
+            <fieldText>&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Pick up where you left off, or start a fresh report.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ModeChoice</name>
+            <choiceReferences>Mode_New</choiceReferences>
+            <choiceReferences>Mode_Continue</choiceReferences>
+            <defaultValue><stringValue>New</stringValue></defaultValue>
+            <extensionName>runtime_service_fieldservice:dcRbGroup</extensionName>
+            <fieldText>What would you like to do?</fieldText>
+            <fieldType>ComponentChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ExistingForm</name>
+            <extensionName>runtime_service_fieldservice:dcLookup</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Which form to continue?</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectApiName</name>
+                <value><stringValue>CustomForm__c</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>searchedFields</name>
+                <value><stringValue>Name, SiteName__c</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isMultiSelection</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isRequired</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Input_ModeChoice.selectedChoiceValues</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue><stringValue>Continue</stringValue></rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <fields>
+            <name>Callout_ContinueHint</name>
+            <fieldText>&lt;div style="background-color: #EAF5FE; border-left: 4px solid #0176D3; padding: 10px 14px; margin: 6px 0 0 0; border-radius: 4px;"&gt;&lt;p style="margin: 0; color: #014486; font-size: 13px;"&gt;&lt;b&gt;ℹ️ Tip:&lt;/b&gt; Continuing an existing form loads the last saved values so you can make edits without retyping.&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+            <visibilityRule>
+                <conditionLogic>and</conditionLogic>
+                <conditions>
+                    <leftValueReference>Input_ModeChoice.selectedChoiceValues</leftValueReference>
+                    <operator>EqualTo</operator>
+                    <rightValue><stringValue>Continue</stringValue></rightValue>
+                </conditions>
+            </visibilityRule>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 1: Site & Contact ──────────────────────────────
+         Short Text · Email · Phone · Numeric · Name · Address
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_SiteContact</name>
+        <label>Site and Contact</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_SchedulingStatus</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_SiteContact</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 1 of 6 – 📍 Site &amp;amp; Contact Details&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 17%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components on this screen: &lt;em&gt;Short Text · Email · Phone · Numeric · Name · Address&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_SiteName</name>
+            <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Site Name  ·  Short Text</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_SiteName</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ContactEmail</name>
+            <extensionName>runtime_service_fieldservice:dcEmail</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Site Contact Email  ·  Email</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_ContactEmail</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ContactPhone</name>
+            <extensionName>runtime_service_fieldservice:dcPhone</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Site Contact Phone  ·  Phone</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_ContactPhone</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_FloorCount</name>
+            <extensionName>runtime_service_fieldservice:dcNumeric</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Number of Floors  ·  Numeric</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_FloorCount</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ContactName</name>
+            <extensionName>runtime_service_fieldservice:dcName</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>On-Site Contact  ·  Name</stringValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_SiteAddress</name>
+            <extensionName>runtime_service_fieldservice:dcAddress</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Site Address  ·  Address</stringValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 2: Scheduling & Status ─────────────────────────
+         Date · DateTime · Checkbox · Counter · Radio · Compact Picklist
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_SchedulingStatus</name>
+        <label>Scheduling and Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_Assessment</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_Scheduling</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 2 of 6 – 🗓️ Scheduling &amp;amp; Status&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 33%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components: &lt;em&gt;Date · Date &amp;amp; Time · Checkbox · Toggle · Counter · Radio Buttons · Compact Picklist&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_VisitDate</name>
+            <extensionName>runtime_service_fieldservice:dcDate</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Visit Date  ·  Date</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_VisitDate</elementReference></value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxDate</name>
+                <value><dateValue>2027-12-31</dateValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_AppointmentTime</name>
+            <extensionName>runtime_service_fieldservice:dcDateTime</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Appointment Date &amp; Time  ·  Date &amp; Time</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_AppointmentTime</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_IsEmergency</name>
+            <extensionName>runtime_service_fieldservice:dcCheckbox</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>⚠️ Emergency callout — escalate immediately  ·  Checkbox</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_IsEmergency</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Callout_EmergencyWarning</name>
+            <fieldText>&lt;div style="background-color: #FFF4E6; border-left: 4px solid #FE9339; padding: 10px 14px; margin: 6px 0 10px 0; border-radius: 4px;"&gt;&lt;p style="margin: 0; color: #704D00; font-size: 13px;"&gt;&lt;b&gt;⚠️ Heads up:&lt;/b&gt; Ticking emergency pages the on-call supervisor and auto-creates a P0 case. Use only for active safety risks.&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_AfterHoursAccess</name>
+            <extensionName>runtime_service_fieldservice:dcToggle</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>After-Hours Access Authorized  ·  Toggle</stringValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_TechCount</name>
+            <extensionName>runtime_service_fieldservice:dcCounter</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Technicians on Site  ·  Counter</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_TechCount</elementReference></value>
+            </inputParameters>
+            <inputParameters>
+                <name>step</name>
+                <value><numberValue>1.0</numberValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>min</name>
+                <value><numberValue>1.0</numberValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>max</name>
+                <value><numberValue>20.0</numberValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>minCustomErrorMessage</name>
+                <value><stringValue>At least 1 technician required</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>maxCustomErrorMessage</name>
+                <value><stringValue>Maximum 20 technicians per visit</stringValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_Priority</name>
+            <choiceReferences>Priority_High</choiceReferences>
+            <choiceReferences>Priority_Medium</choiceReferences>
+            <choiceReferences>Priority_Low</choiceReferences>
+            <defaultValue><elementReference>v_Priority</elementReference></defaultValue>
+            <extensionName>runtime_service_fieldservice:dcRbGroup</extensionName>
+            <fieldText>Visit Priority  ·  Radio Buttons</fieldText>
+            <fieldType>ComponentChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_VisitStatus</name>
+            <choiceReferences>Status_InProgress</choiceReferences>
+            <choiceReferences>Status_OnHold</choiceReferences>
+            <choiceReferences>Status_Completed</choiceReferences>
+            <choiceReferences>Status_FollowUp</choiceReferences>
+            <defaultValue><elementReference>v_VisitStatus</elementReference></defaultValue>
+            <extensionName>runtime_service_fieldservice:dcPicklist</extensionName>
+            <fieldText>Visit Status  ·  Compact Picklist</fieldText>
+            <fieldType>ComponentChoice</fieldType>
+            <inputParameters>
+                <name>isCompact</name>
+                <value><booleanValue>true</booleanValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 3: Assessment ──────────────────────────────────
+         Long Text · Picklist Single · Picklist Multiple · Matrix
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_Assessment</name>
+        <label>Issue Assessment</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_EvidenceSignoff</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_Assessment</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 3 of 6 – 🔍 Issue Assessment&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 50%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components: &lt;em&gt;Long Text · Picklist (Single) · Picklist (Multi) · Checkbox Group · Matrix&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_IssueDescription</name>
+            <extensionName>runtime_service_fieldservice:dcLongText</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Issue Description  ·  Long Text</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>value</name>
+                <value><elementReference>v_IssueDescription</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_IssueType</name>
+            <choiceReferences>Issue_Electrical</choiceReferences>
+            <choiceReferences>Issue_Mechanical</choiceReferences>
+            <choiceReferences>Issue_Plumbing</choiceReferences>
+            <choiceReferences>Issue_Structural</choiceReferences>
+            <choiceReferences>Issue_Safety</choiceReferences>
+            <choiceReferences>Issue_Cosmetic</choiceReferences>
+            <choiceReferences>Issue_Preventive</choiceReferences>
+            <choiceReferences>Issue_Other</choiceReferences>
+            <extensionName>runtime_service_fieldservice:dcPicklist</extensionName>
+            <fieldText>Issue Type  ·  Picklist (Single Select)</fieldText>
+            <fieldType>ComponentChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_AffectedAreas</name>
+            <choiceReferences>Area_Reception</choiceReferences>
+            <choiceReferences>Area_Server</choiceReferences>
+            <choiceReferences>Area_Offices</choiceReferences>
+            <choiceReferences>Area_Restrooms</choiceReferences>
+            <choiceReferences>Area_Parking</choiceReferences>
+            <choiceReferences>Area_Roof</choiceReferences>
+            <choiceReferences>Area_Basement</choiceReferences>
+            <choiceReferences>Area_Kitchen</choiceReferences>
+            <choiceReferences>Area_Boardroom</choiceReferences>
+            <choiceReferences>Area_Warehouse</choiceReferences>
+            <choiceReferences>Area_Other</choiceReferences>
+            <extensionName>runtime_service_fieldservice:dcPicklist</extensionName>
+            <fieldText>Affected Areas  ·  Picklist (Multi-Select)</fieldText>
+            <fieldType>ComponentMultiChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_SafetyEquipment</name>
+            <choiceReferences>Safety_Helmet</choiceReferences>
+            <choiceReferences>Safety_Gloves</choiceReferences>
+            <choiceReferences>Safety_Vest</choiceReferences>
+            <choiceReferences>Safety_Harness</choiceReferences>
+            <choiceReferences>Safety_Boots</choiceReferences>
+            <choiceReferences>Safety_Goggles</choiceReferences>
+            <extensionName>runtime_service_fieldservice:dcCbGroup</extensionName>
+            <fieldText>Safety Equipment Used  ·  Checkbox Group</fieldText>
+            <fieldType>ComponentMultiChoice</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ConditionMatrix</name>
+            <choiceReferences>Cond_Good</choiceReferences>
+            <choiceReferences>Cond_Fair</choiceReferences>
+            <choiceReferences>Cond_Poor</choiceReferences>
+            <extensionName>runtime_service_fieldservice:dcMatrix</extensionName>
+            <fieldText>Asset Condition Ratings  ·  Matrix</fieldText>
+            <fieldType>ComponentMultiChoice</fieldType>
+            <inputParameters>
+                <name>questions</name>
+                <value><stringValue>["Electrical Systems","Mechanical Equipment","Plumbing &amp; HVAC","Structural Elements","Safety Installations"]</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isDisabled</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isReadonly</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 4: Evidence & Sign-off ─────────────────────────
+         Upload Image · Upload File · Address+Coordinates · Signature
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_EvidenceSignoff</name>
+        <label>Evidence and Sign-off</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_LayoutFeatures</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_Evidence</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 4 of 6 – 📸 Evidence &amp;amp; Sign-off&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 67%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components: &lt;em&gt;Static Image · Upload Image · Upload File · Address with GPS · Signature&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Callout_OfflineSync</name>
+            <fieldText>&lt;div style="background-color: #EAF5FE; border-left: 4px solid #0176D3; padding: 10px 14px; margin: 0 0 10px 0; border-radius: 4px;"&gt;&lt;p style="margin: 0; color: #014486; font-size: 13px;"&gt;&lt;b&gt;ℹ️ Offline capture:&lt;/b&gt; Photos, files, and signatures are stored locally and auto-sync to Salesforce once you're back online. No need to wait for a connection.&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_ReferenceImage</name>
+            <extensionName>runtime_service_fieldservice:dcFileView</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Reference: PPE Compliance Checklist  ·  Static Image</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>fileName</name>
+                <value><stringValue>PPE_Compliance_Checklist</stringValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_SitePhoto</name>
+            <extensionName>runtime_service_fieldservice:dcUpImage</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Site Photos  ·  Upload Image</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>recordId</name>
+                <value><elementReference>parentRecordId</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_SupportingDocs</name>
+            <extensionName>runtime_service_fieldservice:dcUpFile</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Supporting Documents  ·  Upload File</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>recordId</name>
+                <value><elementReference>parentRecordId</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_GPSLocation</name>
+            <extensionName>runtime_service_fieldservice:dcAddress</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>GPS Location  ·  Address with Coordinates</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>useCoordinates</name>
+                <value><booleanValue>true</booleanValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_Signature</name>
+            <extensionName>runtime_service_fieldservice:dcSignature</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Customer Sign-off  ·  Signature</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>parentRecordId</name>
+                <value><elementReference>parentRecordId</elementReference></value>
+            </inputParameters>
+            <inputParameters>
+                <name>recordId</name>
+                <value><elementReference>recordId</elementReference></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 5: Layout Features ────────────────────────────
+         Lookup · Repeater · 2-column Section with visibility rule
+         (Static Image View also included)
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_LayoutFeatures</name>
+        <label>Layout Features</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_LayoutFeaturesRepeater</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_Layout</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 5 of 6 – 🧩 Parts &amp;amp; Related Records&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 83%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components: &lt;em&gt;Lookup · 2-Column Section · Conditional Visibility · Parts (persisted as child records)&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <!-- Lookup -->
+        <fields>
+            <name>Input_RelatedAsset</name>
+            <extensionName>runtime_service_fieldservice:dcLookup</extensionName>
+            <fieldType>ComponentInstance</fieldType>
+            <inputParameters>
+                <name>label</name>
+                <value><stringValue>Related Asset  ·  Lookup (multi-select, search by Name &amp; Serial)</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>objectApiName</name>
+                <value><stringValue>Asset</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>searchedFields</name>
+                <value><stringValue>Name, SerialNumber</stringValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isMultiSelection</name>
+                <value><booleanValue>true</booleanValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isRequired</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputParameters>
+                <name>isDisabled</name>
+                <value><booleanValue>false</booleanValue></value>
+            </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <storeOutputAutomatically>true</storeOutputAutomatically>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <!-- Parts Used: Repeater (each row persists as a CustomFormPart__c child) -->
+        <fields>
+            <name>Hdr_Parts</name>
+            <fieldText>&lt;p&gt;&lt;strong&gt;Parts Used&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;&lt;em&gt;Add one row per part — tap + Add Row for more. Each row becomes a child CustomFormPart__c record when you submit.&lt;/em&gt;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_PartsRepeater</name>
+            <fieldType>Repeater</fieldType>
+            <fields>
+                <name>Input_PartName</name>
+                <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+                <fieldType>ComponentInstance</fieldType>
+                <inputParameters>
+                    <name>label</name>
+                    <value><stringValue>Part Name / Description</stringValue></value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <styleProperties>
+                    <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                    <width><stringValue>12</stringValue></width>
+                </styleProperties>
+            </fields>
+            <fields>
+                <name>Input_PartQty</name>
+                <extensionName>runtime_service_fieldservice:dcCounter</extensionName>
+                <fieldType>ComponentInstance</fieldType>
+                <inputParameters>
+                    <name>label</name>
+                    <value><stringValue>Quantity</stringValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>value</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>step</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>min</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <styleProperties>
+                    <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                    <width><stringValue>12</stringValue></width>
+                </styleProperties>
+            </fields>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <!-- 2-column section: Numeric + conditional Compact Picklist -->
+        <fields>
+            <name>Section_PartsAvailability</name>
+            <fieldText>Parts Availability  ·  2-Column Section with Conditional Visibility</fieldText>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Section_PartsAvailability_Col1</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Input_EstimatedHours</name>
+                    <extensionName>runtime_service_fieldservice:dcNumeric</extensionName>
+                    <fieldType>ComponentInstance</fieldType>
+                    <inputParameters>
+                        <name>label</name>
+                        <value><stringValue>Estimated Hours to Complete (enter 0 if done)</stringValue></value>
+                    </inputParameters>
+                    <inputParameters>
+                        <name>value</name>
+                        <value><elementReference>v_EstimatedHours</elementReference></value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>true</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                        <width><stringValue>12</stringValue></width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value><stringValue>6</stringValue></value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Section_PartsAvailability_Col2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <!-- Visible only when Estimated Hours > 0 -->
+                    <name>Input_PartsStatus</name>
+                    <choiceReferences>Parts_InStock</choiceReferences>
+                    <choiceReferences>Parts_OrderRequired</choiceReferences>
+                    <choiceReferences>Parts_NA</choiceReferences>
+                    <extensionName>runtime_service_fieldservice:dcPicklist</extensionName>
+                    <fieldText>Parts Status (visible when hours &gt; 0)</fieldText>
+                    <fieldType>ComponentChoice</fieldType>
+                    <inputParameters>
+                        <name>isCompact</name>
+                        <value><booleanValue>true</booleanValue></value>
+                    </inputParameters>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                    <isRequired>false</isRequired>
+                    <storeOutputAutomatically>true</storeOutputAutomatically>
+                    <styleProperties>
+                        <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                        <width><stringValue>12</stringValue></width>
+                    </styleProperties>
+                    <visibilityRule>
+                        <conditionLogic>and</conditionLogic>
+                        <conditions>
+                            <leftValueReference>Input_EstimatedHours.value</leftValueReference>
+                            <operator>GreaterThan</operator>
+                            <rightValue><numberValue>0.0</numberValue></rightValue>
+                        </conditions>
+                    </visibilityRule>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value><stringValue>6</stringValue></value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 5b: Parts via Repeater ────────────────────────
+         Mirrors Screen 5 but uses the Repeater component.
+         Each repeater row persists as a child CustomFormPart__c.
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_LayoutFeaturesRepeater</name>
+        <label>Parts (Repeater)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Screen_Review</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_LayoutRepeater</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 5b of 6 – 🔁 Parts via Repeater&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 92%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Components: &lt;em&gt;Repeater with nested Text + Counter. Each row becomes a CustomFormPart__c child record via an outer Loop + recordCreate at end-of-flow.&lt;/em&gt;&lt;/p&gt;
+            &lt;div style="background-color: #EAF5FE; border-left: 4px solid #0176D3; padding: 10px 14px; margin: 6px 0 0 0; border-radius: 4px;"&gt;&lt;p style="margin: 0; color: #014486; font-size: 13px;"&gt;&lt;b&gt;ℹ️ Tip:&lt;/b&gt; Use the &lt;b&gt;+ Add Row&lt;/b&gt; button below to add as many parts as you need — each row will save as its own child record.&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Input_PartsRepeaterV2</name>
+            <fieldType>Repeater</fieldType>
+            <fields>
+                <name>Input_PartNameV2</name>
+                <extensionName>runtime_service_fieldservice:dcTextInput</extensionName>
+                <fieldType>ComponentInstance</fieldType>
+                <inputParameters>
+                    <name>label</name>
+                    <value><stringValue>Part Name / Description</stringValue></value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <styleProperties>
+                    <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                    <width><stringValue>12</stringValue></width>
+                </styleProperties>
+            </fields>
+            <fields>
+                <name>Input_PartQtyV2</name>
+                <extensionName>runtime_service_fieldservice:dcCounter</extensionName>
+                <fieldType>ComponentInstance</fieldType>
+                <inputParameters>
+                    <name>label</name>
+                    <value><stringValue>Quantity</stringValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>value</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>step</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputParameters>
+                    <name>min</name>
+                    <value><numberValue>1.0</numberValue></value>
+                </inputParameters>
+                <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+                <isRequired>true</isRequired>
+                <storeOutputAutomatically>true</storeOutputAutomatically>
+                <styleProperties>
+                    <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                    <width><stringValue>12</stringValue></width>
+                </styleProperties>
+            </fields>
+            <isRequired>false</isRequired>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Continue to Review</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ── Screen 6: Review & Submit ─────────────────────────────
+         Review screen — routes to Decision_SaveMode on Submit
+    ──────────────────────────────────────────────────────────── -->
+    <screens>
+        <name>Screen_Review</name>
+        <label>Review and Submit</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>Decision_SaveMode</targetReference>
+        </connector>
+        <fields>
+            <name>Hdr_Review</name>
+            <fieldText>&lt;p&gt;&lt;b&gt;Step 6 of 6 – ✅ Review &amp;amp; Submit&lt;/b&gt;&lt;/p&gt;&lt;div style="width: 100%; height: 8px; background-color: #C9C7C5; border-radius: 4px; margin: 5px 0 12px 0;"&gt;&lt;div style="width: 100%; height: 100%; background: linear-gradient(90deg, #2E844A 0%, #0176D3 100%); border-radius: 4px;"&gt;&lt;/div&gt;&lt;/div&gt;&lt;p style="color: #706E6B; font-size: 13px; margin: 0 0 8px 0;"&gt;Double-check everything below before tapping &lt;strong&gt;Submit Report&lt;/strong&gt;.&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Card_Site</name>
+            <fieldText>&lt;div style="border: 1px solid #DDDBDA; border-radius: 8px; padding: 14px 16px; margin: 8px 0; background-color: #FAFAF9;"&gt;&lt;p style="margin: 0 0 8px 0; color: #0176D3; font-size: 14px;"&gt;&lt;b&gt;📍 Site &amp;amp; Contact&lt;/b&gt;&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Site:&lt;/b&gt; {!Input_SiteName.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Contact:&lt;/b&gt; {!Input_ContactName.firstName} {!Input_ContactName.lastName}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Email:&lt;/b&gt; {!Input_ContactEmail.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Phone:&lt;/b&gt; {!Input_ContactPhone.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Floors:&lt;/b&gt; {!Input_FloorCount.value}&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Card_Scheduling</name>
+            <fieldText>&lt;div style="border: 1px solid #DDDBDA; border-radius: 8px; padding: 14px 16px; margin: 8px 0; background-color: #FAFAF9;"&gt;&lt;p style="margin: 0 0 8px 0; color: #0176D3; font-size: 14px;"&gt;&lt;b&gt;🗓️ Scheduling &amp;amp; Status&lt;/b&gt;&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Visit Date:&lt;/b&gt; {!Input_VisitDate.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Appointment:&lt;/b&gt; {!Input_AppointmentTime.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Emergency:&lt;/b&gt; {!Input_IsEmergency.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;After-Hours Access:&lt;/b&gt; {!Input_AfterHoursAccess.isActive}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Technicians:&lt;/b&gt; {!Input_TechCount.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Priority:&lt;/b&gt; {!Input_Priority.selectedChoiceValues}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Status:&lt;/b&gt; {!Input_VisitStatus.selectedChoiceValues}&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Card_Assessment</name>
+            <fieldText>&lt;div style="border: 1px solid #DDDBDA; border-radius: 8px; padding: 14px 16px; margin: 8px 0; background-color: #FAFAF9;"&gt;&lt;p style="margin: 0 0 8px 0; color: #0176D3; font-size: 14px;"&gt;&lt;b&gt;🔍 Issue Assessment&lt;/b&gt;&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Issue Type:&lt;/b&gt; {!Input_IssueType.selectedChoiceValues}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Description:&lt;/b&gt; {!Input_IssueDescription.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Affected Areas:&lt;/b&gt; {!Input_AffectedAreas.selectedChoiceValues}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Safety Equipment:&lt;/b&gt; {!Input_SafetyEquipment.selectedChoiceValues}&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Card_WorkPlan</name>
+            <fieldText>&lt;div style="border: 1px solid #DDDBDA; border-radius: 8px; padding: 14px 16px; margin: 8px 0; background-color: #FAFAF9;"&gt;&lt;p style="margin: 0 0 8px 0; color: #0176D3; font-size: 14px;"&gt;&lt;b&gt;🧩 Work Plan&lt;/b&gt;&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Estimated Hours:&lt;/b&gt; {!Input_EstimatedHours.value}&lt;/p&gt;&lt;p style="margin: 2px 0;"&gt;&lt;b&gt;Parts Status:&lt;/b&gt; {!Input_PartsStatus.selectedChoiceValues}&lt;/p&gt;&lt;p style="margin: 8px 0 2px 0; color: #706E6B; font-size: 12px;"&gt;&lt;em&gt;Each row from the Parts Repeaters on Screen 5 &amp;amp; 5b will save as a child CustomFormPart__c record on Submit.&lt;/em&gt;&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Callout_ReadyToSync</name>
+            <fieldText>&lt;div style="background-color: #E8F5E9; border-left: 4px solid #2E844A; padding: 12px 14px; margin: 12px 0; border-radius: 4px;"&gt;&lt;p style="margin: 0; color: #1B5E20; font-size: 13px;"&gt;&lt;b&gt;✅ Ready to submit.&lt;/b&gt; Your report will save locally and sync to Salesforce automatically when online.&lt;/p&gt;&lt;/div&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+            <styleProperties>
+                <verticalAlignment><stringValue>top</stringValue></verticalAlignment>
+                <width><stringValue>12</stringValue></width>
+            </styleProperties>
+        </fields>
+        <nextOrFinishButtonLabel>Submit Report</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+
+    <!-- ══════════════════════════════════════════════════════════
+         DECISIONS
+    ══════════════════════════════════════════════════════════ -->
+    <decisions>
+        <name>Decision_Mode</name>
+        <label>Which Mode?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Screen_SiteContact</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>New Form</defaultConnectorLabel>
+        <rules>
+            <name>Rule_Continue</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Input_ModeChoice.selectedChoiceValues</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue><stringValue>Continue</stringValue></rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Input_ExistingForm.recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_ExistingForm</targetReference>
+            </connector>
+            <label>Continue Existing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Decision_SaveMode</name>
+        <label>Create or Update?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Create_CustomForm</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Create New</defaultConnectorLabel>
+        <rules>
+            <name>Rule_UpdateExisting</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Input_ModeChoice.selectedChoiceValues</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue><stringValue>Continue</stringValue></rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Input_ExistingForm.recordId</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue><booleanValue>false</booleanValue></rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_CustomForm</targetReference>
+            </connector>
+            <label>Update Existing</label>
+        </rules>
+    </decisions>
+
+    <!-- ══════════════════════════════════════════════════════════
+         RECORD LOOKUPS
+    ══════════════════════════════════════════════════════════ -->
+    <recordLookups>
+        <name>Get_ExistingForm</name>
+        <label>Get Existing CustomForm</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Screen_SiteContact</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>Input_ExistingForm.recordId</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CustomForm__c</object>
+        <outputAssignments>
+            <assignToReference>v_SiteName</assignToReference>
+            <field>SiteName__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_ContactEmail</assignToReference>
+            <field>ContactEmail__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_ContactPhone</assignToReference>
+            <field>ContactPhone__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_ContactFirstName</assignToReference>
+            <field>ContactFirstName__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_ContactLastName</assignToReference>
+            <field>ContactLastName__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_FloorCount</assignToReference>
+            <field>FloorCount__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_SiteAddress</assignToReference>
+            <field>SiteAddress__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_VisitDate</assignToReference>
+            <field>VisitDate__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_AppointmentTime</assignToReference>
+            <field>AppointmentTime__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_IsEmergency</assignToReference>
+            <field>IsEmergency__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_AfterHoursAccess</assignToReference>
+            <field>AfterHoursAccess__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_TechCount</assignToReference>
+            <field>TechCount__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_Priority</assignToReference>
+            <field>Priority__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_VisitStatus</assignToReference>
+            <field>VisitStatus__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_IssueDescription</assignToReference>
+            <field>IssueDescription__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_IssueType</assignToReference>
+            <field>IssueType__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_AffectedAreas</assignToReference>
+            <field>AffectedAreas__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_SafetyEquipment</assignToReference>
+            <field>SafetyEquipment__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_EstimatedHours</assignToReference>
+            <field>EstimatedHours__c</field>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>v_PartsStatus</assignToReference>
+            <field>PartsStatus__c</field>
+        </outputAssignments>
+    </recordLookups>
+
+    <!-- ══════════════════════════════════════════════════════════
+         RECORD CREATES / UPDATES
+    ══════════════════════════════════════════════════════════ -->
+    <recordCreates>
+        <name>Create_CustomForm</name>
+        <label>Create CustomForm</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_NewFormId</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value><elementReference>Input_SiteName.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SiteName__c</field>
+            <value><elementReference>Input_SiteName.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactEmail__c</field>
+            <value><elementReference>Input_ContactEmail.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactPhone__c</field>
+            <value><elementReference>Input_ContactPhone.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactFirstName__c</field>
+            <value><elementReference>Input_ContactName.firstName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactLastName__c</field>
+            <value><elementReference>Input_ContactName.lastName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>FloorCount__c</field>
+            <value><elementReference>Input_FloorCount.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitDate__c</field>
+            <value><elementReference>Input_VisitDate.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AppointmentTime__c</field>
+            <value><elementReference>Input_AppointmentTime.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsEmergency__c</field>
+            <value><elementReference>Input_IsEmergency.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AfterHoursAccess__c</field>
+            <value><elementReference>Input_AfterHoursAccess.isActive</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TechCount__c</field>
+            <value><elementReference>Input_TechCount.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value><elementReference>Input_Priority.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitStatus__c</field>
+            <value><elementReference>Input_VisitStatus.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IssueDescription__c</field>
+            <value><elementReference>Input_IssueDescription.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IssueType__c</field>
+            <value><elementReference>Input_IssueType.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AffectedAreas__c</field>
+            <value><elementReference>Input_AffectedAreas.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SafetyEquipment__c</field>
+            <value><elementReference>Input_SafetyEquipment.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>EstimatedHours__c</field>
+            <value><elementReference>Input_EstimatedHours.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PartsStatus__c</field>
+            <value><elementReference>Input_PartsStatus.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <object>CustomForm__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_PartFromScreen5</name>
+        <label>Create Part (Screen 5 Repeater row)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_PartsScreen5</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>CustomForm__c</field>
+            <value><elementReference>v_CustomFormId</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PartName__c</field>
+            <value><elementReference>Loop_PartsScreen5.Input_PartName.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Quantity__c</field>
+            <value><elementReference>Loop_PartsScreen5.Input_PartQty.value</elementReference></value>
+        </inputAssignments>
+        <object>CustomFormPart__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_PartFromScreen5b</name>
+        <label>Create Part (Screen 5b Repeater row)</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Loop_PartsScreen5b</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>CustomForm__c</field>
+            <value><elementReference>v_CustomFormId</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PartName__c</field>
+            <value><elementReference>Loop_PartsScreen5b.Input_PartNameV2.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Quantity__c</field>
+            <value><elementReference>Loop_PartsScreen5b.Input_PartQtyV2.value</elementReference></value>
+        </inputAssignments>
+        <object>CustomFormPart__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordUpdates>
+        <name>Update_CustomForm</name>
+        <label>Update CustomForm</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Assign_ExistingFormId</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value><elementReference>Input_ExistingForm.recordId</elementReference></value>
+        </filters>
+        <inputAssignments>
+            <field>SiteName__c</field>
+            <value><elementReference>Input_SiteName.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactEmail__c</field>
+            <value><elementReference>Input_ContactEmail.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactPhone__c</field>
+            <value><elementReference>Input_ContactPhone.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactFirstName__c</field>
+            <value><elementReference>Input_ContactName.firstName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ContactLastName__c</field>
+            <value><elementReference>Input_ContactName.lastName</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>FloorCount__c</field>
+            <value><elementReference>Input_FloorCount.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitDate__c</field>
+            <value><elementReference>Input_VisitDate.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AppointmentTime__c</field>
+            <value><elementReference>Input_AppointmentTime.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IsEmergency__c</field>
+            <value><elementReference>Input_IsEmergency.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AfterHoursAccess__c</field>
+            <value><elementReference>Input_AfterHoursAccess.isActive</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>TechCount__c</field>
+            <value><elementReference>Input_TechCount.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority__c</field>
+            <value><elementReference>Input_Priority.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>VisitStatus__c</field>
+            <value><elementReference>Input_VisitStatus.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IssueDescription__c</field>
+            <value><elementReference>Input_IssueDescription.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IssueType__c</field>
+            <value><elementReference>Input_IssueType.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>AffectedAreas__c</field>
+            <value><elementReference>Input_AffectedAreas.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SafetyEquipment__c</field>
+            <value><elementReference>Input_SafetyEquipment.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>EstimatedHours__c</field>
+            <value><elementReference>Input_EstimatedHours.value</elementReference></value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PartsStatus__c</field>
+            <value><elementReference>Input_PartsStatus.selectedChoiceValues</elementReference></value>
+        </inputAssignments>
+        <object>CustomForm__c</object>
+    </recordUpdates>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LOOPS — iterate each Repeater via .AllItems accessor
+    ══════════════════════════════════════════════════════════ -->
+    <loops>
+        <name>Loop_PartsScreen5</name>
+        <label>Loop over Screen 5 Repeater rows</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Input_PartsRepeater.AllItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Create_PartFromScreen5</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Loop_PartsScreen5b</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <name>Loop_PartsScreen5b</name>
+        <label>Loop over Screen 5b Repeater rows</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <collectionReference>Input_PartsRepeaterV2.AllItems</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Create_PartFromScreen5b</targetReference>
+        </nextValueConnector>
+    </loops>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ASSIGNMENTS — form Id capture (then routes into CUD chain)
+    ══════════════════════════════════════════════════════════ -->
+    <assignments>
+        <name>Assign_NewFormId</name>
+        <label>Capture new CustomForm Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>v_CustomFormId</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Create_CustomForm</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_PartsScreen5</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_ExistingFormId</name>
+        <label>Capture existing CustomForm Id</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>v_CustomFormId</assignToReference>
+            <operator>Assign</operator>
+            <value><elementReference>Input_ExistingForm.recordId</elementReference></value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_PartsScreen5</targetReference>
+        </connector>
+    </assignments>
+
+    <!-- ══════════════════════════════════════════════════════════
+         START
+    ══════════════════════════════════════════════════════════ -->
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Screen_ChooseMode</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+
+    <!-- ══════════════════════════════════════════════════════════
+         VARIABLES — required inputs for DataCaptureFlow
+                   + internal state (v_*)
+    ══════════════════════════════════════════════════════════ -->
+    <variables>
+        <name>v_CustomFormId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_SiteName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_ContactEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_ContactPhone</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_ContactFirstName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_ContactLastName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_FloorCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>v_SiteAddress</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_VisitDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_AppointmentTime</name>
+        <dataType>DateTime</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_IsEmergency</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_AfterHoursAccess</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_TechCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <name>v_Priority</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_VisitStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_IssueDescription</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_IssueType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_AffectedAreas</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_SafetyEquipment</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>v_EstimatedHours</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>2</scale>
+    </variables>
+    <variables>
+        <name>v_PartsStatus</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Required input for Data Capture flows</description>
+        <name>parentObjectType</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Required input for Data Capture flows</description>
+        <name>parentRecordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Required input for Data Capture flows</description>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+
+</Flow>

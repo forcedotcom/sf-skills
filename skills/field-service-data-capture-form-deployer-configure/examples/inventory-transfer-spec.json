@@ -1,0 +1,135 @@
+{
+  "formTitle": "Inventory Transfer",
+  "formType": "Inventory Transfer",
+  "screens": {
+    "InventoryTransfer": [
+      {
+        "fieldName": "From",
+        "fieldLabel": "From",
+        "fieldType": "ShortText",
+        "isRequired": true,
+        "defaultValue": null,
+        "options": null
+      },
+      {
+        "fieldName": "To",
+        "fieldLabel": "To",
+        "fieldType": "Radio",
+        "isRequired": true,
+        "defaultValue": null,
+        "options": ["Truck", "Work Order"]
+      },
+      {
+        "fieldName": "Work_Order_Number",
+        "fieldLabel": "Work Order Number",
+        "fieldType": "ShortText",
+        "isRequired": true,
+        "defaultValue": null,
+        "options": null,
+        "visibility": { "field": "To", "operator": "EqualTo", "value": "Work Order" }
+      },
+      {
+        "fieldName": "Part",
+        "fieldLabel": "Parts",
+        "fieldType": "Repeater",
+        "isRequired": false,
+        "repeaterFields": [
+          {
+            "fieldName": "Quantity",
+            "fieldLabel": "Quantity",
+            "fieldType": "Counter",
+            "isRequired": true,
+            "min": 1,
+            "value": 1
+          },
+          {
+            "fieldName": "Part_Number",
+            "fieldLabel": "Part Number",
+            "fieldType": "ShortText",
+            "isRequired": true
+          },
+          {
+            "fieldName": "Part_Description",
+            "fieldLabel": "Part Description",
+            "fieldType": "ShortText",
+            "isRequired": true
+          }
+        ]
+      }
+    ]
+  },
+  "postScreen": {
+    "variables": [
+      { "name": "Transfer_Destination", "type": "String" }
+    ],
+    "decision": {
+      "name": "Transfer_Location_Decision",
+      "label": "Transfer Location Decision",
+      "defaultLabel": "Error",
+      "branches": [
+        {
+          "name": "Truck_Decision",
+          "label": "Truck",
+          "when": { "field": "To", "operator": "EqualTo", "value": "Truck" },
+          "then": "Get_Truck"
+        },
+        {
+          "name": "Work_Order_Decision",
+          "label": "Work Order",
+          "when": { "field": "To", "operator": "EqualTo", "value": "Work Order" },
+          "then": "Get_WO"
+        }
+      ]
+    },
+    "recordLookups": [
+      {
+        "name": "Get_Truck",
+        "label": "Get Truck",
+        "object": "Location",
+        "filters": [
+          { "field": "Service_Resource__c", "operator": "EqualTo", "valueRef": "$User.Id" }
+        ],
+        "outputAssignments": [
+          { "assignTo": "Transfer_Destination", "field": "Id" }
+        ],
+        "next": "Part_Transfers"
+      },
+      {
+        "name": "Get_WO",
+        "label": "Get WO",
+        "object": "WorkOrder",
+        "filters": [
+          { "field": "Id", "operator": "EqualTo", "valueRef": "Work_Order_Number.value" }
+        ],
+        "outputAssignments": [
+          { "assignTo": "Transfer_Destination", "field": "LocationId" }
+        ],
+        "next": "Part_Transfers"
+      }
+    ],
+    "loop": {
+      "name": "Part_Transfers",
+      "label": "Part Transfers",
+      "description": "Transfer each part",
+      "collection": "Part.AddedItems",
+      "next": "Transfer_Part"
+    },
+    "recordCreates": [
+      {
+        "name": "Transfer_Part",
+        "label": "Transfer Part",
+        "object": "ProductTransfer",
+        "next": "Part_Transfers",
+        "inputAssignments": [
+          { "field": "DestinationLocationId", "valueRef": "Transfer_Destination" },
+          { "field": "IsReceived", "boolean": true },
+          { "field": "OwnerId", "valueRef": "$User.Id" },
+          { "field": "Product2Id", "valueRef": "Part_Transfers.Part_Number.value" },
+          { "field": "QuantityReceived", "valueRef": "Part_Transfers.Quantity.value" },
+          { "field": "QuantitySent", "valueRef": "Part_Transfers.Quantity.value" },
+          { "field": "ReceivedById", "valueRef": "$User.Id" }
+        ]
+      }
+    ]
+  }
+}
