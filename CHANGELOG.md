@@ -1,3 +1,12 @@
+# [1.49.0](https://github.com/forcedotcom/sf-skills/compare/1.48.0...1.49.0) (2026-09-04)
+
+
+### Features
+
+* Release 1 skill updated - education-cloud-multi-campus-configure @W-24038743@ ([17085e2](https://github.com/forcedotcom/sf-skills/commit/17085e28d55fa8d034703657d337a65ec40eca35))
+
+
+
 # [1.48.0](https://github.com/forcedotcom/sf-skills/compare/1.47.0...1.48.0) (2026-09-04)
 
 
