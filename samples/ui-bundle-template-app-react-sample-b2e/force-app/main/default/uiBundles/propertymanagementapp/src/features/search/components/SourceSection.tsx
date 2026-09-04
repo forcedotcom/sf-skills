@@ -9,13 +9,14 @@
  */
 
 import type { ReactNode } from "react";
-import { AlertCircle, SearchX } from "lucide-react";
+import { AlertCircle, Search, SearchX } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert";
 import { Skeleton } from "../../../components/ui/skeleton";
 import { ActiveFilters } from "./filters/ActiveFilters";
 import { FilterProvider, FilterResetButton } from "./filters/FilterContext";
 import { PaginationControls } from "./controls/PaginationControls";
 import { SortControl } from "./controls/SortControl";
+import { MIN_QUERY_LENGTH } from "../constants";
 import type { SourceController } from "../types";
 
 interface SourceSectionProps {
@@ -35,6 +36,15 @@ interface SourceSectionProps {
 	 */
 	hideFilterChrome?: boolean;
 	emptyMessage?: string;
+	/**
+	 * The current search query. Used to distinguish a not-yet-started search
+	 * (query below {@link MIN_QUERY_LENGTH}, so no fetch was issued) from a
+	 * genuine zero-match result, so the empty state can prompt instead of
+	 * claiming "No … found."
+	 */
+	q?: string;
+	/** Message shown when the query is below {@link MIN_QUERY_LENGTH}. Defaults to "Start your search…" */
+	shortQueryMessage?: string;
 	className?: string;
 }
 
@@ -44,6 +54,8 @@ export function SourceSection({
 	renderFilters,
 	hideFilterChrome,
 	emptyMessage,
+	q = "",
+	shortQueryMessage = "Start your search…",
 	className,
 }: SourceSectionProps) {
 	const { config, result, loading, error, filters, sort, pagination } = controller;
@@ -51,6 +63,9 @@ export function SourceSection({
 	const totalCount = result?.totalCount;
 	const showResults = !loading && !error && nodes.length > 0;
 	const showEmpty = !loading && !error && nodes.length === 0;
+	// A query below MIN_QUERY_LENGTH never triggers a fetch, so an empty result
+	// means "not searched yet" — prompt rather than report zero matches.
+	const isShortQuery = q.trim().length < MIN_QUERY_LENGTH;
 
 	const pageSizeOptions = pagination.pageSizeOptions ?? [pagination.pageSize];
 
@@ -70,7 +85,9 @@ export function SourceSection({
 		: error
 			? `Failed to load ${config.label}.`
 			: showEmpty
-				? (emptyMessage ?? `No ${config.label.toLowerCase()} found.`)
+				? isShortQuery
+					? shortQueryMessage
+					: (emptyMessage ?? `No ${config.label.toLowerCase()} found.`)
 				: totalCount != null
 					? `${config.label}: ${totalCount} ${totalCount === 1 ? "result" : "results"}`
 					: "";
@@ -153,9 +170,15 @@ export function SourceSection({
 
 					{showEmpty && (
 						<div className="flex flex-col items-center justify-center py-10 text-center">
-							<SearchX className="size-10 text-muted-foreground mb-3" />
+							{isShortQuery ? (
+								<Search className="size-10 text-muted-foreground mb-3" />
+							) : (
+								<SearchX className="size-10 text-muted-foreground mb-3" />
+							)}
 							<p className="text-sm text-muted-foreground">
-								{emptyMessage ?? `No ${config.label.toLowerCase()} found.`}
+								{isShortQuery
+									? shortQueryMessage
+									: (emptyMessage ?? `No ${config.label.toLowerCase()} found.`)}
 							</p>
 						</div>
 					)}

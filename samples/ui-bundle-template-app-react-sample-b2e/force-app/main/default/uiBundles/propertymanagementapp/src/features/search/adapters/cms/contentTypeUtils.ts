@@ -8,21 +8,23 @@
 
 /**
  * Formats a CMS content type FQN into a human-readable label.
- * Strips "sfdc_cms__" prefix, splits camelCase, title-cases each word.
+ * Strips the "sfdc_cms__" (OOTB) or "c__" (custom) prefix, splits camelCase, title-cases each word.
  *
  * Examples:
  *   "sfdc_cms__blogPost" → "Blog Post"
  *   "sfdc_cms__news" → "News"
- *   "sfdc_cms__document" → "Document"
- *   "sfdc_cms__pressRelease" → "Press Release"
+ *   "c__NewsArticle" → "News Article"
+ *   "c__Recipe" → "Recipe"
  */
 export function formatContentTypeLabel(fqn: string): string {
-	const stripped = fqn.replace(/^sfdc_cms__/, "");
+	const stripped = fqn.replace(/^(?:sfdc_cms__|c__)/, "");
 	const words = stripped.replace(/([a-z])([A-Z])/g, "$1 $2");
 	return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-export const CMS_FQN_PATTERN = /^sfdc_cms__[a-zA-Z][a-zA-Z0-9]{0,39}$/;
+// OOTB content types are namespaced `sfdc_cms__<name>`; custom types created in
+// a namespace-less org take the default `c__<name>` prefix. Both are valid FQNs.
+export const CMS_FQN_PATTERN = /^(?:sfdc_cms__|c__)[a-zA-Z][a-zA-Z0-9]{0,39}$/;
 
 export function isValidCmsFqn(fqn: string): boolean {
 	return CMS_FQN_PATTERN.test(fqn);

@@ -64,7 +64,13 @@ function DefaultFilterField({ filter, source }: DefaultFilterFieldProps) {
 			return <PicklistField filter={filter} source={source} multi={true} />;
 		case "numeric":
 			return (
-				<NumericRangeFilter field={filter.field} label={filter.label} helpText={filter.helpText} />
+				<NumericRangeFilter
+					field={filter.field}
+					label={filter.label}
+					helpText={filter.helpText}
+					min={filter.min}
+					max={filter.max}
+				/>
 			);
 		case "boolean":
 			return <BooleanFilter field={filter.field} label={filter.label} helpText={filter.helpText} />;

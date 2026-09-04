@@ -60,6 +60,31 @@ Options:
   return { targetOrg, uiBundleName };
 }
 
+/**
+ * Print a heads-up about auth surfaces that only work on the deployed Experience
+ * site. In local preview, `sdk.fetch` is proxied to the org outside the site's
+ * guest/community context, so social login and password/MFA login cannot be
+ * exercised on localhost. This mirrors the "Local preview limitations" sections
+ * in the feature-react-authentication / feature-react-mfa READMEs — surfaced here
+ * so it is seen even when the READMEs are not.
+ */
+function printLocalPreviewWarning() {
+  console.log(
+    [
+      '',
+      '⚠️  Local preview limitation — some auth surfaces only work on the DEPLOYED site',
+      '   Local preview proxies sdk.fetch to the org outside the Experience site guest',
+      '   context (Site.getBaseUrl() is blank, no site session), so on localhost:',
+      '     • Social Login buttons do not render (/auth/social-login-config returns no providers)',
+      '     • Password / MFA login fails with "Your login attempt has failed…" (Site.login() cannot',
+      '       establish the site session)',
+      '   This is expected, not a misconfiguration. Test social login and MFA on the published',
+      '   site login page: https://<domain>.site.com/<site-path>/login',
+      '',
+    ].join('\n'),
+  );
+}
+
 async function main() {
   const parsed = parseArgs();
 
@@ -75,6 +100,8 @@ async function main() {
     env: { ...process.env, SF_TARGET_ORG: targetOrg },
   });
   run('GraphQL codegen', 'npm', ['run', 'graphql:codegen'], { cwd: uiBundleDir });
+
+  printLocalPreviewWarning();
 
   console.log('\n--- Launching dev server (Ctrl+C to stop) ---\n');
   const devResult = run('Dev server', 'npm', ['run', 'dev'], { cwd: uiBundleDir, optional: true });

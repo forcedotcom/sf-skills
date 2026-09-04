@@ -44,6 +44,7 @@ function buildCmsRequest(request: SourceRequest<CmsSourceConfig>): QueryFragment
 		offset,
 		limit: request.pageSize,
 		contentTypes: contentTypes && contentTypes.length > 0 ? contentTypes : null,
+		language: request.language ?? null,
 	});
 }
 

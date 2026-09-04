@@ -60,13 +60,16 @@ function isSearchable(entry: RawContentTypeEntry): boolean {
 	return true;
 }
 
-/**
- * Extracts the prefixed FQN from an entry. `id` is the current field; the
- * others are fallbacks for alternate/legacy payloads. `name` is intentionally
- * NOT read here — it is the bare (unprefixed) developer name and would fail
- * `isValidCmsFqn`.
- */
+/** ManagedContentType key prefix — the `id` custom content types carry instead of an FQN. */
+const CONTENT_TYPE_RECORD_ID_PATTERN = /^0T1[a-zA-Z0-9]{12,15}$/;
+
+/** Extracts the prefixed FQN from an entry, rebuilding `c__<name>` when `id` is a custom-type record id. */
 function entryFqn(entry: RawContentTypeEntry): string | undefined {
+	// Custom types put a ManagedContentType id in `id`; the FQN the GraphQL filter
+	// accepts is `c__<name>`.
+	if (entry.id && CONTENT_TYPE_RECORD_ID_PATTERN.test(entry.id)) {
+		return entry.name ? `c__${entry.name}` : undefined;
+	}
 	return entry.id ?? entry.contentType ?? entry.fqn ?? entry.developerName;
 }
 

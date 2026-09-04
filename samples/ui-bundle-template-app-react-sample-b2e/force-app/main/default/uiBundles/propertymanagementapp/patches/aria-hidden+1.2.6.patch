@@ -1,0 +1,45 @@
+diff --git a/node_modules/aria-hidden/dist/es2015/index.js b/node_modules/aria-hidden/dist/es2015/index.js
+index 00aa2ea..1d2f61e 100644
+--- a/node_modules/aria-hidden/dist/es2015/index.js
++++ b/node_modules/aria-hidden/dist/es2015/index.js
+@@ -131,7 +131,9 @@ export var hideOthers = function (originalTarget, parentNode, markerName) {
+     // we should not hide aria-live elements - https://github.com/theKashey/aria-hidden/issues/10
+     // and script elements, as they have no impact on accessibility.
+     targets.push.apply(targets, Array.from(activeParentNode.querySelectorAll('[aria-live], script')));
+-    return applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
++    return supportsInert()
++        ? inertOthers(targets, activeParentNode, markerName)
++        : applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
+ };
+ /**
+  * Marks everything except given node(or nodes) as inert
+diff --git a/node_modules/aria-hidden/dist/es2019/index.js b/node_modules/aria-hidden/dist/es2019/index.js
+index 17404da..a444872 100644
+--- a/node_modules/aria-hidden/dist/es2019/index.js
++++ b/node_modules/aria-hidden/dist/es2019/index.js
+@@ -126,7 +126,9 @@ export const hideOthers = (originalTarget, parentNode, markerName = 'data-aria-h
+     // we should not hide aria-live elements - https://github.com/theKashey/aria-hidden/issues/10
+     // and script elements, as they have no impact on accessibility.
+     targets.push(...Array.from(activeParentNode.querySelectorAll('[aria-live], script')));
+-    return applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
++    return supportsInert()
++        ? inertOthers(targets, activeParentNode, markerName)
++        : applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
+ };
+ /**
+  * Marks everything except given node(or nodes) as inert
+diff --git a/node_modules/aria-hidden/dist/es5/index.js b/node_modules/aria-hidden/dist/es5/index.js
+index 1b86f56..863f83e 100644
+--- a/node_modules/aria-hidden/dist/es5/index.js
++++ b/node_modules/aria-hidden/dist/es5/index.js
+@@ -134,7 +134,9 @@ var hideOthers = function (originalTarget, parentNode, markerName) {
+     // we should not hide aria-live elements - https://github.com/theKashey/aria-hidden/issues/10
+     // and script elements, as they have no impact on accessibility.
+     targets.push.apply(targets, Array.from(activeParentNode.querySelectorAll('[aria-live], script')));
+-    return applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
++    return supportsInert()
++        ? inertOthers(targets, activeParentNode, markerName)
++        : applyAttributeToOthers(targets, activeParentNode, markerName, 'aria-hidden');
+ };
+ exports.hideOthers = hideOthers;
+ /**

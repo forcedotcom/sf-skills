@@ -36,25 +36,7 @@ export interface UseObjectSearchParamsReturn<TFilter, TOrderBy> {
 	resetAll: () => void;
 }
 
-/**
- * Manages filter, sort, and cursor-based pagination state for an object search page.
- *
- * ## State model
- * Local React state is the primary driver for instant UI updates.
- * URL search params act as the durable source of truth so that a page
- * refresh or shared link restores the same view. Changes are synced to
- * the URL via a debounced write (300 ms) to avoid excessive history entries.
- *
- * ## Return shape
- * Returns memoized groups so each group's reference is stable unless its
- * contents change — safe to pass directly as props to `React.memo` children.
- *
- * - `filters`    — active filter values + set/remove callbacks
- * - `sort`       — current sort state + set callback
- * - `query`      — derived `where` / `orderBy` objects ready for the API
- * - `pagination` — page size, page index, cursor, and navigation callbacks
- * - `resetAll`   — clears all filters, sort, and pagination in one call
- */
+/** Manages filter, sort, and cursor-based pagination state for an object search page, syncing changes to the URL via a debounced write. */
 export function useObjectSearchParams<TFilter, TOrderBy>(
 	filterConfigs: FilterFieldConfig[],
 	_sortConfigs?: SortFieldConfig[],

@@ -20,10 +20,7 @@ import {
 } from "@/features/object-search/hooks/useObjectSearchParams";
 import { useAsyncData } from "@/hooks/useAsyncData";
 import type { FilterFieldConfig } from "@/features/object-search/utils/filterUtils";
-import type {
-	SortFieldConfig,
-	SortState,
-} from "@/features/object-search/utils/sortUtils";
+import type { SortFieldConfig, SortState } from "@/features/object-search/utils/sortUtils";
 import { usePropertyMapMarkers } from "@/hooks/usePropertyMapMarkers";
 import PaginationControls from "@/features/object-search/components/PaginationControls";
 import PropertyListingCard, {
@@ -68,7 +65,7 @@ const PAGINATION_CONFIG: PaginationConfig = {
 	validPageSizes: [10, 20, 50],
 };
 
-/* ── Adapter helpers: translate between popover pill UI types and object-search state ── */
+/* ── Adapter helpers: translate between popover pill UI types and filter/sort state ── */
 
 const SORT_TO_STATE: Record<NonNullable<SortBy>, SortState> = {
 	price_asc: { field: "Monthly_Rent__c", direction: "ASC" },
@@ -100,7 +97,7 @@ function rangeToBedroomBucket(min?: string, max?: string): BedroomFilter {
 }
 
 export default function PropertySearch() {
-	/* ── Object-search infrastructure ── */
+	/* ── Search state and pagination ── */
 	const { filters, sort, query, pagination } = useObjectSearchParams<
 		Property__C_Filter,
 		Property__C_OrderBy

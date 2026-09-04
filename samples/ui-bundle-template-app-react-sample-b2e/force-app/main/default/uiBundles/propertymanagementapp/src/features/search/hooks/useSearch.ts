@@ -40,7 +40,11 @@ import { MIN_QUERY_LENGTH } from "../constants";
 // `resolveChannelId` derives the discovery channel id from a CMS result;
 // `useSearchableContentTypes` is the session-cached discovery hook;
 // `isValidCmsFqn` validates a selected FQN before it enters state or a query.
-import { getUIBundleId, isConfiguredUIBundleId } from "../adapters/cms/searchChannel";
+import {
+	getUIBundleId,
+	getUserLanguage,
+	isConfiguredUIBundleId,
+} from "../adapters/cms/searchChannel";
 import { getOrgSupportsCmsSearch } from "../adapters/cms/api/orgApiVersionService";
 import { resolveChannelId } from "../adapters/cms/channelResolver";
 import { useSearchableContentTypes } from "../adapters/cms/hooks/useSearchableContentTypes";
@@ -98,7 +102,7 @@ interface ResolvedPagination {
 }
 
 /** Resolves the single global pagination config, filling in defaults. */
-function resolvePagination(config: SearchConfig): ResolvedPagination {
+export function resolvePagination(config: SearchConfig): ResolvedPagination {
 	const p = config.pagination;
 	const pageSizeOptions =
 		p?.pageSizeOptions && p.pageSizeOptions.length > 0
@@ -119,7 +123,7 @@ function validatePageSize(pagination: ResolvedPagination, size: number): number 
 	return valid.includes(size) ? size : pagination.pageSize;
 }
 
-function initSourceState(
+export function initSourceState(
 	source: SourceConfig,
 	params: URLSearchParams,
 	pagination: ResolvedPagination,
@@ -135,7 +139,8 @@ function initSourceState(
 		filters: read.filters,
 		sort,
 		pageSize,
-		pageIndex: read.pageIndex,
+		// Cursors aren't persisted to the URL, so always seed the first page (page param ignored on read).
+		pageIndex: 0,
 		afterCursor: undefined,
 		cursorStack: [],
 	};
@@ -503,8 +508,8 @@ export function useSearch(config: SearchConfig, options?: UseSearchOptions): Sea
 		// page-level error — content-type narrowing is an enhancement, not a
 		// hard requirement. Read in `.catch` below.
 		let isDiscoveryRefetch = false;
-		Promise.all([getUIBundleId(), getOrgSupportsCmsSearch()])
-			.then(([uiBundleId, orgSupportsCmsSearch]) => {
+		Promise.all([getUIBundleId(), getUserLanguage(), getOrgSupportsCmsSearch()])
+			.then(([uiBundleId, userLanguage, orgSupportsCmsSearch]) => {
 				if (cancelled || generation !== fetchGenRef.current) return;
 
 				const requests: SourceRequest[] = activeSources.flatMap((source) => {
@@ -541,7 +546,7 @@ export function useSearch(config: SearchConfig, options?: UseSearchOptions): Sea
 					if (!cmsFqn && discoveredContentTypeFqns.length > 0) {
 						isDiscoveryRefetch = true;
 					}
-					return [{ ...base, uiBundleId, contentTypes }];
+					return [{ ...base, uiBundleId, language: userLanguage, contentTypes }];
 				});
 
 				// Every in-scope source was gated out (e.g. a CMS-only scope while CMS

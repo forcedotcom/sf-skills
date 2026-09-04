@@ -22,17 +22,9 @@ global with sharing class UIBundleSocialLoginConfig {
     @HttpGet
     global static SocialLoginConfigResponse getConfig() {
         try {
-            String startUrl = RestContext.request.params.get('startURL');
-            if (String.isBlank(startUrl)) {
-                startUrl = '/';
-            }
-
-            // Ensure startURL includes the community path prefix so post-auth
-            // redirect lands on the correct community (not the org default).
-            String pathPrefix = Site.getPathPrefix();
-            if (String.isNotBlank(pathPrefix) && !startUrl.startsWith(pathPrefix)) {
-                startUrl = pathPrefix + startUrl;
-            }
+            // Resolve the post-authentication redirect path, sanitized against
+            // open-redirect attacks (CWE-601). See resolveStartUrl.
+            String startUrl = resolveStartUrl();
 
             String communityUrl = Site.getBaseUrl();
             Auth.AuthConfiguration authConfig = new Auth.AuthConfiguration(communityUrl, startUrl);
@@ -87,6 +79,26 @@ global with sharing class UIBundleSocialLoginConfig {
                 null
             );
         }
+    }
+
+    /**
+     * Resolves the post-authentication redirect path from the request and
+     * sanitizes it to prevent open-redirect attacks (CWE-601).
+     *
+     * Delegates to the shared UIBundleAuthUtils.getSanitizedStartUrl — the same
+     * validation used by UIBundleLogin and UIBundleRegistration — which
+     * URL-decodes the value (catching encoded bypasses such as %2f%2f) and then
+     * rejects absolute, protocol-relative ("//"), backslash, "@", ":" and
+     * control-character inputs, falling back to the community path prefix. Only
+     * safe, community-relative paths survive, prefixed with Site.getPathPrefix()
+     * so the redirect lands on this community rather than the org default.
+     */
+    @TestVisible
+    private static String resolveStartUrl() {
+        return UIBundleAuthUtils.getSanitizedStartUrl(
+            RestContext.request.params.get('startURL'),
+            Site.getPathPrefix()
+        );
     }
 
     global class SocialLoginConfigResponse {

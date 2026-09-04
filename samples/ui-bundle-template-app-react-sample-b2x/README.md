@@ -330,6 +330,8 @@ cd -
 
 > **Prerequisite:** The org must be authenticated and metadata must already be deployed before running these commands, as the schema is generated from the org's live metadata.
 
+> **Guest and Portal GraphQL API Access requires an org preference** Starting with org release 264, unauthenticated (guest) sessions can only call the GraphQL API — the endpoint this app's data layer uses — if the **Enable GraphQL API for Guest Users** org preference is enabled. It is off by default. This is a security-sensitive, org-wide setting, so enable it through **Setup > Security > API Access Controls > Enable GraphQL API for Guest Users**. Enable it before configuring the guest user profile in [Step 4](#step-4-configure-the-guest-user-profile). Without it, guest GraphQL calls fail with `403 GUEST_INSUFFICIENT_ACCESS`. This applies to any b2b/b2c (external) app whose site allows guest browsing — not just this sample.
+
 ### 7. Rebuild the UI Bundle
 
 Step 6 updates the generated GraphQL types in the UI Bundle source. Rebuild the app to compile those changes into the bundle before deploying:
@@ -503,6 +505,8 @@ Open the guest user profile (linked from the site's Preferences page, as describ
 | API Enabled | Checked |
 
 > **Security note:** Enabling API access for the guest profile is required for the UI Bundle to make GraphQL API calls on behalf of unauthenticated users. Ensure that object-level and field-level permissions are restrictive (as listed below) to avoid exposing sensitive data.
+
+> **Org preference (orgs on API v264+):** Profile-level "API Enabled" is not sufficient on its own. On orgs at API version 264 or later, guest sessions also need the org-wide **`GraphQLApiOrgPrefForGuestUsers`** preference enabled (**Setup > Security > API Access Controls > Enable GraphQL API for Guest Users**), or GraphQL calls from the guest user return `403 GUEST_INSUFFICIENT_ACCESS`. See the note in [Step 6](#6-generate-graphql-types).
 
 **Custom Object Permissions:**
 

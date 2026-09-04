@@ -40,6 +40,7 @@ import { FilterProvider, FilterResetButton } from "./filters/FilterContext";
 import { PaginationControls } from "./controls/PaginationControls";
 import { SortControl } from "./controls/SortControl";
 import { resolveResultRenderer, type ResultRenderer } from "./results/resolveResultRenderer";
+import { MIN_QUERY_LENGTH } from "../constants";
 import { ALL_SCOPE, type SearchHandle, type SourceController } from "../types";
 
 export interface MergedSearchResultsProps {
@@ -52,6 +53,8 @@ export interface MergedSearchResultsProps {
 	renderResult?: Record<string, ResultRenderer>;
 	/** Message shown when there are no results. Defaults to "No results found." */
 	emptyMessage?: string;
+	/** Message shown when the query is below {@link MIN_QUERY_LENGTH}. Defaults to "Start your search…" */
+	shortQueryMessage?: string;
 	/** Number of skeleton placeholders to show while loading. Defaults to `pageSize`. */
 	skeletonCount?: number;
 	/** Extra classes on the grid container. Defaults to a responsive 1/2/3-column grid. */
@@ -81,11 +84,16 @@ export function MergedSearchResults({
 	handle,
 	renderResult,
 	emptyMessage,
+	shortQueryMessage = "Start your search…",
 	skeletonCount,
 	gridClassName = DEFAULT_GRID_CLASS,
 	className,
 }: MergedSearchResultsProps) {
-	const { globalPagination: page, mergedResults, loading, error } = handle;
+	const { globalPagination: page, mergedResults, loading, error, q } = handle;
+	// Distinguishes "haven't typed enough yet" (useSearch short-circuits below
+	// MIN_QUERY_LENGTH without fetching) from a genuine zero-match search — both
+	// otherwise present identically as loading=false, mergedResults=[].
+	const isShortQuery = q.trim().length < MIN_QUERY_LENGTH;
 
 	// A single source is in scope when the scope is narrowed (selected from the
 	// dropdown) or locked (`lockedScope` / restrictTo). Its filter chrome can
@@ -111,9 +119,11 @@ export function MergedSearchResults({
 		? "Searching…"
 		: error
 			? "Search failed."
-			: mergedResults.length === 0
-				? (emptyMessage ?? "No results found.")
-				: `${page.totalCount} result${page.totalCount === 1 ? "" : "s"}`;
+			: isShortQuery
+				? shortQueryMessage
+				: mergedResults.length === 0
+					? (emptyMessage ?? "No results found.")
+					: `${page.totalCount} result${page.totalCount === 1 ? "" : "s"}`;
 
 	return (
 		<div className={`space-y-6 ${className ?? ""}`}>
@@ -161,6 +171,8 @@ export function MergedSearchResults({
 						<Skeleton key={i} className="h-48 w-full rounded-lg" />
 					))}
 				</div>
+			) : isShortQuery ? (
+				<p className="py-12 text-center text-sm text-muted-foreground">{shortQueryMessage}</p>
 			) : mergedResults.length === 0 ? (
 				<p className="py-12 text-center text-sm text-muted-foreground">
 					{emptyMessage ?? "No results found."}
