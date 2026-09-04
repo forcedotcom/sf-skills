@@ -1,3 +1,12 @@
+# [1.48.0](https://github.com/forcedotcom/sf-skills/compare/1.47.0...1.48.0) (2026-09-04)
+
+
+### Features
+
+* Release 22 new + 4 updated skills - Omni-Channel skill set + education-cloud-domain-configure @W-24038743@ ([032746b](https://github.com/forcedotcom/sf-skills/commit/032746b5bd31c16241ca63b047f868a03ff79a02))
+
+
+
 # [1.47.0](https://github.com/forcedotcom/sf-skills/compare/1.46.0...1.47.0) (2026-09-04)
 
 
