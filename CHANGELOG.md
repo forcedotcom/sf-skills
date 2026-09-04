@@ -1,3 +1,12 @@
+# [1.50.0](https://github.com/forcedotcom/sf-skills/compare/1.49.0...1.50.0) (2026-09-04)
+
+
+### Features
+
+* Release 13 new field service skills @W-24084305@ ([81dc017](https://github.com/forcedotcom/sf-skills/commit/81dc017762810a493fe6170b04d263114c34597f))
+
+
+
 # [1.49.0](https://github.com/forcedotcom/sf-skills/compare/1.48.0...1.49.0) (2026-09-04)
 
 
