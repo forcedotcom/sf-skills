@@ -1,39 +1,43 @@
 # Output Templates — service-itsm-agentic-setup-agentforce-coordinate
 
 Emit one of these text blocks at the corresponding step in the workflow. Setup is presented as
-**two sequential stages** — Stage 1 (enable platform features) must finish before Stage 2 (install
-& activate agent templates). Only items with a working child skill appear — hide placeholder rows.
+**two sequential setup stages** — Stage 1 (enable platform features) must finish before Stage 2
+(install & activate agent templates). Optional Employee Agent escalation follows Stage 2 and runs
+only after the Employee agent is active. Only items with a working child skill appear — hide
+placeholder rows.
 
 ## Feature menu (Behavior step 3)
 
 ```text
 Agentforce for ITSM Setup (via service-itsm-agentic-setup-agentforce-coordinate)
 
-Here are the features available for Agentforce ITSM. Set them up in two stages —
-Stage 1 (enable) must finish before Stage 2 (install & activate):
+Here are the features available for Agentforce ITSM. Stage 1 (enable) must finish before
+Stage 2 (install & activate). Employee Agent escalation is available after the Employee agent is active:
 
-┌───┬─────────┬──────────────────────────────┬────────────────────────────────────────────────────────┬──────────┐
-│ # │ Stage   │ Item                         │ Description                                            │ Status   │
-├───┼─────────┼──────────────────────────────┼────────────────────────────────────────────────────────┼──────────┤
-│ 1 │ Stage 1 │ Agentforce Studio enablement │ Turn on org-level Agentforce, Einstein GenAI, and IT   │ Not done │
-│   │         │ (Foundation for all agents)  │ Service agent features                                 │          │
-│ 2 │ Stage 2 │ IT Service Fulfiller Agent   │ Automate actions and simplify critical asks for IT     │ Not done │
-│   │         │                              │ service fulfillers who work with incidents, problems,  │          │
-│   │         │                              │ change requests and more to resolve issues and         │          │
-│   │         │                              │ requests.                                              │          │
-│   │         │                              │ Setup: creates the agent from this template and        │          │
-│   │         │                              │ activates a version.                                   │          │
-│ 3 │ Stage 2 │ IT Service Employee Agent    │ Help employees quickly troubleshoot IT issues, raise   │ Not done │
-│   │         │                              │ service requests, and track their incidents with ease. │          │
-│   │         │                              │ Setup: creates the agent from this template and        │          │
-│   │         │                              │ activates a version.                                   │          │
-│ 4 │ Stage 2 │ Specialized Agents           │ Use the specialized templates and build agents that    │ Not done │
-│   │         │ for Employee                 │ power your employee agent. Refine the agent logic, as  │          │
-│   │         │                              │ necessary, and then activate them.                     │          │
-│   │         │                              │ Setup: pick one specialized template (e.g. Password    │          │
-│   │         │                              │ Manager, Onboarding), then create and activate that    │          │
-│   │         │                              │ standalone agent. Re-run this item to add more.        │          │
-└───┴─────────┴──────────────────────────────┴────────────────────────────────────────────────────────┴──────────┘
+┌───┬─────────┬──────────────────────────────┬────────────────────────────────────────────────────────┬────────────────────┬──────────┐
+│ # │ Stage   │ Item                         │ Description                                            │ Action             │ Status   │
+├───┼─────────┼──────────────────────────────┼────────────────────────────────────────────────────────┼────────────────────┼──────────┤
+│ 1 │ Stage 1 │ Agentforce Studio enablement │ Turn on org-level Agentforce, Einstein GenAI, and IT   │ Enable features    │ Not done │
+│   │         │ (Foundation for all agents)  │ Service agent features                                 │                    │          │
+│ 2 │ Stage 2 │ IT Service Fulfiller Agent   │ Automate actions and simplify critical asks for IT     │ Install + activate │ Not done │
+│   │         │                              │ service fulfillers who work with incidents, problems,  │                    │          │
+│   │         │                              │ change requests and more to resolve issues and         │                    │          │
+│   │         │                              │ requests.                                              │                    │          │
+│   │         │                              │ Setup: creates the agent from this template and        │                    │          │
+│   │         │                              │ activates a version.                                   │                    │          │
+│ 3 │ Stage 2 │ IT Service Employee Agent    │ Help employees quickly troubleshoot IT issues, raise   │ Install + activate │ Not done │
+│   │         │                              │ service requests, and track their incidents with ease. │                    │          │
+│   │         │                              │ Setup: creates the agent from this template and        │                    │          │
+│   │         │                              │ activates a version.                                   │                    │          │
+│ 4 │ Stage 2 │ Specialized Agents           │ Use the specialized templates and build agents that    │ Install + activate │ Not done │
+│   │         │ for Employee                 │ power your employee agent. Refine the agent logic, as  │                    │          │
+│   │         │                              │ necessary, and then activate them.                     │                    │          │
+│   │         │                              │ Setup: pick one specialized template (e.g. Password    │                    │          │
+│   │         │                              │ Manager, Onboarding), then create and activate that    │                    │          │
+│   │         │                              │ standalone agent. Re-run this item to add more.        │                    │          │
+│ 5 │ Post    │ Employee Agent escalation    │ Configure human handoff to the General IT queue with   │ Configure handoff  │ Not done │
+│   │ setup   │                              │ failure-threshold directives.                          │                    │          │
+└───┴─────────┴──────────────────────────────┴────────────────────────────────────────────────────────┴────────────────────┴──────────┘
 
 Reply with the numbers of the features you want to set up (one or more, e.g. `1` or `1, 2`).
 If you pick a Stage 2 template without Stage 1, I'll enable the Stage 1 foundation first.
@@ -42,7 +46,8 @@ If you pick a Stage 2 template without Stage 1, I'll enable the Stage 1 foundati
 Stage 1 (Agentforce Studio enablement) is the **foundation** — it enables the org-level platform
 features every agent is built on. Stage 2 items (the Fulfiller agent, the Employee agent, and
 Specialized Agents for Employee) are **installed from a template and activated**; they can be set up
-in any order once Stage 1 is done.
+in any order once Stage 1 is done. The post-setup Employee Agent escalation item requires the
+Employee agent to be active.
 
 **Specialized Agents for Employee** is a third Stage 2 item, shown right after the IT Service
 Employee Agent to keep the two employee options together. Both use the same child skill
@@ -55,6 +60,12 @@ Service Employee Agent), and once given a name it disambiguates a partial or amb
 chosen template names the agent it creates. The specialized templates themselves are turned on in
 Stage 1; this item is where you build and activate an agent from them.
 
+**Employee Agent escalation** is a post-setup item, shown after the Stage 2 agents. It delegates to
+`service-agentforce-human-escalation-configure` and configures the Employee agent's hand-off to a
+human — `canEscalate`, outbound routing, a staffed General IT queue, and failure-threshold
+directives. It requires the IT Service Employee Agent to be Active first, so run it only after item 3
+has succeeded.
+
 ## Post-feature progress (Behavior step 5)
 
 Example after Stage 1 (Agentforce Studio enablement) completes:
@@ -63,16 +74,18 @@ Example after Stage 1 (Agentforce Studio enablement) completes:
 Agentforce Studio — enabled successfully
 (via service-itsm-agentic-setup-agentforce-studio-configure)
 
-┌───┬─────────┬──────────────────────────────┬─────────────┐
-│ # │ Stage   │ Item                         │ Status      │
-├───┼─────────┼──────────────────────────────┼─────────────┤
-│ 1 │ Stage 1 │ Agentforce Studio enablement │ Done        │
-│   │         │ (Foundation for all agents)  │             │
-│ 2 │ Stage 2 │ IT Service Fulfiller Agent   │ Not done    │
-│ 3 │ Stage 2 │ IT Service Employee Agent    │ Not done    │
-│ 4 │ Stage 2 │ Specialized Agents           │ Not done    │
-│   │         │ for Employee                 │             │
-└───┴─────────┴──────────────────────────────┴─────────────┘
+┌───┬─────────┬───────────────────────────────┬─────────────┐
+│ # │ Stage   │ Item                          │ Status      │
+├───┼─────────┼───────────────────────────────┼─────────────┤
+│ 1 │ Stage 1 │ Agentforce Studio enablement  │ Done        │
+│   │         │ (Foundation for all agents)   │             │
+│ 2 │ Stage 2 │ IT Service Fulfiller Agent    │ Not done    │
+│ 3 │ Stage 2 │ IT Service Employee Agent     │ Not done    │
+│ 4 │ Stage 2 │ Specialized Agents            │ Not done    │
+│   │         │ for Employee                  │             │
+│ 5 │ Post    │ Employee Agent escalation     │ Not done    │
+│   │ setup   │                               │             │
+└───┴─────────┴───────────────────────────────┴─────────────┘
 
 Stage 1 (foundation) is enabled. On to Stage 2 — install and activate the IT
 Service Fulfiller agent, the IT Service Employee agent, and/or a specialized
@@ -103,16 +116,18 @@ Example — user finished after only enabling Agentforce Studio (the Stage 2 age
 Agentforce for ITSM Setup — Finished
 (via service-itsm-agentic-setup-agentforce-coordinate)
 
-┌───┬─────────┬──────────────────────────────┬─────────────┐
-│ # │ Stage   │ Item                         │ Status      │
-├───┼─────────┼──────────────────────────────┼─────────────┤
-│ 1 │ Stage 1 │ Agentforce Studio enablement │ Done        │
-│   │         │ (Foundation for all agents)  │             │
-│ 2 │ Stage 2 │ IT Service Fulfiller Agent   │ Not done    │
-│ 3 │ Stage 2 │ IT Service Employee Agent    │ Not done    │
-│ 4 │ Stage 2 │ Specialized Agents           │ Not done    │
-│   │         │ for Employee                 │             │
-└───┴─────────┴──────────────────────────────┴─────────────┘
+┌───┬─────────┬───────────────────────────────┬─────────────┐
+│ # │ Stage   │ Item                          │ Status      │
+├───┼─────────┼───────────────────────────────┼─────────────┤
+│ 1 │ Stage 1 │ Agentforce Studio enablement  │ Done        │
+│   │         │ (Foundation for all agents)   │             │
+│ 2 │ Stage 2 │ IT Service Fulfiller Agent    │ Not done    │
+│ 3 │ Stage 2 │ IT Service Employee Agent     │ Not done    │
+│ 4 │ Stage 2 │ Specialized Agents            │ Not done    │
+│   │         │ for Employee                  │             │
+│ 5 │ Post    │ Employee Agent escalation     │ Not done    │
+│   │ setup   │                               │             │
+└───┴─────────┴───────────────────────────────┴─────────────┘
 
 You have finished the items you selected. The remaining items can be
 resumed later by re-invoking this orchestrator.

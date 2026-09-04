@@ -6,6 +6,8 @@ metadata:
   minApiVersion: "65.0"
   domains:
     - "Education"
+  relatedSkills:
+    - "education-cloud-domain-configure"
   accessCheck:
     - type: "license"
       value: "Education Cloud"
@@ -22,6 +24,11 @@ allowed-tools: |
   mcp__headless-360__describe
   mcp__headless-360__dispatch
   mcp__headless-360__dispatch_readonly
+  distribution:
+    sf-skills:
+      visibility: "public"
+    headless360Mcp:
+      visibility: "public"
 ---
 
 # Education Cloud Multi-Campus Institutional Hierarchy Configuration

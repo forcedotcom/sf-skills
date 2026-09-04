@@ -7,7 +7,7 @@
 // exit code.
 //
 // Usage:
-//   node verify-child-verdict.mjs <studio|fulfiller|employee> <verdict>
+//   node verify-child-verdict.mjs <studio|fulfiller|employee|escalation> <verdict>
 //
 // Exit 0  -> child succeeded, safe to advance the queue.
 // Exit 1  -> child failed or only partially succeeded, stop the queue.
@@ -17,12 +17,16 @@ const SUCCESS_VALUES = {
   studio: new Set(['SUCCESS']),
   fulfiller: new Set(['CREATED', 'ALREADY-CREATED', 'ACTIVATED']),
   employee: new Set(['CREATED', 'ALREADY-CREATED', 'ACTIVATED']),
+  // Employee-agent escalation leaf (service-agentforce-human-escalation-configure, IT scenario inputs)
+  // emits CONFIGURED when every deterministic surface is satisfied; a re-run is an
+  // idempotent CONFIGURED. INCOMPLETE/BLOCKED stop the queue.
+  escalation: new Set(['CONFIGURED', 'ALREADY-CONFIGURED']),
 };
 
 const [child, verdict] = process.argv.slice(2);
 
 if (!child || !verdict || !SUCCESS_VALUES[child]) {
-  process.stderr.write('usage: node verify-child-verdict.mjs <studio|fulfiller|employee> <verdict>\n');
+  process.stderr.write('usage: node verify-child-verdict.mjs <studio|fulfiller|employee|escalation> <verdict>\n');
   process.exit(2);
 }
 

@@ -1,0 +1,72 @@
+// service-omni-supervisor-users-create - Anonymous Apex asset template. Tokens __COUNT__/__PROFILE_ID__/__SUFFIX__ resolved by run-create.sh. Idempotency, password/TraceFlag security note, output contract: references/apex-template-notes.md.
+
+Integer requested = __COUNT__;
+String profileId  = '__PROFILE_ID__';
+String suffix     = '__SUFFIX__';
+
+Map<String, Integer> expectedByUsername = new Map<String, Integer>();
+for (Integer i = 1; i <= requested; i++) {
+    expectedByUsername.put('supervisor' + i + '.' + suffix + '@example.com', i);
+}
+
+Set<String> existingUsernames = new Set<String>();
+for (User u : [SELECT Username FROM User WHERE Username IN :expectedByUsername.keySet()]) {
+    existingUsernames.add(u.Username.toLowerCase());
+}
+
+List<User> toInsert = new List<User>();
+
+for (Integer i = 1; i <= requested; i++) {
+    String uname = 'supervisor' + i + '.' + suffix + '@example.com';
+    if (existingUsernames.contains(uname.toLowerCase())) {
+        continue;
+    }
+
+    // Alias must be <= 8 chars - construct as omsu{i}{last-3-of-suffix}
+    // For i=1..9: 'omsu' (4) + i (1) + last-3-suffix (3) = 8 chars. OK.
+    String aliasStr = 'omsu' + i + suffix.substring(suffix.length() - 3);
+
+    User u = new User(
+        FirstName           = 'Omni',
+        LastName            = 'Supervisor' + i,
+        Email               = uname,
+        Username            = uname,
+        Alias               = aliasStr,
+        ProfileId           = profileId,
+        IsActive            = true,
+        // Service Cloud feature license - REQUIRED for the ContactCenterSupervisor permset
+        // (IsContactCenterSupervisor is license-gated). Only allowed on user licenses that
+        // support it (e.g. Salesforce); the try/catch strips it and retries when the profile's
+        // user license rejects it (e.g. the limited "Service Cloud" user license). In that
+        // fallback the supervisor permset assign will later block until the user is moved to a
+        // Salesforce license + Service Cloud feature.
+        UserPermissionsSupportUser = true,
+        TimeZoneSidKey      = 'America/Los_Angeles',
+        LocaleSidKey        = 'en_US',
+        EmailEncodingKey    = 'UTF-8',
+        LanguageLocaleKey   = 'en_US'
+    );
+    toInsert.add(u);
+}
+
+if (toInsert.isEmpty()) {
+    System.debug('SUPERVISORS_ALL_EXIST - no inserts required');
+    return;
+}
+
+try {
+    insert toInsert;
+    System.debug('SUPERVISORS_SERVICE_CLOUD_FEATURE|enabled');
+} catch (DmlException e) {
+    if (e.getMessage() != null && e.getMessage().contains('Service Cloud User')) {
+        for (User u : toInsert) { u.UserPermissionsSupportUser = false; }
+        insert toInsert;
+        System.debug('SUPERVISORS_SERVICE_CLOUD_FEATURE|skipped_license_not_allowed');
+    } else {
+        throw e;
+    }
+}
+
+for (User u : toInsert) {
+    System.debug('SUPERVISOR_CREATED|' + u.Id + '|' + u.Username + '|' + u.Email);
+}

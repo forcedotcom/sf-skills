@@ -8,6 +8,8 @@ metadata:
   cliTools:
     - tool: ["node"]
       semver: ">=20.0.0"
+    - tool: ["python3"]
+      semver: ">=3.9"
     - tool: ["sf"]
       semver: ">=2.0.0"
   relatedSkills:
@@ -53,7 +55,7 @@ Provisioning behavior:
 
 ## When NOT to use this skill
 
-- **The channel already has `SessionHandlerId` or `FallbackQueueId` set.** This skill no-ops and tells you — nothing to do. Proceed to activation.
+- **The channel already has `SessionHandlerId` or `FallbackQueueId` set.** This skill revalidates the existing target before no-op. An ASA must still have a BotUser and an Active BotVersion; otherwise it reports `asa-target-inactive` and does not claim readiness.
 - **The channel doesn't exist yet.** Run the insertion skill first; this skill expects a real `MessagingChannel.Id`.
 - **You want to replace existing routing.** Safer to clear `SessionHandlerId` manually in the UI, then re-run this skill. The no-op check is a guardrail, not a limitation worth bypassing automatically.
 
@@ -127,13 +129,13 @@ sf data query --target-org '{ORG_ALIAS}' \
 
 Parse with `node -e` or `jq`. If the record is missing — halt with `Error: Channel {CHANNEL_ID} not found — check the id, or run the insertion skill first.`
 
-If `SessionHandlerId` is non-null, branch on the Id prefix to figure out what the existing routing target is, then no-op with the right envelope. The prefix maps 1:1 to the SessionHandler domain (verified against `MessagingChannel.entity.xml`):
+If `SessionHandlerId` is non-null, branch on the Id prefix to figure out what the existing routing target is, then no-op with the right envelope. The prefix maps 1:1 to the SessionHandler domain (verified against `MessagingChannel.entity.xml`). Existing routing is not automatically healthy: the target lookup must return exactly one eligible row before reporting a successful no-op.
 
 | Prefix | Domain / Target | Lookup query | routingType |
 | --- | --- | --- | --- |
 | `00G` | `Group` (Type=Queue) | `SELECT Id, Name, DeveloperName FROM Group WHERE Id='<sh>' AND Type='Queue'` | `queue` |
 | `300` | `FlowDefinition` | `SELECT DurableId, Label, ApiName FROM FlowDefinitionView WHERE DurableId='<sh>'` | `flow` |
-| `0Xx` | `BotDefinition` (ASA) | `SELECT Id, DeveloperName, MasterLabel, AgentType FROM BotDefinition WHERE Id='<sh>'` | `asa` |
+| `0Xx` | `BotDefinition` (ASA) | `SELECT Id, DeveloperName, MasterLabel, AgentType, BotUserId, (SELECT Id, Status FROM BotVersions WHERE Status='Active' LIMIT 1) FROM BotDefinition WHERE Id='<sh>'` | `asa` |
 | `1iE` | `AgenticCtxtDecorDefinition` (Digital Worker) | `SELECT Id, DeveloperName, MasterLabel FROM AgenticCtxtDecorDefinition WHERE Id='<sh>'` | `digital_worker` |
 | `005` | `User` | `SELECT Id, Name FROM User WHERE Id='<sh>'` | `user` |
 
@@ -143,14 +145,20 @@ PREFIX="${SESSION_HANDLER_ID:0:3}"
 case "$PREFIX" in
   00G) sf data query --target-org '{ORG_ALIAS}' --query "SELECT Id, Name, DeveloperName FROM Group WHERE Id = '$SESSION_HANDLER_ID' AND Type = 'Queue'" --json > /tmp/ccr-noop-target.json ;;
   300) sf data query --target-org '{ORG_ALIAS}' --query "SELECT DurableId, Label, ApiName FROM FlowDefinitionView WHERE DurableId = '$SESSION_HANDLER_ID'" --json > /tmp/ccr-noop-target.json ;;
-  0Xx) sf data query --target-org '{ORG_ALIAS}' --query "SELECT Id, DeveloperName, MasterLabel, AgentType FROM BotDefinition WHERE Id = '$SESSION_HANDLER_ID'" --json > /tmp/ccr-noop-target.json ;;
+  0Xx) sf data query --target-org '{ORG_ALIAS}' --query "SELECT Id, DeveloperName, MasterLabel, AgentType, BotUserId, (SELECT Id, Status FROM BotVersions WHERE Status='Active' LIMIT 1) FROM BotDefinition WHERE Id = '$SESSION_HANDLER_ID'" --json > /tmp/ccr-noop-target.json ;;
   1iE) sf data query --target-org '{ORG_ALIAS}' --query "SELECT Id, DeveloperName, MasterLabel FROM AgenticCtxtDecorDefinition WHERE Id = '$SESSION_HANDLER_ID'" --json > /tmp/ccr-noop-target.json ;;
   005) sf data query --target-org '{ORG_ALIAS}' --query "SELECT Id, Name FROM User WHERE Id = '$SESSION_HANDLER_ID'" --json > /tmp/ccr-noop-target.json ;;
   *)   echo "{\"records\":[{\"Id\":\"$SESSION_HANDLER_ID\"}]}" > /tmp/ccr-noop-target.json ;;
 esac
 ```
 
-Report the success-noop envelope (include the existing `FallbackQueueId` from the Stage 1 read) and return.
+For an existing ASA (`0Xx`), require a non-null `BotUserId` and one returned `BotVersions` row with `Status='Active'`. If either is missing, return the following failure instead of a successful no-op. Do not clear or replace the channel routing automatically:
+
+```json
+{"ok":false,"kind":"asa-target-inactive","routingType":"asa","sessionHandlerId":"0Xx...","hint":"The configured Agentforce Service Agent has no BotUser or active BotVersion. Activate the agent in Setup, then re-run routing validation."}
+```
+
+For other prefixes, require exactly one target lookup row. Report the success-noop envelope (include the existing `FallbackQueueId` from the Stage 1 read) only after the target-specific eligibility check succeeds, then return.
 
 If `FallbackQueueId` is non-null but `SessionHandlerId` is null — still no-op. That's a partially-configured Flow/ASA state; don't touch it, but flag it in the envelope `message` (`"FallbackQueue set but SessionHandler null — incomplete routing, review in Setup"`) since activation will still fail readiness without a SessionHandler.
 

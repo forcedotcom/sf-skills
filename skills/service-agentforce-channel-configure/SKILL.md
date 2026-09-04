@@ -8,6 +8,7 @@ metadata:
   minApiVersion: "67.0"
   relatedSkills:
     - "agentforce-generate"
+    - "service-agentforce-human-escalation-configure"
     - "service-digital-engagement-channel-configure"
     - "service-digital-engagement-deployment-configure"
     - "service-email-to-case-configure"
@@ -17,6 +18,9 @@ metadata:
       semver: ">=3.8"
     - tool: ["sf"]
       semver: ">=2.0.0"
+  accessCheck:
+    - type: "license"
+      value: "Agentforce"
 ---
 
 # service-agentforce-channel-configure: Wire an Agentforce agent to a channel
@@ -32,14 +36,13 @@ This skill is generic — it works for any Agentforce agent, not just the Help A
 - Branch A (Enhanced Chat / Enhanced Messaging): deploying `sessionHandlerType=AgentforceServiceAgent` + `sessionHandlerQueue` on an existing MessagingChannel, then binding `SessionHandlerId` via Data API PATCH
 - Branch B (Voice): assumes the phone number and `PstnVoice` MessagingChannel already exist (provisioned by the caller, e.g. `service-helpagent-coordinate`), then creating an inbound RoutingFlow (`routingType: Copilot`) that routes to the agent with the queue as fallback
 - Branch C (Email-to-Case): inbound routing via direct case-owner assignment or an Omni-Channel RoutingFlow, plus deploying a `BotEmailDefinition` (Email Configuration) that links the agent to Service Email and binding it to the routing address
-- Optional outbound escalation: adding the appropriate `connection {type}:` block to the agent and republishing
+- Optional outbound escalation: delegating the verified agent-to-human handoff contract to `service-agentforce-human-escalation-configure`
 
 **Out of scope:**
 - Creating the agent — use `agentforce-generate` or `service-helpagent-coordinate`
 - Creating the MessagingChannel — use `service-digital-engagement-channel-configure`
 - Creating the Embedded Service Deployment — use `service-digital-engagement-deployment-configure`
 - Creating the Voice or Email-to-Case channel infrastructure
-- Outbound escalation RoutingFlow creation — surface the gap if one is needed and doesn't exist
 
 ---
 
@@ -56,6 +59,21 @@ This skill is generic — it works for any Agentforce agent, not just the Help A
 
 Steps are sequential. Read `references/channel-types.md` first to confirm the routing branch before proceeding.
 
+### Phase 0 — Production write-guard (mandatory, before any write)
+
+This skill performs **metadata/data writes** (MessagingChannel edits, RoutingFlow deploys, agent republish). Before any write, classify the target org and refuse real production:
+
+```bash
+sf data query --target-org $ORG --json \
+  --query "SELECT Id, IsSandbox, TrialExpirationDate, OrganizationType FROM Organization LIMIT 1"
+```
+
+- `safe_to_write` is **true** only when `IsSandbox=true`, OR `TrialExpirationDate` is non-null (trial/CDO), OR `OrganizationType` is `Developer Edition` / `Base Edition`.
+- If `safe_to_write` is false, **stop** — state plainly that this is a real production customer org and escalation/channel wiring will not be applied. Do not proceed to any write phase.
+- If `safe_to_write` is true, show the write plan (which MessagingChannel/RoutingFlow/agent will change) and get explicit user confirmation of the target org before continuing.
+
+Never bypass this gate — a mistaken production write here reroutes live customer traffic.
+
 ### Phase 1 — Verify agent and resolve queue
 
 1. **Confirm the agent exists and has an active version:**
@@ -69,6 +87,8 @@ Steps are sequential. Read `references/channel-types.md` first to confirm the ro
      --query "SELECT Id, Status FROM BotVersion WHERE BotDefinitionId='{BOT_DEFINITION_ID}' AND Status='Active' LIMIT 1"
    ```
    Stop with a clear message if the definition is not found or no version has `Status = Active`.
+
+   > **Branch A caveat — an Active BotVersion is necessary but NOT sufficient to bind as `sessionHandlerAsa`.** The platform only accepts an agent that is provisioned/connected as a *deployable Agentforce Service Agent* (typically an `ExternalCopilot`). Binding an agent that is merely Active fails the Phase 2 deploy with `Only active Agentforce Service Agents are supported for a Messaging Channel`. Confirm bindability read-only before writing: if any MessagingChannel on the org already uses `sessionHandlerType=AgentforceServiceAgent`, retrieve it (`sf project retrieve start --metadata "MessagingChannel:{EXISTING}" --target-org $ORG`) and read its `<sessionHandlerAsa>` — that set is the org's provably-bindable ASAs. If the chosen agent is not a provisioned ASA and no bindable ASA exists, stop and report `BLOCKED`: *provide an agent that is provisioned as an Agentforce Service Agent.*
 
 2. **Resolve the fallback queue and routing configuration** — follow `references/queue-resolution.md`:
    - Determine SobjectType from the channel type (see `references/channel-types.md`)
@@ -94,7 +114,7 @@ Full detection queries, exact `AskUserQuestion` block, deferred-flow rules per b
 
 No RoutingFlow required. Deploy the MessagingChannel with `sessionHandlerType` + `sessionHandlerQueue` only, then bind the bot via a Data API PATCH. `sessionHandlerAsa` is not accepted by the Metadata API at v67 — the deploy silently drops it and `SessionHandlerId` stays null unless you run the PATCH. The bot must be Active before the PATCH ("Only active Agentforce Service Agents are supported" otherwise).
 
-All five steps below are mandatory and must run in order — do **not** skip the retrieve/edit/deploy and jump straight to the PATCH. Run the retrieve and edit in the **current working directory** (a real SFDX project), so the edited `.messagingChannel-meta.xml` is saved into the project's `force-app` tree — not a throwaway temp dir. Steps 1–3 record the routing change in source; steps 4–5 apply the binding the Metadata API can't.
+Run all five steps in order. Perform retrieve and edit in the **current SFDX project**, so the deploy reads the edited `.messagingChannel-meta.xml` from `force-app`; do not use a temporary directory.
 
 1. **Retrieve the current MessagingChannel metadata** into the working-directory project:
    ```bash
@@ -116,6 +136,7 @@ All five steps below are mandatory and must run in order — do **not** skip the
      --metadata "MessagingChannel:{CHANNEL_DEVELOPER_NAME}" \
      --target-org $ORG
    ```
+   If the deploy fails with `Only active Agentforce Service Agents are supported for a Messaging Channel`, the agent is not a bindable ASA on this org (see the Phase 1 caveat). Do **not** retry with the same agent — the channel is left unchanged (the failed deploy is atomic). Report `BLOCKED` with the remediation: bind an agent already provisioned as an Agentforce Service Agent, or provision this one, then re-run.
 
 4. **Bind the bot via Data API PATCH:**
    ```bash
@@ -148,11 +169,11 @@ No agent file changes — no republish needed. Proceed to Phase 3 (optional).
 
 #### Branch B — Voice
 
-Wires a `PstnVoice` MessagingChannel to the agent via an inbound `Copilot`-type RoutingFlow with the queue as fallback. Distinct from Branch A: no `sessionHandlerAsa`; the channel is bound to the flow (`sessionHandlerType=Flow`), and the agent needs a `modality voice:` block appended before republish.
+Wire the `PstnVoice` MessagingChannel through an inbound `Copilot` RoutingFlow, with the queue as fallback, and add the required `modality voice:` block before republishing the agent.
 
 Follow `references/channel-branch-voice.md` end to end. Highlights:
 
-- Step 0 — reuse an existing `PstnVoice` MessagingChannel or have `service-helpagent-coordinate` provision one first (its `references/channel-voice.md`); abort if the org uses a partner telephony provider (see `references/channel-types.md`).
+- Step 0 — reuse an existing `PstnVoice` MessagingChannel or have `service-helpagent-coordinate` provision one first using that skill's Voice channel reference; abort if the org uses a partner telephony provider (see `references/channel-types.md`).
 - Steps 1–3 — write and deploy the inbound RoutingFlow using the template in `references/routing-flow.md`, verifying `ActiveVersionId` is non-null.
 - Step 4 — deploy a `MessagingChannel` metadata file for `{CHANNEL_DEVELOPER_NAME}` with `sessionHandlerType=Flow`, `sessionHandlerFlow={FLOW_DEVELOPER_NAME}`, `sessionHandlerQueue={QUEUE_DEVELOPER_NAME}`. Without this the flow is never executed and calls hang up. Verify `SessionHandlerId` starts with `300`.
 - Step 5 — append the platform-default `modality voice:` block (voice_id `UgBBYS2sOqTuMpoF3BR0`, "Mark", en_US) to the `.agent` file if missing; do not ask the user. Republish per `references/agent-wiring.md`.
@@ -163,7 +184,7 @@ Proceed to Phase 3 (optional).
 
 #### Branch C — Email-to-Case
 
-Inbound routing to the agent via direct case-owner assignment or an Omni-Channel `Copilot` RoutingFlow — user chooses in Step 2. Additionally requires the `connection service_email:` **surface** block and a mandatory BotEmailDefinition step (Email Configuration). It gates on API v68.0+ up front (see `references/channel-branch-email.md`).
+Let the user choose direct case-owner assignment or an Omni-Channel `Copilot` RoutingFlow. This branch requires API v68.0+, a `connection service_email:` surface, and a BotEmailDefinition.
 
 Follow `references/channel-branch-email.md` end to end. Load-bearing gotchas (full walkthrough in that file):
 
@@ -178,29 +199,15 @@ Branch C is complete once the routing-address binding is verified. Proceed to Ph
 
 ### Phase 3 — Outbound escalation (optional)
 
+> **Authoritative owner:** full agent-to-human escalation is owned by **`service-agentforce-human-escalation-configure`**. This includes the escalation topic, planner coupling, staffed human queue, outbound flow, failure-threshold directives, republish, and deterministic verification.
+
 After inbound routing is confirmed, ask the user:
 
 > *"Inbound routing is now set up — the channel will route to [agent name]. Do you also want to configure outbound escalation so the agent can hand off to a human when requested?"*
 
-If yes:
-
-1. **Resolve the escalation queue** — follow the escalation queue resolution steps in `references/queue-resolution.md` (Step 6). The user may want a different queue for escalation than the inbound fallback. Capture `ESCALATION_QUEUE_DEVELOPER_NAME` and `ESCALATION_QUEUE_ID`.
-
-2. **Determine the outbound flow name** from the channel type (see naming table in `references/routing-flow.md` Part 2).
-
-3. **Check if an active outbound flow already exists:**
-   ```bash
-   sf data query --target-org $ORG --json \
-     --query "SELECT ApiName, ActiveVersionId FROM FlowDefinitionView WHERE ApiName='{OUTBOUND_FLOW_DEVELOPER_NAME}' AND ProcessType='RoutingFlow'"
-   ```
-   - Row exists with non-null `ActiveVersionId` → reuse it; skip to step 4.
-   - Row missing or `ActiveVersionId` null → create the flow using the QueueBased template in `references/routing-flow.md` Part 2, substituting `ESCALATION_QUEUE_DEVELOPER_NAME` for `QUEUE_DEVELOPER_NAME`. Deploy and verify `ActiveVersionId` is non-null before continuing.
-
-4. **Add the connection block** to the agent's `.agent` file and republish — follow `references/agent-wiring.md`. The connection key depends on channel type:
-   - **Enhanced Chat (EmbeddedMessaging)** → `connection customer_web_client:`
-   - **Enhanced Messaging (3rd-party)** → `connection messaging:`
-   - **Voice** → `connection telephony:`
-   - **Email-to-Case** → `connection service_email:`
+If yes, delegate to `service-agentforce-human-escalation-configure`. Pass the resolved agent,
+channel type, context object, and fallback queue as known inputs. Do not duplicate that skill's
+write or verification steps here.
 
 ---
 
@@ -255,9 +262,7 @@ If yes:
 - [ ] Inbound routing set on the same routing address: `caseOwner`+`caseOwnerType` or `routingFlow`+`fallbackQueue`, with `casePriority` present
 
 ### Optional Phase 3 — Outbound escalation
-- [ ] Correct connection block used: `customer_web_client:` for EmbeddedMessaging, `messaging:` for 3rd-party, `telephony:` for Voice, `service_email:` for Email-to-Case
-- [ ] `outboundRouteName` and `outboundRouteType` present in the correct `<plannerSurfaces>` entry of the deployed bundle
-- [ ] Agent status is Active after republish
+- [ ] `service-agentforce-human-escalation-configure` returned `CONFIGURED` or `ALREADY-CONFIGURED`
 
 ---
 
