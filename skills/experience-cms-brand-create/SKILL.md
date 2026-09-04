@@ -1,12 +1,12 @@
 ---
 name: experience-cms-brand-create
-description: "Author a Salesforce Digital Experience brand (a \"brand.json\") so the VS Code Brand Toolkit can load, edit, and preview it. Use this skill whenever someone wants to: create a brand, make a new brand, generate a brand from a description or a color/logo/mood, add a brand to a project so the Brand Toolkit picks it up, scaffold a brand.json, theme a Digital Experience site, or turn a brand idea (\"a dark luxury brand\", \"match our logo\", \"coral + rounded + friendly\") into a loadable brand. Also use it when the user mentions \"Brand Toolkit\", \"theme manager brand\", \"brand token\", \"colorScheme\", \"primaryAccent\", \".digitalExperience/brands\", \"sfdc_cms:title\", or a \"brand.json\" that should show up in the Brand Toolkit. Do NOT use this skill to apply an existing brand's voice, tone, or guidelines to generated content (use experience-cms-brand-apply), to search Salesforce CMS for existing brands, or to search for images, media, or logos (use experience-content-media-search)."
+description: "Author a Salesforce Digital Experience brand (a \"brand.json\") so the VS Code Brand Toolkit can load, edit, and preview it. Use this skill whenever someone wants to: create a brand, make a new brand, generate a brand from a description or a color/logo/mood, add a brand to a project so the Brand Toolkit picks it up, scaffold a brand.json, theme a Digital Experience site, or turn a brand idea (\"a dark luxury brand\", \"match our logo\", \"coral + rounded + friendly\") into a loadable brand. Also use it when the user mentions \"Brand Toolkit\", \"theme manager brand\", \"brand token\", \"colorScheme\", \"primaryAccent\", \".digitalExperience/brands\", \"sfdc_cms:title\", or a \"brand.json\" that should show up in the Brand Toolkit. Do NOT use this skill to apply an existing brand's voice, tone, or guidelines to generated content (use experience-cms-brand-apply), to search Salesforce CMS for existing brands, or to search for images, media, or logos (use experience-search-coordinate)."
 metadata:
   version: "1.0"
   domains: ["Experience"]
   relatedSkills:
     - "experience-cms-brand-apply"
-    - "experience-content-media-search"
+    - "experience-search-coordinate"
 ---
 
 # Create a Brand for the Brand Toolkit

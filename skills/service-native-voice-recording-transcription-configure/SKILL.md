@@ -1,10 +1,13 @@
 ---
 name: service-native-voice-recording-transcription-configure
-description: "Enable call recording and call transcription for Native Voice (Thunderbird Voice) programmatically via the Metadata API, for headless / API-driven support where no human uses the Service Console UI. Use this skill when a user asks to turn on, enable, or configure Native Voice recording and/or transcription for headless or automated voice calls. TRIGGER when: users mention Thunderbird Voice, Native Voice, ThunderbirdVoiceSettings, enableCallRecording, enableCallTranscription, 'enable recording and transcription', 'turn on call recording via API', headless voice recording, or configuring voice-call capture without clicking through Setup. DO NOT TRIGGER when: the user wants to redact or scrub PII from existing recordings, transcribe a supplied audio file, or author a Flow/Apex — those are out of scope for this skill."
+description: "Configure (enable OR disable) call recording and call transcription for Native Voice (Thunderbird Voice) programmatically via the Metadata API, for headless / API-driven support where no human uses the Service Console UI. Either preference can be turned on or off independently. Use this skill when a user asks to turn on/off, enable/disable, or configure Native Voice recording and/or transcription for headless or automated voice calls. TRIGGER when: users mention Thunderbird Voice, Native Voice, ThunderbirdVoiceSettings, enableCallRecording, enableCallTranscription, 'enable recording and transcription', 'turn off call recording', 'disable transcription', 'turn on call recording via API', headless voice recording, or configuring voice-call capture without clicking through Setup. DO NOT TRIGGER when: the user wants to redact or scrub PII from existing recordings, transcribe a supplied audio file, or author a Flow/Apex — those are out of scope for this skill."
 metadata:
-  version: "1.1"
+  version: "1.2"
   domains: ["Service"]
   minApiVersion: "68.0"
+  accessCheck:
+    - type: "orgPerm"
+      value: "ThunderbirdVoice.orgHasNativeVoiceAllowed"
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6"
@@ -12,20 +15,23 @@ metadata:
       semver: ">=2.0.0"
 ---
 
-# Enable Native Voice Recording & Transcription (headless)
+# Configure Native Voice Recording & Transcription (headless)
 
-Turn on call **recording** and call **transcription** for Native Voice (Thunderbird
-Voice) on an org, programmatically, so they take effect for headless / API-driven
-support sessions that never touch the Service Console UI. Recording and transcription
-are **two separate preferences** — this skill enables both and returns a structured
-JSON confirmation.
+Turn call **recording** and call **transcription** for Native Voice (Thunderbird
+Voice) **on or off** on an org, programmatically, so the change takes effect for
+headless / API-driven support sessions that never touch the Service Console UI.
+Recording and transcription are **two separate preferences** — this skill can set
+either or both to the requested state (leaving the other untouched) and returns a
+structured JSON confirmation.
 
 ## Scope
 
-- **In scope**: enabling `enableCallRecording` and `enableCallTranscription` on the
+- **In scope**: setting `enableCallRecording` and/or `enableCallTranscription` to a
+  requested state — **`true` (enable) or `false` (disable)** — on the
   `ThunderbirdVoiceSettings` metadata via an sf CLI Metadata API deploy (the generic
   `Settings` container, member `ThunderbirdVoice`); returning a JSON confirmation of
-  the resulting configuration.
+  the resulting configuration. A preference the user does not name is left at its
+  current value.
 - **Out of scope**: changing any other `ThunderbirdVoiceSettings` boolean (e.g.
   call-recording redaction, SIP recording) — siblings are read only to be preserved,
   never set or reported; redacting/scrubbing PII from existing recordings or
@@ -43,8 +49,11 @@ Gather or infer before proceeding:
   uses this existing `sf` login; no session id or access token is requested. Default:
   the org's default target. Confirm connectivity with `sf org display -o <alias>`.
 - **Which preferences** — recording, transcription, or both. Default: **both**, since
-  headless capture typically needs recording *and* transcription. Confirm only if the
-  user named just one.
+  headless capture typically needs recording *and* transcription. If the user named
+  just one, target only that one and leave the other at its current value.
+- **Desired state** — enable (`on`/`true`) or disable (`off`/`false`) for each named
+  preference. Default: **enable**, unless the user asks to turn something off. Honor a
+  disable request literally — never re-enable a preference the user asked to turn off.
 
 ---
 
@@ -58,13 +67,18 @@ missing org context.
    booleans on the same metadata type — never collapse them into one combined flag.
    The final confirmation must report each independently.
 
-2. **Run the enable script.** Run
-   `scripts/enable-recording-transcription.sh --target-org <alias>`. It retrieves
-   `ThunderbirdVoiceSettings` (via the `Settings` container), checks the org-perm gate,
-   flips the two target flags to `true` while preserving every sibling, validates with
-   a dry-run deploy, deploys, and verifies by round-trip. Use `--dry-run` to retrieve +
-   validate without persisting. Run
-   `scripts/enable-recording-transcription.sh --help` for all options.
+2. **Run the configure script.** Run
+   `scripts/enable-recording-transcription.sh --target-org <alias>` with the desired
+   state per preference: `--recording on|off` and/or `--transcription on|off`. With no
+   preference flags it defaults to turning **both on**. Examples: turn both off →
+   `--recording off --transcription off`; enable recording only →
+   `--recording on` (transcription left as-is); disable transcription only →
+   `--transcription off`. The script retrieves `ThunderbirdVoiceSettings` (via the
+   `Settings` container), checks the org-perm gate, sets **only the named** flag(s) to
+   the requested value while preserving every other field, validates with a dry-run
+   deploy, deploys, and verifies by round-trip. Use `--dry-run` to retrieve + validate
+   without persisting. Run `scripts/enable-recording-transcription.sh --help` for all
+   options.
 
 3. **For the Metadata API contract**, read `references/thunderbird-voice-settings.md` —
    it documents the type, the two booleans, the `Settings`-container manifest, the
@@ -75,15 +89,20 @@ missing org context.
    > mdApiType **without** the `Settings` suffix (`ThunderbirdVoice`), and the manifest
    > version MUST be **>= 68.0** — the fields are not exposed at any lower version.
 
-4. **Change only the two target fields.** The deployed settings file sets exactly
-   `enableCallRecording` and `enableCallTranscription` to `true`; every other
-   `ThunderbirdVoiceSettings` boolean keeps its retrieved value. Do not add or flip
-   other booleans — they are out of this skill's scope.
+4. **Change only the named target field(s), to the requested state.** The deployed
+   settings file sets exactly the preference(s) the user named — `enableCallRecording`
+   and/or `enableCallTranscription` — to the requested value (`true` to enable, `false`
+   to disable); every other `ThunderbirdVoiceSettings` boolean, INCLUDING a target
+   preference the user did not name, keeps its retrieved value. Do not add or flip
+   other booleans, and never coerce a disable request back to `true` — they are out of
+   this skill's scope or contrary to the request.
 
 5. **Return the confirmation JSON.** Emit a single JSON object matching
    `assets/confirmation-output.json`: the metadata `type` and `fullName`, that it was
    applied via a headless/API deploy, and — for **each** of the two preferences
-   separately — its field name and enabled state, plus an overall `status`. It also
+   separately — its field name and its resulting enabled state (`true`/`false`, as it
+   now stands after the deploy, whether it was changed or left as-is), plus an overall
+   `status` (`ENABLED`, `DISABLED`, or `CONFIGURED`). It also
    includes a **`preserved`** array echoing every sibling boolean (e.g.
    `enableCallRecRedaction`, `enableSipRecording`) with the value it was retrieved
    with — this attests the siblings were carried through **unchanged**, which
@@ -102,8 +121,9 @@ missing org context.
 | Deploy through the generic `Settings` container with member `ThunderbirdVoice` | `ThunderbirdVoiceSettings` is not a retrievable top-level type name; the `Settings` container (member = mdApiType minus the `Settings` suffix) is the sf CLI path and uses the org's `sf` login — no session id. |
 | Manifest version must be >= 68.0 | `ThunderbirdVoiceSettings` fields are only exposed at API v68.0+; below that the retrieve returns the type empty/absent. |
 | Retrieve before deploy; preserve all sibling fields | The deploy is a full-file replace — starting from the retrieved file keeps other prefs intact and lets the gate be checked. |
-| Report the preserved siblings in a `preserved` block, but never change them | Compliance callers need explicit "nothing else moved" assurance; the confirmation echoes each sibling's retrieved value unchanged. Echoing a value is not setting it — the deployed file still flips only the two target fields. |
-| Verify by round-trip before reporting `ENABLED` | A "Succeeded" deploy is not proof; only claim enabled after a re-retrieve returns both `true`. |
+| Report the preserved siblings in a `preserved` block, but never change them | Compliance callers need explicit "nothing else moved" assurance; the confirmation echoes each sibling's retrieved value unchanged. Echoing a value is not setting it — the deployed file changes only the named target field(s). |
+| Honor the requested state literally — enable means `true`, disable means `false` | A disable request that silently re-enables the preference (or reports success while leaving it on) is a correctness failure; set exactly what was asked and report the value the org actually returns. |
+| Verify by round-trip before reporting the status | A "Succeeded" deploy is not proof; only report the resulting state after a re-retrieve returns each named preference at its requested value. |
 | Output must be a single valid JSON object | The confirmation is consumed programmatically by headless callers; prose-only answers are not usable. |
 | Do not include a session id, access token, phone number, recording URL, or transcript content in the output | These are secrets / PII; the confirmation reports configuration state only. |
 
@@ -140,7 +160,7 @@ project and reports the result.
 
 | File | When to read |
 |------|-------------|
-| `scripts/enable-recording-transcription.sh` | Step 2 — run to retrieve → flip → validate → deploy → verify (supports `--dry-run`, `--api-version`, `--help`). |
+| `scripts/enable-recording-transcription.sh` | Step 2 — run to retrieve → set named field(s) → validate → deploy → verify (supports `--recording on\|off`, `--transcription on\|off`, `--dry-run`, `--api-version`, `--help`; defaults to both on). |
 | `references/thunderbird-voice-settings.md` | Step 3 — for the metadata type, the two booleans, the `Settings` manifest, the v68.0+ floor, and the gate check. |
 | `assets/package.xml` | Step 3 — the Metadata API manifest template the script generates; read to understand or hand-build the retrieve/deploy. |
 | `assets/confirmation-output.json` | Step 5 — the exact shape of the JSON confirmation to return. |

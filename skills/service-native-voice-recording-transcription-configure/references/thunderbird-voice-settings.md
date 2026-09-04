@@ -1,8 +1,9 @@
 # ThunderbirdVoiceSettings — Metadata API contract
 
-Reference for enabling Native Voice (Thunderbird Voice) recording and transcription
-via the Metadata API, using the sf CLI `Settings`-container retrieve/deploy path.
-Read this when constructing or debugging `scripts/enable-recording-transcription.sh`.
+Reference for configuring — enabling **or disabling** — Native Voice (Thunderbird
+Voice) recording and transcription via the Metadata API, using the sf CLI
+`Settings`-container retrieve/deploy path. Read this when constructing or debugging
+`scripts/enable-recording-transcription.sh`.
 
 ## The metadata type
 
@@ -16,12 +17,13 @@ This skill manages exactly two boolean preferences:
 
 | Field | Meaning | This skill |
 |-------|---------|------------|
-| `enableCallRecording` | Capture audio of Native Voice calls | **set `true`** (target) |
-| `enableCallTranscription` | Produce transcripts of Native Voice calls | **set `true`** (target) |
+| `enableCallRecording` | Capture audio of Native Voice calls | **set to the requested state** (`true`/`false`) when named (target) |
+| `enableCallTranscription` | Produce transcripts of Native Voice calls | **set to the requested state** (`true`/`false`) when named (target) |
 
 Recording and transcription are independent — a call can be recorded without being
 transcribed and vice versa — so they are always modeled and reported as two separate
-preferences.
+preferences, and each can be enabled or disabled on its own. A target preference the
+caller does not name is left at its retrieved value, exactly like a sibling.
 
 The type may expose other booleans (e.g. `enableCallRecRedaction`,
 `enableRealTimeStreamingRecording`, `enableSipRecording`). They are **out of scope** to
@@ -74,11 +76,13 @@ SFDX project). Two things matter:
    (no fields), the org-perm gate `ThunderbirdVoice.orgHasNativeVoiceAllowed` is **off**
    — Native Voice is not provisioned. Stop; this is enabled via provisioning/Blacktab,
    not this skill. If the fields are listed, the gate is on — proceed.
-3. **Flip** `enableCallRecording` and `enableCallTranscription` to `true`; leave every
-   sibling field at its retrieved value.
+3. **Set** each named target (`enableCallRecording` and/or `enableCallTranscription`)
+   to its requested value (`true` to enable, `false` to disable); leave every other
+   field — siblings and any un-named target — at its retrieved value.
 4. **Validate** with `deploy --dry-run` (never skip).
 5. **Deploy**.
-6. **Verify** by re-retrieving and confirming the org *returns* both `true`.
+6. **Verify** by re-retrieving and confirming the org *returns* each named field at
+   its requested value.
 
 ## Distinguishing the two failure modes
 

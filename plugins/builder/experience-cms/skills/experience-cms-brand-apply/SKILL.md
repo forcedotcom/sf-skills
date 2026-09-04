@@ -1,11 +1,11 @@
 ---
 name: experience-cms-brand-apply
-description: "Extracts, retrieves, and applies CMS brand guidelines (voice, tone, style, colors, typography) to generated content. Use this skill ANY TIME a user request involves branding, brand voice, brand tone, brand guidelines, brand identity, brand styling, or applying a brand to content. Triggers for requests like \"apply my brand\", \"use our brand voice\", \"match our brand guidelines\", \"find my brand\", \"search for brand\", \"get brand instructions\", \"apply brand tone\". Handles the full workflow: searching for brands in Salesforce CMS, extracting brand instructions, and applying brand voice/tone/guidelines to generated content. Does not apply to media/image search (use experience-content-media-search skill), logo search, or creating new brand definitions."
+description: "Extracts, retrieves, and applies CMS brand guidelines (voice, tone, style, colors, typography) to generated content. Use this skill ANY TIME a user request involves branding, brand voice, brand tone, brand guidelines, brand identity, brand styling, or applying a brand to content. Triggers for requests like \"apply my brand\", \"use our brand voice\", \"match our brand guidelines\", \"find my brand\", \"search for brand\", \"get brand instructions\", \"apply brand tone\". Handles the full workflow: searching for brands in Salesforce CMS, extracting brand instructions, and applying brand voice/tone/guidelines to generated content. Does not apply to media/image search (use experience-search-coordinate skill), logo search, or creating new brand definitions."
 metadata:
   version: "1.0"
   domains: ["Experience"]
   relatedSkills:
-    - "experience-content-media-search"
+    - "experience-search-coordinate"
   mcpTools:
     content-readonly:
       tools: ["search_media_cms_channels"]
@@ -29,7 +29,7 @@ Universal skill for searching, extracting, and applying CMS brand guidelines to 
 - Apply brand styling, tone, or voice to a page, component, or app
 
 **DO NOT use this skill when the user wants to:**
-- Search for images or media (use experience-content-media-search skill)
+- Search for images or media (use experience-search-coordinate skill)
 - Create a new brand from scratch
 - Edit brand definitions in CMS
 - Generate logos or visual brand assets
@@ -75,9 +75,9 @@ Brands are stored as CMS content of type `sfdc_cms__brand`. Search for them by
 querying the CMS channels with the brand content type.
 
 > **Note:** Brand content search (`contentTypeFqn=sfdc_cms__brand`) is explicitly
-> excluded from the `experience-content-media-search` skill's scope. Calling
+> excluded from the `experience-search-coordinate` skill's scope. Calling
 > `search_media_cms_channels` directly here is correct and intentional — do not
-> route brand search through `experience-content-media-search`.
+> route brand search through `experience-search-coordinate`.
 
 **Process:**
 

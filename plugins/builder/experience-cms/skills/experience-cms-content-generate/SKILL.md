@@ -7,6 +7,7 @@ metadata:
   minApiVersion: "64.0"
   relatedSkills:
     - "experience-cms-content-type-generate"
+    - "experience-cms-content-render"
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"

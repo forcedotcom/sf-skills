@@ -80,28 +80,22 @@ CMDB Setup (via service-itsm-agentic-setup-cmdb-coordinate)
 Target org: <org>   (all steps below run against this org)
 
 CMDB is enabled in ordered layers. Each must succeed before the next:
+```
 
-┌───┬───────────────────────────┬──────────────────────────────────────────────┬──────────┐
-│ # │ Layer                     │ What it does                                   │ Status   │
-├───┼───────────────────────────┼──────────────────────────────────────────────┼──────────┤
-│ 0 │ License check             │ Confirm this org is licensed for CMDB          │ Pending  │
-│   │ (prerequisite)            │ (set by edition/license — can't be turned on)  │          │
-├───┼───────────────────────────┼──────────────────────────────────────────────┼──────────┤
-│ 1 │ Provision & Enable CMDB   │ Set up the CMDB service, then turn on the      │ Pending  │
-│ 2 │                           │ CMDB feature (makes CMDB available to use)     │          │
-├───┼───────────────────────────┼──────────────────────────────────────────────┼──────────┤
-│ 3 │ Assign user access        │ Grant CMDB access to the chosen users          │ Pending  │
-├───┼───────────────────────────┼──────────────────────────────────────────────┼──────────┤
-│ 4 │ Install content bundle    │ Install the CMDB Foundation (base) content     │ Pending  │
-├───┼───────────────────────────┼──────────────────────────────────────────────┼──────────┤
-│ 5 │ Enable Asset Discovery    │ Turn on asset discovery and grant Discovery    │ Pending  │
-│   │                           │ page access (final step — needs the steps      │          │
-│   │                           │ above done first)                              │          │
-└───┴───────────────────────────┴──────────────────────────────────────────────┴──────────┘
+| #   | Layer                    | What it does                                                 | Status  |
+| --- | ------------------------ | ------------------------------------------------------------ | ------- |
+| 0   | License check            | Confirm this org is licensed for CMDB (set by edition/license — can't be turned on) | Pending |
+| 1–2 | Provision & enable CMDB  | Set up the CMDB service, then turn on the CMDB feature so it's available to use | Pending |
+| 3   | Assign user access       | Grant CMDB access to the chosen users                        | Pending |
+| 4   | Install content bundle   | Install the CMDB Foundation (base) content                   | Pending |
+| 5   | Enable Asset Discovery   | Turn on asset discovery and grant Discovery page access (final step — needs the steps above done first) | Pending |
 
+```text
 I recommend running these in order. Where would you like to start (or shall I run 1 → 5)?
 ```
 
+Render one row per layer with a single-line cell — do not split a layer across stacked rows or wrap
+a cell onto a second line. Present the combined provision-and-enable step as the single row `1–2`.
 Only show layers that have a corresponding, working child skill. Do NOT show placeholder layers.
 
 ### 4. Delegate to child skills
@@ -134,18 +128,17 @@ When all available layers are done (or the user stops), present a final summary:
 CMDB Setup — Complete (via service-itsm-agentic-setup-cmdb-coordinate)
 
 Target org: <org>
+```
 
-┌───┬───────────────────────────┬──────────┐
-│ # │ Layer                     │ Status   │
-├───┼───────────────────────────┼──────────┤
-│ 0 │ License check             │ Done     │
-│ 1 │ CMDB service setup        │ Done     │
-│ 2 │ CMDB feature turned on    │ Done     │
-│ 3 │ User access               │ Done     │
-│ 4 │ Content bundle (base)      │ Done     │
-│ 5 │ Asset Discovery + access  │ Done     │
-└───┴───────────────────────────┴──────────┘
+| #   | Layer                    | Status |
+| --- | ------------------------ | ------ |
+| 0   | License check            | Done   |
+| 1–2 | Provision & enable CMDB  | Done   |
+| 3   | User access              | Done   |
+| 4   | Content bundle (base)    | Done   |
+| 5   | Asset Discovery + access | Done   |
 
+```text
 CMDB is enabled and ready. Users with the assigned permission sets can now work with
 Configuration Items. Next, you can model CIs, identification rules, and relationships.
 ```

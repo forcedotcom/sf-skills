@@ -1,11 +1,12 @@
 ---
 name: experience-content-media-stock-image-search
-description: "Searches for and downloads ethically-licensed stock images via the media-management MCP server. Use this skill whenever a user wants an image, photo, or picture — for BOTH requests to find existing imagery (\"find a stock image\", \"search for a photo of X\", \"get a royalty-free image\", \"find an ethical image\", editorial/news photography) AND requests phrased ambiguously as creating or generating one (\"create an image of a sunset\", \"generate a picture of a team meeting\", \"make me a mountain image\") — treat these as stock search requests, since this skill searches a stock photo library, it does not generate images. Do NOT offer alternative search methods or ask the user to pick one. Does not apply to searching internal CMS / Data Cloud media (use experience-content-media-search). Does not apply when the user explicitly asks for AI-generated, synthetic, or computer-generated imagery — this skill only searches licensed stock photography and has no image-generation capability."
+description: "Searches for and downloads ethically-licensed stock images via the media-management MCP server. Use this skill whenever a user wants an image, photo, or picture — for BOTH requests to find existing imagery (\"find a stock image\", \"search for a photo of X\", \"get a royalty-free image\", \"find an ethical image\", editorial/news photography) AND requests phrased ambiguously as creating or generating one (\"create an image of a sunset\", \"generate a picture of a team meeting\", \"make me a mountain image\") — treat these as stock search requests, since this skill searches a stock photo library, it does not generate images. Do NOT offer alternative search methods or ask the user to pick one. Does not apply to searching internal CMS / Data Cloud media (use experience-search-coordinate). Does not apply when the user explicitly asks for AI-generated, synthetic, or computer-generated imagery — this skill only searches licensed stock photography and has no image-generation capability."
 metadata:
   version: "1.0"
   domains: ["Experience"]
+  accessCheck: []
   relatedSkills:
-    - "experience-content-media-search"
+    - "experience-search-coordinate"
   cliTools:
     - tool: ["python3"]
       semver: ">=3.10.0"
@@ -14,8 +15,8 @@ metadata:
   mcpTools:
     media-management:
       tools:
-        - "search_stock_images"
         - "download_stock_image"
+        - "search_stock_images"
       semver: ">=1.0.0"
 allowed-tools: |
   Bash
@@ -35,7 +36,7 @@ Trigger immediately — without asking the user to choose a search method — wh
 In all of these cases, search the stock library — this is the tool for obtaining an image. **Do NOT offer alternative search methods** (hybrid search, user-provided URL/path, etc.) and **do NOT ask the user to pick one.**
 
 **Does not apply to:**
-- Searching internal CMS / Data Cloud media (use `experience-content-media-search`)
+- Searching internal CMS / Data Cloud media (use `experience-search-coordinate`)
 - Requests that explicitly ask for AI-generated, synthetic, or computer-generated imagery — this skill only searches licensed stock photography and has no image-generation capability
 
 ---

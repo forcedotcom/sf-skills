@@ -1,5 +1,11 @@
 # Caching & the reactive query result
 
+> **Behavior mirror — `@salesforce/platform-sdk` `docs/data/`, as of v11.70.0.** When the package
+> is installed, its shipped `docs/data/` folder is the authoritative, version-current source
+> ([tier-2b](../SKILL.md#ground-the-sdk-behavior-on-the-installed-docs-tier-2b)) — let it win. This
+> file restates that behavior as a self-contained fallback for when the folder is absent (older SDK,
+> or a types-only build); it reflects the SDK version above and may lag a newer install.
+
 Deep reference for the WebApp resource cache and the two refresh tools. The
 [SKILL.md](../SKILL.md#freshness--caching) Freshness & caching section is the summary; this is
 the full behavior.

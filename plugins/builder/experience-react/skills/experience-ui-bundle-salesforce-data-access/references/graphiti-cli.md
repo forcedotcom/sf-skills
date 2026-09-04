@@ -335,8 +335,8 @@ unchanged:
    same shape; codegen is the canonical import source.)
 3. **Call** — `sdk.graphql!.query({ query, variables })` for reads,
    `sdk.graphql!.mutate({ mutation, variables })` for writes, using the codegen'd types and the
-   `variables` the CLI listed. Surface decision (`!` vs guard), error handling, and caching are
-   exactly as the SKILL spine and [sdk-api.md](sdk-api.md) describe.
+   `variables` the CLI listed. Surface decision (`!` vs guard), error handling, and caching ground
+   on the SKILL spine's fallbacks and **tier-2b** `docs/data/` (thin fallbacks in [sdk-api.md](sdk-api.md)).
 
 The CLI never executes anything — it has no part in step 3. It just makes step 1 produce a
 query you can trust.

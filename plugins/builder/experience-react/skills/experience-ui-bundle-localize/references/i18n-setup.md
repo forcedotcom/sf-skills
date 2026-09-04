@@ -74,7 +74,7 @@ backendOptions: [
 
 `USER_DEFAULT` is required for B2C so fallback follows the guest/site language context. Do not copy this override into B2E wiring.
 
-For B2C, also set the document language and direction from the route-selected display language, not `ctx.dir`. The GraphQL i18n context direction reflects the guest session profile and can stay `ltr` after the site switches to an RTL language. Reuse the resolved language from the site's language-switcher integration:
+For B2C, explicitly pass the route-selected display language to i18next and use it for the document language and direction, rather than relying on the detector or `ctx.dir`. The GraphQL i18n context direction reflects the guest session profile and can stay `ltr` after the site switches to an RTL language. Reuse the resolved language from the site's language-switcher integration:
 
 ```typescript
 const resolvedLang =
@@ -82,6 +82,8 @@ const resolvedLang =
 document.documentElement.dir = i18next.dir(resolvedLang);
 document.documentElement.lang = resolvedLang.replace(/_/g, "-");
 ```
+
+Then add `lng: resolvedLang` to the B2C `i18next.init({ ... })` options. The B2E example above remains unchanged.
 
 Before using this configuration, have an org admin confirm that `GraphQLApiOrgPrefForGuestUsers` is already enabled. This workflow must never enable it. Without the preference, unauthenticated GraphQL label requests return HTTP 403; see dependency W-23854208.
 
@@ -120,7 +122,7 @@ The manifest is how i18next knows what to fetch. An **unregistered key fails sil
 
 ## B2C language context
 
-A B2C site's configured languages and language-specific URLs are the source of truth. At boot, the site route supplies `SFDC_ENV.language`; the SDK detector uses that value to resolve labels. A language switcher must navigate to the target language URL and perform a full page reload. An in-place i18next language change is insufficient because the SDK context and localStorage-backed labels are established at boot.
+A B2C site's configured languages and language-specific URLs are the source of truth. At boot, the site route supplies `SFDC_ENV.language`; pass that value explicitly as i18next's `lng`, with `ctx.lang` as fallback. The SDK detector does not read `SFDC_ENV.language` itself. A language switcher must navigate to the target language URL and perform a full page reload. An in-place i18next language change is insufficient because the SDK context and localStorage-backed labels are established at boot.
 
 For local preview, use the site entry of the Vite plugin and pass the site's supported language codes, with the default first:
 
@@ -169,7 +171,7 @@ If you see an older example that vendors `salesforce-detector.ts` or `salesforce
 
 1. Bundle loads, `initI18n()` runs
 2. `createDataSDK()` initializes the SDK
-3. `fetchI18nContext()` queries the org for language/locale/direction (B2C uses the site route's `SFDC_ENV.language`)
+3. `fetchI18nContext()` queries the org for language/locale/direction; B2C separately passes the site route's `SFDC_ENV.language` to i18next as `lng`
 4. `SalesforceBackend` reads the manifest and issues a GraphQL query per namespace:
    ```graphql
    query LoadLabels {

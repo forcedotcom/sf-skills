@@ -1,0 +1,25 @@
+{
+  "public-channels-call": {
+    "inputs": [{
+      "searchKeyword": "keyword1 OR keyword2 OR keyword3",
+      "taxonomyExpression": "{\"OR\": [\"Taxonomy1\", \"Taxonomy2\"]}",
+      "searchLanguage": "en_US",
+      "contentAccessScope": "Public",
+      "contentTypeFqn": "<discovered-fqn, or a comma-separated list e.g. c__Blog,c__Article>",
+      "pageOffset": 0,
+      "searchLimit": 5
+    }]
+  },
+  "channel-scoped-call": {
+    "inputs": [{
+      "searchKeyword": "keyword1 OR keyword2 OR keyword3",
+      "taxonomyExpression": "{\"OR\": [\"Taxonomy1\", \"Taxonomy2\"]}",
+      "searchLanguage": "en_US",
+      "channelIds": "<the single discovered uiBundle channelId>",
+      "contentTypeFqn": "<discovered-fqn, or a comma-separated list e.g. c__Blog,c__Article>",
+      "pageOffset": 0,
+      "searchLimit": 5
+    }]
+  },
+  "_note": "contentAccessScope and channelIds are mutually exclusive — never send both in the same call. Use contentAccessScope: \"Public\" for the public-channels call (omit channelIds entirely). Use channelIds set to the discovered channelId for the channel-scoped call (omit contentAccessScope entirely). Issue one call per scope in play."
+}

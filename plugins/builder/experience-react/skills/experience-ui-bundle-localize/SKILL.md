@@ -190,7 +190,7 @@ Branch on the exit code: `0`, every key is registered (or there are no `t()` cal
 
 **Goal:** Ensure the i18next init exists; scaffold it if the app has no i18n yet.
 
-Configure `SalesforceBackend` by bundle type: preserve the shipped `BASE_VALUE` default for B2E; for B2C only, set `labelFallback: "USER_DEFAULT"`. See [references/i18n-setup.md](references/i18n-setup.md) for both configurations and B2C language context.
+Configure `SalesforceBackend` by bundle type: preserve the shipped `BASE_VALUE` default for B2E; for B2C only, set `labelFallback: "USER_DEFAULT"` and pass the route-selected `SFDC_ENV.language`, with `ctx.lang` fallback, as `lng` to `i18next.init`. See [references/i18n-setup.md](references/i18n-setup.md) for both configurations and B2C language context.
 
 **Check:**
 Run `check-i18n-wired.sh` from the UI bundle dir (it scans `src/` relative to the current directory) and report what it returns. The script owns the whole deterministic inspection: it looks for an init file defining `initI18n()` and a boot-time call to it, and when those exist it also reports whether the label manifest is imported and actually passed into the backend config. Do not re-derive any of this by reading files yourself.

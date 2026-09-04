@@ -145,7 +145,8 @@ export async function executeGraphQL<TData, TVariables>(
 ```
 
 (To thread caching or use the reactive handle, call `sdk.graphql!.query()` directly with
-`cacheControl` / `subscribe` — see [caching.md](caching.md).)
+`cacheControl` / `subscribe` — see [SKILL.md → Freshness & caching](../SKILL.md#freshness--caching),
+which grounds on **tier-2b** `docs/data/`.)
 
 > Directory layout and the full command table (`graphql:schema` / `graphql:codegen` / `eslint` /
 > `graphql-search.sh`, plus the graphiti commands) live in the spine — see
