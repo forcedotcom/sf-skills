@@ -1,3 +1,12 @@
+# [1.51.0](https://github.com/forcedotcom/sf-skills/compare/1.50.0...1.51.0) (2026-09-05)
+
+
+### Features
+
+* @W-24104658 Integrate PR [#1708](https://github.com/forcedotcom/sf-skills/issues/1708) to main ([8fbbdc4](https://github.com/forcedotcom/sf-skills/commit/8fbbdc428b9c0b1347c23eb8c9ece248b5d54e16))
+
+
+
 # [1.50.0](https://github.com/forcedotcom/sf-skills/compare/1.49.0...1.50.0) (2026-09-04)
 
 
