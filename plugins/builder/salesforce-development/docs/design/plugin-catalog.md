@@ -41,6 +41,18 @@ Two properties are load-bearing and easy to erode by accident during future edit
   (UserPromptSubmit, SessionStart) and the two solicited ones (discovery, bypass-gate) split along
   this same line for *every* evidence-bar knob the scorer exposes, not just the band: see
   `require_anchor_terms` below.
+- **Informational matches and flow candidates are different sets, for discovery and bypass-gate.**
+  `discovery-command` and `bypass-gate` deliberately return every high+medium match for
+  display/telemetry/ledger purposes — that is the point of the anchor-ungated, solicited-evidence
+  bar above. But the live decision flow those two surfaces open (`_open_plugin_flow`, from
+  `cmd_plugin_match` and the bypass advisory respectively) narrows to the high-band subset when at
+  least one exists, falling back to the full match list only when none are high. Without that
+  narrowing, a prompt that scores one clear high match plus several medium alternatives puts all of
+  them in the flow, so a bare "yes" answering the single plugin actually proposed in prose is
+  declared ambiguous against matches the user was never told were part of the ask (a PR-1696 review
+  finding, since fixed). A named medium match remains selectable regardless: `_select_plugin_flow`'s
+  existing ledger fallback re-derives it from the proposal ledger — written for every match
+  regardless of band — even when it sits outside the flow's narrowed candidate set.
 - **Project scoped, except when explicitly asked.** UserPromptSubmit, SessionStart, and the bypass
   gate require `sfdx-project.json` in cwd. The explicit `plugin-match` query remains un-gated because
   invoking it is itself sufficient intent. This keeps a globally installed foundation plugin from
@@ -164,17 +176,41 @@ relative-path string (local, in this repo) or a source object (fetched from else
 ## Accepted-proposal install mechanic
 
 The workflow treats the user's explicit acceptance of a recommendation as the authorization to
-install a plugin from the reviewed Salesforce marketplace. UserPromptSubmit pins that exact
+install a plugin from a trusted source. UserPromptSubmit pins that exact
 candidate and routes one fixed command: `plugin-install <name> --accept-proposed`. The runtime
 independently requires a valid same-session proposal, the same selected plugin in `selected` state,
-and an exact source value of `./plugins/builder/<name>`. If all three checks hold, it installs in
+and a **trusted install target** (`_plugin_install_is_trusted_source` — the exact local
+`./plugins/builder/<name>` source, or an allowlisted external identity; see the trust predicate
+below). If all three checks hold, it installs in
 that call; no dry run, nonce, second prose confirmation, or ordinary Bash approval is added. The
 PreToolUse hook can return `allow` only for that complete standalone command and those same checks.
-Appending shell syntax, changing the name, omitting the selected workflow, or using another source
-shape falls outside the allowance. Claude Code's user, project, and managed ask/deny policy remains
-authoritative over hook output.
+Appending shell syntax, changing the name, omitting the selected workflow, or targeting an
+untrusted source falls outside the allowance. Claude Code's user, project, and managed ask/deny
+policy remains authoritative over hook output.
 
-An accepted external or otherwise mutable source does **not** inherit that fast path. The first
+Three ways a user acceptance reaches `selected` — all funnel through the same
+`--accept-proposed` command and the same trust split, so none can bypass the nonce for an untrusted
+source: (1) a **typed** bare/named affirmative in the live flow; (2) a **late bare affirmative**,
+which re-arms the single candidate a topic change just cleared from the live flow — but *only* on
+the very next prompt, via a short-lived, one-shot marker (`_PLUGIN_LAST_OFFER_DIR`,
+`_save_plugin_last_offer`/`_load_plugin_last_offer`) written at the moment the flow is cleared, not
+the durable, un-timestamped proposal ledger (an earlier design let any surviving ledger entry
+re-arm at any later, unrelated "yes" — a PR-1696 review finding, since fixed). It never re-arms a
+proposal the user declined (a declined flow is terminal, not `"recommended"`, so it is never
+snapshotted), and never snapshots a still-undecided *multi*-candidate recommendation (so a bare
+"yes" can never auto-pick among several); and (3) an **AskUserQuestion selection** whose chosen
+option names exactly one open proposal, bridged by a PostToolUse `AskUserQuestion` hook
+(`cmd_post_ask_question`). The bridge only advances the flow — it never installs, mints a nonce, or
+applies trust — so a generic "Yes"/"No" option (which names no plugin) is a no-op and a structured
+answer can never auto-install. The bridge reads the answer text via
+`_ask_question_selected_texts`, which must specifically walk the real result's `answers` field (a
+mapping from arbitrary, model-authored question text to the answer string, multi-select
+comma-joined) rather than only descending through a fixed allowlist of generic field names — the
+mapping's own keys are never one of those names, so a plain "descend only when the key matches"
+walk can never reach it (also a PR-1696 review finding, since fixed).
+
+An accepted external or otherwise mutable source that is **not** on the trust allowlist does
+**not** inherit that fast path. The first
 call prints the plugin name and concrete source, adds a trust warning, and returns a nonce derived
 from the exact `{name, source}` lookup. It installs nothing. Only a subsequent explicit source
 confirmation routed as `--confirm <nonce>` proceeds. The comparison is constant-time
@@ -243,8 +279,37 @@ level is derived from the shape of its verbatim marketplace `source`:
   outside this repo at **install** time by `claude plugin install`. There is no build-time hook to
   hash-verify that fetch, and installing a whole external plugin can run arbitrary hooks it ships —
   an inherently lower assurance level. Rather than imply a byte-level guarantee it cannot deliver,
-  the external confirmation flow surfaces this as an explicit trust warning because it does not
-  equal the exact reviewed same-name marketplace path. The pinned `ref`/`sha` in the source object
+  the external confirmation flow surfaces this as an explicit trust warning. A curated-allowlist
+  entry is trusted enough to install immediately **when the user accepts a proposal** (it skips the
+  confirmation flow entirely — see below), but a bare self-directed `plugin-install <name>` of that
+  same entry still previews its source and shows the trust warning: the allowlist certifies that the
+  user's *acceptance* authorizes the install, not that the external code is safe, so the warning
+  ("runs code and hooks this project does not control") stays honest wherever the preview renders.
+  The trust-warning guard in `_render_plugin_install_dry_run` is therefore shape-based
+  (`_plugin_install_is_same_marketplace`), never allowlist-based — trust is decided once, at the
+  install fork, and not duplicated in the display path. The pinned `ref`/`sha` in the source object
   is recorded for provenance, not verification. Do not reintroduce a build-time tree
   hash of an external repo: it would break the build's offline hermeticity and would only pin the
   wrong moment.
+
+### Which sources may skip the nonce (the trust predicate)
+
+`_plugin_install_is_trusted_source(name, entry)` is the single predicate that decides whether a
+source may be accepted with looser confirmation (the accepted-proposal fast path, a late bare
+affirmative, or an AskUserQuestion selection — see below). It grants trust on exactly two grounds,
+both **explicit**; trust is **never** inferred from source shape:
+
+1. the exact local source `./plugins/builder/<name>` (`_plugin_install_is_same_marketplace`), or
+2. an exact `(name, marketplace)` match in the small, reviewed in-code allowlist
+   `_TRUSTED_EXTERNAL_INSTALLS` — today just `("agentforce-adlc", "claude-plugins-official")`.
+
+The allowlist is keyed on the **routed** marketplace identity — the `<name>@<marketplace>` the
+install actually resolves. This is safe because an object-source install runs
+`claude plugin install <name>@<marketplace> --yes`, i.e. it fetches the plugin **by name from the
+genuine registry**; the catalog `url` is provenance/display only and is never fetched. So trusting
+the exact identity trusts precisely the install that will run. A future arbitrary external entry has
+a **different** name, so its `(name, "claude-plugins-official")` is absent from the set and it stays
+on the nonce + trust-warning path. Adding an entry is a deliberate, reviewed code change — not a
+catalog edit, and not a metadata flag. Routing (`_plugin_install_marketplace_name`) stays purely
+shape-based (W-24078663): shape chooses *where* to install from, the allowlist chooses *whether* to
+trust it, and the two are never conflated.

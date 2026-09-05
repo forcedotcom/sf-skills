@@ -795,6 +795,105 @@ class CheckToolsTests(unittest.TestCase):
             self.assertIn(key, diag)
 
 
+class SourceTrackingCheckTests(unittest.TestCase):
+    """The Source Tracking readiness row (_check_source_tracking).
+
+    Load-bearing rule (E1): source tracking is a scratch/sandbox-only capability.
+    When the default org is a non-scratch, non-sandbox org (production, Developer
+    Edition, trial/signup, Dev Hub), `sf org enable tracking` can NEVER succeed there,
+    so the row must be an informational ℹ️ note that never gates — NOT a 🟡 warning
+    that offers a dead-end remedy. When the org can't be positively identified in
+    `sf org list`, the check falls back to the live `deploy preview` probe rather than
+    guessing (no false negatives)."""
+
+    def _org(self, alias="myOrg", *, edition="Enterprise Edition", sandbox=False, scratch=False):
+        return {"alias": alias, "username": f"{alias}@example.com", "orgEdition": edition,
+                "isSandbox": sandbox, "isScratch": scratch}
+
+    def test_edition_predicate_scratch_and_sandbox_only(self):
+        self.assertTrue(sfx._edition_supports_source_tracking({"isScratch": True}))
+        self.assertTrue(sfx._edition_supports_source_tracking({"isSandbox": True}))
+        self.assertFalse(sfx._edition_supports_source_tracking({"orgEdition": "Enterprise Edition"}))
+        self.assertFalse(sfx._edition_supports_source_tracking({}))
+
+    def test_non_scratch_non_sandbox_org_is_informational_not_a_warning(self):
+        # KV's exact case: an Enterprise trial/signup org. The row is ℹ️ info (non-gating)
+        # and must NOT tell the user to run `sf org enable tracking` — it can't help here.
+        run_spy = mock.Mock()
+        with mock.patch.object(sfx, "get_target_org", return_value="myOrg"), \
+                mock.patch.object(sfx, "get_org_list",
+                                  return_value={"nonScratchOrgs": [self._org()], "scratchOrgs": []}), \
+                mock.patch.object(sfx, "run", run_spy):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "info")
+        self.assertNotIn("enable tracking", row["message"].lower())
+        self.assertIn("Enterprise", row["message"])
+        run_spy.assert_not_called()  # short-circuits before the live deploy-preview probe
+
+    def test_dev_sandbox_falls_through_to_live_probe(self):
+        # A Developer sandbox DOES support tracking, so it must NOT be short-circuited —
+        # it goes through the live preview probe and reports the ordinary enabled state.
+        preview_ok = json.dumps({"status": 0, "result": {"toDeploy": []}})
+        with mock.patch.object(sfx, "get_target_org", return_value="devSbx"), \
+                mock.patch.object(sfx, "get_org_list", return_value={
+                    "nonScratchOrgs": [self._org("devSbx", edition="Developer Edition", sandbox=True)],
+                    "scratchOrgs": []}), \
+                mock.patch.object(sfx, "run", return_value=preview_ok):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "ok")
+        self.assertIn("Enabled", row["message"])
+
+    def test_unidentified_org_falls_back_to_live_probe(self):
+        # Alias mismatch / org not in the list → do NOT guess. Fall through to the probe.
+        preview_ok = json.dumps({"status": 0, "result": {"toDeploy": []}})
+        with mock.patch.object(sfx, "get_target_org", return_value="ghostOrg"), \
+                mock.patch.object(sfx, "get_org_list",
+                                  return_value={"nonScratchOrgs": [self._org()], "scratchOrgs": []}), \
+                mock.patch.object(sfx, "run", return_value=preview_ok):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "ok")
+
+    def test_org_matched_by_username_still_short_circuits_to_info(self):
+        # The default target may be a username, not an alias. The lookup matches on either,
+        # so a non-trackable org identified by username must still short-circuit to info
+        # and skip the live probe — same as the alias-match path.
+        run_spy = mock.Mock()
+        with mock.patch.object(sfx, "get_target_org", return_value="myOrg@example.com"), \
+                mock.patch.object(sfx, "get_org_list",
+                                  return_value={"nonScratchOrgs": [self._org()], "scratchOrgs": []}), \
+                mock.patch.object(sfx, "run", run_spy):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "info")
+        self.assertNotIn("enable tracking", row["message"].lower())
+        run_spy.assert_not_called()
+
+    def test_missing_org_edition_falls_back_to_generic_wording(self):
+        # A matched, non-trackable record with no orgEdition must still produce a clean
+        # info note — the message falls back to "this" org rather than emitting "None".
+        record = self._org()
+        record.pop("orgEdition")
+        run_spy = mock.Mock()
+        with mock.patch.object(sfx, "get_target_org", return_value="myOrg"), \
+                mock.patch.object(sfx, "get_org_list",
+                                  return_value={"nonScratchOrgs": [record], "scratchOrgs": []}), \
+                mock.patch.object(sfx, "run", run_spy):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "info")
+        self.assertIn("this org", row["message"])
+        self.assertNotIn("None", row["message"])
+        run_spy.assert_not_called()
+
+    def test_empty_org_list_fails_open_to_live_probe(self):
+        # If `sf org list` returns nothing usable, we can't identify the org — fail open to
+        # the live probe rather than guessing an edition. No false info verdicts.
+        preview_ok = json.dumps({"status": 0, "result": {"toDeploy": []}})
+        with mock.patch.object(sfx, "get_target_org", return_value="myOrg"), \
+                mock.patch.object(sfx, "get_org_list", return_value={}), \
+                mock.patch.object(sfx, "run", return_value=preview_ok):
+            row = sfx._check_source_tracking()
+        self.assertEqual(row["status"], "ok")
+
+
 class ReadinessStateTests(unittest.TestCase):
     """The cached readiness verdict mirrors the CLI-update state: cwd-relative
     .sf/ JSON, fail-open read, signature-gated freshness. The load-bearing rule is
@@ -2951,6 +3050,260 @@ class PluginCatalogMatchTests(unittest.TestCase):
         fired.assert_not_called()
 
 
+class PluginMatchHighConfidenceFlowTests(unittest.TestCase):
+    """PR-1696 corrected-fix review, item 1: `cmd_plugin_match` must open the
+    live decision flow with only the high-confidence candidates when at least
+    one exists, so a bare "yes" answering the single plugin actually proposed
+    in prose is never declared ambiguous merely because lower-confidence
+    alternatives were also returned for the informational listing. This is
+    Udai's exact incident: one high-confidence match was verbally proposed,
+    three medium-confidence alternatives were not, and a bare "yes" was
+    refused as ambiguous against all four. `matches` (the informational,
+    unfiltered list rendered to the user and recorded in the durable proposal
+    ledger) is untouched by this -- only the live flow's candidate set
+    narrows, and a named medium-confidence match remains selectable via that
+    ledger regardless (`_select_plugin_flow`'s fallback, exercised below)."""
+
+    @staticmethod
+    def _match(name, band, score=5.0):
+        return types.SimpleNamespace(
+            plugin={"name": name, "match": {"description": f"Curated capability for {name}."}},
+            band=band, score=score, matched_terms=frozenset(),
+        )
+
+    @staticmethod
+    def _stub_module(matches):
+        names = [match.plugin["name"] for match in matches]
+        return types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": name} for name in names]},
+            score_prompt_against_catalog=lambda text, catalog, **kwargs: matches,
+        )
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        runtime = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime / "plugin-proposals"),
+            mock.patch.object(sfx, "_PLUGIN_FLOW_DIR", runtime / "plugin-flows"),
+            mock.patch.object(
+                sfx, "_PLUGIN_INSTALL_PENDING_DIR", runtime / "plugin-install-pending"),
+            mock.patch.object(sfx, "_enabled_plugin_names", return_value=None),
+            mock.patch.object(sfx, "_plugin_match_sensitivity", return_value="standard"),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def _run_plugin_match(self, session_id, text, matches):
+        module = self._stub_module(matches)
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                redirect_stdout(io.StringIO()):
+            return sfx.cmd_plugin_match(["--session-id", session_id, text])
+
+    def test_one_high_and_three_medium_matches_narrow_flow_to_the_high_match(self):
+        session_id = "sess-pm-narrow"
+        rc = self._run_plugin_match(session_id, "create an Agentforce agent", [
+            self._match("agentforce-adlc", "high"),
+            self._match("mobile-development", "medium"),
+            self._match("salesforce-test-drive", "medium"),
+            self._match("platform-lightning-widgets", "medium"),
+        ])
+        self.assertEqual(rc, 0)
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["candidates"], ["agentforce-adlc"])
+        self.assertIsNone(flow["selected"])
+        self.assertEqual(flow["state"], "recommended")
+        # Informational listing / proposal ledger still records every band --
+        # narrowing the live flow never hides a medium alternative.
+        self.assertEqual(
+            sorted(sfx._load_plugin_proposals(session_id)),
+            ["agentforce-adlc", "mobile-development",
+             "platform-lightning-widgets", "salesforce-test-drive"],
+        )
+
+    def test_bare_yes_then_selects_the_narrowed_high_match(self):
+        session_id = "sess-pm-bare-yes"
+        self._run_plugin_match(session_id, "create an Agentforce agent", [
+            self._match("agentforce-adlc", "high"),
+            self._match("mobile-development", "medium"),
+            self._match("salesforce-test-drive", "medium"),
+        ])
+        with redirect_stdout(io.StringIO()) as out:
+            sfx.cmd_orientation_paint(
+                payload={"prompt": "yes", "session_id": session_id},
+                prompt_context=None,
+            )
+        result = json.loads(out.getvalue())
+        self.assertNotIn("permissionDecision", result.get("hookSpecificOutput", {}))
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["selected"], "agentforce-adlc")
+        self.assertEqual(flow["state"], "selected")
+
+    def test_multiple_high_confidence_matches_still_require_disambiguation(self):
+        session_id = "sess-pm-multi-high"
+        self._run_plugin_match(session_id, "create something mobile", [
+            self._match("agentforce-adlc", "high"),
+            self._match("mobile-development", "high"),
+        ])
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(
+            sorted(flow["candidates"]), ["agentforce-adlc", "mobile-development"],
+        )
+        with redirect_stdout(io.StringIO()) as out:
+            sfx.cmd_orientation_paint(
+                payload={"prompt": "yes", "session_id": session_id},
+                prompt_context=None,
+            )
+        note = json.loads(out.getvalue())["hookSpecificOutput"]["additionalContext"]
+        self.assertEqual(
+            note, sfx._plugin_disambiguation_note(["agentforce-adlc", "mobile-development"]),
+        )
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertIsNone(flow["selected"])  # no auto-pick among open candidates
+
+    def test_named_medium_match_remains_selectable_from_the_ledger(self):
+        session_id = "sess-pm-named-medium"
+        self._run_plugin_match(session_id, "create an Agentforce agent", [
+            self._match("agentforce-adlc", "high"),
+            self._match("mobile-development", "medium"),
+        ])
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["candidates"], ["agentforce-adlc"])  # medium not in the flow
+        with redirect_stdout(io.StringIO()):
+            sfx.cmd_orientation_paint(
+                payload={"prompt": "install mobile-development", "session_id": session_id},
+                prompt_context=None,
+            )
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["candidates"], ["mobile-development"])
+        self.assertEqual(flow["selected"], "mobile-development")
+        self.assertEqual(flow["state"], "selected")
+
+
+class PluginBypassGateHighConfidenceFlowTests(unittest.TestCase):
+    """The same conflation `PluginMatchHighConfidenceFlowTests` fixes for
+    `cmd_plugin_match`, reached instead through the `bypass-gate` surface in
+    `cmd_skills_first_advisory`: a raw CLI call (e.g. `sf project deploy
+    start`) that no installed skill owns, with an uninstalled plugin match on
+    the user's actual prompt. That code path denies the bypass and tells
+    Claude to relay only the high-confidence match, but -- before this fix --
+    opened the live flow with every match (high+medium), so a later bare
+    "yes" answering the one plugin actually relayed was declared ambiguous.
+    `_plugin_catalog_match` is stubbed directly here (rather than through the
+    catalog module, as `PluginMatchHighConfidenceFlowTests` does) since only
+    the flow-narrowing at the `_open_plugin_flow` call site is under test."""
+
+    def setUp(self):
+        self._prev_cwd = os.getcwd()
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        proj = Path(self._tmp.name) / "proj"
+        proj.mkdir()
+        (proj / "sfdx-project.json").write_text("{}")
+        os.chdir(proj)
+        self.addCleanup(lambda: os.chdir(self._prev_cwd))
+        runtime = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime / "plugin-proposals"),
+            mock.patch.object(sfx, "_PLUGIN_FLOW_DIR", runtime / "plugin-flows"),
+            mock.patch.object(
+                sfx, "_PLUGIN_INSTALL_PENDING_DIR", runtime / "plugin-install-pending"),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    @staticmethod
+    def _candidate(name, band):
+        return {
+            "name": name,
+            "description": f"Curated capability for {name}.",
+            "band": band,
+            "score": 5.0,
+            "first_occurrence": True,
+            "install_command": f"sf-context plugin-install {name} --accept-proposed",
+        }
+
+    def _run_bypass_gate(self, session_id, command, matches):
+        payload = {
+            "tool_name": "Bash",
+            "tool_input": {"command": command},
+            "session_id": session_id,
+        }
+        with mock.patch.object(sfx, "_plugin_catalog_match", return_value=matches), \
+                mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()):
+            return sfx.cmd_skills_first_advisory()
+
+    def test_one_high_and_one_medium_narrow_flow_to_the_high_match(self):
+        session_id = "sess-bypass-narrow"
+        rc = self._run_bypass_gate(session_id, "sf project deploy start", [
+            self._candidate("salesforce-test-drive", "high"),
+            self._candidate("service-engagement", "medium"),
+        ])
+        self.assertEqual(rc, 0)
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["candidates"], ["salesforce-test-drive"])
+        self.assertIsNone(flow["selected"])
+        self.assertEqual(flow["state"], "recommended")
+
+    def test_bare_yes_then_selects_the_narrowed_high_match(self):
+        session_id = "sess-bypass-bare-yes"
+        self._run_bypass_gate(session_id, "sf project deploy start", [
+            self._candidate("salesforce-test-drive", "high"),
+            self._candidate("service-engagement", "medium"),
+        ])
+        with mock.patch.object(sfx, "_plugin_catalog_match", return_value=[]), \
+                redirect_stdout(io.StringIO()) as out:
+            sfx.cmd_orientation_paint(
+                payload={"prompt": "yes", "session_id": session_id},
+                prompt_context=None,
+            )
+        result = json.loads(out.getvalue())
+        self.assertNotIn("permissionDecision", result.get("hookSpecificOutput", {}))
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(flow["selected"], "salesforce-test-drive")
+        self.assertEqual(flow["state"], "selected")
+
+    def test_multiple_high_confidence_matches_still_require_disambiguation(self):
+        session_id = "sess-bypass-multi-high"
+        self._run_bypass_gate(session_id, "sf project deploy start", [
+            self._candidate("salesforce-test-drive", "high"),
+            self._candidate("service-engagement", "high"),
+        ])
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(
+            sorted(flow["candidates"]), ["salesforce-test-drive", "service-engagement"],
+        )
+        with mock.patch.object(sfx, "_plugin_catalog_match", return_value=[]), \
+                redirect_stdout(io.StringIO()) as out:
+            sfx.cmd_orientation_paint(
+                payload={"prompt": "yes", "session_id": session_id},
+                prompt_context=None,
+            )
+        note = json.loads(out.getvalue())["hookSpecificOutput"]["additionalContext"]
+        self.assertEqual(
+            note,
+            sfx._plugin_disambiguation_note(["salesforce-test-drive", "service-engagement"]),
+        )
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertIsNone(flow["selected"])
+
+    def test_no_high_confidence_matches_falls_back_to_all(self):
+        session_id = "sess-bypass-no-high"
+        self._run_bypass_gate(session_id, "sf project deploy start", [
+            self._candidate("service-engagement", "medium"),
+            self._candidate("mobile-development", "medium"),
+        ])
+        flow = sfx._load_plugin_flow(session_id)
+        self.assertEqual(
+            sorted(flow["candidates"]), ["mobile-development", "service-engagement"],
+        )
+
+
 class PluginProposalMarkerTests(unittest.TestCase):
     """`_load_plugin_proposals`/`_save_plugin_proposals` — the session-scoped
     proposal marker's own fail-open read/write discipline, independent of the
@@ -3618,6 +3971,73 @@ class PluginProposalMarkerTests(unittest.TestCase):
             with self.subTest(source=src):
                 self.assertEqual(run({**base, "source": src}), {"continue": True})
 
+    def test_pretool_denies_accept_proposed_when_ambiguous_multi_candidate(self):
+        name = "agentforce-adlc"
+        others = ["mobile-development", "salesforce-test-drive"]
+        session_id = "sess-pretool-ambiguous"
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {
+                n: {"confidence": "high", "surface": "user-prompt"}
+                for n in [name] + others
+            },
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name] + others, selected=None, state="recommended",
+            surface="user-prompt",
+        ))
+        payload = {
+            "tool_name": "Bash",
+            "tool_input": {
+                "command": f"sf-context plugin-install {name} --accept-proposed",
+            },
+            "session_id": session_id,
+        }
+        with mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_skills_first_advisory(), 0)
+        result = json.loads(stdout.getvalue())
+        hook_output = result["hookSpecificOutput"]
+        self.assertEqual(hook_output["permissionDecision"], "deny")
+        self.assertEqual(
+            hook_output["permissionDecisionReason"],
+            sfx._plugin_disambiguation_note([name] + others),
+        )
+
+    def test_pretool_denies_accept_proposed_when_not_proposed_at_all(self):
+        name = "agentforce-adlc"
+        session_id = "sess-pretool-unproposed"
+        payload = {
+            "tool_name": "Bash",
+            "tool_input": {
+                "command": f"sf-context plugin-install {name} --accept-proposed",
+            },
+            "session_id": session_id,
+        }
+        with mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_skills_first_advisory(), 0)
+        result = json.loads(stdout.getvalue())
+        hook_output = result["hookSpecificOutput"]
+        self.assertEqual(hook_output["permissionDecision"], "deny")
+        self.assertIn("not proposed and selected", hook_output["permissionDecisionReason"])
+
+    def test_pretool_deny_check_fails_open_without_session_id(self):
+        name = "agentforce-adlc"
+        payload = {
+            "tool_name": "Bash",
+            "tool_input": {
+                "command": f"sf-context plugin-install {name} --accept-proposed",
+            },
+            "session_id": "",
+        }
+        with mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_skills_first_advisory(), 0)
+        result = json.loads(stdout.getvalue())
+        self.assertNotIn("hookSpecificOutput", result)
+        self.assertEqual(result, {"continue": True})
+
     def test_confirm_route_uses_exact_pending_nonce(self):
         nonce = "c" * 64
         note = sfx._plugin_confirm_route_note("experience-react", nonce)
@@ -3876,13 +4296,19 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         install.assert_called_once_with(name, entry, session_id)
         self.assertIsNone(sfx._load_plugin_install_pending(session_id))
 
-    def test_accepted_external_proposal_requires_source_confirmation(self):
-        name = "agentforce-adlc"
+    def test_accepted_non_allowlisted_external_proposal_requires_source_confirmation(self):
+        # A url/object source whose (name, marketplace) identity is NOT in the
+        # curated _TRUSTED_EXTERNAL_INSTALLS allowlist stays on the nonce + TRUST
+        # WARNING path -- trust is an explicit allowlist, never inferred from the
+        # source shape (routing to claude-plugins-official does not grant trust).
+        name = "acme-data-loader"
         session_id = "sess-external-accept"
         entry = {
             "source": {"source": "url", "url": "https://example.test/plugin.git"},
             "origin": "external",
         }
+        self.assertNotIn(
+            (name, "claude-plugins-official"), sfx._TRUSTED_EXTERNAL_INSTALLS)
         self.assertTrue(sfx._save_plugin_proposals(
             session_id,
             {name: {"confidence": "high", "surface": "user-prompt"}},
@@ -3908,6 +4334,39 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         pending = sfx._load_plugin_install_pending(session_id)
         self.assertEqual(pending["name"], name)
         self.assertEqual(sfx._load_plugin_flow(session_id)["state"], "awaiting-confirmation")
+
+    def test_accepted_allowlisted_external_proposal_installs_in_one_call(self):
+        # agentforce-adlc@claude-plugins-official is the one curated external
+        # identity in _TRUSTED_EXTERNAL_INSTALLS: an accepted proposal installs
+        # immediately (no nonce, no TRUST WARNING), exactly like a local entry --
+        # the install resolves that plugin BY NAME from the genuine official
+        # marketplace, so trusting the exact identity trusts exactly what runs.
+        name = "agentforce-adlc"
+        session_id = "sess-allowlisted-accept"
+        entry = {
+            "source": {"source": "url", "url": "https://example.test/plugin.git"},
+            "origin": "external",
+        }
+        self.assertIn(
+            (name, "claude-plugins-official"), sfx._TRUSTED_EXTERNAL_INSTALLS)
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"}},
+        ))
+        self.assertTrue(sfx._save_plugin_flow(
+            session_id, [name], selected=name, state="selected",
+            surface="user-prompt", task_backed=True,
+        ))
+        with mock.patch.object(
+                sfx, "_plugin_install_lookup", return_value=_plugin_lookup(entry)), \
+                mock.patch.object(sfx, "_perform_plugin_install", return_value=0) as install, \
+                redirect_stdout(io.StringIO()) as stdout:
+            self.assertEqual(sfx.cmd_plugin_install([
+                name, "--accept-proposed", "--session-id", session_id,
+            ]), 0)
+        install.assert_called_once_with(name, entry, session_id)
+        self.assertNotIn("TRUST WARNING", stdout.getvalue())
+        self.assertIsNone(sfx._load_plugin_install_pending(session_id))
 
     def test_accept_proposed_refuses_without_selected_same_session_flow(self):
         name = "experience-react"
@@ -4106,7 +4565,7 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertIn("not proposed", err.getvalue().lower())
         self.assertEqual(self._recorded, [])
 
-    def test_decline_fires_event_and_re_saves_marker_entry_unchanged(self):
+    def test_decline_fires_event_and_persists_durable_declined_marker(self):
         sfx._save_plugin_proposals(
             "sess-8", {"agentforce-adlc": {"confidence": "medium", "surface": "discovery-command"}})
         with mock.patch.object(sfx, "_plugin_install_lookup",
@@ -4121,10 +4580,13 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(payload["tool_input"],
                           {"plugin": "agentforce-adlc", "origin": "external",
                            "confidence": "medium", "surface": "discovery-command"})
-        # The entry survives (unchanged) so a later occurrence still dedupes to warn.
+        # The entry survives so a later occurrence still dedupes to warn, and now
+        # carries a durable "decision": "declined" marker so a bare "yes" issued
+        # after the 24h flow TTL cannot re-arm an intentionally declined proposal.
         self.assertEqual(
             sfx._load_plugin_proposals("sess-8"),
-            {"agentforce-adlc": {"confidence": "medium", "surface": "discovery-command"}})
+            {"agentforce-adlc": {"confidence": "medium", "surface": "discovery-command",
+                                 "decision": "declined"}})
 
     def test_decline_refuses_when_marker_entry_is_malformed(self):
         sfx._save_plugin_proposals(
@@ -4136,6 +4598,459 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(rc, 2)
         self.assertIn("malformed", err.getvalue().lower())
         self.assertEqual(self._recorded, [])
+
+
+class PluginTrustedSourceGateTests(unittest.TestCase):
+    """`_plugin_install_is_trusted_source` -- the single predicate that decides
+    which sources may be accepted with looser confirmation. Trust is granted only
+    by the exact local source OR an exact (name, marketplace) entry in the curated
+    _TRUSTED_EXTERNAL_INSTALLS allowlist; it is NEVER inferred from source shape.
+    Also covers the consent openings _plugin_install_route_note emits."""
+
+    def test_local_exact_builder_source_is_trusted(self):
+        name = "experience-react"
+        self.assertTrue(sfx._plugin_install_is_trusted_source(
+            name, {"source": f"./plugins/builder/{name}"}))
+
+    def test_allowlisted_external_identity_is_trusted(self):
+        # agentforce-adlc routes to claude-plugins-official (url source) and that
+        # exact identity is allowlisted, so it is trusted.
+        name = "agentforce-adlc"
+        entry = {"source": {"source": "url", "url": "https://example.test/p.git"}}
+        self.assertIn((name, "claude-plugins-official"), sfx._TRUSTED_EXTERNAL_INSTALLS)
+        self.assertTrue(sfx._plugin_install_is_trusted_source(name, entry))
+
+    def test_non_allowlisted_external_identity_is_not_trusted(self):
+        # A different external name routes to the same official marketplace but is
+        # NOT allowlisted -- shape (url -> official) must never grant trust.
+        name = "acme-data-loader"
+        entry = {"source": {"source": "url", "url": "https://example.test/p.git"}}
+        self.assertNotIn((name, "claude-plugins-official"), sfx._TRUSTED_EXTERNAL_INSTALLS)
+        self.assertFalse(sfx._plugin_install_is_trusted_source(name, entry))
+
+    def test_local_string_source_outside_builder_is_not_trusted(self):
+        # Routes to the salesforce marketplace, but is not the exact
+        # ./plugins/builder/<name> source and no allowlist entry pins the salesforce
+        # marketplace -- so it stays on the confirmation path (path-traversal guard).
+        name = "skill-platform"
+        self.assertFalse(sfx._plugin_install_is_trusted_source(
+            name, {"source": f"./plugins/internal/{name}"}))
+
+    def test_non_dict_entry_is_not_trusted(self):
+        self.assertFalse(sfx._plugin_install_is_trusted_source("experience-react", None))
+        self.assertFalse(sfx._plugin_install_is_trusted_source(None, {"source": "x"}))
+
+    def test_route_note_openings_are_distinct_but_share_command_tail(self):
+        name = "experience-react"
+        notes = {
+            consent: sfx._plugin_install_route_note(name, consent=consent)
+            for consent in ("explicit", "inferred", "inferred-last-offer", "structured")
+        }
+        # Distinct opening sentences...
+        openings = {note.split(". ", 1)[0] for note in notes.values()}
+        self.assertEqual(len(openings), 4)
+        # ...but a byte-identical tail from the fixed control command onward, so the
+        # grammar the model runs never varies with how consent arrived.
+        tail = "Advance only that selected plugin by running exactly"
+        tails = {note[note.index(tail):] for note in notes.values()}
+        self.assertEqual(len(tails), 1)
+        for note in notes.values():
+            self.assertIn(f"plugin-install {name} --accept-proposed", note)
+        # explicit is the only opening that claims an explicit *request* (FM6).
+        self.assertIn("explicitly requested", notes["explicit"])
+        for consent in ("inferred", "inferred-last-offer", "structured"):
+            self.assertNotIn("explicitly requested", notes[consent])
+
+    def test_route_note_unknown_consent_falls_back_to_inferred(self):
+        name = "experience-react"
+        self.assertEqual(
+            sfx._plugin_install_route_note(name, consent="bogus"),
+            sfx._plugin_install_route_note(name, consent="inferred"),
+        )
+
+
+class PluginLateBareAffirmativeRearmTests(unittest.TestCase):
+    """Feature (b): a bare "yes"/"install it" sent on the prompt IMMEDIATELY
+    following a topic change that cleared a still-undecided, single-candidate
+    "recommended" flow re-arms that one offer -- via a short-lived, one-shot
+    marker (`_PLUGIN_LAST_OFFER_DIR`), never via the durable, un-timestamped
+    proposal ledger (PR-1696 review, finding P1: the ledger has no recency or
+    conversational-correlation data, so any surviving entry could authorize an
+    install for an unrelated later "yes"). The marker preserves `taskBacked`
+    (finding P2) so a later accept still resumes the interrupted task. It is a
+    strict one-shot: it is consumed or invalidated by the very next prompt, so a
+    second bare "yes" a turn later finds nothing. A still-undecided
+    MULTI-candidate recommendation is never snapshotted at all (invariant 2:
+    never auto-pick), and a proposal the user intentionally declined is never
+    re-armed by a bare affirmative (invariant 4) because a declined flow is
+    terminal, not "recommended", and so is never snapshotted either -- only a
+    *named* re-accept can still un-decline, via the unaffected ledger path."""
+
+    def setUp(self):
+        self._prev_cwd = os.getcwd()
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        proj = Path(self._tmp.name) / "proj"
+        proj.mkdir()
+        (proj / "sfdx-project.json").write_text("{}")
+        os.chdir(proj)
+        self.addCleanup(lambda: os.chdir(self._prev_cwd))
+        runtime = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime / "plugin-proposals"),
+            mock.patch.object(sfx, "_PLUGIN_FLOW_DIR", runtime / "plugin-flows"),
+            mock.patch.object(sfx, "_PLUGIN_LAST_OFFER_DIR", runtime / "plugin-last-offer"),
+            mock.patch.object(
+                sfx, "_PLUGIN_INSTALL_PENDING_DIR", runtime / "plugin-install-pending"),
+            mock.patch.object(sfx, "_resolve_position_and_org", return_value=("D1", {})),
+            mock.patch.object(sfx, "_journey_state", return_value="D1"),
+            mock.patch.object(sfx, "_plugin_catalog_match", return_value=[]),
+            mock.patch.object(sfx, "_plugin_match_sensitivity", return_value="standard"),
+            # Every seeded proposal is a locally installable entry (reason "ok").
+            mock.patch.object(
+                sfx, "_plugin_install_lookup",
+                side_effect=lambda n: _plugin_lookup({"source": f"./plugins/builder/{n}"})),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def _dispatch(self, session_id, prompt):
+        payload = {"prompt": prompt, "session_id": session_id}
+        buffer = io.StringIO()
+        with redirect_stdout(buffer):
+            sfx.cmd_orientation_paint(payload=payload, prompt_context=None)
+        return buffer.getvalue()
+
+    def _seed_recommended(self, session_id, names, *, task_backed=False):
+        # Mirrors production, which always writes the proposal ledger entry and
+        # opens the live flow together (via `_plugin_catalog_match` +
+        # `_open_plugin_flow`): the ledger backs the *named* accept/decline path,
+        # the flow backs the bare-affirmative path this class exercises.
+        names = [names] if isinstance(names, str) else names
+        self.assertTrue(sfx._save_plugin_proposals(
+            session_id,
+            {name: {"confidence": "high", "surface": "user-prompt"} for name in names},
+        ))
+        self.assertTrue(
+            sfx._open_plugin_flow(session_id, names, "user-prompt", task_backed=task_backed))
+
+    _TOPIC_CHANGE = "let's talk about something else entirely"
+
+    def test_bare_yes_on_the_next_prompt_rearms_the_lost_offer(self):
+        sid = "sess-rearm-next"
+        self._seed_recommended(sid, "experience-react")
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertIsNotNone(sfx._load_plugin_last_offer(sid))
+        out = self._dispatch(sid, "yes")
+        flow = sfx._load_plugin_flow(sid)
+        self.assertIsNotNone(flow)
+        self.assertEqual(flow["selected"], "experience-react")
+        self.assertEqual(flow["state"], "selected")
+        self.assertIn("sole open proposal from an earlier turn", out)
+        # One-shot: the marker is consumed, win or lose.
+        self.assertIsNone(sfx._load_plugin_last_offer(sid))
+
+    def test_task_backed_is_preserved_through_the_rearm(self):
+        sid = "sess-rearm-taskbacked"
+        self._seed_recommended(sid, "experience-react", task_backed=True)
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self._dispatch(sid, "yes")
+        flow = sfx._load_plugin_flow(sid)
+        self.assertIsNotNone(flow)
+        self.assertTrue(flow["taskBacked"])
+
+    def test_full_cycle_preserves_task_backed_through_install_and_resume(self):
+        # P2 regression: `_perform_plugin_install` reads flow["taskBacked"] AFTER
+        # install to decide whether the handoff offers "continue" (resume the
+        # task the recommendation interrupted) or asks for a brand-new task. A
+        # proposal rearmed from the one-shot marker must still resume correctly.
+        sid = "sess-rearm-full-cycle"
+        name = "experience-react"
+        self._seed_recommended(sid, name, task_backed=True)
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self._dispatch(sid, "yes")
+        entry = {"source": f"./plugins/builder/{name}"}
+        with mock.patch.object(sfx, "_ensure_salesforce_marketplace_registered"), \
+                mock.patch.object(
+                    sfx, "_run_plugin_install_step", return_value=(True, {"exitCode": 0})
+                ), \
+                mock.patch.object(sfx, "_plugin_install_fire_installed"), \
+                mock.patch.object(sfx, "_plugin_install_fire_loaded"), \
+                redirect_stdout(io.StringIO()):
+            self.assertEqual(sfx._perform_plugin_install(name, entry, sid), 0)
+        flow = sfx._load_plugin_flow(sid)
+        self.assertEqual(flow["state"], "installed")
+        self.assertTrue(flow["taskBacked"])
+        out = self._dispatch(sid, "continue")
+        self.assertIn("resume only that same earlier task", out)
+
+    def test_bare_yes_two_prompts_later_does_not_rearm(self):
+        # The one-shot grace covers only the prompt immediately after the clear;
+        # a second intervening prompt invalidates it (the marker is cleared
+        # unconditionally whenever it is not itself consumed).
+        sid = "sess-rearm-stale"
+        self._seed_recommended(sid, "experience-react")
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self._dispatch(sid, "and now a second, different topic")
+        self.assertIsNone(sfx._load_plugin_last_offer(sid))
+        out = self._dispatch(sid, "yes")
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_bare_yes_with_no_prior_offer_is_noop(self):
+        sid = "sess-rearm-none"
+        out = self._dispatch(sid, "yes")
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_multi_candidate_recommendation_is_never_snapshotted(self):
+        # Invariant 2: a still-undecided MULTI-candidate recommendation must
+        # never let a later bare "yes" auto-pick one plugin -- so it gets no
+        # grace marker at all once its topic change clears it.
+        sid = "sess-rearm-multi"
+        self._seed_recommended(sid, ["experience-react", "experience-cms"])
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self.assertIsNone(sfx._load_plugin_last_offer(sid))
+        out = self._dispatch(sid, "yes")
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_declined_recommendation_is_never_snapshotted(self):
+        # Invariant 4: an intentional decline must never be re-armed by a bare
+        # "yes". A declined flow is terminal, not "recommended", so the topic-
+        # change clear that follows never snapshots a grace marker for it.
+        sid = "sess-rearm-declined"
+        self._seed_recommended(sid, "experience-react")
+        self._dispatch(sid, "decline experience-react")
+        self.assertEqual(sfx._load_plugin_flow(sid)["state"], "declined")
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self.assertIsNone(sfx._load_plugin_last_offer(sid))
+        out = self._dispatch(sid, "yes")
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_named_reaccept_still_works_unaffected_by_this_change(self):
+        # The pre-existing named-accept path resolves through the durable ledger
+        # regardless of the marker, and is untouched by this narrowing.
+        sid = "sess-rearm-named"
+        self._seed_recommended(sid, "experience-react")
+        self._dispatch(sid, self._TOPIC_CHANGE)
+        self._dispatch(sid, "install experience-react")
+        flow = sfx._load_plugin_flow(sid)
+        self.assertIsNotNone(flow)
+        self.assertEqual(flow["selected"], "experience-react")
+        self.assertEqual(flow["state"], "selected")
+
+    def test_declined_marker_does_not_affect_the_named_matcher(self):
+        sid = "sess-named-matcher"
+        self.assertTrue(sfx._save_plugin_proposals(sid, {"experience-react": {
+            "confidence": "high", "surface": "user-prompt", "decision": "declined"}}))
+        self.assertEqual(
+            sfx._named_valid_plugin_proposals("install experience-react", sid),
+            ["experience-react"])
+        # ...but the open-set filter DOES exclude it.
+        self.assertEqual(sfx._open_valid_plugin_proposals(sid), [])
+
+
+class PluginPostAskQuestionBridgeTests(unittest.TestCase):
+    """Feature (a): a PostToolUse AskUserQuestion selection that names exactly one
+    open proposal advances the flow to `selected` (the same state a typed "yes"
+    reaches). A generic Yes/No option names nothing and is a no-op; a declined
+    proposal is not re-armed; a malformed payload fails open. The bridge never
+    installs or mints a nonce -- the CLI + PreToolUse gate still split trusted vs.
+    external."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        runtime = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime / "plugin-proposals"),
+            mock.patch.object(sfx, "_PLUGIN_FLOW_DIR", runtime / "plugin-flows"),
+            mock.patch.object(
+                sfx, "_PLUGIN_INSTALL_PENDING_DIR", runtime / "plugin-install-pending"),
+            mock.patch.object(
+                sfx, "_plugin_install_lookup",
+                side_effect=lambda n: _plugin_lookup({"source": f"./plugins/builder/{n}"})),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def _run(self, payload):
+        buffer = io.StringIO()
+        with mock.patch.object(sfx, "_read_hook_payload", return_value=payload), \
+                redirect_stdout(buffer):
+            rc = sfx.cmd_post_ask_question()
+        return rc, buffer.getvalue()
+
+    def _seed(self, session_id, entries):
+        self.assertTrue(sfx._save_plugin_proposals(session_id, entries))
+
+    def test_selection_naming_open_proposal_advances_to_selected(self):
+        sid = "sess-ask-ok"
+        self._seed(sid, {"experience-react": {"confidence": "high", "surface": "user-prompt"}})
+        payload = {
+            "session_id": sid,
+            "tool_response": {"answer": "Install experience-react"},
+        }
+        rc, out = self._run(payload)
+        self.assertEqual(rc, 0)
+        flow = sfx._load_plugin_flow(sid)
+        self.assertIsNotNone(flow)
+        self.assertEqual(flow["selected"], "experience-react")
+        self.assertEqual(flow["state"], "selected")
+        self.assertIn("structured question", out)
+
+    def test_selection_naming_open_proposal_via_answers_mapping_advances_to_selected(self):
+        # The real Claude Code AskUserQuestion result keys the human's answer
+        # under `answers`: a mapping from the (arbitrary, model-authored)
+        # question text to the selected answer string -- not the `{"answer":
+        # [{"label": ...}]}` shape the other tests here use. A fixed-allowlist
+        # walk that only descends when the KEY matches a known name can never
+        # reach a value keyed by arbitrary question text, so this must have its
+        # own branch (dx-prizm review finding on PR 1696).
+        sid = "sess-ask-answers-map"
+        self._seed(sid, {"experience-react": {"confidence": "high", "surface": "user-prompt"}})
+        payload = {
+            "session_id": sid,
+            "tool_response": {
+                "questions": ["Which plugin would you like to install?"],
+                "answers": {
+                    "Which plugin would you like to install?": "Install experience-react",
+                },
+            },
+        }
+        rc, out = self._run(payload)
+        self.assertEqual(rc, 0)
+        flow = sfx._load_plugin_flow(sid)
+        self.assertIsNotNone(flow)
+        self.assertEqual(flow["selected"], "experience-react")
+        self.assertEqual(flow["state"], "selected")
+        self.assertIn("structured question", out)
+
+    def test_generic_yes_option_names_nothing_and_is_a_noop(self):
+        sid = "sess-ask-generic"
+        self._seed(sid, {"experience-react": {"confidence": "high", "surface": "user-prompt"}})
+        rc, out = self._run({"session_id": sid, "tool_response": {"answer": "Yes"}})
+        self.assertEqual(rc, 0)
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_declined_proposal_is_not_advanced_by_a_selection(self):
+        sid = "sess-ask-declined"
+        self._seed(sid, {"experience-react": {
+            "confidence": "high", "surface": "user-prompt", "decision": "declined"}})
+        rc, _ = self._run({
+            "session_id": sid,
+            "tool_response": {"answer": "Install experience-react"},
+        })
+        self.assertEqual(rc, 0)
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+
+    def test_two_open_proposals_with_an_unnamed_both_answer_stays_unresolved(self):
+        # PR-1696 review, P2 ("Both plugins" finding): a structured answer that
+        # names NEITHER open proposal literally -- e.g. KV's actual reply, "Both
+        # plugins" -- must not auto-pick one, and this PR does not implement the
+        # reviewer's suggested sequential-question follow-up; it only guarantees
+        # the safe non-auto-pick behavior already covered by invariant 2 above.
+        # Uses the real `answers`-mapping payload shape (question text -> answer
+        # string), matching KV's actual session rather than the simplified
+        # `{"answer": ...}` shape used elsewhere in this class.
+        sid = "sess-ask-both"
+        self._seed(sid, {
+            "experience-react": {"confidence": "high", "surface": "user-prompt"},
+            "experience-cms": {"confidence": "medium", "surface": "user-prompt"},
+        })
+        rc, out = self._run({
+            "session_id": sid,
+            "tool_response": {
+                "answers": {
+                    "Which plugin(s) would you like to install?": "Both plugins",
+                },
+            },
+        })
+        self.assertEqual(rc, 0)
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_multiselect_answer_naming_both_open_proposals_stays_unresolved(self):
+        # A real `multiSelect` AskUserQuestion answer comma-joins every chosen
+        # option into one string. Naming BOTH open proposals in that single
+        # string must not auto-pick either one (invariant 2): `named` resolves
+        # to length 2, not 1, so the bridge stays a no-op here too.
+        sid = "sess-ask-multiselect"
+        self._seed(sid, {
+            "experience-react": {"confidence": "high", "surface": "user-prompt"},
+            "experience-cms": {"confidence": "medium", "surface": "user-prompt"},
+        })
+        rc, out = self._run({
+            "session_id": sid,
+            "tool_response": {
+                "answers": {
+                    "Which plugin(s) would you like to install?":
+                        "experience-react, experience-cms",
+                },
+            },
+        })
+        self.assertEqual(rc, 0)
+        self.assertIsNone(sfx._load_plugin_flow(sid))
+        self.assertNotIn("--accept-proposed", out)
+
+    def test_malformed_payload_fails_open(self):
+        for payload in (None, {}, {"session_id": "sess-x"}, {"tool_response": 12345}):
+            with self.subTest(payload=payload):
+                rc, out = self._run(payload)
+                self.assertEqual(rc, 0)
+                self.assertIn('"continue": true', out)
+
+    def test_selected_texts_extracts_labels_from_response_only(self):
+        payload = {
+            "tool_input": {"questions": [{"options": [{"label": "install experience-cms"}]}]},
+            "tool_response": {"answer": [{"label": "install experience-react"}]},
+        }
+        texts = sfx._ask_question_selected_texts(payload)
+        self.assertIn("install experience-react", texts)
+        # The model-authored tool_input option is never read as the human's choice.
+        self.assertNotIn("install experience-cms", texts)
+
+    def test_selected_texts_walks_the_answers_mapping_keyed_by_arbitrary_question_text(self):
+        # The mapping's own keys are arbitrary, model-authored question text --
+        # never one of the fixed selection-field names -- so only a dedicated
+        # `answers`-aware branch can reach the values.
+        payload = {
+            "tool_response": {
+                "answers": {
+                    "Which plugin would you like to install?": "Install experience-react",
+                    "Anything else?": "No",
+                },
+            },
+        }
+        texts = sfx._ask_question_selected_texts(payload)
+        self.assertIn("Install experience-react", texts)
+        self.assertIn("No", texts)
+
+    def test_selected_texts_handles_comma_joined_multiselect_answers(self):
+        # Multi-select answers arrive as one comma-joined string, not a list.
+        payload = {
+            "tool_response": {
+                "answers": {
+                    "Which plugin(s) would you like to install?":
+                        "experience-react, experience-cms",
+                },
+            },
+        }
+        texts = sfx._ask_question_selected_texts(payload)
+        self.assertIn("experience-react, experience-cms", texts)
+
+    def test_selected_texts_empty_on_unknown_shape(self):
+        self.assertEqual(sfx._ask_question_selected_texts(None), [])
+        self.assertEqual(sfx._ask_question_selected_texts({"tool_response": 42}), [])
+        self.assertEqual(sfx._ask_question_selected_texts({}), [])
 
 
 class PluginInstallMarketplaceRoutingTests(unittest.TestCase):

@@ -1,0 +1,165 @@
+--- a/SKILL.md
++++ b/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: service-helpagent-coordinate
+-description: "Use to set up, configure, ground, or go live with a Salesforce Help Agent (an Agentforce Service Agent in Service Cloud) via a guided four-checkpoint flow. Use whenever a user says any of: set up / create / build / add a help agent, service agent, or support chat agent; add or embed a chat widget on a website or Experience Cloud / LWR site; put a help agent on a channel (web chat, voice, phone, help portal); ground a help agent on Salesforce Knowledge; or wants an AI to answer customer questions, manage support cases, and escalate to a human. The right skill even when the request names only one part or references help-agent-spec.md or the Agentforce Quick Setup wizard. DO NOT TRIGGER when authoring a brand-new agent with no Help Agent lineage (use agentforce-generate), configuring OAuth/ECAs (use integration-connectivity-connected-app-configure), or only deploying metadata (use platform-metadata-deploy)."
++description: "Use to set up, configure, ground, or go live with a Salesforce Help Agent (an Agentforce Service Agent in Service Cloud) via a guided four-checkpoint flow. Use whenever a user says any of: set up / create / build / add a help agent, service agent, or support chat agent; add or embed a chat widget on a website or Experience Cloud / LWR site; put a help agent on a channel (web chat, voice, phone, help portal); ground a help agent on Salesforce Knowledge; or wants an AI to answer customer questions, manage support cases, and escalate to a human. The right skill even when the request names only one part or references help-agent-spec.md or the Agentforce Quick Setup wizard. DO NOT TRIGGER when authoring a brand-new agent with no Help Agent lineage (use agentforce-adlc:agentforce-generate), configuring OAuth/ECAs (use integration-connectivity-connected-app-configure), or only deploying metadata (use platform-metadata-deploy)."
+ allowed-tools: Bash Read Write Edit Glob Grep WebFetch AskUserQuestion TodoWrite
+ metadata:
+   version: "0.9"
+@@ -44,7 +44,7 @@
+ 
+ **Out of scope — delegate elsewhere:**
+ - OAuth / External Client App setup → [integration-connectivity-connected-app-configure](../integration-connectivity-connected-app-configure/SKILL.md)
+-- Raw agent authoring with no Help Agent lineage → `agentforce-generate`
++- Raw agent authoring with no Help Agent lineage → `agentforce-adlc:agentforce-generate`
+ - Metadata deploy/retrieve → `platform-metadata-deploy`
+ 
+ ## Prerequisites
+@@ -60,32 +60,82 @@
+ 
+ | Skill | Role |
+ |---|---|
+-| `agentforce-generate` | Agent authoring + ADL provisioning/grounding (see its `references/data-library-reference.md`, `references/org-setup-for-adl.md`) |
++| `agentforce-adlc:agentforce-generate` | Agent authoring + ADL provisioning/grounding (see its `references/data-library-reference.md`, `references/org-setup-for-adl.md`) |
+ | `dx-org-permission-set-assign` | Data Cloud permission-set assignment |
+ | `service-digital-engagement-channel-configure` + `service-agentforce-channel-configure` | Deploy channel (Queue routing), then PATCH `SessionHandlerId` to bind agent (see `references/channel-web-chat.md`) |
+ | `service-digital-engagement-deployment-configure` | Embedded Service Deployment — supports both LWR (`ChatterNetworkPicasso`) and Aura (`ChatterNetwork`) sites |
+ | `experience-lwr-site-generate` | Experience Cloud (LWR) site — used when the org has no Live LWR site yet |
+ | `service-digital-engagement-messaging-site-integrate` | Widget placement + embed (Checkpoint 4) |
+ 
+-## Skills inventory pre-flight (advisory — never a hard stop)
++## Agentforce authoring safety preflight (MANDATORY, hard gate)
+ 
+-This skill delegates to several sibling skills. Depending on the runtime, those dependencies resolve one of two ways: as directories under `.claude/skills/`, **or** through a runtime skill catalog that the harness resolves on demand (no local directory). An absent `.claude/skills/<name>` directory therefore does **not** prove a dependency is unavailable — it is normal when the catalog resolves skills at invocation time.
++This plugin-local preflight overrides any conflicting ordering or direct Agentforce CLI examples in `assets/help-agent-spec.md`. Run it once for the selected org and live plugin session **before** the existing readiness check, creating an Einstein Agent User, enabling features, generating metadata, creating or inspecting an Agentforce Data Library, loading `references/agent-script.md`, or starting any authoring, provisioning, deployment, publication, or activation operation. Resolving the target-org alias is the only work allowed before this gate.
+ 
+-Run this check **once, silently, for your own awareness** — never as the run's first user-facing output:
++The load-bearing order is:
++
++```text
++agentforce-adlc:agentforce-generate capability check
++                    ↓
++non-destructive org authoring-capability probe
++                    ↓
++agentforce-adlc:agentforce-generate authoring delegation
++                    ↓
++later readiness, generation, ADL, and lifecycle operations
++```
++
++### Step 1 — Resolve the owning capability
++
++`agentforce-adlc:agentforce-generate` is the plugin-qualified identity of the `agentforce-generate` skill owned by the separate `agentforce-adlc` plugin. Salesforce CLI availability does **not** prove that the plugin or skill is available.
++
++1. Make a no-op Skill-tool dispatch to `agentforce-adlc:agentforce-generate` whose request says: `Capability availability probe only; return without reading project files, running CLI commands, or changing local or org state.` This qualified dispatch is the authoritative live-session capability check; never probe or delegate to an unqualified `agentforce-generate`, because a different workspace or flat skill could satisfy that name. The dispatch checks registration only and is not permission to begin the owning workflow. An `Unknown skill: agentforce-adlc:agentforce-generate` result means the owning capability is not registered in this session. Any normal skill response, including a usage/argument response, means it is invocable.
++2. Only when the qualified dispatch is unknown, run the plugin-local, read-only installed-plugin registry check:
++
++   ```bash
++   python3 "${CLAUDE_PLUGIN_ROOT}/scripts/helpagent_dependency_preflight.py"
++   ```
++
++   The helper invokes the documented `claude plugin list --json` registry operation internally, validates exact plugin IDs whose component before `@` is `agentforce-adlc`, and emits only a sanitized classification; never print or relay the raw registry JSON because unrelated plugin configuration may contain sensitive values. This registry result is guidance only: a cache directory, an installed entry, or `installed_enabled` does not replace the qualified Skill dispatch as proof of live-session availability. Do not infer installation from a relative cache path; installed plugin paths are marketplace- and version-dependent.
++3. Stop at **Help Agent — Agentforce dependency preflight**, then honor the helper's `registryState` exactly:
++   - `installed_enabled`: explain that `agentforce-adlc` is installed and enabled but its skill is not registered in this session. Tell the user to run `/reload-plugins` (or restart the host if reload still does not expose it), then resume this Help Agent task.
++   - `installed_disabled`: explain that `agentforce-adlc` is installed but disabled. Recommend enabling the exact sanitized `pluginId` returned by the helper (normally `claude plugin enable agentforce-adlc@claude-plugins-official`), wait for explicit approval before changing plugin state, then tell the user to run `/reload-plugins` and resume this Help Agent task.
++   - `missing`: explain that Agentforce authoring requires the missing `agentforce-adlc` plugin. Recommend `/salesforce-development:plugin-install agentforce-adlc`, wait for explicit approval before invoking that guarded install flow, and follow its source/nonce confirmation exactly. After installation, tell the user to run `/reload-plugins` before resuming. Do not treat a successful install as same-session skill availability.
++   - `inconclusive`: report that installation state cannot be resolved. Give install/enable + reload guidance as alternatives, but do not mutate plugin state or guess that the capability exists.
++
++At this stop, retain and report the selected org, the checkpoint where the user entered, confirmed identity/grounding/channel choices, the local project path, and every durable identifier already produced by an earlier run (Einstein Agent User, Agentforce Data Library/library ID, `rag_feature_config_id`, agent/bundle DeveloperName, channel, deployment, and site IDs). Do not delete, recreate, roll back, or discard valid prerequisite work. The preflight itself creates no durable state, so resumption starts at the named dependency checkpoint with those facts.
++
++**There is no coordinator fallback.** When `agentforce-adlc:agentforce-generate` is unavailable, do not hand-author or reconstruct `.agent` YAML, run raw `sf agent adl` provisioning commands, call `sf agent generate authoring-bundle`, or reproduce any part of the owning skill. Stop and make the owner available.
+ 
++### Step 2 — Probe the selected org without changing it
++
++Only after Step 1 proves `agentforce-adlc:agentforce-generate` invocable, run the plugin-local probe:
++
+ ```bash
+-for skill in agentforce-generate dx-org-permission-set-assign service-digital-engagement-channel-configure service-digital-engagement-deployment-configure experience-lwr-site-generate service-digital-engagement-messaging-site-integrate service-concierge-portal-generate service-agentforce-channel-configure; do
+-  [ -d ".claude/skills/$skill" ] && echo "OK: $skill" || echo "resolve-at-runtime: $skill"
+-done
++python3 "${CLAUDE_PLUGIN_ROOT}/scripts/helpagent_authoring_preflight.py" --target-org "$ORG"
+ ```
+ 
+-**Do not stop, and do not open the run with a missing-dependency roll call.** Proceed with the checkpoints; delegate to each sibling skill only when the flow actually reaches it. If — and only if — a delegation step is actually reached and that specific skill cannot be resolved at that moment, surface *that one skill* by name at that point. Never front-load the full eight-skill inventory as the deliverable; it is not a decision the user owns and it is not the report.
++The helper first verifies access with `sf org display --json`, then runs the documented `sf agent validate authoring-bundle --json` operation against a fixed minimal bundle in a temporary local DX project. Validation calls the Agent Script compiler but does not deploy or create/update org metadata; the temporary project is removed. This is the strongest supported non-destructive check available because the CLI has no standalone Agent Script entitlement-inspection command.
+ 
++Honor its JSON `outcome` exactly:
++
++| Outcome | Coordinator action |
++|---|---|
++| `ready` | The common Agent Script compiler is reachable for this org/session. Continue to Step 3. Do not claim that Service Agent, Data Cloud, Knowledge, license seats, permissions, or channels were verified; the owning skill still checks those. |
++| `authentication_or_org_access_failure` | Stop at **Help Agent — Agentforce authoring capability preflight**. Reauthenticate or select an accessible org, then rerun this probe. |
++| `agentforce_authoring_unavailable_or_not_entitled` | Stop at the same checkpoint. A documented compiler `AgentApiNotFound` / `ERROR_HTTP_404` means the authoring endpoint is unavailable for this org or region; ask the org admin or Salesforce Support to enable/onboard Agent Script authoring, then rerun. Do not relabel it as a local permission-set or CLI problem. |
++| `transient_cli_or_service_failure` | Stop at the same checkpoint. Preserve state and retry the probe after CLI/network/service health recovers; do not poll, generate, or provision while waiting. |
++| `capability_cannot_be_conclusively_verified` | Stop at the same checkpoint. Repair/update the Salesforce CLI and `agentforce-adlc` environment or obtain authoritative org-onboarding confirmation, then rerun. Never use edition, a license query, an existing Bot/Agentforce record, Data Cloud availability, or another proxy to claim entitlement passed. |
++
++For every non-ready outcome, report the helper's concise remediation, the selected org, the retained resume state listed in Step 1, and that the probe changed no org state. Do not continue unless a later run returns `ready`; an inconclusive result is a conservative stop, not a warning to ignore. Org types expose different feature and license surfaces, so the direct compiler result—not an assumed production/sandbox/scratch/Developer Edition feature set—is authoritative for this narrow gate.
++
++### Step 3 — Delegate to the owner
++
++After and only after Steps 1 and 2 pass, delegate Agentforce-specific readiness, Agentforce Data Library work, agent metadata generation, validation, publication, and activation to `agentforce-adlc:agentforce-generate`. Pass the selected org, canonical Help Agent spec path, current checkpoint, confirmed inputs, and retained identifiers so it reuses valid work. The Help Agent skill remains the checkpoint and channel orchestrator; it consumes the owning skill's results and never substitutes coordinator-written `.agent` YAML or raw ADL provisioning. Direct `sf agent adl ...` commands in the canonical spec describe owner behavior and are not coordinator execution instructions.
++
+ ---
+ 
+ ## Workflow
+ 
+-Read `assets/help-agent-spec.md` first — it is the authoritative flow and is intentionally kept small. **Do not pre-load the rest.** The heavy or conditional material is split into `references/` and read only when the flow reaches it (progressive disclosure — this is deliberate, to keep token usage low):
++Run the mandatory Agentforce authoring safety preflight above first. Only after it returns `ready`, read `assets/help-agent-spec.md` — it is the authoritative flow after the plugin-local safety override and is intentionally kept small. **Do not pre-load the rest.** The heavy or conditional material is split into `references/` and read only when the flow reaches it (progressive disclosure — this is deliberate, to keep token usage low):
+ 
+ - **`references/agent-script.md`** — the ~500-line canonical agent script + placeholder list. Load it **only when you are ready to create the agent, after Checkpoint 2** — not during Checkpoints 1, 3, or 4.
+ - **`references/channel-web-chat.md`** — Web Chat provisioning detail. Load **only if the user picks Web Chat** at Checkpoint 3.
+@@ -95,6 +145,8 @@
+ Read the one channel file that matches the user's selection — never all three. Then run the interactive setup **without one-shotting**: walk the user through four checkpoints in order, waiting for a reply at each.
+ 
+ ### Readiness check (silent, MANDATORY, do not reorder)
++This check begins only after the authoring safety preflight returns `ready`. Agentforce-specific detection, enablement, Agentforce user setup, Data Cloud access, ADL work, and authoring remain owned by `agentforce-adlc:agentforce-generate`; delegate those requirements and verify its returned results. The commands below define required outcomes and later pre-publish verification, not a fallback authorization for the coordinator when the owning skill is missing.
++
+ Order is load-bearing — running step 3 before step 2 fails with `PermissionSet not found: GenieUserEnhancedSecurity` because the Data Cloud permission sets do not exist in the org until Data Cloud itself is turned on:
+ 1. **Verify PSL seat availability, then create a dedicated Einstein Agent User for this agent.** First confirm the three required PSLs have available seats:
+    ```bash
+@@ -107,7 +159,7 @@
+    - `AgentforceServiceAgentUserPsg` (Permission Set Group) — assigns three PSLs in one call: `Agentforce Service Agent User`, `Data Cloud`, and `Einstein Prompt Templates`. Use `sf org assign permsetgroup`.
+    - `AgentforceServiceAgentSecureBase` (Permission Set) — required for all service agents. Use `sf org assign permset`.
+    - `AgentforceKnowledgeUser` (Permission Set, `force` namespace) — required because the Help Agent uses the `knowledge:` block. Use `sf org assign permset`.
+-   - `{AgentName}_Access` (custom Permission Set) — created by `agentforce-generate` for agent-specific Apex/object access.
++   - `{AgentName}_Access` (custom Permission Set) — created by `agentforce-adlc:agentforce-generate` for agent-specific Apex/object access.
+ 
+    Verify PSL assignments landed: `SELECT PermissionSetLicense.DeveloperName FROM PermissionSetLicenseAssign WHERE Assignee.Username = '{agentDevName}_user@{orgId}.ext'` — expect `AgentforceServiceAgentUser`, `DataCloud`, `EinsteinPromptTemplates`.
+ 
+@@ -162,7 +214,7 @@
+ 
+ ### Checkpoint 2 — Give Your Agent Context (grounding)
+ Ask which knowledge source (Salesforce Knowledge / files / website sync). Grounding is **provisioning an Agentforce Data Library**, not designing a search — the agent's `knowledge:` block does the retrieval at runtime. This checkpoint MUST produce all five of:
+-1. **Delegate provisioning to `agentforce-generate`** — it owns ADL create/index/publish. Do not hand-roll data-library metadata.
++1. **Delegate provisioning to `agentforce-adlc:agentforce-generate`** — it owns ADL create/index/publish. Do not hand-roll data-library metadata.
+ 2. **A dedicated, named library** — create `Help_Agent_Knowledge`. **Never wire the stock `All_Records_and_Fields_Default`** (it sits in `NOT_SCHEDULED` on trial or preloaded sample-data orgs and returns empty `knowledgeSummary` with no error).
+ 3. **Category selection** — for Salesforce Knowledge, query the org's Data Category Groups. Ask which categories to ground on **only in an interactive run**; for a non-interactive/scoped run, decide the sensible default (**the org's default Data Category Group**, or all groups if none is designated) and note the default explicitly in the settled-facts report's Blocking Issues line (e.g. "Knowledge data category not specified — chose the org's default group"). Do not stall the report asking.
+ 4. **Wait-for-indexing gate** — poll and only proceed once `indexingStatus.status ∈ {COMPLETED, READY, SUCCESS}`. `NOT_SCHEDULED` is not success.
+@@ -217,7 +269,7 @@
+ Once the channel loop exits ("Done"), run two phases (Phase A below is what used to be a standalone "Checkpoint 3.5"):
+ 
+ **Phase A — Silent pre-flight (INTERNAL — never announce).** Run silently; surface output only on failure. Every check must pass before Phase B:
+-1. Data Cloud access in place for running user **and** Einstein Agent User (defer to `agentforce-generate`).
++1. Data Cloud access in place for running user **and** Einstein Agent User (defer to `agentforce-adlc:agentforce-generate`).
+ 2. ADL is Activated **and** grounded — run a canary retrieval with the captured `rag_feature_config_id`; if empty despite SUCCESS, surface the **Known manual step** (Data Space scope on the permission set) verbatim, wait for confirmation, re-run.
+ 3. Messaging channel is **Active** (assert; initial activation is the channel-configure skill's job, not the site-integrate skill's). This is the only place the flow checks or sets channel-active state — Phase B does not repeat it.
+ 
+@@ -233,6 +285,8 @@
+ 
+ | Rule | Rationale |
+ |---|---|
++| Never run readiness, metadata generation, ADL, or Agentforce lifecycle work before both authoring safety gates pass | Capability ownership must resolve first; then the direct, non-mutating compiler probe must return `ready` for the selected org |
++| Never replace a missing `agentforce-adlc:agentforce-generate` skill with `.agent` YAML or raw `sf agent` authoring/ADL commands | `agentforce-adlc` owns this behavior; install/enable it, reload the session, and resume from the named dependency checkpoint with prior state intact |
+ | Never one-shot the setup | It is a guided conversation; wait for user input at each checkpoint |
+ | Never skip or reorder the readiness steps | Permission sets don't exist before Data Cloud enablement — you'll see `PermissionSet not found: GenieUserEnhancedSecurity` |
+ | Never advance past Checkpoint 4 Phase A with empty ADL retrieval | Ships a silently-broken agent |
+@@ -252,7 +306,7 @@
+ 
+ | File | When to read |
+ |---|---|
+-| `assets/help-agent-spec.md` | Always (first) — the canonical flow; small by design. Points to the files below |
++| `assets/help-agent-spec.md` | After the authoring safety preflight returns `ready` — the canonical flow after the plugin-local safety override; small by design. Points to the files below |
+ | `references/agent-script.md` | At agent creation only (after Checkpoint 2) — the canonical agent script + placeholders |
+ | `references/channel-web-chat.md` | Only if the user selects Web Chat at Checkpoint 3 |
+ | `service-concierge-portal-generate` (external skill) | Only if the user selects Help Portal at Checkpoint 3 — delegate, do not inline |

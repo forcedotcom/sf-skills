@@ -4482,11 +4482,50 @@ def _check_git() -> dict:
     return {"name": "Git", "status": "ok", "version": version, "message": "Installed"}
 
 
+def _edition_supports_source_tracking(org_record: dict) -> bool:
+    """Source tracking is a scratch/sandbox-only capability. A non-scratch, non-sandbox
+    org (production, Developer Edition, trial/signup, or a Dev Hub) can never enable it,
+    so `sf org enable tracking` is a dead-end remedy there. Pure predicate over a single
+    `sf org list` record — no CLI calls — so the rule is unit-testable on its own.
+
+    Deliberately coarse on the sandbox side: only Developer and Developer Pro sandboxes
+    actually support tracking, but `sf org list` carries no sandbox-subtype field to tell
+    Full/Partial Copy sandboxes apart without another CLI call. So we treat every sandbox
+    as "supported" here and let those fall through to the live `deploy preview` probe,
+    which reports the real state. This is fail-safe: it preserves the pre-existing probe
+    behavior for sandboxes and never emits a wrong non-gating `info` for them."""
+    return bool(org_record.get("isScratch") or org_record.get("isSandbox"))
+
+
+def _source_tracking_org_record(target: str) -> Optional[dict]:
+    """Best-effort lookup of the default org's `sf org list` record by direct alias/username
+    match. Returns None when the org can't be confidently identified (alias mismatch, no
+    list) — the caller then falls back to the live `deploy preview` probe rather than
+    guessing. One cheap `sf org list --json` call; no `sf org display`."""
+    org_list = get_org_list()
+    pool = (org_list.get("nonScratchOrgs") or []) + (org_list.get("scratchOrgs") or [])
+    return next(
+        (o for o in pool if o.get("alias") == target or o.get("username") == target),
+        None,
+    )
+
+
 def _check_source_tracking() -> dict:
     target = get_target_org()
     if not target:
         return {"name": "Source Tracking", "status": "warn", "version": None,
                 "message": "No default org configured — connect an org first, then re-run setup"}
+    # Edition precheck: source tracking exists only on scratch orgs and Developer/Developer
+    # Pro sandboxes. When the default org is a production, Developer Edition, trial, or Dev
+    # Hub org, `sf org enable tracking` can never succeed — so report it as an informational
+    # (ℹ️) note that never gates, NOT a fixable 🟡 warning offering a remedy that always
+    # fails. Only apply when we positively identify the org in `sf org list`; otherwise fall
+    # through to the live probe below.
+    match = _source_tracking_org_record(target)
+    if match and not _edition_supports_source_tracking(match):
+        edition = match.get("orgEdition") or "this"
+        return {"name": "Source Tracking", "status": "info", "version": None,
+                "message": f"Not applicable for {edition} org '{target}' — source tracking is available only on scratch orgs and Developer or Developer Pro sandboxes"}
     raw = run(["sf", "project", "deploy", "preview", "--json", "--target-org", target])
     if not raw:
         return {"name": "Source Tracking", "status": "warn", "version": None,
@@ -5733,22 +5772,57 @@ def cmd_skills_first_advisory() -> int:
     # plugin-install grammar bypasses this advisory; compounds remain gated.
     install_control = _plugin_install_control_args(tool_name, tool_input)
     if install_control is not None:
+        install_name = install_control["name"]
+        # A same-session --accept-proposed call for a plugin that is not (yet)
+        # the flow's selected candidate would only ever be refused downstream by
+        # the CLI's own guard (exit 2) -- after the Bash call already ran. Deny
+        # it here instead, before it runs: the model gets a structural stop
+        # instead of a bash error to interpret, and this reuses the exact same
+        # selected-proposal check the CLI performs (_selected_plugin_proposal),
+        # so it can never diverge from what the CLI would have decided anyway.
+        # Fails OPEN when the host did not provide a session id -- a missing/
+        # unresolved id only ever forgoes this early check, never wrongly denies
+        # a call the CLI would have accepted.
+        if (install_control["accept_proposed"] and session_id
+                and _selected_plugin_proposal(install_name, session_id) is None):
+            flow = _load_plugin_flow(session_id)
+            open_candidates = (
+                [c for c in (flow.get("candidates") or []) if isinstance(c, str) and c]
+                if isinstance(flow, dict) and flow.get("state") == "recommended"
+                else []
+            )
+            if len(open_candidates) >= 2:
+                reason = _plugin_disambiguation_note(open_candidates)
+            else:
+                reason = (
+                    f"Plugin install refused: {_sanitize_dynamic_text(install_name)} is "
+                    "not proposed and selected in this exact session. Do not retry "
+                    "--accept-proposed for this name -- ask the user to name the single "
+                    "plugin they want, or check what is actually available before "
+                    "proposing an install."
+                )
+            emit("PreToolUse", "", decision="deny", reason=reason)
+            return 0
         # The user already accepted this exact recommendation in the same
-        # session. For a plugin sourced from this reviewed marketplace, allow
-        # the one fixed command through Claude Code's ordinary Bash prompt so
-        # that acceptance is not followed by a redundant shell approval. Host,
-        # user, and managed deny/ask rules remain authoritative over hook output.
+        # session. For a trusted install target -- the reviewed local marketplace
+        # bundled with the running plugin, or a curated (name, marketplace)
+        # allowlisted from the official Claude Code marketplace -- allow the one
+        # fixed command through Claude Code's ordinary Bash prompt so that
+        # acceptance is not followed by a redundant shell approval. Host, user,
+        # and managed deny/ask rules remain authoritative over hook output.
         if (install_control["accept_proposed"]
                 and _plugin_prompt_source_permits_autoallow(payload)
                 and _plugin_install_acceptance_allowed(
-                    install_control["name"], session_id,
+                    install_name, session_id,
                 )):
             emit(
                 "PreToolUse", "", decision="allow",
                 reason=(
                     "The user explicitly accepted this exact same-session plugin "
-                    "recommendation, and its source is the reviewed Salesforce "
-                    "marketplace bundled with the running plugin."
+                    "recommendation, and it is a trusted install target -- either "
+                    "the reviewed Salesforce marketplace bundled with the running "
+                    "plugin, or a curated plugin allowlisted from the official "
+                    "Claude Code marketplace."
                 ),
             )
             return 0
@@ -5782,9 +5856,16 @@ def cmd_skills_first_advisory() -> int:
             print(json.dumps({"continue": True}))
             return 0
 
+        # `candidates` (below) stays the full high+medium list for the deny/warn
+        # message split -- that's informational. The flow itself narrows to
+        # high-band only when at least one exists, so a bare "yes" answering the
+        # single high match this message tells Claude to relay is never declared
+        # ambiguous merely because lower-confidence alternatives were also
+        # surfaced. Mirrors the same fix in cmd_plugin_match.
+        high_candidates = [candidate for candidate in candidates if candidate.get("band") == "high"]
         _open_plugin_flow(
             session_id,
-            [candidate.get("name") for candidate in candidates],
+            [candidate.get("name") for candidate in (high_candidates or candidates)],
             "bypass-gate",
             task_backed=True,
         )
@@ -7969,6 +8050,20 @@ _PLUGIN_FLOW_MAX_AGE_SECONDS = 86400
 _PLUGIN_FLOW_STATES = frozenset({
     "recommended", "selected", "awaiting-confirmation", "installed", "declined",
 })
+# Feature (b) late bare-affirmative re-arm: a bare "yes" issued once the live flow
+# is gone must correlate to ONE specific just-lost offer, never to any surviving
+# entry in the durable, un-timestamped proposal ledger below (that ledger exists
+# for cross-prompt recommendation dedup, not for standing consent -- see the
+# PR-1696 review). This marker is written ONLY at the moment a still-undecided
+# ("recommended") flow is cleared for a topic change, names exactly that one
+# candidate plus its taskBacked/surface (so a later accept still resumes the
+# right task), and is a strict one-shot: the very next prompt either consumes it
+# (a bare affirmative) or invalidates it (anything else), so it can never answer
+# a "yes" several turns later. The short TTL mirrors the existing nonce-
+# confirmation window and is a backstop, not the primary boundary.
+_PLUGIN_LAST_OFFER_DIR = _PROMPT_RUNTIME_DIR / "plugin-last-offer"
+_PLUGIN_LAST_OFFER_MAX_BYTES = 512
+_PLUGIN_LAST_OFFER_MAX_AGE_SECONDS = 3600
 # --- Test-drive resume marker (test-drive-resume-detection) ------------------
 # A returning user who was mid-drive should be able to say "continue" / "pick it
 # back up" and land back in the drive without knowing the command. The drive
@@ -8571,6 +8666,107 @@ def _clear_plugin_flow(session_id: str) -> bool:
         return False
 
 
+def _plugin_last_offer_path(session_id: str) -> Path:
+    return _PLUGIN_LAST_OFFER_DIR / f"{_runtime_key(session_id)}.json"
+
+
+def _save_plugin_last_offer(
+    session_id: str, name: str, *, task_backed: bool, surface: str,
+) -> bool:
+    """Snapshot the single "recommended" offer a topic change is about to lose.
+
+    See the module-level comment on ``_PLUGIN_LAST_OFFER_DIR`` for why this
+    exists instead of consulting the durable proposal ledger. Deliberately
+    single-candidate only: a still-undecided multi-candidate recommendation is
+    never snapshotted, so a later bare affirmative can never auto-pick among
+    several plugins (invariant 2) -- disambiguation for that case still works
+    the normal way, through an explicit named request.
+    """
+    if (not session_id or not isinstance(name, str) or len(name) > 64
+            or not _SKILL_NAME_PATTERN.fullmatch(name)
+            or not isinstance(task_backed, bool)
+            or surface not in _PLUGIN_PROPOSAL_SURFACES
+            or not _ensure_private_runtime_dir(_PLUGIN_LAST_OFFER_DIR)):
+        return False
+    encoded = json.dumps(
+        {
+            "name": name,
+            "taskBacked": task_backed,
+            "surface": surface,
+            "createdAt": int(time.time()),
+        },
+        separators=(",", ":"),
+    )
+    if len(encoded) > _PLUGIN_LAST_OFFER_MAX_BYTES:
+        return False
+    return _atomic_private_text(_plugin_last_offer_path(session_id), encoded)
+
+
+def _load_plugin_last_offer(session_id: str) -> Optional[dict]:
+    """Load the one-shot last-offer marker, or ``None`` if absent/expired/malformed."""
+    if not session_id:
+        return None
+    text = _private_text(
+        _plugin_last_offer_path(session_id), max_bytes=_PLUGIN_LAST_OFFER_MAX_BYTES,
+    )
+    if text is None:
+        return None
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+    if not isinstance(data, dict):
+        return None
+    name = data.get("name")
+    task_backed = data.get("taskBacked")
+    surface = data.get("surface")
+    created_at = data.get("createdAt")
+    if (not isinstance(name, str) or len(name) > 64
+            or not _SKILL_NAME_PATTERN.fullmatch(name)
+            or not isinstance(task_backed, bool)
+            or surface not in _PLUGIN_PROPOSAL_SURFACES
+            or isinstance(created_at, bool)
+            or not isinstance(created_at, (int, float))):
+        return None
+    age = time.time() - created_at
+    if age < -300 or age > _PLUGIN_LAST_OFFER_MAX_AGE_SECONDS:
+        return None
+    return {"name": name, "taskBacked": task_backed, "surface": surface}
+
+
+def _clear_plugin_last_offer(session_id: str) -> bool:
+    if not session_id:
+        return False
+    try:
+        _plugin_last_offer_path(session_id).unlink()
+        return True
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return False
+
+
+def _retire_plugin_flow(
+    session_id: str, flow: Optional[dict], flow_plugin: Optional[str],
+) -> None:
+    """Clear a topic-changed live flow, snapshotting a one-shot grace offer first.
+
+    Only a still-undecided ("recommended") flow with an unambiguous single
+    candidate is worth preserving this way -- a flow already past that state has
+    either been decided (declined/installed) or is protected by its own
+    nonce-bound grace path (awaiting-confirmation), so nothing is snapshotted for
+    those.
+    """
+    if flow is not None and flow.get("state") == "recommended" and flow_plugin is not None:
+        _save_plugin_last_offer(
+            session_id, flow_plugin,
+            task_backed=bool(flow.get("taskBacked")),
+            surface=flow.get("surface", "user-prompt"),
+        )
+    if flow is not None:
+        _clear_plugin_flow(session_id)
+
+
 def _plugin_flow_plugin(flow: Optional[dict]) -> Optional[str]:
     """Return the selected candidate, or the sole unambiguous candidate."""
     if flow is None:
@@ -8709,6 +8905,46 @@ def _selected_plugin_proposal(name: str, session_id: str) -> Optional[dict]:
             or flow.get("state") != "selected"):
         return None
     return proposal
+
+
+def _open_valid_plugin_proposals(session_id: str) -> list[str]:
+    """Same-session proposals still open to a NAMED (not bare) acceptance.
+
+    The durable-ledger analogue of a live flow's open candidates, consulted only
+    by the PostToolUse AskUserQuestion bridge (Feature a, :func:`cmd_post_ask_question`),
+    which requires the selected option text to literally name the plugin -- an
+    explicit-naming signal as strong as :func:`_explicit_proposed_plugin_install`,
+    so the ledger's lack of recency/correlation data is not a consent risk there.
+    A bare, unnamed "yes"/"install it" (Feature b) does NOT consult this ledger --
+    see :func:`_retire_plugin_flow`/``_PLUGIN_LAST_OFFER_DIR`` instead; the
+    PR-1696 review found using this ledger for that purpose let a stale,
+    unrelated later "yes" authorize an old proposal. A proposal counts as "open"
+    when it is a valid ledger entry, was NOT declined (the durable ``decision ==
+    "declined"`` marker written by :func:`_record_plugin_decline`, invariant 4),
+    and is still installable (``_plugin_install_lookup`` reason ``ok`` -- not
+    already installed, held, self, or unknown). The *named* acceptance path
+    deliberately does NOT consult this filter (see
+    :func:`_named_valid_plugin_proposals`): only an explicit re-naming may
+    un-decline.
+    """
+    if not session_id:
+        return []
+    proposals = _load_plugin_proposals(session_id)
+    if not isinstance(proposals, dict):
+        return []
+    open_names = []
+    for name, proposal in proposals.items():
+        if (not isinstance(name, str) or len(name) > 64
+                or not _SKILL_NAME_PATTERN.fullmatch(name)
+                or not isinstance(proposal, dict)
+                or proposal.get("confidence") not in ("high", "medium")
+                or proposal.get("surface") not in _PLUGIN_PROPOSAL_SURFACES
+                or proposal.get("decision") == "declined"):
+            continue
+        if _plugin_install_lookup(name).reason != "ok":
+            continue
+        open_names.append(name)
+    return open_names
 
 
 def _decline_verb_governs_name(prompt: str, name: str) -> bool:
@@ -8903,25 +9139,40 @@ def _plugin_decline_recorded_note(name: str, recorded: bool) -> str:
 def _plugin_install_route_note(name: str, consent: str = "explicit") -> str:
     """Model instruction for a natural-language, same-session install request.
 
-    ``consent`` distinguishes an explicitly named request ("install
-    experience-react") from an inferred acceptance (a bare "yes" that resolved to
-    the sole open proposal). The directive must not overclaim: an inferred
-    acceptance says so plainly rather than asserting the user "explicitly
-    requested" the plugin (FM6). Everything after the opening sentence -- crucially
-    the exact ``plugin-install <name> --accept-proposed`` command substring -- is
-    byte-identical for both, so the fixed-grammar control command and every
-    downstream guard are unaffected. An unrecognized value is treated as inferred
+    ``consent`` distinguishes how the acceptance arrived, so the directive never
+    overclaims (FM6): ``explicit`` is a named request ("install experience-react");
+    ``inferred`` is a bare "yes" that resolved to the sole open flow candidate;
+    ``inferred-last-offer`` is a bare "yes" that resolved, via the short-lived
+    one-shot last-offer marker, to the single offer an *earlier* turn's topic
+    change had just cleared (Feature b); and
+    ``structured`` is an AskUserQuestion selection that named exactly one open
+    proposal (Feature a). Everything after the opening sentence -- crucially the
+    exact ``plugin-install <name> --accept-proposed`` command substring -- is
+    byte-identical across all values, so the fixed-grammar control command and every
+    downstream guard are unaffected. An unrecognized value is treated as ``inferred``
     (the more conservative wording).
     """
     sf_context = shlex.quote(os.fspath(Path(__file__).resolve().parent / "sf-context"))
-    opening = (
-        f"The user explicitly requested installation of the previously proposed {name} plugin. "
-        if consent == "explicit"
-        else (
-            f"The user accepted installation of the previously proposed {name} plugin "
-            "(a generic confirmation resolved to the sole open proposal, not a named request). "
-        )
+    inferred = (
+        f"The user accepted installation of the previously proposed {name} plugin "
+        "(a generic confirmation resolved to the sole open proposal, not a named request). "
     )
+    openings = {
+        "explicit": (
+            f"The user explicitly requested installation of the previously proposed {name} plugin. "
+        ),
+        "inferred": inferred,
+        "inferred-last-offer": (
+            f"The user accepted installation of the previously proposed {name} plugin "
+            "(a generic confirmation resolved to the sole open proposal from an earlier turn, "
+            "not a named request). "
+        ),
+        "structured": (
+            f"The user accepted installation of the previously proposed {name} plugin "
+            "by selecting it in a structured question that named exactly one open proposal. "
+        ),
+    }
+    opening = openings.get(consent, inferred)
     return (
         opening
         + "Advance only that selected plugin by running exactly "
@@ -10611,6 +10862,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                 return 0
         else:
             if declined_plugin:
+                _clear_plugin_last_offer(session_id)
                 recorded, _ = _record_plugin_decline(declined_plugin, session_id)
                 emit(
                     "UserPromptSubmit",
@@ -10618,12 +10870,50 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                 )
                 return 0
             if install_plugin:
+                _clear_plugin_last_offer(session_id)
                 _select_plugin_flow(session_id, install_plugin, "selected")
                 emit(
                     "UserPromptSubmit",
                     _plugin_install_route_note(install_plugin, consent="explicit"),
                 )
                 return 0
+
+            # Late bare-affirmative re-arm (Feature b): with no live flow, a bare
+            # "yes"/"install it" can still resolve to the ONE offer that a topic
+            # change just cleared -- but ONLY via the short-lived, single-candidate
+            # marker `_retire_plugin_flow` wrote at that exact clear (see
+            # `_PLUGIN_LAST_OFFER_DIR`), never via the durable, un-timestamped
+            # proposal ledger. The PR-1696 review found the ledger unsafe for this:
+            # it has no recency or conversational-correlation data, so any
+            # surviving entry -- even from a long-abandoned proposal -- could
+            # authorize an install for an unrelated later "yes". The marker is a
+            # strict one-shot: this is the only prompt that can ever consume it,
+            # and it is cleared unconditionally below regardless of outcome, so a
+            # second bare "yes" a turn later (or a multi-candidate offer, which is
+            # never snapshotted at all -- invariant 2) finds nothing and falls
+            # through silently. Bare confirmation vocabulary never matches the
+            # terse drive-resume phrases ("continue"/"resume"), so this never
+            # steals a test-drive resume.
+            if flow is None:
+                if _is_plugin_confirmation_reply(prompt):
+                    last_offer = _load_plugin_last_offer(session_id)
+                    _clear_plugin_last_offer(session_id)
+                    if last_offer is not None:
+                        _save_plugin_flow(
+                            session_id, [last_offer["name"]],
+                            selected=last_offer["name"], state="selected",
+                            surface=last_offer["surface"],
+                            task_backed=last_offer["taskBacked"],
+                        )
+                        emit(
+                            "UserPromptSubmit",
+                            _plugin_install_route_note(
+                                last_offer["name"], consent="inferred-last-offer"
+                            ),
+                        )
+                        return 0
+                else:
+                    _clear_plugin_last_offer(session_id)
 
         # A recommendation opens a durable decision workflow before the user
         # answers. Terminal/status/control turns remain inside it and cannot
@@ -10735,7 +11025,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                     emit("UserPromptSubmit", note, system_message="\n" + surface)
                     return 0
             if flow is not None:
-                _clear_plugin_flow(session_id)
+                _retire_plugin_flow(session_id, flow, flow_plugin)
                 _clear_plugin_install_pending(session_id)
 
             # A legacy/corrupt/missing workflow must still keep generic control
@@ -10942,9 +11232,11 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         # A substantive out-of-project turn releases an undecided workflow just
         # as it does inside a project. The proposal ledger remains available for
         # a future explicit named choice, but a stale nonce can never survive the
-        # topic change.
+        # topic change. A still-undecided single-candidate recommendation gets a
+        # one-shot grace marker (see `_retire_plugin_flow`) so an immediately
+        # following bare "yes" can still land.
         if flow is not None:
-            _clear_plugin_flow(session_id)
+            _retire_plugin_flow(session_id, flow, flow_plugin)
         if pending_install is not None:
             _clear_plugin_install_pending(session_id)
 
@@ -11173,6 +11465,102 @@ def cmd_resolution_trace() -> int:
     return 0
 
 
+def _ask_question_selected_texts(payload: object) -> list[str]:
+    """Best-effort extraction of the option text a user SELECTED in an
+    AskUserQuestion answer, for the PostToolUse bridge (Feature a).
+
+    The AskUserQuestion PostToolUse payload shape is not a stable contract, so this
+    is deliberately fail-open and permissive: it walks ``tool_response`` (the
+    user's actual answer) -- never ``tool_input`` (the model-authored questions and
+    options), so the model's own text can never be mistaken for the human's choice
+    -- and collects the human-readable strings under the keys a selection plausibly
+    uses. Anything unrecognized yields ``[]`` (a no-op bridge), never an exception
+    and never a guess. Precision is enforced downstream, not here: the collected
+    strings are only ever fed to the name-boundary matcher, so a stray string can
+    advance nothing unless it literally names an open proposal.
+
+    The real result shape keys the user's answers under ``answers``: a mapping
+    from each *question's own text* (arbitrary, model-authored) to the selected
+    answer string (multi-select answers arrive comma-joined into one string, not
+    as a list). Because that inner mapping's keys are arbitrary question text --
+    never one of the fixed selection-field names below -- a plain "descend only
+    when the key matches" walk can never reach it, so ``answers`` gets its own
+    branch that descends into every value regardless of key.
+    """
+    if not isinstance(payload, dict):
+        return []
+    response = payload.get("tool_response")
+    if response is None:
+        response = payload.get("toolResponse")
+    keys = ("label", "answer", "value", "text", "selected", "option", "choice",
+            "response", "content", "freeformtext")
+    texts: list[str] = []
+
+    def walk(node: object, depth: int) -> None:
+        if depth > 6 or len(texts) > 64:
+            return
+        if isinstance(node, str):
+            stripped = node.strip()
+            if stripped and len(stripped) <= 256:
+                texts.append(stripped)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item, depth + 1)
+        elif isinstance(node, dict):
+            for key, val in node.items():
+                if not isinstance(key, str):
+                    continue
+                if key.lower() == "answers" and isinstance(val, dict):
+                    for answer in val.values():
+                        walk(answer, depth + 1)
+                elif key.lower() in keys:
+                    walk(val, depth + 1)
+
+    walk(response, 0)
+    return texts
+
+
+def cmd_post_ask_question() -> int:
+    """PostToolUse AskUserQuestion bridge (Feature a): honor a structured selection
+    that names exactly one open same-session proposal by advancing the install flow
+    to ``selected`` -- the same state a typed bare "yes" produces.
+
+    Consent integrity: this NEVER installs, mints a nonce, or applies trust. It only
+    advances the flow; the CLI + PreToolUse gate still perform the
+    trusted->install-now vs. external->nonce+dry-run split, so an external source is
+    unaffected. The selected option must NAME the plugin (resolved with the same
+    boundary matcher a typed prompt uses), and it must resolve to exactly one open
+    (valid, not-declined, still-installable) proposal (invariant 2) -- so a generic
+    "Yes"/"No" option resolves nothing and a structured answer can never auto-pick
+    or auto-install. Fail open: any error or unrecognized payload -> silent
+    {"continue": true}.
+    """
+    try:
+        payload = _read_hook_payload()
+        session_id = payload.get("session_id") or payload.get("sessionId") or ""
+        if not session_id:
+            print(json.dumps({"continue": True}))
+            return 0
+        selected = "\n".join(_ask_question_selected_texts(payload))
+        open_names = set(_open_valid_plugin_proposals(session_id))
+        named = [
+            name for name in _named_valid_plugin_proposals(selected, session_id)
+            if name in open_names
+        ]
+        if len(named) == 1:
+            _select_plugin_flow(session_id, named[0], "selected")
+            emit(
+                "PostToolUse",
+                _plugin_install_route_note(named[0], consent="structured"),
+            )
+            return 0
+        print(json.dumps({"continue": True}))
+        return 0
+    except Exception:
+        print(json.dumps({"continue": True}))
+        return 0
+
+
 def cmd_features(args: list[str]) -> int:
     """Load and run org-feature detection only for the explicit on-demand mode."""
     try:
@@ -11289,9 +11677,21 @@ def cmd_plugin_match(args: list[str]) -> int:
     # candidate -- an already-installed plugin has nothing to install, select, or
     # confirm and never surfaces here.
     if matches:
+        # `matches` is every catalog result worth telling the user about
+        # (high+medium for this surface) -- informational. The live flow is the
+        # narrower set actually up for a bare "yes": when at least one high-band
+        # match exists, only high-band candidates open the flow, so an ambiguous
+        # medium alternative never makes a single clearly-proposed high match
+        # unselectable by a generic acceptance. A named medium match remains
+        # selectable regardless -- `_select_plugin_flow` re-derives it from the
+        # proposal ledger this call already wrote, even when it is outside the
+        # flow's candidate set. No high match at all falls back to every match,
+        # preserving today's medium-only behavior.
+        high_matches = [candidate for candidate in matches if candidate.get("band") == "high"]
+        flow_matches = high_matches or matches
         _open_plugin_flow(
             session_id,
-            [candidate.get("name") for candidate in matches],
+            [candidate.get("name") for candidate in flow_matches],
             surface,
             task_backed=(
                 surface != "session-start"
@@ -11414,6 +11814,17 @@ _SALESFORCE_MARKETPLACE_NAME = "salesforce"
 _SALESFORCE_MARKETPLACE_REPO = "forcedotcom/sf-skills"
 _OFFICIAL_MARKETPLACE_NAME = "claude-plugins-official"
 _OFFICIAL_MARKETPLACE_REPO = "anthropics/claude-plugins-official"
+
+# Exact (plugin-name, marketplace) identities trusted for looser install
+# confirmation -- a structured AskUserQuestion answer or a late bare affirmative
+# -- in addition to any local `./plugins/builder/<name>` salesforce-marketplace
+# entry. This is a small, reviewed allowlist, NOT inference from source shape: a
+# `<name>@<marketplace>` install resolves the entry BY NAME from that marketplace
+# (the catalog url of an external entry is provenance/display only and is never
+# fetched), so trusting the exact identity trusts exactly the install that runs.
+# Any external entry whose (name, marketplace) is absent stays on the nonce +
+# TRUST WARNING confirmation path. Adding one is a deliberate code change.
+_TRUSTED_EXTERNAL_INSTALLS = frozenset({("agentforce-adlc", _OFFICIAL_MARKETPLACE_NAME)})
 
 
 def _plugin_install_subprocess_env(env) -> dict:
@@ -11600,6 +12011,26 @@ def _plugin_install_is_same_marketplace(name: str, entry: dict) -> bool:
     )
 
 
+def _plugin_install_is_trusted_source(name: str, entry: dict) -> bool:
+    """Whether `name`/`entry` may be accepted with looser confirmation.
+
+    Two trust grounds, both explicit -- trust is never inferred from source
+    shape (see the W-24078663 note on _plugin_install_marketplace_name):
+
+    * the exact local salesforce-marketplace source
+      (_plugin_install_is_same_marketplace), or
+    * an exact (name, marketplace) match in the curated
+      _TRUSTED_EXTERNAL_INSTALLS allowlist -- keyed on the *routed* marketplace,
+      i.e. the `<name>@<marketplace>` identity the install actually resolves, so
+      a non-allowlisted external entry (any other name) stays on the nonce path.
+    """
+    if _plugin_install_is_same_marketplace(name, entry):
+        return True
+    if not isinstance(name, str) or not isinstance(entry, dict):
+        return False
+    return (name, _plugin_install_marketplace_name(name, entry)) in _TRUSTED_EXTERNAL_INSTALLS
+
+
 def _plugin_install_marketplace_name(name: str, entry: dict) -> str:
     """The marketplace to install `name` from, chosen by its catalog source shape.
 
@@ -11638,7 +12069,7 @@ def _plugin_install_acceptance_allowed(name: str, session_id: str) -> bool:
     return (
         lookup.reason == "ok"
         and lookup.entry is not None
-        and _plugin_install_is_same_marketplace(name, lookup.entry)
+        and _plugin_install_is_trusted_source(name, lookup.entry)
     )
 
 
@@ -11671,6 +12102,14 @@ def _render_plugin_install_dry_run(name: str, entry: dict, nonce: str) -> str:
         # marketplace -- so state the real install target the user is confirming.
         f"Installs from: {name}@{marketplace}",
     ]
+    # Shape-based, not trust-based: this preview/confirm path shows the external
+    # source warning for ANY non-local source, including a curated-allowlist
+    # entry (e.g. agentforce-adlc). Allowlist trust governs only whether an
+    # *accepted proposal* installs immediately (the fast path, which never
+    # reaches this render) -- it does not certify the external code is safe, so
+    # a bare self-directed preview still honestly warns that the install runs
+    # code/hooks this project does not control. Keeping the single trust
+    # decision at the install fork (not duplicated here) preserves invariant 1.
     if not _plugin_install_is_same_marketplace(name, entry):
         lines.append(
             "TRUST WARNING: this is not the exact same-name plugin path in the "
@@ -11827,13 +12266,20 @@ def _record_plugin_decline(name: str, session_id: str) -> tuple[bool, str]:
         return False, f"{name!r}'s recorded proposal is malformed"
     confidence = previous["confidence"]
     surface = previous["surface"]
-    # The marker schema has no separate "declined" flag, and _plugin_catalog_match
-    # unconditionally overwrites this entry the next time the plugin scores against
-    # a prompt -- so persisting one here would just be silently dropped later. The
-    # entry's mere PRESENCE (already required as this function's own precondition)
-    # is what suppresses a future deny (first_occurrence becomes False); re-saving
-    # it unchanged is what "mark declined" means against this existing marker shape.
-    proposals[name] = {"confidence": confidence, "surface": surface}
+    # Persist a durable ``decision == "declined"`` marker on the ledger entry. The
+    # live flow also advances to ``declined`` below, but that flow expires with the
+    # 24h TTL while the proposal ledger has none -- so without this marker a bare
+    # "yes" issued after expiry would re-arm a proposal the user intentionally
+    # declined (invariant 4). _open_valid_plugin_proposals honors it; the *named*
+    # re-accept path deliberately does NOT (only an explicit re-naming may
+    # un-decline), and _plugin_catalog_match unconditionally overwrites this entry
+    # the next time the plugin scores against a prompt -- dropping the marker, which
+    # IS the intended re-open. The key is additive: every existing reader ignores
+    # it, and the entry's mere PRESENCE still suppresses a future deny
+    # (first_occurrence becomes False).
+    proposals[name] = {
+        "confidence": confidence, "surface": surface, "decision": "declined",
+    }
     _save_plugin_proposals(session_id, proposals)
     if not _select_plugin_flow(session_id, name, "declined"):
         return False, "the private session decision marker could not be updated"
@@ -11972,7 +12418,7 @@ def cmd_plugin_install(args: list[str]) -> int:
                 file=sys.stderr,
             )
             return 2
-        if _plugin_install_is_same_marketplace(name, entry):
+        if _plugin_install_is_trusted_source(name, entry):
             return _perform_plugin_install(name, entry, session_id)
         _save_plugin_install_pending(session_id, name, nonce)
         _select_plugin_flow(session_id, name, "awaiting-confirmation")
@@ -12085,6 +12531,8 @@ def main() -> int:
         return cmd_scaffold_gate()
     if cmd == "resolution-trace":
         return cmd_resolution_trace()
+    if cmd == "post-ask-question":
+        return cmd_post_ask_question()
     if cmd == "record-skill-dispatch":
         return cmd_record_skill_dispatch()
     if cmd == "prompt-dispatch":

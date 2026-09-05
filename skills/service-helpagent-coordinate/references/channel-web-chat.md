@@ -22,7 +22,7 @@ Present three options:
 2. **Both anonymous and authenticated visitors** *(default — recommended for any customer-facing portal)* → `authMode = UnAuth`. Despite the name, `UnAuth` *allows* both: guests chat anonymously, and signed-in users can upgrade the session by passing an `identityToken` at runtime.
 3. **Authenticated visitors only** (no guests) → `authMode = Auth`. **Warn the user verbatim:** *"This requires your host app to mint a verified-user JWT for every visitor. The Setup → ESD → 'Test Enhanced Web Chat' button will not work because it loads the widget as a guest, and anonymous visitors on your Experience site will fail to load the chat. Pick this only if you have JWT issuance in place."*
 
-Default to option 2 if the user is unsure. Never silently pick `Auth`. Never emit a legacy `esw.min.js` / Live Agent V1 bootstrap snippet — the V2 widget mounts via the `experience_messaging:embeddedMessaging` LWR component (Step C.3, Checkpoint 3.5 Check 3b).
+Default to option 2 if the user is unsure. Never silently pick `Auth`. Never emit a legacy `esw.min.js` / Live Agent V1 bootstrap snippet — the V2 widget mounts via the `experience_messaging:embeddedMessaging` LWR component (Step C.3, Checkpoint 4 Phase B step 2).
 
 ## Step C — Provision (in order)
 
@@ -78,17 +78,15 @@ Capture the resolved `QUEUE_DEVELOPER_NAME` (either from an existing queue or th
 
 ---
 
-### C.1 — Create the Outbound (Escalation) RoutingFlow
+### C.1 — Outbound (Escalation) wiring is deferred to Phase 3, not created here
 
-> **This step is owned by `service-agentforce-channel-configure` Phase 3.** The full template, naming convention, check-before-create logic, and deploy/verify steps are in that skill's `routing-flow.md` Part 2. Follow that reference — do not duplicate the XML here.
+> **Do not create the RoutingFlow or touch the agent's connection block in this step.** Outbound escalation — asking the user, resolving the escalation queue, creating/reusing the RoutingFlow, adding the `connection customer_web_client:` block, and republishing the agent — is a single atomic unit owned entirely by `service-agentforce-channel-configure` Phase 3. Splitting flow-creation here from connection-wiring at Checkpoint 4 duplicates Phase 3's own sequencing and causes an extra, avoidable agent republish. Skip straight to Step C.2 (channel deploy) and inbound wiring; once inbound routing is confirmed, invoke Phase 3 immediately (see Checkpoint 3 Step 3 in `assets/help-agent-spec.md`) rather than deferring it to Checkpoint 4.
 
-For Web Chat, the channel type label is **Enhanced Chat**, so:
+For reference, when Phase 3 runs for Web Chat it will use:
 - Flow label: `{AgentLabel} Outbound Enhanced Chat Flow`
 - DeveloperName: `{AgentDevName}_Outbound_Enhanced_Chat_Flow`
 - `SERVICE_CHANNEL_DEV_NAME`: `sfdc_livemessage`, `SERVICE_CHANNEL_LABEL`: `Messaging`
-- Queue: `QUEUE_DEVELOPER_NAME` from Step C.0
-
-Follow the template and steps in `service-agentforce-channel-configure`'s `routing-flow.md` Part 2. Capture `{FLOW_DEVELOPER_NAME}` for use in the agent's `connection customer_web_client:` block at Checkpoint 4 (`outbound_route_name: "flow://{FLOW_DEVELOPER_NAME}"`). Note: Web Chat uses `connection customer_web_client:` — not `connection messaging:` — see `service-agentforce-channel-configure`'s `agent-wiring.md`.
+- Connection key: `connection customer_web_client:` — not `connection messaging:` (see `service-agentforce-channel-configure`'s `agent-wiring.md`)
 
 ---
 
@@ -96,7 +94,7 @@ Follow the template and steps in `service-agentforce-channel-configure`'s `routi
 
 Deploy the messaging channel + omni-channel routing (`service-digital-engagement-channel-configure`, channel deploys INACTIVE). **Set `embeddedConfig.authMode` from the choice in Step B.** For `UnAuth`, also set `anonymousUserJwtExpirationTime` (e.g. `360`). For `Auth`, set `verifiedUserJwtExpirationTime` (e.g. `60`). Set `sessionHandlerQueue` to the `QUEUE_DEVELOPER_NAME` resolved in Step C.0.
 
-   > **v67 ASA routing note.** `service-digital-engagement-channel-configure` handles the v67 limitation automatically for ASA routing: it deploys the XML without `sessionHandlerAsa` (rejected by the Metadata API), then binds `SessionHandlerId` + `FallbackQueueId` via Data API PATCH (its step 15a). Verify both fields are non-null after the skill completes. Also ensure the bot is Active before invoking the skill — the PATCH is rejected with "Only active Agentforce Service Agents are supported" otherwise.
+   > **Prerequisite for ASA routing.** Ensure the bot is Active before invoking `service-digital-engagement-channel-configure` — it rejects ASA binding with "Only active Agentforce Service Agents are supported" otherwise. See that skill's SKILL.md for the deploy mechanics.
 
 ### C.3 — Activate MessagingChannel
 
@@ -129,7 +127,7 @@ sf data query --target-org $ORG \
   -q "SELECT Name, UrlPathPrefix FROM Site WHERE Name LIKE 'ESW_HelpChat%' AND SiteType='ChatterNetworkPicasso'" --json
 ```
 
-Pass `siteEndpoint` (`https://<myDomainStem>.my.site.com/<UrlPathPrefix>`) to Checkpoint 3.5 Check 3(b).
+Pass `siteEndpoint` (`https://<myDomainStem>.my.site.com/<UrlPathPrefix>`) to Checkpoint 4 Phase B step 2.
 ### C.5 — Resolve deployment target (Experience Cloud site or own website)
 
 Ask the user where they want to deploy the chat widget via `AskUserQuestion`:
@@ -170,7 +168,7 @@ for r in real:
 
 **After the user selects:**
 
-- **Site selected (either type)** → delegate to `service-digital-engagement-messaging-site-integrate`. The skill reads `SiteType` from the selected site's record and patches the correct layout automatically (LWR: `sfdc_cms__themeLayout/*/content.json` footer regions; Aura: `homeGuestLayout.json` and `homeAuthenticated.json`). After the skill completes, confirm: *"The chat widget has been added to [site name] and will appear as a floating overlay on every page."* Publish the site and verify the smoke-test URL returns 200.
+- **Site selected (either type)** → delegate to `service-digital-engagement-messaging-site-integrate`. The skill reads `SiteType` from the selected site's record and patches the correct layout automatically (LWR: `sfdc_cms__themeLayout/*/content.json` footer regions; Aura: `homeGuestLayout.json` and `homeAuthenticated.json`). After the skill completes, confirm: *"The chat widget has been added to [site name] and will appear as a floating overlay on every page."* Publish the site and verify the smoke-test URL returns 200. This is where widget placement actually happens — Checkpoint 4 Phase B only verifies it landed; if that verification fails, Phase B's repair procedure re-runs the same injection this step performed.
 - **Own website selected** → proceed to Step D.8 snippet instructions.
 
 Do not filter by any hardcoded site name or `UrlPathPrefix` value — the correct site depends on the customer's org and is not knowable up front.
@@ -195,6 +193,6 @@ Print these after the ESD is published and the channel is Active.
 3. Agent escalates to a human when asked → RoutingFlow and queue are wired correctly (requires an agent available in Omni-Channel)
 4. Widget closes and reopens without losing session → widget state is healthy
 
-## Handoff to Checkpoint 3.5 and Checkpoint 4
+## Handoff to Checkpoint 4
 
-After Web Chat provisioning, the flow returns to the spec: Checkpoint 3.5 (silent pre-flight — including Check 3, which verifies the widget is actually placed on the site guest layout) then Checkpoint 4 (embed + go-live, including explicit channel activation and Embedded Service Deployment publish). Those gates live in the spec (`assets/help-agent-spec.md` §4.4–§4.5); do not re-implement them here.
+After Web Chat provisioning, the flow returns to the spec: Checkpoint 4, Phase A (silent pre-flight — Data Cloud access, ADL grounding, channel-active assertion) then Phase B (embed + go-live, including widget placement and Embedded Service Deployment publish). Those gates live in the spec (`assets/help-agent-spec.md` §4.4); do not re-implement them here.

@@ -15,6 +15,19 @@ Authenticated B2E verification has five steps:
 
 B2C verification uses the site-configured languages and language-specific URLs instead of the authenticated user's Language setting. Follow the B2C section after deployment.
 
+### What this skill produces vs. what's left for you / other skills
+
+When asked "what's left to deploy," answer with these — do **not** invent new metadata types:
+
+- **This skill already wrote** the deployable metadata: `CustomLabels.labels-meta.xml` (English base)
+  and `translations/<locale>.translation-meta.xml` (the `Translations` type — **not**
+  `CustomObjectTranslation`; see [label-xml.md](label-xml.md)), plus the i18n wiring and manifest.
+- **Manual/admin prerequisite (not a deployable file this skill emits):** activate each non-English
+  language in Translation Workbench (Step 2) — otherwise the deploy is rejected. There is no
+  "language settings" file for this skill to generate.
+- **Delegated to other skills:** Experience Cloud **site languages** / `sfdc_cms__languageSettings`
+  → `experience-ui-bundle-site-generate`; the **deploy** itself → `experience-ui-bundle-deploy`.
+
 ---
 
 ## Step 1: Build the app
@@ -132,10 +145,10 @@ This step is for **B2E only**. For B2C, use the site language route below.
 3. If the configured language or deployed metadata requires publishing, treat publication as a separate go-live mutation. Resolve the site's `Network.Name` from the target site (prefer matching its `UrlPathPrefix`), show that community name and target org, and wait for explicit user confirmation immediately before running `sf community publish --name "<network-name>" --target-org <org-alias>`. A metadata deployment is not publication approval. Track the returned background operation to completion before guest verification; if propagation is still in progress, report that instead of treating stale output as a localization failure.
 4. Open the published site as a signed-out guest through its language-specific URL. Confirm the boot environment exposes the same language in `SFDC_ENV.language`.
 5. Confirm translated labels render and the labels GraphQL request succeeds for the guest.
-6. Use the site's language switcher. It must navigate to the target language URL and cause a **full page reload**; changing i18next in place leaves the boot-time SDK context and cached resources stale.
+6. Use the site's language switcher. It must navigate to the target language URL and cause a **full page reload**; changing the i18n library's language in place leaves the boot-time SDK context and cached resources stale.
 7. Confirm the new route and `SFDC_ENV.language` agree, then verify the translated labels again.
 
-For a localized local preview, supply an explicit configured language in the preview URL/route. Do not use the authenticated org user's Language as evidence for guest behavior. If a recent translation or route change appears stale, delete `i18next_res_*` localStorage entries and reload each language URL.
+For a localized local preview, supply an explicit configured language in the preview URL/route. Do not use the authenticated org user's Language as evidence for guest behavior. If a recent translation or route change appears stale, clear your i18n library's cached labels and reload each language URL (the exact cache keys are in your framework reference's `gotchas.md`).
 
 ---
 
@@ -162,7 +175,7 @@ When you test localization, **change the Language**, not the Locale. Changing Lo
 
 **Check:** Go to Setup → Translation Workbench → Translate → pick the language and the label. Is the translation there? If not, author it and re-deploy.
 
-**Fallback behavior:** If a registered key is untranslated for the active language, the Platform SDK's GraphQL request resolves it according to `labelFallback`: B2E uses `BASE_VALUE`; B2C explicitly uses `USER_DEFAULT`. The i18next `fallbackLng` applies only if no resource is loaded for the detected language; it does not define Salesforce label-resolution semantics.
+**Fallback behavior:** If a registered key is untranslated for the active language, the Platform SDK's GraphQL request resolves it according to `labelFallback`: B2E uses `BASE_VALUE`; B2C explicitly uses `USER_DEFAULT`. Your i18n library's own language fallback (i18next's `fallbackLng`, ngx-translate's `fallbackLang` — `defaultLanguage` in ngx-translate majors before v16) applies only if no resource is loaded for the detected language; it does not define Salesforce label-resolution semantics.
 
 ---
 
@@ -170,7 +183,7 @@ When you test localization, **change the Language**, not the Locale. Changing Lo
 
 You see the literal string `Welcome_Text` on screen instead of "Welcome."
 
-**Cause:** The key isn't in your `label-manifest.ts`. The app only fetches labels listed in the manifest, so an unregistered key is **never requested**, and i18next, finding nothing, renders the key string. **No console warning, no error**; it fails silently.
+**Cause:** The key isn't in your `label-manifest.ts`. The app only fetches labels listed in the manifest, so an unregistered key is **never requested**, and the i18n library, finding nothing, renders the key string. **No console warning, no error**; it fails silently.
 
 **Fix:** Add the `"c:Key"` entry to `label-manifest.ts` (Step 3 of the workflow). This is the most common localization bug; if a label looks wrong, check the manifest first.
 
@@ -182,17 +195,13 @@ See [gotchas.md](gotchas.md) for the full explanation.
 
 You edited a label in the Translation Workbench (or redeployed a `translation-meta.xml`), confirmed the new value is in the org, but the app keeps rendering the **previous** value on reload.
 
-**Cause:** The label cache. Your `src/i18n/index.ts` chains two backends, `[LocalStorageBackend, SalesforceBackend]`, so on load i18next reads labels from **localStorage first** and only falls through to GraphQL on a cache miss. Labels are cached per language+namespace under keys like `i18next_res_de-c` (DevTools → Application → Local Storage), with a 24-hour `expirationTime`. Until that entry expires, your app serves the cached copy and never refetches.
+**Cause:** The label cache. To avoid a GraphQL roundtrip on every boot, the i18n setup caches fetched labels client-side (typically in `localStorage`) per language+namespace, with an expiration window (commonly 24 hours). Until that entry expires, your app serves the cached copy and never refetches — so a fresh org value doesn't appear.
 
-**Fix:** Clear the cached labels, then reload:
-- **DevTools → Application → Local Storage** → delete the `i18next_res_*` keys
-- Or **Clear site data** to wipe everything
+**Fix:** Clear the cached labels, then reload (**DevTools → Application → Local Storage** → delete the cached label entries, or **Clear site data** to wipe everything). The next load misses the cache, refetches over GraphQL, and shows the current value. The **exact cache keys and where they live are framework-specific** — see your framework reference's `gotchas.md` (e.g. React/i18next uses `i18next_res_*`).
 
-The next load misses the cache, refetches over GraphQL, and shows the current value.
+**This is expected behavior, not a bug.** The cache is what makes labels fast after first load. In production, a translation change takes up to the expiration window to roll out; during development, clear the cache to see edits immediately.
 
-**This is expected behavior, not a bug.** The cache is what makes labels fast after first load. In production, a translation change takes up to `expirationTime` (24 hours) to roll out; during development, clear the cache to see edits immediately.
-
-See [gotchas.md](gotchas.md) for the full explanation.
+See your framework reference's `gotchas.md` for the full explanation.
 
 ---
 
@@ -200,7 +209,7 @@ See [gotchas.md](gotchas.md) for the full explanation.
 
 This is expected, not a bug, **as long as you only authored the base (`en_US`) translation.**
 
-For B2E, the shipped `SalesforceBackend` default is `BASE_VALUE`. The GraphQL server returns the label's base value for a regional Language with no explicit translation: `resolvedLocale` comes back as the base (`en_US`) with `wasFallback: true`. The server does **not** map `en_GB → en_US` region-aware; it honors the base-value fallback.
+For B2E, the label fetch default is `BASE_VALUE`. The GraphQL server returns the label's base value for a regional Language with no explicit translation: `resolvedLocale` comes back as the base (`en_US`) with `wasFallback: true`. The server does **not** map `en_GB → en_US` region-aware; it honors the base-value fallback.
 
 **Fix (only if you want region-specific text):** Author a translation for that exact regional Language (`en_GB.translation-meta.xml`). Otherwise the base value is the intended, correct result.
 
@@ -218,7 +227,7 @@ Use this to confirm everything works:
 - [ ] Opened at `lightning.force.com/lwr/application/ai/<namespace>-<bundleName>` (redirected to `.my.salesforce.app` is fine)
 - [ ] Changed user's **Language** (not Locale) to the translated language
 - [ ] Reloaded, labels render in the new language
-- [ ] If labels are stale, cleared `i18next_res_*` from localStorage
+- [ ] If labels are stale, cleared the i18n library's cached labels from localStorage (see your framework `gotchas.md`)
 - [ ] B2C: site languages are configured/published and the language URL matches `SFDC_ENV.language`
 - [ ] B2C: any site publication received separate explicit confirmation for the named site and org
 - [ ] B2C: signed-out guest labels GraphQL succeeds (no HTTP 403)
@@ -241,7 +250,8 @@ Use this to confirm everything works:
 
 ## Related
 
-- [i18n-setup.md](i18n-setup.md): the init file + manifest
 - [label-xml.md](label-xml.md): Custom Labels + translations metadata
-- [interpolation.md](interpolation.md): `{0}/{1}` placeholders
 - [gotchas.md](gotchas.md): silent-fail traps (unregistered keys, stale cache, API-version mismatch)
+- `platform-sdk-i18n.md` (this folder): the shared runtime engine (Labels query, fallback)
+- your framework reference's `i18n-setup.md`: the init file + manifest
+- your framework reference's `interpolation.md`: `{0}/{1}` placeholders

@@ -47,10 +47,10 @@
         <keywordType>Help</keywordType>
         <language>en_US</language>
     </messagingKeywords>
-    <!-- sessionHandlerAsa is NOT in the XML — rejected by Metadata API at v67.
-         After deploy, run step 15a in SKILL.md to bind via Data API PATCH:
-           SessionHandlerId = <BotDefinition.Id for Support_Service_Agent>
-           FallbackQueueId  = <Group.Id for Support_Escalation_Queue>     -->
+    <!-- sessionHandlerAsa is REQUIRED at v67 — deploy fails with "Missing required Agentforce
+         Service Agent" if omitted. The deploy binds SessionHandlerId automatically; verify with
+         step 15a in SKILL.md. -->
+    <sessionHandlerAsa>Support_Service_Agent</sessionHandlerAsa>
     <sessionHandlerQueue>Support_Escalation_Queue</sessionHandlerQueue>
     <sessionHandlerType>AgentforceServiceAgent</sessionHandlerType>
 </MessagingChannel>

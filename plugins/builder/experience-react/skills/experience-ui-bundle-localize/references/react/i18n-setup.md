@@ -4,6 +4,24 @@ You write two files to set up i18n in a React UI Bundle. The Platform SDK provid
 
 ---
 
+## FIRST: is this a B2E or a B2C bundle?
+
+**Decide before you copy the example below.** The example in File 1 is **B2E**. A B2C
+(guest / public site) bundle is **not** a copy of it — you MUST change two things, or the
+site renders the wrong language and text direction for guest users:
+
+| | B2E (authenticated) | B2C (guest site) |
+|---|---|---|
+| Fallback | omit `labelFallback` (SDK default `BASE_VALUE`) | **`labelFallback: "USER_DEFAULT"`** |
+| Init language | omit `lng` (detector resolves it) | **`lng: resolvedLang`** in `i18next.init` |
+| Document dir/lang | `document.documentElement.dir = ctx.dir` | **`i18next.dir(resolvedLang)`**, not `ctx.dir` |
+
+If the prompt mentions a public site, guest users, a community/Experience site, or a
+language switcher on a public page, it is **B2C** — jump to the [B2C section](#b2c-changes)
+and apply all three overrides. Do **not** ship the B2E `ctx.dir` + no-fallback wiring to a B2C site.
+
+---
+
 ## File 1: `src/i18n/index.ts` (the init wiring)
 
 This is the only "glue" you write. It connects the SDK's i18n pieces to i18next.
@@ -25,7 +43,8 @@ export async function initI18n() {
   const dataSDK = await createDataSDK();
   const ctx = await fetchI18nContext(dataSDK);
 
-  // B2E: the session language is the display language.
+  // B2E ONLY: the session language is the display language.
+  // B2C MUST NOT use ctx.dir here — see the B2C section below.
   document.documentElement.dir = ctx.dir;
   document.documentElement.lang = ctx.lang;
 
@@ -40,7 +59,7 @@ export async function initI18n() {
         backends: [LocalStorageBackend, SalesforceBackend],
         backendOptions: [
           { expirationTime: 86400000 }, // cache labels in localStorage for a day
-          { dataSDK, labelManifest }, // B2E: shipped BASE_VALUE fallback
+          { dataSDK, labelManifest }, // B2E ONLY: shipped BASE_VALUE fallback. B2C MUST add labelFallback: "USER_DEFAULT" — see below.
         ],
       },
       interpolation: {
@@ -59,7 +78,13 @@ export async function initI18n() {
 
 The example above is the **B2E** configuration. Do not set `labelFallback` for B2E: the shipped `SalesforceBackend` default is `BASE_VALUE`.
 
-For a **B2C** bundle, change only the Salesforce backend options entry:
+<a id="b2c-changes"></a>
+### B2C changes (REQUIRED for guest sites)
+
+For a **B2C** bundle you MUST make **all three** changes below. Omitting any one is the most
+common defect: it renders the guest's fallback, display language, or text direction wrong.
+
+**Change 1 — fallback.** Change the Salesforce backend options entry:
 
 ```typescript
 backendOptions: [
@@ -74,7 +99,7 @@ backendOptions: [
 
 `USER_DEFAULT` is required for B2C so fallback follows the guest/site language context. Do not copy this override into B2E wiring.
 
-For B2C, explicitly pass the route-selected display language to i18next and use it for the document language and direction, rather than relying on the detector or `ctx.dir`. The GraphQL i18n context direction reflects the guest session profile and can stay `ltr` after the site switches to an RTL language. Reuse the resolved language from the site's language-switcher integration:
+**Change 2 — document direction/language.** Set the document language and direction from the route-selected display language, **not `ctx.dir`**. The GraphQL i18n context direction reflects the guest session profile and can stay `ltr` after the site switches to an RTL language. Replace the B2E `document.documentElement.dir = ctx.dir` / `.lang = ctx.lang` lines with the resolved language from the site's language-switcher integration:
 
 ```typescript
 const resolvedLang =
@@ -83,7 +108,19 @@ document.documentElement.dir = i18next.dir(resolvedLang);
 document.documentElement.lang = resolvedLang.replace(/_/g, "-");
 ```
 
-Then add `lng: resolvedLang` to the B2C `i18next.init({ ... })` options. The B2E example above remains unchanged.
+**Change 3 — init language.** Add `lng: resolvedLang` to the `i18next.init({ ... })` options so i18next initializes in the route-selected language:
+
+```typescript
+await i18next
+  // ...ChainedBackend / detector / initReactI18next as above...
+  .init({
+    lng: resolvedLang, // B2C: initialize in the route-selected language
+    fallbackLng: "en",
+    // ...defaultNS, backend, interpolation as above...
+  });
+```
+
+The SDK detector does **not** read `SFDC_ENV.language`. Without an explicit `lng`, labels can stay in the guest-session language after the site route selects another locale. Reuse the same `resolvedLang` computed in Change 2. Do not set `lng` for B2E — the detector resolves the session language there.
 
 Before using this configuration, have an org admin confirm that `GraphQLApiOrgPrefForGuestUsers` is already enabled. This workflow must never enable it. Without the preference, unauthenticated GraphQL label requests return HTTP 403; see dependency W-23854208.
 
@@ -122,7 +159,7 @@ The manifest is how i18next knows what to fetch. An **unregistered key fails sil
 
 ## B2C language context
 
-A B2C site's configured languages and language-specific URLs are the source of truth. At boot, the site route supplies `SFDC_ENV.language`; pass that value explicitly as i18next's `lng`, with `ctx.lang` as fallback. The SDK detector does not read `SFDC_ENV.language` itself. A language switcher must navigate to the target language URL and perform a full page reload. An in-place i18next language change is insufficient because the SDK context and localStorage-backed labels are established at boot.
+A B2C site's configured languages and language-specific URLs are the source of truth. At boot, the site route supplies `SFDC_ENV.language`; the SDK detector uses that value to resolve labels. A language switcher must navigate to the target language URL and perform a full page reload. An in-place i18next language change is insufficient because the SDK context and localStorage-backed labels are established at boot.
 
 For local preview, use the site entry of the Vite plugin and pass the site's supported language codes, with the default first:
 
@@ -171,7 +208,7 @@ If you see an older example that vendors `salesforce-detector.ts` or `salesforce
 
 1. Bundle loads, `initI18n()` runs
 2. `createDataSDK()` initializes the SDK
-3. `fetchI18nContext()` queries the org for language/locale/direction; B2C separately passes the site route's `SFDC_ENV.language` to i18next as `lng`
+3. `fetchI18nContext()` queries the org for language/locale/direction (B2C uses the site route's `SFDC_ENV.language`)
 4. `SalesforceBackend` reads the manifest and issues a GraphQL query per namespace:
    ```graphql
    query LoadLabels {
@@ -209,7 +246,8 @@ For most bundles, a single `"c"` namespace is all you need.
 
 ## Related
 
-- [label-xml.md](label-xml.md): the Custom Labels metadata XML shape
+- [../common/platform-sdk-i18n.md](../common/platform-sdk-i18n.md): the shared runtime engine (Labels query, `fetchI18nContext`, batching, fallback)
+- [../common/label-xml.md](../common/label-xml.md): the Custom Labels metadata XML shape
 - [interpolation.md](interpolation.md): how `{0}/{1}` placeholders work
-- [verifying.md](verifying.md): the serve/verify flow
-- [gotchas.md](gotchas.md): silent-fail traps to avoid
+- [../common/verifying.md](../common/verifying.md): the serve/verify flow
+- [../common/gotchas.md](../common/gotchas.md): silent-fail traps to avoid

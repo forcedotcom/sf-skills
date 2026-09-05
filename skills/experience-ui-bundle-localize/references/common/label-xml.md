@@ -34,7 +34,7 @@ This holds the **English base labels**: the source of truth for label content.
 
 | Field | Purpose | Notes |
 |---|---|---|
-| `<fullName>` | The label's API name | Used in `t("Key")` calls and the manifest (`"c:Welcome_Text"`). PascalCase, descriptive, unique. |
+| `<fullName>` | The label's API name | Used in translation calls (`"Key"`) and the manifest (`"c:Welcome_Text"`). PascalCase, descriptive, unique. |
 | `<language>` | Language code | Always `en_US` for the base label file. |
 | `<protected>` | Managed package protection | Always `false` for custom labels in your org (you can edit them). |
 | `<shortDescription>` | Internal description | For translators/developers, not shown to users. Describe what the label is for. |
@@ -61,6 +61,16 @@ Format: `<Context>_<Role>` in PascalCase with underscores between parts.
 
 One file per translated language (e.g., `es.translation-meta.xml` for Spanish, `fr.translation-meta.xml` for French, `ja.translation-meta.xml` for Japanese).
 
+🚫 **Custom Label translations use the `Translations` metadata type — never `CustomObjectTranslation`.**
+Write them to `force-app/main/default/translations/<locale>.translation-meta.xml` with a
+`<Translations>` root. Do **not** author them as
+`objectTranslations/CustomLabels-<locale>/CustomLabels-<locale>.objectTranslation-meta.xml` with a
+`<CustomObjectTranslation>` root — that type is for translating **custom-object components** (field
+labels, record types, picklist values), not org-level Custom Labels, and deploying labels that way
+fails. If you catch yourself reaching for `objectTranslations/` or `CustomObjectTranslation` for a
+Custom Label, stop: the correct target is the `translations/<locale>.translation-meta.xml` file
+described here.
+
 ### Structure
 
 ```xml
@@ -76,6 +86,8 @@ One file per translated language (e.g., `es.translation-meta.xml` for Spanish, `
   </customLabels>
 </Translations>
 ```
+
+⚠️ Inside `<Translations>`, the translated text goes in **`<label>`**, never `<value>`. `<value>` is the *CustomLabels* element (it belongs in `CustomLabels.labels-meta.xml`); using it inside a `<customLabels>` block here produces malformed metadata that fails validation. Each `<customLabels>` block contains exactly `<label>` and `<name>` — nothing else.
 
 Always write the whole document shown above, not a fragment: exactly one XML declaration, one `<Translations>` root with the Metadata API namespace, and one complete `<customLabels>` block per label. For an untranslated scaffold, copy the XML-escaped English source text into `<label>` and leave actual translation to the localization team. Preserve positional placeholders such as `{0}` and `{1}`.
 
@@ -151,7 +163,7 @@ export const labelManifest = [
 
 Other namespaces exist (e.g., `LightningDatatable` for framework-shipped labels), but most bundles only use `c`.
 
-In component code, the namespace is usually implicit (set via `defaultNS: "c"` in the init), so you call `t("Welcome_Text")` not `t("c:Welcome_Text")`.
+In component code the namespace is usually implicit (the init sets `c` as the default), so you call your framework's translation function with the bare key (`Welcome_Text`), not `c:Welcome_Text`. The exact call convention is in your framework reference's `localize.md`.
 
 ---
 
@@ -169,12 +181,14 @@ Labels can include **positional placeholders** for runtime substitution:
 </labels>
 ```
 
-At call time:
+At call time, your framework's translation function substitutes the positional values:
 
-```typescript
-t("Save_Failed_Message", { 0: "Account", 1: "Permission denied" });
+```text
+translate("Save_Failed_Message", { 0: "Account", 1: "Permission denied" })
 // → "Failed to save Account: Permission denied"
 ```
+
+(The exact call syntax is framework-specific — see your framework reference's `interpolation.md`.)
 
 **Translations must preserve the placeholders:**
 
@@ -186,9 +200,9 @@ t("Save_Failed_Message", { 0: "Account", 1: "Permission denied" });
 </customLabels>
 ```
 
-The placeholders can move (Spanish grammar might flip the order), but they must stay as `{0}`, `{1}`; i18next does the substitution at render time.
+The placeholders can move (Spanish grammar might flip the order), but they must stay as `{0}`, `{1}`; the i18n library does the substitution at render time.
 
-See [interpolation.md](interpolation.md) for how this works under the hood.
+See your framework reference's `interpolation.md` for how this works under the hood.
 
 ---
 
@@ -259,14 +273,9 @@ export const labelManifest = ["c:Welcome_Text"];
 
 ### 4. Use in a component
 
-```typescript
-import { useTranslation } from "react-i18next";
-
-function WelcomeBanner() {
-  const { t } = useTranslation("c");
-  return <h1>{t("Welcome_Text")}</h1>;
-}
-```
+Replace the hardcoded string with your framework's translation call (referencing the key by
+its bare `<fullName>`). The exact call convention — the import/injection and the function
+name — is in your framework reference's `localize.md`.
 
 ### 5. Deploy
 
@@ -290,7 +299,8 @@ Review the exact paths and target org with the user before deploying. Repeat the
 
 ## Related
 
-- [i18n-setup.md](i18n-setup.md): the init file + manifest wiring
-- [interpolation.md](interpolation.md): how `{0}/{1}` substitution works
+- `platform-sdk-i18n.md` (this folder): the shared runtime engine that fetches these labels
 - [verifying.md](verifying.md): the serve/verify flow
 - [gotchas.md](gotchas.md): silent-fail traps
+- your framework reference's `i18n-setup.md`: the init file + manifest wiring
+- your framework reference's `interpolation.md`: how `{0}/{1}` substitution works

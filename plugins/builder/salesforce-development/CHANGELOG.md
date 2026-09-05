@@ -14,6 +14,21 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 - We're working on an easy way to provide feedback on this plugin to continually improve the
   development experience.
 
+## [2.1.1] — 2026-09-04
+
+### Fixed
+
+- Accepting a plugin recommendation is now less fussy, without loosening what actually installs.
+  If you pick an install option from a structured question, or say "yes"/"install it" on your very
+  next message after the original suggestion scrolls off, we now act on it — as long as exactly one
+  plugin was waiting on your answer. Suggesting more than one still asks you to name the one you
+  mean, and declining still sticks (a later bare "yes" won't undo it). A non-trusted external plugin
+  still shows its source and asks for confirmation before anything is installed.
+- `setup`'s Source Tracking check no longer suggests running `sf org enable tracking` on an org
+  where that can never work — source tracking is only available on scratch orgs and Developer or
+  Developer Pro sandboxes. On any other edition (Enterprise, Developer Edition, trial/signup, Dev
+  Hub), it now reports the org's edition as informational context instead of a dead-end warning.
+
 ## [2.1.0] — 2026-09-02
 
 ### Added

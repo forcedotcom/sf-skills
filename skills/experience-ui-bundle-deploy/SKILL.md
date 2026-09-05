@@ -1,8 +1,8 @@
 ---
 name: experience-ui-bundle-deploy
-description: "MUST activate when the project has a uiBundles/*/src/ directory and the task involves deploying to an org or post-deploy org setup. Deploys a UI bundle app and runs ordered setup: org auth, build, metadata deploy, permission-set and role assignment, Experience Cloud self-registration, social login / SSO / IDP linking (Auth Providers + SAML SSO configs on a React site), seed-data import, and GraphQL schema fetch + codegen. Trigger signals: *.network-meta.xml, org-setup.config.json (with a socialLogin block), data-plan.json, sfdx-project.json, or mentions of deploy, org setup, or social login / SSO / IDP linking on an Experience site. DO NOT TRIGGER when: creating a new UI bundle project (use experience-ui-bundle-project-generate); styling pages without deploying (use experience-ui-bundle-frontend-generate); adding a feature such as auth, search, or file upload without deploying (use the matching experience-ui-bundle-*-generate skill); configuring MFA permission sets (use experience-ui-bundle-mfa-configure)."
+description: "MUST activate when the project has a uiBundles/*/src/ directory and the task involves deploying to an org or post-deploy org setup. Deploys a UI bundle app and runs ordered setup: org auth, build, metadata deploy, permission-set and role assignment, Experience Cloud self-registration, social login / SSO / IDP linking (Auth Providers + SAML on a React site), site logout URL, seed-data import, and GraphQL schema fetch + codegen. Trigger signals: *.network-meta.xml, org-setup.config.json (socialLogin/logoutUrl), data-plan.json, sfdx-project.json, or mentions of deploy, org setup, social login/SSO, or logout URL on an Experience site. DO NOT TRIGGER when: creating a new UI bundle project (use experience-ui-bundle-project-generate); styling pages without deploying (use experience-ui-bundle-frontend-generate); adding a feature such as auth, search, or file upload without deploying (use the matching experience-ui-bundle-*-generate skill); configuring MFA permission sets (use experience-ui-bundle-mfa-configure)."
 metadata:
-  version: "1.2"
+  version: "1.3"
   domains: ["Experience", "Developer Experience"]
   relatedSkills:
     - "experience-ui-bundle-frontend-generate"
@@ -111,6 +111,46 @@ of this flow.
 
 Timeout 180s. Must complete before permission assignment and schema fetch —
 objects, fields, and permission sets appear in the org only after deploy.
+
+## Step 3b — Set the site logout URL (config-gated)
+
+Run only when `org-setup.config.json` has a top-level `logoutUrl`. If absent,
+no-op cleanly and say so. **Non-destructive and idempotent** — no ask needed.
+
+Runs **here, after the deploy** (not folded into it) because the platform rejects
+a relative logout URL (*"The logout page URL must be an absolute URL."*), and a
+shipped site-relative path (e.g. `/propertyrentalapp/`) is resolved to absolute
+against the site's Experience Cloud origin — which only exists once the site is
+deployed.
+
+Why it matters: a site with no `<logoutUrl>` sends a logging-out member to the
+**org default-site login page** — in a multi-site org that's a *different*
+community, so Sign Out lands on the wrong site's login page. Setting it steers
+logout back to this site (reload as Guest).
+
+Steps:
+
+1. **Read** `logoutUrl` from config; absent → skip.
+2. **Derive the site** — `scripts/derive-site-name.sh` (single `*.network-meta.xml`;
+   skip if zero/ambiguous).
+3. **Resolve, set, and deploy — one command.** Invoke the helper, which resolves
+   the value to an absolute URL (site-relative → matched against the community
+   `siteUrl` **path**, never guessing), writes `<logoutUrl>` idempotently in the
+   canonical position, and deploys only that file:
+
+   ```bash
+   node scripts/set-logout-url.mjs \
+     --logout-url "<logoutUrl from config>" \
+     --network-file <sourceRoot>/networks/<site>.network-meta.xml \
+     --target-org <org> --site <site> --deploy
+   ```
+
+**Best-effort:** the helper exits **0** on success or already-set, and **3** on a
+recoverable skip (network file missing, origin unresolvable, XML-special char, or
+deploy failure). Treat **exit 3 as a loud skip, not a setup failure** — continue
+the rest of setup and tell the user to set the logout URL manually in the site's
+Administration settings. Usage, exit-code contract, and port-provenance:
+`references/logout-url.md`.
 
 ## Step 4 — Assign permission sets
 
@@ -305,6 +345,7 @@ developer action, not part of setup; if the user asks to preview the site, see
 1. Authenticate org
 2. Build UI bundles (pre-deploy)
 3. Deploy metadata (deploy-license gate if self-reg configured)
+3b. Set the site logout URL (if `logoutUrl` configured — post-deploy, idempotent, best-effort)
 4. Assign permission sets (config-driven assignee)
 5. Assign role (if configured)
 6. Enable self-registration (if configured — ask first)

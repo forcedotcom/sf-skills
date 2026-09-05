@@ -163,7 +163,7 @@ t("Nonexistent_Key");
 // → "Nonexistent_Key" (literal key string)
 ```
 
-This is the **unregistered manifest key** trap (see [gotchas.md](gotchas.md)): the label wasn't fetched, so i18next has nothing to interpolate.
+This is the **unregistered manifest key** trap (see [../common/gotchas.md](../common/gotchas.md)): the label wasn't fetched, so i18next has nothing to interpolate.
 
 ---
 
@@ -306,6 +306,6 @@ With the bridge (`prefix: "{", suffix: "}"`), **one Custom Label serves all thre
 ## Related
 
 - [i18n-setup.md](i18n-setup.md): the init file where the `prefix`/`suffix` are configured
-- [label-xml.md](label-xml.md): how to author labels with placeholders
-- [verifying.md](verifying.md): testing interpolated labels
-- [gotchas.md](gotchas.md): silent-fail traps
+- [../common/label-xml.md](../common/label-xml.md): how to author labels with placeholders
+- [../common/verifying.md](../common/verifying.md): testing interpolated labels
+- [../common/gotchas.md](../common/gotchas.md): silent-fail traps

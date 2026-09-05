@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail  # exit on error (-e), undefined vars (-u), and propagate pipeline failures (-o pipefail)
 #
-# check-i18n-wired.sh — Confirm the i18n init exists and is called at boot.
+# check-i18n-wired.sh — Confirm the React i18next init exists and is called at boot.
+#
+# React-specific: the manifest -> backendOptions / SalesforceBackend detection is
+# i18next-shaped and has no ngx-translate analog, so this script lives under the
+# React reference (references/react/) rather than the shared scripts/ folder. The
+# Angular equivalent is authored separately under references/angular/.
 #
 # Whether the app already has i18n wiring is a file-existence plus call-site
 # check, so run this rather than reading for it by hand. It looks for an init
@@ -9,7 +14,7 @@ set -euo pipefail  # exit on error (-e), undefined vars (-u), and propagate pipe
 # file.
 #
 # Usage (run from the UI bundle dir, or pass its src path):
-#   bash <skill-dir>/scripts/check-i18n-wired.sh [src-dir]
+#   bash <skill-dir>/references/react/check-i18n-wired.sh [src-dir]
 #
 # src-dir defaults to "src".
 #
@@ -23,7 +28,7 @@ set -euo pipefail  # exit on error (-e), undefined vars (-u), and propagate pipe
 #   0  fully wired — initI18n() defined, called at boot, AND the manifest is
 #      passed into the SalesforceBackend's backendOptions. Just add new keys.
 #   1  no i18n init found — no initI18n() definition. Scaffold the whole setup
-#      (see references/i18n-setup.md).
+#      (see references/react/i18n-setup.md).
 #   2  init defined but not called at boot — add only the boot-time initI18n()
 #      call in the entry file; do NOT re-scaffold or overwrite the init.
 #   3  wired at boot but the manifest could not be confirmed as passed into the

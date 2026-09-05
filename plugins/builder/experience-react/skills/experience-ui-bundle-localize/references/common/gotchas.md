@@ -8,7 +8,7 @@ These are localization-specific problems that fail **silently** (no console warn
 
 **Symptom:** You see the literal string `Welcome_Text` on screen instead of "Welcome."
 
-**Cause:** The key isn't in your `label-manifest.ts`. The app only fetches labels that are listed in the manifest, so an unregistered key is **never requested**, and i18next, finding nothing in its cache, renders the **literal key string** back to you as a fallback.
+**Cause:** The key isn't in your `label-manifest.ts`. The app only fetches labels that are listed in the manifest, so an unregistered key is **never requested**, and the i18n library, finding nothing in its cache, renders the **literal key string** back to you as a fallback.
 
 **No console warning. No error.** It fails silently. This is the most common localization bug.
 
@@ -22,10 +22,9 @@ export const labelManifest = [
 ];
 ```
 
-```typescript
-// component
-const { t } = useTranslation("c");
-return <h1>{t("Welcome_Text")}</h1>; // renders "Welcome_Text" (literal string)
+```text
+// component calls the translation function with an unregistered key:
+translate("Welcome_Text")   // renders "Welcome_Text" (literal string)
 ```
 
 **Fix:** Add the missing key to `label-manifest.ts`:
@@ -37,11 +36,11 @@ export const labelManifest = [
 ];
 ```
 
-**Why it's silent:** i18next is a general-purpose library. It doesn't know your labels come from Salesforce. When a key isn't in its cache, the fallback behavior (per i18next's design) is to render the key string, because in some apps, that's a valid debugging signal. In our case, it's just a trap.
+**Why it's silent:** the i18n library (i18next, ngx-translate) is general-purpose. It doesn't know your labels come from Salesforce. When a key isn't in its cache, the fallback behavior (by design) is to render the key string, because in some apps that's a valid debugging signal. In our case, it's just a trap.
 
 **Prevention:** Always keep manifest entry count equal to label count (Step 3 completion criterion in the workflow). PR review catches mismatches today.
 
-**Deeper detail:** The manifest is read by `SalesforceBackend` at boot. It groups entries by namespace (all `c:*` together, all `LightningDatatable:*` together) and issues a GraphQL query per namespace:
+**Deeper detail:** The manifest is read by the label backend at boot (React's shipped `SalesforceBackend`, or Angular's custom `TranslateLoader`). It groups entries by namespace (all `c:*` together, all `LightningDatatable:*` together) and issues a GraphQL query per namespace:
 
 ```graphql
 query LoadLabels {
@@ -57,9 +56,9 @@ query LoadLabels {
 }
 ```
 
-If `Welcome_Text` isn't in the manifest, it isn't in the `names` array, so the server never returns it. i18next's cache is empty for that key, and the `t()` call falls back to rendering the key name.
+If `Welcome_Text` isn't in the manifest, it isn't in the `names` array, so the server never returns it. The library's cache is empty for that key, and the translation call falls back to rendering the key name.
 
-Within a namespace, `SalesforceBackend` also splits the names into batches of at most **100** and fires the queries in parallel, because `uiapi.platform.labels` rejects a call with more than 100 names. This is automatic: a manifest with hundreds of `c:*` keys works with no extra config on your part. See the "Large manifest" note under Related problems.
+Within a namespace, the label backend also splits the names into batches of at most **100** and fires the queries in parallel, because `uiapi.platform.labels` rejects a call with more than 100 names. This is automatic: a manifest with hundreds of `c:*` keys works with no extra config on your part. See the "Large manifest" note under Related problems.
 
 ---
 
@@ -74,7 +73,7 @@ Within a namespace, `SalesforceBackend` also splits the names into batches of at
 const endpoint = `https://<org>/services/data/v65.0/graphql`;
 ```
 
-If you built while pointed at a v65.0 org and deploy to a v63.0 org, the bundle tries to call `/services/data/v65.0/graphql`, an endpoint that org doesn't have. The GraphQL call **404s**, the i18n context fetch (`fetchI18nContext()`) throws, and the app crashes during boot before React even mounts. You see a blank page.
+If you built while pointed at a v65.0 org and deploy to a v63.0 org, the bundle tries to call `/services/data/v65.0/graphql`, an endpoint that org doesn't have. The GraphQL call **404s**, the i18n context fetch (`fetchI18nContext()`) throws, and the app crashes during boot before it mounts. You see a blank page.
 
 **Fix:** Before building, set the deploy target org as default so the versions match:
 
@@ -106,46 +105,30 @@ Look for `"API Version"` in the output (e.g., `63.0`).
 
 ---
 
-## 3. Stale localStorage cache → old translations persist
+## 3. Stale label cache → old translations persist
 
 **Symptom:** You changed a translation (edited the `translation-meta.xml` or updated it in Translation Workbench), confirmed the new value is in the org, redeployed, but the app **still shows the old text** on reload.
 
-**Cause:** Your `src/i18n/index.ts` chains two backends:
+**Cause:** The i18n setup caches fetched labels so it doesn't hit GraphQL on every boot. Until that cache is invalidated, the app serves the cached copy and **never refetches**, so a fresh org value doesn't appear. The cache layer is **framework-specific**:
 
-```typescript
-backend: {
-  backends: [LocalStorageBackend, SalesforceBackend],
-  backendOptions: [
-    { expirationTime: 86400000 }, // 24 hours
-    { dataSDK, labelManifest },
-  ],
-},
-```
+- **React / i18next** persists labels to **localStorage** via `i18next-localstorage-backend`, chained in front of the network backend: `backends: [LocalStorageBackend, SalesforceBackend]`. Labels are keyed per language+namespace as `i18next_res_<lang>-<ns>` (e.g. `i18next_res_en-c`, `i18next_res_es-c`) with an `expirationTime` (default 24h / 86400000 ms). This survives reloads until it expires.
+- **Angular / ngx-translate** caches the resolved translations **in memory** on the `TranslateService` for the page session; the custom `TranslateLoader` re-issues the GraphQL query on the next `TranslateService.use(lang)` or a full page reload. A reload refetches (no persistent layer unless you add one).
 
-On load, i18next reads labels from **localStorage first** (the `LocalStorageBackend`), and only falls through to the GraphQL fetch (the `SalesforceBackend`) on a **cache miss**. Labels are cached per language+namespace under keys like:
-
-- `i18next_res_en-c` (English custom labels)
-- `i18next_res_es-c` (Spanish custom labels)
-- `i18next_res_fr-c` (French custom labels)
-
-Each has an `expirationTime` of **24 hours** (86400000 milliseconds). Until that entry expires, your app serves the cached copy and **never refetches**, so a fresh org value doesn't appear.
-
-**What you see in DevTools:**
+**What you see in DevTools (React case):**
 - **Network tab** shows the i18n **context/detect** query on every reload (this is how the SDK reads the user's language).
 - But it shows **no labels query**, because the labels are served from localStorage, not the network.
 - This makes it look like "the network is fine, so why is the text stale?" But the network is fine *for the context fetch*; the labels never hit the network at all.
 
-**Fix:** Clear the cached labels, then reload:
+**Fix:** Invalidate the cache, then reload:
 
-1. **DevTools → Application → Local Storage** → find your org's origin (e.g., `https://<org>.my.salesforce.app`)
-2. Delete the `i18next_res_*` keys (or **Clear site data** to wipe everything)
-3. Reload the app
+- **React / i18next:** DevTools → Application → Local Storage → your org's origin (e.g. `https://<org>.my.salesforce.app`) → delete the `i18next_res_*` keys (or **Clear site data**), then reload.
+- **Angular / ngx-translate:** a full page reload refetches; if you added a persistent cache layer, clear it too (**Clear site data**).
 
 The next load misses the cache, refetches the labels over GraphQL, and shows the current value.
 
-**This is expected behavior, not a bug.** The cache is what makes labels fast after first load (no GraphQL roundtrip on every boot). In production, a translation change takes up to `expirationTime` to roll out to all users; during development, you manually clear the cache to see edits immediately.
+**This is expected behavior, not a bug.** The cache is what makes labels fast after first load (no GraphQL roundtrip on every boot). In production, a React translation change takes up to `expirationTime` to roll out to all users; during development, you manually clear the cache to see edits immediately.
 
-**Prevention:** When testing translation changes, habitually clear localStorage before reloading. Or lower `expirationTime` in the init file during development (e.g., 60000 = 1 minute), but remember to raise it back for production.
+**Prevention:** When testing translation changes, habitually clear the cache before reloading. In React you can also lower `expirationTime` in the init file during development (e.g., 60000 = 1 minute), then raise it back for production.
 
 **Why the GraphQL calls you DO see aren't label refetches:** The context query runs on every boot to detect the user's current language. It's a separate, small query:
 
@@ -174,7 +157,7 @@ That's not cached. The **labels** query (the big one with all your label names) 
 |---|---|---|
 | Label renders as its own key name (`"Welcome_Text"`) | Unregistered manifest key | Add the key to `label-manifest.ts` |
 | Blank page after deploy | API-version mismatch (built against different org) | `sf config set target-org=<deploy-target>` before building |
-| Old translation persists after update | Stale localStorage cache | Clear `i18next_res_*` keys in DevTools, reload |
+| Old translation persists after update | Stale label cache | Clear the i18n cache (React: `i18next_res_*` in localStorage) and reload |
 
 ---
 
@@ -216,13 +199,13 @@ English never needs activation.
 
 **Symptom:** The URL or switcher displays a new site language, but labels remain in the previous language.
 
-**Cause:** B2C language context is established at boot from the language-specific route through `SFDC_ENV.language`. An in-place language change does not rebuild the SDK context, and `i18next_res_*` localStorage entries may continue serving cached labels.
+**Cause:** B2C language context is established at boot from the language-specific route through `SFDC_ENV.language`. An in-place language change does not rebuild the SDK context, and cached labels (React's `i18next_res_*` localStorage entries) may continue serving the old language.
 
-**Fix:** Make the switcher navigate to the configured language URL and perform a full page reload. Confirm the route and `SFDC_ENV.language` agree. During development, clear `i18next_res_*` before retesting.
+**Fix:** Make the switcher navigate to the configured language URL and perform a full page reload. Confirm the route and `SFDC_ENV.language` agree. During development, clear the i18n cache (React: `i18next_res_*`) before retesting.
 
 ### Choose fallback by bundle type
 
-The shipped `SalesforceBackend` supports `labelFallback`. Preserve its `BASE_VALUE` default for B2E by omitting the option. For B2C only, configure `labelFallback: "USER_DEFAULT"` so fallback follows the guest/site language context. Do not apply the B2C override to B2E.
+The label fetch supports `labelFallback`. Preserve its `BASE_VALUE` default for B2E (React: omit the option; Angular: pass `BASE_VALUE`). For B2C only, configure `labelFallback: "USER_DEFAULT"` so fallback follows the guest/site language context. Do not apply the B2C override to B2E.
 
 **If you're debugging the raw labels query** (e.g., re-running it in DevTools): `fallback` must be declared in the operation signature (`$fallback: LabelFallback`) **and** passed to the `labels(...)` field. A `fallback` key in the variables block alone is silently dropped and the server falls back to `USER_DEFAULT`. It takes the `LabelFallback` enum (`USER_DEFAULT` / `BASE_VALUE` / `NONE`), not a locale string like `"en"`:
 
@@ -251,7 +234,7 @@ B2B remains unsupported. Do not infer B2B support from the B2C guidance or apply
 
 **Symptom / worry:** You have hundreds of labels in one namespace and wonder whether you have to split the manifest or cap it.
 
-**You don't.** `uiapi.platform.labels` rejects any single call with more than 100 names, but `SalesforceBackend` handles this for you: it dedupes the names, splits each namespace into batches of at most 100, and issues those queries in parallel, then merges the results. A manifest with 500 `c:*` keys becomes 5 batched queries under the hood; your code and manifest stay flat.
+**You don't.** `uiapi.platform.labels` rejects any single call with more than 100 names, but the label backend handles this for you (React's `SalesforceBackend`, or Angular's custom loader implementing the same logic): it dedupes the names, splits each namespace into batches of at most 100, and issues those queries in parallel, then merges the results. A manifest with 500 `c:*` keys becomes 5 batched queries under the hood; your code and manifest stay flat.
 
 The load is **all-or-nothing per namespace**: if any batch fails, the whole namespace's read rejects (you don't get a half-populated namespace). If you're watching the Network tab, a large manifest is why you may see several `Labels` queries fire at once rather than one.
 
@@ -259,7 +242,8 @@ The load is **all-or-nothing per namespace**: if any batch fails, the whole name
 
 ## Related
 
-- [i18n-setup.md](i18n-setup.md): the init file (where `expirationTime` is configured)
 - [label-xml.md](label-xml.md): Custom Labels + translations metadata
-- [interpolation.md](interpolation.md): `{0}/{1}` placeholders
 - [verifying.md](verifying.md): the serve/verify flow
+- `platform-sdk-i18n.md` (this folder): the shared runtime engine (Labels query, batching, fallback)
+- your framework reference's `i18n-setup.md`: the init file (where the cache is configured)
+- your framework reference's `interpolation.md`: `{0}/{1}` placeholders

@@ -138,8 +138,14 @@ else
     "trusted fast path requires same-session selection" "$CODE_UNSELECTED" "$OUT_UNSELECTED"
 fi
 
-# An accepted external proposal never inherits the marketplace fast path; it
-# renders its source warning and nonce without invoking claude.
+# An accepted proposal for a curated-allowlist external identity
+# (agentforce-adlc@claude-plugins-official) is a trusted install target: the
+# user's acceptance is the sole confirmation, so it installs immediately in one
+# official-marketplace call -- no dry run, no nonce, no trust warning. A
+# NON-allowlisted external name would still require the nonce + trust warning,
+# but there is no such catalog entry to exercise offline here (agentforce-adlc
+# is the only external row and it is allowlisted); that untrusted-external path
+# is covered by test_sf_context.py with a synthetic entry.
 EXTERNAL_SID="plugin-install-external-accept-$$-$RANDOM"
 fresh_proposal "$EXTERNAL_SID"
 printf '{"session_id":"%s","prompt_id":"p1","prompt":"install agentforce-adlc"}' \
@@ -148,17 +154,22 @@ write_stub 0
 OUT_EXTERNAL_ACCEPT=$(CLAUDE_CODE_SESSION_ID="$EXTERNAL_SID" \
   stubbed_ctx plugin-install "$NAME" --accept-proposed)
 CODE_EXTERNAL_ACCEPT=$?
-EXTERNAL_NONCE=$(extract_nonce "$OUT_EXTERNAL_ACCEPT")
+EXTERNAL_ACCEPT_CALL1=$(sed -n '1p' "$STUB_LOG")
+EXTERNAL_ACCEPT_CALL2=$(sed -n '2p' "$STUB_LOG")
 if [ "$CODE_EXTERNAL_ACCEPT" -eq 0 ] \
-   && echo "$OUT_EXTERNAL_ACCEPT" | grep -qi "TRUST WARNING" \
-   && [ -n "$EXTERNAL_NONCE" ] \
-   && [ ! -s "$STUB_LOG" ]; then
-  PASS=$((PASS + 1)); printf '  ok   %-60s → source warning + nonce, no install\n' \
-    "external proposed install retains confirmation"
+   && echo "$OUT_EXTERNAL_ACCEPT" | grep -q "Installed $NAME on disk" \
+   && echo "$OUT_EXTERNAL_ACCEPT" | grep -q "Run /reload-plugins now" \
+   && ! echo "$OUT_EXTERNAL_ACCEPT" | grep -q "Plugin: $NAME" \
+   && ! echo "$OUT_EXTERNAL_ACCEPT" | grep -q -- "--confirm" \
+   && ! echo "$OUT_EXTERNAL_ACCEPT" | grep -qi "TRUST WARNING" \
+   && [ "$EXTERNAL_ACCEPT_CALL1" = "plugin install $NAME@claude-plugins-official --yes" ] \
+   && [ -z "$EXTERNAL_ACCEPT_CALL2" ]; then
+  PASS=$((PASS + 1)); printf '  ok   %-60s → acceptance is sole confirmation, one official-marketplace install\n' \
+    "allowlisted external proposed install installs in one call"
 else
-  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s nonce=%s log=%s out=%s\n' \
-    "external proposed install retains confirmation" "$CODE_EXTERNAL_ACCEPT" \
-    "$EXTERNAL_NONCE" "$(cat "$STUB_LOG")" "$OUT_EXTERNAL_ACCEPT"
+  FAIL=$((FAIL + 1)); printf '  FAIL %-60s → exit=%s call1=%s call2=%s out=%s\n' \
+    "allowlisted external proposed install installs in one call" "$CODE_EXTERNAL_ACCEPT" \
+    "$EXTERNAL_ACCEPT_CALL1" "$EXTERNAL_ACCEPT_CALL2" "$OUT_EXTERNAL_ACCEPT"
 fi
 
 # --- dry run: names the plugin, pin, trust warning; never invokes claude ---

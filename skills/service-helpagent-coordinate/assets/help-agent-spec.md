@@ -10,7 +10,7 @@
 
 Create a Salesforce Agentforce Service Agent ("help agent") in the connected org with the shape and behavior described in the agent script (§7), then expose it on a customer-facing Experience Cloud site via an embedded chat widget.
 
-This file is the spec for the Help Agent we're building. The accompanying Claude Code prompt will simply reference this file ("create an agent out of the spec I have created here in `assets/help-agent-spec.md`"). Use the skills under `.claude/skills/` — do **not** author a new Help Agent skill. The relevant skills in this repo are `agentforce-generate` (agent authoring + Agentforce Data Library provisioning/grounding, in its `references/data-library-reference.md` and `references/org-setup-for-adl.md`), `dx-org-permission-set-assign`, `service-digital-engagement-channel-configure` (initial Queue-routed channel setup and activation), `service-agentforce-channel-configure` (replaces the initial routing with the agent binding — fallback queue + `sessionHandlerAsa`), `service-digital-engagement-deployment-configure`, `experience-lwr-site-generate`, and `service-digital-engagement-messaging-site-integrate` (widget placement + embed, used in Checkpoint 3.5 and Checkpoint 4). The spec is custom data feeding standard skills, not a new skill itself.
+This file is the spec for the Help Agent we're building. The accompanying Claude Code prompt will simply reference this file ("create an agent out of the spec I have created here in `assets/help-agent-spec.md`"). Use the skills under `.claude/skills/` — do **not** author a new Help Agent skill. The relevant skills in this repo are `agentforce-generate` (agent authoring + Agentforce Data Library provisioning/grounding, in its `references/data-library-reference.md` and `references/org-setup-for-adl.md`), `dx-org-permission-set-assign`, `service-digital-engagement-channel-configure` (initial Queue-routed channel setup and activation), `service-agentforce-channel-configure` (replaces the initial routing with the agent binding — fallback queue + `sessionHandlerAsa`), `service-digital-engagement-deployment-configure`, `experience-lwr-site-generate`, and `service-digital-engagement-messaging-site-integrate` (widget placement + embed, used in Checkpoint 4). The spec is custom data feeding standard skills, not a new skill itself.
 
 **Why the spec, not an API.** Salesforce's official Help Agent template-creation API is not yet shipped. Without that API, you (Claude) have no built-in concept of "Help Agent" and would otherwise generate a generic agent. This file substitutes for the missing API: the agent script in §7 is the canonical template that the eventual Quick Start UI will produce. Treat it as the source-of-truth shape — the agent you build should have the same lineage (topics, actions, instructions) as the agent that template would create.
 
@@ -71,7 +71,7 @@ The Data Cloud permission sets *do not exist in the org* until Data Cloud is tur
 
   Both the **running user** (so they can configure the Agentforce Data Library) and the **Einstein Agent User** (so the agent's retriever returns results at runtime) need Data Cloud access. Defer to `agentforce-generate` for this: it resolves the Einstein Agent User, assigns the required Data Cloud permission set and license, and verifies the assignment stuck. Do not resolve the user or assign permission sets by hand here.
 
-  Note: the Data Space scope on that permission set is a separate UI-only step that cannot be automated — that's handled reactively in Checkpoint 3.5 (Check 2) if grounded queries still return empty after ADL indexing completes.
+  Note: the Data Space scope on that permission set is a separate UI-only step that cannot be automated — that's handled reactively in Checkpoint 4 Phase A (Check 2) if grounded queries still return empty after ADL indexing completes.
 
 ### 4.1 Checkpoint 1 — Meet Your Agent
 
@@ -157,7 +157,9 @@ Show these only if the org has existing channels of that type:
 - **WhatsApp** — if any WhatsApp channels exist
 - **SMS** — if any Sms channels exist
 
-Present the channel types via `AskUserQuestion` (multiSelect: true). Label each with how many existing channels of that type are in the org (e.g. "Voice — 2 existing channels"), so the user knows what they'd be choosing from.
+Present the channel types via `AskUserQuestion` (multiSelect: true) **only when there are 4 or fewer types to show** — `AskUserQuestion` caps at 4 options per question, and pagination doesn't work for a multi-select choice (there is no way to select one item from page 1 and another from page 2 in a single answer). Label each with how many existing channels of that type are in the org (e.g. "Voice — 2 existing channels"), so the user knows what they'd be choosing from.
+
+**If there are more than 4 types to show:** do not paginate. List every type in plain text (with its existing-channel count) and ask the user to type their selection(s) as a comma-separated list, e.g. "Web Chat, WhatsApp, SMS". Validate each typed name case-insensitively against the listed types, and confirm the resolved set back to the user before proceeding to Step 2. This is a deliberate exception to the general Long-list presentation rules pagination pattern — it applies specifically to this multi-select type list, not to single-select instance lists (sites, queues, ADLs, or the "which existing channel of this type" list in Step 2).
 
 **Step 2 — For each selected channel type, ask: new or existing?**
 
@@ -170,34 +172,38 @@ After the user picks channel type(s), for each one ask a follow-up via `AskUserQ
 **Step 3 — Branch by selection.**
 
 - **New Web Chat channel** → read [`references/channel-web-chat.md`](references/channel-web-chat.md) and follow it fully (domain, `authMode`, channel + ESD + site provisioning).
-- **New Help Portal** → delegate to `service-concierge-portal-generate`, passing `$ORG`, `$BOT_ID`, and `$BOT_DEV_NAME`. **Immediately after that skill returns, capture its `PUBLISHED_PORTAL_URL` return value and store it as `$PORTAL_URL`. Then run Step 4 (the channel-add loop) before doing anything else — do NOT advance to Checkpoint 3.5 yet.**
-- **Existing channel (any type, including Voice/WhatsApp/SMS/Email)** → delegate wiring to `service-agentforce-channel-configure`, passing the agent DeveloperName and the selected channel's DeveloperName. That skill owns queue resolution, routing flow, and agent wiring for existing channels.
+- **New Help Portal** → delegate to `service-concierge-portal-generate`, passing `$ORG`, `$BOT_ID`, and `$BOT_DEV_NAME`. **Immediately after that skill returns, capture its `PUBLISHED_PORTAL_URL` return value and store it as `$PORTAL_URL`. Then run Step 4 (the channel-add loop) before doing anything else — do NOT advance to Checkpoint 4 yet.**
+- **Existing channel (any type, including Voice/WhatsApp/SMS)** → delegate wiring to `service-agentforce-channel-configure`, passing the agent DeveloperName and the selected channel's DeveloperName. That skill owns queue resolution, routing flow, and agent wiring for existing channels.
+
+**Outbound escalation runs here, not at Checkpoint 4.** Immediately after inbound wiring is confirmed for a Web Chat or Voice branch (Branches A/B of `service-agentforce-channel-configure`), invoke that skill's Phase 3 (ask the user whether to configure outbound escalation; if yes, resolve the queue, create/reuse the RoutingFlow, add the connection block, republish) as part of the same delegated call — do not defer any part of it to Checkpoint 4. This is a single atomic unit owned by that skill; do not split flow-creation from connection-wiring across checkpoints.
 
 Handle each selected channel branch independently. If one branch fails, report it and continue with the others — do not abort the whole setup.
 
-**Step 4 — After EACH channel branch completes, immediately ask if the user wants to add another channel. This is the next thing you do — before Checkpoint 3.5, before any summary, before anything else.**
+**Step 4 — After EACH channel branch completes, immediately ask if the user wants to add another channel. This is the next thing you do — before Checkpoint 4, before any summary, before anything else.**
 
 After each branch (success or failure), present via `AskUserQuestion`:
 
 - **Add another [same type] channel** — e.g. if the user just wired a Phone channel, default to showing remaining unwired Phone channels first. Re-run Step 2 for that type. Skip channels already wired in this session.
 - **Add a different channel type** — return to Step 1 (re-query `MessagingChannel`, rebuild the type list, omit already-wired channels from the options).
-- **Done — proceed to go-live** — exit the loop and advance to Checkpoint 3.5.
+- **Done — proceed to go-live** — exit the loop and advance to Checkpoint 4.
 
 Track which channels have been wired in this session so they are not re-offered. The loop continues until the user selects "Done" or all available channels have been wired.
 
-### 4.4 Checkpoint 3.5 — Silent pre-flight (internal only, DO NOT show the user)
+### 4.4 Checkpoint 4 — Review & Go Live
 
-**This is a silent internal gate between channel deployment and Checkpoint 4. Do NOT announce it, do NOT print a "running checks" message, do NOT tell the user it exists.** Its purpose is to catch the three failure modes that most commonly ship a broken agent to the user in Checkpoint 4. Run all checks silently; only surface output if a check FAILS, and only then to explain the specific fix needed before proceeding.
+Once the user exits the Checkpoint 3 channel loop ("Done"), run Checkpoint 4 in two phases. There is no separate numbered checkpoint between channel setup and go-live — Phase A below is what used to be "Checkpoint 3.5"; it now lives inside Checkpoint 4 because it runs at the same point in the flow and Checkpoint 4 is where verification belongs.
 
-Run these three checks, in order. Every check must pass before advancing to Checkpoint 4.
+#### Phase A — Silent pre-flight (INTERNAL — never announce)
 
-**Check 1 — Data Cloud access is in place for both the running user and the Einstein Agent User.** Re-confirm the Data Cloud grounding prerequisites by deferring to `agentforce-generate` (the same gate used in the readiness phase). If it reports the access is missing or was changed out-of-band, re-run that gate; if it still fails, surface the specific missing user/permset and stop — do not proceed to Checkpoint 4.
+**Do NOT announce this phase, do NOT print a "running checks" message, do NOT tell the user it exists.** Run these three checks, in order, silently; only surface output if a check FAILS, and only then to explain the specific fix needed before proceeding to Phase B.
+
+**Check 1 — Data Cloud access is in place for both the running user and the Einstein Agent User.** Re-confirm the Data Cloud grounding prerequisites by deferring to `agentforce-generate` (the same gate used in the readiness phase). If it reports the access is missing or was changed out-of-band, re-run that gate; if it still fails, surface the specific missing user/permset and stop — do not proceed to Phase B.
 
 **Check 2 — Agentforce Data Library is Activated AND grounded.** Using the `rag_feature_config_id` captured during Checkpoint 2:
   - Confirm the library is indexed and ready by deferring to `agentforce-generate`, which owns the readiness gate. Do not poll it here.
   - Execute a canary grounded retrieval query against the library (e.g. a generic term likely to hit at least one indexed article, such as `"help"` or `"return"`). Confirm the response contains a non-empty `knowledgeSummary` / retrieval-results array. An empty result here — even with status=SUCCESS — is the classic silent-failure signature and means the Data Space scope or the Einstein Agent User's Data Cloud assignment is broken.
   - If the library is not Activated: activate it and re-check.
-  - If retrieval returns empty despite SUCCESS status: surface the **Known manual step** (Data Space scope on the permission set) to the user verbatim, wait for confirmation that they've completed it in Setup, then re-run the canary query. Do not proceed to Checkpoint 4 with an empty retrieval.
+  - If retrieval returns empty despite SUCCESS status: surface the **Known manual step** (Data Space scope on the permission set) to the user verbatim, wait for confirmation that they've completed it in Setup, then re-run the canary query. Do not proceed to Phase B with an empty retrieval.
 
     > **Known manual step — Data Space scope for the Einstein Agent User.** When grounding is configured (Knowledge ADL), the Einstein Agent User needs Data Cloud access for the ADL retriever to return content. The `agentforce-generate` skill's setup assigns the required permission set (e.g. `GenieUserEnhancedSecurity`) and PSL (`GenieDataPlatformStarterPsl`) automatically. **However, the Data Space scope on that permission set is a UI-only assignment** — there's no API to grant it. If grounded queries return empty `knowledgeSummary` after ADL indexing completes, pause the flow and instruct the user to:
     > 1. Setup → Permission Sets → **Data Cloud User** (`GenieUserEnhancedSecurity`)
@@ -205,10 +211,19 @@ Run these three checks, in order. Every check must pass before advancing to Chec
     >
     > Then resume validation. Do not attempt to publish the agent until a grounded test query returns non-empty `knowledgeSummary`.
 
-**Check 3 — The messaging channel is Active AND the V2 Embedded Messaging bootstrap is actually served by the customer-facing site URL.** This catches two related failures that both ship a dead widget: (a) the Embedded Service Deployment and channel were created but the MessagingChannel was never activated, so the widget renders but no agent answers; and (b) the deployment exists but the site was never wired to load the V2 bootstrap script, so the customer-facing URL loads without a chat widget at all. Verify both, in order:
+**Check 3 — The MessagingChannel is Active.** Fetch the MessagingChannel back from the org and assert its status is `Active` (not `Inactive`/`Draft`). `service-digital-engagement-channel-configure` activates the initially Queue-routed channel after deployment; `service-agentforce-channel-configure` then replaces that routing with the agent binding. `service-digital-engagement-messaging-site-integrate` does **not** own activation, so verify that the Agentforce routing deploy preserved the active state rather than assuming widget placement activated it. If the channel is not Active, activate it (the agent must already be Active) and re-fetch to confirm the status flipped. If it still won't activate, surface the specific channel and stop — do not proceed to Phase B with an inactive channel. **This is the only place in the flow that checks or sets channel-active state — Phase B does not repeat it.**
 
-  - **(a) MessagingChannel remains Active after rewiring.** Fetch the MessagingChannel back from the org and assert its status is `Active` (not `Inactive`/`Draft`). `service-digital-engagement-channel-configure` activates the initially Queue-routed channel after deployment; `service-agentforce-channel-configure` then replaces that routing with the agent binding. `service-digital-engagement-messaging-site-integrate` does **not** own activation, so verify that the Agentforce routing deploy preserved the active state rather than assuming widget placement activated it. If the channel is not Active, activate it (the agent must already be Active) and re-fetch to confirm the status flipped. If it still won't activate, surface the specific channel and stop — do not proceed to Checkpoint 4 with an inactive channel.
-  - **(b) The V2 Embedded Messaging LWR component is placed on the site's home layout(s) with the correct `deploymentName` and endpoint attributes.** The widget is embedded via the `experience_messaging:embeddedMessaging` LWR component in `homeGuestLayout.json` (and `homeAuthenticated.json` if signed-in visitors are also expected) — **not** via a `<script>` bootstrap in `mainAppPage.json` `headMarkup`. The correct attribute is `deploymentName` (not `configurationName`, which is not a valid attribute for this component and is stripped on deploy). **The V2 component takes a full six-attribute shape that round-trips cleanly through metadata deploy/retrieve.** The end-to-end path is:
+Only after all three checks pass silently, move to Phase B.
+
+#### Phase B — Explicit go-live steps (narrated to the user)
+
+1. Tell the user the agent is built, and **link them to Agentforce Builder** for this agent so they can review the agent definition, subagents, and topics.
+
+2. **For the Web Chat / Help Portal path, verify the V2 Embedded Messaging widget is placed on the site — do not re-inject it here.** Placement already happened in Checkpoint 3, Step C.5 of `references/channel-web-chat.md`, which delegates to `service-digital-engagement-messaging-site-integrate` the moment the user picks a real Experience Cloud site. This step is a verification, not a repeat of that work: retrieve the ExperienceBundle for the target site (`sf project retrieve start --metadata "ExperienceBundle:<SiteName>"`), confirm all six `componentAttributes` keys (`clientVersion`, `deploymentName`, `hideChatButtonOnLoad`, `isExpSiteAuthMode`, `scrtUrl`, `siteEndpoint`) are present on `experience_messaging:embeddedMessaging` in `homeGuestLayout.json` (and `homeAuthenticated.json` if signed-in visitors are expected), then open the live customer URL in an incognito browser and confirm the floating chat launcher renders. Do NOT use `curl | grep` — the launcher mounts at runtime and is absent from server-rendered HTML, so a curl check always reports "missing" and misleads the diagnosis.
+
+   **This verification does not apply to the own-website deployment path** (Step C.5's "I'll embed it on my own website" branch) — that path has no Salesforce-owned site layout to check; the customer embeds the Setup → Embedded Service Deployments → Get Code snippet on their own pages instead (see Step D.8 of `references/channel-web-chat.md`).
+
+   **If verification fails** — the componentAttributes are missing, incomplete, or the launcher doesn't render — run the repair procedure below. This is the same procedure Step C.5 should have already run; only re-run it because something went wrong the first time (e.g. a prior deploy dropped attributes, or a `configurationName`-shaped node survived from an older run).
 
     1. **Retrieve the ExperienceBundle for the target site** to a scratch directory: `sf project retrieve start --metadata "ExperienceBundle:<SiteName>"`.
     2. **Resolve the values the component needs:**
@@ -249,19 +264,9 @@ Run these three checks, in order. Every check must pass before advancing to Chec
 
     **When to fall back to Experience Builder UI.** If the metadata round-trip in step 7 still shows attributes stripped after two retries — or if `sf community publish` reports errors — surface the problem to the user and direct them to place the component manually in Experience Builder (Setup → Digital Experiences → All Sites → Builder → drag *Embedded Messaging* onto the page → pick `HelpChat` from the *Deployment Name* dropdown → Publish). The UI is the authoritative fallback path; do not chase deploy failures indefinitely.
 
-Only after all three checks pass silently, advance to Checkpoint 4. The user should experience Checkpoint 3.5 as a brief pause, not as an announced step.
+3. **Confirm the Escalation Flow is wired.** This was configured at Checkpoint 3 via `service-agentforce-channel-configure` Phase 3 (RoutingFlow creation, `connection customer_web_client:` block, republish) — not here. Just verify: `@utils.escalate` should transfer to the resolved queue when tested. If the user skipped Phase 3's escalation offer at Checkpoint 3 and now wants it, go back and run it there rather than hand-wiring it in this checkpoint.
 
-### 4.5 Checkpoint 4 — Review & Go Live
-
-Once the agent and channel(s) are deployed:
-1. Tell the user the agent is built, and **link them to Agentforce Builder** for this agent so they can review the agent definition, subagents, and topics.
-2. For the Web Chat / Help Portal path, embed the V2 Embedded Messaging LWR component on the site's home layout(s). Follow the retrieve→inject-component→Tooling-PATCH-ESD→deploy→publish→retrieve-round-trip→live-browser-verify path documented in Checkpoint 3.5 Check 3(b) — that is the verified end-to-end path for a V2 ESD. The correct component is `experience_messaging:embeddedMessaging` with the six-attribute V2 shape (`clientVersion`, `deploymentName`, `hideChatButtonOnLoad`, `isExpSiteAuthMode`, `scrtUrl`, `siteEndpoint`); `deploymentName` is the ESD DeveloperName. Do NOT verify placement with `curl | grep` — the widget mounts at runtime and is not present in server-rendered HTML, so a curl check will always report "missing" and mislead the diagnosis. The verification that matters: retrieve the ExperienceBundle back after publish and confirm all six `componentAttributes` keys survived the round-trip, then open the live customer URL in an incognito browser and confirm the floating chat launcher renders.
-
-3. **Wire the Escalation Flow to the agent.** The RoutingFlow was created in Step C.1 of `references/channel-web-chat.md` (DeveloperName: `{AgentDevName}_Outbound_Enhanced_Chat_Flow`). Follow `service-agentforce-channel-configure`'s `agent-wiring.md` reference to add the `connection customer_web_client:` block and republish. Web Chat uses `connection customer_web_client:` — not `connection messaging:`. If the flow is not wired, `@utils.escalate` returns immediately without transferring and the agent falls through to the case-creation fallback.
-
-4. **Activate the Messaging Channel.** Even if Checkpoint 3.5 flipped it Active for you, verify one more time before declaring go-live: Setup → Messaging Settings → **Help Chat** → confirm the "Activate" button is greyed out / status shows Active. If the button is still live and the channel is Inactive, click Activate. A published deployment with an inactive channel silently drops all inbound messages.
-
-5. **Verify the Embedded Service Deployment is published (V2, Version stamped).** If Step C.3 of `references/channel-web-chat.md` was followed correctly, the ESD was created *and* published in a single call via the Connect API `POST /services/data/v67.0/connect/embeddedmessaging/deployment/setup` (with `clientVersion: WebV2`) — that response includes `"isPublishSuccess": true` and no further publish step is needed. Verify the outcome by opening Setup → Embedded Service Deployments → **Help Chat** and checking:
+4. **Verify the Embedded Service Deployment is published (V2, Version stamped).** If Step C.3 of `references/channel-web-chat.md` was followed correctly, the ESD was created *and* published in a single call via the Connect API `POST /services/data/v67.0/connect/embeddedmessaging/deployment/setup` (with `clientVersion: WebV2`) — that response includes `"isPublishSuccess": true` and no further publish step is needed. Verify the outcome by opening Setup → Embedded Service Deployments → **Help Chat** and checking:
    - Title reads *"Embedded Service Deployment Settings - Web"* with **no `(v1)` suffix and no "Switch to V2" button**.
    - Top-right shows *"Published on: {date}"* and *"Version: 1"* (not empty).
 
@@ -271,7 +276,7 @@ Once the agent and channel(s) are deployed:
 
    **If the title still says `(v1)`**, the ESD was created via bare Metadata deploy without `clientVersion: WebV2`. Delete it and recreate via the Connect API path. An unpublished or V1 deployment never serves the widget to visitors, even when the channel is Active.
 
-6. Confirm the agent is live. For the Help Portal path, print the live portal URL — use `$PORTAL_URL` captured when `service-concierge-portal-generate` returned. If `$PORTAL_URL` is not in context (e.g. after context compression), re-derive it: query `SELECT UrlPathPrefix FROM Site WHERE Name='<DEB site name>'` and build `https://<orgDomain>.my.site.com/<UrlPathPrefix>/`. Do NOT reconstruct the URL from the instance URL or the org slug — always derive it from the `Site` record. Then print the post-setup next steps from Step D.8 of `references/channel-web-chat.md`: the test URL (or embed snippet instructions for own-website deployments) and the four-item testing checklist. Stay in the conversation — offer to walk through the checklist together and ask if they want any adjustments before signing off.
+5. Confirm the agent is live. For the Help Portal path, print the live portal URL — use `$PORTAL_URL` captured when `service-concierge-portal-generate` returned. If `$PORTAL_URL` is not in context (e.g. after context compression), re-derive it: query `SELECT UrlPathPrefix FROM Site WHERE Name='<DEB site name>'` and build `https://<orgDomain>.my.site.com/<UrlPathPrefix>/`. Do NOT reconstruct the URL from the instance URL or the org slug — always derive it from the `Site` record. Then print the post-setup next steps from Step D.8 of `references/channel-web-chat.md`: the test URL (or embed snippet instructions for own-website deployments) and the four-item testing checklist. Stay in the conversation — offer to walk through the checklist together and ask if they want any adjustments before signing off.
 
 ---
 

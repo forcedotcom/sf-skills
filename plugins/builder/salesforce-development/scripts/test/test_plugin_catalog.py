@@ -138,6 +138,21 @@ class PluginCatalogGenerationTests(unittest.TestCase):
         )
         self.assertEqual(external_row["source"].get("ref"), "main")
 
+    def test_agentforce_adlc_row_routes_to_its_trusted_allowlist_identity(self):
+        # End-to-end guard for the curated trust allowlist: the ONE external row we
+        # trust for looser install confirmation must, when fed through sf_context's
+        # shape-based routing, resolve to an identity that is actually in
+        # _TRUSTED_EXTERNAL_INSTALLS. A future rename or re-route of this row would
+        # otherwise silently turn the allowlist entry into a dead no-op (or, worse,
+        # un-trust the plugin we intended to trust) without any test noticing.
+        sfx = load_module(SCRIPTS / "sf_context.py", "sf_context_trust_smoke")
+        data = self.mod.build_catalog(REPO_ROOT, PLUGIN_ROOT)
+        row = next(r for r in data["plugins"] if r["name"] == "agentforce-adlc")
+        marketplace = sfx._plugin_install_marketplace_name(row["name"], row)
+        self.assertEqual(marketplace, "claude-plugins-official")
+        self.assertIn((row["name"], marketplace), sfx._TRUSTED_EXTERNAL_INSTALLS)
+        self.assertTrue(sfx._plugin_install_is_trusted_source(row["name"], row))
+
     def test_match_text_is_verbatim_from_the_marketplace(self):
         marketplace = json.loads(
             (REPO_ROOT / self.mod.MARKETPLACE_RELATIVE).read_text(encoding="utf-8")

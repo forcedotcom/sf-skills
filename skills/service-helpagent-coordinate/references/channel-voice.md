@@ -2,7 +2,7 @@
 
 > **When to read this file.** Load it only when the user has selected **Voice** at Checkpoint 3 of `assets/help-agent-spec.md`. If they selected Web Chat, read `channel-web-chat.md` instead. If they selected Help Portal, delegate to the sibling skill `service-concierge-portal-generate` — do not inline portal steps here.
 
-Voice wires the Help Agent to an existing `PstnVoice` MessagingChannel via an inbound RoutingFlow. It does **not** provision a new phone number — number acquisition puts the org in a state that isn't cleanly retrievable, so it's out of scope for this skill. If the user has no `PstnVoice` channel yet, tell them to provision the number in Setup (Service Cloud Voice / Number Management) first, then come back.
+Voice wires the Help Agent to an existing `PstnVoice` MessagingChannel via an inbound RoutingFlow. It does **not** provision a new phone number — number acquisition puts the org in a state that isn't cleanly retrievable, so it's out of scope for this skill. If the user has no `PstnVoice` channel yet, tell them to provision the number in Setup → Feature Settings → Service → **Communication Channels** first, then come back.
 
 ---
 

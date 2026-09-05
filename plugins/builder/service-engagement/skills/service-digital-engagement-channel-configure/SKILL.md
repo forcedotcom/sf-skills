@@ -8,6 +8,7 @@ metadata:
   relatedSkills:
     - "automation-flow-generate"
     - "platform-permission-set-generate"
+    - "service-agentforce-channel-configure"
     - "service-digital-engagement-deployment-configure"
   cliTools:
     - tool: ["sf"]
@@ -91,7 +92,7 @@ All steps are sequential. Do not skip or reorder.
    - Also verify the fallback queue exists (required for Flow, User, and ASA routing)
    
    If any target is not found, inform the user and ask whether to create it. If the user confirms:
-   - For Queue: generate a `.queue-meta.xml` with `MessagingSession` as the `queueSobject` type and deploy it before the channel
+   - For Queue: generate a `.queue-meta.xml` with `MessagingSession` as the `queueSobject` type and deploy it before the channel. **A new queue is unusable for routing without a `QueueRoutingConfig` — a channel deployed against a queue with none fails at session-start with "Agents are not available. Try again later," even though the channel itself deploys and activates cleanly.** Immediately after the queue deploys, resolve or create its routing config by following `service-agentforce-channel-configure`'s `references/queue-resolution.md` Step 4 — do not defer this to a later skill invocation, since this may be the only place a newly created queue is ever touched.
    - For Flow/User/ASA: inform the user that the flow, user, or bot must be created separately (out of scope for this skill)
 
 5. **Read the channel settings reference** — load `references/channel_settings.md` to understand all available configuration options and their valid values.
@@ -107,20 +108,12 @@ All steps are sequential. Do not skip or reorder.
    | Omni-Channel Queue | `Queue` | `sessionHandlerQueue` |
    | Omni-Channel Flow | `Flow` | `sessionHandlerFlow` + `sessionHandlerQueue` (fallback) |
    | User | `User` | `sessionHandlerUser` + `sessionHandlerQueue` (fallback) |
-   | Agentforce Service Agent | `AgentforceServiceAgent` | `sessionHandlerQueue` (fallback only — see v67 note below) |
+   | Agentforce Service Agent | `AgentforceServiceAgent` | `sessionHandlerQueue` (fallback) + `sessionHandlerAsa` (bot dev name — required, see v67 note below) |
 
-   > **v67 limitation — `sessionHandlerAsa` is not accepted by the Metadata API at v67.** Do NOT include `<sessionHandlerAsa>` in the XML for ASA routing. Instead:
-   > 1. **Verify the bot is Active before channel creation.** The Data API rejects binding with "Only active Agentforce Service Agents are supported." Run `sf agent activate -o <org> --api-name <BotDevName>` and confirm `BotVersion.Status = Active` first.
-   > 2. Deploy the XML with `<sessionHandlerType>AgentforceServiceAgent</sessionHandlerType>` and `<sessionHandlerQueue>` only — no `<sessionHandlerAsa>` element.
-   > 3. After the deploy succeeds, query the channel Id: `sf data query -o <org> -q "SELECT Id FROM MessagingChannel WHERE DeveloperName='<ChannelDevName>'" --json`
-   > 4. Resolve the BotDefinition Id: `sf data query -o <org> -q "SELECT Id FROM BotDefinition WHERE DeveloperName='<BotDevName>'" --json`
-   > 5. PATCH both handler fields via Data API in a single call:
-   >    ```bash
-   >    sf api request rest -o <org> --method PATCH \
-   >      "/services/data/v67.0/sobjects/MessagingChannel/<CHAN_ID>" \
-   >      --body "{\"SessionHandlerId\":\"<BOT_ID>\",\"FallbackQueueId\":\"<QUEUE_ID>\"}"
-   >    ```
-   > 6. Verify: `sf data query -o <org> -q "SELECT SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE Id='<CHAN_ID>'" --json` — both must be non-null.
+   > **v67 note — `<sessionHandlerAsa>` is required in the XML, not rejected.** Confirmed on a v67.0 org: omitting `<sessionHandlerAsa>` causes the deploy to fail with "Missing required Agentforce Service Agent." Include it and the deploy binds `SessionHandlerId` automatically — no post-deploy Data API PATCH needed.
+   > 1. **Verify the bot is Active before channel creation.** The Metadata API rejects binding with "Only active Agentforce Service Agents are supported." Run `sf agent activate -o <org> --api-name <BotDevName>` and confirm `BotVersion.Status = Active` first.
+   > 2. Deploy the XML with `<sessionHandlerType>AgentforceServiceAgent</sessionHandlerType>`, `<sessionHandlerQueue>` (fallback), and `<sessionHandlerAsa>{BotDevName}</sessionHandlerAsa>`.
+   > 3. Verify: `sf data query -o <org> -q "SELECT SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName='<ChannelDevName>'" --json` — both must be non-null after the deploy, with no separate PATCH step.
 
 8. **Apply user verification** — if enabled, set `embeddedConfig.authMode` to `Auth` and include `<messagingAuthorizations>`. If not enabled, set `embeddedConfig.authMode` to `UnAuth` and omit `<messagingAuthorizations>`.
 
@@ -154,26 +147,14 @@ All steps are sequential. Do not skip or reorder.
     sf project deploy start --source-dir <path-to-messagingChannels-folder> --target-org <org-alias>
     ```
 
-15a. **ASA routing only — bind the bot via Data API PATCH.** Skip this step for Queue, Flow, and User routing types.
+15a. **ASA routing only — verify the bind landed.** Skip this step for Queue, Flow, and User routing types. Because `<sessionHandlerAsa>` was included in the deployed XML (step 7), the deploy itself binds `SessionHandlerId` — no separate Data API PATCH is needed.
 
     ```bash
-    CHAN_ID=$(sf data query -o <org> --json \
-      -q "SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'" \
-      | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['records'][0]['Id'])")
-    BOT_ID=$(sf data query -o <org> --json \
-      -q "SELECT Id FROM BotDefinition WHERE DeveloperName='<ASA_BOT_DEV_NAME>'" \
-      | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['records'][0]['Id'])")
-    QUEUE_ID=$(sf data query -o <org> --json \
-      -q "SELECT Id FROM Group WHERE Type='Queue' AND DeveloperName='<FALLBACK_QUEUE_DEV_NAME>'" \
-      | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['records'][0]['Id'])")
-
-    sf api request rest -o <org> --method PATCH \
-      "/services/data/v67.0/sobjects/MessagingChannel/$CHAN_ID" \
-      --body "{\"SessionHandlerId\":\"$BOT_ID\",\"FallbackQueueId\":\"$QUEUE_ID\"}"
-    # Expected: HTTP 204
+    sf data query -o <org> --json \
+      -q "SELECT SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'"
     ```
 
-    Verify: `sf data query -o <org> -q "SELECT SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE Id='$CHAN_ID'" --json` — both must be non-null.
+    Both `SessionHandlerId` and `FallbackQueueId` must be non-null. If either is null, confirm `<sessionHandlerAsa>` and `<sessionHandlerQueue>` were both present in the deployed XML and that the bot was Active before the deploy.
 
 15. **Activate the channel** — after successful deployment, activate the messaging channel:
     ```bash
@@ -197,8 +178,8 @@ All steps are sequential. Do not skip or reorder.
 | `sessionHandlerType` must match the handler fields present | Setting `Queue` but populating `sessionHandlerFlow` causes deployment error |
 | Flow routing requires both `sessionHandlerFlow` and `sessionHandlerQueue` | Queue is the mandatory fallback for human escalation |
 | User routing requires both `sessionHandlerUser` and `sessionHandlerQueue` | Queue is the mandatory fallback when user is unavailable |
-| ASA routing: include `sessionHandlerQueue` in the XML; bind `SessionHandlerId` via Data API PATCH after deploy | `sessionHandlerAsa` is not accepted by the Metadata API at v67 — bot binding must happen via Data API |
-| Bot must be Active before the Data API PATCH that sets `SessionHandlerId` | API rejects with "Only active Agentforce Service Agents are supported" if the bot is inactive |
+| ASA routing: include both `sessionHandlerQueue` and `sessionHandlerAsa` in the XML | `sessionHandlerAsa` is required at v67 — the deploy fails with "Missing required Agentforce Service Agent" if omitted; the deploy itself binds `SessionHandlerId`, no PATCH needed |
+| Bot must be Active before the metadata deploy that binds `SessionHandlerId` | API rejects with "Only active Agentforce Service Agents are supported" if the bot is inactive |
 | `masterLabel` max 40 characters | Platform limit on channel labels |
 | File name must match `^[a-zA-Z][a-zA-Z0-9_]*$` | API name format enforced by Metadata API |
 | `allowedFileTypes` is a comma-separated string with no spaces | Not a nested list or array |
@@ -217,10 +198,12 @@ All steps are sequential. Do not skip or reorder.
 |-------|------------|
 | Channel name conflicts with existing channel | Check org for existing channels; file name must be unique |
 | Queue not found on deploy | Ensure the referenced queue exists and has `MessagingSession` as a `queueSobject` type |
+| Channel deploys and activates fine, but widget shows "Agents are not available. Try again later." at session start | The queue has no `QueueRoutingConfig` — this is silent at deploy time. Check `SELECT QueueRoutingConfigId FROM Group WHERE Id='<QUEUE_ID>'`; if null, resolve/create one per `queue-resolution.md` Step 4 |
 | Omni-Channel Flow not found on deploy | Ensure the referenced flow exists and is active before deploying the channel |
 | ASA bot reference invalid | Bot must be published and active; use exact developer name from BotDefinition metadata |
-| ASA channel deployed but `SessionHandlerId` is null after deploy | `sessionHandlerAsa` is silently rejected by the Metadata API at v67 — run the Data API PATCH step (Phase 3, step 15a) to bind it |
-| "Only active Agentforce Service Agents are supported" on Data API PATCH | Bot is inactive — run `sf agent activate` before the PATCH |
+| ASA channel deploy fails with "Missing required Agentforce Service Agent" | `<sessionHandlerAsa>{BotDevName}</sessionHandlerAsa>` is missing from the XML — it's required at v67, not optional |
+| ASA channel deployed but `SessionHandlerId` is null after deploy | Bot was not Active at deploy time — run `sf agent activate`, confirm `BotVersion.Status = Active`, then redeploy |
+| "Only active Agentforce Service Agents are supported" on deploy | Bot is inactive — run `sf agent activate` before deploying |
 | Flow or ASA routing fails without fallback queue | `sessionHandlerQueue` is mandatory when `sessionHandlerType` is `Flow` or `AgentforceServiceAgent` |
 | JWT verification not working | Connected app and certificate must be configured for the org |
 | Custom parameters not collected | `name` must be unique per channel; `parameterDataType` defaults to `Text` |
@@ -242,8 +225,8 @@ All steps are sequential. Do not skip or reorder.
 - [ ] For Queue routing: is `sessionHandlerQueue` in the XML?
 - [ ] For Flow routing: is `sessionHandlerFlow` in the XML, plus `sessionHandlerQueue` as fallback?
 - [ ] For User routing: is `sessionHandlerUser` in the XML, plus `sessionHandlerQueue` as fallback?
-- [ ] For ASA routing: is `sessionHandlerQueue` in the XML (no `sessionHandlerAsa` — that goes via Data API)?
-- [ ] For ASA routing: was step 15a run? Are `SessionHandlerId` and `FallbackQueueId` non-null after the PATCH?
+- [ ] For ASA routing: are both `sessionHandlerQueue` and `sessionHandlerAsa` in the XML?
+- [ ] For ASA routing: was step 15a run? Are `SessionHandlerId` and `FallbackQueueId` non-null after the deploy?
 - [ ] Does the routing target reference an existing entity in the org?
 
 ### User Verification Checks

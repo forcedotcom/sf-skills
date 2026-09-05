@@ -96,8 +96,9 @@
     <!-- <sessionHandlerType>Flow</sessionHandlerType> -->
 
     <!-- Routing: Agentforce Service Agent (requires a fallback queue) -->
-    <!-- NOTE: sessionHandlerAsa is NOT included here — it is rejected by the Metadata API at v67. -->
-    <!-- After deploy, bind the bot via Data API PATCH: SessionHandlerId + FallbackQueueId (see SKILL.md step 15a) -->
+    <!-- NOTE: sessionHandlerAsa is REQUIRED at v67 — deploy fails with "Missing required Agentforce Service Agent" if omitted. -->
+    <!-- The deploy binds SessionHandlerId automatically; verify it landed with a query (see SKILL.md step 15a). -->
+    <!-- <sessionHandlerAsa>{ASA_BOT_DEV_NAME}</sessionHandlerAsa> -->
     <!-- <sessionHandlerQueue>{FALLBACK_QUEUE_NAME}</sessionHandlerQueue> -->
     <!-- <sessionHandlerType>AgentforceServiceAgent</sessionHandlerType> -->
 </MessagingChannel>

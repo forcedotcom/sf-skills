@@ -43,13 +43,13 @@ The `‹…›` slots below mark where **this run's** real values go — replace
 |---|---|
 | Readiness | Data Cloud enabled; perm sets assigned (GenieUserEnhancedSecurity, GenieAnalytics, DataSpacePermSet); Einstein Agent User assigned |
 | Failure mode guarded | Stock NOT_SCHEDULED ADL → empty knowledgeSummary; guarded via dedicated ADL, indexing gated to COMPLETED |
-| Delegation | agentforce-generate → agent + ADL; dx-org-permission-set-assign → Data Cloud perms; service-digital-engagement-* → channel + ESD |
+| Delegation | agentforce-adlc:agentforce-generate → agent + ADL; dx-org-permission-set-assign → Data Cloud perms; service-digital-engagement-* → channel + ESD |
 
 ## Checkpoint Outcomes
 | # | Checkpoint | Decision |
 |---|---|---|
 | 1 | Identity | ‹agent name› (‹DeveloperName›), ‹locale›, ‹tone› |
-| 2 | Grounding | Salesforce Knowledge via agentforce-generate; dedicated ADL ‹library name› (stock All_Records_and_Fields_Default not wired); indexing gated to COMPLETED before wiring; rag_feature_config_id ‹ARFPC_ id from this run's adl publish› captured |
+| 2 | Grounding | Salesforce Knowledge via agentforce-adlc:agentforce-generate; dedicated ADL ‹library name› (stock All_Records_and_Fields_Default not wired); indexing gated to COMPLETED before wiring; rag_feature_config_id ‹ARFPC_ id from this run's adl publish› captured |
 | 3 | Channel | Web Chat; authMode ‹UnAuth or Auth›; site ‹target site UrlPathPrefix›; ESD HelpChat WebV2 — *or* `Not started` if the run never entered this checkpoint |
 | 4 | Go-live | ESD Published; channel Active; escalation flow wired — *or* `Not started` |
 

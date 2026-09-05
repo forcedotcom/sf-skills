@@ -35,7 +35,8 @@ Every top-level key is optional; each object is strict (no extra keys).
                         "accountName": "<display name>" },
   "socialLogin": { "communityMemberProfile": "<Profile name>",
                    "authProviderNames": ["<DeveloperName>", "..."],
-                   "communityUserPermset": "<PermissionSet API name>" }
+                   "communityUserPermset": "<PermissionSet API name>" },
+  "logoutUrl": "/<site-path>/ or https://<absolute-url>"
 }
 ```
 
@@ -60,6 +61,14 @@ Every top-level key is optional; each object is strict (no extra keys).
   `selfRegistration`, there is **no `siteName`** — the site is derived from the
   single `networks/<siteName>.network-meta.xml`. Full step detail:
   `references/social-login.md`.
+- **`logoutUrl`** (optional) drives step 3b. A **site-relative path** (e.g.
+  `/propertyrentalapp/`, recommended — domain-independent) or an absolute
+  `http(s)` URL. Setup resolves a relative value to the absolute URL the platform
+  requires (against the site's Experience Cloud origin) and writes it to the
+  site's `<logoutUrl>` Network metadata after deploy, so Sign Out returns members
+  to *this* site instead of the org default site. No `siteName` — the site is
+  derived from the single `networks/<siteName>.network-meta.xml`. Full step
+  detail: `references/logout-url.md`.
 
 ## Scaffolding flow (permset folder present, config missing)
 
@@ -68,8 +77,12 @@ Every top-level key is optional; each object is strict (no extra keys).
 2. **Ask the user, per permset, who to assign it to** — `currentUser`,
    `guestUser`, or `skip`. Default a whole-set answer to `currentUser` (not
    `skip`) since the folder exists on purpose; only use `guestUser` for permsets
-   meant for the site's guest user. Also ask whether they want a `role` and/or
-   `selfRegistration` block while you're writing the file (both optional).
+   meant for the site's guest user. Also ask whether they want a `role`,
+   `selfRegistration`, and/or `logoutUrl` block while you're writing the file (all
+   optional). For `logoutUrl`, phrase it as "point Sign Out back to this site?" —
+   if yes, default the value to the site-relative path `/<site-path>/` (step 3b
+   resolves it to absolute post-deploy). Skipping it leaves logout on the org
+   default site (see the `logoutUrl` note above).
 3. **Offer two equivalent paths** — let the user pick:
    - **Write the file**: copy `assets/org-setup.config.template.json` to
      `org-setup.config.json` at the project root and fill in the answers. This is
