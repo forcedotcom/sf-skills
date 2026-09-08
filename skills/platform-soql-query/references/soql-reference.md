@@ -165,11 +165,11 @@ SELECT Id, (SELECT Id FROM Children__r) FROM Parent__c
 
 ## WITH Clauses
 
-| Clause | Description |
-|--------|-------------|
-| `WITH SECURITY_ENFORCED` | Enforce FLS (throws exception if no access) |
-| `WITH USER_MODE` | Respect sharing and FLS |
-| `WITH SYSTEM_MODE` | Bypass sharing rules |
+| Clause | Description                                                                 |
+|--------|-----------------------------------------------------------------------------|
+| `WITH SECURITY_ENFORCED` | Enforce FLS (throws exception if no access; removed in API version 67.0+) |
+| `WITH USER_MODE` | Respect sharing and FLS                                                     |
+| `WITH SYSTEM_MODE` | Bypass sharing rules                                                        |
 
 ---
 
