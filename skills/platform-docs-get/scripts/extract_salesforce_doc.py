@@ -30,7 +30,7 @@ import argparse
 import json
 import re
 from typing import Any, Dict
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 from runtime_bootstrap import maybe_reexec_in_sf_docs_runtime
 
@@ -83,12 +83,153 @@ OFFICIAL_DOC_SUFFIXES = (
     ".lightningdesignsystem.com",
 )
 
+DEVELOPER_DOCUMENT_ENDPOINT = "/docs/get_document/"
+DEVELOPER_DOCUMENT_CONTENT_ENDPOINT = "/docs/get_document_content/"
+
 
 def normalize_text(text: str) -> str:
     text = text.replace("\u00a0", " ").replace("\r", "")
     text = re.sub(r"\n{3,}", "\n\n", text)
     text = re.sub(r"[ \t]+", " ", text)
     return text.strip()
+
+
+def normalize_document_id(document_id: str | None) -> str | None:
+    if not document_id:
+        return None
+    return re.sub(r"\.html?$", "", unquote(document_id), flags=re.IGNORECASE).lower()
+
+
+def requested_document_id(page_url: str) -> str | None:
+    path_parts = [part for part in urlparse(page_url).path.split("/") if part]
+    if (
+        len(path_parts) >= 4
+        and path_parts[0] == "docs"
+        and path_parts[1].startswith("atlas.")
+    ):
+        return normalize_document_id(path_parts[3])
+    return None
+
+
+def response_document_id(response_url: str, payload: Dict[str, Any]) -> str | None:
+    payload_id = normalize_document_id(payload.get("content_document_id"))
+    if payload_id:
+        return payload_id
+
+    path_parts = [part for part in urlparse(response_url).path.split("/") if part]
+    try:
+        endpoint_index = path_parts.index("get_document_content")
+    except ValueError:
+        return None
+
+    content_id_index = endpoint_index + 2
+    if content_id_index >= len(path_parts):
+        return None
+    return normalize_document_id(path_parts[content_id_index])
+
+
+def extract_developer_document_payload(page, responses, page_url: str) -> Dict[str, Any] | None:
+    """Extract an Atlas article from the JSON payload used by Salesforce's doc component."""
+    parsed_page_url = urlparse(page_url)
+    link_base_url = f"{parsed_page_url.scheme}://{parsed_page_url.netloc}/docs/"
+    target_document_id = requested_document_id(page_url)
+
+    for response in reversed(responses):
+        if response.status != 200:
+            continue
+
+        try:
+            payload = response.json()
+        except Exception:
+            continue
+
+        if not isinstance(payload, dict):
+            continue
+
+        payload_document_id = response_document_id(response.url, payload)
+        if target_document_id and payload_document_id != target_document_id:
+            continue
+
+        content = payload.get("content")
+        if not isinstance(content, str) or not content.strip():
+            continue
+
+        try:
+            parsed = page.evaluate(
+                r"""
+                ({ html, baseUrl }) => {
+                  const documentFragment = new DOMParser().parseFromString(html, 'text/html');
+                  const skippedTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'SVG']);
+                  const blockTags = new Set([
+                    'ADDRESS', 'ARTICLE', 'ASIDE', 'BLOCKQUOTE', 'DIV', 'DL', 'DT', 'DD',
+                    'FIELDSET', 'FIGCAPTION', 'FIGURE', 'FOOTER', 'FORM', 'H1', 'H2', 'H3',
+                    'H4', 'H5', 'H6', 'HEADER', 'HR', 'LI', 'MAIN', 'NAV', 'OL', 'P', 'PRE',
+                    'SECTION', 'TABLE', 'TBODY', 'THEAD', 'TFOOT', 'TR', 'UL'
+                  ]);
+                  const chunks = [];
+
+                  function walk(node) {
+                    if (node.nodeType === 3) {
+                      chunks.push(node.nodeValue || '');
+                      return;
+                    }
+                    if (node.nodeType !== 1 || skippedTags.has(node.tagName)) return;
+
+                    if (node.tagName === 'BR') {
+                      chunks.push('\n');
+                      return;
+                    }
+
+                    const isBlock = blockTags.has(node.tagName);
+                    if (isBlock) chunks.push('\n');
+                    for (const child of node.childNodes) walk(child);
+                    if (node.tagName === 'TD' || node.tagName === 'TH') chunks.push('\t');
+                    if (isBlock) chunks.push('\n');
+                  }
+
+                  walk(documentFragment.body);
+
+                  const links = [];
+                  const seen = new Set();
+                  for (const anchor of documentFragment.querySelectorAll('a[href]')) {
+                    const href = anchor.getAttribute('href') || '';
+                    if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) continue;
+                    try {
+                      const absoluteUrl = new URL(href, baseUrl).href;
+                      if (!seen.has(absoluteUrl)) {
+                        seen.add(absoluteUrl);
+                        links.push(absoluteUrl);
+                      }
+                    } catch (error) {
+                      // Ignore malformed links while preserving the article text.
+                    }
+                  }
+
+                  return { text: chunks.join(''), links };
+                }
+                """,
+                {"html": content, "baseUrl": link_base_url},
+            )
+        except Exception:
+            continue
+
+        text = normalize_text(re.sub(r"[ \t]*\n[ \t]*", "\n", parsed.get("text", "")))
+        if not text:
+            continue
+
+        return {
+            "title": payload.get("title") or payload.get("doc_title"),
+            "text": text,
+            "links": parsed.get("links", []),
+            "responseUrl": response.url,
+            "responsePath": (
+                DEVELOPER_DOCUMENT_CONTENT_ENDPOINT
+                if DEVELOPER_DOCUMENT_CONTENT_ENDPOINT in response.url
+                else DEVELOPER_DOCUMENT_ENDPOINT
+            ),
+        }
+
+    return None
 
 
 def looks_like_shell(title: str, text: str) -> bool:
@@ -147,6 +288,17 @@ def extract_official_salesforce_doc(url: str, timeout_seconds: int, use_stealth:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(user_agent=USER_AGENT, viewport={"width": 1440, "height": 1400})
         stealth_used = apply_stealth(page) if use_stealth else False
+        developer_document_responses = []
+
+        def capture_developer_document(response) -> None:
+            is_document_response = (
+                DEVELOPER_DOCUMENT_ENDPOINT in response.url
+                or DEVELOPER_DOCUMENT_CONTENT_ENDPOINT in response.url
+            )
+            if host == "developer.salesforce.com" and is_document_response:
+                developer_document_responses.append(response)
+
+        page.on("response", capture_developer_document)
 
         try:
             response = page.goto(url, wait_until="domcontentloaded", timeout=timeout_ms)
@@ -373,6 +525,21 @@ def extract_official_salesforce_doc(url: str, timeout_seconds: int, use_stealth:
                 """,
                 host,
             )
+
+            developer_document = extract_developer_document_payload(
+                page,
+                developer_document_responses,
+                payload.get("url", url),
+            )
+            if developer_document:
+                payload["strategy"] = "developer-doc-api"
+                payload["selector"] = developer_document["responsePath"]
+                payload["text"] = developer_document["text"]
+                payload["contentLinks"] = developer_document["links"]
+                payload["childLinks"] = developer_document["links"]
+                payload["candidateCount"] = payload.get("candidateCount", 0) + 1
+                if not payload.get("title") or payload.get("title") == "Untitled":
+                    payload["title"] = developer_document["title"] or "Untitled"
 
             text = normalize_text(payload.get("text", ""))
             likely_shell = looks_like_shell(payload.get("title", ""), text)
