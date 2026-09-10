@@ -3166,6 +3166,71 @@ class DeployHookSelfGateTests(unittest.TestCase):
                     _, result = self.run_hook(sfx.cmd_verify_org, cmd)
                 self.assertEqual(result, {"continue": True})
 
+    def test_verify_org_honors_an_explicit_target_org_flag(self):
+        # An explicit --target-org / -o on the deploy segment IS the target: the
+        # gate must verify THAT org and never consult (or require) the default org.
+        # The sibling bash gate (sf-deploy-gate) already reads the flag; this keeps
+        # the two gates consistent for the home-directory / multi-org workflow.
+        for cmd in (
+            "sf project deploy start -o acme --source-dir force-app",
+            "sf project deploy start --target-org acme --source-dir force-app",
+            "sf project deploy start --target-org=acme --source-dir force-app",
+            "cd /tmp/proj && sf project deploy start --source-dir force-app -o acme --json | jq .",
+            "sf project delete source --metadata Flow:X --target-org acme --no-prompt",
+        ):
+            with self.subTest(cmd=cmd):
+                with mock.patch.object(sfx, "resolve_executable", return_value="/usr/bin/sf"), \
+                        mock.patch.object(sfx, "get_target_org_detailed", return_value=("", "")) as gto, \
+                        mock.patch.object(sfx, "get_org_display", return_value={"alias": "acme"}) as god:
+                    _, result = self.run_hook(sfx.cmd_verify_org, cmd)
+                self.assertEqual(result, {"continue": True})
+                gto.assert_not_called()
+                god.assert_called_once_with("acme")
+
+    def test_verify_org_explicit_flag_still_fails_closed_when_unreachable(self):
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/bin/sf"), \
+                mock.patch.object(sfx, "get_target_org_detailed", return_value=("other", "")), \
+                mock.patch.object(sfx, "get_org_display", return_value={}):
+            _, result = self.run_hook(sfx.cmd_verify_org, "sf project deploy start -o gone --source-dir x")
+        self.assertEqual(result.get("hookSpecificOutput", {}).get("permissionDecision"), "deny")
+
+    def test_verify_org_flag_on_another_segment_does_not_count(self):
+        # `-o` belongs to `sf org display`, not to the deploy — the deploy will run
+        # against the DEFAULT org, so the gate must still require one.
+        cmd = "sf org display -o acme --json && sf project deploy start --source-dir force-app"
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/bin/sf"), \
+                mock.patch.object(sfx, "get_target_org_detailed", return_value=("", "")) as gto:
+            _, result = self.run_hook(sfx.cmd_verify_org, cmd)
+        self.assertEqual(result.get("hookSpecificOutput", {}).get("permissionDecision"), "deny")
+        gto.assert_called_once()
+
+    def test_verify_org_mixed_segments_require_the_default_org(self):
+        # Two deploys, one explicit and one not: the bare one uses the default org,
+        # so the default must exist; the explicit one is verified on its own alias.
+        cmd = "sf project deploy start -o acme --source-dir a; sf project deploy start --source-dir b"
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/bin/sf"), \
+                mock.patch.object(sfx, "get_target_org_detailed", return_value=("dflt", "")), \
+                mock.patch.object(sfx, "get_org_display", return_value={"alias": "x"}) as god:
+            _, result = self.run_hook(sfx.cmd_verify_org, cmd)
+        self.assertEqual(result, {"continue": True})
+        self.assertEqual(sorted(c.args[0] for c in god.call_args_list), ["acme", "dflt"])
+
+    def test_explicit_target_orgs_parser(self):
+        f = sfx._explicit_deploy_target_orgs
+        self.assertEqual(f("sf project deploy start -o acme --json"), ["acme"])
+        self.assertEqual(f("sf project deploy start --target-org=acme"), ["acme"])
+        self.assertEqual(f("sf project deploy start --target-org 'my org'"), ["my org"])
+        self.assertEqual(f('sf project deploy start --target-org "my org"'), ["my org"])
+        # `-o` inside another flag's value or a word is not the flag.
+        self.assertEqual(f("sf project deploy start --source-dir foo-o"), [""])
+        self.assertEqual(f("sf project deploy start --wait 30"), [""])
+        # One entry per deploy/delete segment, in order; `-o` on other segments ignored.
+        self.assertEqual(
+            f("sf org display -o zz && sf project deploy start -o a; sf project delete source"),
+            ["a", ""],
+        )
+        self.assertEqual(f("ls"), [])
+
     def test_post_deploy_silent_on_non_deploy_advises_on_deploy(self):
         _, silent = self.run_hook(sfx.cmd_post_deploy, "cd /tmp && grep foo .")
         self.assertEqual(silent, {"continue": True})

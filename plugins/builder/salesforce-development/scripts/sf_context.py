@@ -3775,9 +3775,21 @@ def cmd_verify_org() -> int:
     # whenever no org is set, blocking ordinary shell use. Anything that is not a
     # deploy/delete is always allowed, before any CLI work.
     payload = _read_hook_payload()
-    if not _DEPLOY_OR_DELETE_COMMAND.search(_hook_command(payload)):
+    command = _hook_command(payload)
+    if not _DEPLOY_OR_DELETE_COMMAND.search(command):
         print(json.dumps({"continue": True}))
         return 0
+
+    # The org to verify is the one the deploy will actually hit. An explicit
+    # `--target-org` / `-o` on the deploy segment names it outright (the sibling
+    # bash gate, sf-deploy-gate, reads the same flag); only a segment WITHOUT the
+    # flag falls back to the default org, and only then is a default required.
+    # Before this, the gate ignored the flag and demanded a default org from the
+    # hook's cwd — which denied every `sf … deploy -o <alias>` run from a
+    # non-project directory even though the CLI itself had a perfectly good target.
+    explicit = _explicit_deploy_target_orgs(command)
+    targets = list(dict.fromkeys(o for o in explicit if o))
+    needs_default = any(not o for o in explicit)
 
     # W-23466800 (WIN-027): distinguish "the CLI itself can't be resolved" from "no org set".
     # An unresolvable `sf` is an environment failure, not a config choice;
@@ -3804,7 +3816,7 @@ def cmd_verify_org() -> int:
         )
         return 0
 
-    target, err = get_target_org_detailed()
+    target, err = get_target_org_detailed() if needs_default else ("", "")
     if err:
         # CLI present but the query failed — fail closed, but say WHY (not a false
         # "no org"), with a secret-free diagnostic (W-23466800 / WIN-027).
@@ -3820,23 +3832,26 @@ def cmd_verify_org() -> int:
             ),
         )
         return 0
-    if not target:
+    if needs_default and not target:
         emit(
             "PreToolUse",
             "",
             decision="deny",
-            reason=tag + "No target org is configured. Run 'sf config set target-org <alias>' before deploying.",
+            reason=tag + "No target org is configured. Run 'sf config set target-org <alias>' before deploying, or pass --target-org <alias> on the command.",
         )
         return 0
+    if needs_default and target not in targets:
+        targets.append(target)
 
-    if not get_org_display(target):
-        emit(
-            "PreToolUse",
-            "",
-            decision="deny",
-            reason=tag + "Cannot reach the target org. Your session may have expired. Run 'sf org login web' to re-authenticate.",
-        )
-        return 0
+    for org in targets:
+        if not get_org_display(org):
+            emit(
+                "PreToolUse",
+                "",
+                decision="deny",
+                reason=tag + f"Cannot reach the target org '{_sanitize_dynamic_text(org)}'. Your session may have expired. Run 'sf org login web' to re-authenticate.",
+            )
+            return 0
 
     print(json.dumps({"continue": True}))
     return 0
@@ -4033,6 +4048,31 @@ def _hook_command(payload: dict) -> str:
     """The executed Bash command from a PreToolUse/PostToolUse hook payload, or ""."""
     tool_input = payload.get("tool_input") or payload.get("toolInput") or {}
     return (tool_input.get("command") or "") if isinstance(tool_input, dict) else ""
+
+
+# Shell segment boundaries: `;`, `&&`, `||`, `|` and newlines. A flag is judged on
+# the segment that carries it — `-o` on an `sf org display` segment says nothing
+# about the `sf project deploy` that follows it.
+_SHELL_SEGMENT_SPLIT = re.compile(r"\s*(?:\|\||&&|;|\||\n)\s*")
+# `--target-org X`, `--target-org=X`, `-o X`, `-o=X`; X may be single- or
+# double-quoted. The flag must start a word so `foo-o` never reads as `-o`.
+_TARGET_ORG_FLAG = re.compile(
+    r"""(?:^|\s)(?:--target-org|-o)(?:=|\s+)(?:"([^"]*)"|'([^']*)'|(\S+))"""
+)
+
+
+def _explicit_deploy_target_orgs(command: str) -> list:
+    """One entry per `sf project deploy|delete` shell segment, in command order:
+    the org that segment names with its own `--target-org` / `-o` flag, or "" when
+    it has none (the CLI then falls back to the default org). Non-deploy segments
+    are skipped, so their `-o` never counts. [] when nothing deploys or deletes."""
+    orgs = []
+    for segment in _SHELL_SEGMENT_SPLIT.split(command or ""):
+        if not _DEPLOY_OR_DELETE_COMMAND.search(segment):
+            continue
+        m = _TARGET_ORG_FLAG.search(segment)
+        orgs.append(next((g for g in m.groups() if g is not None), "") if m else "")
+    return orgs
 
 
 def _hook_reports_failure(payload: object) -> bool:
