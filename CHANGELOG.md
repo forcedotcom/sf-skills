@@ -1,3 +1,12 @@
+# [1.54.0](https://github.com/forcedotcom/sf-skills/compare/1.53.0...1.54.0) (2026-09-11)
+
+
+### Features
+
+* Release 1 skill new - service-agentforce-contact-center-coordinate @W-23703127@ ([ac4320c](https://github.com/forcedotcom/sf-skills/commit/ac4320c8eb856839852b306601b39bbbebd69946))
+
+
+
 # [1.53.0](https://github.com/forcedotcom/sf-skills/compare/1.52.0...1.53.0) (2026-09-08)
 
 
