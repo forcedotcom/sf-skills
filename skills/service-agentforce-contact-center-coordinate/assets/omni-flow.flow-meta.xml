@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Inbound voice Omni Flow (RoutingFlow, routingType=Copilot). Routes arriving calls to the
+     Agentforce agent, with the queue as fallback when the agent is unavailable. Rendered by
+     scripts/create-routing-flows.sh (which fills the FLOW_LABEL, AGENT_API_NAME, AGENT_LABEL,
+     QUEUE_ID, and QUEUE_LABEL tokens); the channel's SessionHandlerId points at this flow's
+     FlowDefinition Id. -->
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Route_to_Agent</name>
+        <label>Route to Agent</label>
+        <locationX>176</locationX>
+        <locationY>158</locationY>
+        <actionName>routeWork</actionName>
+        <actionType>routeWork</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recordId</name>
+            <value><elementReference>recordId</elementReference></value>
+        </inputParameters>
+        <inputParameters>
+            <name>serviceChannelLabel</name>
+            <value><stringValue>Phone</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>serviceChannelDevName</name>
+            <value><stringValue>sfdc_phone</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>serviceChannelId</name>
+            <value>
+                <setupReference>sfdc_phone</setupReference>
+                <setupReferenceType>ServiceChannel</setupReferenceType>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>routingType</name>
+            <value><stringValue>Copilot</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>copilotLabel</name>
+            <value><stringValue>{{AGENT_LABEL}}</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>copilotId</name>
+            <value>
+                <setupReference>{{AGENT_API_NAME}}</setupReference>
+                <setupReferenceType>BotDefinition</setupReferenceType>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>queueLabel</name>
+            <value><stringValue>{{QUEUE_LABEL}}</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>queueId</name>
+            <value><stringValue>{{QUEUE_ID}}</stringValue></value>
+        </inputParameters>
+        <inputParameters>
+            <name>isQueueVariable</name>
+            <value><booleanValue>false</booleanValue></value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>68.0</apiVersion>
+    <environments>Default</environments>
+    <interviewLabel>{{FLOW_LABEL}} {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>{{FLOW_LABEL}}</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value><stringValue>LightningFlowBuilder</stringValue></value>
+    </processMetadataValues>
+    <processType>RoutingFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector><targetReference>Route_to_Agent</targetReference></connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>recordId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
