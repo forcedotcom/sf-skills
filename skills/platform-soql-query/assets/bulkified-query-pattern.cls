@@ -47,7 +47,7 @@ public class BulkPatternExample {
             SELECT Id, Name
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
 
         // Step 3: O(1) Map lookups
@@ -86,7 +86,7 @@ public class GroupedChildPattern {
             SELECT Id, FirstName, LastName, Email, AccountId
             FROM Contact
             WHERE AccountId IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]) {
             contactsByAccount.get(c.AccountId).add(c);
         }
@@ -137,7 +137,7 @@ public class MultiLevelLookupPattern {
             SELECT Id, Name, OwnerId, Owner.Name, Owner.Email
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
 
         // Step 3: Use the data
@@ -177,7 +177,7 @@ public class ConditionalQueryPattern {
             SELECT Id, Name, AnnualRevenue, Industry
             FROM Account
             WHERE Id IN :highValueAccountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
 
         // Step 3: Process only the high-value opportunities
@@ -212,7 +212,7 @@ public class SharedQueryPattern {
             SELECT Id, Name, Industry, AnnualRevenue, OwnerId
             FROM Account
             WHERE Id IN :accountIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ]);
     }
 
