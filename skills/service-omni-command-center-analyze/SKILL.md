@@ -8,6 +8,7 @@ metadata:
   minApiVersion: "66.0"
   relatedSkills:
     - "service-omni-channel-setup-coordinate"
+    - "service-omni-command-center-configure"
     - "service-omni-supervisor-config-deploy"
   accessCheck:
     - type: license

@@ -1,6 +1,6 @@
 ---
 name: experience-ui-bundle-project-generate
-description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce UI bundle app (React or Angular) and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); or when the user explicitly says they want to hand-scaffold from scratch."
+description: "Generates a minimal, ready-to-develop SFDX starter project from template instead of hand-scaffolding files. Use this skill when starting a brand-new Salesforce UI bundle app (React or Angular) and the initial project must be scaffolded — trigger phrases include create, start, or scaffold a new UI bundle app, generate a starter project, or use a prebuilt/starter template. DO NOT TRIGGER when: editing, styling, or adding pages or components to an EXISTING app (use experience-ui-bundle-frontend-generate); configuring ui-bundle.json or metadata files (use experience-ui-bundle-metadata-generate); deploying to an org (use experience-ui-bundle-deploy); when the user explicitly says they want to hand-scaffold from scratch; or when creating a brand-new standalone Salesforce project that also needs full setup — relocating the session, connecting an org, setting the default, and enabling source tracking (use dx-project-create in the salesforce-development plugin)."
 metadata:
   version: "1.2"
   domains: ["Experience"]
@@ -42,39 +42,22 @@ Once the user picks, carry the chosen `--template` flag into Step 2.
 
 ## Step 2: Generate the project into the target root
 
-The project contents must land **directly at the target root `$DEST`** — so `sfdx-project.json` sits at `$DEST/sfdx-project.json`, with no extra wrapper subfolder. `sf template generate project` always nests its output under a `--name` subfolder, so generate into the `$DEST` dir, then move the contents from the subfolder up into `$DEST`, overwriting anything already there on conflict. Remove the empty subfolder at the end.
+The project contents must land **directly at the target root `$DEST`** — so `sfdx-project.json` sits at `$DEST/sfdx-project.json`, with no extra wrapper subfolder. `sf template generate project` always nests its output under a `--name` subfolder, so `<SKILL_DIR>/scripts/generate-project.mjs` generates into `$DEST`, flattens the subfolder's contents up into `$DEST` (overwriting anything already there on conflict), and removes the now-empty subfolder — all through Node's `fs`/`child_process` APIs, so it runs the same way on Windows cmd/PowerShell as it does on macOS/Linux/Git Bash.
 
 - `<SKILL_DIR>` = the absolute path to **this skill's own directory** — the folder containing this `SKILL.md`; resolve it from the skill path in context
 - **`$NAME`** — the project name (alphanumerical only — no spaces, hyphens, underscores, or special characters). Ask the user for it. It also names the UI bundle, so it shows up inside the project.
 - **`$DEST`** — the target root directory the contents land in (use `.` for the current directory).
+- **`$TEMPLATE`** — the `--template` flag value from the framework reference chosen in Step 1 (e.g. `reactinternalapp`).
+
+Run the script with the actual, literal values substituted for `$NAME`, `$DEST`, and `$TEMPLATE` — do not use shell variable assignment/interpolation (`NAME=...` / `$NAME` / `%NAME%` / `$env:NAME`) since that syntax differs across bash, cmd, and PowerShell and this command must work in all three:
 
 ```sh
-NAME=MyApp   # project name the user chose; also names the UI bundle
-DEST=.       # target root directory (the contents land directly here, no NAME/ wrapper)
-
-# the --template flag from the framework reference chosen in Step 1
-TEMPLATE=reactinternalapp   # example placeholder — replace with the flag from your Step-1 reference
-
-mkdir -p "$DEST"
-sf template generate project --name "$NAME" --template "$TEMPLATE" --output-dir "$DEST"
-
-# Flatten the generated $DEST/$NAME contents up into $DEST (see <SKILL_DIR>/scripts/flatten-project.mjs).
-# Use the absolute skill-dir path — a relative ./scripts/ would resolve against $DEST, not the skill.
-node "<SKILL_DIR>/scripts/flatten-project.mjs" "$DEST/$NAME" "$DEST"
-rm -rf "$DEST/$NAME"
+node "<SKILL_DIR>/scripts/generate-project.mjs" "<name>" "<dest>" "<template>"
 ```
 
-> `<SKILL_DIR>/scripts/flatten-project.mjs` moves every generated entry (incl. dotfiles) into `$DEST`, overwriting any existing file/dir of any type on conflict while preserving unrelated files the user already had in `$DEST`. The per-entry `rmSync` + `renameSync` is what guarantees the template's files win on conflict (including a file-vs-directory type mismatch).
+The script prints `OK: project root landed at <dest> (...)` and exits 0 on success. It exits non-zero (with a clear stderr message) if `sf template generate project` fails, the generated project has no `sfdx-project.json`, or the flatten didn't leave a valid project root — stop and surface the failure rather than continuing.
 
-### Verify
-
-After generation, confirm the contents landed at the root (not in a `$NAME/` subfolder):
-
-```sh
-test -f "$DEST/sfdx-project.json" && echo "OK: project root landed" || echo "FAILED"
-```
-
-`sfdx-project.json` must sit at `$DEST/sfdx-project.json`. The project also contains `package.json`, `force-app/main/default/uiBundles/$NAME/` (the UI bundle), `scripts/`, `config/`, and `README.md`. See the framework reference from Step 1 for the specific bundle contents. If `sfdx-project.json` is missing or is one level down in `$DEST/$NAME/`, the flatten did not run — re-check before continuing.
+`sfdx-project.json` must sit at `$DEST/sfdx-project.json`. The project also contains `package.json`, `force-app/main/default/uiBundles/$NAME/` (the UI bundle), `scripts/`, `config/`, and `README.md`. See the framework reference from Step 1 for the specific bundle contents.
 
 ## Step 3: Install dependencies (you do this — do NOT hand off uninstalled)
 
@@ -84,26 +67,17 @@ There are **multiple** `package.json` files, each needing its own install:
 - the **project root** (`$DEST/package.json`), and
 - the **UI bundle** dir under `$DEST/force-app/main/default/uiBundles/$NAME/` — this holds the toolchain the preview server loads, so it must have `node_modules` too.
 
-```sh
-# 1. project root ($DEST was set in Step 2)
-( cd "$DEST" && npm install )
+`<SKILL_DIR>/scripts/install-deps.mjs` runs `npm install` for the root and for every UI bundle that has a `package.json` (via Node's `child_process` with an explicit `cwd` — no `cd &&` shell chaining), then verifies `node_modules` landed everywhere it installed:
 
-# 2. each UI bundle
-for b in "$DEST"/force-app/main/default/uiBundles/*/; do
-  [ -f "$b/package.json" ] && ( cd "$b" && npm install )
-done
+```sh
+node "<SKILL_DIR>/scripts/install-deps.mjs" "<dest>"
 ```
 
-> First-run install of the bundle is the heavy step; expect a short wait. If an install fails, surface it — don't hand off a half-installed project.
+Substitute the literal `$DEST` value from Step 2 for `<dest>`. The script prints `OK: all dependencies installed.` and exits 0 on success; it exits non-zero with a listed summary of which install(s) failed otherwise. First-run install of the bundle is the heavy step; expect a short wait. If an install fails, surface it — don't hand off a half-installed project.
 
 ## Step 4: Confirm and hand off
 
-Verify the project landed and is installed:
-
-```sh
-ls "$DEST" # sfdx-project.json, package.json, force-app/, scripts/, README.md ...
-ls "$DEST"/force-app/main/default/uiBundles/*/node_modules >/dev/null && echo "bundle deps installed"
-```
+`install-deps.mjs` already prints a verification summary (root + each UI bundle's `node_modules`) as part of Step 3. To look around the generated project yourself, use your own file-listing/read tools rather than a shell `ls` — that works identically regardless of the underlying OS shell.
 
 The project is now ready to develop and deploy. If there's a `README.md` in the template, take a look at it to see if there is any extra step or guidance for the user.
 

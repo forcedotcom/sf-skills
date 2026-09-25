@@ -13,6 +13,7 @@ metadata:
     - "service-omni-base-settings-configure"
     - "service-omni-channel-inventory-analyze"
     - "service-omni-command-center-analyze"
+    - "service-omni-command-center-configure"
     - "service-omni-permission-set-assign"
     - "service-omni-presence-status-deploy"
     - "service-omni-presence-user-config-deploy"
