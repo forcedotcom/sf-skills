@@ -328,6 +328,9 @@ Method-level format:
 - Template: `assets/trigger.cls`
 - One trigger per object; delegate all logic to handler/TAF action classes
 - Include all relevant DML contexts; if TAF: `new MetadataTriggerHandler().run();`
+- Not all SObjects allow triggers — before authoring, check the target object against `references/non-triggerable-sobjects.md`.
+  If the object is on that list, stop and explain — do not generate the trigger.
+  The list is a heuristic covering obvious cases (setup/audit/history/log objects) and isn't exhaustive; if the object isn't on it, proceed with authoring.
 
 ### Trigger Action (TAF)
 - One class per concern per context; implement `TriggerAction.{Context}`
