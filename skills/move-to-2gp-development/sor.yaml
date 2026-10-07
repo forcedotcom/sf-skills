@@ -1,0 +1,788 @@
+id: move-to-2gp-development
+sor_type: atomic
+setup_nodes:
+- Package
+owning_team: 2GP Readiness
+complexity: MODERATE
+source:
+  type: doc
+  ref: https://developer.salesforce.com/docs/atlas.en-us.pkg1_dev.meta/pkg1_dev/migration_move_to_2gp_workflow.htm
+  author: Salesforce Developers documentation; sor-authoring session 2026-06-10 with
+    andrew.slater@salesforce.com
+  date: '2026-06-10'
+  live_org_validation:
+    date: '2026-06-10'
+    devhub_alias: devhub
+    packaging_org_alias: dev1
+    test_package: pkg1 (SubscriberPackageId 033xx0000004FobAAE; Package2Id 0Hoxx0000004C92CAE)
+    steps_wire_tested:
+    - discover-package-on-devhub
+    - check-eligibility-1gp-released
+    - check-eligibility-2gp-converted-released
+    - check-already-done
+    - "finalize-move-to-2gp (2026-06-10, PRE-266 manual path only \u2014 Setup-page\
+      \ frontdoor URL successful; user completed Move to 2GP in browser. The 266 Connect\
+      \ API dispatch was subsequently wire-tested on 2026-09-10 \u2014 see live_org_validation_266_264.)"
+    field_name_validations:
+    - 'Package2.ConvertedFromPackageId: confirmed correct'
+    - 'Package2Version.ConvertedFromVersionId: confirmed correct (scalar Id form)'
+    - 'MetadataPackageVersion.ReleaseState: confirmed correct (STATICENUM, picklist
+      value ''Released'')'
+    notable_findings:
+    - 'Move-to-2GP does NOT auto-create a native Package2Version on DevHub; check-already-done
+      returned 0 rows even after a successful move. Native Package2Version creation
+      is a separate user-driven step (`sf package version create`). Confirms contract
+      #7.'
+    not_wire_tested:
+    - "verify-finalize-on-packaging-org (264 read-only PackageConversion exposure\
+      \ \u2014 as of 2026-06-10 contract confirmed from source only; subsequently\
+      \ wire-tested 2026-09-10, see live_org_validation_266_264)"
+  contract_source:
+    note: The 266 finalize Connect API and 264 PackageConversion read-only exposure
+      shapes encoded in finalize-move-to-2gp and verify-finalize-on-packaging-org
+      were confirmed against the core implementation (W-23073447 branch), not from
+      a live org.
+    verified_against:
+    - 'Published OAS contract: POST /connect/packaging/package/{packageId}/finalize-move-to-2gp
+      (v69.0, operationId finalizeMoveTo2gp; request FinalizeMoveTo2gpInputRepresentation;
+      response FinalizeMoveTo2gpOutputRepresentation)'
+    - "Resource-implementation behavior: CreatePackaging access gate; all-three-affirmations\
+      \ contract; packageId\u2194ConvertedFromPackageId binding guard; 400/403/404\
+      \ status mapping"
+    - Read-only Tooling exposure of the PackageConversion entity (gated on the PackagingEnabled
+      org permission; EndDate/FinalizedVersionId/FinalizedVersionNumber/ConvertedFromPackageId
+      fields)
+    - 'Functional-test-verified wire behavior: flat JSON body; access / affirmation
+      / id-mismatch / not-found responses'
+    date: '2026-09-04'
+  live_org_validation_266_264:
+    date: '2026-09-10'
+    devhub_alias: devhub-devtest
+    packaging_org_alias: pkg-devtest
+    test_package: pkgtest (MetadataPackage / SubscriberPackageId 033xx0000004Fn0AAE;
+      Package2Id 0Hoxx0000004C92CAE)
+    converted_2gp_version: Package2Version 05ixx0000004C92AAE (v1.0.0; ConvertedFromVersionId
+      04txx0000004HOJAA2; SubscriberPackageVersionId 04txx0000004HT8AAM; Package2VersionCreateRequest
+      08cxx0000004CAeAAM), promoted to Released as part of the test.
+    note: Full end-to-end live-org wire-test of the shipped 266 finalize Connect API
+      and 264 PackageConversion read-only Tooling exposure against a fresh 1GP DE
+      + DevHub fixture on a local core dev server (localhost:6101), satisfying the
+      W-23073480 acceptance criteria. Supersedes the earlier pending_validation note
+      (now removed).
+    steps_wire_tested:
+    - "discover-package-on-devhub (Package2 WHERE ConvertedFromPackageId; the 15-char\
+      \ id supplied by the user matched the 18-char stored FK \u2014 SOQL normalizes\
+      \ 15/18; step output subscriber_package_id is the 18-char ConvertedFromPackageId\
+      \ 033xx0000004Fn0AAE)"
+    - check-eligibility-1gp-released (highest Released 1GP = v1.0, 04txx0000004HOJAA2;
+      the 18-char MetadataPackageId matched)
+    - "check-eligibility-2gp-converted-released (NEGATIVE branch validated first:\
+      \ pre-promote IsReleased=false \u2192 0 rows \u2192 correct block + 'promote\
+      \ to Released' guidance; then post-promote \u2192 1 row)"
+    - "check-already-done (0 native Package2Versions with ConvertedFromVersionId=NULL\
+      \ \u2192 not already finalized \u2192 proceed)"
+    - confirm-affirmations (three-affirmation gate)
+    - "finalize-move-to-2gp (266 Connect API POST \u2014 see finalize_findings)"
+    - verify-finalize-on-packaging-org (PackageConversion.EndDate populated = 2026-09-10T13:32:18Z,
+      matching the POST finalizedAt; FinalizedVersionId 04txx0000004HOJAA2, FinalizedVersionNumber
+      1.0.0)
+    finalize_findings:
+    - "POST /services/data/v69.0/connect/packaging/package/033xx0000004Fn0AAE/finalize-move-to-2gp\
+      \ with the 18-char id (the value the SOR threads from discover's ConvertedFromPackageId\
+      \ output) \u2192 HTTP 200, successfullyFinalized=true, finalizedAt=2026-09-10T13:32:18Z,\
+      \ packageId=033xx0000004Fn0AAE, conversionId=2pcxx0000000001. Confirms the two\
+      \ W-24139399 endpoint fixes are live: (1) 18-char package ids are accepted (server\
+      \ normalizes both ids to their case-safe 15-char form before comparing to PackageConversion.ConvertedFromPackageId\
+      \ \u2014 previously a spurious 400 mismatch), and (2) success returns HTTP 200\
+      \ (not the Connect default 201), matching the OAS."
+    - "Idempotency / ALREADY_FINALIZED branch: a second identical POST \u2192 HTTP\
+      \ 400 [{errorCode: INVALID_INPUT, message: \"Package has already been moved\
+      \ to 2GP. 2GP package id: ...\"}]. Matches the SOR's \"treat 400 ALREADY_FINALIZED\
+      \ as early-exit success\" guidance; the message is clear and surfaceable verbatim."
+    field_name_validations:
+    - finalize response fields successfullyFinalized / finalizedAt / packageId / conversionId
+      map cleanly to the SOR output block (successfully_finalized / finalized_at /
+      finalized_package_id / conversion_id).
+    - PackageConversion.EndDate / FinalizedVersionId / FinalizedVersionNumber / ConvertedFromPackageId
+      all queryable via the 264 read-only Tooling exposure (v64.0).
+    depends_on_release: The SOR's natural 18-char subscriber_package_id path depends
+      on the W-24139399 endpoint fixes (18-char acceptance + 200-on-success) landing
+      in 266 before GA. Both fixes were verified present in the core branch and confirmed
+      live in this wire-test.
+description: "Finalize the irreversible Move-to-2GP transition for a converted 1GP\
+  \ managed package \u2014 afterward, no new major or minor 1GP versions can be created.\
+  \ Fully agent-driveable end-to-end: the finalize action dispatches directly to the\
+  \ packaging Connect API (shipped 266) and the state change is wire-verified against\
+  \ the read-only PackageConversion Tooling exposure (shipped 264)."
+agent_description: "Finalize the irreversible, one-way Move-to-2GP cutover for a converted\
+  \ 1GP managed package \u2014 afterward, new major/minor 1GP versions can NEVER be\
+  \ created. Use when an ISV admin asks to move a 1GP package to 2GP development.\
+  \ The agent dispatches the finalize directly via the packaging Connect API (POST\
+  \ /connect/packaging/package/{packageId}/finalize-move-to-2gp, shipped 266) after\
+  \ clearing the eligibility + conversion/subscriber-migration-testing gates and obtaining\
+  \ the three explicit affirmations the endpoint requires; it then wire-verifies the\
+  \ result against PackageConversion.EndDate (read-only Tooling exposure, shipped\
+  \ 264)."
+preconditions:
+- description: "REQUIRED: the 1GP DE (packaging) org must be reachable with valid\
+    \ credentials. This is the one org the finalize path needs \u2014 an `sf` alias\
+    \ is the convenient way to authenticate, but the skill is NOT coupled to the `sf`\
+    \ CLI: any caller that can present a valid bearer token for this org (e.g. a raw\
+    \ REST call) works equally. The 1GP DE org hosts MetadataPackageVersion (the authoritative\
+    \ highest-Released 1GP version for the eligibility gate), is the org the finalize\
+    \ Connect API endpoint (266) runs against, hosts the read-only PackageConversion\
+    \ Tooling exposure (264) the wire-verify queries, and is the org the pre-266 manual\
+    \ browser fallback opens."
+  check: PackagingOrgAuthenticated
+- description: "OPTIONAL (recommended): authenticating the DevHub org lets the agent\
+    \ proactively pre-check eligibility before dispatching finalize \u2014 the converted\
+    \ 2GP Package2Version at the matching major.minor exists and is Released (Package2\
+    \ + Package2Version live on DevHub). It is NOT a hard prerequisite: if DevHub\
+    \ is unavailable the skill can still finalize, because the Connect endpoint validates\
+    \ eligibility server-side and returns a 400 with a specific reason (e.g. version\
+    \ mismatch) when the latest released version has not been converted + promoted.\
+    \ Skipping the pre-check trades a clear up-front message for a server-side reject;\
+    \ it does not make the workflow unsafe (the irreversibility is gated by the three\
+    \ affirmations, not by DevHub)."
+  check: DevHubOrgAuthenticated
+- description: "User must have the CreatePackaging user permission (which implies\
+    \ CustomizeApplication) plus dev-org ownership of the package. This is the exact\
+    \ edit-access gate the finalize Connect endpoint enforces server-side \u2014 the\
+    \ same edit-access check the package's Setup detail page applies. A caller lacking\
+    \ it gets a 403 from the endpoint before any state is inspected (note: sysadmins\
+    \ do NOT clear this gate \u2014 edit access is org-dev scoped, not sysadmin-scoped)."
+  check: UserPermissions.CreatePackaging
+  guard: UserPermissions.CreatePackaging
+  check_kind: user_perm
+  perm: CreatePackaging
+- description: Package conversion testing must be complete. Per the Salesforce documentation,
+    "Before you complete your move to 2GP package development, it's critical that
+    you thoroughly test package conversions and subscriber migrations first." An agent
+    MUST explicitly confirm this with the user before proceeding to the finalize step.
+    See "Test Converted Packages and Subscriber Migrations" (linked from the workflow
+    doc) for the testing checklist.
+  check: ConversionTestingComplete
+- description: "Source files for the package's latest converted version should be\
+    \ retrieved before finalize. Per the docs, the user runs `sf package version retrieve\
+    \ --package 04tXXX --output-dir my-folder --target-dev-hub <devhub>` to retrieve,\
+    \ then edits sfdx-project.json's versionName, versionNumber, and ancestorVersion.\
+    \ This is preparatory work for ongoing 2GP development AFTER finalize, but the\
+    \ doc places it in the workflow sequence \u2014 the agent should remind the user."
+  check: PackageSourceRetrievedAndProjectFileUpdated
+agent_guidance: "AT START \u2014 the finalize path needs ONE org: the 1GP DE (packaging)\
+  \ org, reachable with valid credentials. A DevHub org is OPTIONAL-but-recommended,\
+  \ used only to proactively pre-check eligibility. Auth is not coupled to the `sf`\
+  \ CLI: an `sf` alias is convenient (and is how Codey's `dispatch` routes today),\
+  \ but any valid bearer token for the org works for a raw REST call. Ask the user\
+  \ for the packaging-org alias (and, if they want the eligibility pre-check, the\
+  \ DevHub alias) at the start if not already provided; `sf org list --json` confirms\
+  \ what's authed. If the packaging org is missing, instruct the user to make it reachable\
+  \ (e.g. `sf org login web --alias <name>`) and wait. If only DevHub is missing you\
+  \ may still finalize \u2014 skip the DevHub-side eligibility queries and rely on\
+  \ the endpoint's server-side validation (a not-yet-converted/not-promoted package\
+  \ returns a 400 with a specific reason), and tell the user the proactive pre-check\
+  \ was skipped.\nMULTI-ORG DISPATCH (read once, important): this workflow spans two\
+  \ orgs \u2014 the 1GP DE (packaging) org and the DevHub org. Each step's `invocation`\
+  \ block carries a `target_org` field naming which org the call must hit (`{packaging_org_alias}`\
+  \ vs `{devhub_alias}`); route each call to the org its `target_org` names rather\
+  \ than assuming a single org for the whole workflow. Route to the DevHub org: discover-package-on-devhub,\
+  \ check-eligibility-2gp-converted-released, and check-already-done. Route to the\
+  \ packaging org: check-eligibility-1gp-released, finalize-move-to-2gp, and verify-finalize-on-packaging-org.\
+  \ If your execution channel can only reach one connected org at a time, run each\
+  \ off-target read-only step against the org named in its `target_org` before dispatching\
+  \ the finalize against the packaging org; a CLI-driven runner can map that routing\
+  \ onto its own tooling. A step sent to the wrong org returns empty or misleading\
+  \ results.\nTWO ROOT INTENTS \u2014 pick by user phrasing.\nINTENT A \u2014 \"tell\
+  \ me how to move my package to 2GP\" (planning /\n  education): walk the user through\
+  \ the full sequence \u2014\n  discover-package-on-devhub \u2192 check-eligibility-1gp-released\
+  \ \u2192\n  check-eligibility-2gp-converted-released \u2192 check-already-done \u2192\
+  \n  remind-of-prerequisites (testing, source retrieval) \u2192 describe the\n  manual\
+  \ finalize step in Setup. Treat this as a planning\n  conversation, NOT a dispatch\
+  \ action.\n\nINTENT B \u2014 \"do the move-to-2GP step now\" (action request):\n\
+  \  discover-package-on-devhub \u2192 check-eligibility-1gp-released \u2192\n  check-eligibility-2gp-converted-released\
+  \ \u2192 check-already-done \u2192\n  confirm-affirmations \u2192 finalize-move-to-2gp\
+  \ (direct Connect API\n  dispatch) \u2192 verify-finalize-on-packaging-org (wire-verify\
+  \ against\n  PackageConversion.EndDate) \u2192 verify-finalize-by-user-confirmation\n\
+  \  (optional cross-check). The finalize step now dispatches the\n  packaging Connect\
+  \ API POST directly against the 1GP DE org \u2014 the\n  agent does NOT open a browser\
+  \ tab in the normal path. It MUST\n  still obtain the three explicit affirmations\
+  \ in confirm-affirmations\n  first (the endpoint requires all three flags true and\
+  \ rejects the\n  call otherwise), then POST, then wire-verify EndDate. The manual\n\
+  \  browser fallback path is retained only as a fallback for orgs on a\n  pre-266\
+  \ release (see finalize-move-to-2gp.invocation.fallback).\n\nHARD STOP CONTRACT:\
+  \ this workflow is irrevocable. Per the documentation's \"After you click Proceed,\
+  \ you can no longer create new major or minor versions in the packaging org.\" An\
+  \ agent MUST NOT instruct the user to click Proceed in Setup until ALL THREE of\
+  \ the following have been explicitly confirmed: (a) conversion testing is done,\
+  \ (b) subscriber migration testing is done, (c) the user understands the irreversibility.\
+  \ Skipping any of these is a contract violation regardless of how the user phrased\
+  \ the original request.\nEARLY EXIT: if check-already-done returns \u22651 row (a\
+  \ Package2Version exists with ConvertedFromVersionId = NULL), the move-to-2GP has\
+  \ ALREADY been completed \u2014 or the package was 2GP-native to start with. Report\
+  \ this to the user and stop. Do NOT proceed to affirmations or finalize.\nELIGIBILITY\
+  \ GATING: if check-eligibility-1gp-released returns no Released 1GP version, OR\
+  \ if check-eligibility-2gp-converted-released returns no matching Released 2GP-converted\
+  \ version at the same major.minor, the user is NOT eligible to Move to 2GP. Surface\
+  \ the specific missing piece and what to do \u2014 typically \"you need to promote\
+  \ 2GP version X.Y to Released before you can move-to-2GP.\" If DevHub is not authenticated,\
+  \ skip the proactive 2GP eligibility query and rely on the endpoint's server-side\
+  \ validation instead \u2014 the finalize call returns a 400 with a specific reason\
+  \ (e.g. version mismatch) when the latest released version has not been converted\
+  \ + promoted; relay that message to the user.\nRELEASE HISTORY (both milestones\
+  \ now shipped \u2014 describe-only, not an ongoing constraint): 264 shipped the\
+  \ read-only PackageConversion Tooling exposure, lighting up verify-finalize-on-packaging-org\
+  \ (EndDate-based wire-verify). 266 shipped the finalize Connect API \u2014 finalize-move-to-2gp\
+  \ now dispatches POST /services/data/v69.0/connect/packaging/package/{packageId}/finalize-move-to-2gp\
+  \ against the 1GP DE org (invocation.kind: rest, operationId finalizeMoveTo2gp,\
+  \ MCP-enabled). The endpoint requires the three affirmation flags (acknowledgedIrrevocable\
+  \ / acknowledgedTestingComplete / acknowledgedSourceRetrieved) all true in the request\
+  \ body, mirroring the Setup dialog's checkboxes \u2014 this is the load-bearing\
+  \ safety gate, so the confirm-affirmations step remains mandatory. For orgs still\
+  \ on a pre-266 release, the manual browser fallback applies.\nOnly the 1GP DE (packaging)\
+  \ org is required for the finalize dispatch + wire-verify. The DevHub org is optional\
+  \ \u2014 used only for the proactive eligibility pre-check; the endpoint validates\
+  \ eligibility server-side regardless.\n\n---\nBACKEND / VERSIONING MECHANICS (relocated\
+  \ from the discover card \u2014 describe-only, never shown on the card):\n- FINALIZE\
+  \ DISPATCH (266+): the agent-dispatchable path is the packaging Connect API POST\
+  \ /services/data/v69.0/connect/packaging/package/{packageId}/finalize-move-to-2gp\
+  \ (operationId finalizeMoveTo2gp), which runs against the 1GP DE org. The endpoint\
+  \ enforces the CreatePackaging edit-access gate, requires all three affirmation\
+  \ flags true, and verifies the {packageId} in the URL matches the package the org\
+  \ is currently converting \u2014 a mismatch returns 400. On success it finalizes\
+  \ the conversion, after which PackageConversion.EndDate is set (observable via verify-finalize-on-packaging-org).\
+  \ It performs the same finalize action that was previously available only through\
+  \ the Setup UI's Move-to-2GP dialog.\n- PRE-266 HISTORY / FALLBACK: before 266 no\
+  \ public agent-dispatchable API existed \u2014 finalize was available only as a\
+  \ Setup-page action the user completed in the browser, with no stable programmatic\
+  \ contract. The fallback delivers the user to the package's Setup detail page at\
+  \ `/udd/AllPackage/viewAllPackage.apexp` (any authenticated browser session to the\
+  \ packaging org reaches it), which hosts the \"Move to Second-Generation Managed\
+  \ Packaging\" dialog and its Proceed action. This remains the fallback for orgs\
+  \ on a pre-266 release.\n- CANNOT-CREATE BOUNDARY, MECHANICS: after finalize, new\
+  \ major/minor 1GP versions cannot be created \u2014 neither via `sf package1 version\
+  \ create` nor via the major/minor upload flow on viewAllPackage.apexp; all new major/minor\
+  \ innovation must use 2GP via `sf package version create`. Customers running on\
+  \ prior 1GP versions are unaffected.\n- PATCH EXCEPTION (surface conversationally\
+  \ only when the user asks e.g. \"can I still cut a patch?\"): PATCH versions of\
+  \ major.minor versions that existed BEFORE finalize remain permitted, to hotfix\
+  \ 1GP subscribers not yet migrated to 2GP. This exception is intentionally NOT part\
+  \ of the affirmation prompt the user confirms (the Setup dialog uses the same headline\
+  \ framing) \u2014 never put it in the affirmation.\n- ELIGIBILITY GATE (3-part proactive\
+  \ pre-check, two-org query): (a) the 1GP package's highest Released major.minor\
+  \ version, queried from the 1GP DE org via MetadataPackageVersion; (b) a corresponding\
+  \ 2GP-converted Package2Version at the same major.minor on DevHub, AND that 2GP\
+  \ version is Released; (c) no native 2GP version exists yet on DevHub (its presence\
+  \ means Move-to-2GP already happened \u2014 early exit). Parts (b)/(c) are the DevHub-side\
+  \ pre-check: run them when DevHub is authenticated to give the user a clear up-front\
+  \ answer; if (a) or (b) fails, surface what's missing + the fix (typically promote\
+  \ the converted 2GP version to Released). When DevHub is unavailable, this proactive\
+  \ check is skipped and the finalize endpoint enforces the same eligibility server-side\
+  \ (\u2192 400 on mismatch). DevHub eligibility queries hit the Package2 / Package2Version\
+  \ 0Ho-prefix entity.\n- PRE-FLIGHT (mandatory): Salesforce docs state \"Before you\
+  \ complete your move to 2GP package development, it's critical that you thoroughly\
+  \ test package conversions and subscriber migrations first.\" Never invoke the manual\
+  \ step without explicit user affirmation that conversion + subscriber-migration\
+  \ testing is complete.\n- RELEASE HISTORY (both milestones shipped): 264 exposed\
+  \ the PackageConversion object read-only via the Tooling API (available when packaging\
+  \ is enabled for the org), lighting up verify-finalize-on-packaging-org as an EndDate-based\
+  \ wire-verify. 266 shipped the Connect API finalize endpoint POST /services/data/v69.0/connect/packaging/package/{packageId}/finalize-move-to-2gp\
+  \ (operationId finalizeMoveTo2gp), driven by the 1GP MetadataPackage Id (033-prefix)\
+  \ with the three affirmation flags in the request body; finalize-move-to-2gp dispatches\
+  \ invocation.kind: rest, is status: implemented, and the skill is now fully agent-driveable\
+  \ end-to-end. The manual browser fallback path is retained only as a pre-266 fallback.\n\
+  - WIRE-VERIFICATION (264+): the canonical post-finalize signal is PackageConversion.EndDate\
+  \ (non-null) on the 1GP DE org, queryable via the read-only Tooling exposure shipped\
+  \ in 264. The finalize endpoint's own response also returns finalizedAt + conversionId\
+  \ directly. Move-to-2GP does NOT auto-create a native (non-converted) Package2Version\
+  \ on DevHub \u2014 native versions are created later by a separate user-driven `sf\
+  \ package version create`, so their absence immediately post-finalize is expected,\
+  \ not a failure signal (i.e. there is no Package2Version-based wire-verify; EndDate\
+  \ is the reliable signal). verify-finalize-by-user-confirmation remains available\
+  \ as an optional human cross-check but is no longer the only verification surface.\n\
+  - ORG REACHABILITY (auth mechanism is agent's choice, not `sf`-specific): only the\
+  \ 1GP DE (packaging) org is genuinely required \u2014 it backs the 266 Connect finalize\
+  \ endpoint, the read-only PackageConversion wire-verify (264), the 1GP-side eligibility\
+  \ query (MetadataPackageVersion), and the browser Setup page for the pre-266 fallback.\
+  \ Reachability can come from an `sf` alias OR any valid bearer token for the org\
+  \ (raw REST); the skill is not coupled to the `sf` CLI. The DevHub org (Package2\
+  \ / Package2Version) is OPTIONAL \u2014 it only enables the proactive eligibility\
+  \ pre-check; when it is absent the finalize endpoint still validates eligibility\
+  \ server-side (a not-yet-converted/not-promoted package \u2192 400), so the skill\
+  \ can proceed DevHub-less. This also sidesteps the multi-org-auth burden of skills\
+  \ that hard-require two authenticated orgs."
+steps:
+- id: discover-package-on-devhub
+  description: Look up the 2GP Package2 record on DevHub for the 1GP package the user
+    wants to move. The user provides the 1GP package by name (the customer-facing
+    label) or by SubscriberPackageId (the 033... key prefix). Returns the Package2
+    Id (0Ho... key prefix) and namespace prefix, plus the SubscriberPackageId for
+    use in eligibility queries. This is the DevHub-side anchor for the DevHub-side
+    eligibility checks; the 1GP-side eligibility check uses the SubscriberPackageId
+    (which equals the MetadataPackage Id on the 1GP DE org) directly.
+  api_type: tooling_api
+  operation: queryPackage2ByConvertedFrom
+  purpose: read
+  status: implemented
+  invocation:
+    kind: rest
+    method: GET
+    path: /services/data/v62.0/tooling/query
+    target_org: '{devhub_alias}'
+    query_params:
+      q: "SELECT Id, Name, NamespacePrefix, ConvertedFromPackageId,\n  ContainerOptions\
+        \ FROM Package2 WHERE\n  ConvertedFromPackageId = '{subscriber_package_id}'"
+  inputs:
+  - name: devhub_alias
+    type: String
+    source: user_input
+    description: 'Source: user_input. The `sf` alias of the user''s DevHub org. Captured
+      at skill start (see agent_guidance "AT START").'
+  - name: subscriber_package_id
+    type: String
+    source: user_input
+    description: The 1GP package's SubscriberPackageId (033... key prefix). User provides
+      this directly, or agent obtains it via a MetadataPackage name lookup on the
+      1GP DE org (see agent_guidance).
+  output:
+    package2_id: $.records[0].Id
+    package_name: $.records[0].Name
+    namespace_prefix: $.records[0].NamespacePrefix
+    subscriber_package_id: $.records[0].ConvertedFromPackageId
+    container_options: $.records[0].ContainerOptions
+  agent_guidance: "If the user only knows the package by Name (not 033-id), resolve\
+    \ via the 1GP DE org's Tooling endpoint: `SELECT Id, Name, NamespacePrefix FROM\
+    \ MetadataPackage WHERE Name = '<name>'`. The Id field on MetadataPackage IS the\
+    \ SubscriberPackageId (033... key prefix) needed by this step. If multiple packages\
+    \ match, surface the list and ask the user to disambiguate by NamespacePrefix.\n\
+    Once the SubscriberPackageId is known, this step's actual query runs against DevHub's\
+    \ `Package2 WHERE ConvertedFromPackageId = '<033...>'`. If THAT returns 0 rows,\
+    \ the 1GP package has not been converted to 2GP yet \u2014 the user must run the\
+    \ conversion process first (a separate workflow not covered by this skill). Surface\
+    \ this clearly: \"I can't find a 2GP-converted Package2 record for your 1GP package\
+    \ on this DevHub. The package needs to be converted to 2GP before Move-to-2GP\
+    \ can complete. See [package conversion docs] for the conversion process.\""
+- id: check-eligibility-1gp-released
+  description: Find the highest Released 1GP major.minor version of the package by
+    querying MetadataPackageVersion on the 1GP DE org. MetadataPackageVersion is the
+    1GP DE-side view of `all_package_version` joined with `dev_package_version`, with
+    a `ReleaseState` STATICENUM field whose Released picklist value is `"Released"`.
+  api_type: tooling_api
+  operation: queryHighestReleased1GPVersion
+  purpose: validate
+  status: implemented
+  invocation:
+    kind: rest
+    method: GET
+    path: /services/data/v62.0/tooling/query
+    target_org: '{packaging_org_alias}'
+    query_params:
+      q: "SELECT Id, MajorVersion, MinorVersion, PatchVersion, ReleaseState\n  FROM\
+        \ MetadataPackageVersion WHERE\n  MetadataPackageId = '{subscriber_package_id}'\
+        \ AND\n  ReleaseState = 'Released' ORDER BY MajorVersion DESC,\n  MinorVersion\
+        \ DESC LIMIT 1"
+  inputs:
+  - name: packaging_org_alias
+    type: String
+    source: user_input
+    description: 'Source: user_input. The `sf` alias of the user''s 1GP DE (packaging)
+      org. Captured at skill start (see agent_guidance "AT START").'
+  - name: subscriber_package_id
+    type: String
+    source: prior_step
+    description: "Source - output of discover-package-on-devhub. Note: the SubscriberPackageId\
+      \ (033... key prefix) on DevHub is the same Id as MetadataPackage on the 1GP\
+      \ DE org \u2014 both wrap the same all_package row."
+  depends_on:
+  - discover-package-on-devhub
+  output:
+    highest_1gp_version_id: $.records[0].Id
+    highest_1gp_major: $.records[0].MajorVersion
+    highest_1gp_minor: $.records[0].MinorVersion
+  agent_guidance: "INTERPRETING THE RESULT: if 0 rows return, the 1GP package has\
+    \ no Released versions at all on the 1GP DE org \u2014 Move-to-2GP cannot proceed.\
+    \ Surface this to the user: \"Your 1GP package has no Released versions on the\
+    \ packaging org. You need at least one Released 1GP version (whose 2GP conversion\
+    \ is also Released) before you can Move to 2GP.\" If \u22651 row returns, capture\
+    \ MajorVersion + MinorVersion as the target coordinates for the next eligibility\
+    \ step."
+- id: check-eligibility-2gp-converted-released
+  description: "Confirm a 2GP-converted Package2Version exists at the same major.minor\
+    \ as the highest Released 1GP version, AND that the 2GP version is Released. This\
+    \ is the second half of the eligibility gate \u2014 Move-to-2GP requires the highest\
+    \ 1GP major.minor to have a corresponding RELEASED 2GP-converted equivalent. Queries\
+    \ Package2Version on DevHub."
+  api_type: tooling_api
+  operation: queryReleased2GPConvertedVersion
+  purpose: validate
+  status: implemented
+  invocation:
+    kind: rest
+    method: GET
+    path: /services/data/v62.0/tooling/query
+    target_org: '{devhub_alias}'
+    query_params:
+      q: "SELECT Id, MajorVersion, MinorVersion, IsReleased,\n  ConvertedFromVersionId\
+        \ FROM Package2Version WHERE\n  Package2Id = '{package2_id}' AND MajorVersion\
+        \ = {major} AND\n  MinorVersion = {minor} AND IsReleased = true AND\n  ConvertedFromVersionId\
+        \ != NULL"
+  inputs:
+  - name: devhub_alias
+    type: String
+    source: prior_step
+    description: Source - output of check-eligibility-1gp-released (transitively from
+      discover-package-on-devhub.devhub_alias).
+  - name: package2_id
+    type: String
+    source: prior_step
+    description: Source - output of check-eligibility-1gp-released (transitively from
+      discover-package-on-devhub.package2_id).
+  - name: major
+    type: Integer
+    source: prior_step
+    description: Source - output of check-eligibility-1gp-released (highest_1gp_major).
+  - name: minor
+    type: Integer
+    source: prior_step
+    description: Source - output of check-eligibility-1gp-released (highest_1gp_minor).
+  depends_on:
+  - check-eligibility-1gp-released
+  output:
+    converted_2gp_version_id: $.records[0].Id
+    converted_2gp_is_released: $.records[0].IsReleased
+  agent_guidance: "INTERPRETING THE RESULT: if 0 rows return, the user is BLOCKED.\
+    \ Possibilities \u2014 surface specifically: - No 2GP-converted version at major.minor\
+    \ X.Y exists at all:\n  \"I see your highest Released 1GP version is X.Y, but\
+    \ no\n  2GP-converted Package2Version exists at X.Y. You need to run\n  the conversion\
+    \ process for X.Y before Move-to-2GP can\n  complete.\"\n- 2GP-converted X.Y exists\
+    \ but is NOT Released: \"I see a\n  2GP-converted version of X.Y, but it's not\
+    \ Released yet. You\n  need to promote it to Released (`sf package version promote\n\
+    \  --package <id>`) before Move-to-2GP can complete.\"\nThe skill MUST NOT proceed\
+    \ to confirm-affirmations until this step returns \u22651 row."
+- id: check-already-done
+  description: "Detect the early-exit case \u2014 if a native (non-converted) Package2Version\
+    \ exists for this Package2, Move-to-2GP has ALREADY happened OR the package was\
+    \ 2GP-native to start with. Native 2GP versions are characterized by ConvertedFromVersionId\
+    \ = NULL. If any such Package2Version exists, the skill exits immediately."
+  api_type: tooling_api
+  operation: queryNativePackage2Version
+  purpose: validate
+  status: implemented
+  invocation:
+    kind: rest
+    method: GET
+    path: /services/data/v62.0/tooling/query
+    target_org: '{devhub_alias}'
+    query_params:
+      q: "SELECT Id, MajorVersion, MinorVersion, IsReleased FROM\n  Package2Version\
+        \ WHERE Package2Id = '{package2_id}' AND\n  ConvertedFromVersionId = NULL\
+        \ LIMIT 1"
+  inputs:
+  - name: devhub_alias
+    type: String
+    source: prior_step
+    description: Source - output of check-eligibility-2gp-converted-released (transitively
+      from discover-package-on-devhub.devhub_alias).
+  - name: package2_id
+    type: String
+    source: prior_step
+    description: Source - output of check-eligibility-2gp-converted-released (transitively
+      from discover-package-on-devhub.package2_id).
+  depends_on:
+  - check-eligibility-2gp-converted-released
+  output:
+    native_version_count: $.totalSize
+    first_native_version_id: $.records[0].Id
+  agent_guidance: "INTERPRETING THE RESULT: if \u22651 row returns, EARLY EXIT \u2014\
+    \ Move-to-2GP has already been completed for this package, OR the package was\
+    \ 2GP-native from the start. To distinguish (mostly cosmetic \u2014 both states\
+    \ mean \"no further finalize action needed\"), check the Package2 record's ContainerOptions\
+    \ field (captured in discover-package-on-devhub) \u2014 converted packages have\
+    \ ContainerOptions = \"Managed\", same as natives, so the only reliable signal\
+    \ is whether ConvertedFromPackageId on Package2 was non-null at discovery (yes\
+    \ = converted, finalize completed previously; no = native from start). Either\
+    \ way, surface to the user: \"Move-to-2GP has already been completed for this\
+    \ package \u2014 no further action needed.\" If 0 rows return, proceed to confirm-affirmations."
+- id: confirm-affirmations
+  description: "Present the irrevocability + testing affirmations to the user, mirroring\
+    \ the \"Move to Second-Generation Managed Packaging\" dialog shown in Setup UI.\
+    \ The user must explicitly confirm each affirmation before the agent proceeds\
+    \ to the (manual) finalize step. This step has no API surface \u2014 it's a structured\
+    \ agent-to-user interaction encoded in the SOR for contract consistency between\
+    \ the eventual 266 Connect API (which is expected to require these as request-body\
+    \ fields) and the pre-266 manual flow."
+  api_type: composite
+  purpose: validate
+  status: implemented
+  invocation:
+    kind: agent_prompt
+    affirmations:
+    - id: acknowledged_irrevocable
+      prompt: "\"Moving to 2GP development is IRREVERSIBLE. After this step, you can\
+        \ no longer create new major or minor 1GP versions of this package \u2014\
+        \ neither via `sf package1 version create` nor via the upload flow on viewAllPackage.apexp.\
+        \ All future innovation must use 2GP via `sf package version create`. Confirm\
+        \ you understand this is a one-way transition.\""
+    - id: acknowledged_testing_complete
+      prompt: '"Salesforce documentation requires that package conversion testing
+        AND subscriber migration testing are complete before finalizing. Confirm you
+        have completed both."'
+    - id: acknowledged_source_retrieved
+      prompt: '"After finalize, you''ll continue 2GP development from a retrieved
+        source-files set. Have you run `sf package version retrieve --package <04t...>
+        --output-dir <folder> --target-dev-hub <devhub>` and updated sfdx-project.json''s
+        versionName, versionNumber, ancestorVersion?"'
+  inputs:
+  - name: package_name
+    type: String
+    source: prior_step
+    description: Source - output of check-already-done (transitively from discover-package-on-devhub.package_name).
+  - name: package2_id
+    type: String
+    source: prior_step
+    description: Source - output of check-already-done (transitively from discover-package-on-devhub.package2_id).
+  depends_on:
+  - check-already-done
+  output:
+    acknowledged_irrevocable: $.affirmations.acknowledged_irrevocable
+    acknowledged_testing_complete: $.affirmations.acknowledged_testing_complete
+    acknowledged_source_retrieved: $.affirmations.acknowledged_source_retrieved
+  agent_guidance: "ALL THREE affirmations must be explicitly confirmed before proceeding.\
+    \ Do NOT use a single yes/no prompt \u2014 surface each one separately. If the\
+    \ user says \"yes, all\" globally, re-prompt individually; the affirmations exist\
+    \ precisely because each is a distinct piece of state the user is consciously\
+    \ confirming. If ANY affirmation is declined, STOP \u2014 do not proceed to finalize-move-to-2gp.\
+    \ Surface what's blocked + what the user needs to do (run conversion tests, subscriber\
+    \ migration tests, or `sf package version retrieve`) before returning.\nPATCH-EXCEPTION\
+    \ FOLLOW-UP: the acknowledged_irrevocable prompt mirrors the Setup dialog's framing\
+    \ \u2014 major/minor blocked, no patch caveat. If the user asks a follow-up like\
+    \ \"can I still cut a patch?\" or \"what about hotfixes for unmigrated 1GP subscribers?\"\
+    , confirm: yes, patch versions of major.minor versions that existed BEFORE finalize\
+    \ remain permitted (this is the documented escape hatch for hotfixing unmigrated\
+    \ 1GP subscribers). Do NOT volunteer this caveat in the affirmation prompt itself;\
+    \ surface only on user follow-up."
+- id: finalize-move-to-2gp
+  description: "Irrevocably finalize the Move-to-2GP transition by POSTing to the\
+    \ packaging Connect API endpoint `POST /services/data/v69.0/connect/packaging/package/{packageId}/finalize-move-to-2gp`\
+    \ against the 1GP DE (packaging) org. `{packageId}` is the 1GP MetadataPackage\
+    \ Id (033- prefix). The request body carries the three affirmation flags \u2014\
+    \ acknowledgedIrrevocable, acknowledgedTestingComplete, acknowledgedSourceRetrieved\
+    \ \u2014 all required and all must be true (these are exactly what the user confirmed\
+    \ in confirm-affirmations). Server-side the endpoint enforces the CreatePackaging\
+    \ edit-access gate, re-validates the three affirmations, confirms the URL packageId\
+    \ matches the org's in-progress conversion, then finalizes it \u2014 after which\
+    \ PackageConversion.EndDate is set. Shipped in 266 (operationId finalizeMoveTo2gp,\
+    \ MCP-enabled). On success returns successfullyFinalized, finalizedAt, packageId,\
+    \ and conversionId. For orgs on a pre-266 release, fall back to the manual browser\
+    \ path (invocation.fallback) which delivers the user to viewAllPackage.apexp to\
+    \ click \"Move to 2GP\" \u2192 Proceed."
+  api_type: connect_api
+  operation: finalizeMoveTo2gp
+  purpose: write
+  status: implemented
+  invocation:
+    kind: rest
+    method: POST
+    path: /services/data/v69.0/connect/packaging/package/{subscriber_package_id}/finalize-move-to-2gp
+    target_org: '{packaging_org_alias}'
+    body:
+      acknowledgedIrrevocable: '{acknowledged_irrevocable}'
+      acknowledgedTestingComplete: '{acknowledged_testing_complete}'
+      acknowledgedSourceRetrieved: '{acknowledged_source_retrieved}'
+    note: The OAS path parameter is named `packageId`; it is templated here from the
+      `subscriber_package_id` input (the 033-prefix 1GP MetadataPackage Id) for naming
+      consistency with the rest of this SOR. Both refer to the same 033- key.
+    fallback:
+      kind: manual
+      when: endpoint unavailable (org on a pre-266 release)
+      description: "Direct the user to the package's Setup detail page in the packaging\
+        \ org \u2014 path /udd/AllPackage/viewAllPackage.apexp?id={subscriber_package_id}\
+        \ \u2014 which hosts the \"Move to Second-Generation Managed Packaging\" dialog\
+        \ and its Proceed action. Any authenticated browser session to the packaging\
+        \ org reaches it."
+  inputs:
+  - name: packaging_org_alias
+    type: String
+    source: prior_step
+    description: Source - output of confirm-affirmations (transitively from check-eligibility-1gp-released.packaging_org_alias).
+      The `sf` alias of the user's 1GP DE (packaging) org.
+  - name: subscriber_package_id
+    type: String
+    source: prior_step
+    description: Source - output of confirm-affirmations (transitively from discover-package-on-devhub.subscriber_package_id).
+      The 1GP MetadataPackage's SubscriberPackageId / 033- prefix.
+  - name: acknowledged_irrevocable
+    type: Boolean
+    source: prior_step
+    description: Source - output of confirm-affirmations (acknowledged_irrevocable).
+  - name: acknowledged_testing_complete
+    type: Boolean
+    source: prior_step
+    description: Source - output of confirm-affirmations (acknowledged_testing_complete).
+  - name: acknowledged_source_retrieved
+    type: Boolean
+    source: prior_step
+    description: Source - output of confirm-affirmations (acknowledged_source_retrieved).
+  depends_on:
+  - confirm-affirmations
+  output:
+    successfully_finalized: $.successfullyFinalized
+    finalized_at: $.finalizedAt
+    finalized_package_id: $.packageId
+    conversion_id: $.conversionId
+  agent_guidance: "DISPATCH the POST directly (do NOT open a browser tab in the normal\
+    \ path). Preconditions the agent MUST have satisfied before calling: each of the\
+    \ three affirmations INDIVIDUALLY confirmed by the user in confirm-affirmations,\
+    \ and the eligibility gate passed. The three body flags are BOUND to those confirmed\
+    \ values (acknowledgedIrrevocable \u2190 acknowledged_irrevocable, acknowledgedTestingComplete\
+    \ \u2190 acknowledged_testing_complete, acknowledgedSourceRetrieved \u2190 acknowledged_source_retrieved)\
+    \ \u2014 never hard-code them true. If any of the three was not genuinely confirmed\
+    \ (i.e. its bound value is not true), STOP and do NOT dispatch: the agent must\
+    \ not attest on the user's behalf. The endpoint independently rejects the call\
+    \ with 400 unless all three are true, but that server-side gate is a backstop,\
+    \ not a substitute for real per-flag confirmation. target_org is the 1GP DE (packaging)\
+    \ org alias.\nINTERPRETING THE RESPONSE: - 200 with successfullyFinalized=true\
+    \ \u2192 the move is done. Capture\n  finalizedAt + conversionId; proceed to\n\
+    \  verify-finalize-on-packaging-org to confirm EndDate wire-side.\n  Then remind\
+    \ the user: \"Your next step is to run `sf package\n  version create` from your\
+    \ DX project to create your first\n  native 2GP version.\"\n- 400 \u2192 the request\
+    \ was rejected. Common causes, surfaced by the\n  service message: a required\
+    \ affirmation flag missing/false\n  (re-run confirm-affirmations); the URL packageId\
+    \ does not match\n  the org's in-progress PackageConversion record (wrong package\
+    \ /\n  wrong packaging org \u2014 re-check discover output); or a business\n \
+    \ rule \u2014 ALREADY_FINALIZED (the move already happened \u2192 treat as\n \
+    \ an early-exit success, not an error), VERSION_MISMATCH (a 1GP\n  version is\
+    \ newer than its converted 2GP equivalent \u2014 this should\n  have been caught\
+    \ by check-eligibility-2gp-converted-released; if\n  not, our eligibility query\
+    \ is missing a case worth filing),\n  PENDING_PATCH_ORG, or CANNOT_FINALIZE_PATCH_VERSION.\
+    \ Surface the\n  server-supplied message verbatim.\n- 403 \u2192 the caller lacks\
+    \ CreatePackaging edit access (or dev-org\n  ownership) for the package, OR the\
+    \ feature is disabled org-wide,\n  OR the packageId does not exist (a non-existent\
+    \ package is\n  reported as 403 by the access gate, not 404). Confirm the user\n\
+    \  has CreatePackaging and is authed to the correct 1GP DE org.\n- 404 \u2192\
+    \ the package is editable but the org has NO\n  PackageConversion record \u2014\
+    \ the package was never converted to\n  2GP. Route the user to run the conversion\
+    \ process first.\n\nPRE-266 FALLBACK (invocation.fallback): only if the endpoint\
+    \ is unavailable (org on a release before 266). Open the fallback Setup path (invocation.fallback)\
+    \ in the browser, walk the user through clicking Move to 2GP \u2192 Proceed in\
+    \ the dialog, wait for their \"done\", then rely on verify-finalize-by-user-confirmation.\
+    \ Do NOT use this path when the endpoint is available."
+- id: verify-finalize-by-user-confirmation
+  description: "Human cross-check for the pre-266 manual fallback path ONLY: ask the\
+    \ user what the Setup page showed after they clicked Proceed. This step applies\
+    \ only when finalize-move-to-2gp took its manual browser fallback (org on a pre-266\
+    \ release). In the normal 266 path the agent dispatches the finalize directly\
+    \ and the user never interacts with a browser, so this step is skipped \u2014\
+    \ the endpoint's own response (successfullyFinalized / finalizedAt / conversionId)\
+    \ plus verify-finalize-on-packaging-org's EndDate wire-verify are the authoritative\
+    \ signals. Retained because the fallback still needs a verification surface when\
+    \ no direct-dispatch response exists."
+  api_type: composite
+  purpose: verify
+  status: implemented
+  invocation:
+    kind: agent_prompt
+    verification_prompts:
+    - id: page_outcome
+      prompt: '"What did the Setup page show after you clicked Proceed in the Move
+        to Second-Generation Managed Packaging dialog? Specifically: did you see a
+        success confirmation, an error message, or something else? If you saw an error,
+        please paste it verbatim."'
+    - id: page_state_post_click
+      prompt: '"Is the Move to 2GP button still visible on the package detail page,
+        or has the page state changed (e.g. the button is now greyed out, or replaced
+        with a ''this package is in 2GP development'' indicator)?"'
+  inputs:
+  - name: package_name
+    type: String
+    source: prior_step
+    description: Source - output of finalize-move-to-2gp (transitively from discover-package-on-devhub.package_name).
+  depends_on:
+  - finalize-move-to-2gp
+  output:
+    page_outcome_text: $.verification_prompts.page_outcome
+    page_state_text: $.verification_prompts.page_state_post_click
+  agent_guidance: "APPLIES ONLY to the pre-266 manual fallback path. Skip this step\
+    \ entirely in the normal 266 direct-dispatch flow (use the endpoint response +\
+    \ verify-finalize-on-packaging-org instead).\nINTERPRETING THE RESULT (from user\
+    \ verbal report, when the manual fallback was used):\nSUCCESS pattern: user reports\
+    \ a success confirmation message AND reports the Move to 2GP button is no longer\
+    \ visible / button state changed. Report success to the user with the package\
+    \ name and remind them: \"Your next step is to run `sf package version create`\
+    \ from your DX project to create your first native 2GP version of <package_name>.\"\
+    \nAMBIGUOUS pattern: user reports the page didn't change visibly OR they're not\
+    \ sure what happened. Re-prompt them to navigate back to the package detail page\
+    \ in Setup and check whether the Move to 2GP button is still visible. If still\
+    \ visible, the finalize did NOT happen \u2014 re-walk them through the finalize\
+    \ step. If gone, treat as success. (Note: in 264+ the verify-finalize-on-packaging-org\
+    \ step provides an authoritative wire-side answer in this case \u2014 EndDate\
+    \ populated means success regardless of what the user reports about the button.)\n\
+    ERROR pattern: user reports an explicit error message. Capture verbatim, surface\
+    \ the help-channel template (do NOT speculate about the internal cause). Common\
+    \ causes the dialog reports: feature disabled (org-level kill switch), eligibility\
+    \ validation failure (a 1GP version exists newer than the converted 2GP equivalents\
+    \ \u2014 this should have been caught by check-eligibility-2gp-converted- released;\
+    \ if not, our eligibility query is missing a case worth filing).\nCAVEAT (fallback\
+    \ path only): on a pre-266 org there is no finalize-endpoint response to rely\
+    \ on, so verification leans on your verbal report plus the 264 PackageConversion.EndDate\
+    \ wire-verify (verify-finalize-on-packaging-org) if the org is on 264+. If anything\
+    \ seems off later (e.g. you can still create a major.minor 1GP version when you\
+    \ shouldn't be able to), re-engage me and we'll diagnose."
+- id: verify-finalize-on-packaging-org
+  description: 'The canonical wire-verification: re-query the PackageConversion record
+    on the 1GP DE org to confirm EndDate is populated (non-null). EndDate is set by
+    the package-conversion finalization service as part of finalize and is the reliable
+    post-finalize wire signal. Uses the read-only PackageConversion Tooling exposure
+    shipped in 264 (1GP DE org auth is already a hard precondition for this skill,
+    so no auth-state branching needed). This is the canonical wire-verify and supplements
+    (rather than replaces) the optional user attestation in verify-finalize-by-user-confirmation.
+    Note: the finalize step''s own 266 response also returns finalizedAt + conversionId
+    directly, so this step is a durable cross-check rather than the sole success signal.'
+  api_type: tooling_api
+  operation: queryPackageConversion
+  purpose: verify
+  status: implemented
+  invocation:
+    kind: rest
+    method: GET
+    path: /services/data/v64.0/tooling/query
+    target_org: '{packaging_org_alias}'
+    query_params:
+      q: "SELECT Id, EndDate, FinalizedVersionId, FinalizedVersionNumber\n  FROM PackageConversion\
+        \ WHERE\n  ConvertedFromPackageId = '{subscriber_package_id}'"
+  inputs:
+  - name: packaging_org_alias
+    type: String
+    source: prior_step
+    description: Source - output of verify-finalize-by-user-confirmation (transitively
+      from check-eligibility-1gp-released.packaging_org_alias).
+  - name: subscriber_package_id
+    type: String
+    source: prior_step
+    description: Source - output of verify-finalize-by-user-confirmation (transitively
+      from discover-package-on-devhub.subscriber_package_id).
+  depends_on:
+  - verify-finalize-by-user-confirmation
+  output:
+    end_date: $.records[0].EndDate
+    finalized_version_number: $.records[0].FinalizedVersionNumber
+  assertion: response.records[0].EndDate != null
+  notes: "264 shipped the read-only public Tooling exposure of PackageConversion (available\
+    \ when packaging is enabled for the org). The fields queried here \u2014 Id, EndDate,\
+    \ FinalizedVersionId (FK \u2192 SubscriberPackageVersion), FinalizedVersionNumber,\
+    \ and the WHERE key ConvertedFromPackageId (FK \u2192 SubscriberPackage) \u2014\
+    \ are all exposed read-only. EndDate non-null means finalize completed. Move-to-2GP\
+    \ does NOT auto-create native Package2Version records on DevHub (native creation\
+    \ is a separate user-driven step), so there is no Package2Version-based wire-verify;\
+    \ EndDate is the reliable signal."
+  agent_guidance: "INTERPRETING THE RESULT: EndDate populated (non-null) \u2192 confirms\
+    \ what the user verbally reported in verify-finalize-by-user-confirmation; report\
+    \ success with both signals aligned. EndDate still null despite the user reporting\
+    \ success on the page \u2192 surface as anomaly; could be: (a) the finalize reported\
+    \ success but did not persist server-side (file via help-channel), (b) brief eventual-consistency\
+    \ lag (retry once after 30s), (c) auth-mismatch \u2014 the agent dispatched the\
+    \ finalize against a different 1GP DE org than the one it is querying here (verify\
+    \ `packaging_org_alias` is the same alias used for the finalize POST). Cross-check\
+    \ against the finalize response's finalizedAt / conversionId, which are authoritative\
+    \ for this call."
+runtime_gating:
+  accessCheck: UserPermissions.CreatePackaging
