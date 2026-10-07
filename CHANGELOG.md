@@ -1,3 +1,12 @@
+# [1.61.0](https://github.com/forcedotcom/sf-skills/compare/1.60.0...1.61.0) (2026-10-07)
+
+
+### Features
+
+* Release skills 07 Oct 2026 @W-24423023@ ([31b5780](https://github.com/forcedotcom/sf-skills/commit/31b5780506e7727265c39e488c35e6dcd11aa09e))
+
+
+
 # [1.60.0](https://github.com/forcedotcom/sf-skills/compare/1.59.0...1.60.0) (2026-10-07)
 
 
