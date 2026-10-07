@@ -68,25 +68,6 @@ SUPERVISOR_COUNT="${4:-1}"
 AGENT_PROFILE="${OMNI_AGENT_PROFILE:-}"
 SUPERVISOR_PROFILE="${OMNI_SUPERVISOR_PROFILE:-}"
 SUPERVISOR_CONFIG_DN="${OMNI_SUPERVISOR_CONFIG_DEVELOPER_NAME:-Omni_Supervisor}"
-COMMAND_CENTER_V2="${OMNI_COMMAND_CENTER_V2:-0}"
-
-case "$COMMAND_CENTER_V2" in
-  0|1) ;;
-  *) echo "{\"error\":\"Invalid OMNI_COMMAND_CENTER_V2 '$COMMAND_CENTER_V2'. Supported: 0 or 1.\"}" >&2; exit 2 ;;
-esac
-
-for command_center_setting in \
-  OMNI_COMMAND_CENTER_CONVERSATION_MONITORING \
-  OMNI_COMMAND_CENTER_AGENT_SNEAK_PEEK \
-  OMNI_COMMAND_CENTER_CUSTOMER_SNEAK_PEEK \
-  OMNI_COMMAND_CENTER_WHISPER_MESSAGING \
-  OMNI_COMMAND_CENTER_QUEUES_AND_SKILLS; do
-  command_center_value="${!command_center_setting:-}"
-  if [ -n "$command_center_value" ] && [ "$command_center_value" != "true" ] && [ "$command_center_value" != "false" ]; then
-    echo "{\"error\":\"Invalid $command_center_setting '$command_center_value'. Supported: true or false.\"}" >&2
-    exit 2
-  fi
-done
 
 # A complete WorkSkillRouting mapping is an unambiguous SBR request. Infer SkillsBased so callers do
 # not need a hidden second switch; an explicit OMNI_ROUTING_TYPE still wins.
@@ -563,7 +544,7 @@ run_skill() {
   # configured/bound/assigned/ok/success/skipped.
   local color
   case "$status" in
-    analyzed|reused|updated|created|deployed|configured|bound|assigned|ok|success|skipped)
+    reused|updated|created|deployed|configured|bound|assigned|ok|success|skipped)
       color="green"
       ;;
     action_needed|partial|unsupported_v1|not_evaluated)
@@ -629,16 +610,6 @@ run_skill() {
 
   return 0
 }
-
-# ---- Read-only cross-channel baseline ----
-# A blocked inventory means the coordinator cannot establish an authoritative starting state, so no
-# write leaf is allowed to run.
-run_skill "service-omni-channel-inventory-analyze" \
-  "service-omni-channel-inventory-analyze" \
-  "Omni channel and routing inventory (read-only preflight)" \
-  '.status' \
-  analyze.sh "$ORG" \
-  || exit 1
 
 # ---- Base settings ----
 # Plan detects; run deploys the 5 OmniChannelSettings toggles + re-verifies. Hard prerequisite for
@@ -1276,32 +1247,11 @@ else
     || true
 fi
 
-# ---- Command Center V2 configuration (explicit opt-in) ----
-if [ "$COMMAND_CENTER_V2" = "1" ]; then
-  if [ "$MODE" = "run" ]; then
-    COMMAND_CENTER_ARGS=(run "$ORG" --apply)
-  else
-    COMMAND_CENTER_ARGS=(plan "$ORG")
-  fi
-
-  [ -z "${OMNI_COMMAND_CENTER_CONVERSATION_MONITORING:-}" ] || COMMAND_CENTER_ARGS+=(--conversation-monitoring "$OMNI_COMMAND_CENTER_CONVERSATION_MONITORING")
-  [ -z "${OMNI_COMMAND_CENTER_AGENT_SNEAK_PEEK:-}" ] || COMMAND_CENTER_ARGS+=(--agent-sneak-peek "$OMNI_COMMAND_CENTER_AGENT_SNEAK_PEEK")
-  [ -z "${OMNI_COMMAND_CENTER_CUSTOMER_SNEAK_PEEK:-}" ] || COMMAND_CENTER_ARGS+=(--customer-sneak-peek "$OMNI_COMMAND_CENTER_CUSTOMER_SNEAK_PEEK")
-  [ -z "${OMNI_COMMAND_CENTER_WHISPER_MESSAGING:-}" ] || COMMAND_CENTER_ARGS+=(--whisper-messaging "$OMNI_COMMAND_CENTER_WHISPER_MESSAGING")
-  [ -z "${OMNI_COMMAND_CENTER_QUEUES_AND_SKILLS:-}" ] || COMMAND_CENTER_ARGS+=(--queues-and-skills "$OMNI_COMMAND_CENTER_QUEUES_AND_SKILLS")
-
-  run_skill "service-omni-command-center-configure" \
-    "service-omni-command-center-configure" \
-    "Command Center for Service V2 (opt-in Metadata API configuration)" \
-    '.status' \
-    configure-and-report.sh "${COMMAND_CENTER_ARGS[@]}" \
-    || true
-fi
-
 # ---- Command Center surface analysis (read-only advisory) ----
-# Reports whether the org is on the classic Omni Supervisor surface or Command Center V2 after any
-# requested V2 configuration. It never writes and never hard-blocks: ambiguous detection surfaces
-# as yellow, while a clean read is green.
+# Reports whether the org is on the classic Omni Supervisor surface or Command Center V2 (Enhanced
+# Omni-Channel). Advisory only: this coordinator configures the classic surface; V2 enablement is an
+# org-preference flip outside the Metadata API. It never writes, so it runs identically in plan and
+# run and never hard-blocks - ambiguous detection surfaces as yellow, a clean read as green.
 run_skill "service-omni-command-center-analyze" \
   "service-omni-command-center-analyze" \
   "Command Center surface analysis (classic vs V2, read-only)" \

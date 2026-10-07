@@ -586,26 +586,6 @@ class SkillsBasedRoutingFlowTests(unittest.TestCase):
             return _run(_FLOW_SCRIPT, args, path_prefix=fake_dir, extra_env=merged)
 
 
-class CoordinatorInventoryPreflightTests(unittest.TestCase):
-    """The authoritative cross-channel inventory must run before the first write leaf."""
-
-    DRIVER = SKILLS_ROOT / "service-omni-channel-setup-coordinate" / "scripts" / "integration-driver.sh"
-
-    def test_inventory_runs_before_base_settings(self):
-        source = self.DRIVER.read_text()
-        inventory_index = source.index('run_skill "service-omni-channel-inventory-analyze"')
-        base_index = source.index('run_skill "service-omni-base-settings-configure"')
-        self.assertLess(inventory_index, base_index)
-
-    def test_inventory_failure_stops_the_driver(self):
-        source = self.DRIVER.read_text()
-        invocation = re.search(
-            r'run_skill "service-omni-channel-inventory-analyze"[\s\S]+?\|\| exit 1',
-            source,
-        )
-        self.assertIsNotNone(invocation, "blocked inventory must stop the coordinator before writes")
-
-
 class VoiceMembershipContractTests(unittest.TestCase):
     """(7) Explicit real-agent membership contract for service-omni-queue-members-assign."""
 
@@ -784,24 +764,6 @@ class CoordinatorSupervisorSurfaceTests(unittest.TestCase):
         self.assertRegex(
             self.src, r'(?m)^run_skill "service-omni-command-center-analyze"',
             "command-center-analyze must be invoked top-level, outside the OMNI_REP_EXPERIENCE gate")
-
-    def test_command_center_v2_configuration_is_explicit_and_precedes_analysis(self):
-        self.assertIn('COMMAND_CENTER_V2="${OMNI_COMMAND_CENTER_V2:-0}"', self.src)
-        self.assertIn('run_skill "service-omni-command-center-configure"', self.src)
-        configure_at = self.src.index('run_skill "service-omni-command-center-configure"')
-        analyze_at = self.src.index('run_skill "service-omni-command-center-analyze"')
-        self.assertLess(configure_at, analyze_at)
-        self.assertIn('COMMAND_CENTER_ARGS=(run "$ORG" --apply)', self.src)
-
-    def test_command_center_control_inputs_are_forwarded(self):
-        for option in (
-            "--conversation-monitoring",
-            "--agent-sneak-peek",
-            "--customer-sneak-peek",
-            "--whisper-messaging",
-            "--queues-and-skills",
-        ):
-            self.assertIn(option, self.src)
 
     def test_supervisor_surface_invoked_after_config(self):
         self.assertIn("service-omni-supervisor-surface-deploy", self.src,

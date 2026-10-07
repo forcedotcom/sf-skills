@@ -19,8 +19,8 @@ Returns the live state (verified `200`):
 {
   "team": {
     "status": "CONNECTED",
-    "teamName": "Slackfarm 1473",
-    "teamDomain": "https://slackfarm-1473.enterprise.slack.com",
+    "teamName": "Acme Workspace",
+    "teamDomain": "https://acme.enterprise.slack.com",
     "teamId": "E0…"
   },
   "currentUserMapping": { "salesforceUserId": "005…", "slackUserId": "U0…" }

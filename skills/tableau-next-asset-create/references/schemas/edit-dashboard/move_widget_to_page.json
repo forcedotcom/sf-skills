@@ -1,0 +1,30 @@
+{
+  "title": "move_widget_to_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "pageName", "placement"],
+  "properties": {
+    "operation": { "const": "move_widget_to_page" },
+    "pageName": { "type": "string", "description": "Dev name of the TARGET page the widget is moved to." },
+    "placement": {
+      "type": "object",
+      "description": "The widget to move (by name) and its placement on the target page.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional placement id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Name of the widget to move." },
+        "label": { "type": "string", "description": "Optional placement-level label override." },
+        "description": { "type": "string", "description": "Optional placement-level description." },
+        "row": { "type": "integer", "description": "1-based grid row on the target page." },
+        "column": { "type": "integer", "description": "1-based grid column on the target page." },
+        "rowspan": { "type": "integer", "description": "Height in rows." },
+        "colspan": { "type": "integer", "description": "Width in columns." }
+      }
+    }
+  },
+  "example": {
+    "operation": "move_widget_to_page",
+    "pageName": "page_2",
+    "placement": { "name": "viz_1", "row": 1, "column": 1, "rowspan": 20, "colspan": 24 }
+  }
+}

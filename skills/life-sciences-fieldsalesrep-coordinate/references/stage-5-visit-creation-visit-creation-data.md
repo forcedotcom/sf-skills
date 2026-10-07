@@ -29,19 +29,19 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## Account (RecordType: Health_Care_Provider)
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | FirstName | Aaron | account.csv |
 | LastName | Morita | account.csv |
 | Salutation | Dr. | account.csv |
 | RecordType DeveloperName | Health_Care_Provider | account.csv |
-| IsActive | True | account.csv (standard `IsActive` boolean — NOT `IsActive__c`) |
+| IsActive | True | account.csv |
 
-> Created as the **rep** (`--target-org lsc-rep`). `IsActive` is the standard field; if the rep lacks FLS to it, omit and set as admin.
+> Created as the **rep** (`--target-org lsc-rep`).
 
 ## HealthcareProvider
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Aaron Morita HP | healthcareprovider.csv |
 | IsActive | True | healthcareprovider.csv |
@@ -50,11 +50,9 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 | Status | Active | healthcareprovider.csv |
 | AccountId | (from Step 2) | FK |
 
-> Do NOT set `NationalProviderIdentifier` or `IsSpeaker` on creation. Both — along with `IsActive` — are gated by field-level security on the LSC Custom Profile; if the rep lacks FLS the create fails. `IsSpeaker` and `NationalProviderIdentifier` are not required for the visit, so omit them (an admin can set them later). The CSV lists them because it was exported from an org where the profile had FLS to those fields.
-
 ## ContactPointAddress
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | 415 Mission St | contactpointaddress.csv |
 | AddressType | Billing | contactpointaddress.csv |
@@ -74,7 +72,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ObjectTerritory2Association
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ObjectId | (from Step 2 — Account) | FK |
 | Territory2Id | (queried — level-3 territory) | FK |
@@ -84,7 +82,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ProviderAcctTerritoryInfo
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | AccountId | (from Step 2) | FK |
 | Territory2Id | (queried — level-3 territory) | FK |
@@ -94,20 +92,21 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 | IsTargetedAccount | True | provideracctterritoryinfo.csv |
 | SourceType | Manual | provideracctterritoryinfo.csv |
 
-## Product2 (NO RecordType)
+## Product2
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Immunexis 5mg | product2.csv |
 | ProductCode | IM001-5 | product2.csv |
 | IsActive | True | product2.csv |
+| RecordTypeId | (resolve in the target org: `RecordType` `DeveloperName='LSC_Sample'`) | product2.csv holds a **foreign** Id — ignore it; use the resolved target-org Id |
 
-> Do NOT set RecordTypeId — this is an explicit requirement.
+> `RecordTypeId`: the value in `product2.csv` comes from the export org and is not valid here. Query the target org for the `Product2` RecordType with `DeveloperName='LSC_Sample'` and use that Id.
 > Create as **admin** — the rep profile has no create permission on Product2 (`Name` is `createable=false`, `ProductCode` invisible for the rep). Steps 7–9 (Product2, LifeSciMarketableProduct, ProductTerritoryAvailability) are all admin-owned master data.
 
 ## LifeSciMarketableProduct
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Immunexis 5mg | lifescimarketableproduct.csv |
 | ProductId | (from Step 7 — Product2) | FK |
@@ -122,7 +121,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ProductTerritoryAvailability
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ProductId | (from Step 8 — LifeSciMarketableProduct) | FK |
 | TerritoryId | (queried — level-3 territory) | FK |
@@ -133,7 +132,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## Visit
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | AccountId | (from Step 2) | FK |
 | PlaceId | (from Step 4 — ContactPointAddress) | FK |
@@ -143,7 +142,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ProviderVisit
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | VisitId | (from Step 10) | FK |
 | TerritoryName | (queried territory Name) | providervisit.csv |
@@ -151,7 +150,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ProviderVisitProdDetailing
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ProviderVisitId | (from Step 11) | FK |
 | ProductId | (from Step 8 — LifeSciMarketableProduct) | FK |
@@ -161,7 +160,7 @@ Each object maps to a CSV named for the sobject (lowercased) under `.lsc-starter
 
 ## ProviderVisitProdDiscussion
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ProviderVisitProductDtlId | (from Step 12) | FK |
 | Note | Discussed Oncology treatments and patient care approaches | providervisitproddiscussion.csv |

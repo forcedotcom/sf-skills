@@ -91,7 +91,7 @@ the `transform_flow.py` restructurer, which rewrites the flow XML connectors in 
 - Strips fault connectors from all elements (not supported in DataCaptureFlow)
 - Removes platform event `<recordCreates>` nodes (DC can't create non-UI entities like `AsgnResourceLocUpdateEvent`) — **side effect: those events will no longer fire**
 - Removes `<outputAssignments>` from screen fields → replaced with `storeOutputAutomatically=true` + an injected `<assignments>` node to preserve variable bindings
-- Strips invalid `<inputParameters>`: `required`, `disabled`, `multiple`, `accept`, `helpText`, `placeholder` (none supported in DC; bake content into label text instead)
+- Strips invalid incoming `<inputParameters>`: `required`, `disabled`, `multiple`, `accept`, `helpText`, `placeholder` (not carried over as-is from the legacy field). `disabled`/`helpText`/`placeholder`/`multiple`/`accept` stay stripped (bake content into label text instead). `required` is different: it's re-added as a computed inputParameter (from `<isRequired>`) on most `ComponentInstance` fields, since the DC runtime reads required-ness from the inputParameter, not `<isRequired>`, for those — except `dcCheckbox`/`dcToggle`, which don't expose a `required` input attribute at all and get only `<isRequired>`
 - Replaces `minimumDate`/`maximumDate` with `minDate`/`maxDate` on date fields
 - Replaces `multiSelection` with `isMultiSelection` on Lookup fields
 - Replaces `disabled`/`readOnly` with `isDisabled`/`isReadonly` (note lowercase `o`) on Lookup fields

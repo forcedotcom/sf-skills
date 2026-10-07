@@ -22,9 +22,23 @@ Design-time metadata tree for one Agentforce agent: planner → topics → actio
 
 Runs **inline** — no subagent. Every phase is deterministic file processing.
 
-## If the user hasn't given enough to proceed
+## If the user hasn't named an agent
 
-When invoked with no `agent_api_name` AND no org alias, print the following block **verbatim** — do not paraphrase, do not pre-run any script. Trigger condition: `$ARGUMENTS` is empty OR names no agent (no `--agent` flag and no known agent API name in the prose) OR names no org (no `--org` flag and no known alias).
+Trigger condition: `$ARGUMENTS` names no agent (no `--agent` flag and no exact `BotDefinition` API name in the prose). Never invent an agent name. Instead, discover what the org actually contains — one read-only query, no pipeline yet. Use the `--org` alias if given, otherwise the default target org (omit `--target-org`):
+
+```bash
+sf data query --query "SELECT DeveloperName, MasterLabel FROM BotDefinition ORDER BY DeveloperName" \
+  [--target-org <alias>] --json
+```
+
+If the user gave no org alias, the pipeline block defaults `--org` to the CLI default target org itself (`sf config get target-org --json` → `.result[0].value`) — you don't need to resolve it.
+
+Then branch on the rows returned:
+
+- **Zero agents** — tell the user the org has no Agentforce agents and stop. Do not fabricate an agent or a tree.
+- **Exactly one agent, or exactly one whose `DeveloperName`/`MasterLabel` matches the user's description** (e.g. "support", "service", "sales") — use it, say explicitly which agent you picked and why, then run the pipeline block below with `ARG_AGENT=<DeveloperName>` (and `ARG_ORG=<alias>` if the user named one) set as its first lines, e.g. `ARG_AGENT=Customer_Support_Agent`. The block reads `ARG_*` from the environment; flags in `$ARGUMENTS` still override.
+- **Otherwise** — print the block below, with the discovered agents listed as a numbered `DeveloperName — MasterLabel` table under the first line, and wait for the user to pick.
+- **Query fails** (no default org, auth error) — print the block below without the list.
 
 > Which agent should I document, and in which org?
 >
@@ -41,7 +55,7 @@ When invoked with no `agent_api_name` AND no org alias, print the following bloc
 
 ## Pipeline invocation
 
-When the user has supplied `--org <alias>` + `--agent <api_name>` (plus any optional flags), run this block. One `python3` invocation drives the full pipeline. `main.py` writes `.emit_ctx.json`; `emit_result.py` reads it and prints the final `=== RESULT ===` block last to stdout.
+Run this block once the agent is known — from `--agent <api_name>` in `$ARGUMENTS`, or preset as `ARG_AGENT=<DeveloperName>` after discovery. `--org` (or `ARG_ORG`) is optional; without it the CLI default target org is used. One `python3` invocation drives the full pipeline. `main.py` writes `.emit_ctx.json`; `emit_result.py` reads it and prints the final `=== RESULT ===` block last to stdout.
 
 ```bash
 set -euo pipefail
@@ -53,20 +67,44 @@ set -euo pipefail
 # matching the bash shebang's expectation. No-op under bash.
 [ -n "${ZSH_VERSION:-}" ] && setopt KSH_ARRAYS
 
-SKILL_ROOT="${SKILL_ROOT:-${PLUGIN_ROOT:-$HOME/.vibe/skills}/agentforce-architecture-analyze}"
+# <SKILL_DIR> = absolute path of this skill's own directory (the folder holding
+# this SKILL.md); substitute it from the skill path in context. Runtimes install
+# skills in different places, so also probe the known install roots and use the
+# first that actually contains this skill's scripts. An exported SKILL_ROOT wins.
+_skill=agentforce-architecture-analyze
+for _c in "${SKILL_ROOT:-}" "<SKILL_DIR>" \
+          "${CLAUDE_PLUGIN_ROOT:+$CLAUDE_PLUGIN_ROOT/skills/$_skill}" \
+          "${VIBES_SKILLS_DIR:+$VIBES_SKILLS_DIR/$_skill}" \
+          "$HOME/.claude/skills/$_skill" "$PWD/.claude/skills/$_skill" \
+          "${PLUGIN_ROOT:-$HOME/.vibe/skills}/$_skill"; do
+  [ -n "$_c" ] || continue
+  # Some stagers (ADK eval) nest the bundled files under <skill>/artifacts/.
+  for _r in "$_c" "$_c/artifacts"; do
+    [ -f "$_r/scripts/main.py" ] && { SKILL_ROOT="$_r"; break 2; }
+  done
+done
+[ -f "${SKILL_ROOT:-}/scripts/main.py" ] || { echo "$_skill: scripts not found — set SKILL_ROOT to this skill's directory" >&2; exit 1; }
 
 # Argument parser. Accepts both `--org foo` and `--org=foo`.
-# `$ARGUMENTS` is the raw user input Claude Code substitutes.
-ARG_ORG=""
-ARG_AGENT=""
-ARG_VERSION=""
-ARG_FORCE=""
-ARG_REPROBE=""
-ARG_PARALLELISM=""
-ARG_MAX_MERMAID=""
+# `$ARGUMENTS` is the raw user input Claude Code substitutes; it may be unset
+# or plain prose. Each ARG_* starts from the environment, so a value resolved
+# during discovery can be preset (e.g. `ARG_AGENT=MyAgent` on the first line);
+# flags in $ARGUMENTS still override.
+ARG_ORG="${ARG_ORG:-}"
+ARG_AGENT="${ARG_AGENT:-}"
+ARG_VERSION="${ARG_VERSION:-}"
+ARG_FORCE="${ARG_FORCE:-}"
+ARG_REPROBE="${ARG_REPROBE:-}"
+ARG_PARALLELISM="${ARG_PARALLELISM:-}"
+ARG_MAX_MERMAID="${ARG_MAX_MERMAID:-}"
 
+# Word-split $ARGUMENTS (zsh needs SH_WORD_SPLIT for that) with globbing off
+# so prose like `*` never expands to filenames.
+[ -n "${ZSH_VERSION:-}" ] && setopt SH_WORD_SPLIT
+set -f
 # shellcheck disable=SC2206
-_args=($ARGUMENTS)
+_args=(${ARGUMENTS:-})
+set +f
 i=0
 while [ $i -lt ${#_args[@]} ]; do
  tok="${_args[$i]}"
@@ -87,6 +125,16 @@ while [ $i -lt ${#_args[@]} ]; do
  i=$((i+1))
 done
 
+# No org named anywhere: fall back to the sf CLI default target org
+# (`sf config get target-org --json` -> .result[0].value). Extracted with sed
+# so the block needs neither jq nor an inline interpreter; any failure leaves
+# ARG_ORG empty and the usage block below fires.
+if [ -z "$ARG_ORG" ] && command -v sf >/dev/null 2>&1; then
+ _cfg="$(sf config get target-org --json 2>/dev/null || true)"
+ _cfg="$(printf '%s\n' "$_cfg" | sed -n 's/.*"value"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' || true)"
+ ARG_ORG="${_cfg%%$'\n'*}"
+fi
+
 # Usage block if required flags missing. Agent reads stderr,
 # prints verbatim, and stops — does NOT pre-run main.py.
 if [ -z "$ARG_ORG" ] || [ -z "$ARG_AGENT" ]; then
@@ -95,7 +143,8 @@ if [ -z "$ARG_ORG" ] || [ -z "$ARG_AGENT" ]; then
 >
 > I need:
 > - **Agent API name** — the BotDefinition.DeveloperName (e.g. `MyAgent`)
-> - **Org alias** — for `sf` CLI auth (the alias you configured with `sf org login`)
+> - **Org alias** — for `sf` CLI auth (the alias you configured with `sf org login`);
+>   only needed when no default target org is set (`sf config set target-org <alias>`)
 >
 > Optional flags:
 > - `--version v5` — pin a specific BotVersion (default: Active+highest)
@@ -152,7 +201,7 @@ exit "$_rc"
 
 | Input | Flag | Required | Default |
 |---|---|---|---|
-| `org_alias` | `--org` | yes | — |
+| `org_alias` | `--org` | no | sf CLI default target org (`sf config get target-org`) |
 | `agent_api_name` | `--agent` | yes | — |
 | `agent_version_api_name` | `--version` | no | active BotVersion |
 | `force_refresh` | `--force` | no | false (honor cache) |
@@ -219,7 +268,7 @@ The ID-prefix router in `resolve_invocation_target.py` distinguishes the two: NG
 
 | Tool | Required |
 |---|---|
-| `sf` CLI (authenticated against the target org) | yes — `sf org login web --alias <alias>` |
+| `sf` CLI (authenticated against the target org) | yes — `sf org login web --alias <alias>`, and the CLI must provide `sf org auth show-access-token` (startup preflight enforces this) |
 | Python 3.10+ | yes |
 
 ## Reference docs to load when needed

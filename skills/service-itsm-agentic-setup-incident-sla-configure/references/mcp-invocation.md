@@ -9,7 +9,7 @@ exposes four meta-tools:
 - `mcp__headless-360__dispatch({url, method, body?, query_params?})` — POST / PATCH / DELETE HTTP
 
 **Dispatch takes raw HTTP**, not `{operation_id, arguments}`. Give it the full `url`
-(`/services/data/v67.0/...`), `method`, optional `body`, and optional `query_params` — the server
+(`/services/data/v{version}/...`), `method`, optional `body`, and optional `query_params` — the server
 signs the request with the JWT bound to the current MCP session and forwards it to the org. The
 skill never handles credentials or an org alias — everything is derived from the session.
 
@@ -26,7 +26,6 @@ skill never handles credentials or an org alias — everything is derived from t
 - [Create SLA Policy (SlaProcess)](#create-sla-policy-slaprocess)
 - [Attach Milestone](#attach-milestone)
 - [Milestone Actions (Phase 2.5 — Warn / Escalate)](#milestone-actions-phase-25--warn--escalate)
-- [Create Entitlement (standard sObject)](#create-entitlement-standard-sobject)
 - [Predefined Incident Policy (Phase 0.6 detect + Phase 2-OOB seed)](#predefined-incident-policy-phase-06-detect--phase-2-oob-seed)
 - [Verify SLA engagement](#verify-sla-engagement)
 - [Gotchas](#gotchas)
@@ -49,183 +48,149 @@ this skill uses none.)
 
 | Method + path | Purpose |
 |---------------|---------|
-| `GET  /services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-manage-sla-policies/status` | Phase 0.5 — read the SLA Management for IT Service feature status |
-| `POST /services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-manage-sla-policies/enable` | Phase 0.5 — enable the feature (flips Simplified SLA Setup) |
-| `GET  /services/data/v67.0/tooling/query` | Phase 0.5 — read SLA Versioning (`EntitlementSettings.IsEntitlementVersioningEnabled`) via `query_params.q` |
-| `PATCH /services/data/v67.0/tooling/sobjects/EntitlementSettings/000000000000000AAA` | Phase 0.5 — turn on SLA Versioning if off |
-| `GET  /services/data/v67.0/sobjects/Incident/describe` | Preflight — Incident Management on + SLA fields present |
-| `GET  /services/data/v67.0/query` | SOQL reads (BusinessHours, SlaProcess, EntityMilestone) via `query_params.q` |
-| `GET  /services/data/v67.0/connect/sla-management/sla-policies` | Phase 0.6 — detect the OOB "Standard Support for Incidents" policy via `query_params.processTypes=Incident` |
-| `POST /services/data/v67.0/connect/sla-management/milestone-types` | Create MilestoneType |
-| `POST /services/data/v67.0/connect/sla-management/sla-policies` | Create SLA Policy (SlaProcess) |
-| `POST /services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones` | Attach Milestone |
-| `POST /services/data/v67.0/sobjects/Entitlement` | Create Entitlement (standard sObject) |
-| `POST /services/data/v67.0/connect/sla-management/entitlement-criteria` | Phase 2-OOB — `describe` first, then attempt the OOB always-match criterion (`Subject NotEqual <sentinel>`); if the create still `400`s after using the described schema, fall back to a date-windowed Entitlement (the route works — a wrong-payload `400`, not a platform gap) |
-| `POST /services/data/v67.0/sobjects/Incident` | Create a test Incident |
-| `POST /services/data/v67.0/sobjects/BusinessHours` | Phase 2.5 — create an IST (or other-timezone) BusinessHours for the policy/Entitlement (createable; **not** API-deletable) |
-| `POST /services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions` | Phase 2.5 — attach a Warn/Escalate milestone action (delegate via the `create-milestone-action` op) |
+| `GET  /headless/invoke/platform/slasettings/get-sla-management-permission` | Phase 0.5 — read whether SLA Management is on (composite: Entitlements + Simplified SLA Setup + Pause Milestone). Delegated to `itsm-shakti/SLASettings` |
+| `PATCH /headless/invoke/platform/slasettings/set-sla-management-permission` | Phase 0.5 — turn SLA Management on (`isEnabled:true`; flips the three prefs atomically; requires Entitlements already on or it throws). **Reversible.** Delegated to `itsm-shakti/SLASettings` |
+| `GET  /headless/invoke/platform/slasettings/get-sla-versioning-permission` | Phase 0.5 — read whether SLA Versioning is on. Delegated to `itsm-shakti/SLASettings` |
+| `PATCH /headless/invoke/platform/slasettings/set-sla-versioning-permission` | Phase 0.5 — turn SLA Versioning on (`isEnabled:true`). **Separate write; permanent / one-way** — the controller refuses to disable it. Delegated to `itsm-shakti/SLASettings` |
+| `GET  /services/data/v{version}/sobjects/Incident/describe` | Preflight — Incident Management on + SLA fields present |
+| `GET  /services/data/v{version}/query` | SOQL reads (BusinessHours, SlaProcess, EntityMilestone) via `query_params.q` |
+| `GET  /headless/invoke/platform/slasettings` | Phase 0.6 / 2-OOB — the seeder's existence map (get-existing-checkbox-states); lowercase keys `{incident,problem,changeRequest}`, `true` = default already seeded (dedup read) |
+| `PATCH /headless/invoke/platform/slasettings/save-selected-options` | Phase 2-OOB — seed the predefined bundle in one call; body `{"selectedOptions":["incident"]}` (**lowercase** — capitalized 500s); provisions the full active policy + Entitlement + criteria |
+| `GET  /services/data/v{version}/connect/sla-management/sla-policies` | List Incident SLA policies via `query_params.processTypes=Incident` (coexistence detect — is another active Incident policy present?) |
+| `POST /services/data/v{version}/connect/sla-management/milestone-types` | Create MilestoneType |
+| `POST /services/data/v{version}/connect/sla-management/sla-policies` | Create SLA Policy (SlaProcess) |
+| `POST /services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones` | Attach Milestone |
+| `PATCH /services/data/v{version}/connect/sla-management/sla-policies/<slaId>/status?isActive=true&createEntitlement=true` | **Custom flow** — activate the policy + auto-provision its Entitlement (`isActive`/`createEntitlement` are QUERY params) |
+| `POST /services/data/v{version}/connect/sla-management/entitlement-criteria` | **Custom flow** — auto-apply the activated policy's Entitlement to matching records (delegated to `csp-sun/create-entitlement-criteria`); `describe` first and send its exact fields (rejects `filterType`). OOB does not use this — the seeder provisions its own criteria |
+| `POST /services/data/v{version}/sobjects/Incident` | Create a test Incident |
+| `POST /services/data/v{version}/sobjects/BusinessHours` | Phase 2.5 — create an IST (or other-timezone) BusinessHours for the policy/Entitlement (createable; **not** API-deletable) |
+| `POST /services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions` | Phase 2.5 — attach a Warn/Escalate milestone action (delegate via the `create-milestone-action` op) |
 
-Minimum API version is **67.0** — `headless-360` currently only routes `v67.0+`.
+**API VERSION:** the `v{version}` segment in every URL above (and everywhere in this
+skill) is resolved to the target org's own current API version at dispatch — resolve it
+once via `GET /services/data/` at the start of the run and substitute it everywhere; do
+NOT pin a release-specific version (e.g. `v67.0`), and do NOT mix versions within a run.
+Minimum API version is **67.0** — `headless-360` currently only routes `v67.0+`, so the
+org-resolved version is always at or above that floor.
 
 ---
 
 ## Phase 0.5 — SLA Management for IT Service prerequisite gate
 
-"SLA Management for IT Service" is a Salesforce Go Setup Discovery feature — verified apiName
-`service-cloud-itsm-manage-sla-policies`. **Do not guess other apiNames for this** — every other
-guess returns `400 NOT_FOUND`; this exact string is the correct one. If it ever needs re-confirming
-for a different org/release, the list-all route `GET /services/data/v67.0/connect/setup/discovery/features`
-returns every feature's apiName + status in one call.
+**SLA Management for IT Service reads as fully enabled only when BOTH sub-settings are on —
+Simplified SLA Setup AND SLA Versioning.** In Setup it shows **In Progress** while either is off. Both
+the reads and the writes below are **delegated to `itsm-shakti/SLASettings`** (which owns the
+SLA-Management settings surface) — `discover` → `describe` → `dispatch` its
+operations rather than re-deriving the routes here. The paths below are the delegate's, shown for
+orientation; take the authoritative request/response shape from its `describe`.
 
-**"SLA Management for IT Service" is a Setup Discovery composite of two sub-steps — Simplified SLA
-Setup AND SLA Versioning — and reads as enabled/Complete only when BOTH are on.** In Setup it shows
-**In Progress** while either is off.
+**Two independent switches, two separate writes — enabling SLA Management does NOT auto-enable
+Versioning.**
+- **SLA Management** (`set-sla-management-permission`, `isEnabled:true`) flips its composite prefs
+  atomically (Simplified SLA Setup + Pause Milestone + the Entitlements pref). It **requires
+  Entitlements already on** or the controller throws. This toggle is **reversible** (`isEnabled:false`).
+- **SLA Versioning** (`set-sla-versioning-permission`, `isEnabled:true`) is a **separate** write and a
+  **permanent, one-way** migration. Turning SLA Management back off does **not** turn Versioning back
+  off — the controller refuses any disable ("SLA Versioning cannot be disabled once it is enabled").
+  So completing the gate takes **both** writes, and the versioning write is irreversible.
 
-**One enable call turns on both — they are inseparable.** The feature's enablement automation (the
-platform recipe `turnOnSLAManagementForITService`) runs two hardcoded, non-optional steps: (1) turns
-on Entitlements (`IsEntitlementsEnabled`) + Simplified SLA Setup + Pause Milestone; (2) turns on **SLA
-Versioning** (`EntitlementSettings.IsEntitlementVersioningEnabled`, a one-way DB migration). So the
-single feature `enable` call below **auto-enables SLA Versioning as a side effect** — no separate
-versioning write is required, and there is **no supported way to enable Simplified SLA Setup while
-leaving versioning off** (both steps are inseparable at the platform level). `IsEntitlementVersioningEnabled`
-is a Tooling singleton (fixed Id `000000000000000AAA`, keyPrefix `0HE`, one row per org).
+Because the versioning write is irreversible, **never fire it without explicit, informed consent for
+the permanent switch** — an explicit permanence-gated `AskUserQuestion`, kept separate from the
+master-enable ack (see *Ack structure* below). If the user declines the permanence, do **not** complete
+the gate (SLA Management alone does not satisfy it), and the run **halts**.
 
-**SLA Versioning is permanent / one-way.** Salesforce rejects any attempt to turn it back off
-("Versioning cannot be disabled once it is enabled"), even if SLA Management is later disabled.
-
-Because the enable is inseparable and versioning is irreversible, **never enable without explicit,
-informed consent for the permanent switch** — an explicit permanence-gated `AskUserQuestion`, kept
-separate from the master-enable ack (see *Ack structure* below). If the user declines, enable **nothing** (enabling the feature would flip versioning
-anyway), SLA Management stays incomplete, and the run **halts**.
-
-This is the root of W-23979084: the skill enabled the feature on a request that also said "don't
-enable versioning," versioning turned on anyway (a side effect of the enable), and the skill then
-**falsely reported it as off**. The fix: get permanence consent up front, and after the write re-read
+This is the root of the versioning false-report defect: the skill turned Versioning on but then
+**falsely reported it as off**. The fix: get permanence consent up front, and after each write re-read
 and report the **real** state.
 
-### Read — feature status
+### Read — SLA Management state
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-manage-sla-policies/status",
+  "url":    "/headless/invoke/platform/slasettings/get-sla-management-permission",
   "method": "GET"
 })
+→ true | false     // composite over Entitlements + Simplified SLA Setup + Pause Milestone
 ```
 
-```json
-{
-  "apiName": "service-cloud-itsm-manage-sla-policies",
-  "status": "NOT_ENABLED",
-  "enableBlockedReasons": [],
-  "disableBlockedReasons": [],
-  "blockedByApexLock": false,
-  "dependencyStatuses": []
-}
-```
+- `true` → SLA Management is on; now read SLA Versioning below. The gate passes only if **both** reads return `true`.
+- `false` → ack with the user (per *Ack structure*), confirm Entitlements are on, then write `set-sla-management-permission`.
 
-- `status == "ENABLED"` → **Simplified SLA Setup** is on — now read SLA Versioning below. SLA
-  Management is fully enabled (the gate) only if **both** this is `ENABLED` **and** versioning is `true`.
-- `status == "NOT_ENABLED"` with non-empty `enableBlockedReasons` → **stop**, relay the reasons, do
-  not attempt to enable.
-- `status == "NOT_ENABLED"` with empty `enableBlockedReasons` → ack with the user (per *Ack structure*), then enable.
-
-### Read — SLA Versioning
+### Read — SLA Versioning state
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url": "/services/data/v67.0/tooling/query",
-  "method": "GET",
-  "query_params": { "q": "SELECT IsEntitlementVersioningEnabled FROM EntitlementSettings" }
+  "url":    "/headless/invoke/platform/slasettings/get-sla-versioning-permission",
+  "method": "GET"
 })
+→ true | false
 ```
 
-```json
-{
-  "size": 1, "totalSize": 1, "done": true,
-  "records": [{ "IsEntitlementVersioningEnabled": true }]
-}
-```
+`true` is **permanent** — never attempt to flip it back. Surface the permanence to the user before the write; never enable it silently.
 
-**SLA Versioning is a one-way switch.** Once `IsEntitlementVersioningEnabled` is `true`, Salesforce
-does not support flipping it back — even if SLA Management is later turned off. Always surface this
-to the user before enabling it — never enable silently.
-
-### Enable — feature (only after explicit user confirmation)
+### Enable — SLA Management (only after the master/feature ack; skip if the read returned `true`)
 
 ```json
 mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/connect/setup/discovery/feature/service-cloud-itsm-manage-sla-policies/enable",
-  "method": "POST",
-  "body":   {}
-})
-→ 201 { "success": true }
-```
-
-**This single call enables the whole composite — Simplified SLA Setup *and*, as a side effect, the
-permanent SLA Versioning.** Do not trust `success: true` alone — re-run the status GET above and
-require `"status": "ENABLED"`, **and** re-run the SLA Versioning query and require
-`IsEntitlementVersioningEnabled: true`, before moving on.
-
-### Enable — SLA Versioning (fallback only — normally unnecessary)
-
-The feature enable above already turns versioning on, so you should **not** need a separate versioning
-write. Use this Tooling PATCH **only** if the post-enable re-read shows versioning still `false` (e.g.
-an older org whose enable automation predates the versioning step). It, too, requires explicit consent
-for the permanent switch — versioning is irreversible either way.
-
-```json
-mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/tooling/sobjects/EntitlementSettings/000000000000000AAA",
+  "url":    "/headless/invoke/platform/slasettings/set-sla-management-permission",
   "method": "PATCH",
-  "body": {
-    "FullName": "EntitlementSettings",
-    "Metadata": { "enableEntitlementVersioning": true }
-  }
+  "body":   { "isEnabled": true }
 })
-→ 204 No Content (empty body)
 ```
 
-`FullName` is mandatory — the PATCH is rejected without it. The PATCH response body is empty on
-success — **re-run the Tooling query above and require `IsEntitlementVersioningEnabled: true`**
-before moving on (never trust a write response alone).
+Requires Entitlements already on (else it throws); reversible. Do **not** trust the write response —
+re-read `get-sla-management-permission` and require `true` before the versioning write.
+
+### Enable — SLA Versioning (a SEPARATE write; only after the distinct permanence ack; skip if the read returned `true`)
+
+```json
+mcp__headless-360__dispatch({
+  "url":    "/headless/invoke/platform/slasettings/set-sla-versioning-permission",
+  "method": "PATCH",
+  "body":   { "isEnabled": true }
+})
+```
+
+**Permanent / one-way** — no disable path exists (the controller refuses `isEnabled:false` afterward).
+Re-read `get-sla-versioning-permission` and require `true` before moving on (never trust the write
+response alone).
 
 ### Ack structure — two separate consent questions
 
-Enabling the feature is **one inseparable action with a permanent consequence**: it turns on the SLA
-Management feature **and, as a one-way side effect, permanently enables SLA Versioning**. **Only SLA
-Versioning is permanent.** Scope the reversibility precisely so the customer is neither over- nor
-under-warned:
+Completing the gate takes two writes with very different stakes — a **reversible** SLA Management
+enable and an **irreversible** SLA Versioning enable. Scope the reversibility precisely so the
+customer is neither over- nor under-warned:
 
 - **Master Incident Management pref** — fully reversible; enabling it has no permanent side effect.
-- **SLA Management for IT Service feature** — the feature toggle can be turned off again later, **but
-  turning it off does NOT turn SLA Versioning back off**. Versioning stays on permanently once the
-  enable flips it. So do **not** describe the feature as cleanly "reversible" without this caveat — a
-  customer could otherwise assume disabling SLA Management undoes versioning, which is false.
-- **SLA Versioning** — permanent / one-way; guarded against disable at the platform level.
+- **SLA Management for IT Service** (`set-sla-management-permission`) — **reversible**; can be turned
+  off again later. Turning it off does **not** turn SLA Versioning back off.
+- **SLA Versioning** (`set-sla-versioning-permission`) — a **separate** write; permanent / one-way,
+  guarded against disable at the platform level.
 
-**Ask two separate `AskUserQuestion`s — never merge them into one.** The master enable and the
-permanent-versioning consent carry very different stakes (reversible prerequisite vs. irreversible
-consequence); bundling them forces an all-or-nothing accept and conflates the two. Do **not** offer a
-"versioning-off" path (none exists). Build each from the reads, not a fixed script.
+**Ask two separate `AskUserQuestion`s — never merge them into one.** The reversible enables and the
+permanent-versioning consent carry very different stakes; bundling them forces an all-or-nothing
+accept and conflates the two. Do **not** offer a "versioning-off" path (none exists). Build each from
+the reads, not a fixed script.
 
-- If **both** the feature and versioning are already on → skip the acks; the gate passes.
+- If **both** SLA Management and Versioning are already on → skip the acks; the gate passes.
 - **Q1 — master prerequisite (only if master Incident Mgmt is `NOT_ENABLED`):** ask to enable it
   first. It's **reversible** — present it as a prerequisite with **no** permanence warning. Offer
   **Enable** or **Stop — make no changes**. A declined master → HALT.
-- **Q2 — permanence ack for the feature (a distinct question, after the master is on):** if the
-  feature is off (and `enableBlockedReasons` is empty) → ask, in customer terms: enabling **SLA
-  Management for IT Service** also turns on **SLA Versioning**, which **can't be turned off once
-  enabled** — the SLA Management feature itself can be turned off again later, but that will **not**
-  turn Versioning back off; Versioning is permanent. Offer **Enable** or **Stop — make no changes**.
-- **Any decline — including a request to enable Simplified SLA Setup but *not* versioning — means
-  HALT.** There is no way to honor "Simplified without versioning" (enabling the feature flips
-  versioning anyway); enable **nothing** and do not proceed to SLA/milestone setup. Say plainly why —
-  they're inseparable and versioning is permanent.
-- **Never** enable silently or bury the permanent switch in a default — a bare or repeated "enable
-  SLA" is not consent for the permanent SLA Versioning switch. This is the W-23979084 bug.
-- **After enabling, re-read both** and report the real, both-on state — never trust the write
-  response. The gate passes only when Simplified SLA Setup is `ENABLED` **and**
-  `IsEntitlementVersioningEnabled` is `true`.
+- **Q2 — enable + permanence ack (a distinct question, after the master is on):** if SLA Management
+  and/or Versioning are off → ask, in customer terms: completing SLA Management setup turns on **SLA
+  Management** and, as a separate step, **SLA Versioning**, which **can't be turned off once enabled**
+  — SLA Management itself can be turned off again later, but that will **not** turn Versioning back
+  off; Versioning is permanent. Offer **Enable** or **Stop — make no changes**.
+- **Any decline — including a request to enable SLA Management but *not* Versioning — means HALT.**
+  The gate needs Versioning on, and there is no way to honor "SLA Management without Versioning" as a
+  completed gate; enable **no further** writes and do not proceed to SLA/milestone setup (a reversible
+  SLA Management enable already made may stand). Say plainly why — Versioning is required and permanent.
+- **Never** enable Versioning silently or bury the permanent switch in a default — a bare or repeated
+  "enable SLA" is not consent for the permanent SLA Versioning switch. This is the versioning
+  false-report bug.
+- **After each write, re-read** and report the real, both-on state — never trust the write response.
+  The gate passes only when `get-sla-management-permission` **and** `get-sla-versioning-permission`
+  both return `true`.
 
 ---
 
@@ -266,7 +231,7 @@ Setup Discovery instead.
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/connect/setup/discovery/features",
+  "url":    "/services/data/v{version}/connect/setup/discovery/features",
   "method": "GET"
 })
 ```
@@ -300,7 +265,7 @@ The endpoint returns the full feature catalog (~763 entries, ~1.1 MB) and does n
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/sobjects/Incident/describe",
+  "url":    "/services/data/v{version}/sobjects/Incident/describe",
   "method": "GET"
 })
 ```
@@ -320,7 +285,7 @@ than reading the whole body — you only need to confirm those three field names
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/query",
+  "url":    "/services/data/v{version}/query",
   "method": "GET",
   "query_params": { "q": "SELECT Id, Name FROM BusinessHours WHERE IsActive = true AND IsDefault = true" }
 })
@@ -335,7 +300,7 @@ If `body.records` is empty, stop — the user must create default Business Hours
 
 ```json
 mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/connect/sla-management/milestone-types",
+  "url":    "/services/data/v{version}/connect/sla-management/milestone-types",
   "method": "POST",
   "body": {
     "name":          "Incident First Response",
@@ -354,7 +319,7 @@ absent, the create failed — surface `body`.
 
 ```json
 mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/connect/sla-management/sla-policies",
+  "url":    "/services/data/v{version}/connect/sla-management/sla-policies",
   "method": "POST",
   "body": {
     "name":                    "Incident SLA Policy",
@@ -363,7 +328,7 @@ mcp__headless-360__dispatch({
     "businessHourId":          "<BusinessHoursId>",
     "createdDateEntryCriteria": true,
     "closedExitCriteria":       true,
-    "active":                   true,
+    "active":                   false,
     "versionDefault":           true
   }
 })
@@ -374,11 +339,32 @@ verify state via SOQL:
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/query",
+  "url":    "/services/data/v{version}/query",
   "method": "GET",
   "query_params": { "q": "SELECT Id, Name, SobjectType, IsActive, BusinessHoursId FROM SlaProcess WHERE Id = '<slaId>'" }
 })
 ```
+
+**Custom flow creates the policy inactive** (`active: false`) — activation is a separate, explicit
+step so the Entitlement is **auto-provisioned**. After the milestones are attached, activate via the
+`csp-sun/activate-sla-policy` leaf:
+
+```json
+mcp__headless-360__dispatch({
+  "url":    "/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/status",
+  "method": "PATCH",
+  "query_params": { "isActive": "true", "createEntitlement": "true" }
+})
+```
+
+`isActive` and `createEntitlement` are **QUERY params, not a body** (sending them in a body `500`s
+headless). `createEntitlement=true` **auto-provisions the Entitlement** and returns its
+`entitlementId` — bind the auto-apply criteria to it (see *Entitlement Criteria* / the
+`csp-sun/create-entitlement-criteria` leaf). Verify by reading the policy back (`IsActive = true`)
+via SOQL, never the write response. **This is the custom-flow activation path — a `200` with a
+returned `entitlementId` is the success shape.** The **OOB/predefined seed path does NOT use this PATCH
+at all** — its single `save-selected-options` call seeds an already-active policy and auto-provisions
+the Entitlement itself (see *Predefined Incident Policy*).
 
 ---
 
@@ -389,7 +375,7 @@ mcp__headless-360__dispatch_readonly({
 
 ```json
 mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones",
+  "url":    "/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones",
   "method": "POST",
   "body": {
     "milestoneTypeId":  "<MilestoneTypeId>",
@@ -411,9 +397,9 @@ mcp__headless-360__dispatch({
 })
 ```
 
-**`startTimeBasedOn`** controls when the timer starts. Send **`"MILESTONE_CRITERIA"`** (matches OOB and every default pattern) to start the clock when the milestone's ACTIVE criteria first match. It is a free string with two recognized values — **`MILESTONE_CRITERIA`** (criteria-based / dynamic start) and **`SLA_PROCESS`** (the fallback); any other value silently defaults to the `SLA_PROCESS` behavior (no error). The fallback anchors the timer to the **Incident's `SlaStartDate`** (→ its `CreatedDate` if `SlaStartDate` is null) — **not** the SLA-process record's created date. **This choice is not runtime-verifiable in the standard verify flow:** for a test Incident that matches the SLA at creation, both settings compute the same `TargetDate` (≈ `SlaStartDate + timeTrigger`) — they diverge only when the criteria first match *after* creation (e.g. a later field change), which the Phase 3 test does not exercise. So send the OOB value and rely on it; there is no Phase-3 assertion that distinguishes the two (unlike the ACTIVE criterion, whose effect **is** observable via tiering — see below). `milestoneCriteria` is mandatory. `milestoneAgreementType` is mandatory per the UI and lives **inside each `milestoneCriteria[]` item** (it maps to the `MilestoneCriteria.MilestoneAgreementType` sub-entity field — sending it at the top level of the milestone body returns `JSON_PARSER_ERROR: Unrecognized field`). Valid UI values are **`SLA`** (customer-facing agreement) or **`OLA`** (internal / operational). The API accepts any string because the underlying field is plain `Text(40)` with no server-side picklist enforcement — an unrecognized value persists to the DB but the UI treats it as blank; omitting the field entirely also succeeds silently but leaves the record's Milestone Agreement Type null (W-23959162). Success: `body.id` is the new Milestone Id.
+**`startTimeBasedOn`** controls when the timer starts. Send **`"MILESTONE_CRITERIA"`** (matches OOB and every default pattern) to start the clock when the milestone's ACTIVE criteria first match. It is a free string with two recognized values — **`MILESTONE_CRITERIA`** (criteria-based / dynamic start) and **`SLA_PROCESS`** (the fallback); any other value silently defaults to the `SLA_PROCESS` behavior (no error). The fallback anchors the timer to the **Incident's `SlaStartDate`** (→ its `CreatedDate` if `SlaStartDate` is null) — **not** the SLA-process record's created date. **This choice is not runtime-verifiable in the standard verify flow:** for a test Incident that matches the SLA at creation, both settings compute the same `TargetDate` (≈ `SlaStartDate + timeTrigger`) — they diverge only when the criteria first match *after* creation (e.g. a later field change), which the Phase 3 test does not exercise. So send the OOB value and rely on it; there is no Phase-3 assertion that distinguishes the two (unlike the ACTIVE criterion, whose effect **is** observable via tiering — see below). `milestoneCriteria` is mandatory. `milestoneAgreementType` is mandatory per the UI and lives **inside each `milestoneCriteria[]` item** (it maps to the `MilestoneCriteria.MilestoneAgreementType` sub-entity field — sending it at the top level of the milestone body returns `JSON_PARSER_ERROR: Unrecognized field`). Valid UI values are **`SLA`** (customer-facing agreement) or **`OLA`** (internal / operational). The API accepts any string because the underlying field is plain `Text(40)` with no server-side picklist enforcement — an unrecognized value persists to the DB but the UI treats it as blank; omitting the field entirely also succeeds silently but leaves the record's Milestone Agreement Type null. Success: `body.id` is the new Milestone Id.
 
-**`milestoneState` MUST be UPPERCASE and comes from a fixed set — this is load-bearing.** Valid values are **`ACTIVE`**, **`COMPLETE`**, **`PAUSE`**, **`UNPAUSE`** (there is **no `CANCEL`** state). `MilestoneService` compares `milestoneState` against `"ACTIVE"` with a **case-sensitive** `String.equals`, so `"Active"`/`"active"` (or any wrong case) **silently fails to register the ACTIVE criterion** — the create still returns `201 success:true`, but the priority/entry filter is never written and the Setup UI shows blank Activation Criteria. The milestone loses its Priority gate, so **in practice every Incident engages the lowest-`order` milestone of that MilestoneType regardless of its Priority** — a priority-tiered policy collapses to one tier. Use `ACTIVE` for the engagement (Priority) criterion and `COMPLETE` for the completion (Status) criterion; never send `CANCEL` (once the `ACTIVE` Priority criterion is correct it gates engagement, making a cancel criterion redundant).
+**`milestoneState` MUST be UPPERCASE and comes from a fixed set — this is load-bearing.** Valid values are **`ACTIVE`**, **`COMPLETE`**, **`PAUSE`**, **`UNPAUSE`** (there is **no `CANCEL`** state). The server compares `milestoneState` against `"ACTIVE"` **case-sensitively**, so `"Active"`/`"active"` (or any wrong case) **silently fails to register the ACTIVE criterion** — the create still returns `201 success:true`, but the priority/entry filter is never written and the Setup UI shows blank Activation Criteria. The milestone loses its Priority gate, so **in practice every Incident engages the lowest-`order` milestone of that MilestoneType regardless of its Priority** — a priority-tiered policy collapses to one tier. Use `ACTIVE` for the engagement (Priority) criterion and `COMPLETE` for the completion (Status) criterion; never send `CANCEL` (once the `ACTIVE` Priority criterion is correct it gates engagement, making a cancel criterion redundant).
 
 **The create response NEVER echoes `milestoneCriteria` — it always returns `milestoneCriteria: []` even on success** (the create handler only sets `id`/`success`; only a subsequent GET/read-back populates criteria). So the `201` proves nothing about whether criteria persisted. **Verify by runtime, not the response:** after seeding, create a **non-matching-tier** test Incident (e.g. a Moderate/Low one for a Critical-first policy) and confirm its `EntityMilestone.TargetResponseInMins` matches that tier's `timeTrigger`, not order-1's. A Critical-only test can't catch a dropped criterion because Critical maps to order-1, which is also the collapse fallback.
 
@@ -444,7 +430,7 @@ mcp__headless-360__describe(id="<create-milestone-action operation id>")
 ```
 
 Then `dispatch` the `POST` it returns:
-`/services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions`.
+`/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions`.
 
 ### Checkpoint roles (the `checkpoint` block)
 
@@ -474,16 +460,20 @@ offsetBeforeTarget = round( milestoneTargetMinutes × (1 − X/100) )
 
 "Escalate **on breach**" → a Violation with `timeLength: 0`.
 
-### Proven bodies (live-validated, Field Update)
+### Milestone-action bodies (Field Update; example shapes, pending live verification)
 
 **Default action is a Field Update** — self-contained, no org dependencies. `actionFlow` returns an
 opaque `201 / success:false / INTERNAL_SERVER_ERROR` on empty-flow auto-create in some orgs — avoid it
-as the default; Email Alert needs a pre-built template. Warning (warn at 75% of a 2-hr milestone → 30
-min before):
+as the default; Email Alert needs a pre-built template. **`Incident.Priority` is derived from
+Impact × Urgency and is NOT directly updateable** (`createable:false / updateable:false` — see *Verify
+SLA engagement*), so a Field Update targeting `Priority` fails `INVALID_FIELD_FOR_INSERT_UPDATE`.
+Escalate by driving Priority's **updateable inputs** instead: raise `Urgency` on the warning and
+`Impact` on the breach — both axes High drives the derived Priority to its top tier. Warning (warn at
+75% of a 2-hr milestone → 30 min before):
 
 ```json
 mcp__headless-360__dispatch({
-  "url": "/services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions",
+  "url": "/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions",
   "method": "POST",
   "body": {
     "isSuccessCheckpoint": false,
@@ -491,16 +481,17 @@ mcp__headless-360__dispatch({
     "entityName": "Incident",
     "actionFieldUpdate": {
       "name": "SLA Warn 75pct RES", "sourceTable": "Incident", "targetTable": "Incident",
-      "columnEnumOrId": "Priority", "developerName": "SLA_Warn_75_RES",
+      "columnEnumOrId": "Urgency", "developerName": "SLA_Warn_75_RES",
       "operationString": "LITERAL", "literal": "High"
     }
   }
 })
 ```
 
-Violation (escalate on breach → `Priority = Critical`): same shape with
+Violation (escalate on breach → raise `Impact = High`): same shape with
 `checkpoint: { "isWarning": false, "timeLength": 0, "timeUnit": "Minutes" }`, `name`
-`"SLA Escalate on Breach RES"`, `developerName` `SLA_Escalate_Breach_RES`, `literal` `"Critical"`.
+`"SLA Escalate on Breach RES"`, `developerName` `SLA_Escalate_Breach_RES`, `columnEnumOrId` `"Impact"`,
+`literal` `"High"`.
 
 **Make `name`/`developerName` unique per milestone.** A `WorkflowFieldUpdate` `DeveloperName` is unique
 on the Incident object, so reusing `SLA_Warn_75` on a second milestone fails with
@@ -548,179 +539,122 @@ shift the milestone clock. State this plainly instead of implying IST changed th
 
 ---
 
-## Create Entitlement (standard sObject)
-
-Entitlement is NOT part of the `/connect/sla-management/` surface — create it via the sObject
-endpoint.
-
-```json
-mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/sobjects/Entitlement",
-  "method": "POST",
-  "body": {
-    "Name":            "Incident SLA Entitlement",
-    "AccountId":       "<AccountId>",
-    "SlaProcessId":    "<slaId>",
-    "BusinessHoursId": "<BusinessHoursId>",
-    "StartDate":       "<YYYY-MM-DD>",
-    "EndDate":         "<YYYY-MM-DD + 1 year>"
-  }
-})
-```
-
-`Entitlement.Status` is date-computed: `StartDate` in the future → `Inactive`; `StartDate` ≤ today
-AND `EndDate` ≥ today → `Active`. For immediate SLA engagement, backdate `StartDate` to yesterday.
-Success: `body.id`.
-
----
-
 ## Predefined Incident Policy (Phase 0.6 detect + Phase 2-OOB seed)
 
 The out-of-box **"Standard Support for Incidents"** policy is what Salesforce seeds from Setup's
-"Create Predefined Policies" step (Incident process type only). That step is **Aura-only** — the
-checkbox calls `DefaultSlaPolicyController.saveSelectedOptions`, an `@AuraEnabled` controller whose
-only caller of `DefaultSlaService.createDefaultSlaPolicies` is that Aura action; there is **no public
-REST/Connect wrapper**, so the headless MCP cannot invoke the seeder directly. But the seeder just
-reads core's `default-sla-policies/incident.json` and writes it through the **same backend** as the
-public `/connect/sla-management/*` routes above — so the skill replicates that resource's exact
-output with routes it already uses. The full template (policy flags, 2 milestone types, **6
-milestones**, entitlement criterion) lives in **`assets/predefined-incident-policy.json`** — load
-and follow it; the values below are the shape.
+"Create Predefined Policies" step (Incident process type only). That seeder — the SLA Settings page's
+**Create Predefined Policies** action (`save-selected-options`) — is served headless on the **Aura dispatcher route**
+`/headless/invoke/platform/slasettings/*`, so the skill invokes the **real seeder in ONE call** rather
+than replicating its output. The seeder builds the entire **active** bundle itself — policy + 2
+MilestoneTypes + 6 milestones (Critical/High per-tier, Moderate+Low merged) + Entitlement + auto-apply
+criteria — the same core out-of-box seed data, with Core's own Priority/Status handling. (Route
+live-proven for both read and write; the former hand-rebuilt replica over `/connect/sla-management/*`
+plus the manual `POST /sobjects/Entitlement` is retired.)
 
 ### Detect first (no server idempotency → mandatory)
 
 Re-seeding is **not** idempotent — a second seed duplicates every artifact. Before offering to seed,
-read the existing Incident policies and name-match:
+read the seeder's own existence map:
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/connect/sla-management/sla-policies",
-  "method": "GET",
-  "query_params": { "processTypes": "Incident" }
+  "url":    "/headless/invoke/platform/slasettings",
+  "method": "GET"
 })
 ```
 
-If any returned policy's name is **"Standard Support for Incidents"**, it is already seeded — report
-it and do **not** re-seed. (Fallback: SOQL `SELECT Id, Name FROM SlaProcess WHERE SobjectType =
-'Incident' AND Name = 'Standard Support for Incidents'`.)
+It returns a **lowercase-keyed** map, e.g. `{"incident": true}` (keys: `incident`, `problem`,
+`changeRequest`; a key is `true` when that type's default is already seeded). If `incident` is `true`,
+the OOB policy is already present — report it and do **not** re-seed. (Fallback: SOQL `SELECT Id, Name
+FROM SlaProcess WHERE SobjectType = 'Incident' AND Name = 'Standard Support for Incidents'`.)
 
-### Seed recipe (only if not already present)
+### Seed (only if not already present)
 
-Uses the Phase 2 routes above, in this order:
+One call:
 
-1. **Resolve the 2 MilestoneTypes — detect first, create only what is missing.** Enabling the SLA
-   Management feature pre-seeds a default MilestoneType catalog (commonly `First Response`,
-   `Follow Up`, `Periodic Update`, **`Resolve Within`**), so a blind `POST .../milestone-types` for a
-   name that already exists returns **HTTP 500 ("already exists")** and leaves the policy half-seeded.
-   First read the catalog — SOQL `SELECT Id, Name FROM MilestoneType WHERE Name IN ('Acknowledge
-   Within', 'Resolve Within')` (or `GET .../milestone-types`) — **reuse any match by id**, and `POST
-   .../milestone-types` (`recurrenceType: OneTime`) **only** for the name(s) not already present.
-   Capture both ids (whether reused or created) **for chaining only — when you narrate the reuse,
-   name the type ("reusing the existing First Response type"); never append its queried Id, masked or
-   full (Output contract).**
-2. Create the SLA Policy `Standard Support for Incidents` (`POST .../sla-policies`) with
-   `processType: "Incident"`, `businessHourId` = default, `createdDateEntryCriteria: true`,
-   `closedExitCriteria: true`, `versionDefault: true`, **`active: true`** (create it active directly —
-   do **not** use the Connect activate PATCH, which can 500 headless). Verify via SOQL on `SlaProcess`,
-   then narrate the policy by that verified name — never the captured/queried Id (Output contract).
-3. Attach the **6 milestones** (`POST .../sla-policies/<id>/milestones`, one per row). Reuse
-   `assets/attach-milestone.json`. Send **`startTimeBasedOn: "MILESTONE_CRITERIA"`** on every
-   milestone — the OOB timer starts when the milestone criteria first match; the public route reads
-   this exact token (`MilestoneService` treats `MILESTONE_CRITERIA` as the criteria-based/dynamic
-   start; its only other recognized value, `SLA_PROCESS`, anchors to the Incident's `SlaStartDate`).
-   Validate each Priority/Status value against the live `Incident` picklist first. For the **mid
-   tier**, map to the org's actual mid-priority label — `Moderate` on the standard ITSM picklist, but
-   many orgs label it `Medium` — inside the merged orders 5–6 `Priority` OR rows (keep the `Low` row).
-   Drop a row from the OR **only** when its value is genuinely absent from the picklist, and note any
-   dropped or relabeled tier in the report.
+```json
+mcp__headless-360__dispatch({
+  "url":    "/headless/invoke/platform/slasettings/save-selected-options",
+  "method": "PATCH",
+  "body":   { "selectedOptions": ["incident"] }
+})
+```
 
-| order | milestoneType | timeTrigger | active criterion (Priority) | completion (Status) |
-|-------|---------------|-------------|-----------------------------|---------------------|
-| 1 | Acknowledge Within | 30  | `Equals Critical` | `NotEqual New` |
-| 2 | Resolve Within     | 120 | `Equals Critical` | `In [Resolved, Completed, Closed]` |
-| 3 | Acknowledge Within | 60  | `Equals High` | `NotEqual New` |
-| 4 | Resolve Within     | 240 | `Equals High` | `In [Resolved, Completed, Closed]` |
-| 5 | Acknowledge Within | 240 | `Equals Moderate` OR `Equals Low` (`filterLogic: "1 OR 2"`) | `NotEqual New` |
-| 6 | Resolve Within     | 960 | `Equals Moderate` OR `Equals Low` (`filterLogic: "1 OR 2"`) | `In [Resolved, Completed, Closed]` |
+- **`selectedOptions` values MUST be lowercase** (`incident` / `problem` / `changeRequest`), matching
+  the existence-map keys. The capitalized `Incident` form returns a server-side **`500`** — this is the
+  single most common failure; the describe metadata's `{Incident,Problem,ChangeRequest}` casing is
+  misleading, so send lowercase.
+- Success is **HTTP `200` with body `true`**. The seeded policy is **active**, and its Entitlement and
+  auto-apply criteria are provisioned by the seeder — there is **no** manual `POST /sobjects/Entitlement`
+  and **no** Connect activate PATCH (so the 500 that path could throw never arises).
 
-This mirrors core's `default-sla-policies/incident.json` shape: Critical and High are per-tier;
-**Moderate and Low are one merged tier** (ACTIVE `filterLogic "1 OR 2"` over two Priority Equals rows).
+### Verify
 
-The **active** criterion is the one the public Attach-Milestone `milestoneCriteria` carries
-(`milestoneState: ACTIVE`, `milestoneAgreementType: SLA`, `filterType: RuleFilter`) — seeding it
-**is what tiers the policy**: it gates which Incidents engage each milestone. Because all three tiers
-reuse the same two MilestoneTypes, if the ACTIVE criterion fails to persist (e.g. a wrong-case
-`milestoneState` — see the case-sensitivity warning above), the milestone loses its Priority gate and
-in practice every Incident engages the lowest-`order` milestone (Critical, 30/120) regardless of Priority. Each milestone also carries a
-completion criterion (`milestoneState: COMPLETE`, `Status In …`). **The core template's per-tier
-CANCEL criterion is intentionally dropped** — the public route has no `CANCEL` state, and once the
-ACTIVE Priority criterion is correct it already prevents off-tier engagement, so a cancel criterion is
-redundant. **Verify tiering by runtime** (see the case-sensitivity warning): seed, then create a
-**Moderate/Low** test Incident and confirm its `EntityMilestone` lands on the 240/960 tier, not 30/120.
-
-**Priority OR is expressed via `filterLogic`, not an `In` operator.** `filterItems` AND by default and
-there is no `In` operator, but the merged Moderate-or-Low tier's ACTIVE criterion uses
-`filterLogic: "1 OR 2"` across two `Priority Equals` rows — the same `customLogicExpression` the
-public milestone-criteria route consumes, so no separate per-value milestone is needed. If the live
-route rejects `filterLogic`, fall back to two separate `Priority Equals` milestones (Moderate, Low)
-with the same timeTriggers — behavior-equivalent. The `Status In` completion sets use the same
-`filterLogic: "1 OR 2 OR 3"` pattern (split into one row per value if the route rejects it).
-
-4. Create the Entitlement (`POST /sobjects/Entitlement`) on the resolved Account, `SlaProcessId` =
-   the seeded policy, backdated `StartDate`. **Attempt** the OOB always-match entitlement criterion
-   (`Subject NotEqual <sentinel>`, see the asset) via `POST /connect/sla-management/entitlement-criteria`
-   so the policy auto-matches every Incident like true OOB. **First `describe` that operation and send
-   its exact input fields** — do **not** reuse the milestone-criteria body shape: `entitlement-criteria`
-   rejects `filterType` (`400 JSON_PARSER_ERROR: Unrecognized field "filterType"`); its criterion body
-   differs. If the create still fails after using the described schema, fall back to the date-windowed
-   Entitlement alone and **disclose only the consequence, in plain customer terms**: the seeded policy
-   then engages on Incidents wired to this Entitlement (`EntitlementId` set), not on every Incident
-   automatically — to make it apply to all Incidents, add the always-match criterion via **Setup →
-   Entitlement Management**. **Do NOT tell the user the route is "unreachable" or its schema
-   "undiscoverable"** — that is inaccurate; the route works, the criterion body just needs its correct
-   fields (a wrong-payload `400`, not a platform gap), and misattributing it reads as a bug. Never
-   surface the raw sentinel string or a `JSON_PARSER_ERROR` in the customer report. The date-windowed
-   Entitlement plus the milestone criteria are still enough to engage the Phase 3 test Incident.
-   Narrate the Entitlement by name/Account, never its returned Id (Output contract).
-5. Verify per **Verify SLA engagement** below with a **Moderate/Low** test Incident — its
-   `EntityMilestone` must land on the 240/960 tier, not 30/120. Use a non-lowest tier: Critical is
-   order-1, the collapse fallback, so it spawns a milestone even when the ACTIVE criterion was dropped
-   and can't detect the bug. Then **STOP** — do not offer custom.
+Re-read the existence map (`GET /headless/invoke/platform/slasettings`) and confirm `incident: true`,
+then SOQL `SlaProcess` for **"Standard Support for Incidents"** with `IsActive = true` (do not trust the
+write body). Then verify runtime engagement per **Verify SLA engagement** below with a **Moderate/Low**
+test Incident — its `EntityMilestone` must land on the 240/960 tier, not 30/120 (Critical is order-1,
+the collapse fallback, so it can't detect a mis-tiered seed). Then **STOP** — do not offer custom.
+Narrate the policy by name, never its Id (Output contract).
 
 ---
 
 ## Verify SLA engagement
 
-Create a test Incident:
+Create a test Incident. **`Priority` is NOT directly writable on `Incident`** — the field is
+`createable:false / updateable:false` (not a formula) and is **platform-derived from `Impact` ×
+`Urgency`** via the ITSM priority matrix (both are `High | Medium | Low` picklists). Sending
+`Priority` in the body fails with `INVALID_FIELD_FOR_INSERT_UPDATE`. So to land the test Incident on
+a target tier, set **`Impact` and `Urgency`** (never `Priority`), then read the **derived** `Priority`
+back to confirm which tier it resolved to — the matrix is **org-configurable**, so do NOT hardcode the
+mapping. **Pick a tier that actually exercises the milestone under test — for a Priority-tiered or OOB
+policy use a Moderate/Low Incident, NOT Critical.** Critical is the order-1 milestone (the collapse
+fallback), so it always stamps an EntityMilestone and can't reveal a mis-tiered or dropped milestone
+(the OOB Verify step mandates Moderate/Low for the same reason). (On the default matrix
+`Impact=Medium, Urgency=Medium` → a mid tier and `Impact=High, Urgency=High` → `Critical`; treat these
+as default-matrix illustrations, not guarantees — always read the derived `Priority` back.) Wire the
+Entitlement explicitly (`EntitlementId`) so engagement is deterministic and does not depend on the
+auto-apply criterion:
 
 ```json
 mcp__headless-360__dispatch({
-  "url":    "/services/data/v67.0/sobjects/Incident",
+  "url":    "/services/data/v{version}/sobjects/Incident",
   "method": "POST",
-  "body":   { "Subject": "SLA test incident", "EntitlementId": "<EntitlementId>" }
+  "body":   { "Subject": "SLA test incident", "Impact": "Medium", "Urgency": "Medium", "EntitlementId": "<EntitlementId>" }
 })
 ```
 
-Then confirm the Incident stamped an SLA start and an EntityMilestone:
+Then confirm the derived Priority landed on the intended tier, and that the Incident stamped an SLA
+start and an EntityMilestone:
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/query",
+  "url":    "/services/data/v{version}/query",
   "method": "GET",
-  "query_params": { "q": "SELECT Id, IncidentNumber, Subject, Status, SlaStartDate FROM Incident WHERE Id = '<incidentId>'" }
+  "query_params": { "q": "SELECT Id, IncidentNumber, Subject, Status, Priority, Impact, Urgency, SlaStartDate FROM Incident WHERE Id = '<incidentId>'" }
 })
 ```
 
 ```json
 mcp__headless-360__dispatch_readonly({
-  "url":    "/services/data/v67.0/query",
+  "url":    "/services/data/v{version}/query",
   "method": "GET",
   "query_params": { "q": "SELECT Id, MilestoneType.Name, TargetDate, IsCompleted, IsViolated FROM EntityMilestone WHERE ParentEntityId = '<incidentId>'" }
 })
 ```
 
-`SlaStartDate` populated + at least one `EntityMilestone` row with a `TargetDate` = SLA engaged.
-`TargetDate` should equal `SlaStartDate + timeTrigger minutes` (business-hours-adjusted).
+**At least one `EntityMilestone` row with a `TargetDate`** is the reliable proof the SLA engaged —
+assert on that first. `Incident.SlaStartDate` is populated when the Incident is created with an
+explicit `EntitlementId`, but can come back **null** when the Entitlement is applied hands-free by an
+entitlement-criteria rule (the milestone still lands, with its `TargetDate` computed off `CreatedDate`
+— the `SLA_PROCESS` fallback anchor). So treat a null `SlaStartDate` as a non-blocker, not a failure,
+as long as the `EntityMilestone` is present on the correct tier.
+When `SlaStartDate` is populated, `TargetDate` should equal `SlaStartDate + timeTrigger minutes`
+(business-hours-adjusted), and
+`EntityMilestone.TargetResponseInMins` should equal the target tier's `timeTrigger`. First confirm the
+**derived** `Priority` on the Incident is the tier you intended (from the `Impact`/`Urgency` you set) —
+if the org's matrix mapped your `Impact`/`Urgency` to a different Priority, adjust them and recreate
+rather than reading the assertion against the wrong tier.
 
 ---
 
@@ -734,7 +668,7 @@ mcp__headless-360__dispatch_readonly({
 | SLA Policy create response is null | `POST /sla-policies` echoes most fields as `null` — always verify via SOQL on `SlaProcess`; then narrate the policy by the **verified name**, never the captured/queried Id (Output contract). |
 | Milestone filter payload | `milestoneCriteria` is mandatory (omitting it → `400: Criteria details cannot be empty`). Use `filterType: "RuleFilter"` with concrete `filterItems[]` — `filterType: "Formula"` triggers a 500. Operators are `Equals` (not `Equal`) and `NotEqual` (not `NotEquals`/`NotEqualTo`/`!=`); wrong forms → `POST_BODY_PARSE_ERROR: Invalid value for Filter Operation Enum`. |
 | `slaProcessId` rejected in body | The server returns `JSON_PARSER_ERROR: Unrecognized field "slaProcessId"` — the id is in the path only. |
-| Entitlement create + status | Create via `POST /sobjects/Entitlement` (standard sObject, not the Connect surface). Status is date-computed: a future `StartDate` → `Inactive`; backdate `StartDate` to yesterday for immediate SLA engagement in testing. |
-| OOB seed has no idempotency | `POST .../sla-policies` does not dedupe — re-seeding "Standard Support for Incidents" duplicates every artifact. Detect first via `GET .../sla-policies?processTypes=Incident` and name-match before seeding. |
-| Connect activate PATCH may 500 | The OOB backend flips the policy active via a Connect activate call; headless, that PATCH can 500. Create the SlaProcess with `active: true` directly instead (as the custom flow does). |
+| OOB seed `selectedOptions` casing | The `save-selected-options` values MUST be **lowercase** (`incident`/`problem`/`changeRequest`), matching the existence-map keys. The capitalized `Incident` form returns a server-side **`500`** — the single most common OOB failure; the describe metadata's `{Incident,Problem,ChangeRequest}` casing is misleading. |
+| OOB seed has no idempotency | `save-selected-options` does not dedupe — re-seeding "Standard Support for Incidents" duplicates every artifact. Detect first via `GET /headless/invoke/platform/slasettings` (existence map; `incident: true` = already seeded) before seeding. |
+| OOB uses the seeder, not the Connect activate PATCH | The **OOB seed** does one `save-selected-options` call that seeds an already-active policy + auto-provisions its Entitlement — it never touches the Connect activate PATCH. The **custom flow** activates via the `csp-sun/activate-sla-policy` leaf (`isActive`+`createEntitlement` query params) — the no-500 activation path (a `200` with a returned `entitlementId` is the success shape). |
 | Never leak a record Id (SKILL.md Output contract) | In **every** user-facing message — interim narration *and* the final report, incl. "created milestone …" / "policy created …" / "reusing existing … →" progress lines — refer to the Phase-3 test Incident by its **`IncidentNumber`** (the verify SOQL selects it) and milestones/policy by their **name** — never the 15/18-char record Id (full **or masked**, e.g. `557VW…R3XVYA0`) or a `triggerId`. This covers **detected/reused** artifacts too — no `→ <Id>` "proof of reuse". Ids stay internal (chaining only). |

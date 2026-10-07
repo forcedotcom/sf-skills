@@ -4,7 +4,8 @@ description: "Configure the \"Set Up Self Service for Employees on Slack\" / \"S
 metadata:
   version: "1.0"
   minApiVersion: "67.0"
-  domains: ["Service"]
+  domains:
+    - "Service"
   relatedSkills:
     - "experience-portal-create"
     - "service-itsm-agentic-setup-employee-agent-configure"

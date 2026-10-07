@@ -1,0 +1,122 @@
+{
+  "note": "Cross-cutting optional fields shared by every upsert_*_widget operation in this directory: widget.actions, widget.dynamicTokens, and the style/receive-source/conditional-formatting building blocks several widgets' parameters reference by name below. This file is not an operation itself — read it alongside whichever upsert_*_widget.json you're using when you need one of these fields. Everything here is optional; omitting it is always valid.",
+  "widgetLevelFields": {
+    "description": "Every widget type also accepts an optional top-level widget.description (human-readable, distinct from widget.label). Omitted from the per-widget files for brevity — assume it's always available.",
+    "actions": {
+      "type": "array",
+      "description": "Interactions triggered by the widget on click or select. Each item is one of the 5 action types below, discriminated by actionType.",
+      "items": { "oneOf": ["NavigateAction", "FlowAction", "ParameterAction", "FilterAction", "RecordAction"] }
+    },
+    "dynamicTokens": {
+      "type": "object",
+      "description": "Dynamic tokens keyed by token name, referenced elsewhere on the widget (e.g. from text content, or a metric's tokenSpec).",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "label": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string", "enum": ["query", "insights", "reference", "metric"] },
+          "source": { "type": "object", "description": "WidgetDataSource { id, name }." },
+          "tokenSpec": { "type": "object", "description": "Shape depends on type; keyed by setting name." }
+        }
+      }
+    }
+  },
+  "actionTypes": {
+    "NavigateAction": {
+      "required": ["actionType", "eventType"],
+      "properties": {
+        "actionType": { "const": "navigate" },
+        "eventType": { "enum": ["click", "select"] },
+        "parameters": {
+          "field": "string, optional",
+          "label": "string, optional",
+          "includeState": "boolean, optional — carry current dashboard filter/parameter state into the destination",
+          "destination": "NavigateDestination — oneOf: {type:\"url\", target} | {type:\"page\", target} | {type:\"dashboard\", target, pageName} | {type:\"metricdetails\", target:{tokenName}}"
+        }
+      },
+      "example": { "actionType": "navigate", "eventType": "click", "parameters": { "destination": { "type": "page", "target": "page_2" } } }
+    },
+    "FlowAction": {
+      "required": ["actionType", "eventType"],
+      "properties": {
+        "actionType": { "const": "flow" },
+        "eventType": { "enum": ["click", "select"] },
+        "parameters": {
+          "flowName": "string — API name of the flow to run",
+          "showDialog": "boolean, optional",
+          "attributes": "object keyed by flow variable name -> FlowAttribute { inputDataType, inputData: {inputType:\"static\", value} | {inputType:\"dynamic\", widgetId, widgetField, selectionType: \"result\"|\"selection\"} }"
+        }
+      },
+      "example": { "actionType": "flow", "eventType": "click", "parameters": { "flowName": "Escalate_Opportunity" } }
+    },
+    "ParameterAction": {
+      "required": ["actionType", "eventType"],
+      "properties": {
+        "actionType": { "const": "parameter" },
+        "eventType": { "enum": ["click", "select"] },
+        "parameters": {
+          "parameter": "value to set on the target parameter widget",
+          "sourceFieldAPIName": "string, optional",
+          "sourceObjectAPIName": "string, optional"
+        }
+      },
+      "example": { "actionType": "parameter", "eventType": "select", "parameters": { "parameter": "West" } }
+    },
+    "FilterAction": {
+      "required": ["actionType", "eventType"],
+      "properties": {
+        "actionType": { "const": "filter" },
+        "eventType": { "enum": ["click", "select"] },
+        "parameters": {
+          "filter": "{ tokenName: string }",
+          "sourceFieldAPIName": "string, optional",
+          "sourceObjectAPIName": "string, optional"
+        }
+      },
+      "example": { "actionType": "filter", "eventType": "select", "parameters": { "filter": { "tokenName": "region_filter" } } }
+    },
+    "RecordAction": {
+      "required": ["actionType", "eventType"],
+      "properties": {
+        "actionType": { "const": "recordaction" },
+        "eventType": { "enum": ["click", "select"] },
+        "parameters": {
+          "field": "{ fieldKey: string }",
+          "recordId": "{ fieldKey: string }",
+          "actions": "[{ apiName: string }] — RecordActionInfo list"
+        }
+      },
+      "example": { "actionType": "recordaction", "eventType": "click", "parameters": { "recordId": { "fieldKey": "Id" }, "actions": [{ "apiName": "Log_a_Call" }] } }
+    }
+  },
+  "styleBlocks": {
+    "WidgetStyle": { "backgroundColor": "hex", "borderEdges": "string[], e.g. [\"top\",\"bottom\",\"left\",\"right\"]", "borderColor": "hex", "borderWidth": "integer px", "borderRadius": "integer px" },
+    "ButtonStyle": { "extends": "WidgetStyle", "fontColor": "hex", "textStyle": "string[], e.g. [\"bold\",\"italic\",\"underline\"]" },
+    "ContainerStyle": { "extends": "WidgetStyle", "background": "BackgroundParameters — { alignmentX, alignmentY, imageScale: fitToWidth|fitToHeight|fill|original, opacity: 0-100 }" },
+    "VisualizationStyle": { "extends": "WidgetStyle", "textColor": "hex", "lineColor": "hex", "headerBackgroundColor": "hex", "textSize": "integer" },
+    "MetricStyle": { "extends": "WidgetStyle", "textColor": "hex" },
+    "WidgetTextStyle": { "fontSize": "integer", "fontColor": "hex", "textStyle": "string[]" },
+    "ToggleTextStyle": { "alignmentX": "string", "alignmentY": "string", "fontSize": "integer" },
+    "ToggleDefaultStyle": { "fontColor": "hex", "textStyle": "string[]" },
+    "ToggleSelectedStyle": { "backgroundColor": "hex", "fontColor": "hex", "textStyle": "string[]" },
+    "NavigationLabelStyle": { "id": "string", "name": "string", "label": "string", "description": "string", "fontSize": "integer", "alignmentX": "string", "alignmentY": "string" }
+  },
+  "receiveSources": {
+    "receiveFilterSource": {
+      "filterMode": "all | include | exclude | none",
+      "widgetIds": "string[], optional",
+      "publishers": "[{ widgetId, fieldName, objectName, source:{id,name} }], optional — explicit FilterPublisher list"
+    },
+    "receiveParameterSource": {
+      "parameterMode": "all | include | exclude | none",
+      "publishers": "[{ widgetId, parameterName }], optional — ParameterPublisher list"
+    }
+  },
+  "conditionalFormatting": {
+    "ConditionalFormattingRule": { "name": "string", "formatBasedOn": "string — field or value the rule keys on", "formattingType": "\"single_color\" (only current enum value)", "buckets": "ConditionalFormattingBucket[]" },
+    "ConditionalFormattingBucket": { "operator": "greater_than | greater_than_or_equal_to | less_than | less_than_or_equal_to | equals | between", "value": "array", "attributes": "TextContentAttributes — the styling applied when this bucket matches" }
+  }
+}

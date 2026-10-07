@@ -18,7 +18,6 @@ into logs or RESULT blocks.
 from __future__ import annotations
 
 import json
-import os
 import re
 import subprocess
 from pathlib import Path
@@ -55,6 +54,83 @@ class SfCliError(RuntimeError):
 
     Message is redacted  before construction.
     """
+
+
+_show_access_token_capability_ok = False
+"""Set once the preflight succeeds; the check then never reruns in this
+process (401-triggered creds refreshes skip it). Failures are NOT cached,
+so a fixed PATH/upgrade is picked up on the next call."""
+
+_SHOW_ACCESS_TOKEN_HELP_SIGNATURE_RE = re.compile(
+    r"\$\s*sf\s+org\s+auth\s+show-access-token\b"
+)
+"""USAGE-line form that real ``--help`` output always contains
+(``$ sf org auth show-access-token -o <value> ...``). The bare command name
+is not enough: unknown-command notices echo it too
+(``Command org:auth:show-access-token not found``,
+``show-access-token is not a sf command``). A zero-exit probe whose output
+lacks the USAGE form is treated as a failed check."""
+
+_ANSI_ESCAPE_RE = re.compile(r"\x1b\[[0-9;?]*[ -/]*[@-~]")
+
+
+def assert_show_access_token_capability() -> None:
+    """Fail fast when the installed sf CLI lacks ``sf org auth show-access-token``.
+
+    That command is the only supported runtime token-retrieval path
+    (forcedotcom/cli#3560). Probing ``--help`` is cheap, needs no org auth,
+    and gives the operator an actionable upgrade message instead of a
+    confusing downstream auth failure. A successful probe is cached for
+    the process lifetime.
+
+    Exit status alone is not trusted: a CLI build that answers an unknown
+    command with exit 0 (e.g. printing top-level help or a "not found"
+    notice) would otherwise pass. The probe therefore also requires the
+    command's USAGE line (``$ sf org auth show-access-token``) in the
+    ANSI-stripped stdout+stderr; if it is absent the check fails and is not
+    cached.
+    """
+    global _show_access_token_capability_ok
+    if _show_access_token_capability_ok:
+        return
+    try:
+        proc = subprocess.run(
+            ["sf", "org", "auth", "show-access-token", "--help"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=True,
+        )
+    except FileNotFoundError as exc:
+        raise SfCliError(
+            "sf CLI not found on PATH — install Salesforce CLI first"
+        ) from exc
+    except subprocess.CalledProcessError as exc:
+        safe_detail = _redact_subprocess_stderr(exc.stderr or exc.stdout or "")
+        raise SfCliError(
+            "sf CLI is missing required command 'sf org auth show-access-token'. "
+            "Upgrade/reinstall Salesforce CLI to a version that provides this "
+            f"command. Preflight detail: {safe_detail or 'unknown error'}"
+        ) from exc
+    except subprocess.TimeoutExpired as exc:
+        raise SfCliError(
+            f"sf CLI capability preflight timed out: {redact_error(exc)}"
+        ) from exc
+    help_text = _ANSI_ESCAPE_RE.sub(
+        "", f"{proc.stdout or ''}\n{proc.stderr or ''}",
+    )
+    if not _SHOW_ACCESS_TOKEN_HELP_SIGNATURE_RE.search(help_text):
+        # Zero exit without the command's help signature — the CLI did not
+        # recognise the command. Fail (uncached) like a non-zero exit.
+        # Redact before truncating so a token can never be split past the regex.
+        safe_detail = _redact_subprocess_stderr(help_text.strip())[:500]
+        raise SfCliError(
+            "sf CLI is missing required command 'sf org auth show-access-token'. "
+            "Upgrade/reinstall Salesforce CLI to a version that provides this "
+            "command. Preflight detail: "
+            f"{safe_detail or 'help output lacked the command signature'}"
+        )
+    _show_access_token_capability_ok = True
 
 
 def _load_recipe(name: str) -> Dict[str, Any]:
@@ -175,14 +251,6 @@ def run_sf(name: str, **params: str) -> Dict[str, Any]:
     timeout = int(recipe.get("timeout_seconds", 60))
     auth_patterns = recipe.get("auth_required_stderr_patterns") or []
 
-    # SF_TEMP_SHOW_SECRETS=true is required for `sf org display --verbose
-    # --json` to emit `accessToken` instead of the literal redaction string
-    # `"[REDACTED] Use 'sf org auth show-access-token' to view"` introduced
-    # in sf CLI v2. Without it, downstream callers receive the redaction
-    # string as the bearer token and every Tooling/REST call returns
-    # INVALID_AUTH_HEADER 401. Set on every recipe — recipes that don't
-    # touch tokens are unaffected.
-    env = {**os.environ, "SF_TEMP_SHOW_SECRETS": "true"}
     try:
         cp = subprocess.run(
             argv,
@@ -190,7 +258,6 @@ def run_sf(name: str, **params: str) -> Dict[str, Any]:
             text=True,
             timeout=timeout,
             check=False,
-            env=env,
         )
     except subprocess.TimeoutExpired as e:
         # timeout exceptions carry stderr via e.stderr — redact.

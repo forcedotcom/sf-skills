@@ -1,0 +1,103 @@
+{
+  "title": "upsert_text_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_text_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete text widget definition for create or full replacement. Omitted fields are dropped on replacement. No data source. Rich text lives in parameters.content as Quill-Delta ops. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "text" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key within the dashboard, e.g. \"text_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions (navigate, run a flow, set a parameter, set a filter, record action). Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Text widget parameters.",
+          "properties": {
+            "content": {
+              "type": "array",
+              "description": "Quill-Delta ops list. Each op is { insert, attributes? }. Plain text ends with a trailing \"\\n\".",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "insert": { "description": "Inserted text or embed token." },
+                  "attributes": {
+                    "type": "object",
+                    "description": "Inline formatting for the inserted text.",
+                    "properties": {
+                      "bold": { "type": "boolean" },
+                      "italic": { "type": "boolean" },
+                      "underline": { "type": "boolean" },
+                      "strike": { "type": "boolean" },
+                      "color": { "type": "string", "description": "Hex color, e.g. \"#FF0000\"." },
+                      "background": { "type": "string", "description": "Hex background color." },
+                      "align": { "type": "string", "description": "\"left\" | \"center\" | \"right\"." },
+                      "link": { "type": "string", "description": "URL." },
+                      "size": { "type": "string", "description": "e.g. \"18px\" or \"large\"." },
+                      "list": { "type": "string", "description": "\"bullet\" | \"ordered\"." }
+                    }
+                  },
+                  "rules": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Echoed back by the server on each op even if you didn't send one — harmless, don't be surprised reading it back."
+                  }
+                }
+              }
+            },
+            "verticalAlignment": {
+              "type": "string",
+              "enum": ["top", "center", "bottom"],
+              "description": "Vertical alignment of the content."
+            },
+            "lineSpacing": { "type": "number", "description": "Line spacing multiplier." },
+            "overflow": { "type": "string", "enum": ["scroll", "truncate"], "description": "How content overflowing the widget's bounds is handled." },
+            "wrap": { "type": "string", "enum": ["wrap", "nowrap"], "description": "Whether text wraps within the widget." },
+            "tooltip": { "type": "string", "description": "Tooltip text." },
+            "widgetStyle": { "type": "object", "description": "WidgetStyle (backgroundColor/borderEdges/borderColor/borderWidth/borderRadius). Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+            "receiveFilterSource": { "type": "object", "description": "Which published filters this widget listens to. Full shape: _shared-widget-fields.json#/receiveSources/receiveFilterSource." },
+            "receiveParameterSource": { "type": "object", "description": "Which published parameters this widget listens to. Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." },
+            "conditionalFormattingRules": {
+              "type": "array",
+              "description": "Rules that restyle content based on a bucketed value. Full shape: _shared-widget-fields.json#/conditionalFormatting.",
+              "items": { "type": "object" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_text_widget",
+    "widget": {
+      "type": "text",
+      "name": "text_1",
+      "parameters": {
+        "content": [
+          { "insert": "Q4 Summary\n", "attributes": { "bold": true, "align": "center" } }
+        ]
+      }
+    }
+  }
+}

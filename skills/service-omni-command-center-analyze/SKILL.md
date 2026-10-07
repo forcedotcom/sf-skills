@@ -8,7 +8,6 @@ metadata:
   minApiVersion: "66.0"
   relatedSkills:
     - "service-omni-channel-setup-coordinate"
-    - "service-omni-command-center-configure"
     - "service-omni-supervisor-config-deploy"
   accessCheck:
     - type: license
@@ -61,7 +60,7 @@ bash scripts/analyze.sh <org-alias> [supervisor_username_or_id]
 | `v2_ready` | Capability + seed present (and supervisor has permission, if checked) | verify only (coordinator proceeds to V2 verification) |
 | `v2_permission_missing` | V2 enabled but the named supervisor lacks `CommandCenterForServiceUser` | Manual — assign `CommandCenterForServiceUser` (headless-capable via PermissionSet; packaging pending) |
 | `v2_seed_incomplete` | Capability present but the FlexiPage/tab provisioning is inconsistent | Manual — re-check in Setup → Omni-Channel → Supervisor Settings (no supported public write API) |
-| `v2_available_not_enabled` | Org supports V2 but the preference is off | `service-omni-command-center-configure` when the W-24039822 Metadata API contract is available; otherwise enable manually |
+| `v2_available_not_enabled` | Org supports V2 but the preference is off | Manual — enable in Setup → Omni-Channel → Supervisor Settings (no supported Metadata/Tooling write API) |
 | `legacy_selected` | V2 capability absent | `service-omni-supervisor-config-deploy` |
 | `ambiguous` | A required signal could not be read through a supported API | none — **blocks**, do not guess |
 
@@ -73,7 +72,7 @@ A single JSON object: `status` (`detected` | `blocked`), `state` (one of the six
 
 ## Limitations
 
-- The analyzer keeps using the seeded FlexiPage as its cross-release read signal. On releases containing W-24039822, `service-omni-command-center-configure` can write and re-read the preference through `Settings:OmniChannel`.
+- The `CommandCenterForServiceV2` org preference has no supported public read; its state is **inferred** from the seeded FlexiPage (the platform seeds on the ON-flip). This is called out in `signals` and is why a bare capability-without-seed reads as `v2_available_not_enabled`.
 - The release gater cannot be read directly; capability is inferred from the presence of the user-permission column on the org schema.
 - Tab detection is best-effort; when the tab query cannot run, `v2_tab_present` is `"unknown"` and state is derived from the remaining signals.
 - Read-only: it never enables V2, seeds pages, assigns permissions, or deploys config.

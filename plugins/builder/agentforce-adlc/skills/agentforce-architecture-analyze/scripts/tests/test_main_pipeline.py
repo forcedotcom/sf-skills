@@ -131,6 +131,7 @@ def _mock_auth_probe(probe_result=None):
     org_display_payload["result"]["id"] = "00Dxx0000000000AAA"
     return [
         mock.patch.object(main, "run_sf", return_value=org_display_payload),
+        mock.patch.object(main, "assert_show_access_token_capability"),
         mock.patch.object(main, "probe_channels", return_value=probe_result),
     ]
 
@@ -852,11 +853,13 @@ class RenderFailureIntegrationTests(unittest.TestCase):
 
             # Drive emit_result against this ctx and confirm the RESULT
             # block reflects the render failure.
-            tools_dir = Path(__file__).resolve().parent.parent.parent / "tools"
+            # emit_result.py ships under scripts/ (SKILL.md invokes
+            # "$SKILL_ROOT/scripts/emit_result.py"), not the hub-era tools/.
+            scripts_dir = Path(__file__).resolve().parent.parent
             import subprocess, sys as _sys
             env = {**os.environ, "WORK_DIR": str(work_dir)}
             r = subprocess.run(
-                [_sys.executable, str(tools_dir / "emit_result.py")],
+                [_sys.executable, str(scripts_dir / "emit_result.py")],
                 env=env, capture_output=True, text=True, timeout=30,
             )
             self.assertEqual(r.returncode, 0, msg=r.stderr)
@@ -1011,6 +1014,53 @@ class ThreadSafeRefreshTests(unittest.TestCase):
         refresh()
 
         self.assertEqual(call_count["n"], 2)
+
+    def test_slow_refresh_waiters_do_not_re_refresh(self):
+        """A refresh that takes LONGER than the dedupe window must still
+        satisfy threads that queued on the lock while it ran. The window
+        is stamped when `resolve_creds()` returns, not when it starts —
+        otherwise every queued waiter re-refreshes after a slow
+        multi-command resolve.
+        """
+        import threading as _t
+        import time as _time
+
+        calls = {"n": 0}
+        entered = _t.Event()
+
+        def slow_resolve():
+            calls["n"] += 1
+            entered.set()
+            _time.sleep(0.3)  # longer than the 0.1s window below
+            return ("url", f"tok_{calls['n']}")
+
+        _provider, refresh, _cell = main._build_creds_plumbing(
+            ("url", "tok_0"),
+            resolve_creds=slow_resolve,
+            dedupe_window_s=0.1,
+        )
+
+        results: list = []
+        results_lock = _t.Lock()
+
+        def _worker():
+            r = refresh()
+            with results_lock:
+                results.append(r)
+
+        first = _t.Thread(target=_worker)
+        first.start()
+        self.assertTrue(entered.wait(timeout=5))
+        # These all block on the refresh lock while slow_resolve runs.
+        waiters = [_t.Thread(target=_worker) for _ in range(4)]
+        for t in waiters:
+            t.start()
+        first.join()
+        for t in waiters:
+            t.join()
+
+        self.assertEqual(calls["n"], 1)
+        self.assertEqual(results, [("url", "tok_1")] * 5)
 
     def test_provider_reads_cell_after_refresh(self):
         """After refresh mutates the cell, the NEXT `creds_provider()`
@@ -1512,6 +1562,7 @@ class ApiVersionEndToEndTests(unittest.TestCase):
             ]
             patches = [
                 mock.patch.object(main, "run_sf", return_value=org_display_payload),
+                mock.patch.object(main, "assert_show_access_token_capability"),
                 mock.patch.object(main, "probe_channels",
                                   return_value=fx.probe_ok_payload()),
                 *_mock_bot_resolution(),

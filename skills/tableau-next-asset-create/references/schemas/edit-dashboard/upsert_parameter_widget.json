@@ -1,0 +1,160 @@
+{
+  "title": "upsert_parameter_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_parameter_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete parameter widget definition for create or full replacement. Omitted fields are dropped on replacement. source is optional; parameters carry the view type and the parameter option. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "parameter" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"parameter_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions. Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "source": {
+          "type": "object",
+          "description": "Optional data source reference.",
+          "properties": {
+            "id": { "type": "string", "description": "Data source record id." },
+            "name": { "type": "string", "description": "Data source apiName." }
+          }
+        },
+        "initialValues": {
+          "type": "object",
+          "description": "Optional default parameter value applied when the dashboard loads.",
+          "properties": {
+            "details": { "description": "Untyped — shape depends on parameterOption.dataType (a scalar for text/number/date/boolean/percentage). No fixed schema; do not assume FilterDetails' shape here." }
+          }
+        },
+        "parameters": {
+          "description": "Parameter widget parameters — shape depends on viewType. oneOf ListParameterParameters | ListCardParameterParameters | ToggleParameterParameters | InputParameterParameters | InputCardParameterParameters. Send only the fields for your chosen viewType.",
+          "oneOf": [
+            {
+              "title": "ListParameterParameters",
+              "type": "object",
+              "required": ["viewType", "isLabelHidden"],
+              "properties": {
+                "viewType": { "const": "list" },
+                "isLabelHidden": { "type": "boolean", "description": "REQUIRED for viewType list/listcard." },
+                "parameterName": { "type": "string", "description": "The parameter's field/dev name." },
+                "parameterOption": {
+                  "type": "object",
+                  "description": "Parameter input configuration.",
+                  "properties": {
+                    "dataType": {
+                      "type": "string",
+                      "enum": ["text", "number", "date", "boolean", "percentage"],
+                      "description": "Input data type. Lowercase — a different casing convention than the filter widget's dataType; do not cross-copy."
+                    }
+                  }
+                },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "ListCardParameterParameters",
+              "type": "object",
+              "required": ["viewType", "isLabelHidden"],
+              "properties": {
+                "viewType": { "const": "listcard" },
+                "isLabelHidden": { "type": "boolean", "description": "REQUIRED for viewType list/listcard." },
+                "parameterName": { "type": "string" },
+                "parameterOption": { "type": "object", "description": "Same shape as ListParameterParameters.parameterOption above." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "ToggleParameterParameters",
+              "type": "object",
+              "required": ["viewType"],
+              "description": "isLabelHidden is not required here (unlike list/listcard).",
+              "properties": {
+                "viewType": { "const": "toggle" },
+                "parameterName": { "type": "string" },
+                "parameterOption": { "type": "object", "description": "Same shape as ListParameterParameters.parameterOption above." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "textStyle": { "type": "object", "description": "ToggleTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleTextStyle." },
+                "defaultStyle": { "type": "object", "description": "ToggleDefaultStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleDefaultStyle." },
+                "selectedStyle": { "type": "object", "description": "ToggleSelectedStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleSelectedStyle." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "InputParameterParameters",
+              "type": "object",
+              "required": ["viewType"],
+              "description": "isLabelHidden is optional (not required) for input/inputcard.",
+              "properties": {
+                "viewType": { "const": "input" },
+                "isLabelHidden": { "type": "boolean", "description": "Optional for viewType input/inputcard." },
+                "parameterName": { "type": "string" },
+                "parameterOption": { "type": "object", "description": "Same shape as ListParameterParameters.parameterOption above." },
+                "valueSource": { "type": "object", "description": "Optional source feeding the input's current/default value." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "InputCardParameterParameters",
+              "type": "object",
+              "required": ["viewType"],
+              "description": "isLabelHidden is optional (not required) for input/inputcard.",
+              "properties": {
+                "viewType": { "const": "inputcard" },
+                "isLabelHidden": { "type": "boolean", "description": "Optional for viewType input/inputcard." },
+                "parameterName": { "type": "string" },
+                "parameterOption": { "type": "object", "description": "Same shape as ListParameterParameters.parameterOption above." },
+                "valueSource": { "type": "object", "description": "Optional source feeding the input's current/default value." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_parameter_widget",
+    "widget": {
+      "type": "parameter",
+      "name": "parameter_1",
+      "label": "Target",
+      "parameters": {
+        "viewType": "input",
+        "parameterOption": { "dataType": "number" },
+        "isLabelHidden": false
+      }
+    }
+  }
+}

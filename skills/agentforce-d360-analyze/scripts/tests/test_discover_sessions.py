@@ -399,7 +399,7 @@ class RenderPickerTests(unittest.TestCase):
 class MainTests(unittest.TestCase):
 
     def _argv(self, *extra: str) -> list[str]:
-        # `--org` is required; everything else has a default or is optional.
+        # Explicit `--org` so no test shells out for the sf default target org.
         return ["discover_sessions.py", "--org", "my-org", *extra]
 
     def test_main_exit_zero_when_rows_returned(self):

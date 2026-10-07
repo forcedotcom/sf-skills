@@ -1,4 +1,4 @@
-const { execSync, execFileSync, spawnSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,16 +16,7 @@ const ACCESS_TOKEN_VIA_SHOW_SINCE = [2, 136, 8];
 
 function getSfCliVersion() {
   try {
-    let raw;
-    if (process.platform === 'win32') {
-      const r = spawnSync('sf.cmd', ['version', '--json'], {
-        encoding: 'utf8', stdio: 'pipe', shell: true, windowsVerbatimArguments: true
-      });
-      if (r.error) return null;
-      raw = r.stdout;
-    } else {
-      raw = execFileSync(getSfBin(), ['version', '--json'], { encoding: 'utf8', stdio: 'pipe' });
-    }
+    const raw = execFileSync(getSfBin(), ['version', '--json'], { encoding: 'utf8', stdio: 'pipe' });
     const { cliVersion } = JSON.parse(raw);
     const m = (cliVersion || '').match(/(\d+)\.(\d+)\.(\d+)/);
     return m ? m.slice(1).map(Number) : null;
@@ -48,27 +39,10 @@ function isSfAtLeast(version, min) {
  * @param {string[]} args - CLI arguments
  * @returns {any} parsed JSON result
  */
-function execSfJson(args, options) {
-  options = options || {};
+function execSfJson(args) {
   let rawOutput;
   try {
-    if (process.platform === 'win32') {
-      // execFileSync cannot run .cmd files without shell:true, but shell:true
-      // word-splits args containing spaces. Use spawnSync with shell:true +
-      // windowsVerbatimArguments:true and pre-quote space-bearing args so that
-      // cmd.exe receives them intact.
-      const winArgs = args.map(a =>
-        (a.includes(' ') || a.includes("'")) ? `"${a.replace(/"/g, '\\"')}"` : a
-      );
-      const r = spawnSync('sf.cmd', winArgs, {
-        encoding: 'utf8', stdio: 'pipe', shell: true, windowsVerbatimArguments: true,
-        cwd: options.cwd
-      });
-      if (r.error) throw r.error;
-      rawOutput = r.stdout;
-    } else {
-      rawOutput = execFileSync(getSfBin(), args, { encoding: 'utf8', stdio: 'pipe', cwd: options.cwd });
-    }
+    rawOutput = execFileSync(getSfBin(), args, { encoding: 'utf8', stdio: 'pipe' });
   } catch (err) {
     if (err.stdout) {
       rawOutput = err.stdout;
@@ -227,12 +201,6 @@ function getBundleStreamMap(dataKitPath) {
     .filter(f => f.endsWith('.dataStreamTemplate-meta.xml'));
 
   const bundleRegex = /<dataSourceBundleDefinition>\s*([^<\s]+)\s*<\/dataSourceBundleDefinition>/i;
-  // <sourceObjectName> is the stable identifier that appears verbatim (or as a prefix
-  // for ingest streams with hex suffixes) in DataKitDeploymentLog.ComponentName.
-  // E.g. sourceObjectName "tpm_accrualrule_ingest" → log "tpm_accrualrule_ingest_3ADCEDC6".
-  // Fall back to <dataSourceObject> if absent, then to the filename stem.
-  const srcObjNameRegex = /<sourceObjectName>\s*([^<\s]+)\s*<\/sourceObjectName>/i;
-  const srcObjRegex = /<dataSourceObject>\s*([^<\s]+)\s*<\/dataSourceObject>/i;
 
   for (const file of files) {
     const fullPath = path.join(templatesDir, file);
@@ -247,20 +215,12 @@ function getBundleStreamMap(dataKitPath) {
     if (!match) continue;
 
     const bundleName = match[1];
-    const srcObjNameMatch = content.match(srcObjNameRegex);
-    const srcObjMatch = content.match(srcObjRegex);
-    const streamDevName = srcObjNameMatch
-      ? srcObjNameMatch[1]
-      : srcObjMatch
-        ? srcObjMatch[1]
-        : file.replace(/\.dataStreamTemplate-meta\.xml$/, '');
+    const streamDevName = file.replace(/\.dataStreamTemplate-meta\.xml$/, '');
 
     if (!map.has(bundleName)) {
       map.set(bundleName, []);
     }
-    if (!map.get(bundleName).includes(streamDevName)) {
-      map.get(bundleName).push(streamDevName);
-    }
+    map.get(bundleName).push(streamDevName);
   }
 
   return map;
@@ -307,7 +267,7 @@ function findMatchingRecords(deploymentLog, spec, namespace) {
 function getDeploymentLogForComponents(orgAlias, componentSpecs) {
   console.log(`Checking deployment status for ${componentSpecs.length} components...`);
 
-  const query = `SELECT ComponentName, DeploymentStatus, DeploymentError FROM DataKitDeploymentLog ORDER BY CreatedDate DESC LIMIT 500`;
+  const query = `SELECT ComponentName, DeploymentStatus, DeploymentError FROM DataKitDeploymentLog ORDER BY CreatedDate DESC`;
 
   try {
     const result = execSfJson(['data', 'query', '--query', query, '--target-org', orgAlias, '--json']);
@@ -384,7 +344,7 @@ async function waitForDeploymentCompletion(orgAlias, componentSpecs, deploymentS
   console.log(`\nWaiting for deployment to complete...`);
   console.log(`Tracking ${componentSpecs.length} components`);
 
-  const maxWaitTime = 90 * 60 * 1000; // 90 minutes — production orgs typically take 60-90 min
+  const maxWaitTime = 30 * 60 * 1000; // 30 minutes
   const pollInterval = 60_000; // 60 seconds
   const startTime = Date.now();
 
@@ -393,7 +353,7 @@ async function waitForDeploymentCompletion(orgAlias, componentSpecs, deploymentS
 
   while (Date.now() - startTime < maxWaitTime) {
     const whereClause = deploymentStartTime ? `WHERE CreatedDate > ${deploymentStartTime}` : '';
-    const query = `SELECT ComponentName, DeploymentStatus, DeploymentError FROM DataKitDeploymentLog ${whereClause} ORDER BY CreatedDate DESC LIMIT 500`;
+    const query = `SELECT ComponentName, DeploymentStatus, DeploymentError FROM DataKitDeploymentLog ${whereClause} ORDER BY CreatedDate DESC`;
 
     let deploymentLog = [];
     try {
@@ -448,7 +408,7 @@ async function waitForDeploymentCompletion(orgAlias, componentSpecs, deploymentS
   if (pending.length > 0) {
     console.error(`Pending: ${pending.join(', ')}`);
   }
-  throw new Error(`Deployment timed out after ${maxWaitTime / 1000 / 60} minutes — ${pending.length} component(s) still in progress`);
+  process.exit(1);
 }
 
 /**
@@ -460,19 +420,7 @@ function execDeployJson(deployArgs, options) {
   const allArgs = deployArgs.concat(['--json']);
   let rawOutput;
   try {
-    if (process.platform === 'win32') {
-      const winArgs = allArgs.map(a =>
-        (a.includes(' ') || a.includes("'")) ? `"${a.replace(/"/g, '\\"')}"` : a
-      );
-      const r = spawnSync('sf.cmd', winArgs, {
-        encoding: 'utf8', stdio: 'pipe', shell: true, windowsVerbatimArguments: true,
-        cwd: options.cwd
-      });
-      if (r.error) throw r.error;
-      rawOutput = r.stdout;
-    } else {
-      rawOutput = execFileSync(getSfBin(), allArgs, { encoding: 'utf8', stdio: 'pipe', cwd: options.cwd });
-    }
+    rawOutput = execFileSync(getSfBin(), allArgs, { encoding: 'utf8', stdio: 'pipe', cwd: options.cwd });
   } catch (err) {
     if (err.stdout) {
       rawOutput = err.stdout;

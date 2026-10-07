@@ -23,7 +23,9 @@ Design contract:
   - Rerunning the same session overwrites prior artifacts.
 
 Invocation:
-    python3 scripts/fetch_dc.py --session <uuid> --org <alias> [--verbose]
+    python3 scripts/fetch_dc.py --session <uuid> [--org <alias>] [--verbose]
+
+`--org` defaults to the sf CLI default target org (`sf config get target-org`).
 
 After the waterfall finishes, the fetcher chains two downstream steps:
   1. assemble_dc.main_for_session → dc._session_tree.json
@@ -66,7 +68,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from config import DATA_ROOT, paths, sql as _sql_mod
-from dc import SQL_DIR, DCQueryError, load_sql, post, resolve_org
+from dc import SQL_DIR, DCQueryError, default_target_org, load_sql, post, resolve_org
 from storage import save
 
 
@@ -357,7 +359,7 @@ def main() -> int:
                     help="AI-agent session UUID, OR a Salesforce MessagingSession id "
                          "(0Mw... prefix). Messaging ids are resolved to the UUID "
                          "via a one-row DC lookup before the waterfall starts.")
-    ap.add_argument("--org", required=True, help="sf org alias")
+    ap.add_argument("--org", help="sf org alias (default: the sf CLI default target org)")
     ap.add_argument("--verbose", action="store_true", help="dump each SQL before POST")
     ap.add_argument("--no-assemble", action="store_true",
                     help="skip tree assembly after fetch")
@@ -371,6 +373,20 @@ def main() -> int:
 
     _preflight_templates()
 
+    # No --org means the sf CLI default target org. If none is set, surface
+    # it through the DC-access-denied contract (reason "no_org", exit 10
+    # headless) — the same path an unresolvable alias takes.
+    org = args.org
+    if not org:
+        try:
+            org = default_target_org()
+        except SystemExit as e:
+            return _handle_dc_access_denied(
+                DcAccessDenied("no_org", str(e)),
+                session_id=args.session,
+                is_tty=sys.stdin.isatty(),
+            )
+
     # Accept either a UUID or a MessagingSession id (0Mw...). The resolver
     # passes UUIDs through unchanged; on messaging ids it tries disk first
     # (any prior fetch left dc.sessions.json behind under DATA_ROOT), and
@@ -380,7 +396,7 @@ def main() -> int:
     # On multi-match or zero-match the resolver exits with a diagnostic.
     from resolve_session import is_messaging_id, resolve_disk_or_live
     input_id = args.session
-    session_id = resolve_disk_or_live(input_id, org=args.org)
+    session_id = resolve_disk_or_live(input_id, org=org)
     if is_messaging_id(input_id):
         _log(f"resolved messaging id {input_id} → AiAgentSession {session_id}")
 
@@ -390,7 +406,7 @@ def main() -> int:
     # emits either an interactive prompt or a JSON preamble depending on
     # tty presence, then exits with EXIT_DC_ACCESS_DENIED (10).
     try:
-        instance_url, token = preflight_dc_access(session_id, args.org)
+        instance_url, token = preflight_dc_access(session_id, org)
     except DcAccessDenied as exc:
         return _handle_dc_access_denied(
             exc,
@@ -402,7 +418,7 @@ def main() -> int:
 
     ctx = {
         "session_id": session_id,
-        "org_alias": args.org,
+        "org_alias": org,
         "instance_url": instance_url,
         "token": token,
         "verbose": args.verbose,

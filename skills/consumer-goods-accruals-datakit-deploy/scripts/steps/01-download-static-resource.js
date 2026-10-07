@@ -1,6 +1,5 @@
 const fs = require('fs');
 const https = require('https');
-const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 const { execSfJson, getOrgDetails } = require('./utils');
@@ -12,8 +11,6 @@ async function downloadStaticResource(orgAlias, setupDir) {
   console.log('\n=== Step 1: Downloading CGCloudAddons static resource ===');
 
   const staticResourceName = 'CGCloudAddons';
-  // Extract to os.tmpdir() to avoid EBUSY locks in the script tree on Windows
-  const extractBase = path.join(os.tmpdir(), `tpm_accruals_extract_${Date.now()}`);
 
   // Get org details for REST API call
   console.log('Getting org connection details...');
@@ -33,8 +30,7 @@ async function downloadStaticResource(orgAlias, setupDir) {
 
   // Download the static resource body using REST API
   console.log('Downloading static resource content...');
-  fs.mkdirSync(extractBase, { recursive: true });
-  const targetFile = path.join(extractBase, `${staticResourceName}.zip`);
+  const targetFile = path.join(setupDir, `${staticResourceName}.zip`);
   const bodyUrl = `${orgDetails.instanceUrl}/services/data/v${orgDetails.apiVersion}/sobjects/StaticResource/${staticResourceId}/Body`;
 
   await new Promise((resolve, reject) => {
@@ -66,15 +62,17 @@ async function downloadStaticResource(orgAlias, setupDir) {
 
   // Extract the zip file
   console.log('Extracting static resource...');
-  const extractDir = path.join(extractBase, staticResourceName);
-  fs.mkdirSync(extractDir, { recursive: true });
+  const extractDir = path.join(setupDir, staticResourceName);
 
-  // Extract: use Windows System32 bsdtar on Windows (Git Bash's GNU tar cannot
-  // read ZIP and misinterprets Windows drive letters as URLs). Convert paths to
-  // forward-slash POSIX form so bsdtar receives them correctly.
-  function toPosix(p) { return p.replace(/\\/g, '/'); }
+  // Remove existing extraction directory if it exists
+  if (fs.existsSync(extractDir)) {
+    fs.rmSync(extractDir, { recursive: true });
+  }
+
+  // Extract: tar on Windows (bsdtar handles ZIP), unzip on macOS/Linux.
+  // GNU tar on Linux cannot read ZIP archives.
   const [unzipCmd, unzipArgs] = process.platform === 'win32'
-    ? ['C:\\Windows\\System32\\tar.exe', ['-xf', toPosix(targetFile), '-C', toPosix(extractDir)]]
+    ? ['tar', ['-xf', targetFile, '-C', extractDir]]
     : ['unzip', ['-o', '-q', targetFile, '-d', extractDir]];
   try {
     execFileSync(unzipCmd, unzipArgs, { stdio: 'pipe' });
@@ -94,7 +92,6 @@ async function downloadStaticResource(orgAlias, setupDir) {
   }
 
   console.log('[OK] CGCloudAddons static resource downloaded and extracted successfully\n');
-  return extractDir;
 }
 
 module.exports = downloadStaticResource;

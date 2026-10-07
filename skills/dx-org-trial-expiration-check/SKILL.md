@@ -173,7 +173,7 @@ Org IDs of at-risk orgs so the steps are actionable:
   for LDV orgs. (Salesforce Help article 000387818.)
 - **Nonprofits:** email your Account Executive with subject "Trial Extension"
   and the trial-starter email, Org ID, and username; AMER
-  `PowerOfUsDesk@salesforce.com`, other regions `myaccount@salesforce.com` /
+  the Power of Us Desk, other regions My Account support /
   1-800-NO-SOFTWARE. Works even if already expired. (Article 004754220.)
 - **Developer Edition:** DE orgs have no subscription clock but are deactivated
   after prolonged inactivity (~180 days without a login); log in periodically.

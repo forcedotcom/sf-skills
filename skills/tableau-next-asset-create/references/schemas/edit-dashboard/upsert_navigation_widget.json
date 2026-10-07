@@ -1,0 +1,80 @@
+{
+  "title": "upsert_navigation_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_navigation_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete navigation (in-dashboard page navigation) widget definition for create or full replacement. Omitted fields are dropped on replacement. parameters.navigationItems is the ordered list of destinations; an omitted or empty list is an empty nav bar. Upsert defines the widget only; it neither places it nor changes existing placements. This is a gated pilot type: persisting the batch or using save_dashboard fails with ACCESS_DENIED unless the org has the navigation-widget pilot enabled.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "navigation" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"navigation_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions. Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Navigation widget parameters.",
+          "properties": {
+            "viewType": { "type": "string", "description": "How the navigation renders, e.g. \"tabs\"." },
+            "navigationItems": {
+              "type": "array",
+              "description": "Ordered navigation destinations.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string", "description": "Item id." },
+                  "name": { "type": "string", "description": "Item dev name." },
+                  "label": { "type": "string", "description": "Display label for this item." },
+                  "description": { "type": "string", "description": "Optional item description." },
+                  "type": { "type": "string", "description": "Item type, e.g. \"page\"." },
+                  "target": { "type": "string", "description": "Target identifier (e.g. a page name)." },
+                  "order": { "type": "integer", "description": "Explicit position in the navigation order." },
+                  "hidden": { "type": "boolean", "description": "Whether the item is hidden." }
+                }
+              }
+            },
+            "labelStyle": { "type": "object", "description": "NavigationLabelStyle. Full shape: _shared-widget-fields.json#/styleBlocks/NavigationLabelStyle." },
+            "widgetStyle": { "type": "object", "description": "ButtonStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ButtonStyle." },
+            "defaultStyle": { "type": "object", "description": "ButtonStyle applied to unselected items. Full shape: _shared-widget-fields.json#/styleBlocks/ButtonStyle." },
+            "selectedStyle": { "type": "object", "description": "ButtonStyle applied to the selected item. Full shape: _shared-widget-fields.json#/styleBlocks/ButtonStyle." },
+            "dropdownValueStyle": { "type": "object", "description": "WidgetTextStyle for a dropdown-rendered viewType. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_navigation_widget",
+    "widget": {
+      "type": "navigation",
+      "name": "navigation_1",
+      "label": "Pages",
+      "parameters": {
+        "viewType": "tabs",
+        "navigationItems": [
+          { "type": "page", "target": "page_1", "order": 0, "hidden": false }
+        ]
+      }
+    }
+  }
+}

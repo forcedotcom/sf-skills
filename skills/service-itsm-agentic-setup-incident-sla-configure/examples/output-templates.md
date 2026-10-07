@@ -15,7 +15,7 @@ Artifacts created:
   Milestone Type: <name> (OneTime)
   SLA Policy:     <name> (Active, Incident)
   Milestone:      <time> min, criteria: <criteria summary>
-  Entitlement:    <name> -> Account: <account name>
+  Entitlement:    <name> (auto-provisioned; no Account — Incident engages per-Incident via EntitlementId)
 
 Verification:
   Incident:  <IncidentNumber> — "<Subject>"
@@ -41,7 +41,7 @@ Artifacts created:
     #1  <MilestoneType name>   <time> min   criteria: <summary>
     #2  <MilestoneType name>   <time> min   criteria: <summary>
     ...
-  Entitlement:     <name> -> Account: <account name>
+  Entitlement:     <name> (auto-provisioned; no Account — Incident engages per-Incident via EntitlementId)
 
 Verification:
   Incident:  <IncidentNumber> — "<Subject>" (Priority=<value>)
@@ -71,8 +71,8 @@ Entitlement, the Verification section, and the scope line below.
 ```text
 Milestone Actions attached:
   <MilestoneType name>:
-    - Warning:   fires <X> min before target  ->  <action summary, e.g. set Priority = High>
-    - Violation: fires at breach               ->  <action summary, e.g. set Priority = Critical>
+    - Warning:   fires <X> min before target  ->  <action summary, e.g. raise Urgency = High>
+    - Violation: fires at breach               ->  <action summary, e.g. raise Impact = High>
   <MilestoneType name>:
     - Warning:   fires <Y> min before target  ->  <action summary>
     - Violation: fires at breach               ->  <action summary>

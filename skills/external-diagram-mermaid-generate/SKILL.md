@@ -2,6 +2,18 @@
 name: external-diagram-mermaid-generate
 description: "Salesforce architecture diagrams using Mermaid with ASCII fallback. Use this skill when generating text-based diagrams for Salesforce architecture, OAuth flows, ERDs, integration sequences, or Agentforce structure. TRIGGER when: user says \"diagram\", \"visualize\", \"ERD\", or asks for sequence diagrams, flowcharts, class diagrams, or architecture visualizations in Mermaid. DO NOT TRIGGER when: user asks about non-Salesforce systems."
 metadata:
+  version: "1.0"
+  domains: ["External"]
+  relatedSkills:
+    - "agentforce-generate"
+    - "automation-flow-generate"
+    - "integration-connectivity-connected-app-configure"
+    - "integration-connectivity-generate"
+    - "platform-apex-generate"
+    - "platform-custom-field-generate"
+    - "platform-custom-object-generate"
+    - "platform-data-manage"
+    - "platform-metadata-deploy"
   cliTools:
     - tool: ["curl"]
       semver: ">=7.0.0"
@@ -13,18 +25,6 @@ metadata:
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-  relatedSkills:
-    - "agentforce-generate"
-    - "automation-flow-generate"
-    - "integration-connectivity-connected-app-configure"
-    - "integration-connectivity-generate"
-    - "platform-apex-generate"
-    - "platform-custom-field-generate"
-    - "platform-custom-object-generate"
-    - "platform-data-manage"
-    - "platform-metadata-deploy"
-  version: "1.0"
-  domains: ["External"]
 ---
 
 # external-diagram-mermaid-generate: Salesforce Diagram Generation

@@ -64,18 +64,27 @@ class ParseTests(unittest.TestCase):
 
 
 class ResolveOrgTests(unittest.TestCase):
-    """Tests for the two-path access-token retrieval per forcedotcom/cli#3560.
+    """Tests for fail-fast access-token retrieval per forcedotcom/cli#3560.
 
-    Path 1 (primary): ``sf org auth show-access-token --json --no-prompt``
-    Path 2 (fallback): ``sf org display`` + ``SF_TEMP_SHOW_SECRETS=true``
+    The token comes ONLY from ``sf org auth show-access-token --json
+    --no-prompt``; ``sf org display`` supplies instanceUrl only. The
+    display stub deliberately carries a non-empty ``TOKEN_FROM_DISPLAY``
+    so any regression to a display-token fallback is caught.
 
-    Most tests mock ``subprocess.run`` with a side-effect callable that
-    returns a different stub depending on which sf subcommand was invoked,
-    so we can exercise primary success, primary failure → fallback, and
-    full-failure paths without spawning real processes.
+    Tests mock ``subprocess.run`` with a side-effect callable that routes
+    by argv shape (preflight ``--help`` / display / show-access-token)
+    without spawning real processes.
     """
 
     REDACTED_TOKEN = "[REDACTED] Use 'sf org auth show-access-token' to view"
+    PREFLIGHT_ARGV = ["sf", "org", "auth", "show-access-token", "--help"]
+    # Shape of real ``--help`` output (sf CLI 2.150.6).
+    REAL_HELP = "USAGE\n  $ sf org auth show-access-token -o <value> [--json]\n"
+
+    def setUp(self):
+        # The preflight caches success process-wide; isolate every test.
+        dc._show_access_token_capability_ok = False
+        self.addCleanup(setattr, dc, "_show_access_token_capability_ok", False)
 
     def _cp(self, stdout: str, *, returncode: int = 0, stderr: str = ""):
         return SimpleNamespace(
@@ -91,36 +100,38 @@ class ResolveOrgTests(unittest.TestCase):
     def _show_token_payload(self, *, access_token: str = "TOKEN_FROM_SHOW") -> str:
         return json.dumps({"result": {"accessToken": access_token}})
 
-    def _route(self, primary_ok=True, primary_unknown=False,
-               primary_redacted=False, display_redacted=False):
+    def _route(self, *, preflight_missing=False, primary_fails=False,
+               primary_token="TOKEN_FROM_SHOW", captured=None):
         """Build a fake_run that routes by argv shape.
 
-        - primary_ok=True   → show-access-token returns clean token
-        - primary_unknown   → show-access-token raises CalledProcessError
-                              (older sf CLI without the subcommand)
-        - primary_redacted  → show-access-token returns the placeholder
-        - display_redacted  → org_display token field is the placeholder
-                              (so fallback also fails — test full-failure)
+        - preflight_missing → ``show-access-token --help`` raises
+                              CalledProcessError (sf CLI lacks the command)
+        - primary_fails     → token call raises CalledProcessError
+                              (e.g. org not authenticated)
+        - primary_token     → accessToken returned by the token call
+        - captured          → optional list; each (argv, kwargs) is appended
         """
         def fake_run(argv, **kwargs):
-            # display call
-            if "display" in argv:
-                return self._cp(
-                    self._display_payload(
-                        access_token=(self.REDACTED_TOKEN if display_redacted
-                                      else "TOKEN_FROM_DISPLAY"),
-                    ),
-                )
-            # show-access-token call
-            if "show-access-token" in argv:
-                if primary_unknown:
+            if captured is not None:
+                captured.append((argv, kwargs))
+            if "show-access-token" in argv and "--help" in argv:
+                if preflight_missing:
                     raise subprocess.CalledProcessError(
                         returncode=1, cmd=argv,
                         stderr="show-access-token is not a sf command",
                     )
-                token = (self.REDACTED_TOKEN if primary_redacted
-                         else "TOKEN_FROM_SHOW")
-                return self._cp(self._show_token_payload(access_token=token))
+                return self._cp(self.REAL_HELP)
+            if "display" in argv:
+                return self._cp(self._display_payload())
+            if "show-access-token" in argv:
+                if primary_fails:
+                    raise subprocess.CalledProcessError(
+                        returncode=1, cmd=argv,
+                        stderr="NoOrgAuthenticationError",
+                    )
+                return self._cp(
+                    self._show_token_payload(access_token=primary_token),
+                )
             raise AssertionError(f"unexpected argv: {argv}")
         return fake_run
 
@@ -131,40 +142,133 @@ class ResolveOrgTests(unittest.TestCase):
         self.assertEqual(url, "https://example.salesforce.com")
         self.assertEqual(token, "TOKEN_FROM_SHOW")
 
-    def test_primary_unknown_falls_back_to_display_token(self):
-        """Older sf CLI: show-access-token unknown → use display payload."""
+    def test_primary_failure_raises_without_display_fallback(self):
+        """Token command failing is terminal — the display payload's
+        accessToken must NOT be used as a fallback."""
         with mock.patch.object(
-            dc.subprocess, "run",
-            side_effect=self._route(primary_unknown=True),
+            dc.subprocess, "run", side_effect=self._route(primary_fails=True),
         ):
-            url, token = dc.resolve_org("my-org")
-        self.assertEqual(url, "https://example.salesforce.com")
-        self.assertEqual(token, "TOKEN_FROM_DISPLAY")
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        msg = str(ctx.exception)
+        self.assertIn("sf org auth show-access-token", msg)
+        self.assertNotIn("TOKEN_FROM_DISPLAY", msg)
 
-    def test_primary_redacted_falls_back_to_display_token(self):
-        """Edge case: dedicated command returns the placeholder string —
-        treat as failure and try the display fallback."""
+    def test_primary_non_json_output_raises(self):
+        def fake_run(argv, **kwargs):
+            if "--help" in argv:
+                return self._cp(self.REAL_HELP)
+            if "display" in argv:
+                return self._cp(self._display_payload())
+            return self._cp("Warning: something not json")
+
+        with mock.patch.object(dc.subprocess, "run", side_effect=fake_run):
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        self.assertIn("sf org auth show-access-token", str(ctx.exception))
+
+    def test_primary_redacted_raises(self):
+        """Dedicated command returns the placeholder — fail fast rather than
+        handing the redaction string to downstream callers (which would
+        cause INVALID_AUTH_HEADER 401 on every call)."""
         with mock.patch.object(
             dc.subprocess, "run",
-            side_effect=self._route(primary_redacted=True),
-        ):
-            url, token = dc.resolve_org("my-org")
-        self.assertEqual(token, "TOKEN_FROM_DISPLAY")
-
-    def test_both_paths_redacted_raises(self):
-        """If both paths return the placeholder, surface a clean SystemExit
-        rather than handing back the redaction string to downstream callers
-        (which would cause INVALID_AUTH_HEADER 401 on every Tooling/REST call)."""
-        with mock.patch.object(
-            dc.subprocess, "run",
-            side_effect=self._route(primary_redacted=True, display_redacted=True),
+            side_effect=self._route(primary_token=self.REDACTED_TOKEN),
         ):
             with self.assertRaises(SystemExit) as ctx:
                 dc.resolve_org("my-org")
         self.assertIn("could not retrieve a usable access token", str(ctx.exception))
 
+    def test_primary_empty_token_raises(self):
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(primary_token=""),
+        ):
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        self.assertIn("could not retrieve a usable access token", str(ctx.exception))
+
+    def test_capability_preflight_failure_raises_clear_error(self):
+        """sf CLI without `sf org auth show-access-token` → actionable
+        upgrade message, and the token call is never attempted."""
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run",
+            side_effect=self._route(preflight_missing=True, captured=captured),
+        ):
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        msg = str(ctx.exception)
+        self.assertIn("missing required command", msg)
+        self.assertIn("sf org auth show-access-token", msg)
+        self.assertIn("Upgrade/reinstall Salesforce CLI", msg)
+        token_calls = [a for a, _ in captured
+                       if "show-access-token" in a and "--no-prompt" in a]
+        self.assertEqual(token_calls, [])
+
+    def test_zero_exit_without_help_signature_fails_and_is_not_cached(self):
+        """A CLI that answers an unknown command with exit 0 must NOT be
+        treated as capable; the failure is not cached, so the next call
+        re-probes."""
+        bogus = self._cp(
+            "\x1b[1mUSAGE\x1b[22m\n  $ sf [COMMAND]\n",
+            stderr='{"accessToken":"SECRET_Z"}',
+        )
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=[bogus, self._cp(self.REAL_HELP)],
+        ) as run:
+            with self.assertRaises(SystemExit) as ctx:
+                dc._assert_show_access_token_capability()
+            msg = str(ctx.exception)
+            self.assertIn("missing required command", msg)
+            self.assertNotIn("SECRET_Z", msg)
+            self.assertFalse(dc._show_access_token_capability_ok)
+            dc._assert_show_access_token_capability()
+        self.assertEqual(run.call_count, 2)
+        self.assertTrue(dc._show_access_token_capability_ok)
+
+    def test_zero_exit_without_help_signature_blocks_resolve_org(self):
+        captured: list = []
+        route = self._route(captured=captured)
+
+        def fake_run(argv, **kwargs):
+            if "--help" in argv:
+                captured.append((argv, kwargs))
+                return self._cp("")
+            return route(argv, **kwargs)
+
+        with mock.patch.object(dc.subprocess, "run", side_effect=fake_run):
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        self.assertIn("lacked the command signature", str(ctx.exception))
+        self.assertEqual([a for a, _ in captured], [self.PREFLIGHT_ARGV])
+
+    def test_zero_exit_unknown_command_notice_echoing_name_fails(self):
+        """Unknown-command notices contain the bare command name; only the
+        USAGE form (`$ sf org auth show-access-token`) may pass."""
+        for out in (
+            "Error: Command org:auth:show-access-token not found.",
+            "Warning: show-access-token is not a sf command.",
+            "Did you mean org auth show-access-token? Run sf help for options.",
+        ):
+            with self.subTest(out=out):
+                dc._show_access_token_capability_ok = False
+                with mock.patch.object(
+                    dc.subprocess, "run", return_value=self._cp("", stderr=out),
+                ):
+                    with self.assertRaises(SystemExit) as ctx:
+                        dc._assert_show_access_token_capability()
+                self.assertIn("missing required command", str(ctx.exception))
+                self.assertFalse(dc._show_access_token_capability_ok)
+
+    def test_real_help_signature_passes_preflight(self):
+        with mock.patch.object(
+            dc.subprocess, "run", return_value=self._cp(self.REAL_HELP),
+        ):
+            dc._assert_show_access_token_capability()
+        self.assertTrue(dc._show_access_token_capability_ok)
+
     def test_raises_systemexit_when_sf_cli_missing(self):
-        """sf binary not on PATH — bail with the upgrade hint."""
+        """sf binary not on PATH — bail with the install hint."""
         with mock.patch.object(
             dc.subprocess, "run", side_effect=FileNotFoundError("sf"),
         ):
@@ -182,49 +286,167 @@ class ResolveOrgTests(unittest.TestCase):
                 dc.resolve_org("my-org")
 
     def test_primary_path_argv_contains_show_access_token(self):
-        """Tripwire — primary call MUST be `sf org auth show-access-token`
+        """Tripwire — token call MUST be `sf org auth show-access-token`
         with `--no-prompt`. Without `--no-prompt` the command blocks on a
         confirmation banner that --json doesn't suppress on its own."""
-        captured_argvs: list[list[str]] = []
-
-        def fake_run(argv, **kwargs):
-            captured_argvs.append(argv)
-            if "display" in argv:
-                return self._cp(self._display_payload())
-            return self._cp(self._show_token_payload())
-
-        with mock.patch.object(dc.subprocess, "run", side_effect=fake_run):
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
             dc.resolve_org("my-org")
 
-        # display call should still pass --verbose + SF_TEMP_SHOW_SECRETS
-        # (so the fallback path stays viable on this same invocation).
-        self.assertTrue(any("display" in a for a in captured_argvs))
-        # primary call shape:
-        primary = next(a for a in captured_argvs if "show-access-token" in a)
-        self.assertIn("--no-prompt", primary)
+        argvs = [a for a, _ in captured]
+        # display call is still required for non-secret metadata.
+        self.assertTrue(any("display" in a for a in argvs))
+        primary = next(
+            a for a in argvs if "show-access-token" in a and "--no-prompt" in a
+        )
         self.assertIn("--json", primary)
         self.assertIn("--target-org", primary)
 
-    def test_display_call_still_passes_verbose_and_show_secrets_env(self):
-        """The legacy fallback path stays armed: org_display still runs
-        with `--verbose` (so accessToken is emitted) and
-        `SF_TEMP_SHOW_SECRETS=true` (so the token isn't redacted on sf
-        CLI versions that still honour the workaround)."""
-        captured = {}
-
-        def fake_run(argv, **kwargs):
-            if "display" in argv:
-                captured["argv"] = argv
-                captured["env"] = kwargs.get("env")
-                return self._cp(self._display_payload())
-            return self._cp(self._show_token_payload())
-
-        with mock.patch.object(dc.subprocess, "run", side_effect=fake_run):
+    def test_does_not_inject_show_secrets_env(self):
+        """Tripwire: no sf subprocess may rely on SF_TEMP_SHOW_SECRETS
+        (removed from sf CLI per forcedotcom/cli#3560)."""
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
             dc.resolve_org("my-org")
 
-        self.assertIn("--verbose", captured["argv"])
-        self.assertIsNotNone(captured["env"])
-        self.assertEqual(captured["env"].get("SF_TEMP_SHOW_SECRETS"), "true")
+        self.assertTrue(captured)
+        for argv, kwargs in captured:
+            env = kwargs.get("env") or {}
+            self.assertNotIn("SF_TEMP_SHOW_SECRETS", env, msg=argv)
+
+    def test_preflight_is_first_sf_call(self):
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
+            dc.resolve_org("my-org")
+        argvs = [a for a, _ in captured]
+        self.assertEqual(argvs[0], self.PREFLIGHT_ARGV)
+        self.assertIn("display", argvs[1])
+
+    def test_preflight_failure_never_invokes_display(self):
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run",
+            side_effect=self._route(preflight_missing=True, captured=captured),
+        ):
+            with self.assertRaises(SystemExit):
+                dc.resolve_org("my-org")
+        self.assertEqual([a for a, _ in captured], [self.PREFLIGHT_ARGV])
+
+    def test_missing_sf_reports_preflight_error_not_display(self):
+        captured: list = []
+
+        def fake_run(argv, **kwargs):
+            captured.append(argv)
+            raise FileNotFoundError("sf")
+
+        with mock.patch.object(dc.subprocess, "run", side_effect=fake_run):
+            with self.assertRaises(SystemExit) as ctx:
+                dc.resolve_org("my-org")
+        self.assertIn("sf CLI not found", str(ctx.exception))
+        self.assertEqual(captured, [self.PREFLIGHT_ARGV])
+
+    def test_preflight_runs_once_across_two_resolves(self):
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
+            dc.resolve_org("my-org")
+            dc.resolve_org("my-org")
+        argvs = [a for a, _ in captured]
+        self.assertEqual(argvs.count(self.PREFLIGHT_ARGV), 1)
+        self.assertEqual(sum(1 for a in argvs if "display" in a), 2)
+
+    def test_failed_preflight_is_retried_on_next_resolve(self):
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run",
+            side_effect=self._route(preflight_missing=True, captured=captured),
+        ):
+            with self.assertRaises(SystemExit):
+                dc.resolve_org("my-org")
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
+            _url, token = dc.resolve_org("my-org")
+        self.assertEqual(token, "TOKEN_FROM_SHOW")
+        argvs = [a for a, _ in captured]
+        self.assertEqual(argvs.count(self.PREFLIGHT_ARGV), 2)
+
+    def _token_call_fails_with(self, *, stdout: str, stderr: str):
+        def fake_run(argv, **kwargs):
+            if "--help" in argv:
+                return self._cp(self.REAL_HELP)
+            if "display" in argv:
+                return self._cp(self._display_payload())
+            raise subprocess.CalledProcessError(
+                returncode=1, cmd=argv, output=stdout, stderr=stderr,
+            )
+        return fake_run
+
+    def test_token_call_failure_output_is_redacted(self):
+        """A failing `show-access-token --json` can echo the token on
+        stdout (or a bearer header on stderr); neither may reach the exit
+        message."""
+        cases = {
+            "stdout_only": ('{"accessToken":"SECRET_X"}', ""),
+            "stderr_and_stdout": (
+                '{"accessToken":"SECRET_X"}',
+                "Error: request failed\nBearer SECRET_Y\n",
+            ),
+            "auth_header_and_qs": (
+                "", "Authorization: Bearer SECRET_Y accessToken=SECRET_X",
+            ),
+        }
+        for label, (stdout, stderr) in cases.items():
+            with self.subTest(label):
+                with mock.patch.object(
+                    dc.subprocess, "run",
+                    side_effect=self._token_call_fails_with(
+                        stdout=stdout, stderr=stderr,
+                    ),
+                ):
+                    with self.assertRaises(SystemExit) as ctx:
+                        dc.resolve_org("my-org")
+                msg = str(ctx.exception)
+                self.assertNotIn("SECRET_X", msg)
+                self.assertNotIn("SECRET_Y", msg)
+                self.assertIn("<redacted>", msg)
+
+    def test_preflight_failure_output_is_redacted(self):
+        for label, (stdout, stderr) in {
+            "stdout_only": ('{"accessToken":"SECRET_X"}', ""),
+            "stderr": ("", "Bearer SECRET_Y"),
+        }.items():
+            with self.subTest(label):
+                dc._show_access_token_capability_ok = False
+                err = subprocess.CalledProcessError(
+                    returncode=1, cmd=self.PREFLIGHT_ARGV,
+                    output=stdout, stderr=stderr,
+                )
+                with mock.patch.object(dc.subprocess, "run", side_effect=err):
+                    with self.assertRaises(SystemExit) as ctx:
+                        dc.resolve_org("my-org")
+                msg = str(ctx.exception)
+                self.assertIn("missing required command", msg)
+                self.assertNotIn("SECRET_X", msg)
+                self.assertNotIn("SECRET_Y", msg)
+
+    def test_display_call_still_passes_verbose(self):
+        """org_display still includes --verbose for metadata shape stability."""
+        captured: list = []
+        with mock.patch.object(
+            dc.subprocess, "run", side_effect=self._route(captured=captured),
+        ):
+            dc.resolve_org("my-org")
+
+        display_argv = next(a for a, _ in captured if "display" in a)
+        self.assertIn("--verbose", display_argv)
 
 
 # -----------------------------------------------------------------------------

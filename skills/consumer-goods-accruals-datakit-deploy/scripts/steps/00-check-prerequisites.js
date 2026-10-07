@@ -1,63 +1,47 @@
-const readline = require('readline');
-
-/**
- * Step 0: Check Prerequisites
- * Presents prerequisites to the user and waits for confirmation
- */
-async function checkPrerequisites() {
-  console.log('\n=== Step 0: Prerequisites ===');
-
-  console.log('\nBefore proceeding, confirm ALL of the following are complete in your org.\n');
-
-  console.log('--- PERMISSIONS ---');
-  console.log('\n1. Assign permission set "Data Cloud Architect" to:');
-  console.log('   - The System Admin user');
-  console.log('   - The user assigned to the Accrual Ingestion Process');
-  console.log('\n2. Enable CRM Analytics (if you need Accruals dashboards):');
-  console.log('   Setup > Feature Settings > Analytics > Analytics > Getting Started > Enable CRM Analytics');
-  console.log('   Then assign permission set "CRM Analytics Plus Admin" to the System Admin.');
-
-  console.log('\n--- DATA CLOUD ---');
-  console.log('\n3. Data Cloud is enabled and set up (via the Data Cloud app, not Setup).');
-  console.log('\n4. Salesforce CRM connector is active:');
-  console.log('   Data Cloud app > Data Cloud Setup > Salesforce CRM > enable Home Org connection.');
-  console.log('   Also activate any other required connectors using the dropdown button.');
-  console.log('\n5. A user is assigned to the Accrual Ingestion Process:');
-  console.log('   Setup > Processing Services Pairing > Accrual Ingestion Process.');
-
-  console.log('\n--- INTEGRATION ---');
-  console.log('\n6. OAuth scope "cdp_ingest_api" is configured on the integration app used by TPM Offcore.');
-  console.log('   Check Setup > App Manager (Connected Apps) or Setup > External Client Apps.');
-  console.log('   The app name varies by org — locate the one used by TPM Offcore.');
-
-  console.log('\n');
-
-  // Wait for user confirmation
-  await waitForUserConfirmation();
-
-  console.log('[OK] Prerequisites confirmed. Proceeding to next step...\n');
-}
-
-/**
- * Wait for user to press Enter.
- * Auto-confirms immediately when stdin is not a TTY (piped / headless run).
- */
-function waitForUserConfirmation() {
-  if (!process.stdin.isTTY) {
-    console.log('[Auto-confirmed: running non-interactively]');
-    return Promise.resolve();
-  }
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
-
-    rl.question('Press Enter when you have confirmed all prerequisites are met...', () => {
-      rl.close();
-      resolve();
-    });
-  });
-}
-
-module.exports = checkPrerequisites;
+const readline = require('readline');
+
+/**
+ * Step 0: Check Prerequisites
+ * Presents prerequisites to the user and waits for confirmation
+ */
+async function checkPrerequisites() {
+  console.log('\n=== Step 0: Prerequisites ===');
+
+  console.log('\nBefore proceeding with the setup, please ensure the following prerequisites are met:');
+  console.log('\n1. Enable Data Cloud and Analytics Studio');
+  console.log('   - Navigate to Setup > Data Cloud Setup');
+  console.log('   - Ensure Data Cloud and Analytics Studio are enabled');
+  console.log('\n2. Ensure there is a user assigned in the Processing Services Pairing app to the Accrual Ingestion Process');
+  console.log('   - The user must have the Data Cloud Architect permission set');
+  console.log('   - Alternatively, a System Admin or user with Data Cloud Architect can be assigned to all processes');
+  console.log('\n3. Ensure the connected app or external client app for TPM Offcore has the oauth scope "cdp_ingest_api"');
+  console.log('   - Navigate to Setup > App Manager');
+  console.log('   - Edit your connected app and verify the oauth scope includes "cdp_ingest_api"');
+  console.log('   - Note: Depending on your org setup, this permission may already be included');
+
+  console.log('\n');
+
+  // Wait for user confirmation
+  await waitForUserConfirmation();
+
+  console.log('[OK] Prerequisites confirmed. Proceeding to next step...\n');
+}
+
+/**
+ * Wait for user to press Enter
+ */
+function waitForUserConfirmation() {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl.question('Press Enter when you have confirmed all prerequisites are met...', () => {
+      rl.close();
+      resolve();
+    });
+  });
+}
+
+module.exports = checkPrerequisites;

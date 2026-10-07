@@ -122,6 +122,23 @@ class RedactErrorTests(unittest.TestCase):
         out = rest_client.redact_error(exc)
         self.assertNotIn("TESTONLY_BEARER_VALUE", out)
 
+    def test_bare_bearer_token_redacted(self):
+        # No `Authorization:` prefix — e.g. curl-style traces or CLI stderr.
+        for raw in (
+            "request failed: Bearer TESTONLY_BARE_VALUE",
+            "headers={'auth': 'bearer TESTONLY_DICT_VALUE'}",
+        ):
+            with self.subTest(raw=raw):
+                out = rest_client.redact_text(raw)
+                self.assertIn("<redacted>", out)
+                self.assertNotIn("TESTONLY_BARE_VALUE", out)
+                self.assertNotIn("TESTONLY_DICT_VALUE", out)
+
+    def test_auth_header_not_double_redacted(self):
+        # The auth-header rule runs first; the bare rule must not double-mangle it.
+        out = rest_client.redact_text("Authorization: Bearer TESTONLY_HDR")
+        self.assertEqual(out, "Authorization: Bearer <redacted>")
+
     def test_access_token_querystring_redacted(self):
         exc = RuntimeError("POST /oauth/token accessToken=TESTONLY_TOKEN&foo=1")
         out = rest_client.redact_error(exc)

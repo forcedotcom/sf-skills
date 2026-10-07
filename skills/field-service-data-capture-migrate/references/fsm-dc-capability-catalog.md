@@ -24,8 +24,7 @@ A `lightning:*` / `forceContent:*` / `c:*` name only ever appears as the
 Two inputs were reconciled:
 
 1. The **assessment spreadsheet** — *FSM Flow vs Data Capture Flow component
-   assessment*
-   ([sheet](https://docs.google.com/spreadsheets/d/1KeZPHw4AN8XxqxoTh4X9ciLavp9JNcOeYDbSzmCATGg/edit)).
+   assessment*.
 2. **Salesforce core code** (core-2206, 264 release line), which is
    authoritative where the two disagree.
 

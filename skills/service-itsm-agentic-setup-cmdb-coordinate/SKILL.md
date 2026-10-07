@@ -2,7 +2,7 @@
 name: service-itsm-agentic-setup-cmdb-coordinate
 description: "Orchestrator skill for enabling CMDB (Configuration Management Database) end-to-end in Service Cloud ITSM against a production or sandbox org. Use when the user asks to set up CMDB, enable Configuration Management Database, configure the ITSM CMDB, onboard CMDB from scratch, wants a guided walkthrough of CMDB enablement, or asks what CMDB setup steps are available. Triggers on: set up CMDB, enable CMDB, configure CMDB, CMDB onboarding, Configuration Management Database setup, ITSM CMDB walkthrough. DO NOT TRIGGER when: the user asks about a specific CMDB sub-step directly (e.g. only installing a bundle, only assigning permission sets), CMDB record CRUD (creating CIs, relationships), Discovery/Service Graph Connector configuration, or general ITSM queries without CMDB setup intent."
 metadata:
-  version: "1.0"
+  version: "1.1"
   domains: ["Service"]
   relatedSkills:
     - "service-itsm-agentic-setup-cmdb-access-assign"
@@ -45,7 +45,10 @@ Layer 3  User access            Assign the PSL + CMDB permission sets to the use
 Layer 4  Content bundles        Install the CMDB Foundation (base) content bundle.
 Layer 5  Asset Discovery        Enable feature service-cloud-itsm-discovery-integration and grant
                                 Discovery page access (IT Service Discovery Manager permission set).
-                                Runs last — depends on the base CMDB feature and earlier layers.
+                                Recommended last, but a direct enable CASCADE-ENABLES the base CMDB
+                                feature — it needs only Layer 0 (license) + Layer 1 (provisioned
+                                tenant), NOT Layers 2–4 done first. Never claim a direct enable
+                                "will fail"; only a genuine blocker (e.g. tenant not provisioned) stops it.
 ```
 
 Layer 0 is a hard prerequisite: if the org was not born with the CMDB SKU, **no API can grant it**
@@ -79,7 +82,8 @@ CMDB Setup (via service-itsm-agentic-setup-cmdb-coordinate)
 
 Target org: <org>   (all steps below run against this org)
 
-CMDB is enabled in ordered layers. Each must succeed before the next:
+CMDB is set up in ordered layers, each building on the earlier ones (Asset Discovery is the
+exception — see its note below):
 ```
 
 | #   | Layer                    | What it does                                                 | Status  |
@@ -88,7 +92,7 @@ CMDB is enabled in ordered layers. Each must succeed before the next:
 | 1–2 | Provision & enable CMDB  | Set up the CMDB tenant, then turn on the CMDB feature so it's available to use | Pending |
 | 3   | Assign user access       | Grant CMDB access to the chosen users                        | Pending |
 | 4   | Install content bundle   | Install the CMDB Foundation (base) content                   | Pending |
-| 5   | Enable Asset Discovery   | Turn on asset discovery and grant Discovery page access (final step — needs the steps above done first) | Pending |
+| 5   | Enable Asset Discovery   | Turn on asset discovery and grant Discovery page access (recommended last; enabling it directly turns the base CMDB feature on too — needs only the license and a provisioned tenant, not the other layers first) | Pending |
 
 ```text
 I recommend running these in order. Where would you like to start (or shall I run 1 → 5)?
@@ -154,8 +158,10 @@ Configuration Items. Next, you can model CIs, identification rules, and relation
 3. User access             (PSL + permission sets; without these users can't see CMDB)
 4. Content bundle          (CMDB Foundation base; requires Layer 2 — bundle APIs 403 until enabled)
 5. Asset Discovery         (enable service-cloud-itsm-discovery-integration and grant Discovery page
-                           access via the IT Service Discovery Manager permission set; final layer —
-                           requires the base CMDB feature and earlier layers; blocked until done)
+                           access via the IT Service Discovery Manager permission set; recommended
+                           last, but a direct enable CASCADE-ENABLES the base CMDB feature — needs
+                           only Layer 0 license + Layer 1 provisioned tenant, not Layers 2–4; never
+                           tell the user a direct enable "will fail")
 ```
 
 Layers 1 and 2 are handled together by `service-itsm-agentic-setup-cmdb-configure` because Layer 2
@@ -174,6 +180,11 @@ cannot succeed until Layer 1 reaches `PROVISIONED`. Present them as one step.
   license/edition prerequisite that no API can grant
 - If a child skill reports a prerequisite gap or a failure, relay it to the user in friendly,
   actionable terms — do not bury the error
+- When the user asks to run **Layer 5 (Asset Discovery) directly**, do NOT warn that it "will fail"
+  or "error out" without the earlier layers, and do NOT push "run the full flow" as a precondition.
+  Enabling Discovery **cascade-enables** the base CMDB feature; it needs only Layer 0 (license) and a
+  Layer 1 provisioned tenant. Delegate straight to `service-itsm-agentic-setup-cmdb-discovery-configure`,
+  which reads the feature status first and stops only on a genuine blocker (e.g. tenant not provisioned)
 - Track progress across the conversation — do not re-present completed layers as "Pending". Re-derive the current layer from the latest child-skill activity, not from a previously rendered highlight; on a resumed or long conversation, do not assume the last-highlighted layer is still current — if ambiguous, re-confirm with the user
 - Do NOT expose internal technical jargon in user-facing output. This includes Salesforce record
   IDs and org IDs, raw HTTP status codes (403, 500, …), API error codes (`FUNCTIONALITY_NOT_ENABLED`,

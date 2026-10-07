@@ -1,0 +1,18 @@
+{
+  "title": "save_dashboard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation"],
+  "properties": {
+    "operation": { "const": "save_dashboard" },
+    "dashboardIdOrApiName": {
+      "type": "string",
+      "description": "The id (0FK...) or apiName of the dashboard to save. Optional; defaults to the dashboard the batch targets."
+    }
+  },
+  "description": "Control operation. Standalone (sole operation in the batch): commits whatever draft is already staged on the dashboard. In a mixed batch: persists once after the other operations in that same batch succeed. The top-level autosave flag is ignored when save_dashboard is present.",
+  "example": {
+    "operation": "save_dashboard",
+    "dashboardIdOrApiName": "0FK000000000123"
+  }
+}

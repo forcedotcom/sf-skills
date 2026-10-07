@@ -1,0 +1,27 @@
+{
+  "title": "delete_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "page"],
+  "properties": {
+    "operation": { "const": "delete_page" },
+    "layoutName": {
+      "type": "string",
+      "description": "Dev name of the layout the page is in. Optional; defaults to the first layout."
+    },
+    "page": {
+      "type": "object",
+      "description": "Identifies the page to delete by name.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional page id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Dev name of the page to delete." },
+        "description": { "type": "string", "description": "Optional page description (not needed to identify the page — name is sufficient)." }
+      }
+    }
+  },
+  "example": {
+    "operation": "delete_page",
+    "page": { "name": "page_2" }
+  }
+}

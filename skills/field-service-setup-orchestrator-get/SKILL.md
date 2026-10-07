@@ -1,7 +1,6 @@
 ---
 name: field-service-setup-orchestrator-get
 description: "Use this skill to set up Salesforce Field Service — Work Types, Skills, Service Territories, Operating Hours, Scheduling Policy, Work Rules, Service Objectives, Data Capture Forms, FSL mobile forms, Pre-Work Brief, Mobile Branding, or any FSL setup, enablement, or configuration request. Entry point that identifies what the user wants to configure and routes to the right sub-workflow: Foundation Setup, Scheduling Policy, Data Capture Forms, Pre-Work Brief, or Mobile Branding."
-user-invocable: false
 owning_team: sfs-setup-experience
 metadata:
   version: "1.0"

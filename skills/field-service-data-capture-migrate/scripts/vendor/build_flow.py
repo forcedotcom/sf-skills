@@ -719,7 +719,10 @@ def render_field(field: Field, spec: FormSpec, indent: str = "        ") -> str:
     parts.append(f"{indent}    <extensionName>{x(extension_name)}</extensionName>\n")
     parts.append(f"{indent}    <fieldType>ComponentInstance</fieldType>\n")
     parts.append(render_input_param("label", label, indent=inner))
-    if field.is_required:
+    # dcCheckbox/dcToggle don't expose a `required` input attribute — an
+    # unchecked/off boolean is itself a valid answer, so deploying `required`
+    # on these fails with "We can't find this input attribute: 'required'".
+    if field.is_required and field.field_type not in ("Checkbox", "Toggle"):
         parts.append(render_input_param("required", boolean_value=True, indent=inner))
     if field.field_type == "Counter":
         if field.counter_min is not None:

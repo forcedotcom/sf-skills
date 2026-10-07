@@ -27,17 +27,17 @@ The CSVs come from <https://github.com/SalesforceLabs/LSStarterConfig.git>. As a
 
 This is the CSV-driven **person** account (an individual provider). The HCO (organization) account is a separate bundle below.
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | FirstName | Aaron | account.csv |
 | LastName | Morita | account.csv |
 | Salutation | Dr. | account.csv |
 | RecordType DeveloperName | Health_Care_Provider | account.csv |
-| IsActive | True | account.csv (standard `IsActive` boolean — NOT `IsActive__c`) |
+| IsActive | True | account.csv |
 
 ## HealthcareProvider
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Aaron Morita HP | healthcareprovider.csv |
 | IsActive | True | healthcareprovider.csv |
@@ -46,11 +46,11 @@ This is the CSV-driven **person** account (an individual provider). The HCO (org
 | Status | Active | healthcareprovider.csv |
 | AccountId | (from Account) | FK |
 
-> As admin you have FLS to all fields, so `NationalProviderIdentifier` and `IsSpeaker` may be set if the CSV lists them. If a create fails on a field, omit it and continue — those two are not required by any KAM downstream record.
+> Use only the row's live CSV values.
 
 ## ContactPointAddress
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | 415 Mission St | contactpointaddress.csv |
 | AddressType | Billing | contactpointaddress.csv |
@@ -165,7 +165,7 @@ sf data create record --sobject ProviderAcctTerritoryInfo --target-org <admin> \
 
 ## ObjectTerritory2Association
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ObjectId | (from Account) | FK |
 | Territory2Id | (Stage-3 level-3 territory) | FK |
@@ -173,7 +173,7 @@ sf data create record --sobject ProviderAcctTerritoryInfo --target-org <admin> \
 
 ## ProviderAcctTerritoryInfo
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | AccountId | (from Account) | FK |
 | Territory2Id | (Stage-3 level-3 territory) | FK |
@@ -183,19 +183,20 @@ sf data create record --sobject ProviderAcctTerritoryInfo --target-org <admin> \
 | IsTargetedAccount | True | provideracctterritoryinfo.csv |
 | SourceType | Manual | provideracctterritoryinfo.csv |
 
-## Product2 (NO RecordType)
+## Product2
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Immunexis 5mg | product2.csv |
 | ProductCode | IM001-5 | product2.csv |
 | IsActive | True | product2.csv |
+| RecordTypeId | (resolve in the target org: `RecordType` `DeveloperName='LSC_Sample'`) | product2.csv holds a **foreign** Id — ignore it; use the resolved target-org Id |
 
-> Do NOT set RecordTypeId — explicit requirement.
+> `RecordTypeId`: the value in `product2.csv` comes from the export org and is not valid here. Query the target org for the `Product2` RecordType with `DeveloperName='LSC_Sample'` and use that Id.
 
 ## LifeSciMarketableProduct
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | Name | Immunexis 5mg | lifescimarketableproduct.csv |
 | ProductId | (from Product2) | FK |
@@ -208,11 +209,13 @@ sf data create record --sobject ProviderAcctTerritoryInfo --target-org <admin> \
 | StartDate | 2026-07-01 | lifescimarketableproduct.csv |
 | Type | Product | lifescimarketableproduct.csv |
 
-> Capture the resulting `LifeSciMarketableProduct` Id — Part B (plan templates) of this stage references it as the `GoalDefinitionProduct.ProductId`.
+> Create **one row per data row** in `lifescimarketableproduct.csv`, each pointing at the matching `Product2` (resolve the parent via the product natural-key→Id map keyed on `ProductCode`/`Name` — do not thread a single product Id). Capture each resulting `LifeSciMarketableProduct` Id.
+>
+> Part B (plan templates) references **one** LifeSciMarketableProduct as `GoalDefinitionProduct.ProductId` (the `Immunexis 5mg` product). If the CSV now yields multiple products, that Part B link still targets the single named product — Part B is intentionally not CSV-driven, so this coupling is by design; confirm the intended product Id is captured for Part B.
 
 ## ProductTerritoryAvailability
 
-| Field | Value | Source |
+| Field | Example / decode-only (read the live CSV) | Source |
 |-------|-------|--------|
 | ProductId | (from LifeSciMarketableProduct) | FK |
 | TerritoryId | (Stage-3 level-3 territory) | FK |

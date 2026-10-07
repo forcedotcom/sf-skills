@@ -1,11 +1,12 @@
 ---
 name: dx-org-manage
-description: "INVOKE this skill to execute Salesforce org operations: create scratch orgs, list/display/resume/delete scratch orgs, create org snapshots, open orgs in browser. This skill EXECUTES operations immediately - it does NOT generate scripts or code files. ALWAYS invoke this skill (do not execute SF CLI commands directly) when user requests to: create a scratch org (from edition, definition file (.json), snapshot, or org shape), list/display/resume/delete scratch orgs, create an org snapshot, or open a Salesforce org. Trigger phrases include: 'create a snapshot', 'take a snapshot', 'create scratch org', 'new scratch org', 'spin up an org', 'create 5 scratch orgs', 'create org from snapshot', 'scratch-def.json', 'project-scratch-def.json', 'list scratch orgs', 'display org', 'delete scratch org', 'resume scratch org', 'open my Salesforce org', 'open org in browser'. Do NOT use for switching default org (use dx-org-switch) or deploying metadata (use platform-metadata-deploy)."
+description: "Use to EXECUTE Salesforce org operations immediately via the sf CLI (this skill runs them, it does NOT generate scripts): create scratch orgs (from edition, definition file, snapshot, or org shape), list/display/resume/delete scratch orgs, open orgs in browser. Trigger: 'create scratch org', 'create org from snapshot', 'delete scratch org', 'open my org'. Do NOT use for switching the default org (use dx-org-switch), deploying metadata (use platform-metadata-deploy), or creating/checking/listing/deleting org snapshots (use dx-org-snapshot-manage)."
 metadata:
-  version: "1.2"
+  version: "1.3"
   domains: ["Developer Experience"]
   minApiVersion: "60.0"
   relatedSkills:
+    - "dx-org-snapshot-manage"
     - "dx-org-switch"
     - "platform-metadata-deploy"
   cliTools:
@@ -19,7 +20,7 @@ metadata:
 
 **Tool constraint:** Use the Bash tool for all `sf` CLI commands. Always include `--json` for structured output. Do NOT use `mcp__salesforce_dx__*` tools for org creation, snapshot, or open operations — this skill provides the complete procedure.
 
-**Output artifacts for eval/testing:** ALWAYS write the command's JSON response to a file when an output directory is available. Do NOT ask the user what file to write — this skill defines the filenames. After executing the command: (1) if the user specified an output path (e.g. "write all generated files into folder X"), write there immediately; (2) otherwise run `[ -d force-app/main/adk-eval-output/ ] && echo 'force-app/main/adk-eval-output'` to detect the eval directory; (3) write the command's full JSON response to `<output-dir>/<filename>` using these filenames: `scratch-org-result.json` for org creation (for a batch of N orgs, `scratch-org-result-1.json` … `scratch-org-result-N.json`), `scratch-org-list-result.json` for list, `org-display-result.json` for display, `scratch-org-resume-result.json` for resume, `scratch-org-delete-result.json` for delete, or `snapshot-result.json` for snapshot creation. This is the generated output — write it without asking. (Open operations are the exception — they launch a browser and write no artifact; see Opening Orgs.)
+**Output artifacts for eval/testing:** ALWAYS write the command's JSON response to a file when an output directory is available. Do NOT ask the user what file to write — this skill defines the filenames. After executing the command: (1) if the user specified an output path (e.g. "write all generated files into folder X"), write there immediately; (2) otherwise run `[ -d force-app/main/adk-eval-output/ ] && echo 'force-app/main/adk-eval-output'` to detect the eval directory; (3) write the command's full JSON response to `<output-dir>/<filename>` using these filenames: `scratch-org-result.json` for org creation (for a batch of N orgs, `scratch-org-result-1.json` … `scratch-org-result-N.json`), `scratch-org-list-result.json` for list, `org-display-result.json` for display, `scratch-org-resume-result.json` for resume, or `scratch-org-delete-result.json` for delete. This is the generated output — write it without asking. (Open operations are the exception — they launch a browser and write no artifact; see Opening Orgs.)
 
 ---
 
@@ -118,7 +119,7 @@ Write the extracted org-list entry (the resolved org record), NOT the raw creati
 - For the complete creation workflow (AUTO MODE, STATE A/B, batch, definition-file authoring) → load `references/scratch-org-create.md`; for list/display/resume/delete → load `references/scratch-org-operations.md`
 - For available features, settings, and definition file structure → load `references/definition_file_options.md`
 - For edition selection guidance and comparison → load `references/edition_types.md`
-- For snapshot workflow and post-creation usage → load `references/snapshot_usage.md`
+- To create/check/list/delete the snapshot itself before referencing it here → use the `dx-org-snapshot-manage` skill
 
 ---
 
@@ -182,47 +183,6 @@ sf org delete scratch --target-org <alias> --no-prompt --json
 
 ---
 
-## Creating Snapshots
-
-**REQUIRED steps — execute in order:**
-
-**Step 1. Get inputs:**
-- Source org: scratch org ID or alias (from user)
-- Snapshot name: unique name (from user)
-- Description: optional (from user)
-
-**Step 2. Determine Dev Hub:** resolve to a concrete value and pass it explicitly via `--target-dev-hub` in Step 3 (same order as scratch-org creation — never guess a name):
-1. A Dev Hub the user named → use it verbatim.
-2. Else the default: non-empty `result[0].value` from `sf config get target-dev-hub --json`.
-3. Else the single authenticated Dev Hub — run **this exact all-bucket command** (do NOT hand-write a single-bucket filter, which misses hubs that land in `devHubs`/`nonScratchOrgs`):
-   ```bash
-   sf org list --json | jq -r '[.result.devHubs[]?, .result.nonScratchOrgs[]?, .result.other[]?, .result.sandboxes[]?, .result.scratchOrgs[]?] | map(select(.isDevHub == true).username) | unique | .[]'
-   ```
-   Exactly one → use it. Zero → **do NOT run the snapshot command at all**; advise `sf org login web --set-default-dev-hub` and stop. Two or more → ask the user which.
-
-Never fabricate a placeholder alias (e.g. `eval-target`, `my-dev-hub`) and never run the command with no `--target-dev-hub` flag — the CLI rejects a bad name with `NotADevHubError` and a missing default with `NoDefaultDevHubError`. If no hub resolves, that is a hard stop, not a value to guess.
-
-**Step 3. Execute:**
-```bash
-sf org create snapshot --source-org <orgId-or-alias> --name <SnapshotName> --target-dev-hub <devHub> --json
-```
-
-With description:
-```bash
-sf org create snapshot --source-org <orgId-or-alias> --name <SnapshotName> --description "<desc>" --target-dev-hub <devHub> --json
-```
-
-**Step 4. Report result:** Returns JSON with SnapshotId and Status. If an output directory is available (per the output artifacts rule above), write the JSON response to `<output-dir>/snapshot-result.json`.
-
-**Error handling:** surface the CLI's own error unchanged. For example:
-- "Snapshot name already exists" → use a different unique name
-
-**When you need more detail:**
-- For complete snapshot creation workflow and flag reference → load `references/creating-snapshot.md`
-- For CLI flag reference → load `references/cli_flags.md`
-
----
-
 ## Opening Orgs
 
 **REQUIRED steps — execute in order:**
@@ -264,10 +224,9 @@ Load these reference files for detailed guidance:
 | `references/scratch-org-operations.md` | Operating on existing orgs: list, display, resume, delete — plus shared lifecycle rules and troubleshooting |
 | `references/definition_file_options.md` | User needs to configure org features, settings, or advanced definition file options beyond basic org creation |
 | `references/edition_types.md` | User asks which edition to choose or needs to understand edition differences |
-| `references/snapshot_usage.md` | User wants to use snapshots in definition files or needs post-snapshot workflow guidance |
-| `references/cli_flags.md` | User needs complete snapshot CLI flag reference |
-| `references/creating-snapshot.md` | Troubleshooting snapshot creation failures or need detailed snapshot workflow |
 | `references/opening-org.md` | User needs to navigate to specific setup paths, open metadata files, or use advanced open flags |
+
+To create/check/list/delete a snapshot itself (rather than just consuming one), use the `dx-org-snapshot-manage` skill.
 
 ## Example Files
 
@@ -285,5 +244,3 @@ Example command outputs for testing and troubleshooting:
 | `examples/scratch-orgs/display_output.json` | `sf org display --json` output (wrapped, tokens redacted) |
 | `examples/scratch-orgs/resume_output.json` | `sf org resume scratch --json` output (completed org) |
 | `examples/scratch-orgs/delete_output.json` | `sf org delete scratch --json` output |
-| `examples/snapshots/success_output.json` | Successful snapshot creation |
-| `examples/snapshots/error_output.json` | Common snapshot error scenario (duplicate name) |

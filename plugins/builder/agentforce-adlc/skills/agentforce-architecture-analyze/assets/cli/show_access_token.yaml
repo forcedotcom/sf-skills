@@ -1,15 +1,12 @@
 name: show_access_token
-# Primary access-token retrieval path per forcedotcom/cli#3560 (effective
-# 2026-05-27). The `sf org display --json` field is now redacted to a
-# placeholder string by default; the dedicated `sf org auth show-access-token`
-# command is the long-term replacement.
+# Access-token retrieval per forcedotcom/cli#3560. The `sf org display --json`
+# accessToken field is redacted to a placeholder string; the dedicated
+# `sf org auth show-access-token` command is the replacement.
 #
 # `--no-prompt` skips the interactive confirmation banner so the command
 # behaves identically under `--json`.
 #
-# The legacy fallback (`sf org display` with `SF_TEMP_SHOW_SECRETS=true`)
-# stays wired for sf CLI versions that don't ship show-access-token; that
-# fallback is orchestrated in `main.py::_resolve_creds`, not here.
+# This command is the only supported runtime token-retrieval path.
 argv:
   - sf
   - org

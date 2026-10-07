@@ -1,0 +1,30 @@
+{
+  "title": "move_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "pageName", "placement"],
+  "properties": {
+    "operation": { "const": "move_widget" },
+    "pageName": { "type": "string", "description": "Dev name of the page the widget is on." },
+    "placement": {
+      "type": "object",
+      "description": "New grid coordinates for the widget on the same page.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional placement id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Name of the widget to reposition." },
+        "label": { "type": "string", "description": "Optional placement-level label override." },
+        "description": { "type": "string", "description": "Optional placement-level description." },
+        "row": { "type": "integer", "description": "New 1-based grid row." },
+        "column": { "type": "integer", "description": "New 1-based grid column." },
+        "rowspan": { "type": "integer", "description": "New height in rows." },
+        "colspan": { "type": "integer", "description": "New width in columns." }
+      }
+    }
+  },
+  "example": {
+    "operation": "move_widget",
+    "pageName": "page_1",
+    "placement": { "name": "viz_1", "row": 5, "column": 25, "rowspan": 20, "colspan": 24 }
+  }
+}

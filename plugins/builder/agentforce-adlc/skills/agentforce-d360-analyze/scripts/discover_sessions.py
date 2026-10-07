@@ -9,9 +9,11 @@ DC-only by design (no OTel path).
 
 ## CLI
 
-    python3 scripts/discover_sessions.py --org <alias> [options]
+    python3 scripts/discover_sessions.py [--org <alias>] [options]
 
-Options (all optional except --org):
+Options (all optional):
+  --org <alias>     sf CLI org alias. Default: the sf CLI default target org
+                    (`sf config get target-org`).
   --since <expr>    "last 2 hours" | "last 10" | "today" | "yesterday"
                     | "YYYY-MM-DD" | "YYYY-MM-DD to YYYY-MM-DD"
                     | explicit UTC/TZ datetime (RFC 3339). Default: last 24 hours.
@@ -55,7 +57,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from dc import DCQueryError, load_sql, post, resolve_org
+from dc import DCQueryError, default_target_org, load_sql, post, resolve_org
 from _shared.sql import _escape_sql_literal
 
 
@@ -477,7 +479,8 @@ def main() -> int:
         description="Find candidate Agentforce sessions via Data Cloud. "
                     "Prints a numbered picker; no artifacts written.",
     )
-    ap.add_argument("--org", required=True, help="sf CLI org alias (the one you configured via `sf org login`)")
+    ap.add_argument("--org", help="sf CLI org alias (the one you configured via `sf org login`). "
+                                  "Default: the sf CLI default target org")
     ap.add_argument("--since", help='time range: "last 2 hours" | "today" | "yesterday" | '
                                     '"YYYY-MM-DD" | "YYYY-MM-DD to YYYY-MM-DD" | ISO datetime. '
                                     'Default: last 24 hours.')
@@ -519,7 +522,8 @@ def main() -> int:
         limit=args.limit,
     )
 
-    instance_url, token = resolve_org(args.org)
+    org = args.org or default_target_org()
+    instance_url, token = resolve_org(org)
     try:
         rows = post(sql, instance_url, token, "discover_sessions")
     except DCQueryError as e:
@@ -544,7 +548,7 @@ def main() -> int:
     print(render_picker(
         rows=rows,
         agent_by_sid=agent_by_sid,
-        org=args.org,
+        org=org,
         tr=tr,
         filters=filters,
         composed_sql=sql,

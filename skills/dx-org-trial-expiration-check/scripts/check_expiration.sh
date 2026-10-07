@@ -402,8 +402,8 @@ render_renew() {
   echo "      - Email of the customer that started the trial"
   echo "      - Org ID (or your org's name if you can't access the Org ID)"
   echo "      - Username"
-  echo "    AMER: PowerOfUsDesk@salesforce.com"
-  echo "    Other regions: myaccount@salesforce.com or 1-800-NO-SOFTWARE"
+  echo "    AMER: the Power of Us Desk"
+  echo "    Other regions: My Account support or 1-800-NO-SOFTWARE"
   echo "    Ref: Salesforce Help article 004754220"
   echo
   echo "  Developer Edition orgs:"

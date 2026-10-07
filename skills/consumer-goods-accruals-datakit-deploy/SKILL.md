@@ -15,6 +15,8 @@ metadata:
       semver: ">=22.0.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
+    - tool: ["sfdx"]
+      semver: ">=7.0.0"
 ---
 
 ## MANDATORY: Always write the Phase 6 report
@@ -134,37 +136,30 @@ is empty — `WHERE CreatedDate > null` is an `INVALID_QUERY_FILTER_OPERATOR` er
 Salesforce SOQL and will abort the query.
 
 ### 1.7 Org-side manual prerequisites
-The setup script (Step 0) displays the full prerequisites list and waits for user
-confirmation before proceeding. If the user's prompt already confirms these, treat them
-as confirmed — do **not** re-ask. Only ask for items the user has not already addressed:
+If the user's prompt already confirms these prerequisites, treat them as confirmed — do
+**not** re-ask. Only ask for items the user has not already addressed:
 - Data Cloud and Analytics Studio enabled (Setup → Data Cloud Setup)
 - Connectors feature enabled (Data Cloud Setup → Feature Manager)
 - A user assigned to the **Accrual Ingestion Process** in Processing Services Pairing
   with the **Data Cloud Architect** permission set
-- OAuth scope **`cdp_ingest_api`** configured on the integration app used by TPM Offcore.
-  This may be a **Connected App** or an **External Client App** depending on the org —
-  the app name varies by configuration. Verify via Setup → App Manager (Connected Apps)
-  or Setup → External Client Apps. Do NOT assume any specific app name.
-- Permission sets assigned to the System Admin (and to the Accrual Ingestion Process user):
-  - **Data Cloud Architect**
-- CRM Analytics must be enabled first (Setup → Feature Settings → Analytics → Analytics → Getting Started → "Enable CRM Analytics"), then assign to the admin:
-  - **CRM Analytics Plus Admin**
+- OAuth scope **`cdp_ingest_api`** on the TPM Offcore connected app
+- Licenses: `AccrualsProcessingAddOn`, `AccrualsProcessingUserAddOn`,
+  `TpmAccrualsAddOn`, `TpmAccrualsUserAddOn` (advisory — record what the user confirmed)
 
 ---
 
 ## Phase 2 — Verify the Data Cloud connection (best-effort)
 
-The OAuth client used by TPM Offcore can be a **Connected App** or an **External Client
-App**, and the app name varies by org configuration — it cannot be queried reliably by
-name. Skip the programmatic check. Instead, if the user has not already confirmed
-`cdp_ingest_api` as part of Phase 1.7, ask them to verify it manually:
+Try to verify `cdp_ingest_api` by query — treat "cannot verify" as WARN, not STOP:
 
-> "Please confirm that `cdp_ingest_api` is in the selected OAuth scopes for the
-> integration app used by TPM Offcore. You can check under Setup → App Manager
-> (for Connected Apps) or Setup → External Client Apps."
+```bash
+sf data query --target-org <alias> \
+  --query "SELECT Id, Name FROM ConnectedApplication WHERE Name LIKE '%TPM%'"
+```
 
-Continue once the user confirms. Do not block on this — treat unconfirmed as WARN in
-the Phase 6 report.
+If the query errors on permissions, ask the user to confirm `cdp_ingest_api` is in
+Setup → App Manager → (edit TPM Offcore connected app) → OAuth Policies →
+Selected OAuth Scopes. Continue only after the user confirms.
 
 ---
 
@@ -228,13 +223,8 @@ Evaluate the rows:
   failing component name and its `DeploymentError` value. Do not proceed to Phase 5.
   Record Phase 5 as `not run — deployment failures unresolved` in the Phase 6 report.
 - Any `InProgress` row → wait 60 s and re-query. **Do not advance to Phase 5 until all
-  rows are in a terminal state** (`Successful` or `Failure`). DataKit deployments on
-  production orgs typically take 60–90 minutes. The setup script (`node scripts/setup.js`)
-  has an internal 90-minute polling timeout — if the script exits with a timeout error,
-  **do not treat this as a failure**: query `DataKitDeploymentLog` directly in the agent
-  Phase 4 loop (as shown above) and continue polling until terminal state or a genuine
-  liveness signal is lost (org unreachable, explicit Failure rows). Surface live counts
-  periodically so the user can see progress.
+  rows are in a terminal state** (`Successful` or `Failure`). If any row is still
+  `InProgress` after 30 minutes, stop and surface the live counts.
 - Zero rows → the deployment has not produced log entries yet; re-query every 60 s up to
   30 minutes. Treat persistent zero rows as a deployment problem — stop and report.
 - All rows `Successful` → proceed to Phase 5.

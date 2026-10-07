@@ -130,9 +130,10 @@ Before presenting the workflow, establish which org to use. Do this **every time
 
 2. **Ask for confirmation**: "Ready to begin the full Life Sciences Cloud setup? (yes/no)"
 
-3. **Download the shared source folder ONCE (MANDATORY — hard gate, before any stage).** Both Stage 2 (Starter Config Deploy — metadata + config records) and Stage 5 (Sample Visit Creation — Data CSVs) read from `.lsc-starter-config/LSStarterConfig/`; those stages do NOT download or delete it — the orchestrator owns a single download here and a single delete in Phase 8. Sparse-checkout only that subtree (the repo is large) into the CWD:
+3. **Download the shared source folder FRESH (MANDATORY — hard gate, before any stage).** Both Stage 2 (Starter Config Deploy — metadata + config records) and Stage 5 (Sample Visit Creation — Data CSVs) read from `.lsc-starter-config/LSStarterConfig/`; those stages do NOT download or delete it — the orchestrator owns one fresh download here and a single delete in Phase 8. **Always re-pull — never reuse an existing folder** (a stale copy could serve outdated CSVs, silently defeating Stage 5's "create strictly from the current CSV" rule, or skip newly added components). Delete any pre-existing `.lsc-starter-config` first, then sparse-checkout only that subtree (the repo is large) fresh into the CWD:
 
    ```bash
+   rm -rf .lsc-starter-config lsstarter-tmp
    git clone --no-checkout --depth 1 --filter=blob:none \
      https://github.com/SalesforceLabs/LSStarterConfig.git lsstarter-tmp
    cd lsstarter-tmp && git sparse-checkout init --cone \
@@ -140,7 +141,7 @@ Before presenting the workflow, establish which org to use. Do this **every time
    mv lsstarter-tmp/Codey ./.lsc-starter-config && rm -rf lsstarter-tmp
    ```
 
-   > `.lsc-starter-config/LSStarterConfig/` contains its own `sfdx-project.json` (pins `sourceApiVersion: 65.0`) — the deploy step (Phase 3) must run from inside it. If the folder already exists in the CWD (from a prior run), reuse it (skip the download).
+   > `.lsc-starter-config/LSStarterConfig/` contains its own `sfdx-project.json` (pins `sourceApiVersion: 65.0`) — the deploy step (Phase 3) must run from inside it.
 
 4. **Download gate — verify the folder exists before proceeding.** Confirm the download succeeded by checking that `.lsc-starter-config/LSStarterConfig/sfdx-project.json` and `.lsc-starter-config/LSStarterConfig/Data/` are present (e.g. `ls .lsc-starter-config/LSStarterConfig/sfdx-project.json .lsc-starter-config/LSStarterConfig/Data`).
    - If present → set `sourceFolderDownloaded: true` in `OrchestrationState` and proceed to Phase 2.

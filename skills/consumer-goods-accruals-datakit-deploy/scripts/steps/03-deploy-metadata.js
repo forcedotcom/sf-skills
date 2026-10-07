@@ -1,7 +1,4 @@
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const { exec, execDeployJson, execSfJson } = require('./utils');
+const { exec, execDeployJson, getSfBin } = require('./utils');
 
 /**
  * Step 3: Deploy TPM Accruals Data Kit metadata to the org
@@ -21,24 +18,10 @@ async function deployMetadata(orgAlias, dataKitPath, dryRun = false) {
     return;
   }
 
-  // Convert to MDAPI format first, then deploy via --metadata-dir.
-  // This bypasses SF CLI source-tracking ("NothingToDeploy" errors on non-scratch
-  // orgs where tracking state diverges from org reality).
-  const mdapiOut = path.join(os.tmpdir(), `tpm_accruals_mdapi_${Date.now()}`);
-  console.log('Converting source to MDAPI format...');
-  const convertResult = execSfJson(['project', 'convert', 'source', '--output-dir', mdapiOut, '--json'], { cwd: dataKitPath });
-  if (convertResult.status !== 0) {
-    throw new Error(`Source conversion failed: ${convertResult.message || JSON.stringify(convertResult)}`);
-  }
-  console.log(`Converted to: ${convertResult.result && convertResult.result.location || mdapiOut}`);
-
+  // Deploy using sf project deploy start from the data kit root so the
+  // sfdx-project.json sourceApiVersion is respected.
   console.log('Deploying metadata...');
-  execDeployJson(['project', 'deploy', 'start', '--metadata-dir', mdapiOut, '--target-org', orgAlias]);
-
-  // Clean up temp dir
-  try { fs.rmSync(mdapiOut, { recursive: true }); } catch (cleanupErr) {
-    console.warn(`[WARN] Could not remove temp directory ${mdapiOut}: ${cleanupErr.message}`);
-  }
+  execDeployJson(['project', 'deploy', 'start', '--source-dir', 'force-app', '--target-org', orgAlias], { cwd: dataKitPath });
 
   console.log('[OK] TPM Accruals Data Kit deployed successfully\n');
 }

@@ -3,7 +3,8 @@ name: consumer-goods-rtr-datacloud-export-configure
 description: "Configure a Trade Promotion Management (TPM) org's RTR (Real Time Reporting) export pipeline to push promotion measures into Data Cloud (Data 360) for Trade Promotion Effectiveness (TPE) dashboards. Use when a customer or admin wants to set up the RTR export for Data Cloud measures, configure the RTR report for TPE, or as a delegated step from consumer-goods-tpe-dashboard-configure."
 metadata:
   version: "1.0"
-  domains: ["Consumer Goods"]
+  domains:
+    - "Consumer Goods"
   relatedSkills:
     - "consumer-goods-tpe-dashboard-configure"
   cliTools:

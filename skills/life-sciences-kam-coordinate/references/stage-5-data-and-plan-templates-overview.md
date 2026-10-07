@@ -33,7 +33,16 @@ All Part A CSVs come from `.lsc-starter-config/LSStarterConfig/Data/`. This stag
 
 ## Workflow
 
-1. **Read the live CSV for each object** — never hardcode values from the reference table. Full field-by-field mapping: `references/stage-5-data-creation-data.md`.
+> **CSV-STRICT STOP-GATE (MANDATORY — do this before any `sf data create record` in Part A).** For each of the 8 CSV objects (Account, HealthcareProvider, ContactPointAddress, ObjectTerritory2Association, ProviderAcctTerritoryInfo, Product2, LifeSciMarketableProduct, ProductTerritoryAvailability) you MUST have `cat`-ed that object's `.lsc-starter-config/LSStarterConfig/Data/<object>.csv` **this run** and built `--values` **strictly from the row's columns** — one record per data row. If a CSV is absent, STOP and report it must be provisioned by the coordinator; do NOT fall back to remembered or reference-table values. The only values permitted that are **not** a literal CSV column are the closed set below — anything else is a violation.
+>
+> **Closed set of permitted non-CSV values** (Part A CSV objects only):
+> 1. **Runtime FK Ids** threaded from a prior create in this run (AccountId, ParentId, ProductId, PreferredAddressId, …).
+> 2. **Org-resolved lookup Ids from a CSV natural key** — the `Product2` `RecordTypeId` resolved in the target org via `RecordType WHERE SObjectType='Product2' AND DeveloperName='LSC_Sample'` (the CSV's `RecordTypeId` is a foreign Id from the export org — ignore it), and the product natural-key→Id map (key on `ProductCode`/`Name`) so each `LifeSciMarketableProduct`/`ProductTerritoryAvailability` row resolves its correct parent product.
+> 3. **The Stage-3 level-3 `territoryId`** (from `OrchestrationState.territoryId`) for `ObjectTerritory2Association.Territory2Id`, `ProviderAcctTerritoryInfo.Territory2Id`, and `ProductTerritoryAvailability.TerritoryId`.
+>
+> The **HCO "Partners Healthcare" bundle** below is a separate, intentional exception (explicit hardcoded values + its own `Health_Care_Organization` record types) — it is not one of these 8 CSV objects and this gate does not apply to it.
+
+1. **Read the live CSV for each object** — never hardcode values from the reference table; build `--values` from the row's columns at execution time. **Loop one record per CSV data row** — the product chain (`product2.csv`, `lifescimarketableproduct.csv`, `productterritoryavailability.csv`) may be multi-row, so create every row and thread the correct parent per row via the product natural-key→Id map (do not create just the first). Full field-by-field mapping: `references/stage-5-data-creation-data.md`.
 2. **Create the records in dependency order**, capturing each returned Id for downstream foreign keys:
 
    ```text
@@ -59,6 +68,8 @@ sf data query --query "SELECT Id, ProductId, TerritoryId FROM ProductTerritoryAv
 
 All three must return a record, and the `ProductTerritoryAvailability.TerritoryId` must equal the Stage-3 `territoryId`.
 
+**Reconciliation (MANDATORY).** For each of the 8 CSV objects, the number of records created this run must equal the data-row count in that object's CSV. The product chain (`product2.csv`, `lifescimarketableproduct.csv`, `productterritoryavailability.csv`) is potentially multi-row — verify none were dropped. If any count is short, STOP before Part B and report object / expected / actual; do not proceed with a partial data set.
+
 ## Part A Rules / Constraints
 
 | Constraint | Rationale |
@@ -66,6 +77,8 @@ All three must return a record, and the `ProductTerritoryAvailability.TerritoryI
 | Create everything as the admin | No end user exists until Stage 6 |
 | Do NOT create the Visit chain | KAM workflow has no visit data |
 | Read the live CSV; never hardcode | CSV values may change between runs |
+| **Build `--values` strictly from the row's CSV columns; only these non-CSV values are permitted** — (a) runtime FK Ids threaded from a prior create, (b) an org-resolved lookup Id from a CSV natural key (the `Product2` `RecordTypeId` via `DeveloperName='LSC_Sample'`, whose CSV value is a foreign Id, and the product natural-key→Id map), (c) the Stage-3 `territoryId`. Anything else is a violation. On recovery, re-`cat` the CSV — never resume from remembered/hardcoded values | The closed set keeps every field either CSV-sourced or a documented runtime/resolved Id; recovery must not reintroduce literals |
+| **Post-create reconciliation:** for each of the 8 CSV objects, records created this run == data rows in that object's CSV (the product chain is multi-row — verify none dropped); if short, STOP before Part B | Catches the "created 1 of N products" regression where only the first row is created |
 | Use the Stage-3 level-3 territory for all three territory FKs | The KAM user (Stage 6) is assigned this same territory; a mismatch hides all data |
 | Do NOT download or delete `.lsc-starter-config/` | Owned by the coordinator |
 
@@ -74,8 +87,8 @@ All three must return a record, and the `ProductTerritoryAvailability.TerritoryI
 | Issue | Resolution |
 |-------|------------|
 | `ProductTerritoryAvailability` created against the wrong territory | Re-create with `TerritoryId` = the Stage-3 `territoryId` (the one Stage 6 assigns to the user) |
-| Product2 create fails on `RecordTypeId` | Do NOT set `RecordTypeId` on Product2 — it takes no record type |
-| A create fails on an FLS-gated field | As admin this is rare; omit the offending non-required field and continue (see the per-object notes in the data reference) |
+| Product2 create fails on `RecordTypeId` | The value in `product2.csv` is a **foreign** Id from the export org — ignore it. Resolve the target org's `Product2` RecordType via `RecordType WHERE SObjectType='Product2' AND DeveloperName='LSC_Sample'` and set that Id |
+| A create fails on a field | Omit the offending non-required field and continue (see the per-object notes in the data reference) |
 | `INVALID_CROSS_REFERENCE_KEY` on an FK | The parent record Id wasn't captured — re-query the parent and retry |
 
 ---

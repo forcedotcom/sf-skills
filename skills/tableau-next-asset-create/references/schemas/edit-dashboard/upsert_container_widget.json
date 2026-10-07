@@ -1,0 +1,88 @@
+{
+  "title": "upsert_container_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_container_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete container (layout grouping) widget definition for create or full replacement. Omitted fields are dropped on replacement. Styling lives under parameters.widgetStyle. An optional backgroundSource sets a background image asset { id, name }. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "container" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"container_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions (navigate, run a flow, set a parameter, set a filter, record action). Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "backgroundSource": {
+          "type": "object",
+          "description": "Optional background image asset reference.",
+          "properties": {
+            "id": { "type": "string", "description": "Asset record id." },
+            "name": { "type": "string", "description": "Asset apiName." }
+          }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Container widget parameters. widgetStyle carries the container's fill, border, and background-image styling.",
+          "properties": {
+            "widgetStyle": {
+              "type": "object",
+              "description": "Container styling.",
+              "properties": {
+                "backgroundColor": { "type": "string", "description": "Background fill color hex, e.g. \"#F3F3F3\"." },
+                "borderColor": { "type": "string", "description": "Border color hex." },
+                "borderWidth": { "type": "integer", "description": "Border width in px." },
+                "borderRadius": { "type": "integer", "description": "Border corner radius in px." },
+                "borderEdges": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Which edges show a border, e.g. [\"top\", \"bottom\", \"left\", \"right\"]."
+                },
+                "background": {
+                  "type": "object",
+                  "description": "Background-image styling (applies to backgroundSource).",
+                  "properties": {
+                    "alignmentX": { "type": "string", "description": "Horizontal alignment of the background image." },
+                    "alignmentY": { "type": "string", "description": "Vertical alignment of the background image." },
+                    "imageScale": {
+                      "type": "string",
+                      "enum": ["fitToWidth", "fitToHeight", "fill", "original"],
+                      "description": "Background image scale mode."
+                    },
+                    "opacity": { "type": "integer", "description": "Background image opacity 0-100." }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_container_widget",
+    "widget": {
+      "type": "container",
+      "name": "container_1",
+      "label": "KPI group"
+    }
+  }
+}

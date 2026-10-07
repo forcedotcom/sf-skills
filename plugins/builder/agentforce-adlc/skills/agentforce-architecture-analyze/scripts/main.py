@@ -46,7 +46,12 @@ from config import (
     build_agent_data_dir,
 )
 from rest_client import RestClientError, redact_error
-from sf_cli import AuthRequired, SfCliError, run_sf
+from sf_cli import (
+    AuthRequired,
+    SfCliError,
+    assert_show_access_token_capability,
+    run_sf,
+)
 from soql_loader import SoqlParamError
 
 # Phase 2 Batch 1 imports — functional pipeline primitives.
@@ -180,9 +185,12 @@ def _build_creds_plumbing(
     on every call so a refresh actually lands in the NEXT SOQL attempt.
     `refresh_fn` is serialized by an internal `threading.Lock` + a
     `time.monotonic()` dedupe window — N concurrent 401s against the same
-    stale token collapse to ONE `resolve_creds()` spawn per window. That
-    caps real `sf org display` spawns at roughly 1/second regardless of
-    pool size.
+    stale token collapse to ONE `resolve_creds()` call per window. The
+    window is stamped when `resolve_creds()` RETURNS, so waiters queued
+    behind a slow refresh (several sf CLI spawns: `sf org display` +
+    `sf org auth show-access-token`) reuse its result instead of
+    re-refreshing. That caps full credential refreshes at roughly one per
+    window regardless of pool size.
 
     Extracted from `main()` so the closure is testable without threading
     a whole pipeline run through argparse + mocks.
@@ -205,7 +213,9 @@ def _build_creds_plumbing(
                 # Another thread refreshed within the dedupe window — reuse.
                 return creds_cell[0]
             creds_cell[0] = resolve_creds()
-            last_refresh_mono[0] = now
+            # Stamp AFTER the (possibly slow) refresh so threads that queued
+            # on the lock during it fall inside the window and reuse it.
+            last_refresh_mono[0] = time.monotonic()
             return creds_cell[0]
 
     return creds_provider, refresh_fn, creds_cell
@@ -222,25 +232,25 @@ been stable since cli#3560 landed."""
 def _resolve_creds(org_alias: str) -> Tuple[str, str]:
     """Resolve (instance_url, access_token) for ``org_alias``.
 
-    Two-path strategy per forcedotcom/cli#3560 (effective 2026-05-27):
-
-      1. **Primary** — call ``sf org display`` for instanceUrl, then
-         ``sf org auth show-access-token`` for the access token. This is
-         the upstream long-term path; ``SF_TEMP_SHOW_SECRETS`` is
-         decommissioned in summer 2026.
-      2. **Fallback** — if the dedicated command isn't shipped in the
-         installed sf CLI version (older releases), fall back to the
-         legacy ``sf org display --verbose`` with the
-         ``SF_TEMP_SHOW_SECRETS=true`` env var that ``run_sf`` injects
-         unconditionally. The fallback is detected by the redaction
-         placeholder appearing in the ``accessToken`` field — exact match
-         on the substring ``show-access-token`` (see
-         ``_REDACTION_MARKER_FRAGMENT``).
+    Runtime token retrieval is fail-fast (forcedotcom/cli#3560): the
+    access token comes ONLY from ``sf org auth show-access-token``.
+    ``sf org display`` is still used for non-secret metadata
+    (instanceUrl). A missing command, an empty token, or the redaction
+    placeholder (see ``_REDACTION_MARKER_FRAGMENT``) all raise
+    ``AuthRequired``.
 
     sf_cli.run_sf already redacts stderr on failure paths. Any
     exception surfaces as `AuthRequired` / `SfCliError`; caller routes
     through `_emit_fail`.
     """
+    # Capability preflight first (cached once it passes, see sf_cli) so a
+    # missing sf binary / command surfaces the actionable preflight error
+    # rather than a generic spawn failure from `sf org display`.
+    try:
+        assert_show_access_token_capability()
+    except SfCliError as exc:
+        raise AuthRequired(str(exc)) from exc
+
     display_data = run_sf("org_display", ORG_ALIAS=org_alias)
     display_result = display_data.get("result") or {}
     instance_url = display_result.get("instanceUrl") or ""
@@ -249,37 +259,23 @@ def _resolve_creds(org_alias: str) -> Tuple[str, str]:
             "sf org display returned an incomplete payload (missing instanceUrl)"
         )
 
-    # Primary path: dedicated command. Catches both the unknown-command
-    # case (older sf CLI) and any AuthRequired surfaced from the recipe.
     try:
         token_data = run_sf("show_access_token", ORG_ALIAS=org_alias)
-    except SfCliError:
-        # Older sf CLI versions emit "is not a sf command" on stderr; the
-        # recipe surfaces that as SfCliError. Fall back to the
-        # SF_TEMP_SHOW_SECRETS path via the org_display payload we
-        # already have.
-        access_token = display_result.get("accessToken") or ""
-    else:
-        token_result = token_data.get("result") or {}
-        access_token = token_result.get("accessToken") or ""
+    except (SfCliError, AuthRequired) as exc:
+        raise AuthRequired(
+            "could not retrieve access token via sf org auth "
+            "show-access-token; ensure sf CLI is logged in for this org "
+            f"and supports the dedicated command. Detail: {exc}"
+        ) from exc
 
-    # Defensive fallback: if the dedicated command silently returned an
-    # empty token OR sf CLI redacted the org_display token to the
-    # placeholder, try the org_display payload directly. SF_TEMP_SHOW_SECRETS
-    # is set unconditionally by run_sf so this works as long as the env
-    # var is still honoured by the installed sf CLI.
-    if not access_token or _REDACTION_MARKER_FRAGMENT in access_token:
-        legacy_token = display_result.get("accessToken") or ""
-        if legacy_token and _REDACTION_MARKER_FRAGMENT not in legacy_token:
-            access_token = legacy_token
+    token_result = token_data.get("result") or {}
+    access_token = token_result.get("accessToken") or ""
 
     if not access_token or _REDACTION_MARKER_FRAGMENT in access_token:
         raise AuthRequired(
             "could not retrieve a usable access token via sf org auth "
-            "show-access-token (primary) or sf org display (fallback); "
-            "ensure sf CLI is logged in for this org and either the "
-            "dedicated command is available or SF_TEMP_SHOW_SECRETS is "
-            "still honoured."
+            "show-access-token; ensure sf CLI is logged in for this org "
+            "and the command returned a real token."
         )
 
     return instance_url, access_token

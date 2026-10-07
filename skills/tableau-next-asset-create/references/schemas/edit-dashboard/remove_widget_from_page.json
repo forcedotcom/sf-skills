@@ -1,0 +1,26 @@
+{
+  "title": "remove_widget_from_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "pageName", "placement"],
+  "properties": {
+    "operation": { "const": "remove_widget_from_page" },
+    "pageName": { "type": "string", "description": "Dev name of the page to remove the widget placement from." },
+    "placement": {
+      "type": "object",
+      "description": "Identifies the placement to remove by widget name.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional placement id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Name of the widget whose placement is removed from this page." },
+        "label": { "type": "string", "description": "Optional placement-level label (not required to identify the placement — name is sufficient)." },
+        "description": { "type": "string", "description": "Optional placement-level description." }
+      }
+    }
+  },
+  "example": {
+    "operation": "remove_widget_from_page",
+    "pageName": "page_1",
+    "placement": { "name": "text_1" }
+  }
+}

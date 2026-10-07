@@ -4,7 +4,8 @@ description: "Deploy the TPM Accruals Data Kit components specifically required 
 metadata:
   version: "1.0"
   minApiVersion: "67.0"
-  domains: ["Consumer Goods"]
+  domains:
+    - "Consumer Goods"
   relatedSkills:
     - "consumer-goods-tpe-dashboard-configure"
   cliTools:

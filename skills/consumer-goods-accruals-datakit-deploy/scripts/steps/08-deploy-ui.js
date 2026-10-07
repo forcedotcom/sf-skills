@@ -1,9 +1,9 @@
 const { execFileSync } = require('child_process');
 const fs = require('fs');
-const os = require('os');
+
 const path = require('path');
 
-const { exec, execDeployJson, execSfJson, getSfBin } = require('./utils');
+const { exec, execDeployJson, getSfBin } = require('./utils');
 
 
 
@@ -53,8 +53,7 @@ async function deployUI(orgAlias, setupDir, skipDataSpace, configuredDataSpaceNa
 
 
 
-  // setupDir is already the CGCloudAddons extraction dir (e.g. <tmp>/CGCloudAddons)
-  const sourceDir = path.join(setupDir, 'TPM', 'Accruals', 'UI');
+  const sourceDir = path.join(setupDir, 'CGCloudAddons', 'TPM', 'Accruals', 'UI');
 
   const tempDir = path.join(setupDir, 'temp-ui');
 
@@ -104,32 +103,17 @@ async function deployUI(orgAlias, setupDir, skipDataSpace, configuredDataSpaceNa
 
 
 
-  // Convert to MDAPI format to bypass source-tracking "NothingToDeploy" on non-scratch orgs.
-  const mdapiOut = path.join(os.tmpdir(), `tpm_accruals_ui_mdapi_${Date.now()}`);
-  console.log('Converting UI source to MDAPI format...');
-  const convertResult = execSfJson(['project', 'convert', 'source', '--output-dir', mdapiOut, '--json'], { cwd: tempDir });
-  if (convertResult.status !== 0) {
-    console.warn(`[WARN] UI source conversion failed: ${convertResult.message || JSON.stringify(convertResult)}`);
-    console.warn('[WARN] Skipping UI deployment — source conversion error.');
-    return;
-  }
-
   console.log('Deploying UI components metadata...');
-  try {
-    execDeployJson(['project', 'deploy', 'start', '--metadata-dir', mdapiOut, '--target-org', orgAlias]);
-  } catch (err) {
-    console.warn(`[WARN] UI deployment failed: ${err.message}`);
-    console.warn('[WARN] Skipping UI deployment — see warning above.');
-    return;
-  } finally {
-    try { fs.rmSync(mdapiOut, { recursive: true }); } catch (_) {}
-  }
+
+  execDeployJson(['project', 'deploy', 'start', '--source-dir', deployPath, '--target-org', orgAlias]);
+
+
 
   // Clean up temp directory
 
   console.log('Cleaning up temp directory...');
 
-  try { fs.rmSync(tempDir, { recursive: true }); } catch (_) {}
+  fs.rmSync(tempDir, { recursive: true });
 
 
 
@@ -414,3 +398,4 @@ function replaceInFile(filePath, dataSpaceName, dataSpacePrefix, salesOrg, names
 
 
 module.exports = deployUI;
+

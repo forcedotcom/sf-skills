@@ -174,7 +174,7 @@ preserves these but flags for offline-priming verification.
 | Legacy parameter | DC parameter | Notes |
 |---|---|---|
 | `label` | `label` | Direct map for ComponentInstance fields |
-| `required` | Field-level `<isRequired>` | Moved from parameter to field attribute |
+| `required` | Field-level `<isRequired>` **and** a `required` inputParameter | `ComponentInstance` fields read required-ness from the inputParameter at DC runtime, not `<isRequired>` alone — transformer emits both. Exception: `dcCheckbox`/`dcToggle` don't expose a `required` input attribute; only `<isRequired>` is set for those. |
 | `placeholder` | *(not supported)* | Bake into label text |
 | `disabled` / `readOnly` | `isDisabled` / `isReadonly` | Available on some DC components |
 | `helpText` | *(not supported)* | Bake into label or use DisplayText |

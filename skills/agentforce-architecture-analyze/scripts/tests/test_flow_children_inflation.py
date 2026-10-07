@@ -244,6 +244,7 @@ def _mock_auth_probe():
     }
     return [
         mock.patch.object(main, "run_sf", return_value=org_display_payload),
+        mock.patch.object(main, "assert_show_access_token_capability"),
         mock.patch.object(main, "probe_channels", return_value=fx.probe_ok_payload()),
     ]
 

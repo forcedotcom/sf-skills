@@ -1,0 +1,69 @@
+{
+  "title": "upsert_button_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_button_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete button widget definition for create or full replacement. Omitted fields are dropped on replacement. No data source. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "button" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"button_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions (navigate, run a flow, set a parameter, set a filter, record action) — the button's primary use case. Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Button widget parameters.",
+          "properties": {
+            "text": { "type": "string", "description": "Button caption, e.g. \"View Details\"." },
+            "alignmentX": { "type": "string", "description": "Horizontal text alignment, e.g. \"center\"." },
+            "alignmentY": { "type": "string", "description": "Vertical text alignment, e.g. \"middle\"." },
+            "fontSize": { "type": "integer", "description": "Font size, e.g. 14." },
+            "symbol": {
+              "type": "object",
+              "description": "Optional icon shown alongside the caption.",
+              "properties": {
+                "name": { "type": "string", "description": "Icon name." },
+                "position": { "type": "string", "description": "Icon position relative to the caption, e.g. \"left\"." }
+              }
+            },
+            "widgetStyle": { "type": "object", "description": "ButtonStyle (WidgetStyle + fontColor/textStyle). Full shape: _shared-widget-fields.json#/styleBlocks/ButtonStyle." },
+            "hoverStyle": { "type": "object", "description": "ButtonStyle applied on hover. Full shape: _shared-widget-fields.json#/styleBlocks/ButtonStyle." }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_button_widget",
+    "widget": {
+      "type": "button",
+      "name": "button_1",
+      "parameters": {
+        "text": "View Details",
+        "alignmentX": "center",
+        "alignmentY": "middle"
+      }
+    }
+  }
+}

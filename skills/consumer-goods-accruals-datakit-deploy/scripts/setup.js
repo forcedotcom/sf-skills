@@ -179,16 +179,7 @@ function getConfig() {
  * @param {string} salesOrg - Must be exactly 4 alphanumeric characters.
  * @param {string|null} namespaceOverride - When non-null, must be 1-15 alphanumeric characters.
  */
-function validateInputs(salesOrg, namespaceOverride, orgAlias) {
-  // Org alias: Salesforce allows alphanumeric, hyphens, underscores, dots, and @ (usernames).
-  // Restrict to safe characters to prevent shell metacharacter injection on Windows cmd.exe.
-  // Allow alphanumeric, hyphens, underscores, dots, @, and + (valid in Salesforce usernames, e.g. user+ci@example.com).
-  // None of these characters are cmd.exe metacharacters, so shell injection via org alias is prevented.
-  if (!/^[A-Za-z0-9_\-@.+]+$/.test(orgAlias)) {
-    console.error(`Error: Invalid org alias "${orgAlias}". Must contain only alphanumeric characters, hyphens, underscores, dots, @, or +.`);
-    process.exit(1);
-  }
-
+function validateInputs(salesOrg, namespaceOverride) {
   if (!/^[A-Za-z0-9]{4}$/.test(salesOrg)) {
     console.error('Error: Invalid sales org.');
     process.exit(1);
@@ -232,7 +223,7 @@ async function main() {
   const { orgAlias, skipDataSpace, salesOrg, dryRun, namespaceOverride } = config;
 
   // Validate inputs before any org access or step execution
-  validateInputs(salesOrg, namespaceOverride, orgAlias);
+  validateInputs(salesOrg, namespaceOverride);
 
   const { dataSpaceName, dataSpacePrefix } = getDataSpaceConfig(salesOrg);
 
@@ -274,6 +265,8 @@ async function main() {
   }
 
   const setupDir = __dirname;
+  const dataKitPath = path.join(setupDir, 'CGCloudAddons', 'TPM', 'Accruals', 'TPM Accruals Data Kit');
+  const scriptsDir = path.join(setupDir, 'CGCloudAddons', 'TPM', 'Accruals', 'Accruals Data Kit Deployment Scripts');
 
   console.log(`Sales Org: ${salesOrg}`);
   if (!skipDataSpace) {
@@ -289,10 +282,7 @@ async function main() {
   }
 
   // Run all steps in order
-  // Step 1 returns the extraction dir; derive dataKitPath and scriptsDir from it.
-  const cgcloudAddonsDir = await downloadStaticResource(orgAlias, setupDir);
-  const dataKitPath = path.join(cgcloudAddonsDir, 'TPM', 'Accruals', 'TPM Accruals Data Kit');
-  const scriptsDir = path.join(cgcloudAddonsDir, 'TPM', 'Accruals', 'Accruals Data Kit Deployment Scripts');
+  await downloadStaticResource(orgAlias, setupDir);
   await replaceOrgId(orgId, dataKitPath);
   await deployMetadata(orgAlias, dataKitPath, dryRun);
   await deployEngine(orgAlias, scriptsDir, orgId, namespace, dryRun);
@@ -306,10 +296,10 @@ async function main() {
   }
 
   // Step 7: Deploy Accruals Reports with Data Space replacements
-  await deployAccrualsReports(orgAlias, cgcloudAddonsDir, skipDataSpace, dataSpaceName, dataSpacePrefix, namespace, dryRun);
+  await deployAccrualsReports(orgAlias, setupDir, skipDataSpace, dataSpaceName, dataSpacePrefix, namespace, dryRun);
 
   // Step 8: Deploy UI components (TPMAccrualTacticSummary)
-  await deployUI(orgAlias, cgcloudAddonsDir, skipDataSpace, dataSpaceName, dataSpacePrefix, salesOrg, namespace, dryRun);
+  await deployUI(orgAlias, setupDir, skipDataSpace, dataSpaceName, dataSpacePrefix, salesOrg, namespace, dryRun);
 
   // Step 9: Completion and next steps
   await completion(dryRun);

@@ -67,46 +67,54 @@ Maintain a creation state throughout the workflow (target org, rep username/alia
 
 3. **Verify the login** succeeded with `sf org display --target-org lsc-rep --json` and confirm the username matches the expected sales rep.
 
+> **STOP-GATE — CSV-strict creation (MANDATORY; applies to every create in Steps 2–13).** Before creating any record for an object you MUST have `cat`-ed that object's CSV **this run** (`.lsc-starter-config/LSStarterConfig/Data/<object>.csv` — mapping in `references/stage-5-visit-creation-visit-creation-data.md`). Then:
+> 1. **One record per data row.** Iterate every data row in the CSV; never create a single fixed record when the CSV holds more. The product CSVs (`product2.csv`, `lifescimarketableproduct.csv`, `productterritoryavailability.csv`, and the per-product detailing/discussion) in particular may carry **multiple rows** — creating only the first silently drops the rest.
+> 2. **Build `--values` only from that row's columns.** Read each value from the live CSV cell. Do NOT paste values from this document, from the tables in `references/stage-5-visit-creation-visit-creation-data.md`, or from a prior run.
+> 3. **Only these non-CSV values are permitted** (anything else = violation): (a) runtime FK IDs threaded from a prior step's create, (b) an org-resolved ID (`RecordTypeId` — including the Product2 RecordType resolved in the target org via `DeveloperName='LSC_Sample'`, whose CSV `RecordTypeId` is a foreign Id — `Territory2Id`, and the Product2/LifeSciMarketableProduct IDs in the product natural-key map — see Phase 3), (c) the generated `PlannedVisitStartTime` (Step 10, `NOW`).
+> 4. **If a required CSV is absent → STOP** and report the missing file. Do NOT fall back to remembered or example values.
+>
+> The literal field values shown in the Step commands below are **placeholders for shape only** — intentionally not runnable data. Substitute the live CSV row. A **post-create reconciliation** (after Step 13) checks that records created per object == CSV data rows.
+
 ### Phase 2 — Create Account and Provider Records (Steps 2–6)
 
 > **Rep vs. Admin ownership (important):** The LSC Custom Profile can create the Account, HealthcareProvider, ContactPointAddress, ProviderAcctTerritoryInfo, and the whole Visit chain (Steps 10–13) — but NOT territory associations (Step 5) or product master data (Steps 7–9). Create those as the admin (`--target-org <admin>`), then switch back to the rep. This split is expected: territory associations and products are admin-managed data.
 
-**Step 2: Create Account (RecordType = Health_Care_Provider)**
+**Step 2: Create Account (one per row in `account.csv`)**
 
-First, query the RecordType ID:
+`cat .lsc-starter-config/LSStarterConfig/Data/account.csv` first. For each data row, resolve its `RecordType` DeveloperName to an ID:
 ```bash
-sf data query --query "SELECT Id FROM RecordType WHERE SObjectType='Account' AND DeveloperName='Health_Care_Provider'" --target-org lsc-rep --json
+sf data query --query "SELECT Id FROM RecordType WHERE SObjectType='Account' AND DeveloperName='<row RecordType DeveloperName>'" --target-org lsc-rep --json
 ```
 
-Then create the Account:
+Then create **one Account per data row**, building `--values` only from that row's columns (map `RecordType` → resolved `RecordTypeId`):
 ```bash
-sf data create record --sobject Account --values "FirstName='Aaron' LastName='Morita' Salutation='Dr.' RecordTypeId='<recordTypeId>' IsActive=true" --target-org lsc-rep --json
+sf data create record --sobject Account --values "<one Col='row value' pair per account.csv column; RecordTypeId='<resolved>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `account.csv` — Name=Aaron Morita, Salutation=Dr., RecordType=Health_Care_Provider.
-> The active flag is the standard `IsActive` field (boolean) — NOT `IsActive__c`. If the rep lacks FLS to it, omit it and have an admin set it afterward.
+> Use only the row's live CSV values — never the illustrative names in `references/stage-5-visit-creation-visit-creation-data.md`.
 
-**Step 3: Create HealthcareProvider**
+**Step 3: Create HealthcareProvider (one per row in `healthcareprovider.csv`)**
 
 First, query the HealthcareProvider RecordType ID:
 ```bash
 sf data query --query "SELECT Id FROM RecordType WHERE SObjectType='HealthcareProvider' AND DeveloperName != null LIMIT 1" --target-org lsc-rep --json
 ```
 
-Then create:
+`cat .lsc-starter-config/LSStarterConfig/Data/healthcareprovider.csv`, then create **one HealthcareProvider per data row** (`AccountId` = the matching Account from Step 2, `RecordTypeId` = resolved):
 ```bash
-sf data create record --sobject HealthcareProvider --values "AccountId='<accountId>' IsActive=true IsPrimaryProvider=true Name='Aaron Morita HP' ProviderType='Medical Doctor' Status='Active' RecordTypeId='<hcpRecordTypeId>'" --target-org lsc-rep --json
+sf data create record --sobject HealthcareProvider --values "<one Col='row value' pair per healthcareprovider.csv column; AccountId='<accountId>' RecordTypeId='<hcpRecordTypeId>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `healthcareprovider.csv` — ProviderType=Medical Doctor, Status=Active. Do NOT set `NationalProviderIdentifier` or `IsSpeaker` — they (and `IsActive`) are FLS-gated on the LSC Custom Profile, so as the rep the create fails with `INVALID_FIELD`. Omit NPI/IsSpeaker (an admin can set them later).
+> Use only the row's live CSV values.
 
-**Step 4: Create ContactPointAddress**
+**Step 4: Create ContactPointAddress (one per row in `contactpointaddress.csv`)**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/contactpointaddress.csv`, then create **one ContactPointAddress per data row** (`ParentId` = the matching Account from Step 2):
 ```bash
-sf data create record --sobject ContactPointAddress --values "ParentId='<accountId>' AddressType='Billing' Name='415 Mission St' Street='415 Mission St' City='San Francisco' State='California' StateCode='CA' PostalCode='94105' Country='United States' CountryCode='US' Latitude=37.789853 Longitude=-122.396806 IsActive=true IsPrimary=true UsageType='Work'" --target-org lsc-rep --json
+sf data create record --sobject ContactPointAddress --values "<one Col='row value' pair per contactpointaddress.csv column; ParentId='<accountId>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `contactpointaddress.csv` — 415 Mission St, San Francisco, CA 94105
+> Use only the row's live CSV values — never the illustrative address in `references/stage-5-visit-creation-visit-creation-data.md`.
 
 **Step 5: Create ObjectTerritory2Association — as ADMIN**
 
@@ -115,91 +123,106 @@ First, query the level-3 territory ID:
 sf data query --query "SELECT Id, Name FROM Territory2 WHERE Territory2Model.State='Active' AND ParentTerritory2.ParentTerritory2Id != null" --target-org <admin> --json
 ```
 
-Then create it **as the admin** — the rep profile lacks "Manage Territories", so as the rep this fails with `entity type cannot be inserted: Object Territory Association` (describe reports `createable=false` for the rep). As the admin it is `createable=true`:
+`cat .lsc-starter-config/LSStarterConfig/Data/objectterritory2association.csv`, then create it **as the admin** — the rep profile lacks "Manage Territories", so as the rep this fails with `entity type cannot be inserted: Object Territory Association` (describe reports `createable=false` for the rep). As the admin it is `createable=true`. Create **one per data row** (`ObjectId` = the matching Account, `Territory2Id` = the queried level-3 territory):
 ```bash
-sf data create record --sobject ObjectTerritory2Association --values "ObjectId='<accountId>' Territory2Id='<territory2Id>' AssociationCause='Territory2Manual'" --target-org <admin> --json
+sf data create record --sobject ObjectTerritory2Association --values "<one Col='row value' pair per objectterritory2association.csv column; ObjectId='<accountId>' Territory2Id='<territory2Id>'>" --target-org <admin> --json
 ```
 
-> Reference: `objectterritory2association.csv` — AssociationCause=Territory2Manual. This is an admin-managed record, not referenced by any later record (the Visit gets its territory from its own `TerritoryId`, Step 10; the account↔territory link is carried by ProviderAcctTerritoryInfo, Step 6). If admin access is unavailable, it may be skipped without breaking the visit.
+> Use only the row's live CSV values. This is an admin-managed record, not referenced by any later record (the Visit gets its territory from its own `TerritoryId`, Step 10; the account↔territory link is carried by ProviderAcctTerritoryInfo, Step 6). If admin access is unavailable, it may be skipped without breaking the visit.
 
-**Step 6: Create ProviderAcctTerritoryInfo**
+**Step 6: Create ProviderAcctTerritoryInfo (one per row in `provideracctterritoryinfo.csv`)**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/provideracctterritoryinfo.csv`, then create **one per data row** (`AccountId` = matching Account, `Territory2Id` = queried level-3 territory, `PreferredAddressId` = the ContactPointAddress from Step 4):
 ```bash
-sf data create record --sobject ProviderAcctTerritoryInfo --values "AccountId='<accountId>' Territory2Id='<territory2Id>' PreferredAddressId='<contactPointAddressId>' IsActive=true IsAvailableOffline=true IsTargetedAccount=true SourceType='Manual'" --target-org lsc-rep --json
+sf data create record --sobject ProviderAcctTerritoryInfo --values "<one Col='row value' pair per provideracctterritoryinfo.csv column; AccountId='<accountId>' Territory2Id='<territory2Id>' PreferredAddressId='<contactPointAddressId>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `provideracctterritoryinfo.csv` — IsTargetedAccount=true, SourceType=Manual
+> Use only the row's live CSV values.
 
 ### Phase 3 — Create Product Records (Steps 7–9) — as ADMIN
 
 Products are master data. The rep's LSC Custom Profile has NO create permission on `Product2` / `LifeSciMarketableProduct` (as the rep, even `Name` reports `createable=false` and `Product2.ProductCode` is not visible), and `ProductTerritoryAvailability` also fails as the rep. Create all three **as the admin** (`--target-org <admin>`). If your rep genuinely must own products, grant the profile Create + field access first — but the default and recommended path is admin.
 
-**Step 7: Create Product2 (no RecordType) — as ADMIN**
+> **Product chain is multi-row — build a natural-key → ID map.** `product2.csv` may hold several products; each downstream row must resolve to the **correct** parent, not a single threaded ID. As you create Step 7 and Step 8 records, keep two lookup maps: **`ProductCode → Product2Id`** (from Step 7) and **`ProductCode (or Name) → LifeSciMarketableProductId`** (from Step 8). Steps 8, 9, and 12 use the CSV row's natural key (`ProductCode`/`Name`) to look up the right ID in these maps — never assume one product.
 
+**Step 7: Create Product2 (one per row in `product2.csv`) — as ADMIN**
+
+First, resolve the Product2 RecordType Id **in the target org** — the `RecordTypeId` in `product2.csv` is a foreign Id from the export org and must not be used:
 ```bash
-sf data create record --sobject Product2 --values "Name='Immunexis 5mg' ProductCode='IM001-5' IsActive=true" --target-org <admin> --json
+sf data query --query "SELECT Id FROM RecordType WHERE SObjectType='Product2' AND DeveloperName='LSC_Sample'" --target-org <admin> --json
 ```
 
-> Reference: `product2.csv` — Do NOT set a RecordType.
-
-**Step 8: Create LifeSciMarketableProduct — as ADMIN**
-
+`cat .lsc-starter-config/LSStarterConfig/Data/product2.csv`, then create **one Product2 per data row** (set `RecordTypeId` = the resolved `LSC_Sample` Id, NOT the CSV's foreign value); record each `ProductCode → Product2Id` in the map:
 ```bash
-sf data create record --sobject LifeSciMarketableProduct --values "Name='Immunexis 5mg' ProductId='<product2Id>' IsActive=true IsAvlForSamplingAllocation=true Manufacturer='Makana Health' DistributionMethod='Drop' SignatureRequirementLevel='Mandatory' SortOrder=100 StartDate=2026-07-01 Type='Product'" --target-org <admin> --json
+sf data create record --sobject Product2 --values "<one Col='row value' pair per product2.csv column except RecordTypeId; RecordTypeId='<resolved LSC_Sample Id>'>" --target-org <admin> --json
 ```
 
-> Reference: `lifescimarketableproduct.csv` — Manufacturer=Makana Health, DistributionMethod=Drop
+> Use only the row's live CSV values, except `RecordTypeId` — that is the org-resolved `LSC_Sample` Id; the CSV's `RecordTypeId` column is a foreign Id and must be ignored.
 
-**Step 9: Create ProductTerritoryAvailability — as ADMIN**
+**Step 8: Create LifeSciMarketableProduct (one per row in `lifescimarketableproduct.csv`) — as ADMIN**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/lifescimarketableproduct.csv`, then create **one per data row**; set `ProductId` by looking up the row's product natural key in the Step 7 map. Record each `ProductCode`/`Name` → `LifeSciMarketableProductId` in the map:
 ```bash
-sf data create record --sobject ProductTerritoryAvailability --values "ProductId='<lifeSciMarketableProductId>' TerritoryId='<territory2Id>' AlignmentType='Territory Inclusion' Purpose='Visit' Status='Draft' UsageType='LifeSciences'" --target-org <admin> --json
+sf data create record --sobject LifeSciMarketableProduct --values "<one Col='row value' pair per lifescimarketableproduct.csv column; ProductId='<matched product2Id>'>" --target-org <admin> --json
 ```
 
-> Reference: `productterritoryavailability.csv` — AlignmentType=Territory Inclusion, Purpose=Visit. After Step 9, switch back to the rep (`--target-org lsc-rep`) for the Visit chain (Steps 10–13) so the visit records are rep-owned.
+> Use only the row's live CSV values.
+
+**Step 9: Create ProductTerritoryAvailability (one per row in `productterritoryavailability.csv`) — as ADMIN**
+
+`cat .lsc-starter-config/LSStarterConfig/Data/productterritoryavailability.csv`, then create **one per data row**; set `ProductId` from the Step 8 LifeSciMarketableProduct map (matched on the row's product natural key), `TerritoryId` = queried level-3 territory:
+```bash
+sf data create record --sobject ProductTerritoryAvailability --values "<one Col='row value' pair per productterritoryavailability.csv column; ProductId='<matched lifeSciMarketableProductId>' TerritoryId='<territory2Id>'>" --target-org <admin> --json
+```
+
+> Use only the row's live CSV values. After Step 9, switch back to the rep (`--target-org lsc-rep`) for the Visit chain (Steps 10–13) so the visit records are rep-owned.
 
 ### Phase 4 — Create Visit Records (Steps 10–13)
 
 > **STOP-GATE (chain integrity).** Steps 10–13 are a strict dependency chain — each `sf data create record` returns an `id` that is a required input to the next step. After **every** create in this stage (Steps 2–13), confirm the response has `"success": true` and capture the real returned `id`. If any create fails, **STOP immediately** — do NOT continue with a null, empty, or placeholder ID (that produces an orphaned or mis-parented record chain that looks created but is broken). Report which step failed and its error. After Step 13, verify the full chain resolves: the ProviderVisitProdDiscussion → ProviderVisitProdDetailing → ProviderVisit → Visit → Account links must all be non-null.
 
-**Step 10: Create Visit (PlannedVisitStartTime = NOW)**
+**Step 10: Create Visit (one per row in `visit.csv`; PlannedVisitStartTime = NOW)**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/visit.csv`, then create **one Visit per data row** (`AccountId` = matching Account, `PlaceId` = ContactPointAddress from Step 4, `TerritoryId` = queried level-3 territory):
 ```bash
-sf data create record --sobject Visit --values "AccountId='<accountId>' PlaceId='<contactPointAddressId>' PlannedVisitStartTime='<NOW_ISO8601>' Status='Planned' TerritoryId='<territory2Id>'" --target-org lsc-rep --json
+sf data create record --sobject Visit --values "<one Col='row value' pair per visit.csv column; AccountId='<accountId>' PlaceId='<contactPointAddressId>' TerritoryId='<territory2Id>' PlannedVisitStartTime='<NOW_ISO8601>'>" --target-org lsc-rep --json
 ```
 
-> `<NOW_ISO8601>` = current datetime in ISO 8601 (e.g. `2026-08-01T10:30:00.000+0000`), generated at execution time with `date -u +"%Y-%m-%dT%H:%M:%S.000+0000"`.
->
-> Reference: `visit.csv` — Status=Planned, linked to Account, Place, and Territory
+> `<NOW_ISO8601>` = current datetime in ISO 8601 (e.g. `2026-08-01T10:30:00.000+0000`), generated at execution time with `date -u +"%Y-%m-%dT%H:%M:%S.000+0000"`. Keep `PlannedVisitStartTime` = NOW even if the CSV carries a date — a past date risks the visit not syncing to the iPad app. Use only the row's live CSV values for the other columns.
 
-**Step 11: Create ProviderVisit**
+**Step 11: Create ProviderVisit (one per row in `providervisit.csv`)**
 
 First, query the territory name:
 ```bash
 sf data query --query "SELECT Name FROM Territory2 WHERE Id='<territory2Id>'" --target-org lsc-rep --json
 ```
 
-Then create:
+`cat .lsc-starter-config/LSStarterConfig/Data/providervisit.csv`, then create **one per data row** (`VisitId` = the matching Visit from Step 10; `TerritoryName` = the queried territory Name):
 ```bash
-sf data create record --sobject ProviderVisit --values "VisitId='<visitId>' TerritoryName='<territoryName>' IsConfirmed=false" --target-org lsc-rep --json
+sf data create record --sobject ProviderVisit --values "<one Col='row value' pair per providervisit.csv column; VisitId='<visitId>' TerritoryName='<territoryName>'>" --target-org lsc-rep --json
 ```
 
+> Use only the row's live CSV values.
 
-**Step 12: Create ProviderVisitProdDetailing**
+**Step 12: Create ProviderVisitProdDetailing (one per row in `providervisitproddetailing.csv`)**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/providervisitproddetailing.csv`, then create **one per data row** (`ProviderVisitId` = the matching ProviderVisit from Step 11; `ProductId` = the LifeSciMarketableProduct from the Step 8 map, matched on the row's product natural key):
 ```bash
-sf data create record --sobject ProviderVisitProdDetailing --values "ProviderVisitId='<providerVisitId>' ProductId='<lifeSciMarketableProductId>' Priority=4 AdditionalInformation='Discussed Oncology products and treatments' IsGeneratedFromPresentation=false" --target-org lsc-rep --json
+sf data create record --sobject ProviderVisitProdDetailing --values "<one Col='row value' pair per providervisitproddetailing.csv column; ProviderVisitId='<providerVisitId>' ProductId='<matched lifeSciMarketableProductId>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `providervisitproddetailing.csv` — Priority=4, AdditionalInformation about Oncology products
+> Use only the row's live CSV values.
 
-**Step 13: Create ProviderVisitProdDiscussion**
+**Step 13: Create ProviderVisitProdDiscussion (one per row in `providervisitproddiscussion.csv`)**
 
+`cat .lsc-starter-config/LSStarterConfig/Data/providervisitproddiscussion.csv`, then create **one per data row** (`ProviderVisitProductDtlId` = the matching ProviderVisitProdDetailing from Step 12):
 ```bash
-sf data create record --sobject ProviderVisitProdDiscussion --values "ProviderVisitProductDtlId='<providerVisitProdDetailingId>' Note='Discussed Oncology treatments and patient care approaches'" --target-org lsc-rep --json
+sf data create record --sobject ProviderVisitProdDiscussion --values "<one Col='row value' pair per providervisitproddiscussion.csv column; ProviderVisitProductDtlId='<providerVisitProdDetailingId>'>" --target-org lsc-rep --json
 ```
 
-> Reference: `providervisitproddiscussion.csv` — Note about Oncology treatments
+> Use only the row's live CSV values.
+
+> **STOP-GATE — post-create reconciliation (MANDATORY, after Step 13).** For **every** object created in Steps 2–13, the number of records created this run MUST equal the number of **data rows** in that object's CSV. Compare per object (e.g. Products created == data rows in `product2.csv`; ProviderVisitProdDetailing created == rows in `providervisitproddetailing.csv`). If any count is short — most commonly only the first product row was created and the rest silently dropped — **STOP** and report the object, expected row count, and actual created count; do NOT proceed to Phase 5. This catches the "created 1 of N" regression that the per-row rule in the CSV-strict STOP-GATE (Phase 1) is meant to prevent.
 
 ### Phase 5 — Generate Metadata Cache (Steps 14–15) — as ADMIN
 
@@ -277,14 +300,14 @@ Load-bearing rules (full table with rationales in `references/stage-5-visit-crea
 - **Ask for rep credentials — never assume or reuse admin credentials.**
 - Create records in exact order 2→15, then run the manual iPad validation (Step 16) last; earlier IDs feed later records and the metadata cache must exist before the app can sync the Visit.
 - **Step 16 is manual** — show rep credentials (ask for the password if unknown; never use admin creds), give instructions, and never claim it's done without the user's explicit "yes"; on a reported issue, run the troubleshooting checks before re-asking.
-- `PlannedVisitStartTime` must be NOW; Product2 must NOT have a RecordType.
+- `PlannedVisitStartTime` must be NOW; Product2's `RecordTypeId` is org-resolved via `DeveloperName='LSC_Sample'` (the CSV value is a foreign Id — ignore it).
 - Show diagnosis on every failure and wait for the user's decision — no silent skips.
 
 ---
 
 ## Gotchas
 
-Common failures and fixes — missing RecordTypes/objects, rep-vs-admin FLS on HealthcareProvider (NPI/IsSpeaker) and product master data, ISO 8601 date formats, the Step 14 profile/metadata prerequisites, and the Step 15 Connect API errors — are tabulated in `references/stage-5-visit-creation-execution-state-and-recovery.md`.
+Common failures and fixes — missing RecordTypes/objects, rep-vs-admin create permission on territory associations and product master data, ISO 8601 date formats, the Step 14 profile/metadata prerequisites, and the Step 15 Connect API errors — are tabulated in `references/stage-5-visit-creation-execution-state-and-recovery.md`.
 
 ---
 

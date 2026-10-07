@@ -1,0 +1,16 @@
+{
+  "title": "remove_widget_from_dashboard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widgetName"],
+  "properties": {
+    "operation": { "const": "remove_widget_from_dashboard" },
+    "widgetName": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "description": "Name/key of the widget definition to remove, including every placement across all dashboard pages. Source it the same way as widget.name elsewhere: read it back via render_dashboard, or reuse the widget.name supplied to an earlier upsert_*_widget in this same draft/batch. Never invent it. Distinct from remove_widget_from_page, which only unplaces one page's placement and leaves the definition behind (see edit-dashboard.md §6)."
+    }
+  },
+  "example": { "operation": "remove_widget_from_dashboard", "widgetName": "text_1" }
+}

@@ -1,8 +1,8 @@
 {
-  "_notes": "Phase 2.5 request-body templates for POST /connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions. Send EXACTLY ONE action sub-object per call. timeLength/timeUnit live INSIDE checkpoint. timeUnit is Minutes|Hours|Days only. Never send isInitiationCheckpoint. Confirm success from body.success + non-empty body.actionMappings (+ triggerId for timed checkpoints), not the 201. UNIQUENESS: the actionFieldUpdate name/developerName must be unique per milestone (a WorkflowFieldUpdate DeveloperName is unique on the Incident object) — attaching the same-named action to a second milestone fails with DUPLICATE_DEVELOPER_NAME. Suffix both with the milestone (e.g. _FR for First Response, _RES for Resolution). These mirror the live-validated 'Proven bodies' in references/mcp-invocation.md (Milestone Actions) — keep the two in sync.",
+  "_notes": "Phase 2.5 request-body templates for POST /connect/sla-management/sla-policies/<slaId>/milestones/<milestoneId>/actions. Send EXACTLY ONE action sub-object per call. timeLength/timeUnit live INSIDE checkpoint. timeUnit is Minutes|Hours|Days only. Never send isInitiationCheckpoint. Confirm success from body.success + non-empty body.actionMappings (+ triggerId for timed checkpoints), not the 201. UNIQUENESS: the actionFieldUpdate name/developerName must be unique per milestone (a WorkflowFieldUpdate DeveloperName is unique on the Incident object) — attaching the same-named action to a second milestone fails with DUPLICATE_DEVELOPER_NAME. Suffix both with the milestone (e.g. _FR for First Response, _RES for Resolution). These mirror the example bodies in references/mcp-invocation.md (Milestone Actions — see 'Milestone-action bodies', pending live verification) — keep the two in sync.",
 
   "warningAction": {
-    "_notes": "Warn BEFORE target. timeLength = round(targetMinutes * (1 - X/100)). 2-hr (120-min) milestone, warn at 75% -> 30 min before. Default action = Field Update setting Priority = High. Replace <MS> in name/developerName with a per-milestone suffix. For a custom-field target, put its 00N... CustomField id in columnEnumOrId (not the __c API name).",
+    "_notes": "Warn BEFORE target. timeLength = round(targetMinutes * (1 - X/100)). 2-hr (120-min) milestone, warn at 75% -> 30 min before. Default action = Field Update raising Urgency = High. NOTE: Incident.Priority is DERIVED from Impact x Urgency and is NOT directly updateable (createable:false/updateable:false) — a Field Update targeting Priority fails INVALID_FIELD_FOR_INSERT_UPDATE, so escalate by driving its updateable inputs (Urgency here, Impact on breach). Replace <MS> in name/developerName with a per-milestone suffix. For a custom-field target, put its 00N... CustomField id in columnEnumOrId (not the __c API name).",
     "isSuccessCheckpoint": false,
     "checkpoint": { "isWarning": true, "timeLength": 30, "timeUnit": "Minutes" },
     "entityName": "Incident",
@@ -10,7 +10,7 @@
       "name": "SLA Warn 75pct <MS>",
       "sourceTable": "Incident",
       "targetTable": "Incident",
-      "columnEnumOrId": "Priority",
+      "columnEnumOrId": "Urgency",
       "developerName": "SLA_Warn_75_<MS>",
       "operationString": "LITERAL",
       "literal": "High"
@@ -18,7 +18,7 @@
   },
 
   "violationAction": {
-    "_notes": "Escalate ON breach = Violation with timeLength 0 (fires at target). Default: set Priority = Critical. Replace <MS> in name/developerName with the same per-milestone suffix used for the warning.",
+    "_notes": "Escalate ON breach = Violation with timeLength 0 (fires at target). Default: raise Impact = High. If the paired warning action also fired (Urgency already = High), both axes are then High — on a DEFAULT matrix that derives the top Priority tier, but the matrix is org-configurable so the resulting Priority depends on the org's mapping; read the derived Priority back after the action fires to confirm the tier (Priority itself is not directly updateable — see warningAction _notes). Replace <MS> in name/developerName with the same per-milestone suffix used for the warning.",
     "isSuccessCheckpoint": false,
     "checkpoint": { "isWarning": false, "timeLength": 0, "timeUnit": "Minutes" },
     "entityName": "Incident",
@@ -26,10 +26,10 @@
       "name": "SLA Escalate on Breach <MS>",
       "sourceTable": "Incident",
       "targetTable": "Incident",
-      "columnEnumOrId": "Priority",
+      "columnEnumOrId": "Impact",
       "developerName": "SLA_Escalate_Breach_<MS>",
       "operationString": "LITERAL",
-      "literal": "Critical"
+      "literal": "High"
     }
   },
 

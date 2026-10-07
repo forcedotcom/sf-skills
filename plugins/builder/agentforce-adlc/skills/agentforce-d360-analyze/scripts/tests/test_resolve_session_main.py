@@ -5,7 +5,7 @@ Argparse-driven — exercises every branch:
 - --disk-only hit / miss
 - live path with --org
 - disk-first fallback when no --org
-- not-found-no-org error
+- not-found-no-org error (no sf default target org either)
 """
 from __future__ import annotations
 
@@ -135,14 +135,20 @@ class DiskFirstFallbackTests(unittest.TestCase):
         self.assertIn(IDS.SID, h.stdout.getvalue())
 
     def test_disk_miss_no_org_returns_two_with_hint(self):
-        # No --org AND disk miss → exit 2 + helpful stderr.
+        # No --org, disk miss, AND no sf default target org → exit 2 +
+        # helpful stderr.
         with _MainHarness(
             argv=["--id", "0Mw000000000000"],
         ) as h:
-            rc = resolve_session.main()
+            with mock.patch.object(
+                resolve_session, "default_target_org",
+                side_effect=SystemExit("no --org given and no default target org set"),
+            ):
+                rc = resolve_session.main()
         self.assertEqual(rc, 2)
         self.assertIn("not found on disk", h.stderr.getvalue())
         self.assertIn("--org <alias> required", h.stderr.getvalue())
+        self.assertIn("no default target org set", h.stderr.getvalue())
 
 
 if __name__ == "__main__":

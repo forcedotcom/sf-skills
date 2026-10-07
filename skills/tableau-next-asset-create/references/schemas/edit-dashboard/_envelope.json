@@ -1,0 +1,54 @@
+{
+  "note": "edit_dashboard's live MCP input schema, split by operation for cheap lookup. This file is the envelope only (dashboardIdOrApiName + autosave + operations + minorVersion). Each operations[] item is discriminated by its 'operation' field — read the sibling file named '<operation-value>.json' in this same directory for that operation's exact required fields, properties, and a worked example. Don't guess a payload shape from prose when you can Read the fragment. Cross-cutting widget fields (actions, dynamicTokens, style blocks, receive-sources, conditional formatting) shared by every upsert_*_widget op live once in '_shared-widget-fields.json' — read it alongside a widget op when you need one of those fields.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["dashboardIdOrApiName", "operations", "minorVersion"],
+  "properties": {
+    "dashboardIdOrApiName": {
+      "type": "string",
+      "description": "The id (0FK...) or apiName of the dashboard the operations apply to. REQUIRED."
+    },
+    "autosave": {
+      "type": "boolean",
+      "default": false,
+      "description": "Batch-wide persistence mode (top-level — NOT per-operation). false (default) stages the final dashboard as an unsaved draft; true persists once after every operation succeeds. Ignored when a save_dashboard, undo, or discard_dashboard control operation determines the outcome."
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered, non-empty list of operations applied atomically in order (all-or-nothing). Each item is one operation, discriminated by its 'operation' field. For upsert_*_widget: provide widget.id to fully replace that persisted widget (also requires widget.name and widget.type to match it); omit id to create a new widget. An ID-less same-name widget may be replaced only when it is an unsaved draft. Each upsert is a complete replacement (omitted fields are dropped) and does not place the widget or change existing placements.",
+      "items": {
+        "type": "object",
+        "required": ["operation"],
+        "description": "One operation. Look up its full shape by filename: '<operation>.json' in this directory, where <operation> is this item's 'operation' value."
+      }
+    },
+    "minorVersion": {
+      "type": "integer",
+      "description": "Minor version supported for the API. Always send -1 (latest supported minor version) — the single-value enum forces this so a compliant client always emits it. NOT a dashboard revision.",
+      "enum": [-1],
+      "default": -1
+    }
+  },
+  "operationSchemaFiles": [
+    "upsert_text_widget.json",
+    "upsert_button_widget.json",
+    "upsert_container_widget.json",
+    "upsert_filter_widget.json",
+    "upsert_parameter_widget.json",
+    "upsert_visualization_widget.json",
+    "upsert_metric_widget.json",
+    "upsert_navigation_widget.json",
+    "place_widget_on_page.json",
+    "remove_widget_from_page.json",
+    "remove_widget_from_dashboard.json",
+    "move_widget_to_page.json",
+    "move_widget.json",
+    "add_page.json",
+    "rename_page.json",
+    "delete_page.json",
+    "save_dashboard.json",
+    "undo.json",
+    "discard_dashboard.json"
+  ]
+}

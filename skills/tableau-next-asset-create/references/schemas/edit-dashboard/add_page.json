@@ -1,0 +1,29 @@
+{
+  "title": "add_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "page"],
+  "properties": {
+    "operation": { "const": "add_page" },
+    "layoutName": {
+      "type": "string",
+      "description": "Dev name of the layout to add the page to. Optional; defaults to the first layout."
+    },
+    "page": {
+      "type": "object",
+      "description": "The new page.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional page id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Page dev name, e.g. \"page_2\". Keep the page_N sequence contiguous." },
+        "label": { "type": "string", "description": "Display label / tab title, e.g. \"Details\"." },
+        "description": { "type": "string", "description": "Optional page description." },
+        "navigationHidden": { "type": "boolean", "description": "Whether the page is hidden from navigation." }
+      }
+    }
+  },
+  "example": {
+    "operation": "add_page",
+    "page": { "name": "page_2", "label": "Details" }
+  }
+}

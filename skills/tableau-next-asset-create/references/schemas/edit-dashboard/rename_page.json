@@ -1,0 +1,28 @@
+{
+  "title": "rename_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "page"],
+  "properties": {
+    "operation": { "const": "rename_page" },
+    "layoutName": {
+      "type": "string",
+      "description": "Dev name of the layout the page is in. Optional; defaults to the first layout."
+    },
+    "page": {
+      "type": "object",
+      "description": "Identifies the page by name and sets its new label.",
+      "required": ["name", "label"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional page id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Existing page dev name to rename." },
+        "label": { "type": "string", "description": "New display label / tab title." },
+        "description": { "type": "string", "description": "Optional page description." }
+      }
+    }
+  },
+  "example": {
+    "operation": "rename_page",
+    "page": { "name": "page_2", "label": "Regional detail" }
+  }
+}

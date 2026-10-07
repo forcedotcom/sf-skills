@@ -188,6 +188,7 @@ For full agent DevOps details, including `Agent:` pseudo metadata, publish/activ
 | custom object creation | [platform-custom-object-generate](../platform-custom-object-generate/SKILL.md) | define objects before deploy |
 | custom field creation | [platform-custom-field-generate](../platform-custom-field-generate/SKILL.md) | define fields before deploy |
 | Apex authoring / fixes | [platform-apex-generate](../platform-apex-generate/SKILL.md) | code authoring and repair |
+| run tests after deployment | [platform-apex-test-run](../platform-apex-test-run/SKILL.md) | post-deploy test execution and coverage |
 | Flow creation / repair | [automation-flow-generate](../automation-flow-generate/SKILL.md) | Flow authoring and activation guidance |
 | test data or seed records | [platform-data-manage](../platform-data-manage/SKILL.md) | describe-first data setup and cleanup |
 | Agent authoring and publish readiness | [agentforce-generate](../agentforce-generate/SKILL.md) | agent-specific correctness |

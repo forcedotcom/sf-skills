@@ -1,0 +1,30 @@
+{
+  "title": "place_widget_on_page",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "pageName", "placement"],
+  "properties": {
+    "operation": { "const": "place_widget_on_page" },
+    "pageName": { "type": "string", "description": "Dev name of the page to place the widget on, e.g. \"page_1\"." },
+    "placement": {
+      "type": "object",
+      "description": "Grid placement referencing an already-built widget by name.",
+      "required": ["name"],
+      "properties": {
+        "id": { "type": "string", "description": "Optional placement id (rarely needed to author; usually server-assigned)." },
+        "name": { "type": "string", "description": "Name of the widget to place (the key set when it was built)." },
+        "label": { "type": "string", "description": "Optional placement-level label override." },
+        "description": { "type": "string", "description": "Optional placement-level description." },
+        "row": { "type": "integer", "description": "1-based grid row." },
+        "column": { "type": "integer", "description": "1-based grid column." },
+        "rowspan": { "type": "integer", "description": "Height in rows." },
+        "colspan": { "type": "integer", "description": "Width in columns (grid is 48 wide)." }
+      }
+    }
+  },
+  "example": {
+    "operation": "place_widget_on_page",
+    "pageName": "page_1",
+    "placement": { "name": "text_1", "row": 1, "column": 1, "rowspan": 4, "colspan": 24 }
+  }
+}

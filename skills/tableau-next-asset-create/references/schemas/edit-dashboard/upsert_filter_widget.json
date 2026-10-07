@@ -1,0 +1,146 @@
+{
+  "title": "upsert_filter_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_filter_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete filter widget definition for create or full replacement. Omitted fields are dropped on replacement. source is the data source { id, name }; parameters carry the view type and the field to filter on. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "filter" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"filter_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label, e.g. \"Region\"." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions. Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name. Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "source": {
+          "type": "object",
+          "description": "Data source reference.",
+          "properties": {
+            "id": { "type": "string", "description": "Data source record id." },
+            "name": { "type": "string", "description": "Data source apiName." }
+          }
+        },
+        "initialValues": {
+          "type": "object",
+          "description": "Optional default filter state applied when the dashboard loads.",
+          "properties": {
+            "details": {
+              "type": "array",
+              "description": "FilterDetails[] — { fieldName, operator, values }. operator is a large enum (Equals, Contains, Between, In, IsEmpty, LastNDays, PreviousQuarter, StartsWith, …, ~60 values covering text/date/numeric comparisons); read this field's live schema for the exact enum before authoring one rather than guessing a value.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldName": { "type": "string" },
+                  "operator": { "type": "string", "description": "See field description above — large enum, don't guess a value." },
+                  "values": { "type": "array" }
+                }
+              }
+            }
+          }
+        },
+        "parameters": {
+          "description": "Filter widget parameters — shape depends on viewType. oneOf ListFilterParameters | ListCardFilterParameters | ToggleFilterParameters. Send only the fields for your chosen viewType.",
+          "oneOf": [
+            {
+              "title": "ListFilterParameters",
+              "type": "object",
+              "required": ["viewType", "isLabelHidden"],
+              "properties": {
+                "viewType": { "const": "list" },
+                "isLabelHidden": { "type": "boolean", "description": "Show or hide the filter widget's label. REQUIRED for viewType list/listcard." },
+                "filterOption": {
+                  "type": "object",
+                  "description": "Which field the filter targets and how it selects.",
+                  "properties": {
+                    "objectName": { "type": "string", "description": "Table/view name, e.g. \"Opportunity\"." },
+                    "fieldName": { "type": "string", "description": "Field to filter on, e.g. \"StageName\"." },
+                    "dataType": {
+                      "type": "string",
+                      "enum": ["Text", "Boolean", "Geo", "Date", "DateTime", "Number", "Currency", "Percentage"],
+                      "description": "Semantic data type of the filtered field (case-sensitive; must be one of the enum values). It selects the filter UI at render time: Text/Boolean/Geo render a value list, Date/DateTime a date picker, Number/Currency/Percentage a numeric range. Any other value (e.g. the JSON type \"string\") is rejected at render with \"Unsupported data type for filter\"."
+                    },
+                    "selectionType": { "type": "string", "enum": ["single", "multiple"], "description": "Single- or multi-select." }
+                  }
+                },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle for the label. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle for the values. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveFilterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveFilterSource." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "ListCardFilterParameters",
+              "type": "object",
+              "required": ["viewType", "isLabelHidden"],
+              "properties": {
+                "viewType": { "const": "listcard" },
+                "isLabelHidden": { "type": "boolean", "description": "Show or hide the filter widget's label. REQUIRED for viewType list/listcard." },
+                "filterOption": { "type": "object", "description": "Same shape as ListFilterParameters.filterOption above." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "titleStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "valueStyle": { "type": "object", "description": "WidgetTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetTextStyle." },
+                "receiveFilterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveFilterSource." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            },
+            {
+              "title": "ToggleFilterParameters",
+              "type": "object",
+              "required": ["viewType"],
+              "description": "isLabelHidden is NOT used by toggle — omit it here.",
+              "properties": {
+                "viewType": { "const": "toggle" },
+                "filterOption": { "type": "object", "description": "Same shape as ListFilterParameters.filterOption above." },
+                "widgetStyle": { "type": "object", "description": "WidgetStyle. Full shape: _shared-widget-fields.json#/styleBlocks/WidgetStyle." },
+                "textStyle": { "type": "object", "description": "ToggleTextStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleTextStyle." },
+                "defaultStyle": { "type": "object", "description": "ToggleDefaultStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleDefaultStyle." },
+                "selectedStyle": { "type": "object", "description": "ToggleSelectedStyle. Full shape: _shared-widget-fields.json#/styleBlocks/ToggleSelectedStyle." },
+                "receiveFilterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveFilterSource." },
+                "receiveParameterSource": { "type": "object", "description": "Full shape: _shared-widget-fields.json#/receiveSources/receiveParameterSource." }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_filter_widget",
+    "widget": {
+      "type": "filter",
+      "name": "filter_1",
+      "label": "Stage",
+      "source": { "id": "0Fb000000000123", "name": "OpportunityDataSource" },
+      "parameters": {
+        "viewType": "list",
+        "filterOption": {
+          "objectName": "Opportunity",
+          "fieldName": "StageName",
+          "dataType": "Text",
+          "selectionType": "multiple"
+        },
+        "isLabelHidden": false
+      }
+    }
+  }
+}

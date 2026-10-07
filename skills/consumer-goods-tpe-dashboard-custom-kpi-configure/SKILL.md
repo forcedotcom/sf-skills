@@ -3,7 +3,8 @@ name: consumer-goods-tpe-dashboard-custom-kpi-configure
 description: "Customize the Trade Promotion Effectiveness (TPE) Analytics dashboards' generic KPI slots (Promotion Measure 1-3, Tactic Measure 1-2) with customer-chosen KPI measure codes and display names, without touching the shipped base model. Use when a customer/admin wants to \"customize TPE dashboards\", \"change the KPIs on the Promotion/Tactic Analysis dashboard\", or \"swap in our own measure codes on the TPE dashboard\"."
 metadata:
   version: "1.0"
-  domains: ["Consumer Goods"]
+  domains:
+    - "Consumer Goods"
   relatedSkills:
     - "consumer-goods-tpe-dashboard-configure"
   cliTools:

@@ -46,12 +46,14 @@ class RestClientError(RuntimeError):
 # -----------------------------------------------------------------------------
 # error redaction
 # -----------------------------------------------------------------------------
-# Three patterns cover the bulk of token-leakage surfaces:
+# Four patterns cover the bulk of token-leakage surfaces:
 # 1. `Authorization: Bearer <token>` in any string context (header echo,
 # exception repr, stringified HTTP error).
-# 2. `accessToken=<token>` / `access_token=<token>` in URL-encoded bodies
+# 2. A bare `Bearer <token>` with no `Authorization:` prefix (curl-style
+# traces, CLI stderr, hand-built header dicts).
+# 3. `accessToken=<token>` / `access_token=<token>` in URL-encoded bodies
 # or query strings (`sf org display` errors sometimes echo these).
-# 3. `"accessToken":"<token>"` or `"access_token":"<token>"` in JSON
+# 4. `"accessToken":"<token>"` or `"access_token":"<token>"` in JSON
 # payload echoes.
 #
 # Regexes are intentionally permissive on the token character class
@@ -60,6 +62,11 @@ class RestClientError(RuntimeError):
 
 _AUTH_HEADER_RE = re.compile(
     r"(Authorization\s*:\s*Bearer\s+)\S+",
+    flags=re.IGNORECASE,
+)
+# Matches a bare `Bearer <value>`; stops at whitespace or a quote.
+_BEARER_RE = re.compile(
+    r"(\bBearer\s+)[^\s\"']+",
     flags=re.IGNORECASE,
 )
 # Matches access[_]?Token=<value> in url-encoded form; stops at & or whitespace.
@@ -91,6 +98,7 @@ def redact_text(text: str) -> str:
     if not text:
         return text
     text = _AUTH_HEADER_RE.sub(r"\1<redacted>", text)
+    text = _BEARER_RE.sub(r"\1<redacted>", text)
     text = _ACCESS_TOKEN_QS_RE.sub(r"\1<redacted>", text)
     text = _ACCESS_TOKEN_JSON_RE.sub(r'\1<redacted>', text)
     return text

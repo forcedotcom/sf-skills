@@ -24,8 +24,9 @@ milestone shape is already determined by the request:
   (`"you have my explicit authorization to create"`, `"do not re-ask me to confirm"`,
   `"proceed without asking"`) **and** a concrete milestone shape is derivable per (a). A passing
   mention ("build it", "go ahead") is NOT sufficient by itself. Waives the interactive confirm;
-  does NOT waive Phase 1.5 plan-narration — dispatch only after SLA Policy name, Account,
-  Entitlement date range, and per-milestone list have been written to the response.
+  does NOT waive Phase 1.5 plan-narration — dispatch only after SLA Policy name, the engagement model
+  (per-Incident via `EntitlementId`; no Account), and the per-milestone list have been written to the
+  response.
 
 **Only when none of (a)/(b)/(c) apply** (generic "set up an SLA on Incidents" with no shape),
 dispatch `AskUserQuestion` with the five options below. Priority-tiered requires the
@@ -35,7 +36,7 @@ All strategies share these defaults unless overridden:
 
 - `businessHoursId`: the default BusinessHours resolved in Phase 1 step 4
 - `startTimeBasedOn`: `MILESTONE_CRITERIA` (timer starts when the milestone's criteria first match; this is the OOB default — send this exact token, see `references/mcp-invocation.md` Attach Milestone)
-- `milestoneAgreementType`: `SLA` — inside each `milestoneCriteria[]` item (mandatory per the UI). Valid UI values are `SLA` (customer-facing) or `OLA` (internal); the API accepts any string because the underlying field is `Text(40)` with no server-side picklist, but the UI renders unrecognized values as blank (W-23959162)
+- `milestoneAgreementType`: `SLA` — inside each `milestoneCriteria[]` item (mandatory per the UI). Valid UI values are `SLA` (customer-facing) or `OLA` (internal); the API accepts any string because the underlying field is `Text(40)` with no server-side picklist, but the UI renders unrecognized values as blank
 - `milestoneState`: `ACTIVE` (**uppercase — the server matches this value case-sensitively**; `Active`/`active` silently fail to register the criterion) inside `milestoneCriteria[]`
 - `filterType`: `RuleFilter` (inside `milestoneCriteria[]`)
 - Base filter row: `Incident.Status NotEqual Closed` (keeps every milestone alive until the
@@ -58,16 +59,31 @@ Question: How many milestones do you want on this SLA policy?
 For options 3 and 4, the concrete numbers are the defaults the skill uses if the user picks the
 option without customizing. Option 5 dispatches follow-up `AskUserQuestion` prompts.
 
-Before rendering options 3 and 5, confirm the live `Incident.Priority` picklist values (fetched in
-Phase 1 via the Incident describe) — if any value used in a default row is missing from the org's
-picklist, drop that milestone from the pattern and note it in the Phase-1.5 confirmation.
+Before rendering options 3 and 5, confirm the live `Incident.Priority` picklist values and reconcile
+the pattern against them in **both** directions: if any value used in a default row is missing from
+the org's picklist, drop that milestone; and if the org has **added** active Priority values beyond
+the four default tiers, add a milestone for each so no active Priority value is left without one.
+Note both adjustments in the Phase-1.5 confirmation.
+
+**Hard gate — never assume the picklist.** The reconciliation above requires the *actual* live
+`Incident.Priority` picklist. Do **not** present the Priority-tiered milestone list, and do **not**
+state or imply that the picklist "is the four standard tiers" / "needs no reconciliation", **from
+assumption**. The four standard tiers (Critical/High/Moderate/Low) are only *defaults* — they are
+NOT what the org necessarily has. You may present the tier list **only after** the live
+`Incident.Priority` describe (Phase 1 step 3) has actually been dispatched **this session** and you
+have its `fields[].picklistValues` in hand. If it has not run yet — e.g. Custom was invoked
+**directly**, skipping the Phase 0.6 fork where the describe is normally pulled forward — run
+`GET /services/data/v{version}/sobjects/Incident/describe` **now**, before offering or rendering any
+per-priority list, and derive the tiers from its **active** `picklistValues`. An org-added active
+value such as `Emergency` MUST appear as its own milestone; silently defaulting to four tiers leaves
+those Incidents with no milestone and no SLA engagement.
 
 ---
 
 ## Canonical Attach-Milestone payload
 
 Dispatch every pattern below via `mcp__headless-360__dispatch` with `method: "POST"` and
-`url: "/services/data/v67.0/connect/sla-management/sla-policies/<slaId>/milestones"` (substitute
+`url: "/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones"` (substitute
 the SLA policy id captured in Phase 2 step 9). The reusable request-body template lives at
 `assets/attach-milestone.json` — load and populate it rather than reconstructing the JSON.
 
@@ -109,7 +125,7 @@ concurrently on its own 8-hour timer.
 ## Pattern 3 — Priority-tiered response
 
 **MilestoneTypes to create:** 1 — `Incident First Response` (reused across all four milestones)
-**Milestones to attach:** up to 4 (one per active Priority value)
+**Milestones to attach:** one per active Priority value (the 4 standard tiers below **plus any custom active values** the org has added)
 
 | # | Priority | timeTrigger | Extra filter items |
 |---|----------|-------------|--------------------|
@@ -119,10 +135,18 @@ concurrently on its own 8-hour timer.
 | 4 | Low      | 1440 | `Incident.Priority Equals Low` |
 
 Assumes the standard `Critical / High / Moderate / Low` picklist (some orgs and prompts label the
-mid tier `Medium` instead of `Moderate` — same P3 tier, different label). If the org has renamed /
-removed / added values (checked against the Phase-1 Incident describe), drop or rename milestones
-to match — do not send `Priority Equals <value>` for a value that is not in the live picklist (the
-server accepts it silently and the milestone never engages).
+mid tier `Medium` instead of `Moderate` — same P3 tier, different label). Reconcile the four default
+rows against the **live `Incident.Priority` picklist** (from the Phase-1 Incident describe) before
+dispatch, handling every difference:
+
+- **Renamed** value → rename the milestone's filter to the live label (e.g. `Medium` for the P3 tier).
+- **Removed / inactive** value → drop that milestone. Never send `Priority Equals <value>` for a value
+  absent from the live picklist — the server accepts it silently and the milestone never engages.
+- **Added / custom active** value (any active Priority value not covered by the four default rows) →
+  **add a milestone for it** so those Incidents still engage an SLA. Reuse the `Incident First Response`
+  MilestoneType, filter `Incident.Priority Equals <customValue>`, and confirm its `timeTrigger` with the
+  user in Phase 1.5 (offer a sensible default from the nearest standard tier). Do **not** silently skip a
+  custom value — an uncovered active Priority means those Incidents get no milestone and no SLA engagement.
 
 The multi-item `filterItems` array combines with `AND` by default — both `Status != Closed` AND
 `Priority == Critical` must hold for the milestone to remain active. If Priority flips after
@@ -196,12 +220,17 @@ and a **Resolve Within** milestone per priority tier:
 | High            | 60 min  | 240 min |
 | Moderate or Low | 240 min | 960 min |
 
-Seed it verbatim from `assets/predefined-incident-policy.json` following the recipe in
-`references/mcp-invocation.md` (Predefined Incident Policy) — detect-before-seed (the policy AND the
-pre-seeded MilestoneType catalog: reuse `Resolve Within` etc. by name, create only what is missing),
-`active: true` on create, validate Priority/Status against the live picklist, and map the mid tier to
-the org's real label (`Moderate` or `Medium`). Unlike the custom patterns above, when the user picks
-this at the fork the skill seeds → verifies → **stops** (no custom milestone offer after).
+The skill does **not** build this table milestone-by-milestone. One call to the platform seeder route
+(`PATCH /headless/invoke/platform/slasettings/save-selected-options`, body
+`{"selectedOptions":["incident"]}` — lowercase) provisions the whole active bundle server-side: the
+policy, both MilestoneTypes, all 6 milestones (the tiers above), and the Entitlement + auto-apply
+criteria. The table is here so you know what the seeder produces — not a build list. Detect first
+(`GET /headless/invoke/platform/slasettings`, `incident:true` = already seeded) because the seeder
+isn't idempotent. Full recipe: `references/mcp-invocation.md` (Predefined Incident Policy). Unlike the
+custom patterns above, when the user picks this at the fork the skill seeds → verifies → **stops** (no
+*proactive* custom milestone offer after — but an *explicit* request to attach a milestone to the
+seeded policy is honored via a direct `csp-sun/create-milestone` against the policy resolved by name,
+never a re-seed).
 
 ---
 
@@ -210,7 +239,7 @@ this at the fork the skill seeds → verifies → **stops** (no custom milestone
 | Issue | Detail |
 |-------|--------|
 | MilestoneType reuse vs. create | Priority-tiered = 1 MilestoneType reused 4 times. Response + Resolution = 2 types. Escalation ladder = 3 types. |
-| Priority-tiered needs a Priority | The test Incident in Phase 3 must have a `Priority` value matching one of the milestones — otherwise no EntityMilestone spawns. Set the Priority explicitly, or create one test Incident per Priority. |
+| Priority-tiered needs a Priority | The test Incident in Phase 3 must derive a `Priority` value matching one of the milestones — otherwise no EntityMilestone spawns. `Priority` is not directly insertable — set `Impact` and `Urgency` so the org's matrix derives the target Priority (see `references/mcp-invocation.md` → Verify SLA engagement), or create one test Incident per tier. |
 | Multi-milestone partial-failure | If milestone #2 of N fails to attach, halt and surface the raw error. Do NOT continue attaching #3..N — the policy will be half-configured. |
 | `order` field | Numeric 1..N. Not load-bearing for runtime evaluation (all milestones fire independently), but controls display order in the UI. |
-| Priority-tiered + Priority Matrix skill | If the Priority Matrix skill is also running, its Impact × Urgency grid decides `Incident.Priority`. Enable the matrix first if you want new Incidents to derive Priority from the matrix. |
+| Priority-tiered + Priority Matrix skill | `Incident.Priority` is always derived from the Impact × Urgency matrix (a default matrix always exists). The Priority Matrix skill configures the *mapping* (which Impact × Urgency combination yields which Priority) — it does not turn derivation on or off. Run it first if you need a mapping other than the default. |

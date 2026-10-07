@@ -1,0 +1,78 @@
+{
+  "title": "upsert_metric_widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["operation", "widget"],
+  "properties": {
+    "operation": { "const": "upsert_metric_widget" },
+    "widget": {
+      "type": "object",
+      "description": "Complete metric widget definition for create or full replacement. Omitted fields are dropped on replacement. source may reference the metric; parameters.metricOption carries the SDM identifiers. Upsert defines the widget only; it neither places it nor changes existing placements.",
+      "required": ["type", "name"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Existing widget ID. Required when fully replacing a persisted widget; omit when creating a widget. Never invent this value. An unsaved draft widget has no ID and may be replaced by matching widget.name."
+        },
+        "type": { "const": "metric" },
+        "name": {
+          "type": "string",
+          "description": "Stable widget key, e.g. \"metric_1\". On persisted replacement, it must match the widget identified by id."
+        },
+        "label": { "type": "string", "description": "Display label." },
+        "description": { "type": "string", "description": "Optional widget description (distinct from label)." },
+        "actions": {
+          "type": "array",
+          "description": "Optional click/select interactions. Full per-type shape: _shared-widget-fields.json.",
+          "items": { "type": "object", "required": ["actionType", "eventType"] }
+        },
+        "dynamicTokens": {
+          "type": "object",
+          "description": "Optional dynamic value bindings keyed by token name (e.g. referenced from metricOption.layout). Full shape: _shared-widget-fields.json.",
+          "additionalProperties": { "type": "object" }
+        },
+        "source": {
+          "type": "object",
+          "description": "Optional metric data source reference.",
+          "properties": {
+            "id": { "type": "string", "description": "Metric record id." },
+            "name": { "type": "string", "description": "Metric apiName." }
+          }
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Metric widget parameters.",
+          "properties": {
+            "metricOption": {
+              "type": "object",
+              "description": "Metric layout and SDM information.",
+              "properties": {
+                "sdmApiName": { "type": "string", "description": "Semantic data model apiName, e.g. \"Revenue_SDM\"." },
+                "sdmId": { "type": "string", "description": "Semantic data model id (2SM...)." },
+                "showForecast": { "type": "boolean", "description": "Whether to show a forecast on the metric card." },
+                "layout": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Metric layout settings keyed by setting name. No fixed schema — pass through settings as given rather than inventing keys."
+                },
+                "metricCardVersion": { "type": "integer", "description": "Metric card rendering version." }
+              }
+            },
+            "widgetStyle": { "type": "object", "description": "MetricStyle (WidgetStyle + textColor). Full shape: _shared-widget-fields.json#/styleBlocks/MetricStyle." },
+            "receiveFilterSource": { "type": "object", "description": "Which published filters this widget listens to. Full shape: _shared-widget-fields.json#/receiveSources/receiveFilterSource." }
+          }
+        }
+      }
+    }
+  },
+  "example": {
+    "operation": "upsert_metric_widget",
+    "widget": {
+      "type": "metric",
+      "name": "metric_1",
+      "parameters": {
+        "metricOption": { "sdmApiName": "Revenue_SDM", "sdmId": "2SM000000000123" }
+      }
+    }
+  }
+}

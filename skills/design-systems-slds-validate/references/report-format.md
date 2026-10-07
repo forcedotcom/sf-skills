@@ -131,7 +131,7 @@ Suggestions for improvement.
 <details>
 <summary>Full Linter Output</summary>
 
-```
+```json
 {linter-output}
 ```
 

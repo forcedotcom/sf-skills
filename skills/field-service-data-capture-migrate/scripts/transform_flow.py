@@ -267,6 +267,17 @@ CHOICE_REQUIRED = {
 # Invalid inputParameter names on dc* components
 INVALID_PARAMS = frozenset(('required', 'disabled', 'multiple', 'accept', 'helpText', 'placeholder'))
 
+# dc* ComponentInstance extensions that do NOT expose a `required` input
+# attribute — injecting one deploys as "We can't find this input attribute:
+# 'required'". Confirmed for dcCheckbox (W-24086520); dcToggle is the other
+# boolean-backed component and excluded on the same rationale: an unchecked/
+# off boolean is itself a valid answer, so these components have no notion of
+# "required" distinct from <isRequired> already being set on the field.
+NO_REQUIRED_INPUT_PARAM_EXTENSIONS = frozenset((
+    'runtime_service_fieldservice:dcCheckbox',
+    'runtime_service_fieldservice:dcToggle',
+))
+
 # ──────────────────────────────────────────────
 # Phase 1: Screen field transformation
 # ──────────────────────────────────────────────
@@ -389,7 +400,7 @@ def _apply_component_type(field: ET.Element, new_ft: str, new_ext: str, label_st
         # don't need this — they read <isRequired> directly.)
         is_required = (findtext(field, 'isRequired') or 'false').lower() == 'true'
         has_required_param = any(findtext(p, 'name') == 'required' for p in findall(field, 'inputParameters'))
-        if not has_required_param:
+        if not has_required_param and new_ext not in NO_REQUIRED_INPUT_PARAM_EXTENSIONS:
             ip = make('inputParameters')
             ip.append(make('name', 'required'))
             v = sub(ip, 'value')

@@ -21,7 +21,8 @@ specific UUID.
 
 ## Two resolution modes
 
-1. **Live** — query DC. Requires `--org`. Used by `fetch_dc.py` at the
+1. **Live** — query DC against `--org` (CLI: defaults to the sf CLI default
+   target org). Used by `fetch_dc.py` at the
    top of the pipeline (before any artifacts exist on disk).
 2. **Disk-first** — scan `DATA_ROOT/*/dc.sessions.json` for a row whose
    `ssot__RelatedMessagingSessionId__c` matches. No DC call, no `--org`
@@ -31,7 +32,7 @@ specific UUID.
 
 ## CLI
 
-    python3 scripts/resolve_session.py --id <uuid|msg_id> --org <alias>
+    python3 scripts/resolve_session.py --id <uuid|msg_id> [--org <alias>]
 
 Prints the resolved UUID to stdout on single-match (or pass-through).
 Non-zero exit with diagnostics on zero-match and multi-match.
@@ -47,7 +48,7 @@ from typing import List, Optional
 sys.path.insert(0, str(Path(__file__).parent))
 
 from config import DATA_ROOT
-from dc import load_sql, post, resolve_org
+from dc import default_target_org, load_sql, post, resolve_org
 
 
 # NOT_SET sentinel set. Matches fetch_dc.py:41; keep in sync.
@@ -224,7 +225,8 @@ def main() -> int:
     )
     ap.add_argument("--id", required=True,
                     help="Either the AI-agent session UUID or the MessagingSession id (0Mw...)")
-    ap.add_argument("--org", help="sf org alias (required for live DC lookup when input is 0Mw...)")
+    ap.add_argument("--org", help="sf org alias for the live DC lookup when input is 0Mw... "
+                                  "(default: the sf CLI default target org)")
     ap.add_argument("--disk-only", action="store_true",
                     help="Only scan DATA_ROOT/*/dc.sessions.json; no DC query")
     # Runtime-agnostic path overrides; default to ~/.vibe/...
@@ -243,19 +245,25 @@ def main() -> int:
             return 1
         print(found)
         return 0
-    if not args.org:
-        # Try disk first as a convenience; only error if that also misses.
+    org = args.org
+    if not org:
+        # Try disk first as a convenience; on a miss, fall back to the sf CLI
+        # default target org for the live lookup, and only error if that
+        # is unset too.
         disk = resolve_from_disk(args.id)
         if disk is not None:
             print(disk)
             return 0
-        print(
-            f"resolve_session: {args.id!r} not found on disk; --org <alias> required "
-            f"for a live DC lookup",
-            file=sys.stderr,
-        )
-        return 2
-    uuid = resolve(args.id, org=args.org)
+        try:
+            org = default_target_org()
+        except SystemExit as e:
+            print(
+                f"resolve_session: {args.id!r} not found on disk; --org <alias> required "
+                f"for a live DC lookup ({e})",
+                file=sys.stderr,
+            )
+            return 2
+    uuid = resolve(args.id, org=org)
     print(uuid)
     return 0
 

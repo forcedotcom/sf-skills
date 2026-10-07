@@ -2,9 +2,8 @@
 name: omnistudio-dependencies-analyze
 description: "Cross-cutting OmniStudio analysis skill for namespace detection, dependency visualization, and impact analysis across OmniScripts, FlexCards, Integration Procedures, and Data Mappers. TRIGGER when: user asks about OmniStudio dependencies, wants namespace detection (Core vs vlocity_cmt vs vlocity_ins), needs impact analysis, requests dependency graphs or Mermaid diagrams, or asks which components are affected by a change. DO NOT TRIGGER when: authoring OmniScripts (use omnistudio-omniscript-generate), building FlexCards (use omnistudio-flexcard-generate), creating Integration Procedures (use omnistudio-integration-procedure-generate), or configuring Data Mappers (use omnistudio-datamapper-generate)."
 metadata:
-  cliTools:
-    - tool: ["sf"]
-      semver: ">=2.0.0"
+  version: "1.0"
+  domains: ["OmniStudio"]
   relatedSkills:
     - "external-diagram-mermaid-generate"
     - "omnistudio-datamapper-generate"
@@ -14,8 +13,9 @@ metadata:
     - "platform-custom-field-generate"
     - "platform-custom-object-generate"
     - "platform-metadata-deploy"
-  version: "1.0"
-  domains: ["OmniStudio"]
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # omnistudio-dependencies-analyze: OmniStudio Cross-Component Analysis

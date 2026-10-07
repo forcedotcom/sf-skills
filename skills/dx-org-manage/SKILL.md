@@ -6,6 +6,7 @@ metadata:
   domains: ["Developer Experience"]
   minApiVersion: "60.0"
   relatedSkills:
+    - "dx-org-snapshot-manage"
     - "dx-org-switch"
     - "platform-metadata-deploy"
   cliTools:

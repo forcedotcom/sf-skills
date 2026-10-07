@@ -211,13 +211,11 @@ class RunSfTests(unittest.TestCase):
                 sf_cli.run_sf("org_display", ORG_ALIAS="my-org")
         self.assertIn("invocation failed", str(ctx.exception))
 
-    def test_passes_show_secrets_env_to_subprocess(self):
-        """Tripwire for the W-22582511 sf-CLI-redaction fix.
+    def test_does_not_inject_show_secrets_env(self):
+        """Tripwire: run_sf must not rely on SF_TEMP_SHOW_SECRETS.
 
-        Without ``SF_TEMP_SHOW_SECRETS=true`` in the subprocess env, sf CLI
-        v2 returns the literal string ``"[REDACTED] Use 'sf org auth
-        show-access-token' to view"`` in place of the bearer token, and
-        every downstream Tooling/REST call returns INVALID_AUTH_HEADER 401.
+        sf CLI removes that env var (forcedotcom/cli#3560); tokens come
+        only from ``sf org auth show-access-token``.
         """
         from unittest import mock
         captured = {}
@@ -232,15 +230,14 @@ class RunSfTests(unittest.TestCase):
         with mock.patch.object(sf_cli.subprocess, "run", side_effect=fake_run):
             sf_cli.run_sf("org_display", ORG_ALIAS="my-org")
 
-        self.assertIsNotNone(captured["env"])
-        self.assertEqual(captured["env"].get("SF_TEMP_SHOW_SECRETS"), "true")
+        env = captured["env"] or {}
+        self.assertNotIn("SF_TEMP_SHOW_SECRETS", env)
 
     def test_org_display_recipe_includes_verbose_flag(self):
         """Tripwire for the W-22582511 ``--verbose`` fix.
 
-        Without ``--verbose``, sf CLI v2 omits ``accessToken`` from the
-        ``--json`` output entirely (regardless of SF_TEMP_SHOW_SECRETS),
-        so the redaction-env workaround is necessary but not sufficient.
+        Without ``--verbose``, some sf CLI builds omit fields that callers
+        expect in ``--json`` output.
         """
         from unittest import mock
         captured = {}
@@ -255,6 +252,163 @@ class RunSfTests(unittest.TestCase):
             sf_cli.run_sf("org_display", ORG_ALIAS="my-org")
 
         self.assertIn("--verbose", captured["argv"])
+
+
+class ShowAccessTokenCapabilityTests(unittest.TestCase):
+    """Preflight for the required ``sf org auth show-access-token`` command."""
+
+    # Shape of real ``--help`` output (sf CLI 2.150.6): the command id is
+    # printed in the USAGE line.
+    REAL_HELP = (
+        "Show an access token for an org.\n\nUSAGE\n"
+        "  $ sf org auth show-access-token -o <value> [--json]\n"
+    )
+
+    def setUp(self):
+        # The preflight caches success process-wide; isolate every test.
+        sf_cli._show_access_token_capability_ok = False
+        self.addCleanup(
+            setattr, sf_cli, "_show_access_token_capability_ok", False,
+        )
+
+    def test_capability_check_passes_when_help_available(self):
+        from types import SimpleNamespace
+        from unittest import mock
+
+        cp = SimpleNamespace(returncode=0, stdout=self.REAL_HELP, stderr="")
+        with mock.patch.object(sf_cli.subprocess, "run", return_value=cp) as run:
+            sf_cli.assert_show_access_token_capability()
+        argv = run.call_args.args[0]
+        self.assertEqual(argv, ["sf", "org", "auth", "show-access-token", "--help"])
+
+    def test_capability_check_raises_clear_error_when_missing(self):
+        import subprocess as _subprocess
+        from unittest import mock
+
+        err = _subprocess.CalledProcessError(
+            returncode=1,
+            cmd=["sf", "org", "auth", "show-access-token", "--help"],
+            stderr="show-access-token is not a sf command",
+        )
+        with mock.patch.object(sf_cli.subprocess, "run", side_effect=err):
+            with self.assertRaises(sf_cli.SfCliError) as ctx:
+                sf_cli.assert_show_access_token_capability()
+        self.assertIn("missing required command", str(ctx.exception))
+        self.assertIn("sf org auth show-access-token", str(ctx.exception))
+
+    def test_capability_check_raises_when_sf_not_on_path(self):
+        from unittest import mock
+
+        with mock.patch.object(
+            sf_cli.subprocess, "run", side_effect=FileNotFoundError("sf"),
+        ):
+            with self.assertRaises(sf_cli.SfCliError) as ctx:
+                sf_cli.assert_show_access_token_capability()
+        self.assertIn("not found on PATH", str(ctx.exception))
+
+    def test_successful_preflight_is_cached_for_process(self):
+        from types import SimpleNamespace
+        from unittest import mock
+
+        cp = SimpleNamespace(returncode=0, stdout=self.REAL_HELP, stderr="")
+        with mock.patch.object(sf_cli.subprocess, "run", return_value=cp) as run:
+            sf_cli.assert_show_access_token_capability()
+            sf_cli.assert_show_access_token_capability()
+        self.assertEqual(run.call_count, 1)
+
+    def test_failed_preflight_is_not_cached(self):
+        import subprocess as _subprocess
+        from types import SimpleNamespace
+        from unittest import mock
+
+        err = _subprocess.CalledProcessError(
+            returncode=1,
+            cmd=["sf", "org", "auth", "show-access-token", "--help"],
+            stderr="show-access-token is not a sf command",
+        )
+        ok = SimpleNamespace(returncode=0, stdout=self.REAL_HELP, stderr="")
+        with mock.patch.object(
+            sf_cli.subprocess, "run", side_effect=[err, ok],
+        ) as run:
+            with self.assertRaises(sf_cli.SfCliError):
+                sf_cli.assert_show_access_token_capability()
+            # Retried (not cached) and now succeeds.
+            sf_cli.assert_show_access_token_capability()
+            # Success is cached — no third spawn.
+            sf_cli.assert_show_access_token_capability()
+        self.assertEqual(run.call_count, 2)
+
+    def test_zero_exit_without_help_signature_fails_and_is_not_cached(self):
+        """A CLI that answers an unknown command with exit 0 (e.g. printing
+        top-level help) must NOT be treated as capable."""
+        from types import SimpleNamespace
+        from unittest import mock
+
+        bogus = SimpleNamespace(
+            returncode=0,
+            stdout="\x1b[1mUSAGE\x1b[22m\n  $ sf [COMMAND]\n\nTOPICS\n  org\n",
+            stderr="Authorization: Bearer SECRET_TOKEN_X",
+        )
+        ok = SimpleNamespace(returncode=0, stdout=self.REAL_HELP, stderr="")
+        with mock.patch.object(
+            sf_cli.subprocess, "run", side_effect=[bogus, ok],
+        ) as run:
+            with self.assertRaises(sf_cli.SfCliError) as ctx:
+                sf_cli.assert_show_access_token_capability()
+            msg = str(ctx.exception)
+            self.assertIn("missing required command", msg)
+            self.assertNotIn("SECRET_TOKEN_X", msg)
+            self.assertFalse(sf_cli._show_access_token_capability_ok)
+            # Next call re-probes and now succeeds.
+            sf_cli.assert_show_access_token_capability()
+        self.assertEqual(run.call_count, 2)
+        self.assertTrue(sf_cli._show_access_token_capability_ok)
+
+    def test_zero_exit_with_empty_output_fails(self):
+        from types import SimpleNamespace
+        from unittest import mock
+
+        cp = SimpleNamespace(returncode=0, stdout="", stderr="")
+        with mock.patch.object(sf_cli.subprocess, "run", return_value=cp):
+            with self.assertRaises(sf_cli.SfCliError) as ctx:
+                sf_cli.assert_show_access_token_capability()
+        self.assertIn("lacked the command signature", str(ctx.exception))
+        self.assertFalse(sf_cli._show_access_token_capability_ok)
+
+    def test_zero_exit_unknown_command_notice_echoing_name_fails(self):
+        """Unknown-command notices contain the bare command name; only the
+        USAGE form (`$ sf org auth show-access-token`) may pass."""
+        from types import SimpleNamespace
+        from unittest import mock
+
+        for out in (
+            "Error: Command org:auth:show-access-token not found.",
+            "Warning: show-access-token is not a sf command.",
+            "Did you mean org auth show-access-token? Run sf help for options.",
+        ):
+            with self.subTest(out=out):
+                sf_cli._show_access_token_capability_ok = False
+                cp = SimpleNamespace(returncode=0, stdout="", stderr=out)
+                with mock.patch.object(sf_cli.subprocess, "run", return_value=cp):
+                    with self.assertRaises(sf_cli.SfCliError) as ctx:
+                        sf_cli.assert_show_access_token_capability()
+                self.assertIn("missing required command", str(ctx.exception))
+                self.assertFalse(sf_cli._show_access_token_capability_ok)
+
+    def test_ansi_colored_real_help_passes(self):
+        """Real help with ANSI styling still matches the signature."""
+        from types import SimpleNamespace
+        from unittest import mock
+
+        cp = SimpleNamespace(
+            returncode=0,
+            stdout="\x1b[1mUSAGE\x1b[22m\n  $ sf org auth "
+                   "show-access-token -o <value>\n",
+            stderr="",
+        )
+        with mock.patch.object(sf_cli.subprocess, "run", return_value=cp):
+            sf_cli.assert_show_access_token_capability()
+        self.assertTrue(sf_cli._show_access_token_capability_ok)
 
 
 if __name__ == "__main__":

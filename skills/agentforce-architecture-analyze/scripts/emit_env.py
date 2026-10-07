@@ -24,9 +24,9 @@ Any path component is a dictionary key OR an integer array index
 is the empty string — caller decides whether that's OK.
 
 Usage:
-    # Parse `sf org display --json` output via stdin
+    # Parse `sf org display --json` output via stdin (org metadata only —
+    # access tokens come only from `sf org auth show-access-token --json --no-prompt`)
     eval "$(printf '%s' "$_SF_JSON" | python3 emit_env.py stdin \\
-            'ACCESS_TOKEN:result.accessToken' \\
             'INSTANCE_URL:result.instanceUrl' \\
             'ORG_ID_18:result.id' \\
             'ORG_ID_15:result.id[:15]')"

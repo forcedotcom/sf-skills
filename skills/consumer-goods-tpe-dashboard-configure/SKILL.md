@@ -4,7 +4,8 @@ description: "End-to-end headless setup of Trade Promotion Effectiveness (TPE) d
 metadata:
   version: "1.0"
   minApiVersion: "67.0"
-  domains: ["Consumer Goods"]
+  domains:
+    - "Consumer Goods"
   relatedSkills:
     - "consumer-goods-rtr-datacloud-export-configure"
     - "consumer-goods-tpe-dashboard-custom-kpi-configure"

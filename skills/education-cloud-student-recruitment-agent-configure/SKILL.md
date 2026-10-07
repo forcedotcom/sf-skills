@@ -1,12 +1,13 @@
 ---
 name: education-cloud-student-recruitment-agent-configure
-description: "Use this skill to set up and configure the Education Cloud Student Recruitment Agent (SRA) — the packaged Agentforce agent (namespace sturecruitment) that answers admissions FAQs, captures inquiries, registers campus tours, and files applications for prospective students. TRIGGER when the user wants to: create or configure an admissions, recruitment, or enrollment agent, set up the Student Recruitment Agent, deploy SRA to an Experience Cloud site, clone the SRA flows or permission sets, add the SRA subagents (Admissions and Enrollments FAQ; Admissions Application; Campus Tours, Visits, and Events Registration; Request for Information), wire Learning Program grounding, or build the escalation subagent. Guides platform enablement, permissions, grounding, agent creation, and channel deployment — API-first with UI fallback. DO NOT TRIGGER for the Transfer Credit Agent, generic Agentforce authoring (use agentforce-generate), or base Education Cloud domain enablement."
+description: "Use this skill to set up and configure the Education Cloud Student Recruitment Agent (SRA) — the packaged Agentforce agent (namespace sturecruitment) that answers admissions FAQs, captures inquiries, registers campus tours, and files applications for prospective students. TRIGGER when the user wants to: create or configure an admissions, recruitment, or enrollment agent, set up the Student Recruitment Agent, deploy SRA to an Experience Cloud site, clone the SRA flows or permission sets, add the SRA subagents (Admissions and Enrollments FAQ; Admissions Application; Campus Tours, Visits, and Events Registration; Request for Information), wire Learning Program grounding, or build the escalation subagent. Guides platform enablement, permissions, grounding, agent creation, and channel deployment — API-first with UI fallback. DO NOT TRIGGER for the Transfer Credit Agent, generic Agentforce authoring (use agentforce-generate), or base Education Cloud domain enablement (use education-cloud-domain-configure)."
 metadata:
   version: "1.0"
   minApiVersion: "67.0"
   domains: ["Education"]
   relatedSkills:
     - "agentforce-generate"
+    - "education-cloud-domain-configure"
     - "platform-custom-field-generate"
     - "platform-metadata-deploy"
     - "platform-sharing-owd-configure"
@@ -30,7 +31,7 @@ metadata:
 
 - **In scope**: The full SRA setup sequence — the three platform toggles (Einstein, SRA, Omni-Channel; Agentforce provisioning is a verify-only Step-1 gate, not a toggle the skill flips), the `EducationCloudAiAgentAccess` permission set + OWD/sharing foundation, Learning Program grounding (Data Cloud data stream + hybrid search index + prompt template) and Knowledge/data-library grounding, creating the Service (unauth) and Employee (auth) agents, adding the 4 packaged SRA subagents, building the customer escalation subagent, cloning and configuring the 6 admissions flows (Service path), and deploying to Experience Cloud channels with user verification.
 - **Out of scope**: The **Transfer Credit Agent** (separate agent, own perms/help — never include its steps); generic Agentforce agent authoring from scratch (see Cross-Skill Integration below); Data Cloud connector plumbing beyond the SRA grounding path; deciding the substance of Knowledge article content — Claude may draft an article for the customer to review, but the customer owns what it says.
-- **The EDU foundation is a checked dependency, not an assumption**: SRA depends on base Education Cloud enablement, Person Accounts, R&A domain objects, and Data Cloud. This skill doesn't re-implement base Education Cloud domain enablement, but verifies each piece concretely (step 2a) and only surfaces a gap to the user to *fill what it detects*.
+- **The EDU foundation is a checked dependency, not an assumption**: SRA depends on base Education Cloud enablement, Person Accounts, R&A domain objects, and Data Cloud. This skill doesn't re-implement `education-cloud-domain-configure`, but verifies each piece concretely (step 2a) and only routes there to *fill a gap it detects*.
 
 ---
 
@@ -53,7 +54,7 @@ Defaults unless specified:
 
 **Step 0 resolves the org's current API version; Step 1 is a hard prerequisites gate — clear both before touching anything else.** The rest is a linear, sequential set of steps (0–13); confirm before every irreversible or org-shaping action, and end every step with its verify call. (See *Talking to the user* below.)
 
-**Every org-changing step walks a three-tier ladder, then verifies — tier = what runtime you have:** **T1** headless MCP (`dispatch`/`dispatch_readonly`, no shell) · **T2** `sf` CLI (needs a shell) · **T3** Setup UI. Try T1; drop to T2 on a route/allowlist failure; T3 if no shell. Steps carry a best-tier tag; the verify-only preflight (step 1) uses STOP/ASK-USER labels instead. `references/execution-model.md` has the ladder detail — allowlist, route signals, query-routing, API-version policy; read it whenever a tier or route is unclear.
+**Every org-changing step walks a three-tier ladder, then verifies — tier = what runtime you have:** **T1** headless MCP (`dispatch`/`dispatch_readonly`, no shell) · **T2** `sf` CLI (needs a shell) · **T3** Setup UI. Try T1; drop to T2 on a route/allowlist failure; T3 if no shell. Steps carry a best-tier tag; the verify-only preflight (step 1) uses STOP/REDIRECT labels instead. `references/execution-model.md` has the ladder detail — allowlist, route signals, query-routing, API-version policy; read it whenever a tier or route is unclear.
 
 **Several steps land on T3 with no tier-1/tier-2 write path at all** (hand the user the Setup path, then verify) — each is tagged inline where it occurs (e.g. `[T3 · ...]` on steps 8, 9a, 12); every other action has a tier-1 path.
 
@@ -77,11 +78,11 @@ All steps are sequential. Each step is one action + its best tier + a pointer to
 
 ### 1 — Verify prerequisites & gates
 
-> **Step 1 is a hard gate — clear it before enabling or building anything.** If a STOP check (external grant the skill can't flip) or an ASK-USER check (foundation the skill doesn't own) fails, **do not start the toggles or the foundation build** — stop and request the grant, or have the user complete the missing Education Cloud foundation setup, then re-verify. **Also confirm now, before saying anything to the customer: `references/customer-narration.md` has been read in full this run (see *Talking to the user* above) — this gate isn't cleared until that's true too.** Don't build permissions/OWD/grounding for an agent that can't exist. Full preflight-gate table and every verify call: `references/prerequisites.md`.
+> **Step 1 is a hard gate — clear it before enabling or building anything.** If a STOP check (external grant the skill can't flip) or a REDIRECT check (foundation the skill doesn't own) fails, **do not start the toggles or the foundation build** — stop and request the grant, or redirect to `education-cloud-domain-configure`, then re-verify. **Also confirm now, before saying anything to the customer: `references/customer-narration.md` has been read in full this run (see *Talking to the user* above) — this gate isn't cleared until that's true too.** Don't build permissions/OWD/grounding for an agent that can't exist. Full preflight-gate table and every verify call: `references/prerequisites.md`.
 
 1. **Confirm edition & the Einstein-for-EDU license.** Both are STOP checks — halt if either is missing. (Agentforce provisioning is verified in item 2; Data Cloud in item 2a.)
 2. **Verify the three SRA gates** — Agentforce provisioning, Education Cloud enabled, and the runtime `orgHasStudentRecruitmentAgentBetaAccess` check (a three-part AND — its exact composition and per-part verify live in `references/prerequisites.md`). Stop if provisioning, the license, or the Gater is missing.
-   - **2a — Verify the EDU foundation** (don't assume base Education Cloud domain enablement has run): EDU enablement, Person Accounts, R&A domain schema, and Data Cloud. Ask the user to complete the first three, then re-verify; Data Cloud is a Home-Org grant (that's a STOP, not something the user can self-serve).
+   - **2a — Verify the EDU foundation** (don't assume `education-cloud-domain-configure` ran): EDU enablement, Person Accounts, R&A domain schema, and Data Cloud. Route the first three to `education-cloud-domain-configure`, then re-verify; Data Cloud is a Home-Org grant (stop, don't redirect).
 
 ### 2 — Enable the platform toggles
 
@@ -159,6 +160,7 @@ This skill configures a live org; no repository files. Expected outputs:
 
 | Need | Delegate to |
 |------|-------------|
+| A verified EDU-foundation gap in EDU enablement, Person Accounts, or the R&A domain schema (step 2a) — not blind pre-delegation. Missing **Data Cloud** is *not* routed here — that's a Home-Org grant, outside this skill's scope | `education-cloud-domain-configure` |
 | Generic Agentforce agent authoring or metadata generation | `agentforce-generate` |
 
 ---

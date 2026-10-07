@@ -1,6 +1,6 @@
 ---
 name: service-omni-channel-setup-coordinate
-description: "Use to stand up Omni-Channel headlessly: base settings, users, service channels, routing configs, queues and members, presence statuses, permissions, supervisor configuration, and Case or VoiceCall routing flows. Reuses existing records and creates missing ones. Optional stages cover Command Center V2 on supported releases, agent experience, and skills-based routing. TRIGGER when: set up Omni-Channel, configure Omni routing, provision Omni agents, provision Omni supervisors, or configure Case, Incident, MessagingSession, or VoiceCall routing. Do not use for Agentforce bots, one existing field change, or bare metadata deployment."
+description: "Use to stand up Omni-Channel setup headlessly on Salesforce: base settings, agent users, service channels, routing configs, queues (create and align) and members, presence statuses, permission assignments, the classic Omni Supervisor config plus its action/tab surface, and — for Case and VoiceCall — the record-triggered routing flow. Supports Case, Incident, MessagingSession, and VoiceCall targets; reuses existing records and creates what is missing. Opt-in extras: presence user config, Omni sidebar, skills-based routing, and field-based WorkSkillRouting; also reports (read-only) whether the org is on the classic supervisor surface or Command Center V2. Triggers: set up Omni-Channel, configure Omni routing, provision Omni agents or supervisors, configure Case/Incident/Messaging/Voice routing. Do not use for Agentforce agents or bots, a single existing Omni field change, bare metadata deployment (use platform-metadata-deploy), or to enable Command Center V2 (not writable via the Metadata API)."
 allowed-tools: Bash Read Write Edit Glob Grep AskUserQuestion TodoWrite
 metadata:
   version: "1.0"
@@ -11,9 +11,7 @@ metadata:
     - "service-agentforce-human-escalation-configure"
     - "service-omni-agent-users-create"
     - "service-omni-base-settings-configure"
-    - "service-omni-channel-inventory-analyze"
     - "service-omni-command-center-analyze"
-    - "service-omni-command-center-configure"
     - "service-omni-permission-set-assign"
     - "service-omni-presence-status-deploy"
     - "service-omni-presence-user-config-deploy"
@@ -81,22 +79,20 @@ bash scripts/integration-driver.sh --run  <org-alias> [agent_count] [routing_tar
 - `Incident` targets require the Incident Management feature enabled; `MessagingSession` requires Enhanced Messaging; `VoiceCall` requires Service Cloud Voice. The readiness check hard-fails with a click-path when a requested target sObject is absent.
 - **Production guardrail:** `safe_to_write` is `true` iff any of `IsSandbox = true`, `TrialExpirationDate != null`, or `OrganizationType IN ('Developer Edition', 'Base Edition')`. The run hard-refuses when it is false. CDOs return `IsSandbox=false` with a non-null `TrialExpirationDate` and must be permitted, so `IsSandbox` alone is never the guard.
 
-Readiness check (mandatory, before any write leaf runs):
+Readiness check (silent, mandatory, before any leaf runs):
 
 1. `sf org display` → confirm the org alias is authenticated; refuse (exit 1) if not.
 2. `Organization` (`IsSandbox`, `TrialExpirationDate`, `OrganizationType`) → compute `safe_to_write`; refuse (exit 1) if false.
-3. `service-omni-channel-inventory-analyze` → capture the complete channel/routing baseline through the approved read-only aggregate operation; a blocked inventory prevents writes because the coordinator cannot safely establish the starting state.
-4. Preflight entity availability → for each **non-`Case`** routing target, confirm the sObject exists via `EntityDefinition`; a missing target hard-fails with a feature-enablement click-path (exit 2). `Case` is assumed present and skipped.
+3. Preflight entity availability → for each **non-`Case`** routing target, confirm the sObject exists via `EntityDefinition`; a missing target hard-fails with a feature-enablement click-path (exit 2). `Case` is assumed present and skipped.
 
 Omni-Channel base-settings enablement is not a separate upfront probe — it is detected by the base-settings leaf (step 1), and downstream Omni-dependent leaves are deferred as pending in `--plan` until it is on. The driver does not pre-check `UserLicense` headroom or `ServicePresenceStatus`/`QueueRoutingConfig` availability in this readiness pass.
 
 ## Skills this coordinates
 
-The coordinator delegates every write to a leaf skill. sObject-specific leaves (3, 5, 6, 6c, 7) loop once per routing target; the rest run once. For SkillsBased routing, steps 6a and 6b complete before any trigger flow is activated. Step 10a (`command-center-configure`) is opt-in through `OMNI_COMMAND_CENTER_V2=1`; step 10b (`command-center-analyze`) is a read-only advisory and always runs. Step 11a (`supervisor-surface-deploy`) always runs after the supervisor config succeeds. Leaves 12–13 are the opt-in rep-experience stages (`OMNI_REP_EXPERIENCE=1`).
+The coordinator delegates every write to a leaf skill. sObject-specific leaves (3, 5, 6, 6c, 7) loop once per routing target; the rest run once. For SkillsBased routing, steps 6a and 6b complete before any trigger flow is activated. Step 10a (`command-center-analyze`) is a read-only advisory and always runs. Step 11a (`supervisor-surface-deploy`) always runs after the supervisor config succeeds. Leaves 12–13 are the opt-in rep-experience stages (`OMNI_REP_EXPERIENCE=1`).
 
 | # | Child skill | Role |
 |---|---|---|
-| 0 | `service-omni-channel-inventory-analyze` | Capture the read-only cross-channel and routing baseline before any writes |
 | 1 | `service-omni-base-settings-configure` | Deploy `Settings:OmniChannel` (5 toggles) |
 | 2 | `service-omni-agent-users-create` | Provision the requested agent users |
 | 3 | `service-omni-service-channel-configure` | Reuse the standard `ServiceChannel` for the target sObject, or deploy the canonical XML |
@@ -110,8 +106,7 @@ The coordinator delegates every write to a leaf skill. sObject-specific leaves (
 | 8 | `service-omni-permission-set-assign` | Assign the `Omni_Agent` PermissionSet to agent users; self-heals the bundled metadata when absent (run mode only) |
 | 9 | `service-omni-supervisor-users-create` | Provision supervisor users |
 | 10 | `service-omni-supervisor-permset-assign` | Assign the standard `ContactCenterSupervisor` PermissionSet to supervisor users |
-| 10a | `service-omni-command-center-configure` | *(opt-in)* Enable Command Center V2 through preserved `OmniChannel.settings` and verify its seeded page and tab |
-| 10b | `service-omni-command-center-analyze` | **Read-only advisory** — report whether the org is on the classic supervisor surface or Command Center V2; never writes, never hard-blocks |
+| 10a | `service-omni-command-center-analyze` | **Read-only advisory** — report whether the org is on the classic supervisor surface or Command Center V2; never writes, never hard-blocks |
 | 11 | `service-omni-supervisor-config-deploy` | Deploy `OmniSupervisorConfig` binding supervisor users to the queues discovered in step 5 |
 | 11a | `service-omni-supervisor-surface-deploy` | Populate the supervisor **action + tab surface** (`OmniSupervisorConfigAction` / `OmniSupervisorConfigTab`) on the config from step 11 |
 | 12 | `service-omni-presence-user-config-deploy` | *(opt-in)* Deploy `PresenceUserConfig` + `PresenceDeclineReason` (decline + ACW) and assign the provisioned agents |
@@ -124,7 +119,7 @@ The coordinator delegates every write to a leaf skill. sObject-specific leaves (
 
 **Ordering and gating.** Leaves run in dependency order. Base settings are a hard prerequisite for every write below. For SkillsBased routing, agent `SkillUser` bindings (6a) and the `WorkSkillRouting` rule (6b) must succeed before the routing-flow leaf (6c) can activate the trigger. The flow also requires the queue (5) and its members (6), and it round-trips `FlowDefinitionView.ActiveVersionId` to prove the flow is Active. A required runtime proof does not pass merely because a PSR exists: SkillsBased requires at least one `SkillRequirement` on that PSR.
 
-**Supervisor path.** Supervisor users (9) use the same Anonymous Apex `System.setPassword` model as agent users. Because a password literal can be captured in an `ApexLog` when a debug TraceFlag is active, both user-create leaves fail closed *before* the first `System.setPassword`: they prove via a SOQL-filtered Tooling API query (`ExpirationDate > now`) that no active TraceFlag exists for the running user, and if that cannot be positively proven they set no password at all (users left ACTIVE and `reset_required`, with a `security_warning`). They never delete logs, so unrelated audit logs are untouched. The supervisor permset leaf (10) assigns the standard `ContactCenterSupervisor` — never the custom `Omni_Supervisor`, whose license-gated permissions fail assignment — and a contract test asserts this wiring. With `OMNI_COMMAND_CENTER_V2=1`, the coordinator enables and verifies the V2 org preference through `service-omni-command-center-configure`; optional `OMNI_COMMAND_CENTER_*` booleans select its subordinate controls. A read-only Command Center analysis then reports the resulting supervisor surface and never hard-blocks (ambiguous detection is yellow, a clean read green). Once the classic config lands (11), the surface leaf (11a) inserts the standard action + tab companions (`OmniSupervisorConfigAction` / `OmniSupervisorConfigTab`) against the config's Id — plain Data API rows, so no metadata-file redeploy — and is idempotent (only missing types are inserted). It runs only after the config succeeds; a skipped or failed config skips the surface with a dependency note.
+**Supervisor path.** Supervisor users (9) use the same Anonymous Apex `System.setPassword` model as agent users. Because a password literal can be captured in an `ApexLog` when a debug TraceFlag is active, both user-create leaves fail closed *before* the first `System.setPassword`: they prove via a SOQL-filtered Tooling API query (`ExpirationDate > now`) that no active TraceFlag exists for the running user, and if that cannot be positively proven they set no password at all (users left ACTIVE and `reset_required`, with a `security_warning`). They never delete logs, so unrelated audit logs are untouched. The supervisor permset leaf (10) assigns the standard `ContactCenterSupervisor` — never the custom `Omni_Supervisor`, whose license-gated permissions fail assignment — and a contract test asserts this wiring. After the supervisor permset, a read-only Command Center analysis (10a) reports the org's supervisor surface (classic vs Command Center V2); it never writes and never hard-blocks (ambiguous detection is yellow, a clean read green). Once the config lands (11), the surface leaf (11a) inserts the standard action + tab companions (`OmniSupervisorConfigAction` / `OmniSupervisorConfigTab`) against the config's Id — plain Data API rows, so no metadata-file redeploy — and is idempotent (only missing types are inserted). It runs only after the config succeeds; a skipped or failed config skips the surface with a dependency note.
 
 **Optional rep-experience stages.** With `OMNI_REP_EXPERIENCE=1`, presence user config (12) deploys a validator-safe `PresenceUserConfig` with its decline reason and assigns every resolved agent username, including reused users. Sidebar (13) pins the Omni utility region on `OMNI_CONSOLE_APP`, or auto-detects a single console app. SkillsBased routing is not a cosmetic rep-experience stage: when requested, its SkillUser and WorkSkillRouting prerequisites run before flow activation.
 
@@ -147,11 +142,23 @@ Report content rules:
 ## Limitations
 
 - Routing-flow deploy covers `Case` and `VoiceCall` only.
-- Classic `OmniSupervisorConfig`, including its standard action and tab surface, is supported. Command Center V2 is an explicit opt-in (`OMNI_COMMAND_CENTER_V2=1`) and runs only when the org's Metadata API exposes the V2 settings; otherwise the configure leaf fails closed. Custom actions, FlexiPages, AWS dashboards, and AI-agent surfaces still need external references and separate setup.
+- Classic `OmniSupervisorConfig` (including its action + tab surface) only. Command Center V2 (Enhanced Omni-Channel) is reported by the read-only analysis step but not enabled — the org preference is not writable via the Metadata API. The surface leaf populates only the reference-free standard action/tab types; custom-action, FlexiPage, AWS-dashboard, and AI-agent surfaces need an external reference and must be set up in Setup.
 - The rep-experience stages (presence user config, decline reasons, sidebar) run only with `OMNI_REP_EXPERIENCE=1`. SkillsBased routing is selected explicitly or inferred from a complete `OMNI_WSR_*` mapping and runs independently of that flag.
 - Teardown is **plan-only**: `--run` emits `deploy_ids.json` (a provenance manifest) and a dry-run `teardown.sh` that prints the reverse-order removal/restore plan, but does not execute destructive changes. Automated reversal is deliberately deferred until every leaf emits a normalized provenance block and the reversal is validated live — metadata-deployed components need destructiveChanges deploys and adopted records must never be deleted. Reversal today is a manual operator task guided by the plan and the per-skill artifacts.
 
-Detailed coverage and known headless gaps are maintained in `references/gap-catalog.md`. In short, Case routing is fully coordinated; VoiceCall needs a provisioned voice runtime; Incident and generic MessagingSession routing are adopted rather than created; and Omni Inbox or external supervisor surfaces remain outside this workflow.
+### Use-case coverage (current)
+
+| Use case | Status | What is / isn't headless |
+| --- | --- | --- |
+| Case routing | Ready | Full create-and-bind thread (queue + QRC + members + routing flow), idempotent; runtime `PendingServiceRouting` proof optional. |
+| VoiceCall / AFCC routing | Conditional | QRC + queue + members + routing flow are deployable, but require a **provisioned Amazon/AFCC contact center** and a live Voice runtime to prove end-to-end. Contact-center provisioning is the caller's responsibility. |
+| Open CTI → AFCC migration | Partial | The coordinator creates the Omni routing resources; it does not provision or migrate the contact center itself. |
+| Incident routing | Partial | Service channel + presence are supported; the coordinator **verifies/adopts** Incident routing but does not create a missing queue/QRC/flow for it. |
+| Generic MessagingSession routing | Partial | Service channel + presence supported; full create-and-bind is delegated to `service-agentforce-human-escalation-configure`, not run generically here. |
+| Classic Omni Supervisor | Ready | Users, permissions, config, queues/users, and the action/tab surface companions are all implemented. |
+| Command Center V2 | Detection only | The read-only analysis step reports classic vs V2; the org preference `CommandCenterForServiceV2` is **not writable via the Metadata API** (tracked: W-23827287) and must be enabled in Setup. |
+| Supervisor monitoring OrgValues | Not implemented | `OmniSuperConvMonitor`, `OmniSuperAgentSneakpeek`, `OmniSuperClientSneakpeek`, `OmniSuperWhisper`, `OmniSuperAdminSkillQueue` are OrgValues with no proven supported external write API. |
+| Omni Inbox | Not implemented | The sidebar leaf pins the Omni sidebar (`isOmniPinnedViewEnabled`); it does not create or configure Omni Inbox, a console app, or utility items. |
 
 ## References
 

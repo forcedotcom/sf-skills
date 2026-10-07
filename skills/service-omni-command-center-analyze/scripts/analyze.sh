@@ -142,8 +142,8 @@ else
     REC_SKILL="null"
   else
     STATE="v2_available_not_enabled"
-    REC_ACTION="Org supports V2 but the CommandCenterForServiceV2 preference is off (no seeded page). Use service-omni-command-center-configure when the W-24039822 Metadata API contract is available; otherwise enable it manually in Setup → Omni-Channel → Supervisor Settings."
-    REC_SKILL='"service-omni-command-center-configure"'
+    REC_ACTION="Org supports V2 but the CommandCenterForServiceV2 preference is off (no seeded page). Enable it manually in Setup → Omni-Channel → Supervisor Settings; there is no supported Metadata/Tooling write API for this preference."
+    REC_SKILL="null"
   fi
 fi
 
@@ -153,7 +153,7 @@ case "$STATE" in
   v2_permission_missing)
     MANUAL_ACTIONS=$(jq -n '[{id:"ASSIGN_V2_PERM",title:"Assign the CommandCenterForServiceUser permission to the supervisor (headless-capable via PermissionSet; packaging pending)",target_skill:null}]') ;;
   v2_available_not_enabled|v2_seed_incomplete)
-    MANUAL_ACTIONS=$(jq -n '[{id:"ENABLE_V2_PREF",title:"Enable Command Center for Service V2 with service-omni-command-center-configure when the W-24039822 API field is available; otherwise use Setup → Omni-Channel → Supervisor Settings",target_skill:"service-omni-command-center-configure"}]') ;;
+    MANUAL_ACTIONS=$(jq -n '[{id:"ENABLE_V2_PREF",title:"Enable Command Center for Service V2 in Setup → Omni-Channel → Supervisor Settings (no supported public write API; manual)",target_skill:null}]') ;;
 esac
 
 # Emit
