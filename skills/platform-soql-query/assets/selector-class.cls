@@ -83,7 +83,7 @@ public inherited sharing class ${OBJECT_NAME}Selector {
             SELECT Id, Name, OwnerId, CreatedDate, LastModifiedDate
             FROM ${OBJECT_NAME}
             WHERE Id IN :recordIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 
@@ -114,7 +114,7 @@ public inherited sharing class ${OBJECT_NAME}Selector {
             SELECT Id, Name, OwnerId, CreatedDate, LastModifiedDate
             FROM ${OBJECT_NAME}
             WHERE OwnerId = :ownerId
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
             ORDER BY LastModifiedDate DESC
             LIMIT 1000
         ];
@@ -139,7 +139,7 @@ public inherited sharing class ${OBJECT_NAME}Selector {
             FROM ${OBJECT_NAME}
             WHERE CreatedDate >= :startDate
             AND CreatedDate <= :endDate
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
             ORDER BY CreatedDate DESC
             LIMIT 10000
         ];
@@ -171,7 +171,7 @@ public inherited sharing class ${OBJECT_NAME}Selector {
                     LIMIT 50)
             FROM ${OBJECT_NAME}
             WHERE Id IN :recordIds
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
         ];
     }
 
@@ -211,7 +211,7 @@ public inherited sharing class ${OBJECT_NAME}Selector {
             SELECT Id
             FROM ${OBJECT_NAME}
             WHERE Id = :recordId
-            WITH SECURITY_ENFORCED
+            WITH USER_MODE
             LIMIT 1
         ];
         return !results.isEmpty();

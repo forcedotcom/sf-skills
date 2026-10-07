@@ -7,7 +7,7 @@ Salesforce SOQL query generation, optimization, and analysis skill with 100-poin
 - **Natural Language to SOQL**: Convert requests into executable queries
 - **Query Optimization**: Improve selectivity, LIMIT usage, and field selection
 - **Relationship Queries**: Parent-child, child-parent, and polymorphic patterns
-- **Security Guidance**: `WITH USER_MODE`, `WITH SECURITY_ENFORCED`, and Apex-safe usage
+- **Security Guidance**: `WITH USER_MODE`, and Apex-safe usage
 - **100-Point Scoring**: Performance, correctness, security, and readability checks
 
 ## Quick Start

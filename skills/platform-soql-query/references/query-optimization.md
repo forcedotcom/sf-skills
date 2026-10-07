@@ -111,7 +111,7 @@ for (List<Account> accs : [SELECT Id, Name FROM Account]) {
 
 ## Security Patterns
 
-### WITH SECURITY_ENFORCED
+### WITH SECURITY_ENFORCED (Removed in API version 67.0+, use USER_MODE instead)
 
 ```sql
 -- Throws exception if user lacks FLS
