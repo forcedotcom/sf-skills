@@ -15,6 +15,32 @@
 
 > **Key insight:** Bare `number` works in **variable declarations** but **fails at publish** in action inputs/outputs. This is the #1 cause of publish-fix-republish cycles.
 
+> **`sf agent validate` does NOT catch this.** `sf agent validate authoring-bundle` returns
+> `success: true` for an action param with the wrong numeric type — the check only runs server-side
+> during `sf agent publish`. Do not treat a green validate as evidence your action I/O types are
+> correct. When publish rejects the type it returns a **400** whose message names the exact fix,
+> e.g.:
+>
+> ```text
+> Validation failed for action 'calculate_interest_paid' due to invalid data type for the input
+> parameter 'fiscalYear'. To fix, update the data type to 'object' type and 'complex_data_type_name'
+> to 'lightning__integerType' for the input parameter 'fiscalYear'.
+> ```
+>
+> Read that message rather than guessing — it is authoritative for the target you are wiring.
+
+> **Apex `Integer` and Apex `Decimal` behave differently.** Verified against API v67.0 with
+> `sf` CLI 2.145.6:
+> - Apex **`Integer`** param (input *or* output) as bare `number` → publish **fails** with the 400
+>   above. Must be `object` + `lightning__integerType`.
+> - Apex **`Decimal`** output as bare `number` → publish **succeeds**. Two separate agents wired to
+>   `apex://` invocables returning `Decimal` published with bare `number` outputs and returned
+>   correct values at runtime.
+>
+> So for `apex://` targets, reach for the complex type when the Apex field is an `Integer`. If you
+> hit a publish 400 on a `Decimal`, follow the message — but a bare `number` is not automatically
+> wrong there.
+
 > **CRITICAL: Target type matters!** The valid `complex_data_type_name` for integer values differs by target type:
 > - **Flow targets** (`flow://`): Use `lightning__numberType` (NOT `lightning__integerType`)
 > - **Apex targets** (`apex://`): Use `lightning__integerType` (NOT `lightning__numberType`)
