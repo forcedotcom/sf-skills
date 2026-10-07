@@ -1,5 +1,5 @@
 ---
-name: "move-to-2gp-development"
+name: "dx-pkg-move-to-2gp-development"
 description: "Use this skill when users want to finalize the irreversible, one-way Move-to-2GP cutover for a converted 1GP managed package — afterward, new major/minor 1GP versions can NEVER be created. Also use when an ISV admin asks to move a 1GP package to 2GP development. Trigger when users mention move, 2gp, development, package."
 metadata:
   version: "1.0"
@@ -80,7 +80,7 @@ After every write operation, confirm the effect by re-reading state:
 
 ## Operations Reference
 
-Read the bundled [sor.yaml](sor.yaml) for the REST paths, queries, request bodies, org routing, and response mappings of the operations below.
+Read the bundled [references/sor.yaml](references/sor.yaml) for the REST paths, queries, request bodies, org routing, and response mappings of the operations below.
 
 Operations grouped by purpose. Use these as the building blocks for the workflows above.
 
