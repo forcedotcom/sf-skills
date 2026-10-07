@@ -102,6 +102,7 @@ This is especially important for:
 Use this playbook:
 - start with the most likely official guide root
 - if the page is JS-heavy, prefer browser-rendered extraction
+- for legacy Atlas pages, use `scripts/extract_salesforce_doc.py`; it captures the official document payload when the web component stays empty and validates that the payload matches the requested article
 - check whether the exact concept appears on the page
 - if the concept is missing, inspect official child links and follow the best matching 1–3 links
 - prefer exact concept pages over broad guide roots
@@ -206,7 +207,7 @@ If evidence is weak, say so plainly rather than forcing an answer.
 
 | File | When to read |
 |------|-------------|
-| `scripts/extract_salesforce_doc.py` | Use to fetch any official Salesforce doc URL; automatically routes `help.salesforce.com` into the dedicated Help extractor and supports browser-rendered extraction for all Salesforce-owned doc hosts |
+| `scripts/extract_salesforce_doc.py` | Use to fetch any official Salesforce doc URL; automatically routes `help.salesforce.com` into the dedicated Help extractor, supports browser-rendered extraction, and uses a page-identity-validated payload fallback for legacy Atlas pages |
 | `scripts/extract_help_salesforce.py` | Use directly when targeting `help.salesforce.com` `articleView` URLs; use when the wrapper is not appropriate |
 | `scripts/runtime_bootstrap.py` | Imported by the extraction scripts to resolve the isolated platform-docs-get Python runtime and Playwright browser path; not called directly |
 | `scripts/requirements.txt` | Lists Python dependencies (`playwright`, `playwright-stealth`) needed to run the extraction scripts |
