@@ -1,127 +1,164 @@
-# Move to 2GP API operations
+# Move to 2GP Operations Reference
 
-Use these operations for the final cutover of an already-converted 1GP managed package. Initial conversion, version promotion, and subscriber migration are separate workflows.
+Operations grouped by purpose. Use these as the building blocks for the workflows above.
 
-## Execution and org routing
+### Summary
 
-Prefer an available authenticated MCP tool that supports these REST or Tooling operations. Map the method, full path, query, body, and target org to its documented parameters; do not assume a particular tool name. If none is available, use the Salesforce CLI examples below. Never print access tokens.
+| Operation | Purpose | Status | Call | Depends on |
+|-----------|---------|--------|------|------------|
+| `discover-package-on-devhub` | read | implemented | `queryPackage2ByConvertedFrom` | — |
+| `check-eligibility-1gp-released` | validate | implemented | `queryHighestReleased1GPVersion` | `discover-package-on-devhub` |
+| `check-eligibility-2gp-converted-released` | validate | implemented | `queryReleased2GPConvertedVersion` | `check-eligibility-1gp-released` |
+| `check-already-done` | validate | implemented | `queryNativePackage2Version` | `check-eligibility-2gp-converted-released` |
+| `confirm-affirmations` | validate | implemented | — | `check-already-done` |
+| `finalize-move-to-2gp` | write | implemented | `finalizeMoveTo2gp` | `confirm-affirmations` |
+| `verify-finalize-by-user-confirmation` | verify | implemented | — | `finalize-move-to-2gp` |
+| `verify-finalize-on-packaging-org` | verify | implemented | `queryPackageConversion` | `verify-finalize-by-user-confirmation` |
 
-Use API 69.0 for the automated workflow. Check the org's supported API versions before dispatch. The original 1GP packaging org is required; the Dev Hub is optional and is used only for proactive converted-version checks. Subscriber orgs are not targets of this skill. The packaging org needs packaging enabled for the Tooling objects; finalization requires CreatePackaging and edit rights on the selected package. A profile name alone does not establish access.
+### Dependency graph
 
-In the examples, replace `packaging-org`, `dev-hub`, `<033-package-id>`, and `<0Ho-package-id>` with confirmed values. The 033 ID is the original MetadataPackage ID; 15- and 18-character forms are supported. Escape any user-supplied package name as a SOQL string literal, and URL-encode SOQL when sending REST query parameters.
-
-```bash
-sf org list --json
+```mermaid
+graph TD
+  discover_package_on_devhub["discover-package-on-devhub (read)"]
+  check_eligibility_1gp_released["check-eligibility-1gp-released (validate)"]
+  check_eligibility_2gp_converted_released["check-eligibility-2gp-converted-released (validate)"]
+  check_already_done["check-already-done (validate)"]
+  confirm_affirmations["confirm-affirmations (validate)"]
+  finalize_move_to_2gp["finalize-move-to-2gp (write)"]
+  verify_finalize_by_user_confirmation["verify-finalize-by-user-confirmation (verify)"]
+  verify_finalize_on_packaging_org["verify-finalize-on-packaging-org (verify)"]
+  discover_package_on_devhub --> check_eligibility_1gp_released
+  check_eligibility_1gp_released --> check_eligibility_2gp_converted_released
+  check_eligibility_2gp_converted_released --> check_already_done
+  check_already_done --> confirm_affirmations
+  confirm_affirmations --> finalize_move_to_2gp
+  finalize_move_to_2gp --> verify_finalize_by_user_confirmation
+  verify_finalize_by_user_confirmation --> verify_finalize_on_packaging_org
 ```
 
-## Resolve the source package (packaging org)
+### Read operations
 
-For a supplied package name, query MetadataPackage. Zero matches means the name or org is wrong; multiple matches require the user to select the package. A supplied 033 ID can be checked with an Id filter instead.
+#### `discover-package-on-devhub`
 
-```bash
-sf data query --use-tooling-api --api-version 69.0 --target-org packaging-org --json \
-  --query "SELECT Id, Name, NamespacePrefix FROM MetadataPackage WHERE Name = '<escaped-package-name>'"
-```
+Look up the 2GP Package2 record on DevHub for the 1GP package the user wants to move. The user provides the 1GP package by name (the customer-facing label) or by SubscriberPackageId (the 033... key prefix). Returns the Package2 Id (0Ho... key prefix) and namespace prefix, plus the SubscriberPackageId for use in eligibility queries. This is the DevHub-side anchor for the DevHub-side eligibility checks; the 1GP-side eligibility check uses the SubscriberPackageId (which equals the MetadataPackage Id on the 1GP DE org) directly.
 
-REST equivalent: `GET /services/data/v69.0/tooling/query?q=<URL-encoded-SOQL>`.
+**Call:** `queryPackage2ByConvertedFrom`   — status: `implemented`
 
-## Check completion first (packaging org)
+**Inputs:**
 
-```bash
-sf data query --use-tooling-api --api-version 69.0 --target-org packaging-org --json \
-  --query "SELECT Id, EndDate, FinalizedVersionId, FinalizedVersionNumber FROM PackageConversion WHERE ConvertedFromPackageId = '<033-package-id>'"
-```
+- `devhub_alias` *(`String`)* — Source: user_input. The `sf` alias of the user's DevHub org. Captured at skill start (see agent_guidance "AT START").
+- `subscriber_package_id` *(`String`)* — The 1GP package's SubscriberPackageId (033... key prefix). User provides this directly, or agent obtains it via a MetadataPackage name lookup on the 1GP DE org (see agent_guidance).
 
-No records: conversion is required first; stop. EndDate non-null: already finalized; stop before confirmations or POST. EndDate null: continue. A failed query is not equivalent to an empty result. Do not assume a native 2GP version is created by finalization.
+### Write operations
 
-## Check the latest Released 1GP version (packaging org)
+#### `finalize-move-to-2gp`
 
-```bash
-sf data query --use-tooling-api --api-version 69.0 --target-org packaging-org --json \
-  --query "SELECT Id, MajorVersion, MinorVersion, PatchVersion, ReleaseState FROM MetadataPackageVersion WHERE MetadataPackageId = '<033-package-id>' AND ReleaseState = 'Released' ORDER BY MajorVersion DESC, MinorVersion DESC, PatchVersion DESC LIMIT 1"
-```
+Irrevocably finalize the Move-to-2GP transition by POSTing to the packaging Connect API endpoint `POST /services/data/v69.0/connect/packaging/package/{packageId}/finalize-move-to-2gp` against the 1GP DE (packaging) org. `{packageId}` is the 1GP MetadataPackage Id (033- prefix). The request body carries the three affirmation flags — acknowledgedIrrevocable, acknowledgedTestingComplete, acknowledgedSourceRetrieved — all required and all must be true (these are exactly what the user confirmed in confirm-affirmations). Server-side the endpoint enforces the CreatePackaging edit-access gate, re-validates the three affirmations, confirms the URL packageId matches the org's in-progress conversion, then finalizes it — after which PackageConversion.EndDate is set. Shipped in 266 (operationId finalizeMoveTo2gp, MCP-enabled). On success returns successfullyFinalized, finalizedAt, packageId, and conversionId. For orgs on a pre-266 release, fall back to the manual browser path (invocation.fallback) which delivers the user to viewAllPackage.apexp to click "Move to 2GP" → Proceed.
 
-No Released version blocks finalization. PatchVersion must be zero: finalization of a latest Released patch version is rejected by the server. Retain the exact major.minor.patch coordinates.
+**Call:** `finalizeMoveTo2gp`   — status: `implemented`
 
-## Optional converted-version check (Dev Hub)
+**Inputs:**
 
-Skip both queries when no Dev Hub is connected, disclose the skipped proactive check, and let the finalization endpoint enforce version eligibility. The remaining workflow uses the package ID resolved on the packaging org.
+- `packaging_org_alias` *(`String`)* — Source - output of confirm-affirmations (transitively from check-eligibility-1gp-released.packaging_org_alias). The `sf` alias of the user's 1GP DE (packaging) org.
+  - **Source:** output of `check-eligibility-1gp-released`
+- `subscriber_package_id` *(`String`)* — Source - output of confirm-affirmations (transitively from discover-package-on-devhub.subscriber_package_id). The 1GP MetadataPackage's SubscriberPackageId / 033- prefix.
+  - **Source:** output of `discover-package-on-devhub`
+- `acknowledged_irrevocable` *(`Boolean`)* — Source - output of confirm-affirmations (acknowledged_irrevocable).
+- `acknowledged_testing_complete` *(`Boolean`)* — Source - output of confirm-affirmations (acknowledged_testing_complete).
+- `acknowledged_source_retrieved` *(`Boolean`)* — Source - output of confirm-affirmations (acknowledged_source_retrieved).
 
-```bash
-sf data query --use-tooling-api --api-version 69.0 --target-org dev-hub --json \
-  --query "SELECT Id, Name, NamespacePrefix, ConvertedFromPackageId, ContainerOptions FROM Package2 WHERE ConvertedFromPackageId = '<033-package-id>'"
-```
+**Depends on:** `confirm-affirmations`
 
-No matching Package2 requires checking the Dev Hub and conversion before continuing this branch. Using its 0Ho ID, query the highest Released converted version:
+### Verify operations
 
-```bash
-sf data query --use-tooling-api --api-version 69.0 --target-org dev-hub --json \
-  --query "SELECT Id, MajorVersion, MinorVersion, PatchVersion, IsReleased, ConvertedFromVersionId, SubscriberPackageVersionId FROM Package2Version WHERE Package2Id = '<0Ho-package-id>' AND IsReleased = true AND ConvertedFromVersionId != NULL ORDER BY MajorVersion DESC, MinorVersion DESC, PatchVersion DESC LIMIT 1"
-```
+#### `verify-finalize-by-user-confirmation`
 
-Require the returned major.minor.patch to equal the latest Released 1GP version exactly. No Released converted version or any mismatch blocks this branch. Do not choose an older matching version to bypass the latest version. The server also validates version alignment and rejects pending patch orgs.
+Human cross-check for the pre-266 manual fallback path ONLY: ask the user what the Setup page showed after they clicked Proceed. This step applies only when finalize-move-to-2gp took its manual browser fallback (org on a pre-266 release). In the normal 266 path the agent dispatches the finalize directly and the user never interacts with a browser, so this step is skipped — the endpoint's own response (successfullyFinalized / finalizedAt / conversionId) plus verify-finalize-on-packaging-org's EndDate wire-verify are the authoritative signals. Retained because the fallback still needs a verification surface when no direct-dispatch response exists.
 
-## Retrieve and preserve source before finalization
+**Status:** `implemented`
 
-This is preparation, not an automatic part of the cutover. The user must confirm that conversion and subscriber-migration tests are complete and that source is retrieved and preserved.
+**Inputs:**
 
-```bash
-sf package version retrieve --package <converted-04t-version-id> \
-  --output-dir <source-folder> --target-dev-hub dev-hub
-```
+- `package_name` *(`String`)* — Source - output of finalize-move-to-2gp (transitively from discover-package-on-devhub.package_name).
+  - **Source:** output of `discover-package-on-devhub`
 
-Prepare `versionName`, `versionNumber`, and `ancestorVersion` in the retrieved project's sfdx-project.json for ongoing 2GP development. See the [Salesforce preparation and cutover workflow](https://developer.salesforce.com/docs/platform/pkg1-dev/guide/migration-move-to-2gp-workflow.html).
+**Depends on:** `finalize-move-to-2gp`
 
-## Finalize (packaging org, explicit action requests only)
+#### `verify-finalize-on-packaging-org`
 
-Method: `POST`.
-Path: `/services/data/v69.0/connect/packaging/package/<033-package-id>/finalize-move-to-2gp`.
+The canonical wire-verification: re-query the PackageConversion record on the 1GP DE org to confirm EndDate is populated (non-null). EndDate is set by the package-conversion finalization service as part of finalize and is the reliable post-finalize wire signal. Uses the read-only PackageConversion Tooling exposure shipped in 264 (1GP DE org auth is already a hard precondition for this skill, so no auth-state branching needed). This is the canonical wire-verify and supplements (rather than replaces) the optional user attestation in verify-finalize-by-user-confirmation. Note: the finalize step's own 266 response also returns finalizedAt + conversionId directly, so this step is a durable cross-check rather than the sole success signal.
 
-Each field below is a JSON boolean bound to a distinct explicit user confirmation:
+**Call:** `queryPackageConversion`   — status: `implemented`
 
-| Field | Required confirmation |
-|---|---|
-| `acknowledgedIrrevocable` | No new major/minor 1GP versions after this one-way transition. |
-| `acknowledgedTestingComplete` | Both package-conversion testing and subscriber-migration testing are complete. |
-| `acknowledgedSourceRetrieved` | Converted package source is retrieved and preserved, with the project prepared for 2GP development. |
+**Inputs:**
 
-Never set a field true without its confirmation. If any confirmation is missing or declined, do not POST or direct the user to click Proceed.
+- `packaging_org_alias` *(`String`)* — Source - output of verify-finalize-by-user-confirmation (transitively from check-eligibility-1gp-released.packaging_org_alias).
+  - **Source:** output of `check-eligibility-1gp-released`
+- `subscriber_package_id` *(`String`)* — Source - output of verify-finalize-by-user-confirmation (transitively from discover-package-on-devhub.subscriber_package_id).
+  - **Source:** output of `discover-package-on-devhub`
 
-Only after all three confirmations, create a request file with their actual boolean values. The following is the valid body shape when all confirmations are affirmative; it is not permission to assume them:
+**Depends on:** `verify-finalize-by-user-confirmation`
 
-```json
-{
-  "acknowledgedIrrevocable": true,
-  "acknowledgedTestingComplete": true,
-  "acknowledgedSourceRetrieved": true
-}
-```
+**Notes:** 264 shipped the read-only public Tooling exposure of PackageConversion (available when packaging is enabled for the org). The fields queried here — Id, EndDate, FinalizedVersionId (FK → SubscriberPackageVersion), FinalizedVersionNumber, and the WHERE key ConvertedFromPackageId (FK → SubscriberPackage) — are all exposed read-only. EndDate non-null means finalize completed. Move-to-2GP does NOT auto-create native Package2Version records on DevHub (native creation is a separate user-driven step), so there is no Package2Version-based wire-verify; EndDate is the reliable signal.
 
-```bash
-sf api request rest "/services/data/v69.0/connect/packaging/package/<033-package-id>/finalize-move-to-2gp" \
-  --method POST --header "Content-Type: application/json" \
-  --body @finalize-request.json --target-org packaging-org --include
-```
+### Other operations
 
-Success is HTTP 200 with `successfullyFinalized: true` and `packageId`. `finalizedAt` and `conversionId` are optional and may be null. Verify persisted state using the completion query above on the SAME packaging org. EndDate non-null confirms completion. If EndDate remains null, retry the read once after 30 seconds, then report the discrepancy without repeating the write. If the POST times out, query state before deciding whether another write is needed; do not automatically retry.
+#### `check-eligibility-1gp-released`
 
-## Rejections and fallback
+Find the highest Released 1GP major.minor version of the package by querying MetadataPackageVersion on the 1GP DE org. MetadataPackageVersion is the 1GP DE-side view of `all_package_version` joined with `dev_package_version`, with a `ReleaseState` STATICENUM field whose Released picklist value is `"Released"`.
 
-| Response | Action |
-|---|---|
-| 400, missing acknowledgement | Stop and collect the missing confirmation; never invent it. |
-| 400, package mismatch | Check the selected package ID and original packaging org. |
-| 400, already finalized | Read EndDate and report completion if confirmed; do not POST again. |
-| 400, version mismatch | Explain that the latest Released 1GP and converted 2GP major.minor.patch versions must match. |
-| 400, patch version | Explain that a latest Released 1GP patch cannot be finalized. |
-| 400, pending patch org | Explain that the pending patch org must be resolved before finalization; let the user resolve it. |
-| 403, access failure | Check CreatePackaging, package edit rights, packaging-org identity, and the supplied package ID. Nonexistent package IDs can also return 403. |
-| 403, temporarily unavailable | Report the service message and suggest retrying later or contacting Salesforce Support. |
-| 404, no conversion record for an editable package | Initial conversion is required; this is not evidence of an unavailable endpoint. |
-| 5xx or transport failure | Report the error and read state before considering any repeat write. |
+**Call:** `queryHighestReleased1GPVersion`   — status: `implemented`
 
-Surface the service-supplied message. These business-rule labels describe causes, not a guarantee of distinct REST errorCode values.
+**Inputs:**
 
-When the org's supported API versions do not expose the finalization endpoint, use the manual Setup workflow after the same confirmations: Setup > Package Manager > select the package > Move to 2GP > review every statement > Proceed. Ask for the result and re-query PackageConversion using an API version the org supports where that object is available. Do not bypass an access or eligibility rejection through Setup. If an independent state read is unavailable, clearly distinguish the user's reported success from verified persisted state.
+- `packaging_org_alias` *(`String`)* — Source: user_input. The `sf` alias of the user's 1GP DE (packaging) org. Captured at skill start (see agent_guidance "AT START").
+- `subscriber_package_id` *(`String`)* — Source - output of discover-package-on-devhub. Note: the SubscriberPackageId (033... key prefix) on DevHub is the same Id as MetadataPackage on the 1GP DE org — both wrap the same all_package row.
 
-After finalization, the next development step is `sf package version create` from the prepared DX project. It is a separate operation. Older 1GP versions remain patchable; the version moved to 2GP and later versions require 2GP patches. See the linked Salesforce workflow for the precise boundary.
+**Depends on:** `discover-package-on-devhub`
+
+#### `check-eligibility-2gp-converted-released`
+
+Confirm a 2GP-converted Package2Version exists at the same major.minor as the highest Released 1GP version, AND that the 2GP version is Released. This is the second half of the eligibility gate — Move-to-2GP requires the highest 1GP major.minor to have a corresponding RELEASED 2GP-converted equivalent. Queries Package2Version on DevHub.
+
+**Call:** `queryReleased2GPConvertedVersion`   — status: `implemented`
+
+**Inputs:**
+
+- `devhub_alias` *(`String`)* — Source - output of check-eligibility-1gp-released (transitively from discover-package-on-devhub.devhub_alias).
+  - **Source:** output of `discover-package-on-devhub`
+- `package2_id` *(`String`)* — Source - output of check-eligibility-1gp-released (transitively from discover-package-on-devhub.package2_id).
+  - **Source:** output of `discover-package-on-devhub`
+- `major` *(`Integer`)* — Source - output of check-eligibility-1gp-released (highest_1gp_major).
+- `minor` *(`Integer`)* — Source - output of check-eligibility-1gp-released (highest_1gp_minor).
+
+**Depends on:** `check-eligibility-1gp-released`
+
+#### `check-already-done`
+
+Detect the early-exit case — if a native (non-converted) Package2Version exists for this Package2, Move-to-2GP has ALREADY happened OR the package was 2GP-native to start with. Native 2GP versions are characterized by ConvertedFromVersionId = NULL. If any such Package2Version exists, the skill exits immediately.
+
+**Call:** `queryNativePackage2Version`   — status: `implemented`
+
+**Inputs:**
+
+- `devhub_alias` *(`String`)* — Source - output of check-eligibility-2gp-converted-released (transitively from discover-package-on-devhub.devhub_alias).
+  - **Source:** output of `discover-package-on-devhub`
+- `package2_id` *(`String`)* — Source - output of check-eligibility-2gp-converted-released (transitively from discover-package-on-devhub.package2_id).
+  - **Source:** output of `discover-package-on-devhub`
+
+**Depends on:** `check-eligibility-2gp-converted-released`
+
+#### `confirm-affirmations`
+
+Present the irrevocability + testing affirmations to the user, mirroring the "Move to Second-Generation Managed Packaging" dialog shown in Setup UI. The user must explicitly confirm each affirmation before the agent proceeds to the (manual) finalize step. This step has no API surface — it's a structured agent-to-user interaction encoded in the SOR for contract consistency between the eventual 266 Connect API (which is expected to require these as request-body fields) and the pre-266 manual flow.
+
+**Status:** `implemented`
+
+**Inputs:**
+
+- `package_name` *(`String`)* — Source - output of check-already-done (transitively from discover-package-on-devhub.package_name).
+  - **Source:** output of `discover-package-on-devhub`
+- `package2_id` *(`String`)* — Source - output of check-already-done (transitively from discover-package-on-devhub.package2_id).
+  - **Source:** output of `discover-package-on-devhub`
+
+**Depends on:** `check-already-done`
