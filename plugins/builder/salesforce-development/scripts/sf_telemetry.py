@@ -308,9 +308,14 @@ _ALLOWLIST = {
     # same plugin-catalog proposal (dynamic-loading-strategy-plan.md Phase 4.5).
     # `surface` (bypass-gate | discovery-command | session-start | user-prompt) is
     # recovered from the session-scoped proposal marker at correlation time, not
-    # asserted by the caller.
-    "plugin_loaded": {"plugin", "origin", "confidence", "surface"},
-    "plugin_suggestion_declined": {"plugin", "origin", "confidence", "surface"},
+    # asserted by the caller. All four plugin funnel events also carry the match
+    # reason -- `match_keywords` (curated catalog keywords only) and `match_signal`
+    # (a fixed session-start file-signal code), revalidated at capture against the
+    # shipped catalog / fixed code set (see _clamp_match_keywords). Never prompt text.
+    "plugin_loaded": {"plugin", "origin", "confidence", "surface", "match_keywords", "match_signal"},
+    "plugin_suggestion_declined": {
+        "plugin", "origin", "confidence", "surface", "match_keywords", "match_signal",
+    },
     # plugin_recommended / plugin_installed: additive to the accept/decline pair
     # above (W-23856691). `plugin_recommended` fires once per plugin per session when
     # a known-set plugin is surfaced to the user on any surface (bypass-gate |
@@ -318,8 +323,8 @@ _ALLOWLIST = {
     # any successful install of a known-set plugin, `surface` recovered from the
     # proposal marker or "self-directed" when the user installed with no in-session
     # proposal.
-    "plugin_recommended": {"plugin", "origin", "confidence", "surface"},
-    "plugin_installed": {"plugin", "origin", "confidence", "surface"},
+    "plugin_recommended": {"plugin", "origin", "confidence", "surface", "match_keywords", "match_signal"},
+    "plugin_installed": {"plugin", "origin", "confidence", "surface", "match_keywords", "match_signal"},
     # Terminal result of one `sf-context plugin-install` invocation. The event
     # carries a catalog-validated plugin name (or the fixed `unknown` sentinel)
     # plus a fixed reason vocabulary emitted by the command's own return branches.
@@ -894,6 +899,85 @@ def _plugin_catalog_origins() -> dict:
         except (OSError, json.JSONDecodeError, ValueError, AttributeError):
             _PLUGIN_CATALOG_CACHE = {}
     return _PLUGIN_CATALOG_CACHE
+
+
+# --- Plugin match reason (the four plugin funnel events) -----------------------
+# WHY a plugin proposal fired, never the prompt: `match_keywords` is the
+# comma-joined curated catalog subset of the scorer's match evidence
+# (plugin_catalog.curated_match_terms); `match_signal` is the SessionStart
+# file-signal code (sf_context._PLUGIN_SIGNALS). The caller is not trusted -- this
+# module is the privacy boundary. A signal must be one of the fixed codes below and
+# is kept only on the session-start surface; a keyword must be a token of THAT
+# plugin's own curated `match.keywords`/`match.anchorTerms` in the shipped catalog,
+# so nothing but owner-approved catalog vocabulary can be buffered or sent. The caps
+# mirror plugin_catalog.MATCH_REASON_MAX_TERMS / MATCH_REASON_MAX_CHARS.
+_PLUGIN_MATCH_REASON_EVENTS = frozenset({
+    "plugin_recommended", "plugin_loaded", "plugin_installed", "plugin_suggestion_declined",
+})
+_PLUGIN_MATCH_SIGNALS = frozenset({"lwc", "react", "agentforce", "cms"})
+_MATCH_KEYWORDS_MAX_TERMS = 8
+_MATCH_KEYWORDS_MAX_CHARS = 120
+_MATCH_TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+_PLUGIN_MATCH_VOCAB_CACHE: Optional[dict] = None
+
+
+def _plugin_catalog_match_vocab() -> dict:
+    """Map of {plugin_name: frozenset(curated tokens)} from catalog/plugins.json
+    (cached): every lowercase [a-z0-9]+ token of the plugin's own `match.keywords`
+    and `match.anchorTerms` -- a superset of what the scorer's tokenizer can match,
+    so membership proves a keyword is shipped curated vocabulary.
+
+    Fail-closed to {} on a missing/corrupt artifact (every keyword then drops),
+    the same discipline as _plugin_catalog_origins."""
+    global _PLUGIN_MATCH_VOCAB_CACHE
+    if _PLUGIN_MATCH_VOCAB_CACHE is None:
+        _PLUGIN_MATCH_VOCAB_CACHE = {}
+        try:
+            catalog_path = Path(__file__).resolve().parent.parent / "catalog" / "plugins.json"
+            data = json.loads(catalog_path.read_text(encoding="utf-8"))
+            plugins = data.get("plugins") if isinstance(data, dict) else None
+            for entry in plugins or []:
+                if not isinstance(entry, dict):
+                    continue
+                name, match = entry.get("name"), entry.get("match")
+                if not isinstance(name, str) or not name or not isinstance(match, dict):
+                    continue
+                text = " ".join(
+                    term for field in ("keywords", "anchorTerms")
+                    if isinstance(match.get(field), list)
+                    for term in match[field] if isinstance(term, str)
+                )
+                _PLUGIN_MATCH_VOCAB_CACHE[name] = frozenset(
+                    _MATCH_TOKEN_PATTERN.findall(text.lower()))
+        except (OSError, json.JSONDecodeError, ValueError, AttributeError, TypeError):
+            # TypeError: a truthy, non-iterable "plugins" -- this loader also runs
+            # at egress (_to_a4d_event), so it must never raise into a send.
+            _PLUGIN_MATCH_VOCAB_CACHE = {}
+    return _PLUGIN_MATCH_VOCAB_CACHE
+
+
+def _clamp_match_keywords(value: object, plugin: object) -> str:
+    """Revalidate a comma-joined `match_keywords` value: keep only tokens of
+    `plugin`'s own curated catalog vocabulary, sorted and de-duplicated, then the
+    longest prefix within the count/length caps ("" when nothing survives)."""
+    if not isinstance(value, str) or not value or not isinstance(plugin, str):
+        return ""
+    vocab = _plugin_catalog_match_vocab().get(plugin) or frozenset()
+    kept: list = []
+    for token in sorted({token for token in value.split(",") if token in vocab}):
+        if len(kept) >= _MATCH_KEYWORDS_MAX_TERMS \
+                or len(",".join([*kept, token])) > _MATCH_KEYWORDS_MAX_CHARS:
+            break
+        kept.append(token)
+    return ",".join(kept)
+
+
+def _clamp_match_signal(value: object, surface: object) -> str:
+    """Revalidate a comma-joined `match_signal` value: only on the session-start
+    surface, only the fixed signal codes, sorted and de-duplicated ("" otherwise)."""
+    if surface != "session-start" or not isinstance(value, str) or not value:
+        return ""
+    return ",".join(sorted({code for code in value.split(",") if code in _PLUGIN_MATCH_SIGNALS}))
 
 
 def _resolve_sf_skill(skill: str) -> tuple:
@@ -1591,9 +1675,10 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             # Both are in-process-only calls from sf_context.py::cmd_plugin_install
             # (never a standalone hook), correlating against the session-scoped
             # plugin-proposal marker -- see dynamic-loading-strategy-plan.md Phase
-            # 4.5. The caller passes plugin/confidence/surface already recovered
-            # from that marker; this gate only re-validates each against its closed
-            # vocabulary before it is ever buffered.
+            # 4.5. The caller passes plugin/confidence/surface (and the match
+            # reason) already recovered from that marker; this gate only
+            # re-validates each against its closed vocabulary before it is ever
+            # buffered.
             plugin = tool_input.get("plugin") if isinstance(tool_input, dict) else ""
             confidence = tool_input.get("confidence") if isinstance(tool_input, dict) else ""
             surface = tool_input.get("surface") if isinstance(tool_input, dict) else ""
@@ -1606,6 +1691,8 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             _write_event(event, {
                 "plugin": plugin, "origin": origin,
                 "confidence": confidence, "surface": surface,
+                "match_keywords": _clamp_match_keywords(tool_input.get("match_keywords"), plugin),
+                "match_signal": _clamp_match_signal(tool_input.get("match_signal"), surface),
             }, payload)
             return
 
@@ -1617,8 +1704,9 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             # proposal surfaces, including the in-process SessionStart banner slot
             # `_session_start_plugin_slot`); `plugin_installed` is fired on any
             # successful install of a known-set plugin. The caller passes
-            # plugin/confidence/surface; the origin dimension is re-derived here
-            # from the catalog so it can never be spoofed by the caller.
+            # plugin/confidence/surface and the match reason; the origin dimension
+            # is re-derived here from the catalog so it can never be spoofed by the
+            # caller, and the match reason is clamped to catalog vocabulary.
             plugin = tool_input.get("plugin") if isinstance(tool_input, dict) else ""
             confidence = tool_input.get("confidence") if isinstance(tool_input, dict) else ""
             surface = tool_input.get("surface") if isinstance(tool_input, dict) else ""
@@ -1645,6 +1733,8 @@ def capture_event(event: str, outcome: str, payload: dict) -> None:
             _write_event(event, {
                 "plugin": plugin, "origin": origin,
                 "confidence": confidence, "surface": surface,
+                "match_keywords": _clamp_match_keywords(tool_input.get("match_keywords"), plugin),
+                "match_signal": _clamp_match_signal(tool_input.get("match_signal"), surface),
             }, payload)
             return
 
@@ -2245,6 +2335,17 @@ def _to_a4d_event(record: dict, org_bucket: Optional[str] = None,
         # necessarily ours because non-Salesforce dispatches were dropped.
         attributes["subjectPlugin"] = str(
             p.get("subject_plugin") or "salesforce-development")
+    # matchKeywords / matchSignal: WHY a plugin proposal fired (curated catalog
+    # keywords; session-start file-signal code). UIP-ONLY -- the PDP
+    # origin::confidence::surface triple keeps its fixed 3-part arity. Always set on
+    # the four plugin funnel events ("" = no curated evidence or a pre-feature
+    # record) and re-clamped at egress so a legacy/tampered buffer still cannot send
+    # anything but shipped catalog vocabulary.
+    if rec.get("event") in _PLUGIN_MATCH_REASON_EVENTS:
+        attributes["matchKeywords"] = _clamp_match_keywords(
+            p.get("match_keywords"), p.get("plugin"))
+        attributes["matchSignal"] = _clamp_match_signal(
+            p.get("match_signal"), p.get("surface"))
     # Raw org id rides UIP ONLY, and ONLY when live-resolved (non-empty) — never
     # enveloped on the buffered record, never on PDP events.
     if org_id:

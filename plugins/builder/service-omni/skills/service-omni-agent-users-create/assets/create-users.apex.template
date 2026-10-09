@@ -1,0 +1,80 @@
+// service-omni-agent-users-create - Anonymous Apex asset template. Tokens __COUNT__/__PROFILE_ID__/__SUFFIX__ resolved by run-create.sh. Idempotency, password/TraceFlag security note, output contract: references/apex-template-notes.md.
+
+Integer requested = __COUNT__;
+String profileId  = '__PROFILE_ID__';
+String suffix     = '__SUFFIX__';
+
+Map<String, Integer> expectedByUsername = new Map<String, Integer>();
+for (Integer i = 1; i <= requested; i++) {
+    expectedByUsername.put('agent' + i + '.' + suffix + '@example.com', i);
+}
+
+Set<String> existingUsernames = new Set<String>();
+for (User u : [SELECT Username FROM User WHERE Username IN :expectedByUsername.keySet()]) {
+    existingUsernames.add(u.Username.toLowerCase());
+}
+
+List<User> toInsert = new List<User>();
+
+for (Integer i = 1; i <= requested; i++) {
+    String uname = 'agent' + i + '.' + suffix + '@example.com';
+    if (existingUsernames.contains(uname.toLowerCase())) {
+        continue;
+    }
+
+    // Alias must be <= 8 chars - 'omag' (4) + index + trailing suffix chars.
+    String aliasStr;
+    if (i < 10) {
+        aliasStr = 'omag' + i + suffix.substring(suffix.length() - 3);
+    } else {
+        aliasStr = 'omag' + i + suffix.substring(suffix.length() - 2);
+    }
+
+    User u = new User(
+        FirstName           = 'Omni',
+        LastName            = 'Agent' + i,
+        Email               = uname,
+        Username            = uname,
+        Alias               = aliasStr,
+        ProfileId           = profileId,
+        IsActive            = true,
+        // Service Cloud feature license - required for the user to actually go online in
+        // Omni-Channel and to hold Omni permissions. Only allowed on user licenses that
+        // support it (e.g. Salesforce); the try/catch below strips it and retries when the
+        // profile's user license rejects it (e.g. the limited "Service Cloud" user license).
+        UserPermissionsSupportUser = true,
+        TimeZoneSidKey      = 'America/Los_Angeles',
+        LocaleSidKey        = 'en_US',
+        EmailEncodingKey    = 'UTF-8',
+        LanguageLocaleKey   = 'en_US'
+    );
+    toInsert.add(u);
+}
+
+if (toInsert.isEmpty()) {
+    System.debug('AGENT_USERS_ALL_EXIST - no inserts required');
+    return;
+}
+
+try {
+    insert toInsert;
+    System.debug('AGENT_USERS_SERVICE_CLOUD_FEATURE|enabled');
+} catch (DmlException e) {
+    // The user license behind this profile does not allow the Service Cloud feature.
+    // Fall back to creating the users without it so the skill still provisions them; the
+    // operator must move them to a Salesforce license + Service Cloud feature for full Omni.
+    if (e.getMessage() != null && e.getMessage().contains('Service Cloud User')) {
+        for (User u : toInsert) { u.UserPermissionsSupportUser = false; }
+        insert toInsert;
+        System.debug('AGENT_USERS_SERVICE_CLOUD_FEATURE|skipped_license_not_allowed');
+    } else {
+        throw e;
+    }
+}
+
+// Emit machine-parseable lines. No password field - passwords are set by a separate
+// `System.setPassword` Apex submission on the CLI side (run-create.sh), whose source
+// Salesforce does not persist to any queryable ApexLog.
+for (User u : toInsert) {
+    System.debug('AGENT_USER_CREATED|' + u.Id + '|' + u.Username + '|' + u.Email);
+}

@@ -7,6 +7,59 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-10-09
+
+### Added
+
+- **Education Cloud and Omni-Channel are now recommended companion plugins.** The new
+  `education-cloud` and `service-omni` plugins are publicly available. Plugin recommendations
+  can suggest them, and `/salesforce-development:plugin-install` can install them, when you work
+  on Education Cloud or Omni-Channel routing tasks.
+- Plugin recommendation telemetry now includes matched keywords from the plugin's curated catalog
+  and a fixed project category to help improve suggestions. Only catalog-approved terms and
+  predefined category codes are collected.
+
+### Changed
+
+- Added related-skill hints: `platform-apex-logs-debug` now points to `platform-soql-query` for slow SOQL, and `platform-metadata-deploy` and `platform-soql-query` point to `platform-apex-test-run` for post-deploy and query test runs.
+
+### Fixed
+
+- English catalog requests with emoji presentation selectors (such as `✔️` or `❤️`) remain
+  eligible for recommendations. Selectors attached to catalog words also preserve matching.
+  Accented and mixed-script requests still abstain. (W-24445750)
+
+- Filtered prompts now preserve UTF-8 within the existing byte limit without splitting characters.
+  Catalog tokens retain whole Unicode words with consistent NFC/case folding. Requests containing
+  non-ASCII letters or combining marks abstain from catalog matching, including accented Latin
+  requests and non-English instructions mixed with English logs, so incomplete language evidence
+  cannot block tool calls. Host/incidental filtering and installed-skill routing are unchanged.
+  This adds lexical consistency, not translation or multilingual semantic understanding.
+  (W-24445750; [sf-skills#354 comment](https://github.com/forcedotcom/sf-skills/issues/354#issuecomment-6037899821))
+
+- Plugin suggestions now match only the user's own words. IDE file and selection notices, task
+  notifications, system reminders, URLs, file paths, slash-command names, and `UPPER_SNAKE`
+  identifiers no longer trigger suggestions or block unrelated tool calls, and text inside a notice
+  can no longer confirm a pending install. Prompts written mostly in a non-Latin script no longer
+  trigger suggestions from their few English fragments.
+  ([forcedotcom/sf-skills#354](https://github.com/forcedotcom/sf-skills/issues/354), reported by
+  [@Z-kondokazuhiro](https://github.com/Z-kondokazuhiro))
+- Once Claude loads the skill that owns SOQL queries, metadata retrieves, Apex test runs, or
+  manifest generation, its raw `sf` commands (and, for `platform-manifest-generate`, `package.xml`
+  writes) stay allowed for the rest of the session instead of only until the next message. This
+  resets when a session starts, resumes, is cleared, or is compacted. Only the
+  `salesforce-development:`-qualified skill name counts for the session, and a skill loaded by
+  typing its slash command does not count yet.
+  ([forcedotcom/sf-skills#355](https://github.com/forcedotcom/sf-skills/issues/355), reported by
+  [@jvbeat](https://github.com/jvbeat))
+- The `ui_mode` setting now also applies to plain-language questions such as "where am I?" or
+  "what's the status of this project?". With `off`, these questions and "what can I do here?" show
+  nothing. With `plain`, status and "where am I?" get the short plain-text summary. A
+  `discover journey` that Claude runs on its own follows the mode too, and plain summaries now show
+  the latest stage with evidence as "Current stage". Slash commands still work in every mode.
+  ([forcedotcom/sf-skills#340](https://github.com/forcedotcom/sf-skills/issues/340), reported by
+  [@rob-alexa](https://github.com/rob-alexa))
+
 ## [2.3.0] — 2026-10-02
 
 ### Added

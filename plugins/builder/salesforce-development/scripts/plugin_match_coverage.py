@@ -28,7 +28,9 @@ It exists so that:
 
 Coverage is the positive (examplePrompts) direction, hard-gated: each of a
 plugin's own example prompts MUST route back to it at ``high`` on the discovery
-path (``require_anchor_terms=False``). Discovery is the LESS strict of the two
+path (``require_anchor_terms=False``). Entries with
+``enforceAnchorsOnAllSurfaces=True`` still apply their anchor gate here. For other
+entries, discovery is the LESS strict of the two
 runtime paths: the anchor-gated proactive path (below) is a subset of it -- it
 additionally drops any prompt that names no anchor term -- so clearing discovery
 does NOT imply clearing proactive. That difference is exactly what the advisory
@@ -48,7 +50,8 @@ Two scorer paths are measured, because the runtime uses both
 
   discovery  -- ``require_anchor_terms=False``: the explicit "/plugin-match"
                 and reactive bypass-gate surfaces, where the user's own act of
-                asking is the evidence. This is the HARD gate: every candidate
+                asking is the evidence. Entries opting into all-surface anchor
+                enforcement retain their anchors and companions. This is the HARD gate: every candidate
                 plugin's every example prompt must reach that plugin at the
                 ``high`` band here.
   proactive  -- ``require_anchor_terms=True``: the SessionStart /
@@ -57,8 +60,8 @@ Two scorer paths are measured, because the runtime uses both
                 never interrupt unprompted. This is a SOFT signal: a prompt that
                 clears discovery but not proactive is reported as a proactive
                 gap (usually an example prompt that names no anchor term), not a
-                build failure -- anchor gating is a deliberate proactive-only
-                tradeoff, but owners should see which of their prompts it drops.
+                build failure -- anchor gating is proactive-only by default;
+                opted-in entries gate both paths. Owners should see any gaps.
 
 The foundation plugin (``salesforce-development``) is excluded from the corpus
 and from coverage: the runtime never recommends the plugin that is already
@@ -107,7 +110,7 @@ FOUNDATION_PLUGIN = "salesforce-development"
 class PromptCoverage(NamedTuple):
     """One example prompt's routing result on both scorer paths."""
     prompt: str
-    discovery_own_high: bool          # own plugin reached `high` (anchor-ungated path)
+    discovery_own_high: bool          # own plugin reached `high` (solicited surface; opt-in anchors apply)
     discovery_other_highs: tuple      # names of OTHER plugins also at `high` (recall context)
     proactive_own_high: bool          # own plugin reached `high` (anchor-gated path)
     proactive_present: bool           # own plugin appeared at all on the anchor-gated path

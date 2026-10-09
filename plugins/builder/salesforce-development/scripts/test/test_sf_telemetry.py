@@ -35,6 +35,7 @@ import io
 import json
 import multiprocessing as mp
 import os
+import re
 import tempfile
 import time
 import unittest
@@ -142,12 +143,19 @@ PLAN_EVENTS = {
     "mcp_tool_used": {"mcp_server", "mcp_tool", "outcome"},
     # plugin_loaded / plugin_suggestion_declined: accept/decline halves of a
     # plugin-catalog proposal (dynamic-loading-strategy-plan.md Phase 4.5).
-    "plugin_loaded": {"plugin", "origin", "confidence", "surface"},
-    "plugin_suggestion_declined": {"plugin", "origin", "confidence", "surface"},
+    # All four plugin funnel events also carry the match reason
+    # (dynamic-plugins-funnel.md "Match reason"): match_keywords (curated catalog
+    # tokens only) and match_signal (a fixed session-start file-signal code).
+    "plugin_loaded": {"plugin", "origin", "confidence", "surface",
+                      "match_keywords", "match_signal"},
+    "plugin_suggestion_declined": {"plugin", "origin", "confidence", "surface",
+                                   "match_keywords", "match_signal"},
     # plugin_recommended / plugin_installed: recommend-time and install-time
     # signals for a known-set plugin (W-23856691), additive to the pair above.
-    "plugin_recommended": {"plugin", "origin", "confidence", "surface"},
-    "plugin_installed": {"plugin", "origin", "confidence", "surface"},
+    "plugin_recommended": {"plugin", "origin", "confidence", "surface",
+                           "match_keywords", "match_signal"},
+    "plugin_installed": {"plugin", "origin", "confidence", "surface",
+                         "match_keywords", "match_signal"},
     "plugin_install_result": {"plugin", "reason"},
     "plugin_recommendation_configured": {"action", "level"},
     # feedback: the /feedback command's structured signal. rating is a numeric
@@ -174,6 +182,14 @@ FORBIDDEN_SUBSTRINGS = [
     "SECRET", "token", "TOKEN", "password", "acme-prod", "projectatlas",
     "jsmith", "W-12345678", "https://", "/Users/", "customer bug",
 ]
+
+# The four plugin funnel events that carry the match reason (match_keywords /
+# match_signal on the buffer, matchKeywords / matchSignal on UIP). Pinned here
+# rather than read from sf_telemetry, so an event silently dropped from the code's
+# set fails these tests instead of shrinking their loops.
+PLUGIN_FUNNEL_EVENTS = (
+    "plugin_recommended", "plugin_loaded", "plugin_suggestion_declined", "plugin_installed",
+)
 
 
 class PlanParityTests(unittest.TestCase):
@@ -593,22 +609,46 @@ class EveryEventCapturedTests(TelemetryCaptureTestBase):
         self.assertEqual(seen, set(PLAN_EVENTS), "not every plan event reached the buffer")
 
     def test_plugin_loaded_and_declined(self):
+        # The match reason keys are ALWAYS written ("" when the caller passed none),
+        # so a dashboard can tell "no curated evidence" from a pre-feature record.
         with mock.patch.object(sft, "_plugin_catalog_origins", return_value={"agentforce-adlc": "external"}):
             self.capture("plugin_loaded", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "bypass-gate"}})
             ev = self.last("plugin_loaded")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "bypass-gate"})
+                                             "confidence": "high", "surface": "bypass-gate",
+                                             "match_keywords": "", "match_signal": ""})
             self.capture("plugin_suggestion_declined", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "medium", "surface": "discovery-command"}})
             ev = self.last("plugin_suggestion_declined")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "medium", "surface": "discovery-command"})
+                                             "confidence": "medium", "surface": "discovery-command",
+                                             "match_keywords": "", "match_signal": ""})
             self.capture("plugin_loaded", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "user-prompt"}})
             ev = self.last("plugin_loaded")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "user-prompt"})
+                                             "confidence": "high", "surface": "user-prompt",
+                                             "match_keywords": "", "match_signal": ""})
+            # A reason recovered from the proposal marker passes through when it is
+            # curated vocabulary: agentforce-adlc's own catalog keywords, and the
+            # file-signal code on the session-start surface.
+            self._require_vocab("agentforce-adlc", present={"agent", "agentforce"})
+            self.capture("plugin_loaded", payload={"session_id": "S1", "tool_input": {
+                "plugin": "agentforce-adlc", "confidence": "high", "surface": "session-start",
+                "match_keywords": "agent,agentforce", "match_signal": "agentforce"}})
+            ev = self.last("plugin_loaded")
+            self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
+                                             "confidence": "high", "surface": "session-start",
+                                             "match_keywords": "agent,agentforce",
+                                             "match_signal": "agentforce"})
+            self.capture("plugin_suggestion_declined", payload={"session_id": "S1", "tool_input": {
+                "plugin": "agentforce-adlc", "confidence": "high", "surface": "user-prompt",
+                "match_keywords": "agentforce", "match_signal": ""}})
+            ev = self.last("plugin_suggestion_declined")
+            self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
+                                             "confidence": "high", "surface": "user-prompt",
+                                             "match_keywords": "agentforce", "match_signal": ""})
 
     def test_plugin_loaded_rejects_unknown_plugin_or_bad_vocab(self):
         # A plugin name absent from the generated catalog (held/internal, or never
@@ -635,30 +675,53 @@ class EveryEventCapturedTests(TelemetryCaptureTestBase):
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "session-start"}})
             ev = self.last("plugin_recommended")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "session-start"})
+                                             "confidence": "high", "surface": "session-start",
+                                             "match_keywords": "", "match_signal": ""})
             self.capture("plugin_installed", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "session-start"}})
             ev = self.last("plugin_installed")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "session-start"})
+                                             "confidence": "high", "surface": "session-start",
+                                             "match_keywords": "", "match_signal": ""})
             # user-prompt is a persisted proposal surface, valid for both the
             # recommendation and the subsequent successful install attribution.
             self.capture("plugin_recommended", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "user-prompt"}})
             ev = self.last("plugin_recommended")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "user-prompt"})
+                                             "confidence": "high", "surface": "user-prompt",
+                                             "match_keywords": "", "match_signal": ""})
             self.capture("plugin_installed", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "high", "surface": "user-prompt"}})
             ev = self.last("plugin_installed")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "high", "surface": "user-prompt"})
+                                             "confidence": "high", "surface": "user-prompt",
+                                             "match_keywords": "", "match_signal": ""})
             # installed: self-directed (no in-session proposal) rides confidence "none".
             self.capture("plugin_installed", payload={"session_id": "S1", "tool_input": {
                 "plugin": "agentforce-adlc", "confidence": "none", "surface": "self-directed"}})
             ev = self.last("plugin_installed")
             self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
-                                             "confidence": "none", "surface": "self-directed"})
+                                             "confidence": "none", "surface": "self-directed",
+                                             "match_keywords": "", "match_signal": ""})
+            # The match reason passes through when it is curated vocabulary: the
+            # plugin's own catalog keywords anywhere, the signal on session-start.
+            self._require_vocab("agentforce-adlc", present={"agent", "agentforce", "adlc"})
+            self.capture("plugin_recommended", payload={"session_id": "S1", "tool_input": {
+                "plugin": "agentforce-adlc", "confidence": "high", "surface": "session-start",
+                "match_keywords": "agent,agentforce", "match_signal": "agentforce"}})
+            ev = self.last("plugin_recommended")
+            self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
+                                             "confidence": "high", "surface": "session-start",
+                                             "match_keywords": "agent,agentforce",
+                                             "match_signal": "agentforce"})
+            self.capture("plugin_installed", payload={"session_id": "S1", "tool_input": {
+                "plugin": "agentforce-adlc", "confidence": "medium", "surface": "user-prompt",
+                "match_keywords": "adlc", "match_signal": ""}})
+            ev = self.last("plugin_installed")
+            self.assertEqual(ev["payload"], {"plugin": "agentforce-adlc", "origin": "external",
+                                             "confidence": "medium", "surface": "user-prompt",
+                                             "match_keywords": "adlc", "match_signal": ""})
 
     def test_plugin_recommended_and_installed_reject_bad_vocab(self):
         with mock.patch.object(sft, "_plugin_catalog_origins", return_value={"agentforce-adlc": "external"}):
@@ -674,6 +737,168 @@ class EveryEventCapturedTests(TelemetryCaptureTestBase):
             self.assertEqual([e for e in self.events()
                               if e["event"] in ("plugin_recommended", "plugin_installed")], [],
                              "recommend/install events must honor their closed vocabularies")
+
+    # --- match reason (match_keywords / match_signal) -------------------------
+    # Capture is the privacy boundary for WHY a proposal fired
+    # (dynamic-plugins-funnel.md "Match reason") and never trusts the caller.
+    # These tests use the SHIPPED catalog's curated vocabulary
+    # (catalog/plugins.json) and check the catalog facts they rely on first, so
+    # an edit to the curated keywords fails with a clear message.
+    def _plugin_payload(self, event, plugin, surface, confidence="high", **reason):
+        """Capture one plugin funnel event as the in-process producer does and
+        return its buffered payload. Fails unless a NEW event was written, so a
+        dropped capture can't pass by reading an earlier record."""
+        before = len([e for e in self.events() if e["event"] == event])
+        self.capture(event, payload={"session_id": "S1", "tool_input": {
+            "plugin": plugin, "confidence": confidence, "surface": surface, **reason}})
+        evs = [e for e in self.events() if e["event"] == event]
+        self.assertEqual(len(evs), before + 1, f"{event} was not captured")
+        return evs[-1]["payload"]
+
+    def _require_vocab(self, plugin, present=(), absent=()):
+        """Precondition on the shipped catalog's curated vocabulary for `plugin`."""
+        vocab = sft._plugin_catalog_match_vocab().get(plugin, frozenset())
+        self.assertFalse(set(present) - vocab,
+                         f"catalog no longer curates {sorted(set(present) - vocab)} for {plugin}")
+        self.assertFalse(set(absent) & vocab,
+                         f"catalog now curates {sorted(set(absent) & vocab)} for {plugin}")
+
+    def test_plugin_match_keywords_keep_only_the_plugins_own_curated_tokens(self):
+        # A keyword survives only as a token of THAT plugin's curated
+        # match.keywords / match.anchorTerms. A word the catalog doesn't curate
+        # (a name, a secret), a description-only word (PICKLES, methodology), an
+        # example-prompt-only word (datatable), and a token curated only for a
+        # DIFFERENT plugin (experience-react's shadcn/tailwind) are all dropped.
+        self._require_vocab("experience-lwc", present={"jest", "lwc", "wcag"},
+                            absent={"jsmith", "secret", "pickles", "methodology",
+                                    "datatable", "shadcn", "tailwind"})
+        self._require_vocab("experience-react", present={"react", "shadcn", "tailwind"},
+                            absent={"frontend", "lwc"})
+        hostile = "jest,jsmith,lwc,pickles,methodology,datatable,secret,shadcn,tailwind,wcag"
+        with mock.patch.object(sft, "_plugin_catalog_origins", return_value={
+                "experience-lwc": "local", "experience-react": "local"}):
+            for event in PLUGIN_FUNNEL_EVENTS:
+                with self.subTest(event=event):
+                    payload = self._plugin_payload(event, "experience-lwc", "user-prompt",
+                                                   match_keywords=hostile)
+                    self.assertEqual(payload["match_keywords"], "jest,lwc,wcag")
+            # The same check from the other plugin's side: experience-lwc's "lwc" is
+            # not curated for experience-react, and "frontend" (an anchorCompanions
+            # word only) is not curated vocabulary.
+            payload = self._plugin_payload("plugin_recommended", "experience-react",
+                                           "user-prompt",
+                                           match_keywords="frontend,lwc,react,tailwind")
+            self.assertEqual(payload["match_keywords"], "react,tailwind")
+        self.assertNoLeak(self.events())
+
+    def test_plugin_match_keywords_are_sorted_deduped_and_capped(self):
+        # Sorted and de-duplicated, then the longest sorted PREFIX within the
+        # 8-term / 120-char caps (a truncated set keeps the alphabetically first
+        # tokens). The caps keep the dashboard dimension and buffered record bounded.
+        mobile = ["storage", "smartstore", "offline", "nfc", "native", "mobile",
+                  "geolocation", "barcode", "biometric", "device"]
+        isv = ["transactablemarketplacereceivepartneroffers", "subscribersnapshot",
+               "packageusagesummary", "appanalyticssettings", "appanalyticsqueryrequest"]
+        self._require_vocab("experience-lwc", present={"jest", "lwc", "wcag"})
+        self._require_vocab("mobile-development", present=mobile)
+        self._require_vocab("dx-isv-partner", present=isv)
+        self.assertEqual((sft._MATCH_KEYWORDS_MAX_TERMS, sft._MATCH_KEYWORDS_MAX_CHARS), (8, 120))
+        with mock.patch.object(sft, "_plugin_catalog_origins", return_value={
+                "experience-lwc": "local", "mobile-development": "local",
+                "dx-isv-partner": "local"}):
+            payload = self._plugin_payload("plugin_recommended", "experience-lwc", "user-prompt",
+                                           match_keywords="wcag,lwc,jest,lwc,wcag,jest")
+            self.assertEqual(payload["match_keywords"], "jest,lwc,wcag")
+            # Ten curated tokens: the term cap binds and keeps the first 8 sorted.
+            payload = self._plugin_payload("plugin_recommended", "mobile-development",
+                                           "user-prompt", match_keywords=",".join(mobile))
+            self.assertEqual(payload["match_keywords"],
+                             "barcode,biometric,device,geolocation,mobile,native,nfc,offline")
+            # Long curated tokens: the char cap binds first. Adding the 43-char
+            # token would make the joined value 128 > 120 chars, so it stops at 4.
+            payload = self._plugin_payload("plugin_installed", "dx-isv-partner", "user-prompt",
+                                           match_keywords=",".join(isv))
+            self.assertEqual(payload["match_keywords"],
+                             "appanalyticsqueryrequest,appanalyticssettings,"
+                             "packageusagesummary,subscribersnapshot")
+
+    def test_plugin_match_reason_non_string_values_become_empty(self):
+        # A malformed (non-str) reason must not crash capture or drop the event.
+        # It records "" on both keys, the same as "no curated evidence".
+        self._require_vocab("experience-lwc", present={"lwc"})
+        with mock.patch.object(sft, "_plugin_catalog_origins",
+                               return_value={"experience-lwc": "local"}):
+            for bad in (["lwc"], {"lwc": 1}, 42, True, None, ""):
+                with self.subTest(value=bad):
+                    payload = self._plugin_payload("plugin_recommended", "experience-lwc",
+                                                   "session-start",
+                                                   match_keywords=bad, match_signal=bad)
+                    self.assertEqual(payload["match_keywords"], "")
+                    self.assertEqual(payload["match_signal"], "")
+
+    def test_plugin_match_signal_is_a_fixed_code_on_session_start_only(self):
+        # match_signal is a fixed SessionStart file-signal code (lwc | react |
+        # agentforce | cms), never the human label or a path, and only on the
+        # session-start surface. A set is sorted and de-duplicated.
+        with mock.patch.object(sft, "_plugin_catalog_origins",
+                               return_value={"experience-lwc": "local"}):
+            for event in PLUGIN_FUNNEL_EVENTS:
+                with self.subTest(event=event):
+                    payload = self._plugin_payload(event, "experience-lwc", "session-start",
+                                                   match_signal="lwc")
+                    self.assertEqual(payload["match_signal"], "lwc")
+                    payload = self._plugin_payload(event, "experience-lwc", "session-start",
+                                                   match_signal="react,lwc,lwc")
+                    self.assertEqual(payload["match_signal"], "lwc,react")
+            # Off-vocabulary values are dropped, including the human label the
+            # banner paints and a project path.
+            payload = self._plugin_payload(
+                "plugin_recommended", "experience-lwc", "session-start",
+                match_signal="python,Lightning Web Components in this project,"
+                             "force-app/main/default/lwc,lwc")
+            self.assertEqual(payload["match_signal"], "lwc")
+            payload = self._plugin_payload("plugin_recommended", "experience-lwc",
+                                           "session-start", match_signal="apex,python")
+            self.assertEqual(payload["match_signal"], "")
+            # A valid code is still dropped off the session-start surface: there is
+            # no file signal behind a prompt-driven proposal.
+            for surface in ("user-prompt", "discovery-command", "bypass-gate"):
+                with self.subTest(surface=surface):
+                    payload = self._plugin_payload("plugin_recommended", "experience-lwc",
+                                                   surface, match_signal="lwc")
+                    self.assertEqual(payload["match_signal"], "")
+            # A self-directed install (no in-session proposal): the producer's
+            # default "" writes "" on both keys, and a smuggled signal is dropped.
+            payload = self._plugin_payload("plugin_installed", "experience-lwc",
+                                           "self-directed", confidence="none",
+                                           match_keywords="", match_signal="")
+            self.assertEqual((payload["match_keywords"], payload["match_signal"]), ("", ""))
+            payload = self._plugin_payload("plugin_installed", "experience-lwc",
+                                           "self-directed", confidence="none",
+                                           match_signal="lwc")
+            self.assertEqual(payload["match_signal"], "")
+
+    def test_prompt_like_match_reason_never_reaches_the_buffer(self):
+        # Canary: even a caller that passes the raw utterance (or pieces of it)
+        # as the match reason cannot get it buffered or sent. Only curated catalog
+        # tokens and fixed signal codes survive, on every funnel event, at capture
+        # and again at egress.
+        self._require_vocab("experience-lwc", present={"lwc"})
+        prompt = ("./deploy-projectatlas.sh --token SECRET123 https://acme-prod.example "
+                  "for jsmith W-12345678 /Users/jsmith/password customer bug lwc")
+        hostile = ",".join([prompt, *prompt.split(), *FORBIDDEN_SUBSTRINGS, "lwc"])
+        with mock.patch.object(sft, "_plugin_catalog_origins",
+                               return_value={"experience-lwc": "local"}):
+            for event in PLUGIN_FUNNEL_EVENTS:
+                with self.subTest(event=event):
+                    payload = self._plugin_payload(event, "experience-lwc", "session-start",
+                                                   match_keywords=hostile, match_signal=hostile)
+                    self.assertEqual(payload["match_keywords"], "lwc")
+                    self.assertEqual(payload["match_signal"], "lwc")
+        self.assertNoLeak(self.events())
+        for record in self.events():
+            self.assertNoLeak(sft._to_pdp_event(record))
+            self.assertNoLeak(sft._to_a4d_event(record))
 
     def test_plugin_install_result_accepts_only_closed_vocabulary(self):
         with mock.patch.object(
@@ -739,6 +964,186 @@ class EveryEventCapturedTests(TelemetryCaptureTestBase):
         event = self.last("plugin_recommendation_configured")
         self.assertEqual(event["payload"], {"action": "set", "level": "custom"})
         self.assertNotIn("4.2", json.dumps(event))
+
+
+class PluginMatchReasonClampTests(unittest.TestCase):
+    """The match-reason revalidation helpers on their own: the curated vocabulary
+    (_plugin_catalog_match_vocab) is built from each catalog entry's
+    match.keywords + match.anchorTerms ONLY and fails closed on a missing/corrupt
+    artifact; _clamp_match_keywords / _clamp_match_signal keep only that vocabulary
+    / the fixed signal codes, with the caps keeping the sorted prefix. Pure-function
+    tests -- no cwd/consent state. The module-level vocabulary cache is reset per
+    test and restored afterwards, so a synthetic catalog never leaks into other
+    tests."""
+
+    _CATALOG_PATH = _SCRIPTS_DIR.parent / "catalog" / "plugins.json"
+
+    def setUp(self):
+        prev = sft._PLUGIN_MATCH_VOCAB_CACHE
+        self.addCleanup(setattr, sft, "_PLUGIN_MATCH_VOCAB_CACHE", prev)
+        sft._PLUGIN_MATCH_VOCAB_CACHE = None
+
+    @contextmanager
+    def _catalog(self, content):
+        """Point the vocabulary loader at a temp catalog/plugins.json holding
+        `content` (str or raw bytes; None = no file at all), with a cold cache. The
+        loader resolves the catalog relative to the module file, so patching
+        sft.__file__ into a temp scripts/ dir redirects it."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "scripts").mkdir()
+            (root / "catalog").mkdir()
+            path = root / "catalog" / "plugins.json"
+            if isinstance(content, bytes):
+                path.write_bytes(content)
+            elif content is not None:
+                path.write_text(content, encoding="utf-8")
+            sft._PLUGIN_MATCH_VOCAB_CACHE = None
+            with mock.patch.object(sft, "__file__", str(root / "scripts" / "sf_telemetry.py")):
+                yield
+
+    @staticmethod
+    def _tokens(terms):
+        return set(re.findall(r"[a-z0-9]+", " ".join(terms).lower()))
+
+    def test_vocab_is_each_plugins_keywords_and_anchor_terms_only(self):
+        raw = json.loads(self._CATALOG_PATH.read_text(encoding="utf-8"))
+        by_name = {p["name"]: p["match"] for p in raw["plugins"]}
+        vocab = sft._plugin_catalog_match_vocab()
+        self.assertEqual(set(vocab), set(by_name))
+        for name, tokens in vocab.items():
+            with self.subTest(plugin=name):
+                self.assertIsInstance(tokens, frozenset)
+                self.assertEqual(
+                    tokens,
+                    frozenset(self._tokens(by_name[name]["keywords"]
+                                           + (by_name[name].get("anchorTerms") or []))))
+                for token in tokens:
+                    self.assertRegex(token, r"^[a-z0-9]+$")
+        # Both curated fields count: a keyword token, and a token only anchorTerms
+        # declares (experience-cms "brand"; salesforce-code-quality "violations").
+        self.assertLessEqual({"lwc", "jest", "wire", "service"}, vocab["experience-lwc"])
+        for name, anchor_only in (("experience-cms", "brand"),
+                                  ("salesforce-code-quality", "violations")):
+            self.assertIn(anchor_only, self._tokens(by_name[name]["anchorTerms"]))
+            self.assertNotIn(anchor_only, self._tokens(by_name[name]["keywords"]))
+            self.assertIn(anchor_only, vocab[name])
+        self.assertIn("branding", vocab["experience-cms"])
+        # The other match fields are NOT curated vocabulary: words only the
+        # description (PICKLES methodology), an example prompt (datatable), or
+        # anchorCompanions (frontend) carry never become emittable. Check each word
+        # really is in that field first, so the exclusion is meaningful.
+        excluded = (
+            ("experience-lwc", "description", {"pickles", "methodology"}),
+            ("experience-lwc", "examplePrompts", {"datatable"}),
+            ("experience-react", "anchorCompanions", {"frontend"}),
+        )
+        for name, field, words in excluded:
+            with self.subTest(plugin=name, field=field):
+                value = by_name[name][field]
+                if isinstance(value, str):
+                    value = [value]
+                elif isinstance(value, dict):
+                    value = [w for companions in value.values() for w in companions]
+                self.assertLessEqual(words, self._tokens(value))
+                self.assertFalse(words & vocab[name],
+                                 f"{field}-only words became curated vocabulary for {name}")
+
+    def test_vocab_fails_closed_on_a_missing_or_corrupt_catalog(self):
+        # Fail CLOSED: no readable artifact means no curated vocabulary, so every
+        # keyword drops ("" on the wire) -- never fail-open to the raw value.
+        record = {"event": "plugin_recommended", "payload": {
+            "plugin": "experience-lwc", "origin": "local", "confidence": "high",
+            "surface": "user-prompt", "match_keywords": "lwc", "match_signal": ""}}
+        for label, content in (
+            ("missing", None),
+            ("empty file", ""),
+            ("not json", "{not json"),
+            ("not utf-8", b"\xff\xfe\x00{"),
+            ("top-level list", "[1, 2, 3]"),
+            ("plugins null", '{"plugins": null}'),
+            ("plugins empty", '{"plugins": []}'),
+            ("plugins a string", '{"plugins": "experience-lwc"}'),
+            # Truthy and non-iterable: must not raise into an egress send.
+            ("plugins a number", '{"plugins": 5}'),
+            ("plugins true", '{"plugins": true}'),
+        ):
+            with self.subTest(catalog=label), self._catalog(content):
+                self.assertEqual(sft._plugin_catalog_match_vocab(), {})
+                self.assertEqual(sft._clamp_match_keywords("lwc", "experience-lwc"), "")
+                self.assertEqual(sft._to_a4d_event(record)["attributes"]["matchKeywords"], "")
+
+    def test_vocab_skips_malformed_entries_and_keeps_valid_ones(self):
+        catalog = {"plugins": [
+            "not-an-entry",
+            {"name": "", "match": {"keywords": ["ghost"]}},
+            {"name": 7, "match": {"keywords": ["ghost"]}},
+            {"name": "no-match"},
+            {"name": "scalar-match", "match": "lwc"},
+            # Only list-valued keywords/anchorTerms count; non-str terms are skipped.
+            {"name": "mixed", "match": {
+                "keywords": ["Wire Service", 5, None, "wire"], "anchorTerms": "lwc",
+                "description": "pickles", "examplePrompts": ["datatable"],
+                "anchorCompanions": {"wire": ["frontend"]}}},
+            {"name": "good", "match": {"keywords": ["LWC", "jest-runner"],
+                                       "anchorTerms": ["slds"]}},
+        ]}
+        with self._catalog(json.dumps(catalog)):
+            self.assertEqual(sft._plugin_catalog_match_vocab(), {
+                "mixed": frozenset({"wire", "service"}),
+                "good": frozenset({"lwc", "jest", "runner", "slds"}),
+            })
+            self.assertEqual(sft._clamp_match_keywords("lwc,service,slds", "good"), "lwc,slds")
+            self.assertEqual(sft._clamp_match_keywords("ghost", "no-match"), "")
+
+    def test_empty_vocab_drops_every_keyword(self):
+        real = sft._plugin_catalog_match_vocab()
+        self.assertTrue(real, "the shipped catalog yielded no curated vocabulary")
+        with mock.patch.object(sft, "_plugin_catalog_match_vocab", return_value={}):
+            for name, tokens in real.items():
+                with self.subTest(plugin=name):
+                    self.assertEqual(
+                        sft._clamp_match_keywords(",".join(sorted(tokens)), name), "")
+
+    def test_caps_keep_the_longest_sorted_prefix(self):
+        # The caps keep a PREFIX of the sorted tokens: once one token does not fit,
+        # nothing after it is kept, even a shorter one. Exactly 120 chars fits. A
+        # token is never truncated (a fragment is not curated vocabulary).
+        a59, a60, b60 = "a" * 59, "a" * 60, "b" * 60
+        vocab = {
+            "prefix": frozenset({a60, b60, "c"}),
+            "boundary": frozenset({a59, b60}),
+            "count": frozenset(f"t{i}" for i in range(1, 10)),
+            "oversized": frozenset({"a" * 121, "b"}),
+        }
+        with mock.patch.object(sft, "_plugin_catalog_match_vocab", return_value=vocab):
+            self.assertEqual(sft._clamp_match_keywords(f"c,{b60},{a60}", "prefix"), a60)
+            boundary = sft._clamp_match_keywords(f"{b60},{a59}", "boundary")
+            self.assertEqual(boundary, f"{a59},{b60}")
+            self.assertEqual(len(boundary), 120)
+            self.assertEqual(
+                sft._clamp_match_keywords(",".join(f"t{i}" for i in range(9, 0, -1)), "count"),
+                "t1,t2,t3,t4,t5,t6,t7,t8")
+            # A 121-char token is dropped, not cut down to 120. It sorts first, so
+            # it also ends the prefix before "b".
+            self.assertEqual(sft._clamp_match_keywords("a" * 121, "oversized"), "")
+            self.assertEqual(sft._clamp_match_keywords(f"b,{'a' * 121}", "oversized"), "")
+
+    def test_non_string_arguments_or_unknown_plugin_yield_empty(self):
+        self.assertIn("lwc", sft._plugin_catalog_match_vocab()["experience-lwc"])
+        self.assertEqual(sft._clamp_match_keywords("lwc", "experience-lwc"), "lwc")
+        for plugin in (None, 5, ["experience-lwc"], {"experience-lwc": 1}, "",
+                       "not-a-catalog-plugin"):
+            with self.subTest(plugin=plugin):
+                self.assertEqual(sft._clamp_match_keywords("lwc", plugin), "")
+        self.assertEqual(sft._clamp_match_signal("lwc", "session-start"), "lwc")
+        for surface in (None, 1, ["session-start"], "user-prompt", "self-directed", ""):
+            with self.subTest(surface=surface):
+                self.assertEqual(sft._clamp_match_signal("lwc", surface), "")
+        for value in (None, 1, True, ["lwc"], {"lwc"}, b"lwc", ""):
+            with self.subTest(value=value):
+                self.assertEqual(sft._clamp_match_keywords(value, "experience-lwc"), "")
+                self.assertEqual(sft._clamp_match_signal(value, "session-start"), "")
 
 
 class FeedbackEventTests(TelemetryCaptureTestBase):
@@ -2056,6 +2461,27 @@ class PdpMappingTests(TelemetryCaptureTestBase):
         self.assertNotIn("previous", serialized)
         self.assertNotIn("/Users/", serialized)
 
+    def test_plugin_events_pdp_triple_unchanged_by_match_reason(self):
+        # The match reason is UIP-only: the PDP shape keeps its fixed 3-part
+        # origin::confidence::surface tuple, so a PDP consumer that splits on "::"
+        # is unaffected, and no match* key or curated keyword rides the PDP wire.
+        base = {"plugin": "experience-lwc", "origin": "local", "confidence": "high",
+                "surface": "session-start"}
+        reason = {"match_keywords": "figma,jest,wcag", "match_signal": "lwc"}
+        for event in PLUGIN_FUNNEL_EVENTS:
+            with self.subTest(event=event):
+                bare = self._pdp(self._record(event, dict(base)))
+                pdp = self._pdp(self._record(event, {**base, **reason}))
+                self.assertEqual(pdp, bare)
+                self.assertEqual(pdp["componentId"], "experience-lwc")
+                self.assertEqual(pdp["contextName"], "origin::confidence::surface")
+                self.assertEqual(pdp["contextValue"].split("::"),
+                                 ["local", "high", "session-start"])
+                self.assertEqual([k for k in pdp if "match" in k.lower()], [])
+                blob = json.dumps(pdp)
+                for keyword in ("figma", "jest", "wcag"):
+                    self.assertNotIn(keyword, blob)
+
     def test_unknown_record_is_skipped(self):
         self.assertIsNone(sft._to_pdp_event({"event": "not_real", "payload": {}}))
         self.assertIsNone(sft._to_pdp_event("garbage"))
@@ -2209,6 +2635,77 @@ class A4dEventTests(unittest.TestCase):
     def test_unknown_record_is_skipped(self):
         self.assertIsNone(sft._to_a4d_event({"event": "not_real", "payload": {}}))
         self.assertIsNone(sft._to_a4d_event("garbage"))
+
+    # --- match reason (matchKeywords / matchSignal) ---------------------------
+    def _plugin_attrs(self, event, **payload):
+        base = {"plugin": "experience-lwc", "origin": "local", "confidence": "high",
+                "surface": "session-start"}
+        return sft._to_a4d_event(self._record(event, {**base, **payload}))["attributes"]
+
+    def test_match_reason_is_a_named_attribute_on_every_plugin_funnel_event(self):
+        # Named, str-valued UIP attributes (read via JSON_EXTRACT_SCALAR like every
+        # other key), on all four plugin funnel events.
+        self.assertLessEqual({"jest", "lwc"}, sft._plugin_catalog_match_vocab()["experience-lwc"])
+        for event in PLUGIN_FUNNEL_EVENTS:
+            with self.subTest(event=event):
+                attrs = self._plugin_attrs(event, match_keywords="jest,lwc", match_signal="lwc")
+                self.assertIsInstance(attrs["matchKeywords"], str)
+                self.assertIsInstance(attrs["matchSignal"], str)
+                self.assertEqual((attrs["matchKeywords"], attrs["matchSignal"]),
+                                 ("jest,lwc", "lwc"))
+
+    def test_match_reason_is_reclamped_at_egress(self):
+        # Defense-in-depth for a legacy/tampered buffer: the UIP projection
+        # re-applies the capture clamp, so only the RECORD's plugin's own curated
+        # tokens, and a fixed signal code on session-start, can be sent.
+        vocab = sft._plugin_catalog_match_vocab()["experience-lwc"]
+        self.assertIn("lwc", vocab)
+        self.assertFalse({"jsmith", "shadcn", "react", "tsx"} & vocab)
+        for event in PLUGIN_FUNNEL_EVENTS:
+            with self.subTest(event=event):
+                attrs = self._plugin_attrs(event, match_keywords="jsmith,lwc,shadcn",
+                                           match_signal="lwc,evil,/Users/jsmith")
+                self.assertEqual((attrs["matchKeywords"], attrs["matchSignal"]), ("lwc", "lwc"))
+                blob = json.dumps(attrs)
+                for bad in ("jsmith", "shadcn", "evil", "/Users/"):
+                    self.assertNotIn(bad, blob)
+                # experience-react's curated words are not experience-lwc vocabulary.
+                attrs = self._plugin_attrs(event, match_keywords="react,tsx")
+                self.assertEqual(attrs["matchKeywords"], "")
+                # A signal off the session-start surface is dropped.
+                attrs = self._plugin_attrs(event, surface="user-prompt",
+                                           match_keywords="lwc", match_signal="lwc")
+                self.assertEqual((attrs["matchKeywords"], attrs["matchSignal"]), ("lwc", ""))
+
+    def test_match_reason_defaults_to_empty_for_legacy_or_malformed_records(self):
+        # A record buffered before the feature has no match keys; the attributes are
+        # still present, as "" (the same value as "no curated evidence").
+        for event in PLUGIN_FUNNEL_EVENTS:
+            with self.subTest(event=event):
+                attrs = self._plugin_attrs(event)
+                self.assertEqual((attrs["matchKeywords"], attrs["matchSignal"]), ("", ""))
+                attrs = self._plugin_attrs(event, match_keywords=["lwc"], match_signal={"lwc": 1})
+                self.assertEqual((attrs["matchKeywords"], attrs["matchSignal"]), ("", ""))
+                attrs = self._plugin_attrs(event, plugin=None, match_keywords="lwc")
+                self.assertEqual(attrs["matchKeywords"], "")
+
+    def test_match_reason_absent_on_non_plugin_funnel_events(self):
+        # Only the four funnel events carry the match reason; a smuggled
+        # match_keywords on another event's payload is never projected.
+        smuggled = {"match_keywords": "lwc", "match_signal": "lwc"}
+        for event, payload in (
+            ("skill_dispatched", {"skill": "platform-apex-generate", "skill_domain": "platform"}),
+            ("plugin_install_result", {"plugin": "experience-lwc", "reason": "subprocess_failure"}),
+            ("plugin_recommendation_configured", {"action": "set", "level": "custom"}),
+            ("session_start", {"is_first_run": True}),
+            ("command_invoked", {"binary": "sf-context", "category": "plugin_command",
+                                 "subcommand": "status-org", "outcome": "success"}),
+        ):
+            with self.subTest(event=event):
+                a4d = sft._to_a4d_event(self._record(event, {**payload, **smuggled}))
+                self.assertIsNotNone(a4d)
+                self.assertNotIn("matchKeywords", a4d["attributes"])
+                self.assertNotIn("matchSignal", a4d["attributes"])
 
 
 class A4dDatasetAlignmentTests(unittest.TestCase):
@@ -2425,6 +2922,22 @@ class GoldenWireShapeTests(unittest.TestCase):
         "agent_dispatched": {"agent_type": "code-review"},
         "exception": {"error_class": "rate_limit", "kind": "api_error"},
         "mcp_tool_used": {"mcp_server": "api-context", "mcp_tool": "query", "outcome": "success"},
+        # The four plugin funnel events. Each match reason is already curated
+        # vocabulary in the shipped catalog/plugins.json (the UIP projection
+        # re-clamps it against that catalog), so the goldens pin the exact
+        # matchKeywords / matchSignal bytes.
+        "plugin_recommended": {"plugin": "experience-lwc", "origin": "local",
+                               "confidence": "high", "surface": "user-prompt",
+                               "match_keywords": "jest,lwc", "match_signal": ""},
+        "plugin_loaded": {"plugin": "experience-react", "origin": "local",
+                          "confidence": "high", "surface": "session-start",
+                          "match_keywords": "react,tsx", "match_signal": "react"},
+        "plugin_suggestion_declined": {"plugin": "experience-cms", "origin": "local",
+                                       "confidence": "medium", "surface": "discovery-command",
+                                       "match_keywords": "cms,media", "match_signal": ""},
+        "plugin_installed": {"plugin": "agentforce-adlc", "origin": "local",
+                             "confidence": "none", "surface": "self-directed",
+                             "match_keywords": "", "match_signal": ""},
     }
 
     def _record(self, event):
@@ -2468,6 +2981,23 @@ class GoldenWireShapeTests(unittest.TestCase):
                 "productFeatureId": self.PFID, "eventName": "mcpTool.used",
                 "componentId": "api-context.query",
                 "contextName": "outcome", "contextValue": "success"},
+            # The match reason never rides PDP: the fixed 3-part tuple only.
+            "plugin_recommended": {
+                "productFeatureId": self.PFID, "eventName": "plugin.recommended",
+                "componentId": "experience-lwc", "contextName": "origin::confidence::surface",
+                "contextValue": "local::high::user-prompt"},
+            "plugin_loaded": {
+                "productFeatureId": self.PFID, "eventName": "plugin.loaded",
+                "componentId": "experience-react", "contextName": "origin::confidence::surface",
+                "contextValue": "local::high::session-start"},
+            "plugin_suggestion_declined": {
+                "productFeatureId": self.PFID, "eventName": "pluginSuggestion.declined",
+                "componentId": "experience-cms", "contextName": "origin::confidence::surface",
+                "contextValue": "local::medium::discovery-command"},
+            "plugin_installed": {
+                "productFeatureId": self.PFID, "eventName": "plugin.installed",
+                "componentId": "agentforce-adlc", "contextName": "origin::confidence::surface",
+                "contextValue": "local::none::self-directed"},
         }
         for event, want in expected.items():
             self.assertEqual(sft._to_pdp_event(self._record(event)), want, event)
@@ -2486,6 +3016,15 @@ class GoldenWireShapeTests(unittest.TestCase):
         }
 
     def test_uip_wire_shape_golden(self):
+        # Precondition: the UIP projection re-clamps matchKeywords against the
+        # shipped catalog, so a catalog edit that drops a golden keyword fails
+        # here by name rather than as an opaque wire-shape diff.
+        vocab = sft._plugin_catalog_match_vocab()
+        for plugin, terms in (("experience-lwc", {"jest", "lwc"}),
+                              ("experience-react", {"react", "tsx"}),
+                              ("experience-cms", {"cms", "media"})):
+            missing = terms - vocab.get(plugin, frozenset())
+            self.assertFalse(missing, f"catalog no longer curates {sorted(missing)} for {plugin}")
         expected = {
             "session_start": {"eventName": "session.started", "attributes": {
                 **self._uip_common("claude-opus-4-8", "os::org_bucket::model",
@@ -2513,6 +3052,22 @@ class GoldenWireShapeTests(unittest.TestCase):
                 self._uip_common("rate_limit", "kind", "api_error")},
             "mcp_tool_used": {"eventName": "mcpTool.used", "attributes":
                 self._uip_common("api-context.query", "outcome", "success")},
+            "plugin_recommended": {"eventName": "plugin.recommended", "attributes": {
+                **self._uip_common("experience-lwc", "origin::confidence::surface",
+                                   "local::high::user-prompt"),
+                "matchKeywords": "jest,lwc", "matchSignal": ""}},
+            "plugin_loaded": {"eventName": "plugin.loaded", "attributes": {
+                **self._uip_common("experience-react", "origin::confidence::surface",
+                                   "local::high::session-start"),
+                "matchKeywords": "react,tsx", "matchSignal": "react"}},
+            "plugin_suggestion_declined": {"eventName": "pluginSuggestion.declined", "attributes": {
+                **self._uip_common("experience-cms", "origin::confidence::surface",
+                                   "local::medium::discovery-command"),
+                "matchKeywords": "cms,media", "matchSignal": ""}},
+            "plugin_installed": {"eventName": "plugin.installed", "attributes": {
+                **self._uip_common("agentforce-adlc", "origin::confidence::surface",
+                                   "local::none::self-directed"),
+                "matchKeywords": "", "matchSignal": ""}},
         }
         for event, want in expected.items():
             self.assertEqual(sft._to_a4d_event(self._record(event)), want, event)
@@ -2871,6 +3426,81 @@ class ShimParityTests(unittest.TestCase):
                              f"argv divergence for resolved={resolved!r} args={args!r}")
 
 
+class MatchReasonCrossModuleParityTests(unittest.TestCase):
+    """The match reason is produced in plugin_catalog (curated_match_terms) and
+    sf_context (the session-start signal codes), and revalidated here. Each module
+    keeps its own copy of the caps / code set, so these tests fail if they ever
+    diverge. They also show that real producer output survives the telemetry clamp
+    unchanged: a clamp that silently drops legitimate evidence would be as wrong
+    as one that lets prompt text through."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location(
+            "plugin_catalog_match_reason_parity", _SCRIPTS_DIR / "plugin_catalog.py")
+        cls.pc = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.pc)
+        spec = importlib.util.spec_from_file_location(
+            "sf_context_match_reason_parity", _SCRIPTS_DIR / "sf_context.py")
+        cls.sfx = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.sfx)
+        cls.catalog = cls.pc.load_catalog(_SCRIPTS_DIR.parent)
+
+    def test_caps_match_across_modules(self):
+        self.assertEqual(
+            (self.pc.MATCH_REASON_MAX_TERMS, self.pc.MATCH_REASON_MAX_CHARS),
+            (sft._MATCH_KEYWORDS_MAX_TERMS, sft._MATCH_KEYWORDS_MAX_CHARS))
+
+    def test_signal_codes_match_across_modules(self):
+        self.assertEqual(sft._PLUGIN_MATCH_SIGNALS, self.sfx._PLUGIN_MATCH_SIGNAL_CODES)
+        # Each code passes the clamp on session-start; the human label the banner
+        # paints and the signal's scoring query never do.
+        for code, label, query, _ in self.sfx._PLUGIN_SIGNALS:
+            with self.subTest(code=code):
+                self.assertEqual(sft._clamp_match_signal(code, "session-start"), code)
+                self.assertEqual(sft._clamp_match_signal(label, "session-start"), "")
+                self.assertEqual(sft._clamp_match_signal(query, "session-start"), "")
+
+    def test_producer_curated_set_is_within_the_telemetry_vocab(self):
+        # Everything curated_match_terms can return for a plugin is a member of the
+        # vocabulary sf_telemetry derives for it. With ALL of a plugin's curated
+        # tokens matched, both modules keep the same capped sorted prefix.
+        vocab = sft._plugin_catalog_match_vocab()
+        for plugin in self.catalog["plugins"]:
+            name, match = plugin["name"], plugin["match"]
+            with self.subTest(plugin=name):
+                tokens = set(self.pc._tokenize(
+                    " ".join(match["keywords"] + (match.get("anchorTerms") or []))))
+                self.assertTrue(tokens)
+                self.assertLessEqual(tokens, vocab[name])
+                self.assertEqual(
+                    sft._clamp_match_keywords(",".join(sorted(tokens)), name),
+                    ",".join(self.pc.curated_match_terms(plugin, tokens)))
+
+    def test_real_match_evidence_survives_the_clamp_unchanged(self):
+        # Score each plugin's own example prompts (and its keywords as one prompt)
+        # against the shipped catalog, as the producer does. For every match, the
+        # curated subset the producer would send is in the telemetry vocab and the
+        # clamp returns it unchanged (idempotent).
+        vocab = sft._plugin_catalog_match_vocab()
+        evidence = {plugin["name"]: 0 for plugin in self.catalog["plugins"]}
+        for plugin in self.catalog["plugins"]:
+            match = plugin["match"]
+            for prompt in [*match["examplePrompts"], " ".join(match["keywords"])]:
+                for hit in self.pc.score_prompt_against_catalog(
+                        prompt, self.catalog, require_anchor_terms=False):
+                    name = hit.plugin["name"]
+                    terms = self.pc.curated_match_terms(hit.plugin, hit.matched_terms)
+                    value = ",".join(terms)
+                    with self.subTest(prompt=prompt, plugin=name):
+                        self.assertLessEqual(set(terms), vocab[name])
+                        self.assertEqual(sft._clamp_match_keywords(value, name), value)
+                    if terms:
+                        evidence[name] += 1
+        self.assertEqual([name for name, count in evidence.items() if not count], [],
+                         "plugins whose own prompts never produced curated evidence")
+
+
 class CliNodeModulesTests(unittest.TestCase):
     """Windows QE finding: the SF CLI's @salesforce/telemetry (the transport the
     flusher needs) must be located across BOTH install layouts. On Windows the
@@ -3030,6 +3660,27 @@ class TransmitTests(TelemetryCaptureTestBase):
         self._org.start()
         for ev in job["a4dEvents"]:
             self.assertNotIn("org_id", ev["attributes"])
+
+    def test_plugin_match_reason_rides_uip_only_end_to_end(self):
+        # Capture -> buffer -> transmit job: the match reason reaches the UIP shape
+        # as matchKeywords / matchSignal, clamped to curated vocabulary, while the
+        # PDP event for the same record keeps its 3-part tuple and no match key.
+        self.assertLessEqual({"jest", "lwc"}, sft._plugin_catalog_match_vocab()["experience-lwc"])
+        with mock.patch.object(sft, "_plugin_catalog_origins",
+                               return_value={"experience-lwc": "local"}):
+            self.capture("plugin_recommended", payload={"session_id": "S1", "tool_input": {
+                "plugin": "experience-lwc", "confidence": "high", "surface": "session-start",
+                "match_keywords": "jest,jsmith,lwc", "match_signal": "lwc,SECRET"}})
+            job = self.transmit_job()
+        [uip] = [e for e in job["a4dEvents"] if e["eventName"] == "plugin.recommended"]
+        [pdp] = [e for e in job["events"] if e["eventName"] == "plugin.recommended"]
+        self.assertEqual((uip["attributes"]["matchKeywords"], uip["attributes"]["matchSignal"]),
+                         ("jest,lwc", "lwc"))
+        self.assertEqual(pdp["contextName"], "origin::confidence::surface")
+        self.assertEqual(pdp["contextValue"], "local::high::session-start")
+        self.assertEqual([k for k in pdp if "match" in k.lower()], [])
+        self.assertNoLeak(job["events"])
+        self.assertNoLeak(job["a4dEvents"])
 
     def test_transmit_job_carries_consent_file(self):
         # The job hands the flusher the ABSOLUTE machine-wide consent path so it can
@@ -3765,6 +4416,81 @@ class FlusherScriptTests(unittest.TestCase):
             self.assertEqual(a4d[0]["attributes"], a4d_attrs)
             self.assertEqual(a4d[0]["attributes"]["org_id"], "00Dxx0000000001EAA",
                              "UIP must carry the raw org_id through the O11y leg")
+
+    def test_flusher_forwards_match_reason_attributes_untouched(self):
+        # Regression guard: telemetry-flush.js has no match-reason logic and must
+        # forward matchKeywords / matchSignal exactly as sf_telemetry projected them,
+        # including the "" values, in order and on the same O11y reporter as PDP.
+        # Spawns the REAL flusher against a recording o11yReporter stub.
+        import shutil, subprocess, tempfile
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node not on PATH")
+        base = {"plugin": "experience-lwc", "origin": "local", "confidence": "high"}
+        a4d_events = [
+            sft._to_a4d_event({"event": "plugin_recommended", "payload": {
+                **base, "surface": "session-start",
+                "match_keywords": "jest,lwc", "match_signal": "lwc"}}),
+            sft._to_a4d_event({"event": "plugin_installed", "payload": {
+                **base, "confidence": "none", "surface": "self-directed",
+                "match_keywords": "", "match_signal": ""}}),
+        ]
+        # Precondition: the projection produced the values this test forwards.
+        self.assertEqual([(e["attributes"]["matchKeywords"], e["attributes"]["matchSignal"])
+                          for e in a4d_events], [("jest,lwc", "lwc"), ("", "")])
+        with tempfile.TemporaryDirectory() as td:
+            td = Path(td)
+            capture = td / "o11y-sends.jsonl"
+            nm = td / "node_modules" / "@salesforce"
+            (nm / "telemetry").mkdir(parents=True)
+            (nm / "core").mkdir(parents=True)
+            (nm / "telemetry" / "index.js").write_text(
+                "const fs=require('fs');\n"
+                f"const CAP={json.dumps(str(capture))};\n"
+                "const rec=(o)=>fs.appendFileSync(CAP, JSON.stringify(o)+'\\n');\n"
+                "class TelemetryReporter {\n"
+                "  static async create(o){ return new TelemetryReporter(o); }\n"
+                "  constructor(o){ this.options=o||{};\n"
+                "    this.o11yReporter = {\n"
+                "      sendPdpEvent: async (e) => rec({kind:'pdp', name:e.eventName}),\n"
+                "      sendTelemetryEvent: async (name, attrs) => rec({kind:'a4d', name, attributes:attrs}),\n"
+                "    };\n"
+                "    this.reporter = null; }\n"
+                "  async flush(){}\n  async stopAsync(){}\n  async stop(){}\n}\n"
+                "module.exports = { TelemetryReporter };\n"
+            )
+            (nm / "telemetry" / "package.json").write_text('{"name":"@salesforce/telemetry","main":"index.js"}')
+            (nm / "core" / "index.js").write_text(
+                "class Org { static async create(){ return new Org(); }\n"
+                "  async getConnection(){ return { instanceUrl: 'https://x.my.salesforce.com' }; } }\n"
+                "module.exports = { Org };\n"
+            )
+            (nm / "core" / "package.json").write_text('{"name":"@salesforce/core","main":"index.js"}')
+            job = {
+                "cliNodeModules": str(td / "node_modules"),
+                "project": "salesforce-development",
+                "username": "u@example",  # enables the O11y leg (UIP rides it)
+                "events": [{"eventName": "plugin.recommended", "productFeatureId": "x"}],
+                "a4dEvents": a4d_events,
+            }
+            pending = td / "pending.json"
+            pending.write_text(json.dumps(job))
+            # An inherited ecosystem opt-out would skip the send and fail this test
+            # for the wrong reason, so run the flusher without one.
+            env = {k: v for k, v in os.environ.items()
+                   if k not in ("SF_DISABLE_TELEMETRY", "DO_NOT_TRACK")}
+            proc = subprocess.run([node, str(self.js), str(pending)], timeout=15,
+                                  capture_output=True, env=env)
+            self.assertEqual(proc.returncode, 0, proc.stderr.decode())
+            self.assertFalse(pending.exists(), "pending file must be consumed")
+            self.assertTrue(capture.exists(),
+                            "the O11y reporter recorded no sends — UIP leg did not run")
+            sends = [json.loads(ln) for ln in capture.read_text().splitlines() if ln.strip()]
+            self.assertEqual([s["name"] for s in sends if s["kind"] == "pdp"],
+                             ["plugin.recommended"])
+            self.assertEqual(
+                [(s["name"], s["attributes"]) for s in sends if s["kind"] == "a4d"],
+                [(e["eventName"], e["attributes"]) for e in a4d_events])
 
 
 class ConsentLockMultiProcessTests(unittest.TestCase):

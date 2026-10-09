@@ -202,6 +202,72 @@ ORDER BY 1;
 
 For the plugin-by-surface view, add `r.plugin` to the select and group by both dimensions.
 
+## Match reason
+
+`plugin.recommended`, `plugin.loaded`, `plugin.installed`, and `pluginSuggestion.declined` also
+record why the suggestion fired, as two named UIP attributes in the same bag as `skillSource`:
+`matchKeywords` and `matchSignal` (the Skills dashboard reads them as `$.properties.matchKeywords` /
+`$.properties.matchSignal`; this note's projection reads `$.matchKeywords` / `$.matchSignal` from
+`message_json`). Neither is ever prompt text.
+
+- **`matchKeywords`** is the sorted, comma-joined set of tokens from that plugin's own curated
+  catalog `keywords` and `anchorTerms` that were part of the scorer's match evidence, capped at 8
+  tokens and 120 characters (a truncated set keeps the alphabetically first tokens). A word the user
+  typed that the catalog does not curate can never appear: the producer intersects the evidence with
+  the curated vocabulary next to the scorer (`plugin_catalog.curated_match_terms`; see
+  [plugin-catalog.md](./plugin-catalog.md)), and the telemetry layer revalidates every token against
+  the shipped `catalog/plugins.json` at capture and again at egress. On `session-start` the scored
+  text is the signal's fixed query, so there `matchSignal` is the informative dimension.
+- **`matchSignal`** is `lwc`, `react`, `agentforce`, or `cms`, set only when
+  `surface = 'session-start'`. Signals are matched in that fixed order, and v1 records only the
+  first one that surfaced the plugin; later signals for the same plugin in the same scan are not
+  aggregated. Capture accepts a sorted, de-duplicated comma-joined set of the codes, so split it
+  rather than assume one value.
+- **`''`** means no curated evidence — the deterministic test-drive surfaces (recorded as
+  `user-prompt`), self-directed installs, a match carried only by description or example-prompt
+  words, or (later-turn events only) a proposal ledger that shed the reason to stay under its size
+  cap — or a record buffered before the field existed. A **missing** property (`NULL` after
+  extraction) means a producer version that predates the field.
+
+`plugin.loaded`, `plugin.installed`, and `pluginSuggestion.declined` inherit the reason recorded
+with the plugin's first proposal in the session, exactly as they inherit `surface`; a repeat match
+never rewrites it, so short of a ledger shed every stage of one plugin-session funnel carries the
+same reason. The PDP `origin::confidence::surface` tuple is deliberately unchanged: if a PDP
+consumer ever needs the reason, add a new `contextName`, never a fourth `::` segment that existing
+parsers would mis-split. `telemetry-flush.js` forwards the attributes untouched.
+
+Add both attributes to the projection's `events` CTE, after `skill_source`:
+
+```sql
+    TRY(JSON_EXTRACT_SCALAR(message_json, '$.skillSource')) AS skill_source,
+    TRY(JSON_EXTRACT_SCALAR(message_json, '$.matchKeywords')) AS match_keywords,
+    TRY(JSON_EXTRACT_SCALAR(message_json, '$.matchSignal')) AS match_signal
+```
+
+Then compare recommended, declined, and installed plugin-sessions per curated keyword:
+
+```sql
+SELECT
+  component_id AS plugin,
+  keyword,
+  COUNT(DISTINCT IF(event_name = 'plugin.recommended', session_id)) AS recommended_sessions,
+  COUNT(DISTINCT IF(event_name = 'pluginSuggestion.declined', session_id)) AS declined_sessions,
+  COUNT(DISTINCT IF(event_name = 'plugin.installed', session_id)) AS installed_sessions
+FROM events
+CROSS JOIN UNNEST(SPLIT(match_keywords, ',')) AS k (keyword)
+WHERE skill_source = 'salesforce-development'
+  AND event_name IN ('plugin.recommended', 'pluginSuggestion.declined', 'plugin.installed')
+  AND context_name = 'origin::confidence::surface'
+  AND match_keywords <> ''
+GROUP BY 1, 2
+ORDER BY plugin, recommended_sessions DESC;
+```
+
+A plugin-session counts once under each of its keywords, so keyword rows do not sum to plugin
+totals. The rows include medium `bypass-gate` soft advisories; exclude them as in the headline split
+before comparing against shown recommendations. Slice `session-start` rows by `match_signal` the
+same way.
+
 ## Install result validation
 
 After the producer version is deployed, validate the closed vocabulary with:

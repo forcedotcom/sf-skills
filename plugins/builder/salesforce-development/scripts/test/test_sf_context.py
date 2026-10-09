@@ -21,11 +21,13 @@ import importlib.util
 import json
 import io
 import os
+import shutil
 import stat
 import sys
 import tempfile
 import time
 import types
+import unicodedata
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from datetime import date, timedelta
@@ -3262,10 +3264,14 @@ class PluginCatalogMatchTests(unittest.TestCase):
             band=band, score=score, matched_terms=matched_terms,
         )
 
-    def _stub_catalog(self, matches_by_call):
+    def _stub_catalog(self, matches_by_call, curated_match_terms=None):
         """A fake `plugin_catalog` module whose `score_prompt_against_catalog`
         returns the next queued result on each call (list of lists), so a test
-        can simulate the same prompt scoring differently across turns if needed."""
+        can simulate the same prompt scoring differently across turns if needed.
+
+        `curated_match_terms`, when given, becomes the module's match-reason
+        helper; by default the stub has none, like a catalog module predating
+        match-reason capture, so the ledger entry stays {confidence, surface}."""
         calls = list(matches_by_call)
         names = sorted({
             match.plugin["name"]
@@ -3278,7 +3284,48 @@ class PluginCatalogMatchTests(unittest.TestCase):
                 calls.pop(0) if calls else []
             ),
         )
+        if curated_match_terms is not None:
+            module.curated_match_terms = curated_match_terms
         return module
+
+    @staticmethod
+    def _sorted_terms(plugin, matched_terms):
+        """Stand-in curated helper: echoes the evidence, sorted. The real helper
+        also intersects it with the plugin's curated vocabulary (covered by the
+        real-scorer test below); here it just makes each match's reason visible."""
+        return sorted(matched_terms)
+
+    def test_plugin_catalog_match_abstains_on_non_ascii_letters_before_loading(self):
+        loader = mock.MagicMock(side_effect=AssertionError("catalog loaded for non-ASCII prompt"))
+        prompts = (
+            "café flow", unicodedata.normalize("NFD", "café flow"),
+            "создать Salesforce flow", "SalesforceのApexトリガー", "Kelvin flow",
+        )
+        for prompt in prompts:
+            for surface in ("bypass-gate", "user-prompt", "discovery-command", "session-start"):
+                with self.subTest(prompt=prompt, surface=surface), \
+                        mock.patch.object(sfx, "_load_plugin_catalog_module", loader):
+                    self.assertEqual(
+                        sfx._plugin_catalog_match(prompt, "sess-unicode", surface=surface), []
+                    )
+        loader.assert_not_called()
+
+    def test_real_catalog_matches_ignore_attached_presentation_selectors(self):
+        real = load_module(CATALOG_MODULE_PATH, "catalog_for_presentation_selectors")
+        prompt = "build me an LWC datatable with wire service and Jest tests"
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=real):
+            baseline = sfx._plugin_catalog_match(prompt, "", surface="user-prompt")
+            self.assertTrue(baseline)
+            expected = [(x["name"], x["band"], x["score"]) for x in baseline]
+            for term in ("LWC\ufe0f", "L\ufe0eWC", "LWC ✔️"):
+                with self.subTest(term=term):
+                    matches = sfx._plugin_catalog_match(
+                        prompt.replace("LWC", term), "", surface="user-prompt"
+                    )
+                    self.assertEqual([(x["name"], x["band"], x["score"]) for x in matches], expected)
+            self.assertEqual(sfx._plugin_catalog_match(
+                prompt.replace("LWC", "LWC\ufe0fТриггер"), "", surface="user-prompt"
+            ), [])
 
     def test_first_occurrence_true_and_marker_written(self):
         module = self._stub_catalog([[self._match("agentforce-adlc", "high")]])
@@ -3689,6 +3736,577 @@ class PluginCatalogMatchTests(unittest.TestCase):
         self.assertTrue(results[0]["first_occurrence"])
         fired.assert_not_called()
 
+    # -- Match-reason telemetry: WHY a proposal fired, never the prompt. The curated
+    # catalog subset of the match evidence (`match_keywords`) and, on session-start
+    # only, the file-signal code (`match_signal`) ride the result row, the
+    # first-occurrence ledger entry, and the single plugin_recommended fire.
+
+    def test_first_occurrence_carries_the_curated_match_keywords_everywhere(self):
+        # The one call site where the scorer's evidence is structurally in scope:
+        # the curated subset lands on the result row, is persisted on the ledger (so
+        # the later-turn events can recover it), and rides the fire's kwargs.
+        seen = []
+
+        def curated(plugin, matched_terms):
+            seen.append((plugin["name"], matched_terms))
+            return ["agent", "agentforce"]
+
+        evidence = frozenset({"agentforce", "agent", "deploy"})
+        module = self._stub_catalog(
+            [[self._match("agentforce-adlc", "high", matched_terms=evidence)]],
+            curated_match_terms=curated,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match(
+                "deploy an agentforce agent", "sess-reason-1", surface="bypass-gate")
+        # The curated helper is handed the match's own catalog row and evidence.
+        self.assertEqual(seen, [("agentforce-adlc", evidence)])
+        self.assertEqual(results, [{
+            "name": "agentforce-adlc",
+            "description": "Curated capability for agentforce-adlc.",
+            "band": "high",
+            "score": 5.0,
+            "first_occurrence": True,
+            "install_command": "/salesforce-development:plugin-install agentforce-adlc",
+            "match_keywords": "agent,agentforce",
+        }])
+        # A prompt-driven surface has no file signal, so the ledger records the
+        # keywords only (an empty reason key is omitted, never stored as "").
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-1"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate",
+                                 "match_keywords": "agent,agentforce"}},
+        )
+        fired.assert_called_once_with(
+            "plugin_recommended", "agentforce-adlc", None, "high", "bypass-gate",
+            "sess-reason-1", match_keywords="agent,agentforce", match_signal="",
+        )
+
+    def test_repeat_occurrence_keeps_the_first_reason_and_does_not_refire(self):
+        # The reason travels with the FIRST recorded surface: a later match with
+        # different evidence still updates confidence to the latest band, but never
+        # rewrites the recorded reason, so plugin_loaded/plugin_installed report what
+        # the first recommendation actually did. And there is no second fire.
+        module = self._stub_catalog(
+            [
+                [self._match("agentforce-adlc", "high",
+                             matched_terms=frozenset({"agentforce"}))],
+                [self._match("agentforce-adlc", "medium",
+                             matched_terms=frozenset({"agent", "script"}))],
+            ],
+            curated_match_terms=self._sorted_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            first = sfx._plugin_catalog_match("x", "sess-reason-2", surface="bypass-gate")
+            second = sfx._plugin_catalog_match(
+                "x", "sess-reason-2", surface="discovery-command")
+        # Each result row still reports its own match's evidence...
+        self.assertEqual(first[0]["match_keywords"], "agentforce")
+        self.assertEqual(second[0]["match_keywords"], "agent,script")
+        self.assertFalse(second[0]["first_occurrence"])
+        # ...but the ledger keeps the first surface AND the first reason.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-2"),
+            {"agentforce-adlc": {"confidence": "medium", "surface": "bypass-gate",
+                                 "match_keywords": "agentforce"}},
+        )
+        fired.assert_called_once_with(
+            "plugin_recommended", "agentforce-adlc", None, "high", "bypass-gate",
+            "sess-reason-2", match_keywords="agentforce", match_signal="",
+        )
+
+    def test_rescoring_a_declined_entry_reopens_it_but_keeps_the_reason(self):
+        # _record_plugin_decline's documented re-open: the next time a declined
+        # plugin scores, its entry is rewritten WITHOUT the "decision" marker. The
+        # recorded surface and match reason survive that rewrite, and it is still
+        # not a first occurrence, so nothing re-fires.
+        sfx._save_plugin_proposals("sess-reason-3", {"experience-cms": {
+            "confidence": "high", "surface": "session-start",
+            "match_keywords": "cms,media", "match_signal": "cms",
+            "decision": "declined",
+        }})
+        module = self._stub_catalog(
+            [[self._match("experience-cms", "medium",
+                          matched_terms=frozenset({"content"}))]],
+            curated_match_terms=self._sorted_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match(
+                "content", "sess-reason-3", surface="discovery-command")
+        self.assertFalse(results[0]["first_occurrence"])
+        self.assertEqual(results[0]["match_keywords"], "content")
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-3"),
+            {"experience-cms": {"confidence": "medium", "surface": "session-start",
+                                "match_keywords": "cms,media", "match_signal": "cms"}},
+        )
+        fired.assert_not_called()
+
+    def test_reasonless_prior_entry_is_never_backfilled(self):
+        # An entry first recorded WITHOUT a reason (a deterministic test-drive
+        # writer, or a ledger from before match-reason capture) stays reasonless:
+        # later evidence must not be credited to a recommendation it did not cause.
+        sfx._save_plugin_proposals(
+            "sess-reason-4",
+            {"agentforce-adlc": {"confidence": "high", "surface": "user-prompt"}})
+        module = self._stub_catalog(
+            [[self._match("agentforce-adlc", "high",
+                          matched_terms=frozenset({"agentforce"}))]],
+            curated_match_terms=self._sorted_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match("x", "sess-reason-4", surface="bypass-gate")
+        self.assertEqual(results[0]["match_keywords"], "agentforce")
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-4"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "user-prompt"}},
+        )
+        fired.assert_not_called()
+
+    def test_prior_entry_without_a_recorded_surface_takes_the_current_reason(self):
+        # The reason is bound to the recorded surface. An entry with no string
+        # surface is re-recorded under the CURRENT surface, so it takes the current
+        # match's reason too -- never a stale value orphaned from its surface. Its
+        # mere presence still means this is not a first occurrence (no fire).
+        sfx._save_plugin_proposals(
+            "sess-reason-5",
+            {"agentforce-adlc": {"confidence": "high", "surface": 7,
+                                 "match_keywords": "stale"}})
+        module = self._stub_catalog(
+            [[self._match("agentforce-adlc", "high",
+                          matched_terms=frozenset({"agentforce"}))]],
+            curated_match_terms=self._sorted_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match("x", "sess-reason-5", surface="bypass-gate")
+        self.assertFalse(results[0]["first_occurrence"])
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-5"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate",
+                                 "match_keywords": "agentforce"}},
+        )
+        fired.assert_not_called()
+
+    def test_catalog_module_without_curated_helper_costs_only_the_reason(self):
+        # Fail-soft: a catalog module with no curated_match_terms (the default stub,
+        # like a module predating match-reason capture) still returns, records, and
+        # fires the match -- "" on the row and the fire, no reason keys on the ledger.
+        module = self._stub_catalog([[self._match(
+            "agentforce-adlc", "high", matched_terms=frozenset({"agentforce"}))]])
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match("x", "sess-reason-6", surface="bypass-gate")
+        self.assertEqual([r["name"] for r in results], ["agentforce-adlc"])
+        self.assertEqual(results[0]["match_keywords"], "")
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-6"),
+            {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}},
+        )
+        fired.assert_called_once_with(
+            "plugin_recommended", "agentforce-adlc", None, "high", "bypass-gate",
+            "sess-reason-6", match_keywords="", match_signal="",
+        )
+
+    def test_failing_or_malformed_curated_helper_never_costs_the_match(self):
+        # The reason is best-effort context. A helper that raises, is not callable,
+        # or returns junk degrades to "" (or to just its non-empty string items) --
+        # never to a lost match, and never to a non-string reason on the ledger.
+        cases = (
+            ("raises", mock.Mock(side_effect=RuntimeError("boom")), ""),
+            ("not-callable", "agent,agentforce", ""),
+            ("returns-none", lambda plugin, terms: None, ""),
+            ("mixed-items",
+             lambda plugin, terms: ["agent", "", 7, None, "agentforce"],
+             "agent,agentforce"),
+        )
+        for label, helper, expected in cases:
+            with self.subTest(helper=label):
+                session_id = f"sess-reason-7-{label}"
+                module = self._stub_catalog(
+                    [[self._match("agentforce-adlc", "high",
+                                  matched_terms=frozenset({"agentforce"}))]],
+                    curated_match_terms=helper,
+                )
+                with mock.patch.object(sfx, "_load_plugin_catalog_module",
+                                       return_value=module), \
+                        mock.patch.object(sfx, "_fire_plugin_telemetry_event"):
+                    results = sfx._plugin_catalog_match(
+                        "x", session_id, surface="bypass-gate")
+                self.assertEqual([r["name"] for r in results], ["agentforce-adlc"])
+                self.assertTrue(results[0]["first_occurrence"])
+                self.assertEqual(results[0]["match_keywords"], expected)
+                entry = {"confidence": "high", "surface": "bypass-gate"}
+                if expected:
+                    entry["match_keywords"] = expected
+                self.assertEqual(
+                    sfx._load_plugin_proposals(session_id), {"agentforce-adlc": entry})
+
+    def test_session_start_records_a_known_signal_code(self):
+        module = self._stub_catalog(
+            [[self._match("experience-cms", "high",
+                          matched_terms=frozenset({"cms", "media"}))]],
+            curated_match_terms=self._sorted_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_catalog_match(
+                "cms media", "sess-signal-1", surface="session-start", match_signal="cms")
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-signal-1"),
+            {"experience-cms": {"confidence": "high", "surface": "session-start",
+                                "match_keywords": "cms,media", "match_signal": "cms"}},
+        )
+        fired.assert_called_once_with(
+            "plugin_recommended", "experience-cms", None, "high", "session-start",
+            "sess-signal-1", match_keywords="cms,media", match_signal="cms",
+        )
+
+    def test_unknown_signal_codes_are_dropped(self):
+        # Closed vocabulary: only a `_PLUGIN_SIGNALS` code survives. An arbitrary
+        # string, a signal's human label, a project path, or a non-str value never
+        # reaches the ledger or the fire -- yet the match itself still lands, with
+        # its keywords.
+        for index, bogus in enumerate((
+            "evil",
+            "Lightning Web Components in this project",
+            "force-app/main/default/lwc",
+            ["lwc"],
+            {"lwc": 1},
+            None,
+        )):
+            with self.subTest(match_signal=bogus):
+                session_id = f"sess-signal-bogus-{index}"
+                module = self._stub_catalog(
+                    [[self._match("platform-lwc", "high",
+                                  matched_terms=frozenset({"lwc"}))]],
+                    curated_match_terms=self._sorted_terms,
+                )
+                with mock.patch.object(sfx, "_load_plugin_catalog_module",
+                                       return_value=module), \
+                        mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+                    results = sfx._plugin_catalog_match(
+                        "lwc", session_id, surface="session-start", match_signal=bogus)
+                self.assertEqual([r["name"] for r in results], ["platform-lwc"])
+                self.assertEqual(
+                    sfx._load_plugin_proposals(session_id),
+                    {"platform-lwc": {"confidence": "high", "surface": "session-start",
+                                      "match_keywords": "lwc"}},
+                )
+                fired.assert_called_once_with(
+                    "plugin_recommended", "platform-lwc", None, "high", "session-start",
+                    session_id, match_keywords="lwc", match_signal="",
+                )
+
+    def test_signal_is_dropped_on_every_non_session_start_surface(self):
+        # A file signal only explains a session-start proposal (a project scan, no
+        # prompt). A prompt-driven surface drops even a valid code.
+        for surface in ("user-prompt", "discovery-command", "bypass-gate"):
+            with self.subTest(surface=surface):
+                session_id = f"sess-signal-{surface}"
+                module = self._stub_catalog(
+                    [[self._match("platform-lwc", "high",
+                                  matched_terms=frozenset({"lwc"}))]],
+                    curated_match_terms=self._sorted_terms,
+                )
+                with mock.patch.object(sfx, "_load_plugin_catalog_module",
+                                       return_value=module), \
+                        mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+                    sfx._plugin_catalog_match(
+                        "lwc", session_id, surface=surface, match_signal="lwc")
+                self.assertEqual(
+                    sfx._load_plugin_proposals(session_id),
+                    {"platform-lwc": {"confidence": "high", "surface": surface,
+                                      "match_keywords": "lwc"}},
+                )
+                fired.assert_called_once_with(
+                    "plugin_recommended", "platform-lwc", None, "high", surface,
+                    session_id, match_keywords="lwc", match_signal="",
+                )
+
+    def test_prompt_words_outside_the_curated_vocabulary_never_leave_the_matcher(self):
+        # The privacy boundary end-to-end, through the REAL scorer and the REAL
+        # curated_match_terms. BM25 evidence (matched_terms) is the prompt
+        # intersected with the plugin's whole document (description + keywords +
+        # examplePrompts), so a prompt token that merely also appears in a
+        # description -- here a PII-like email local part and phone number -- IS
+        # matched evidence. Only tokens of the curated keywords/anchorTerms may be
+        # reported; the rest must never reach the result's match_keywords, the
+        # ledger, or the fire.
+        real = load_module(CATALOG_MODULE_PATH, "plugin_catalog_for_match_reason")
+        plugin = {
+            "name": "flow-plugin",
+            "source": "./x",
+            "match": {
+                "description": (
+                    "Build and automate record-triggered Salesforce Flows for approvals; "
+                    "escalations go to janedoe@example.com or 4155550123."
+                ),
+                "keywords": ["flow", "automation", "record-triggered", "approvals"],
+                "examplePrompts": ["build a flow", "automate an approval process"],
+                "anchorTerms": ["flow"],
+            },
+        }
+        # A second, disjoint-vocabulary plugin gives BM25 idf real contrast.
+        other = {
+            "name": "apex-plugin",
+            "source": "./y",
+            "match": {
+                "description": "Analyze and secure Apex code for governor limit violations.",
+                "keywords": ["apex", "governor", "security"],
+                "examplePrompts": ["analyze my apex code"],
+            },
+        }
+        catalog = {"plugins": [plugin, other]}
+        prompt = ("automate a record-triggered flow for approvals and email "
+                  "janedoe@example.com at 4155550123")
+        leaked = ("janedoe", "4155550123", "example", "automate")
+
+        # Precondition: those tokens really are part of the scorer's evidence for a
+        # high match, so the assertions below are not vacuous.
+        flow = next(
+            match for match in real.score_prompt_against_catalog(
+                prompt, catalog, require_anchor_terms=True)
+            if match.plugin["name"] == "flow-plugin"
+        )
+        self.assertEqual(flow.band, "high")
+        self.assertTrue(set(leaked) <= flow.matched_terms)
+
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: catalog,
+            score_prompt_against_catalog=real.score_prompt_against_catalog,
+            curated_match_terms=real.curated_match_terms,
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            results = sfx._plugin_catalog_match(
+                prompt, "sess-reason-pii", surface="user-prompt")
+        curated = "approvals,flow,record,triggered"
+        self.assertEqual([r["name"] for r in results], ["flow-plugin"])
+        self.assertEqual(results[0]["match_keywords"], curated)
+        ledger = sfx._load_plugin_proposals("sess-reason-pii")
+        self.assertEqual(
+            ledger,
+            {"flow-plugin": {"confidence": "high", "surface": "user-prompt",
+                             "match_keywords": curated}},
+        )
+        fired.assert_called_once_with(
+            "plugin_recommended", "flow-plugin", None, "high", "user-prompt",
+            "sess-reason-pii", match_keywords=curated, match_signal="",
+        )
+        ledger_text = json.dumps(ledger)
+        fired_text = repr(fired.call_args_list)
+        for token in leaked:
+            with self.subTest(token=token):
+                self.assertNotIn(token, results[0]["match_keywords"])
+                self.assertNotIn(token, ledger_text)
+                self.assertNotIn(token, fired_text)
+
+
+class SessionStartPluginSignalTests(unittest.TestCase):
+    """Match-reason telemetry, SessionStart half: `_detect_plugin_signals` maps
+    project files onto the fixed `_PLUGIN_SIGNALS` table, and
+    `_session_start_plugin_slot` threads each signal's closed-vocabulary CODE into
+    `_plugin_catalog_match`, so the plugin_recommended fire and the ledger record
+    which file signal surfaced a plugin. The human label is model/paint copy only:
+    neither it nor any project path or filename may ever reach telemetry.
+
+    Same isolation as PluginCatalogMatchTests (temp runtime/proposal/flow dirs,
+    "standard" sensitivity, nothing enabled). The project is a temp dir with a
+    distinctive name, so a path leaking into a payload is detectable by substring."""
+
+    _PLUGIN_BY_CODE = {
+        "lwc": "platform-lwc",
+        "react": "experience-react",
+        "agentforce": "agentforce-adlc",
+        "cms": "experience-cms",
+    }
+    _ALL_SIGNAL_FILES = (
+        "force-app/main/default/lwc/foo/foo.js-meta.xml",
+        "ui/src/App.tsx",
+        "force-app/main/default/aiAuthoringBundles/helper/helper.agent",
+        "force-app/main/default/contentassets/logo.asset-meta.xml",
+    )
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        runtime_dir = Path(self._tmp.name) / "runtime"
+        patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", runtime_dir),
+            mock.patch.object(sfx, "_PLUGIN_PROPOSAL_DIR", runtime_dir / "plugin-proposals"),
+            mock.patch.object(sfx, "_PLUGIN_FLOW_DIR", runtime_dir / "plugin-flows"),
+            mock.patch.object(sfx, "_enabled_plugin_names", return_value=None),
+            mock.patch.object(sfx, "_plugin_match_sensitivity", return_value="standard"),
+        ]
+        for patch in patches:
+            patch.start()
+            self.addCleanup(patch.stop)
+        self.project = Path(self._tmp.name) / "acme-secret-project"
+        self.project.mkdir()
+
+    def _touch(self, *relative_paths):
+        for relative in relative_paths:
+            path = self.project / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("", encoding="utf-8")
+
+    @staticmethod
+    def _signal_catalog(plugin_by_code):
+        """Fake catalog module that answers each signal's fixed query with one high
+        match for the plugin mapped to that signal's code (nothing for any other
+        text), echoing the query's own words as the curated reason."""
+        plugin_by_query = {
+            query: plugin_by_code[code]
+            for code, _label, query, _predicate in sfx._PLUGIN_SIGNALS
+            if code in plugin_by_code
+        }
+
+        def score(text, _catalog, **_kwargs):
+            name = plugin_by_query.get(text)
+            if name is None:
+                return []
+            return [types.SimpleNamespace(
+                plugin={"name": name,
+                        "match": {"description": f"Curated capability for {name}."}},
+                band="high", score=5.0, matched_terms=frozenset(text.split()),
+            )]
+
+        names = sorted(set(plugin_by_code.values()))
+        return types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": name} for name in names]},
+            score_prompt_against_catalog=score,
+            curated_match_terms=lambda plugin, matched_terms: sorted(matched_terms),
+        )
+
+    def test_detects_each_file_signal_as_a_code_label_query_triple(self):
+        self._touch(*self._ALL_SIGNAL_FILES)
+        signals = sfx._detect_plugin_signals(self.project)
+        self.assertEqual(signals, [entry[:3] for entry in sfx._PLUGIN_SIGNALS])
+        self.assertEqual([code for code, _label, _query in signals],
+                         ["lwc", "react", "agentforce", "cms"])
+
+    def test_detection_prunes_denylisted_dirs_and_reports_only_present_signals(self):
+        self._touch(
+            "node_modules/some-pkg/index.tsx",       # pruned -- would be react
+            "dist/lwc/foo/foo.js-meta.xml",          # pruned -- would be lwc
+            "force-app/main/default/aiAuthoringBundles/helper/helper.agent",
+        )
+        self.assertEqual(
+            [code for code, _label, _query in sfx._detect_plugin_signals(self.project)],
+            ["agentforce"],
+        )
+
+    def test_slot_threads_each_signal_code_into_the_matcher(self):
+        self._touch(*self._ALL_SIGNAL_FILES)
+        with mock.patch.object(sfx, "_plugin_catalog_match", return_value=[]) as match:
+            self.assertEqual(
+                sfx._session_start_plugin_slot("sess-thread", "startup", self.project),
+                ("", ""),
+            )
+        # One call per detected signal, in table order: the signal's fixed query,
+        # the live session id, the session-start surface, and its CODE -- never its
+        # human label.
+        self.assertEqual(match.call_args_list, [
+            mock.call(query, "sess-thread", "session-start", match_signal=code)
+            for code, _label, query, _predicate in sfx._PLUGIN_SIGNALS
+        ])
+
+    def test_end_to_end_records_signal_codes_never_labels_or_paths(self):
+        self._touch(*self._ALL_SIGNAL_FILES)
+        telemetry = mock.Mock()
+        with mock.patch.object(sfx, "_load_plugin_catalog_module",
+                               return_value=self._signal_catalog(self._PLUGIN_BY_CODE)), \
+                mock.patch.object(sfx, "_load_sf_telemetry", return_value=telemetry):
+            model, _visible = sfx._session_start_plugin_slot(
+                "sess-e2e", "startup", self.project)
+        # The human labels are model copy, so they DO reach the note...
+        for _code, label, _query, _predicate in sfx._PLUGIN_SIGNALS:
+            self.assertIn(label, model)
+        # ...but each plugin_recommended event carries only its signal's code.
+        calls = telemetry.capture_event.call_args_list
+        self.assertEqual([call.args[0] for call in calls], ["plugin_recommended"] * 4)
+        payloads = [call.args[2] for call in calls]
+        self.assertEqual(
+            [(p["tool_input"]["plugin"], p["tool_input"]["match_signal"]) for p in payloads],
+            [(name, code) for code, name in self._PLUGIN_BY_CODE.items()],
+        )
+        forbidden = [label for _code, label, _query, _predicate in sfx._PLUGIN_SIGNALS]
+        forbidden += [str(self.project), self.project.name, "force-app",
+                      ".js-meta.xml", "App.tsx", "helper.agent", "contentassets"]
+        for payload in payloads:
+            self.assertEqual(payload["session_id"], "sess-e2e")
+            self.assertEqual(payload["tool_input"]["surface"], "session-start")
+            self.assertIn(payload["tool_input"]["match_signal"],
+                          sfx._PLUGIN_MATCH_SIGNAL_CODES)
+            for value in payload["tool_input"].values():
+                for text in forbidden:
+                    self.assertNotIn(text, str(value))
+        # The ledger records the same code next to the session-start surface, and
+        # is equally free of labels and paths.
+        ledger = sfx._load_plugin_proposals("sess-e2e")
+        self.assertEqual(
+            {name: entry["match_signal"] for name, entry in ledger.items()},
+            {name: code for code, name in self._PLUGIN_BY_CODE.items()},
+        )
+        ledger_text = json.dumps(ledger)
+        for text in forbidden:
+            self.assertNotIn(text, ledger_text)
+
+    def test_plugin_surfaced_by_two_signals_records_only_the_first_code(self):
+        # Documented v1 limitation: the fire dedups on first occurrence inside the
+        # per-query matcher, so a plugin that two signals surface reports the FIRST
+        # signal's code only -- on the event and on the ledger -- while the model
+        # note still credits both labels.
+        self._touch("force-app/main/default/lwc/foo/foo.js-meta.xml", "ui/src/App.tsx")
+        telemetry = mock.Mock()
+        module = self._signal_catalog({"lwc": "experience-ui", "react": "experience-ui"})
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_load_sf_telemetry", return_value=telemetry):
+            model, _visible = sfx._session_start_plugin_slot(
+                "sess-shared", "startup", self.project)
+        telemetry.capture_event.assert_called_once()
+        self.assertEqual(
+            telemetry.capture_event.call_args.args[2]["tool_input"]["match_signal"], "lwc")
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-shared")["experience-ui"]["match_signal"], "lwc")
+        self.assertIn("Lightning Web Components in this project", model)
+        self.assertIn("a React UI bundle in this project", model)
+
+    def test_resume_and_compact_replays_record_and_fire_nothing(self):
+        # A replayed SessionStart repaints the recommendation but stays
+        # side-effect-free: the blanked proposal id writes no ledger entry (so no
+        # reason) and fires no plugin_recommended event.
+        self._touch("force-app/main/default/lwc/foo/foo.js-meta.xml")
+        for source in ("resume", "compact"):
+            with self.subTest(source=source):
+                session_id = f"sess-replay-{source}"
+                telemetry = mock.Mock()
+                module = self._signal_catalog({"lwc": "platform-lwc"})
+                with mock.patch.object(sfx, "_load_plugin_catalog_module",
+                                       return_value=module), \
+                        mock.patch.object(sfx, "_load_sf_telemetry", return_value=telemetry):
+                    model, _visible = sfx._session_start_plugin_slot(
+                        session_id, source, self.project)
+                self.assertIn("platform-lwc", model)   # the matcher still ran
+                telemetry.capture_event.assert_not_called()
+                self.assertEqual(sfx._load_plugin_proposals(session_id), {})
+
+    def test_signal_codes_match_the_sf_telemetry_closed_vocabulary(self):
+        # sf_telemetry keeps its OWN copy of the code set (it is the privacy
+        # boundary and does not trust the caller). The three must stay identical,
+        # or a new signal's code would be silently dropped at capture.
+        sf_telemetry = sfx._load_sf_telemetry()
+        self.assertIsNotNone(sf_telemetry)
+        codes = [code for code, _label, _query, _predicate in sfx._PLUGIN_SIGNALS]
+        self.assertEqual(len(codes), len(set(codes)))
+        self.assertEqual(sfx._PLUGIN_MATCH_SIGNAL_CODES, frozenset(codes))
+        self.assertEqual(sfx._PLUGIN_MATCH_SIGNAL_CODES, sf_telemetry._PLUGIN_MATCH_SIGNALS)
+
 
 class PluginMatchHighConfidenceFlowTests(unittest.TestCase):
     """PR-1696 corrected-fix review, item 1: `cmd_plugin_match` must open the
@@ -3872,7 +4490,12 @@ class PluginBypassGateHighConfidenceFlowTests(unittest.TestCase):
             "tool_name": "Bash",
             "tool_input": {"command": command},
             "session_id": session_id,
+            "prompt_id": "bypass-prompt",
         }
+        # The advisory now requires an eligibility marker from UserPromptSubmit;
+        # seed the same prompt-scoped state before exercising its mocked matcher.
+        prompt_context = sfx._prompt_context(payload, rotate_fallback=False)
+        sfx._record_prompt_text(prompt_context, "build a service agent")
         with mock.patch.object(sfx, "_plugin_catalog_match", return_value=matches), \
                 mock.patch.object(sys, "stdin", io.StringIO(json.dumps(payload))), \
                 redirect_stdout(io.StringIO()):
@@ -3996,6 +4619,15 @@ class PluginProposalMarkerTests(unittest.TestCase):
         self.assertEqual(
             sfx._load_plugin_proposals("sess-a"),
             {"agentforce-adlc": {"confidence": "high", "surface": "bypass-gate"}})
+
+    def test_round_trips_the_additive_match_reason_keys(self):
+        # The optional match-reason keys (and the durable decline marker) are plain
+        # additive JSON: they round-trip untouched next to {confidence, surface}.
+        entry = {"confidence": "high", "surface": "session-start",
+                 "match_keywords": "cms,media", "match_signal": "cms",
+                 "decision": "declined"}
+        self.assertTrue(sfx._save_plugin_proposals("sess-a2", {"experience-cms": entry}))
+        self.assertEqual(sfx._load_plugin_proposals("sess-a2"), {"experience-cms": entry})
 
     def test_plugin_flow_round_trip_extends_one_session_start_batch(self):
         self.assertTrue(sfx._open_plugin_flow(
@@ -4169,6 +4801,80 @@ class PluginProposalMarkerTests(unittest.TestCase):
     def test_blank_session_id_is_a_no_op(self):
         self.assertEqual(sfx._load_plugin_proposals(""), {})
         self.assertFalse(sfx._save_plugin_proposals("", {"x": {"confidence": "high"}}))
+
+    def test_save_sheds_match_reason_keys_before_losing_an_oversized_ledger(self):
+        # The match reason is best-effort telemetry context; the first-occurrence
+        # ledger is not. A ledger that only its reason keys push past the byte cap
+        # is still saved -- with every reason key stripped, and confidence/surface/
+        # decision (and a non-dict legacy entry) intact.
+        keywords = ",".join(f"keyword{i:02d}" for i in range(12))
+        proposals = {
+            f"plugin-{i:02d}": {"confidence": "high", "surface": "session-start",
+                                "match_keywords": keywords, "match_signal": "lwc",
+                                "decision": "declined"}
+            for i in range(40)
+        }
+        proposals["legacy-entry"] = "not-a-dict"
+        stripped = {
+            name: ({key: value for key, value in entry.items()
+                    if key not in ("match_keywords", "match_signal")}
+                   if isinstance(entry, dict) else entry)
+            for name, entry in proposals.items()
+        }
+        # Self-check that the fixture straddles the cap: over WITH the reason keys,
+        # within it WITHOUT them.
+        self.assertGreater(len(json.dumps(proposals, separators=(",", ":"))),
+                           sfx._PLUGIN_PROPOSAL_MAX_BYTES)
+        self.assertLessEqual(len(json.dumps(stripped, separators=(",", ":"))),
+                             sfx._PLUGIN_PROPOSAL_MAX_BYTES)
+        self.assertTrue(sfx._save_plugin_proposals("sess-shed", proposals))
+        self.assertEqual(sfx._load_plugin_proposals("sess-shed"), stripped)
+
+    def test_save_refuses_a_ledger_over_the_cap_even_without_reason_keys(self):
+        # Shedding the reason is the only concession: a ledger still too large
+        # without it is refused outright, leaving the previously saved ledger in
+        # place rather than a truncated one.
+        previous = {"experience-cms": {"confidence": "high", "surface": "user-prompt"}}
+        self.assertTrue(sfx._save_plugin_proposals("sess-too-big", previous))
+        oversized = {
+            f"plugin-{i:03d}": {"confidence": "high", "surface": "session-start",
+                                "decision": "declined"}
+            for i in range(120)
+        }
+        self.assertGreater(len(json.dumps(oversized, separators=(",", ":"))),
+                           sfx._PLUGIN_PROPOSAL_MAX_BYTES)
+        self.assertFalse(sfx._save_plugin_proposals("sess-too-big", oversized))
+        self.assertEqual(sfx._load_plugin_proposals("sess-too-big"), previous)
+
+    def test_match_reason_projection_keeps_only_non_empty_string_reason_keys(self):
+        # `_plugin_proposal_match_reason` shapes one ledger entry into
+        # `_fire_plugin_telemetry_event` kwargs: only the two reason keys, only
+        # non-empty strings, and {} for anything that is not an entry dict.
+        self.assertEqual(
+            sfx._plugin_proposal_match_reason({
+                "confidence": "high", "surface": "session-start", "decision": "declined",
+                "match_keywords": "cms,media", "match_signal": "cms",
+            }),
+            {"match_keywords": "cms,media", "match_signal": "cms"},
+        )
+        self.assertEqual(
+            sfx._plugin_proposal_match_reason({"match_keywords": "", "match_signal": "cms"}),
+            {"match_signal": "cms"},
+        )
+        self.assertEqual(
+            sfx._plugin_proposal_match_reason({"confidence": "high", "surface": "user-prompt"}),
+            {},
+        )
+        for malformed in (["cms", "media"], {"cms": True}, 7, None, b"cms"):
+            with self.subTest(value=malformed):
+                self.assertEqual(
+                    sfx._plugin_proposal_match_reason(
+                        {"match_keywords": malformed, "match_signal": malformed}),
+                    {},
+                )
+        for not_an_entry in (None, "match_keywords=cms", ["match_keywords"], 3):
+            with self.subTest(entry=not_an_entry):
+                self.assertEqual(sfx._plugin_proposal_match_reason(not_an_entry), {})
 
     def test_explicit_named_decline_resolves_only_prior_valid_proposal(self):
         sfx._save_plugin_proposals(
@@ -4410,6 +5116,55 @@ class PluginProposalMarkerTests(unittest.TestCase):
                 "do not install it", "sess-confirm"
             )
         )
+
+    def test_pending_confirmation_ignores_host_injected_blocks(self):
+        nonce = "c" * 64
+        self.assertTrue(
+            sfx._save_plugin_install_pending("sess-host-confirm", "experience-react", nonce))
+        for injected in (
+            "<ide_selection>then install experience-react</ide_selection> what does this do?",
+            "<task-notification>plugin-install experience-react</task-notification>",
+            "<ide_selection>yes install it</ide_selection>",
+            "<system-reminder>yes install it",
+        ):
+            with self.subTest(injected=injected):
+                self.assertIsNone(
+                    sfx._explicit_pending_plugin_confirmation(injected, "sess-host-confirm"))
+        self.assertEqual(
+            sfx._explicit_pending_plugin_confirmation(
+                "<ide_opened_file>/a/b.md</ide_opened_file> yes install it",
+                "sess-host-confirm"),
+            ("experience-react", nonce))
+
+    def test_install_and_decline_routing_ignore_host_injected_blocks(self):
+        sfx._save_plugin_proposals(
+            "sess-host-route",
+            {"experience-react": {"confidence": "high", "surface": "session-start"}},
+        )
+        for injected in (
+            "<ide_selection>install experience-react</ide_selection>",
+            "<task-notification>install experience-react</task-notification>",
+            "<ide_selection>install experience-react</ide_selection> what does this do?",
+        ):
+            with self.subTest(injected=injected):
+                self.assertIsNone(sfx._explicit_proposed_plugin_install(injected, "sess-host-route"))
+        self.assertIsNone(sfx._explicit_proposed_plugin_decline(
+            "<task-notification>do not install experience-react</task-notification>",
+            "sess-host-route"))
+        self.assertEqual(
+            sfx._explicit_proposed_plugin_install(
+                "<ide_selection>x</ide_selection> install experience-react", "sess-host-route"),
+            "experience-react")
+
+    def test_pending_confirmation_after_large_pasted_content(self):
+        nonce = "d" * 64
+        self.assertTrue(
+            sfx._save_plugin_install_pending("sess-big-confirm", "experience-react", nonce))
+        prompt = "<ide_selection>" + "x " * 40000 + "</ide_selection> yes install it"
+        self.assertGreater(len(prompt), sfx._PROMPT_INTENT_SCAN_MAX_CHARS)
+        self.assertEqual(
+            sfx._explicit_pending_plugin_confirmation(prompt, "sess-big-confirm"),
+            ("experience-react", nonce))
 
     def test_pending_confirmation_expires(self):
         nonce = "b" * 64
@@ -4872,10 +5627,29 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(event, "plugin_loaded")
         self.assertEqual(outcome, "")
         self.assertEqual(payload["session_id"], "sess-1")
+        # The match-reason keys are ALWAYS present on the wire shape ("" when the
+        # caller had no evidence), so sf_telemetry's revalidation sees one shape.
         self.assertEqual(
             payload["tool_input"],
             {"plugin": "agentforce-adlc", "origin": "external",
-             "confidence": "high", "surface": "bypass-gate"})
+             "confidence": "high", "surface": "bypass-gate",
+             "match_keywords": "", "match_signal": ""})
+
+    def test_fire_plugin_telemetry_event_forwards_the_match_reason_verbatim(self):
+        # The caller is a pass-through: whatever reason it is handed rides in
+        # tool_input under the two named keys, unchanged. Clamping to the curated
+        # vocabulary / signal enum is sf_telemetry's job, not this layer's.
+        sfx._fire_plugin_telemetry_event(
+            "plugin_recommended", "experience-cms", None, "high", "session-start",
+            "sess-reason", match_keywords="cms,media", match_signal="cms")
+        self.assertEqual(self._recorded, [(
+            "plugin_recommended", "",
+            {"tool_input": {
+                "plugin": "experience-cms", "origin": None,
+                "confidence": "high", "surface": "session-start",
+                "match_keywords": "cms,media", "match_signal": "cms",
+            }, "session_id": "sess-reason"},
+        )])
 
     def test_fire_plugin_install_result_carries_only_reason_and_session(self):
         sfx._fire_plugin_install_result(
@@ -5098,9 +5872,12 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(len(self._recorded), 1)
         event, _outcome, payload = self._recorded[0]
         self.assertEqual(event, "plugin_loaded")
+        # A reasonless entry (written before match-reason capture, or by a
+        # deterministic surface) still fires, with both reason keys empty.
         self.assertEqual(payload["tool_input"],
                           {"plugin": "agentforce-adlc", "origin": "external",
-                           "confidence": "high", "surface": "bypass-gate"})
+                           "confidence": "high", "surface": "bypass-gate",
+                           "match_keywords": "", "match_signal": ""})
         self.assertEqual(sfx._load_plugin_proposals("sess-2"), {})
 
     def test_fire_loaded_fires_nothing_when_no_prior_proposal(self):
@@ -5139,7 +5916,8 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(event, "plugin_installed")
         self.assertEqual(payload["tool_input"],
                           {"plugin": "agentforce-adlc", "origin": "external",
-                           "confidence": "high", "surface": "bypass-gate"})
+                           "confidence": "high", "surface": "bypass-gate",
+                           "match_keywords": "", "match_signal": ""})
         # The marker entry is untouched, so _plugin_install_fire_loaded can still fire.
         self.assertEqual(
             sfx._load_plugin_proposals("sess-i1"),
@@ -5157,7 +5935,8 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(
             payload["tool_input"],
             {"plugin": "experience-cms", "origin": "local",
-             "confidence": "high", "surface": "session-start"},
+             "confidence": "high", "surface": "session-start",
+             "match_keywords": "", "match_signal": ""},
         )
 
     def test_fire_installed_records_self_directed_when_no_prior_proposal(self):
@@ -5167,9 +5946,11 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(len(self._recorded), 1)
         event, _outcome, payload = self._recorded[0]
         self.assertEqual(event, "plugin_installed")
+        # No proposal means no match evidence: both reason keys stay empty.
         self.assertEqual(payload["tool_input"],
                           {"plugin": "agentforce-adlc", "origin": "external",
-                           "confidence": "none", "surface": "self-directed"})
+                           "confidence": "none", "surface": "self-directed",
+                           "match_keywords": "", "match_signal": ""})
 
     def test_fire_installed_falls_back_to_self_directed_on_malformed_marker(self):
         sfx._save_plugin_proposals(
@@ -5232,7 +6013,8 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertEqual(event, "plugin_suggestion_declined")
         self.assertEqual(payload["tool_input"],
                           {"plugin": "agentforce-adlc", "origin": "external",
-                           "confidence": "medium", "surface": "discovery-command"})
+                           "confidence": "medium", "surface": "discovery-command",
+                           "match_keywords": "", "match_signal": ""})
         self.assertEqual(self._recorded[1][0], "plugin_install_result")
         self.assertEqual(self._recorded[1][2]["tool_input"]["reason"], "declined")
         # The entry survives (unchanged) so a later occurrence still dedupes to warn.
@@ -5255,6 +6037,141 @@ class PluginInstallTelemetryTests(unittest.TestCase):
         self.assertIn("malformed", err.getvalue().lower())
         self.assertEqual(self._recorded[-1][0], "plugin_install_result")
         self.assertEqual(self._recorded[-1][2]["tool_input"]["reason"], "decline_refused")
+
+    # -- Match-reason recovery: the later-turn funnel events recover WHY the
+    # proposal fired from its ledger entry (match_keywords / match_signal were
+    # persisted at recommendation time), forwarding only well-formed values.
+
+    def test_fire_loaded_recovers_the_recorded_match_reason(self):
+        sfx._save_plugin_proposals("sess-reason-loaded", {"experience-cms": {
+            "confidence": "high", "surface": "session-start",
+            "match_keywords": "cms,media", "match_signal": "cms",
+        }})
+        with mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_install_fire_loaded(
+                "experience-cms", {"origin": "local"}, "sess-reason-loaded")
+        fired.assert_called_once_with(
+            "plugin_loaded", "experience-cms", "local", "high", "session-start",
+            "sess-reason-loaded", match_keywords="cms,media", match_signal="cms",
+        )
+        self.assertEqual(sfx._load_plugin_proposals("sess-reason-loaded"), {})
+
+    def test_fire_installed_recovers_the_recorded_match_reason_non_destructively(self):
+        recorded = {"agentforce-adlc": {
+            "confidence": "medium", "surface": "bypass-gate",
+            "match_keywords": "agent,agentforce",
+        }}
+        sfx._save_plugin_proposals("sess-reason-installed", recorded)
+        with mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_install_fire_installed(
+                "agentforce-adlc", {"origin": "external"}, "sess-reason-installed")
+        # A prompt-driven proposal recorded no signal, so only its keywords ride.
+        fired.assert_called_once_with(
+            "plugin_installed", "agentforce-adlc", "external", "medium", "bypass-gate",
+            "sess-reason-installed", match_keywords="agent,agentforce",
+        )
+        # The reason survives for the plugin_loaded fire that follows.
+        self.assertEqual(sfx._load_plugin_proposals("sess-reason-installed"), recorded)
+
+    def test_fire_installed_without_a_valid_proposal_passes_no_match_reason(self):
+        # Self-directed (no entry at all) and an entry too malformed to attribute
+        # the install to both report no reason: a reason is never detached from the
+        # proposal it explains.
+        sfx._save_plugin_proposals("sess-reason-malformed", {"agentforce-adlc": {
+            "confidence": "not-a-band", "surface": "bypass-gate",
+            "match_keywords": "agentforce",
+        }})
+        with mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_install_fire_installed(
+                "agentforce-adlc", {"origin": "external"}, "sess-reason-cold")
+            sfx._plugin_install_fire_installed(
+                "agentforce-adlc", {"origin": "external"}, "sess-reason-malformed")
+        self.assertEqual(fired.call_args_list, [
+            mock.call("plugin_installed", "agentforce-adlc", "external", "none",
+                      "self-directed", "sess-reason-cold"),
+            mock.call("plugin_installed", "agentforce-adlc", "external", "none",
+                      "self-directed", "sess-reason-malformed"),
+        ])
+
+    def test_decline_recovers_and_preserves_the_recorded_match_reason(self):
+        sfx._save_plugin_proposals("sess-reason-decline", {"experience-cms": {
+            "confidence": "high", "surface": "session-start",
+            "match_keywords": "cms,media", "match_signal": "cms",
+        }})
+        with mock.patch.object(sfx, "_plugin_install_lookup",
+                               return_value=_plugin_lookup({"origin": "local"})), \
+                mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired, \
+                redirect_stdout(io.StringIO()):
+            rc = sfx._cmd_plugin_install_decline("experience-cms", "sess-reason-decline")
+        self.assertEqual(rc, 0)
+        fired.assert_called_once_with(
+            "plugin_suggestion_declined", "experience-cms", "local", "high",
+            "session-start", "sess-reason-decline",
+            match_keywords="cms,media", match_signal="cms",
+        )
+        # The durable declined marker carries the reason forward unchanged, so a
+        # later install of the declined plugin still reports the original reason.
+        self.assertEqual(
+            sfx._load_plugin_proposals("sess-reason-decline"),
+            {"experience-cms": {"confidence": "high", "surface": "session-start",
+                                "match_keywords": "cms,media", "match_signal": "cms",
+                                "decision": "declined"}},
+        )
+
+    def test_malformed_recorded_reason_values_are_not_forwarded(self):
+        # Only a non-empty string is a reason. A list recorded under a reason key is
+        # dropped rather than forwarded; the well-formed sibling key still rides.
+        sfx._save_plugin_proposals("sess-reason-junk", {"experience-cms": {
+            "confidence": "high", "surface": "session-start",
+            "match_keywords": ["cms", "media"], "match_signal": "cms",
+        }})
+        with mock.patch.object(sfx, "_fire_plugin_telemetry_event") as fired:
+            sfx._plugin_install_fire_installed(
+                "experience-cms", {"origin": "local"}, "sess-reason-junk")
+            sfx._plugin_install_fire_loaded(
+                "experience-cms", {"origin": "local"}, "sess-reason-junk")
+        self.assertEqual(fired.call_args_list, [
+            mock.call("plugin_installed", "experience-cms", "local", "high",
+                      "session-start", "sess-reason-junk", match_signal="cms"),
+            mock.call("plugin_loaded", "experience-cms", "local", "high",
+                      "session-start", "sess-reason-junk", match_signal="cms"),
+        ])
+
+    def test_recommended_reason_rides_every_later_funnel_event_on_the_wire(self):
+        # End-to-end on one session, through the real ledger and the real
+        # _fire_plugin_telemetry_event: the reason the session-start recommendation
+        # recorded is the reason plugin_installed and plugin_loaded report.
+        module = types.SimpleNamespace(
+            load_catalog=lambda root: {"plugins": [{"name": "experience-cms"}]},
+            score_prompt_against_catalog=lambda text, catalog, **kwargs: [
+                types.SimpleNamespace(
+                    plugin={"name": "experience-cms",
+                            "match": {"description": "Curated capability for experience-cms."}},
+                    band="high", score=5.0, matched_terms=frozenset({"media", "cms"}),
+                ),
+            ],
+            curated_match_terms=lambda plugin, matched_terms: sorted(matched_terms),
+        )
+        with mock.patch.object(sfx, "_load_plugin_catalog_module", return_value=module), \
+                mock.patch.object(sfx, "_enabled_plugin_names", return_value=None), \
+                mock.patch.object(sfx, "_plugin_match_sensitivity", return_value="standard"):
+            sfx._plugin_catalog_match(
+                "cms media", "sess-reason-funnel", surface="session-start",
+                match_signal="cms")
+        sfx._plugin_install_fire_installed(
+            "experience-cms", {"origin": "local"}, "sess-reason-funnel")
+        sfx._plugin_install_fire_loaded(
+            "experience-cms", {"origin": "local"}, "sess-reason-funnel")
+        reason = {"match_keywords": "cms,media", "match_signal": "cms"}
+        base = {"plugin": "experience-cms", "confidence": "high", "surface": "session-start"}
+        self.assertEqual(
+            [(event, payload["tool_input"]) for event, _outcome, payload in self._recorded],
+            [
+                ("plugin_recommended", {**base, "origin": None, **reason}),
+                ("plugin_installed", {**base, "origin": "local", **reason}),
+                ("plugin_loaded", {**base, "origin": "local", **reason}),
+            ],
+        )
 
     # -- NL decline (UserPromptSubmit / cmd_orientation_paint) also reaches
     # pluginInstall.completed. Per decision-log.md / plugin-catalog.md, natural-
@@ -5945,7 +6862,329 @@ class PromptTextCaptureTests(unittest.TestCase):
         # Must not raise on a missing context (e.g. an older host with no
         # native prompt_id and no prior UserPromptSubmit rotation).
         sfx._record_prompt_text(None, "text")
-        sfx._record_prompt_text(self._context(), "")
+        context = self._context()
+        sfx._record_prompt_text(context, "")
+        self.assertIsNone(sfx._prompt_text(context))
+
+    # Host-injected context and incidental vocabulary must never stand in for
+    # the user's ask: the bypass gate denies a tool call on what is recorded.
+    IDE_NOTICE = (
+        "<ide_opened_file>The user opened the file "
+        "/Users/me/proj/docs/DATA_PARTNER-123_notes.md in the IDE. This may or "
+        "may not be related to the current task.</ide_opened_file>")
+    JAPANESE = "このメモを要約して、課題管理システムに投稿する文面を作ってください"
+
+    def test_ide_notice_around_a_non_ascii_prompt_records_filtered_user_text(self):
+        context = self._context()
+        sfx._record_prompt_text(context, self.IDE_NOTICE + "\n" + self.JAPANESE)
+        self.assertEqual(sfx._prompt_text(context), self.JAPANESE)
+
+    def test_task_notification_alone_records_nothing(self):
+        context = self._context()
+        sfx._record_prompt_text(context, (
+            "<task-notification>\n<task-id>abc</task-id>\n<status>completed</status>\n"
+            "<summary>created scratch org, deployed lightning widgets</summary>\n"
+            "</task-notification>"))
+        self.assertIsNone(sfx._prompt_text(context))
+
+    def test_unclosed_host_block_is_stripped_to_the_end(self):
+        self.assertEqual(
+            sfx._prompt_intent_text("deploy my apex <system-reminder>scratch org sandbox"),
+            "deploy my apex")
+
+    def test_host_blocks_are_stripped_and_the_ask_kept(self):
+        context = self._context()
+        sfx._record_prompt_text(context, self.IDE_NOTICE + "\nbuild me a service agent")
+        self.assertEqual(sfx._prompt_text(context), "build me a service agent")
+
+    def test_every_host_block_shape_is_stripped(self):
+        for prompt in (
+                '<system-reminder foo="x">scratch org sandbox</system-reminder>build an agent',
+                "<ide_selection>lwc datatable</ide_selection> build an agent "
+                "<ide_opened_file>/a/b.cls</ide_opened_file>",
+                "<ide_diagnostics>apex error</ide_diagnostics>build an agent"):
+            with self.subTest(prompt=prompt):
+                self.assertEqual(sfx._prompt_intent_text(prompt), "build an agent")
+
+    def test_many_unterminated_host_openings_stay_fast(self):
+        # Each opening without a closing `>` must not rescan the whole prompt.
+        prompt = "build an agent " + "<system-reminder " * 20000
+        started = time.monotonic()
+        self.assertTrue(sfx._prompt_intent_text(prompt).startswith("build an agent "))
+        self.assertLess(time.monotonic() - started, 2.0)
+
+    def test_host_block_regex_alone_stays_fast_on_huge_input(self):
+        # The regex bound, independent of the scan window: >1 MB of openings.
+        prompt = "<system-reminder " * 80000
+        self.assertGreater(len(prompt), 1_000_000)
+        started = time.monotonic()
+        sfx._PROMPT_HOST_BLOCK_PATTERN.sub(" ", prompt)
+        self.assertLess(time.monotonic() - started, 1.0)
+
+    def test_scan_window_bounds_work_and_strips_before_truncating(self):
+        # A 10 KB selection that closes inside the window is removed whole,
+        # and the ask after it survives.
+        selection = "<ide_selection>" + "x " * 5000 + "</ide_selection> build an agent"
+        self.assertEqual(sfx._prompt_intent_text(selection), "build an agent")
+        # An ordinary few-KB paste is well inside the window: the ask at its end
+        # is read.
+        paste = "pasted log line " * 250 + "build an agent"
+        self.assertGreater(len(paste), 3000)
+        self.assertTrue(sfx._prompt_intent_text(paste).endswith("build an agent"))
+        # Past the window nothing is read: the ask is simply not seen.
+        beyond = "build an agent " + "y" * sfx._PROMPT_INTENT_SCAN_MAX_CHARS + " deploy apex"
+        self.assertNotIn("deploy", sfx._prompt_intent_text(beyond))
+        # Stripping covers the whole prompt before the window is applied, so a
+        # block that closes beyond the window is still removed whole.
+        straddle = ("ask one "
+                    + "<ide_selection>" + "z " * sfx._PROMPT_INTENT_SCAN_MAX_CHARS
+                    + "</ide_selection> ask two")
+        self.assertEqual(sfx._prompt_intent_text(straddle), "ask one ask two")
+
+    def test_decision_text_is_not_truncated(self):
+        trailing = "yes install it"
+        prompt = "pasted " * 20000 + trailing
+        self.assertGreater(len(prompt), sfx._PROMPT_INTENT_SCAN_MAX_CHARS)
+        self.assertTrue(sfx._strip_prompt_host_blocks(prompt).endswith(trailing))
+        started = time.monotonic()
+        sfx._strip_prompt_host_blocks("<system-reminder " * 80000 + trailing)
+        self.assertLess(time.monotonic() - started, 2.0)
+
+    def test_host_tag_name_must_end_at_a_delimiter(self):
+        # `<system-reminder-extra>` is not a host tag: nothing after it is eaten.
+        self.assertEqual(
+            sfx._prompt_intent_text("build <system-reminder-extra>an agent"),
+            "build <system-reminder-extra>an agent")
+
+    def test_two_same_tag_blocks_around_the_ask_are_both_removed(self):
+        self.assertEqual(
+            sfx._prompt_intent_text(
+                "<ide_selection>lwc datatable</ide_selection> build an agent "
+                "<ide_selection>apex trigger</ide_selection>"),
+            "build an agent")
+
+    def test_adjacent_block_does_not_merge_the_words_around_it(self):
+        self.assertEqual(
+            sfx._prompt_intent_text("build<ide_selection>x</ide_selection>agent"), "build agent")
+
+    def test_strip_host_blocks_returns_empty_for_pure_host_context(self):
+        self.assertEqual(sfx._strip_prompt_host_blocks("<task-notification>done</task-notification>"), "")
+        self.assertEqual(sfx._strip_prompt_host_blocks(None), "")
+        self.assertEqual(
+            sfx._strip_prompt_host_blocks("<ide_selection>x</ide_selection> yes install it"),
+            "yes install it")
+
+    def test_urls_paths_and_upper_snake_identifiers_are_dropped(self):
+        for incidental in (
+                "https://tracker.example.com/view/PROJECT_PARTNER-546",
+                "PROJECT_PARTNER-546",
+                "docs/DATA_PARTNER-123_notes.md",
+                "/Users/me/proj/force-app",
+                "~/proj/notes",
+                "./scripts/run",
+                "C:\\Users\\me\\notes",
+                "`force-app/main/default`,",
+                "src/classes/Foo.cls",
+                "src/classes/Foo",
+                "scripts/deploy/run",
+                "node_modules/pkg/lib",
+                "docs/guide/setup",
+                "lwc/heroBanner/heroBanner.js:42:13",
+                "(src/classes/Foo.cls:12)"):
+            with self.subTest(incidental=incidental):
+                self.assertEqual(sfx._prompt_intent_text(f"see {incidental} please"), "see please")
+
+    def test_url_with_plain_word_segments_is_dropped_by_the_url_rule_alone(self):
+        self.assertEqual(
+            sfx._prompt_intent_text("see https://example.com/lwc/guide please"), "see please")
+
+    def test_wrapped_identifiers_followed_by_punctuation_are_dropped(self):
+        for incidental in (
+                "(PARTNER_PACKAGE_VERSION_ID),",
+                "`LWC_DATATABLE_COLUMNS`.",
+                "[PROJECT_PARTNER-546];",
+                "\"DATA_PARTNER_ID\"?",
+                "PARTNER_PACKAGE_VERSION_ID()",
+                "`PARTNER_PACKAGE_VERSION_ID()`",
+                ">PARTNER_PACKAGE_VERSION_ID"):
+            with self.subTest(incidental=incidental):
+                self.assertEqual(sfx._prompt_intent_text(f"why is {incidental} null"), "why is null")
+
+    def test_line_breaks_survive_so_a_later_request_is_seen(self):
+        # Request checks split sentences on line breaks; an unpunctuated
+        # informational first line must not swallow the ask on the next one.
+        prompt = "What is DevOps Center\nSet up a test pipeline for my org"
+        intent = sfx._prompt_intent_text(
+            "<ide_opened_file>/a/b.cls</ide_opened_file>\n" + prompt + "\n\n")
+        self.assertEqual(intent, prompt)
+        self.assertTrue(sfx._plugin_prompt_requests_action(intent))
+
+    def test_getting_started_cue_reads_non_latin_prompts(self):
+        # The ASCII intent text declines a mostly non-Latin prompt, but the
+        # Salesforce/CRM cue reads the user's words in any script.
+        prompt = "Хочу создать приложение в Salesforce для продаж"
+        self.assertEqual(sfx._prompt_intent_text(prompt), "")
+        self.assertTrue(sfx._is_getting_started_intent(sfx._prompt_user_words(prompt)))
+
+    def test_slash_command_name_is_dropped_and_its_arguments_kept(self):
+        self.assertEqual(
+            sfx._prompt_intent_text("/salesforce-development:discover build an agent"),
+            "build an agent")
+
+    def test_ordinary_slashed_words_are_kept(self):
+        for prompt in (
+                "build an Apex/LWC page and/or a flow",
+                "should I use Flow/Apex/LWC here",
+                "Sales/Service/Experience Cloud setup",
+                "port this Apex/Node.js service",
+                "migrate .NET/C# code",
+                "build the B2B/B2C checkout flow",
+                "set up Experience-Cloud/CMS branding",
+                "build a mobile-sdk/offline app",
+                "validate the OAuth2/JWT bearer flow",
+                "run a Well-Architected/PMD code review",
+                "connect Agentforce/Data-Cloud grounding",
+                "compare Apex/LWC/Node.js options"):
+            with self.subTest(prompt=prompt):
+                self.assertEqual(sfx._prompt_intent_text(prompt), prompt)
+
+    def test_typed_capability_paths_are_dropped(self):
+        # Decision (plugin-catalog.md): a typed file path is a thing the user
+        # names, not the capability they ask for, even under lwc/.
+        self.assertEqual(
+            sfx._prompt_intent_text("why is lwc/heroBanner/heroBanner.js not rendering"),
+            "why is not rendering")
+
+    def test_salesforce_terms_are_kept(self):
+        prompt = "query Account.Name and My_Object__c via sf org list from force-app"
+        self.assertEqual(sfx._prompt_intent_text(prompt), prompt)
+
+    def test_catalog_example_prompts_record_unchanged(self):
+        # Guards against over-stripping: every prompt the catalog is tuned on
+        # must reach the matcher intact.
+        catalog = load_module(CATALOG_MODULE_PATH, "plugin_catalog_for_intent").load_catalog(
+            CATALOG_MODULE_PATH.parent.parent)
+        prompts = [
+            prompt
+            for plugin in catalog["plugins"]
+            for prompt in plugin["match"]["examplePrompts"]
+        ]
+        self.assertTrue(prompts)
+        for prompt in prompts:
+            with self.subTest(prompt=prompt):
+                self.assertEqual(sfx._prompt_intent_text(prompt), " ".join(prompt.split()))
+
+    def test_intent_text_abstains_on_any_non_ascii_letter(self):
+        # The catalog cannot safely infer multilingual intent after transliteration
+        # or ratio heuristics: even a single non-ASCII letter makes it abstain.
+        for prompt in (
+                "create a scratch org for the café demo",
+                "Apexтриггер Salesforce", "SalesforceのApexトリガーを作る"):
+            with self.subTest(prompt=prompt):
+                self.assertEqual(sfx._prompt_intent_text(prompt), "")
+
+    def test_emoji_formatting_preserves_english_catalog_eligibility(self):
+        for suffix in ("✔️", "❤️", "✔\ufe0e", "👩‍💻", "“flow” — № 1"):
+            with self.subTest(suffix=suffix):
+                prompt = "create a Salesforce flow " + suffix
+                self.assertEqual(sfx._prompt_intent_text(prompt), prompt)
+                context = self._context()
+                sfx._record_prompt_text(context, prompt)
+                self.assertEqual(sfx._prompt_text(context), prompt)
+                self.assertTrue(sfx._recorded_catalog_prompt_eligible(context))
+
+    def test_emoji_formatting_does_not_hide_non_ascii_language_evidence(self):
+        for text in ("café ✔️", "cafe\u0301 ❤️", "FLOW\u0301", "ＦＬＯＷ ✔️",
+                     "SalesforceのFlow 👩‍💻", "ApexТриггер ❤️"):
+            with self.subTest(text=text):
+                self.assertFalse(sfx._catalog_prompt_eligible(text))
+                self.assertEqual(sfx._prompt_intent_text(text), "")
+
+    def test_intent_text_checks_non_ascii_letters_beyond_the_scan_cap(self):
+        prompt = "create a scratch org " + ("x " * sfx._PROMPT_INTENT_SCAN_MAX_CHARS) + " café"
+        self.assertEqual(sfx._prompt_intent_text(prompt), "")
+
+    def test_intent_text_abstains_on_decomposed_non_ascii_letters(self):
+        prompt = unicodedata.normalize("NFD", "create a scratch org for the café demo")
+        self.assertEqual(sfx._prompt_intent_text(prompt), "")
+
+    def test_unicode_storage_does_not_relax_ascii_marker_reads(self):
+        context = self._context()
+        sfx._record_prompt_text(context, "Příliš žluťoučký")
+        self.assertEqual(sfx._prompt_text(context), "Příliš žluťoučký")
+        self.assertIsNone(sfx._private_text(context.path / sfx._PROMPT_TEXT_FILE))
+
+    def test_catalog_eligibility_marker_is_prompt_scoped_and_fails_closed(self):
+        old_prompt = self._context(prompt_id="p-old")
+        self.assertFalse(sfx._recorded_catalog_prompt_eligible(old_prompt))
+        sfx._record_prompt_text(old_prompt, "Хочу создать Salesforce flow")
+        self.assertFalse(sfx._recorded_catalog_prompt_eligible(old_prompt))
+
+        eligible_prompt = self._context(prompt_id="p-eligible")
+        sfx._record_prompt_text(eligible_prompt, "Create a Salesforce flow")
+        self.assertTrue(sfx._recorded_catalog_prompt_eligible(eligible_prompt))
+
+        next_prompt = self._context(prompt_id="p-next")
+        self.assertFalse(sfx._recorded_catalog_prompt_eligible(next_prompt))
+        (eligible_prompt.path / "catalog-eligible").write_text("corrupt", encoding="utf-8")
+        self.assertFalse(sfx._recorded_catalog_prompt_eligible(eligible_prompt))
+
+    def test_recapture_clears_previous_catalog_eligibility(self):
+        context = self._context()
+        sfx._record_prompt_text(context, "Create a Salesforce flow")
+        self.assertTrue(sfx._recorded_catalog_prompt_eligible(context))
+        sfx._record_prompt_text(context, "Vytvoř Salesforce flow")
+        self.assertFalse(sfx._recorded_catalog_prompt_eligible(context))
+        self.assertEqual(sfx._prompt_text(context), "Vytvoř Salesforce flow")
+
+    def test_record_prompt_text_keeps_filtered_unicode_user_words(self):
+        cases = (
+            ("Žluťoučký kůň creates a Salesforce flow", "Žluťoučký kůň creates a Salesforce flow"),
+            ("Žlutoucky kun creates a Salesforce flow", "Žlutoucky kun creates a Salesforce flow"),
+            ("Хочу создать Salesforce flow для продаж", "Хочу создать Salesforce flow для продаж"),
+            ("SalesforceのApexトリガーを作って", "SalesforceのApexトリガーを作って"),
+        )
+        for prompt, expected in cases:
+            with self.subTest(prompt=prompt):
+                context = self._context()
+                sfx._record_prompt_text(context, prompt)
+                self.assertEqual(sfx._prompt_text(context), expected)
+
+    def test_record_prompt_text_keeps_english_request_with_non_english_logs(self):
+        context = self._context()
+        prompt = "2026-10-07 ERROR timeout\nПривет мир 日本語ログ\nPlease create a Salesforce flow"
+        sfx._record_prompt_text(context, prompt)
+        self.assertEqual(sfx._prompt_text(context), prompt)
+
+    def test_record_prompt_text_keeps_non_english_request_with_english_logs(self):
+        context = self._context()
+        prompt = "ERROR timeout in request.log\nХочу создать поток Salesforce для продаж"
+        sfx._record_prompt_text(context, prompt)
+        self.assertEqual(sfx._prompt_text(context), prompt)
+
+    def test_record_prompt_text_caps_utf8_bytes_without_splitting_codepoints(self):
+        # Each prompt leaves exactly one character of room after the ASCII prefix;
+        # the last two- / three- / four-byte codepoint must be retained whole.
+        cap = sfx._PROMPT_TEXT_MAX_BYTES
+        for char, width in (("é", 2), ("漢", 3), ("😀", 4)):
+            with self.subTest(char=char):
+                prefix = "a" * (cap - width)
+                context = self._context(prompt_id=f"exact-{width}")
+                sfx._record_prompt_text(context, prefix + char + "tail")
+                recorded = sfx._prompt_text(context)
+                self.assertEqual(recorded, prefix + char)
+                self.assertEqual(len(recorded.encode("utf-8")), cap)
+                recorded.encode("utf-8").decode("utf-8")
+
+                # Move the multibyte character one byte past the limit. The stored
+                # prefix must remain valid UTF-8 and omit the incomplete character.
+                straddling_prefix = "b" * (cap - width + 1)
+                context = self._context(prompt_id=f"straddle-{width}")
+                sfx._record_prompt_text(context, straddling_prefix + char + "tail")
+                straddled = sfx._prompt_text(context)
+                self.assertEqual(straddled, straddling_prefix)
+                self.assertEqual(len(straddled.encode("utf-8")), cap - width + 1)
+                straddled.encode("utf-8").decode("utf-8")
 
 
 class DriveResumeRegexTests(unittest.TestCase):
@@ -6350,6 +7589,14 @@ class WelcomeTestDrivePointerTests(unittest.TestCase):
         self.assertEqual(fired.call_args.args[0], "plugin_recommended")
         self.assertIn(sfx._TEST_DRIVE_PLUGIN_NAME,
                       sfx._load_plugin_proposals("sess-side-b"))
+        # Deterministic, not prompt-scored: there is no scorer evidence, so the
+        # ledger entry carries no match-reason keys and the fire passes no reason
+        # kwargs (the wire shape then records "" for both).
+        entry = sfx._load_plugin_proposals("sess-side-b")[sfx._TEST_DRIVE_PLUGIN_NAME]
+        self.assertEqual(entry, {"confidence": "high", "surface": "user-prompt"})
+        self.assertNotIn("match_keywords", entry)
+        self.assertNotIn("match_signal", entry)
+        self.assertEqual(fired.call_args.kwargs, {})
 
     def test_uninstalled_install_pointer_wraps_every_line_to_80(self):
         # Regression guard (adversarial review 2026-08-29): the compact rec bullet
@@ -6517,6 +7764,11 @@ class ArmOverviewTestDriveProposalTests(unittest.TestCase):
         opened.assert_not_called()                       # LEDGER-ONLY — no flow opens
         self.assertIsNone(sfx._load_plugin_flow("sess-arm"))
         self.assertEqual(fired.call_args.args[0], "plugin_recommended")
+        # Deterministic, not prompt-scored: no scorer evidence, so the entry has no
+        # match-reason keys and the fire passes no reason kwargs.
+        self.assertNotIn("match_keywords", entry)
+        self.assertNotIn("match_signal", entry)
+        self.assertEqual(fired.call_args.kwargs, {})
 
     def test_named_bite_resolves_through_accept_proposed_after_arming(self):
         # End-to-end against the real ledger: arming lets the fast path resolve the
@@ -6704,6 +7956,335 @@ class ProjectTypeFromDescriptorTests(unittest.TestCase):
 
     def test_empty_descriptor(self):
         self.assertIsNone(sfx._project_type_from_descriptor({}))
+
+
+class SessionScopedSkillsFirstTests(unittest.TestCase):
+    """sf-skills#355: an enforced skills-first deny, once satisfied by a skill loaded
+    by its `salesforce-development:`-qualified name, stays satisfied for later prompts
+    of the same session -- per skill, until the next SessionStart
+    (compaction/clear/resume). A bare name satisfies only the current prompt, and any
+    missing or corrupt session state fails closed to today's per-prompt deny."""
+
+    QUERY = "sf data query --query \"SELECT Id FROM Account\""
+    RETRIEVE = "sf project retrieve start --metadata ApexClass"
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.runtime = self.root / "runtime"
+        markers = self.root / "markers"
+        markers.mkdir()
+        self._cwd = os.getcwd()
+        os.chdir(self.root)
+        self._patches = [
+            mock.patch.object(sfx, "_PROMPT_RUNTIME_DIR", self.runtime),
+            mock.patch.object(sfx, "_WELCOME_MARKER_DIR", markers),
+        ]
+        for patch in self._patches:
+            patch.start()
+
+    def tearDown(self):
+        for patch in reversed(self._patches):
+            patch.stop()
+        os.chdir(self._cwd)
+        self._tmp.cleanup()
+
+    def _run(self, command, payload):
+        stdin = io.StringIO(json.dumps(payload))
+        out = io.StringIO()
+        with mock.patch.object(sfx.sys, "stdin", stdin), redirect_stdout(out):
+            command()
+        lines = out.getvalue().strip().splitlines()
+        return json.loads(lines[-1]) if lines else {}
+
+    def load_skill(self, skill, session="s1", prompt="p1",
+                   plugin="salesforce-development", **extra):
+        """Both Skill hooks, as the host runs them: PreToolUse intent, then the
+        PostToolUse resolution trace once the skill content has loaded."""
+        name = f"{plugin}:{skill}" if plugin else skill
+        payload = {"session_id": session, "prompt_id": prompt,
+                   "tool_input": {"skill": name}, **extra}
+        self._run(sfx.cmd_record_skill_dispatch, payload)
+        self._run(sfx.cmd_resolution_trace, payload)
+
+    def gate(self, command, session="s1", prompt="p1", **extra):
+        payload = {"tool_name": "Bash", "tool_input": {"command": command},
+                   "prompt_id": prompt, **extra}
+        if session is not None:
+            payload["session_id"] = session
+        result = self._run(sfx.cmd_skills_first_advisory, payload)
+        return (result.get("hookSpecificOutput") or {}).get("permissionDecision") or "allow"
+
+    class _DetectStopped(Exception):
+        pass
+
+    def session_start(self, source, session="s1"):
+        """Run the SessionStart hook only as far as the ledger clear: the journey
+        derivation that follows outside a project reads global state, so stop there
+        to keep these tests about the clear alone."""
+        with mock.patch.object(sfx, "_derive_journey_state",
+                               side_effect=self._DetectStopped):
+            try:
+                self._run(sfx.cmd_detect, {"session_id": session, "source": source})
+            except self._DetectStopped:
+                pass
+
+    def session_skills(self, session="s1"):
+        return self.runtime / sfx._runtime_key(session) / "skills"
+
+    def test_denies_before_first_dispatch(self):
+        self.assertEqual(self.gate(self.QUERY), "deny")
+
+    def test_later_prompt_in_same_session_is_allowed(self):
+        self.load_skill("platform-soql-query", prompt="p1")
+        self.assertEqual(self.gate(self.QUERY, prompt="p1"), "allow")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+        self.assertEqual(self.gate(self.QUERY, prompt="p3"), "allow")
+
+    def test_delegate_dispatch_also_persists_for_the_session(self):
+        self.load_skill("platform-data-manage", prompt="p1")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+
+    def test_different_skill_is_still_denied(self):
+        self.load_skill("platform-soql-query", prompt="p1")
+        self.assertEqual(self.gate(self.RETRIEVE, prompt="p2"), "deny")
+
+    def test_new_session_is_denied(self):
+        self.load_skill("platform-soql-query", session="s1")
+        self.assertEqual(self.gate(self.QUERY, session="s2", prompt="p2"), "deny")
+
+    def test_pretooluse_intent_alone_does_not_persist_for_the_session(self):
+        # A Skill call that never loaded (no PostToolUse) keeps today's per-prompt
+        # behavior only: allowed in its own prompt, denied on the next one.
+        self._run(sfx.cmd_record_skill_dispatch, {
+            "session_id": "s1", "prompt_id": "p1",
+            "tool_input": {"skill": "platform-soql-query"}})
+        self.assertEqual(self.gate(self.QUERY, prompt="p1"), "allow")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+    def test_every_session_start_source_invalidates_the_session_ledger(self):
+        for source in ("compact", "clear", "resume", "fork", "startup"):
+            with self.subTest(source=source):
+                self.load_skill("platform-soql-query", prompt="p1")
+                self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+                self.session_start(source)
+                self.assertFalse(self.session_skills().exists())
+                self.assertEqual(self.gate(self.QUERY, prompt="p3"), "deny")
+
+    def test_session_start_leaves_other_sessions_ledgers_alone(self):
+        self.load_skill("platform-soql-query", session="s1")
+        self.load_skill("platform-soql-query", session="s2")
+        self.session_start("compact", session="s1")
+        self.assertEqual(self.gate(self.QUERY, session="s2", prompt="p9"), "allow")
+
+    def test_warn_only_nudges_stay_prompt_scoped(self):
+        self.load_skill("platform-apex-generate", prompt="p1")
+        self.assertFalse(self.session_skills().exists())
+        # Even a planted marker for a warn-only skill is not honored: the strict
+        # reader rejects any name outside the enforced owners and delegates.
+        self.load_skill("platform-soql-query", prompt="p1")
+        (self.session_skills() / "platform-apex-generate").touch()
+        result = self._run(sfx.cmd_skills_first_advisory, {
+            "tool_name": "Edit",
+            "tool_input": {"file_path": "force-app/main/default/classes/Foo.cls"},
+            "session_id": "s1", "prompt_id": "p2"})
+        self.assertIn("platform-apex-generate", json.dumps(result))
+
+    def test_bare_skill_name_counts_for_its_own_prompt_only(self):
+        # A bare payload is identical whether it loaded this plugin's skill or a
+        # same-named user/project copy, so it never reaches the session ledger.
+        self.load_skill("platform-soql-query", plugin="", prompt="p1")
+        self.assertFalse(self.session_skills().exists())
+        self.assertEqual(self.gate(self.QUERY, prompt="p1"), "allow")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+    def test_deny_asks_for_the_qualified_skill_name(self):
+        for command, skill in ((self.QUERY, "platform-soql-query"),
+                               (self.RETRIEVE, "platform-metadata-retrieve")):
+            payload = {"tool_name": "Bash", "tool_input": {"command": command},
+                       "session_id": "s1", "prompt_id": "p1"}
+            reason = self._run(sfx.cmd_skills_first_advisory, payload)[
+                "hookSpecificOutput"]["permissionDecisionReason"]
+            self.assertIn(f"`salesforce-development:{skill}`", reason)
+        warn = self._run(sfx.cmd_skills_first_advisory, {
+            "tool_name": "Edit",
+            "tool_input": {"file_path": "force-app/main/default/classes/Foo.cls"},
+            "session_id": "s1", "prompt_id": "p1"})
+        self.assertIn("`salesforce-development:platform-apex-generate`", json.dumps(warn))
+        generic = self._run(sfx.cmd_skills_first_advisory, {
+            "tool_name": "Edit",
+            "tool_input": {"file_path": "force-app/main/default/dashboards/x-meta.xml"},
+            "session_id": "s1", "prompt_id": "p1"})
+        self.assertIn("the matching platform metadata skill", json.dumps(generic))
+        self.assertNotIn("salesforce-development:the matching", json.dumps(generic))
+
+    def test_same_named_skill_from_another_plugin_does_not_persist(self):
+        self.load_skill("platform-soql-query", plugin="other-plugin", prompt="p1")
+        self.assertFalse(self.session_skills().exists())
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+    def test_subagent_neither_writes_nor_reads_the_session_ledger(self):
+        # A subagent shares the parent's session_id but not its context.
+        self.load_skill("platform-soql-query", prompt="p1", agent_id="a1")
+        self.assertFalse(self.session_skills().exists())
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+        self.load_skill("platform-soql-query", prompt="p1")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2", agent_id="a1"), "deny")
+
+    def test_subagent_is_still_allowed_within_its_own_prompt(self):
+        for key in ("agent_id", "agentId"):
+            with self.subTest(key=key):
+                self.load_skill("platform-soql-query", prompt="p5", **{key: "a1"})
+                self.assertEqual(self.gate(self.QUERY, prompt="p5", **{key: "a1"}), "allow")
+                self.assertEqual(self.gate(self.QUERY, prompt="p6", **{key: "a1"}), "deny")
+                self.assertFalse(self.session_skills().exists())
+
+    def test_session_record_is_written_under_ui_mode_off(self):
+        with mock.patch.dict(os.environ, {"CLAUDE_PLUGIN_OPTION_UI_MODE": "off"}):
+            self.load_skill("platform-soql-query", prompt="p1")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+
+    def test_missing_or_invalid_session_id_fails_closed(self):
+        self.load_skill("platform-soql-query", session="s1")
+        self.assertEqual(self.gate(self.QUERY, session=None, prompt="p2"), "deny")
+        self.assertEqual(sfx._session_dispatched_skills(""), set())
+        self.assertEqual(sfx._session_dispatched_skills("../escape"), set())
+
+    def test_invalid_session_ids_neither_write_nor_read_a_record(self):
+        for bad in ("", "../escape", "a/b"):
+            with self.subTest(session=repr(bad)):
+                shutil.rmtree(self.runtime, ignore_errors=True)
+                self.load_skill("platform-soql-query", session=bad, prompt="p1")
+                self.assertEqual(self.gate(self.QUERY, session=bad, prompt="p2"), "deny")
+                self.assertEqual(list(self.runtime.glob("**/skills")), [])
+                self.assertFalse((self.root / "escape").exists())
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_strict_reader_rejects_symlinked_marker_session_dir_and_foreign_uid(self):
+        def symlinked_marker():
+            self.load_skill("platform-metadata-retrieve", prompt="p1")
+            target = self.root / "target-file"
+            target.touch()
+            (self.session_skills() / "platform-soql-query").symlink_to(target)
+
+        def symlinked_session_dir():
+            target = self.root / "elsewhere"
+            (target / "skills").mkdir(parents=True)
+            (target / "skills" / "platform-soql-query").touch()
+            self.runtime.mkdir(mode=0o700)
+            self.session_skills().parent.symlink_to(target, target_is_directory=True)
+
+        for corrupt in (symlinked_marker, symlinked_session_dir):
+            with self.subTest(corrupt=corrupt.__name__):
+                shutil.rmtree(self.runtime, ignore_errors=True)
+                shutil.rmtree(self.root / "elsewhere", ignore_errors=True)
+                corrupt()
+                self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+        shutil.rmtree(self.runtime, ignore_errors=True)
+        self.load_skill("platform-soql-query", prompt="p1")
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "allow")
+        # Directory checks pass, so only the marker's own owner check can refuse it.
+        with mock.patch.object(sfx, "_owned_private_dir", return_value=True), \
+                mock.patch.object(sfx.os, "getuid", return_value=os.getuid() + 1):
+            self.assertEqual(sfx._session_dispatched_skills("s1"), set())
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_reader_rejects_a_symlinked_runtime_dir(self):
+        self.load_skill("platform-soql-query", prompt="p1")
+        real = self.root / "real-runtime"
+        self.runtime.rename(real)
+        self.runtime.symlink_to(real, target_is_directory=True)
+        self.assertTrue((real / sfx._runtime_key("s1") / "skills" / "platform-soql-query").exists())
+        self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_session_start_does_not_follow_a_symlinked_session_dir(self):
+        victim = self.root / "victim"
+        (victim / "skills").mkdir(parents=True)
+        (victim / "skills" / "platform-soql-query").touch()
+        self.runtime.mkdir(mode=0o700)
+        self.session_skills().parent.symlink_to(victim, target_is_directory=True)
+        self.session_start("startup")
+        self.assertTrue((victim / "skills" / "platform-soql-query").exists())
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_session_start_does_not_follow_a_symlinked_runtime_dir(self):
+        victim = self.root / "victim"
+        (victim / sfx._runtime_key("s1") / "skills").mkdir(parents=True)
+        marker = victim / sfx._runtime_key("s1") / "skills" / "platform-soql-query"
+        marker.touch()
+        self.runtime.symlink_to(victim, target_is_directory=True)
+        self.session_start("startup")
+        self.assertTrue(marker.exists())
+        # A stale victim session that prune would otherwise remove.
+        os.utime(marker.parent.parent, (0, 0))
+        with mock.patch.object(sfx, "_PROMPT_MAX_AGE_SECONDS", 1):
+            sfx._prune_prompt_runtime(None)
+        self.assertTrue(marker.exists())
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_session_start_does_not_clear_a_foreign_owned_session_dir(self):
+        self.load_skill("platform-soql-query", prompt="p1")
+        # Only the session dir reads as foreign-owned; the runtime dir stays ours, so
+        # the session-dir check is the one that has to refuse the clear.
+        session_dir = self.session_skills().parent
+        owned = sfx._owned_private_dir
+        with mock.patch.object(sfx, "_owned_private_dir",
+                               side_effect=lambda path: path != session_dir and owned(path)):
+            self.session_start("startup")
+        self.assertTrue((self.session_skills() / "platform-soql-query").exists())
+
+    @unittest.skipIf(os.name == "nt", "POSIX symlink and uid semantics")
+    def test_corrupt_session_ledger_fails_closed(self):
+        def as_file():
+            self.session_skills().parent.mkdir(parents=True)
+            self.session_skills().write_text("platform-soql-query")
+
+        def as_symlink():
+            target = self.root / "elsewhere"
+            target.mkdir()
+            (target / "platform-soql-query").touch()
+            self.session_skills().parent.mkdir(parents=True)
+            self.session_skills().symlink_to(target, target_is_directory=True)
+
+        def foreign_entry():
+            self.load_skill("platform-soql-query", prompt="p1")
+            (self.session_skills() / "not-a-skill.txt").write_text("x")
+
+        def hardlinked_marker():
+            self.load_skill("platform-metadata-retrieve", prompt="p1")
+            os.link(self.session_skills() / "platform-metadata-retrieve",
+                    self.session_skills() / "platform-soql-query")
+
+        def directory_marker():
+            self.load_skill("platform-metadata-retrieve", prompt="p1")
+            (self.session_skills() / "platform-soql-query").mkdir()
+
+        for corrupt in (as_file, as_symlink, foreign_entry, hardlinked_marker,
+                        directory_marker):
+            with self.subTest(corrupt=corrupt.__name__):
+                shutil.rmtree(self.runtime, ignore_errors=True)
+                shutil.rmtree(self.root / "elsewhere", ignore_errors=True)
+                corrupt()
+                self.assertEqual(self.gate(self.QUERY, prompt="p2"), "deny")
+
+    def test_session_start_removes_a_corrupt_ledger_file(self):
+        path = self.session_skills()
+        path.parent.mkdir(parents=True)
+        path.write_text("x")
+        self.session_start("compact")
+        self.assertFalse(path.exists())
+
+    def test_prune_still_removes_a_stale_session_with_a_session_ledger(self):
+        self.load_skill("platform-soql-query", session="old")
+        old = self.session_skills("old").parent
+        os.utime(old, (0, 0))
+        current = sfx._prompt_context({"session_id": "new", "prompt_id": "p1"})
+        with mock.patch.object(sfx, "_PROMPT_MAX_AGE_SECONDS", 1):
+            sfx._prune_prompt_runtime(current)
+        self.assertFalse(old.exists())
 
 
 if __name__ == "__main__":

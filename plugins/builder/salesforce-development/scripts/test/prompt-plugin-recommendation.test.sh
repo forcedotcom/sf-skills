@@ -104,6 +104,35 @@ assert_route \
   "experience-react" "agentforce-adlc|experience-(cms|lwc) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
   "scaffold a new Salesforce React UI bundle app with Tailwind and shadcn"
 
+# W-24445750: product names and English log fragments do not make a
+# multilingual prompt eligible for automatic catalog recommendations. Keep the
+# same actionable English request as a control so eligible prompts still route.
+assert_quiet \
+  "Czech request with Salesforce CMS product names stays recommendation-free" \
+  "Prosím vyhledej obrázek pro Salesforce CMS Experience Cloud page; error logs mention stock image"
+assert_quiet \
+  "Cyrillic request with English Salesforce logs stays recommendation-free" \
+  "Пожалуйста, найди изображение для Salesforce CMS; logs say Experience Cloud stock image"
+assert_quiet \
+  "Japanese request with English Salesforce product names stays recommendation-free" \
+  "Salesforce CMSのExperience Cloudページ用に画像を探してください; logs mention stock image"
+assert_route \
+  "English control still recommends CMS after multilingual abstention" \
+  "experience-cms" "agentforce-adlc|experience-(lwc|react) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
+  "Please search Salesforce CMS for a stock image for an Experience Cloud page"
+
+# The stored prompt is capped at 2048 UTF-8 bytes and the intent scan at 64k
+# characters. A non-ASCII instruction after either boundary must still veto the
+# entire host-stripped prompt, even when the retained prefix is strong English.
+PROMPT_AFTER_BYTE_PREFIX=$(python3 -c 'print("Please search Salesforce CMS for an Experience Cloud stock image. " + "English log line. " * 180 + " 画像を探してください")')
+assert_quiet \
+  "Japanese after 2048-byte prompt prefix vetoes CMS recommendation" \
+  "$PROMPT_AFTER_BYTE_PREFIX"
+PROMPT_AFTER_SCAN_PREFIX=$(python3 -c 'print("Please search Salesforce CMS for an Experience Cloud stock image. " + "English log line. " * 4000 + " 画像を探してください")')
+assert_quiet \
+  "Japanese after 64k English log characters vetoes CMS recommendation" \
+  "$PROMPT_AFTER_SCAN_PREFIX"
+
 # Exact live-QE sequence: SessionStart proposed one React plugin, the user asked
 # about that recommendation, then replied `ok install it`. The session workflow
 # must survive the explanatory turn and route the sole active candidate to its
@@ -847,6 +876,116 @@ for new_installed_case in \
     PASS=$((PASS + 1)); printf '  ok   %-62s → quiet\n' "enabled ${plugin} plugin is not recommended again"
   else
     FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "enabled ${plugin} plugin is not recommended again" "$OUT_NEW_INSTALLED"
+  fi
+done
+
+# Host-injected context (IDE notices, task notifications) is not the user's
+# words. It must not drive a recommendation, open a workflow, or decide an
+# install; the user's own words around it still do.
+printf '{"enabledPlugins":{"salesforce-development@salesforce":true}}' > "$CFG/settings.json"
+IDE_LWC_NOTICE='<ide_opened_file>The user opened the file /Users/me/proj/force-app/main/default/lwc/heroBanner/heroBanner.js in the IDE.</ide_opened_file>'
+# Hosts put the notice on its own line, so each fixture separates it with a
+# newline (the one-line form was already quiet before host blocks were stripped).
+NL=$'\n'
+TASK_NOTE="<task-notification>${NL}<status>completed</status>${NL}<result>${NL}Build a B2B storefront checkout next.${NL}</result>${NL}</task-notification>"
+assert_quiet \
+  "IDE-opened LWC file notice does not drive a recommendation" \
+  "${IDE_LWC_NOTICE}${NL}fix the failing test"
+assert_route \
+  "IDE notice around a real LWC ask recommends the LWC plugin" \
+  "experience-lwc" "agentforce-adlc|experience-(cms|react) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
+  "${IDE_LWC_NOTICE}${NL}build me an LWC datatable with wire service and Jest tests"
+assert_quiet \
+  "lone task notification opens no recommendation" \
+  "$TASK_NOTE"
+SID_TASK_NOTE="prompt-task-note-$$-$RANDOM"
+run_prompt "$PROJ" "$SID_TASK_NOTE" "$TASK_NOTE" >/dev/null
+OUT_TASK_NOTE_FOLLOWUP=$(run_prompt "$PROJ" "$SID_TASK_NOTE" "yes install it")
+if ! echo "$OUT_TASK_NOTE_FOLLOWUP" | grep -q "plugin-install commerce-b2b"; then
+  PASS=$((PASS + 1)); printf '  ok   %-62s → no flow opened\n' "lone task notification leaves no workflow behind"
+else
+  FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "lone task notification leaves no workflow behind" "$OUT_TASK_NOTE_FOLLOWUP"
+fi
+
+assert_host_block_confirm() {
+  # assert_host_block_confirm <description> <expect: routed|ignored> <prompt>
+  local desc="$1" expect="$2" prompt="$3" sid dry nonce out routed=no
+  sid="prompt-hostblock-confirm-$$-$RANDOM"
+  run_prompt "$PROJ" "$sid" \
+    "scaffold a new Salesforce React UI bundle app with Tailwind and shadcn" >/dev/null
+  dry=$(CLAUDE_CODE_SESSION_ID="$sid" "$CTX" plugin-install experience-react)
+  nonce=$(printf '%s' "$dry" | grep -o -- '--confirm [a-f0-9]\{64\}' | awk '{print $2}')
+  out=$(run_prompt "$PROJ" "$sid" "$prompt")
+  if [ -n "$nonce" ] && echo "$out" | grep -q "plugin-install experience-react --confirm $nonce"; then
+    routed=yes
+  fi
+  if { [ "$expect" = routed ] && [ "$routed" = yes ]; } \
+     || { [ "$expect" = ignored ] && [ "$routed" = no ] && [ -n "$nonce" ]; }; then
+    PASS=$((PASS + 1)); printf '  ok   %-62s → %s\n' "$desc" "$expect"
+  else
+    FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "$desc" "$out"
+  fi
+}
+
+assert_host_block_confirm \
+  "install words inside an IDE selection are not a confirmation" ignored \
+  "<ide_selection>then install experience-react</ide_selection> what does this file do?"
+assert_host_block_confirm \
+  "install words inside a task notification are not a confirmation" ignored \
+  "<task-notification>plugin-install experience-react</task-notification>"
+assert_host_block_confirm \
+  "a typed confirmation next to an IDE notice confirms" routed \
+  "${IDE_LWC_NOTICE}${NL}yes install it"
+# Decisions read the whole host-stripped prompt, not the bounded intent window.
+LONG_PASTE=$(printf 'pasted log line %.0s' $(seq 1 4500))
+assert_host_block_confirm \
+  "a confirmation after >64 KB of pasted text confirms" routed \
+  "${LONG_PASTE}${NL}ok, install experience-react"
+
+# A request on a later line of a multi-line prompt is still a request: an
+# unpunctuated informational first line must not swallow it.
+assert_route \
+  "multi-line: informational first line, LWC request on the next" \
+  "experience-lwc" "agentforce-adlc|experience-(cms|react) —|dx-org-lifecycle|${TAIL_PLUGINS}" \
+  "What is DevOps Center${NL}build me an LWC datatable with wire service and Jest tests"
+assert_route \
+  "multi-line: question first line, CMS request on the next" \
+  "experience-cms" "agentforce-adlc|experience-(lwc|react) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
+  "Quick question about our site${NL}I need to search Salesforce CMS for an existing media asset"
+assert_route \
+  "multi-line: question first line, React request on the next" \
+  "experience-react" "agentforce-adlc|experience-(cms|lwc) —|dx-org-lifecycle|dx-devops|${TAIL_PLUGINS}" \
+  "what does this page do${NL}scaffold a new Salesforce React UI bundle app with Tailwind and shadcn"
+
+# Outside a project only the user's own words can trip the getting-started note:
+# Salesforce wording that lives in a host block, or only inside a typed path or
+# URL, is not a mention.
+printf '{"enabledPlugins":{"salesforce-development@salesforce":true}}' > "$CFG/settings.json"
+for gs_case in \
+  "host ide_selection|<ide_selection>start a new Salesforce project</ide_selection> explain this" \
+  "host task-notification|<task-notification><result>new Salesforce project</result></task-notification>" \
+  "typed path|please open ~/dev/salesforce-notes/todo now" \
+  "typed URL|please read https://example.com/salesforce/guide now"; do
+  gs_desc="${gs_case%%|*}"
+  gs_prompt="${gs_case#*|}"
+  OUT_GS=$(run_prompt "$NONPROJ" "prompt-gs-quiet-$$-$RANDOM" "$gs_prompt")
+  if ! echo "$OUT_GS" | grep -q "Salesforce/CRM"; then
+    PASS=$((PASS + 1)); printf '  ok   %-62s → no getting-started note\n' "outside a project, ${gs_desc} wording is not a Salesforce mention"
+  else
+    FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "outside a project, ${gs_desc} wording is not a Salesforce mention" "$OUT_GS"
+  fi
+done
+for gs_case in \
+  "typed|start a new Salesforce project" \
+  "non-Latin (Russian)|Хочу создать приложение в Salesforce для продаж" \
+  "non-Latin (Japanese)|Salesforce の Apex クラスを作成したいのですが、手順を教えてください"; do
+  gs_desc="${gs_case%%|*}"
+  gs_prompt="${gs_case#*|}"
+  OUT_GS=$(run_prompt "$NONPROJ" "prompt-gs-typed-$$-$RANDOM" "$gs_prompt")
+  if echo "$OUT_GS" | grep -q "Salesforce/CRM"; then
+    PASS=$((PASS + 1)); printf '  ok   %-62s → note emitted\n' "outside a project, a ${gs_desc} Salesforce mention notes"
+  else
+    FAIL=$((FAIL + 1)); printf '  FAIL %-62s → %s\n' "outside a project, a ${gs_desc} Salesforce mention notes" "$OUT_GS"
   fi
 done
 

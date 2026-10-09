@@ -7,19 +7,22 @@ understand a safety prompt.
 
 ## Ambient UI Modes
 
-Ambient SessionStart output is configured by plugin `userConfig.ui_mode` (transported to hooks as
-`CLAUDE_PLUGIN_OPTION_UI_MODE`):
+Ambient output is configured by plugin `userConfig.ui_mode` (transported to hooks as
+`CLAUDE_PLUGIN_OPTION_UI_MODE`). It covers the SessionStart banner, wayfinding, and the answers the
+plugin paints when you ask a natural-language status, orientation, or capability question ("what's
+the status of this project?", "where am I?", "what can I do here?"):
 
-| Mode | Ambient SessionStart and wayfinding |
-|---|---|
-| `full` (default) | signature banner and evidence rail |
-| `plain` | accessible semantic text, without ANSI color or journey glyphs |
-| `off` | hidden |
+| Mode | Ambient SessionStart and wayfinding | Natural-language status / orientation / capability questions |
+|---|---|---|
+| `full` (default) | signature banner and graded nudge | full status surface, welcome, or capability overview |
+| `plain` | accessible semantic text, without ANSI color or journey glyphs | the same plain project / stage / next-step text (capability overview unchanged) |
+| `off` | hidden | nothing painted and no guidance added to Claude's reply; Claude answers on its own |
 
 The retired `compact` mode maps to `plain` (the nearest surviving reduced-chrome surface), so a
 saved `compact` preference keeps reduced output rather than reverting to the full banner.
 
-`NO_COLOR` removes ANSI without changing mode. Explicit status, setup, discovery, safety
+`NO_COLOR` removes ANSI without changing mode. Explicit status, setup, and discovery slash
+commands (such as `/salesforce-development:status` and `/salesforce-development:discover`), safety
 advisories/gates, failures, and install guidance remain available in every mode.
 
 ## Guard Rails vs. Claude Code's Auto-Mode Classifier

@@ -20,6 +20,10 @@ CTX="$ROOT/sf-context"
 PASS=0
 FAIL=0
 
+# Private TMPDIR: the plugin's prompt/session runtime lives under it, and a shared one
+# can be evicted by concurrent runs mid-assertion (the cross-prompt session checks).
+TMPDIR="$(mktemp -d)"; export TMPDIR
+
 # Hermetic installed-plugin set: the tier-2 assertions below exercise the two
 # uninstalled candidates in the checked-in catalog (`agentforce-adlc` and
 # `experience-cms`). Whether the other registered plugins (experience-lwc /
@@ -32,7 +36,7 @@ CFG="$(mktemp -d)"
 printf '{"enabledPlugins":{"experience-lwc@salesforce":true,"experience-react@salesforce":true}}' \
   > "$CFG/settings.json"
 export CLAUDE_CONFIG_DIR="$CFG"
-trap 'rm -rf "$CFG" "${PROJDIR:-}" "${NONPROJ:-}"' EXIT
+trap 'rm -rf "$TMPDIR" "$CFG" "${PROJDIR:-}" "${NONPROJ:-}"' EXIT
 
 # Parse the hook JSON, print a compact "<has-advisory>|<skill-or->|<blocking>" triple:
 #   has-advisory: "warn" if additionalContext present, else "quiet"
@@ -48,7 +52,8 @@ warn='warn' if ctx else 'quiet'
 decision=hso.get('permissionDecision')
 # The skill name is backtick-wrapped in the advisory text (additionalContext) on
 # a warn, and in permissionDecisionReason on an enforcement deny — search both.
-m=re.search(r'\`([a-z][a-z0-9-]+)\`', ctx or hso.get('permissionDecisionReason',''))
+# The name may be plugin-qualified (salesforce-development:<skill>); report the skill.
+m=re.search(r'\`(?:salesforce-development:)?([a-z][a-z0-9-]+)\`', ctx or hso.get('permissionDecisionReason',''))
 skill=m.group(1) if m else '-'
 if decision:
     # A blocking deny legitimately omits top-level continue (hook spec) — report
@@ -214,7 +219,7 @@ check quiet - "empty payload" '{}'
 echo ""
 echo "  turn-aware suppression (#415):"
 TMPDIR_415="$(mktemp -d)"
-trap 'rm -rf "$TMPDIR_415"' EXIT
+trap 'rm -rf "$TMPDIR" "$TMPDIR_415" "$CFG" "${PROJDIR:-}" "${NONPROJ:-}"' EXIT
 pushd "$TMPDIR_415" >/dev/null
 
 SID="skills-first-$$"
@@ -283,6 +288,45 @@ check quiet - "retrieve allowed through after dispatch despite CWD change (F1)" 
 popd >/dev/null
 rm -rf "$CWD_DRIFT"
 
+# --- session-scoped enforcement (sf-skills#355) ------------------------------
+# An enforced skill loaded by its salesforce-development:-qualified name (PreToolUse
+# intent + PostToolUse resolution-trace) keeps satisfying its deny on later prompts
+# of the same session, until a SessionStart (compaction, /clear, resume) discards
+# the session ledger. A bare name satisfies only the current prompt.
+echo ""
+echo "  session-scoped enforcement (sf-skills#355):"
+SS="$SID-ss"
+squery() {
+  printf '{"tool_name":"Bash","tool_input":{"command":"sf data query --query \\"SELECT Id FROM Account\\""},"session_id":"%s","prompt_id":"%s"}' "$1" "$2"
+}
+SKILL_SS="{\"session_id\":\"$SS\",\"prompt_id\":\"p1\",\"tool_input\":{\"skill\":\"salesforce-development:platform-soql-query\"}}"
+check_deny platform-soql-query "query denies before the first dispatch" "$(squery "$SS" p1)"
+if printf '%s' "$(squery "$SS" p1)" | "$CTX" skills-first-advisory \
+    | grep -q 'salesforce-development:platform-soql-query'; then
+  PASS=$((PASS + 1)); echo "  ok   deny asks for the qualified skill name"
+else
+  FAIL=$((FAIL + 1)); echo "  FAIL deny asks for the qualified skill name"
+fi
+# A bare-name load counts for its own prompt only (it may be a same-named project skill).
+SKILL_BARE="{\"session_id\":\"$SS-bare\",\"prompt_id\":\"p1\",\"tool_input\":{\"skill\":\"platform-soql-query\"}}"
+printf '%s' "$SKILL_BARE" | "$CTX" record-skill-dispatch >/dev/null
+printf '%s' "$SKILL_BARE" | "$CTX" resolution-trace >/dev/null
+check quiet - "bare-name load allows its own prompt" "$(squery "$SS-bare" p1)"
+check_deny platform-soql-query "bare-name load does not persist to the next prompt" "$(squery "$SS-bare" p2)"
+printf '%s' "$SKILL_SS" | "$CTX" record-skill-dispatch >/dev/null
+printf '%s' "$SKILL_SS" | "$CTX" resolution-trace >/dev/null
+check quiet - "query allowed in the dispatching prompt" "$(squery "$SS" p1)"
+check quiet - "query allowed on a later prompt, same session" "$(squery "$SS" p2)"
+check_deny platform-metadata-retrieve "a different enforced skill still denies" \
+  "{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"sf project retrieve start --metadata ApexClass\"},\"session_id\":\"$SS\",\"prompt_id\":\"p2\"}"
+check_deny platform-soql-query "a new session still denies" "$(squery "$SS-new" p1)"
+printf '{"session_id":"%s","source":"compact"}' "$SS" | "$CTX" detect >/dev/null
+check_deny platform-soql-query "query denies again after compaction" "$(squery "$SS" p3)"
+# Leave no session ledger behind for later sections or reruns.
+for sess in "$SS" "$SS-new" "$SS-bare"; do
+  printf '{"session_id":"%s","source":"compact"}' "$sess" | "$CTX" detect >/dev/null
+done
+
 popd >/dev/null
 
 # --- plugin-catalog gap detection (tier 2 — uninstalled plugin match) ------
@@ -348,6 +392,39 @@ SID_MED="skills-first-pr-medium-$$"
 capture_prompt "$SID_MED" "p1" "$MEDIUM_PROMPT"
 DEPLOY_MED="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"$DEPLOY_BYPASS_CMD\"},\"session_id\":\"$SID_MED\",\"prompt_id\":\"p1\"}"
 check warn agentforce-adlc "medium-confidence plugin match warns, never denies" "$DEPLOY_MED"
+
+# W-24445750: a passive, high-confidence English catalog query reaches the real
+# reactive gate and denies the raw bypass. Adding any non-English instruction to
+# that same English product/log context must make the catalog abstain entirely.
+HIGH_PASSIVE_PROMPT="Agentforce .agent employee agent author discover scaffold deploy test secure optimize"
+SID_HIGH_ENGLISH="skills-first-pr-high-english-$$"
+capture_prompt "$SID_HIGH_ENGLISH" "p1" "$HIGH_PASSIVE_PROMPT"
+DEPLOY_HIGH_ENGLISH="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"$DEPLOY_BYPASS_CMD\"},\"session_id\":\"$SID_HIGH_ENGLISH\",\"prompt_id\":\"p1\"}"
+check_deny agentforce-adlc "English high-confidence catalog match still denies" "$DEPLOY_HIGH_ENGLISH"
+
+for multilingual_suffix in \
+  " Prosím vyhledej Salesforce CMS obrázek" \
+  " Пожалуйста, найди Salesforce CMS image" \
+  " Salesforce CMSの画像を探してください"; do
+  SID_MULTI="skills-first-pr-multilingual-$$-$RANDOM"
+  capture_prompt "$SID_MULTI" "p1" "$HIGH_PASSIVE_PROMPT$multilingual_suffix"
+  DEPLOY_MULTI="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"$DEPLOY_BYPASS_CMD\"},\"session_id\":\"$SID_MULTI\",\"prompt_id\":\"p1\"}"
+  check quiet - "multilingual task with English logs abstains from catalog gate" "$DEPLOY_MULTI"
+done
+
+# The suffixes occur beyond the 2048-byte storage prefix and 64k-character scan
+# window, respectively. Eligibility must cover the entire host-stripped prompt.
+PROMPT_AFTER_BYTE_PREFIX=$(python3 -c 'print("Agentforce .agent employee agent author discover scaffold deploy test secure optimize. " + "English log line. " * 180 + " 画像を探してください")')
+SID_LONG_BYTE="skills-first-pr-long-byte-$$"
+capture_prompt "$SID_LONG_BYTE" "p1" "$PROMPT_AFTER_BYTE_PREFIX"
+DEPLOY_LONG_BYTE="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"$DEPLOY_BYPASS_CMD\"},\"session_id\":\"$SID_LONG_BYTE\",\"prompt_id\":\"p1\"}"
+check quiet - "Japanese after 2048-byte prefix abstains from catalog gate" "$DEPLOY_LONG_BYTE"
+
+PROMPT_AFTER_SCAN_PREFIX=$(python3 -c 'print("Agentforce .agent employee agent author discover scaffold deploy test secure optimize. " + "English log line. " * 4000 + " 画像を探してください")')
+SID_LONG_SCAN="skills-first-pr-long-scan-$$"
+capture_prompt "$SID_LONG_SCAN" "p1" "$PROMPT_AFTER_SCAN_PREFIX"
+DEPLOY_LONG_SCAN="{\"tool_name\":\"Bash\",\"tool_input\":{\"command\":\"$DEPLOY_BYPASS_CMD\"},\"session_id\":\"$SID_LONG_SCAN\",\"prompt_id\":\"p1\"}"
+check quiet - "Japanese after 64k English logs abstains from catalog gate" "$DEPLOY_LONG_SCAN"
 
 # Generic prompt, no catalog entry clears the threshold → silent, identical
 # to today's no-match behavior.

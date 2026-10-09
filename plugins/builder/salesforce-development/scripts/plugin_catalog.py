@@ -183,6 +183,14 @@ def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
             )
         ):
             raise PluginCatalogError(f"{marketplace_path}: {name!r} has invalid metadata.match.anchorCompanions")
+        if "requiredEvidence" in match_meta:
+            raise PluginCatalogError(
+                f"{marketplace_path}: {name!r} uses replaced metadata.match.requiredEvidence; "
+                "use anchorCompanions with enforceAnchorsOnAllSurfaces"
+            )
+        enforce_anchors = match_meta.get("enforceAnchorsOnAllSurfaces")
+        if "enforceAnchorsOnAllSurfaces" in match_meta:
+            _validate_anchor_policy(enforce_anchors, anchor_terms, f"{marketplace_path}: {name!r}")
         entry_command = match_meta.get("entryCommand") if isinstance(match_meta, dict) else None
         if entry_command is not None and not (type(entry_command) is str and entry_command):
             raise PluginCatalogError(f"{marketplace_path}: {name!r} has invalid metadata.match.entryCommand")
@@ -195,6 +203,8 @@ def build_catalog(repo_root: Path, plugin_root: Path) -> dict:
             match["anchorTerms"] = list(anchor_terms)
         if anchor_companions:
             match["anchorCompanions"] = {key: list(value) for key, value in anchor_companions.items()}
+        if enforce_anchors is not None:
+            match["enforceAnchorsOnAllSurfaces"] = enforce_anchors
         if entry_command:
             match["entryCommand"] = entry_command
         plugins.append({
@@ -270,8 +280,15 @@ _TOP_KEYS = {"schemaVersion", "generatedFrom", "plugins"}
 _GENERATED_FROM_KEYS = {"marketplace", "marketplaceSha256"}
 _PLUGIN_KEYS = {"name", "source", "match"}
 _MATCH_REQUIRED_KEYS = {"description", "keywords", "examplePrompts"}
-_MATCH_OPTIONAL_KEYS = {"anchorTerms", "anchorCompanions", "entryCommand"}
+_MATCH_OPTIONAL_KEYS = {"anchorTerms", "anchorCompanions", "entryCommand", "enforceAnchorsOnAllSurfaces"}
 _MATCH_KEYS = _MATCH_REQUIRED_KEYS | _MATCH_OPTIONAL_KEYS
+
+
+def _validate_anchor_policy(value: object, anchors: object, context: str) -> None:
+    if type(value) is not bool:
+        raise PluginCatalogError(f"{context}: enforceAnchorsOnAllSurfaces must be a boolean")
+    if value and not anchors:
+        raise PluginCatalogError(f"{context}: enforceAnchorsOnAllSurfaces requires anchorTerms")
 
 
 def _validate_catalog(data, context: str) -> None:
@@ -332,6 +349,9 @@ def _validate_catalog(data, context: str) -> None:
                         for key, value in companions.items()
                     )):
                 raise PluginCatalogError(f"{row_context}: invalid match anchorCompanions")
+        if "enforceAnchorsOnAllSurfaces" in match:
+            _validate_anchor_policy(match["enforceAnchorsOnAllSurfaces"],
+                                    match.get("anchorTerms"), row_context)
         if "entryCommand" in match:
             entry_command = match["entryCommand"]
             if type(entry_command) is not str or len(entry_command) > 64 or not _ENTRY_COMMAND_PATTERN.fullmatch(entry_command):
@@ -367,7 +387,35 @@ MIN_SCORE_THRESHOLD = 1.0
 HIGH_CONFIDENCE_THRESHOLD = 3.5
 DEDUP_SCORE_MARGIN = 1.0
 DEDUP_OVERLAP_THRESHOLD = 0.6
+# Curated anchor schema remains ASCII; prompt tokenization is separate.
 _TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
+
+
+def _unicode_words(text: str) -> list[str]:
+    """Complete alphanumeric words, including attached Unicode combining marks.
+
+    This is lexical normalization, not translation or language segmentation.
+    Underscores and punctuation remain separators as in the English tokenizer.
+    """
+    # Presentation selectors affect rendering, not word identity. Ignore them
+    # symmetrically in queries and catalog copy, even when attached to letters.
+    text = text.replace("\ufe0e", "").replace("\ufe0f", "")
+    # Compose equivalent spellings before folding; folding can introduce new
+    # combining sequences, so normalize its result to NFC as well.
+    normalized = unicodedata.normalize("NFC", unicodedata.normalize("NFC", text).casefold())
+    words: list[str] = []
+    current: list[str] = []
+    for char in normalized:
+        if char.isalnum() or (current and unicodedata.category(char).startswith("M")):
+            current.append(char)
+        elif current:
+            words.append("".join(current))
+            current = []
+    if current:
+        words.append("".join(current))
+    return words
+
+
 # A plugin's own entry command (e.g. `/salesforce-test-drive:start`) -- the
 # single slash command a returning user runs when the plugin is already
 # installed. Curated first-party data, so a malformed value fails the build.
@@ -396,9 +444,52 @@ class Match(NamedTuple):
 
 def _tokenize(text: str) -> list[str]:
     return [
-        token for token in _TOKEN_PATTERN.findall(text.lower())
+        token for token in _unicode_words(text)
         if len(token) > 1 and token not in _GENERIC_MATCH_TERMS
     ]
+
+
+# Match-reason telemetry: the curated subset of a match's evidence is recorded as
+# a dashboard dimension, so it is bounded in token count and comma-joined length.
+# sf_telemetry re-applies the same caps at capture (the privacy boundary).
+MATCH_REASON_MAX_TERMS = 8
+MATCH_REASON_MAX_CHARS = 120
+
+
+def curated_match_terms(plugin: dict, matched_terms) -> list[str]:
+    """The sorted, capped subset of `matched_terms` that belongs to the plugin's
+    own curated vocabulary (`match.keywords` + `match.anchorTerms`).
+
+    `matched_terms` is query-vs-document evidence, so every token in it also
+    appears in the user's prompt -- emitting it verbatim would leak utterance
+    fragments. Intersecting with the curated vocabulary is the load-bearing
+    privacy step: a returned token is always a member of the plugin's
+    first-party, owner-approved dictionary, so a word the user typed that the
+    catalog does not curate can never surface. Tokenized with `_tokenize` so the
+    curated set is symmetric with scoring. Keeps the longest sorted prefix within
+    MATCH_REASON_MAX_TERMS / MATCH_REASON_MAX_CHARS (joined with ","). Pure
+    function; malformed input yields [].
+    """
+    match = plugin.get("match") if isinstance(plugin, dict) else None
+    if not isinstance(match, dict) or not matched_terms or isinstance(matched_terms, str):
+        return []
+    try:
+        evidence = {term for term in matched_terms if isinstance(term, str)}
+    except TypeError:  # not iterable
+        return []
+    curated_text = [
+        term for field in ("keywords", "anchorTerms")
+        if isinstance(match.get(field), list)
+        for term in match[field]
+        if isinstance(term, str)
+    ]
+    curated = set(_tokenize(" ".join(curated_text)))
+    kept: list[str] = []
+    for term in sorted(evidence & curated):
+        if len(kept) >= MATCH_REASON_MAX_TERMS or len(",".join([*kept, term])) > MATCH_REASON_MAX_CHARS:
+            break
+        kept.append(term)
+    return kept
 
 
 def _plugin_document_tokens(plugin: dict) -> list[str]:
@@ -483,10 +574,14 @@ def score_prompt_against_catalog(
     user's own act of invoking it is the evidence (explicit discovery, the
     reactive bypass gate) should pass False to restore plain high+medium
     recall for plugins whose anchor set doesn't cover every legitimate phrase.
+    Entries declaring `enforceAnchorsOnAllSurfaces=True` retain the anchor gate
+    even on solicited surfaces. All companion checks use raw prompt tokens, including
+    scoring stop words such as Salesforce, independently of this flag.
     """
     threshold = HIGH_CONFIDENCE_THRESHOLD if high_confidence_threshold is None else high_confidence_threshold
     plugins = catalog_data["plugins"]
     query_terms = set(_tokenize(prompt))
+    raw_terms = set(_TOKEN_PATTERN.findall(prompt.lower()))
     if not query_terms or not plugins:
         return []
     doc_tokens_by_name = {plugin["name"]: _plugin_document_tokens(plugin) for plugin in plugins}
@@ -515,14 +610,17 @@ def score_prompt_against_catalog(
         # companion is also present in the prompt -- proxying the "test drive"
         # phrase via the token "test" rather than firing on bare "drive". Callers
         # that already require explicit user intent to reach the scorer
-        # (require_anchor_terms=False) skip this gate; it exists to stop a
-        # generic-word coincidence from *interrupting* the user unprompted.
+        # (require_anchor_terms=False) skip this gate by default; entries opting
+        # into all-surface enforcement retain it on those surfaces too.
         anchor_terms = plugin["match"].get("anchorTerms")
-        if require_anchor_terms and anchor_terms:
+        enforce_anchors = plugin["match"].get("enforceAnchorsOnAllSurfaces", False)
+        if (require_anchor_terms or enforce_anchors) and anchor_terms:
             companions = plugin["match"].get("anchorCompanions") or {}
+            # Companions qualify an anchor using raw tokens without changing
+            # BM25 scoring; the flag controls only which surfaces apply the gate.
             anchor_hits = {
                 term for term in matched_terms.intersection(anchor_terms)
-                if not companions.get(term) or not query_terms.isdisjoint(companions[term])
+                if not companions.get(term) or not raw_terms.isdisjoint(companions[term])
             }
             if not anchor_hits:
                 continue

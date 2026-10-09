@@ -39,8 +39,8 @@ Two properties are load-bearing and easy to erode by accident during future edit
   local file signals, not a free-form ambient model guess. All four paths are deterministic and
   share the catalog scorer; none makes a recommendation-time LLM call. The two proactive surfaces
   (UserPromptSubmit, SessionStart) and the two solicited ones (discovery, bypass-gate) split along
-  this same line for *every* evidence-bar knob the scorer exposes, not just the band: see
-  `require_anchor_terms` below.
+  this same line by default. A plugin may explicitly retain anchor qualification on
+  solicited surfaces with `enforceAnchorsOnAllSurfaces`: see below.
 - **Informational matches and flow candidates are different sets, for discovery and bypass-gate.**
   `discovery-command` and `bypass-gate` deliberately return every high+medium match for
   display/telemetry/ledger purposes — that is the point of the anchor-ungated, solicited-evidence
@@ -112,6 +112,44 @@ Two properties are load-bearing and easy to erode by accident during future edit
   UserPromptSubmit. If no prompt marker is available, it stays quiet rather than treating a raw
   command or file path as the task; terms such as `project`, `source`, or `app` otherwise create
   plausible but false cross-product matches.
+- **Only the user's own words are matched.** `UserPromptSubmit` strips host-injected context before
+  any decision or score: IDE open-file/selection/diagnostic notices, `<task-notification>` and
+  `<system-reminder>` blocks. The surfaces then read three views of that text:
+  - *Decisions* (confirm, install, decline) read the whole host-stripped prompt, unbounded, so
+    selected README text or a task notification that says "install X" can never confirm an install,
+    while a typed "yes install it" next to an IDE notice still does. A prompt that is empty after
+    stripping decides nothing.
+  - *Prompt-time matching and request checks* read the intent text (`_prompt_intent_text`): the
+    first 64 KB of the stripped prompt minus URLs, paths, slash-command names, and `UPPER_SNAKE`
+    identifiers, with line breaks kept so the request checks still split sentences on them. Any non-ASCII
+    letter or combining mark (except U+FE0E/U+FE0F presentation selectors) in the full
+    host-stripped prompt yields no matching intent, even beyond the scan window: incidental
+    English logs are not the ask.
+    The outside-project Salesforce/CRM cue reads the same filtered words without the matching abstention
+    (`_prompt_user_words`), so a non-Latin prompt that names Salesforce still gets its note.
+  - *The reactive bypass gate* reads the recorded filtered user words (`prompt.txt`),
+    preserved as UTF-8 within the existing 2048-byte limit, truncated at character boundaries.
+    Preservation is independent of matching eligibility; user spelling is retained. A separate
+    ASCII `catalog-eligible` marker records eligibility of the full host-stripped prompt before
+    either scan or byte truncation. Missing/corrupt eligibility abstains, including legacy markers.
+    This prevents an English prefix or pasted log from denying a non-English request.
+  - *Unclosed host blocks run to the end of the prompt, wherever they open.* Dropping the tail of
+    a typed sentence only makes matching quieter (the safe direction); restricting the strip to
+    openings at a line start would let a mid-line injected block be scored as the user's ask.
+    The accepted cost: a user who types a host tag name in prose loses the rest of that prompt.
+  - *Path vs. product name.* A relative slashed token is a path only with a known project root
+    (`force-app`, `src`, `scripts`, `docs`, `node_modules`) or a file extension on its last segment,
+    optionally with a `:line[:col]` suffix. Hyphens, digits, or three segments alone do not make a
+    path, so `B2B/B2C`, `Experience-Cloud/CMS`, `OAuth2/JWT`, and `Apex/LWC/Node.js` keep the
+    vocabulary the catalog anchors on; dotted product names in `_PROMPT_DOTTED_PRODUCT_NAMES`
+    (`Node.js`, `Next.js`, ...) are not file extensions. Other dotted names such as `Site.com` and
+    `Force.com` in a slashed token are treated as file names.
+  - *Typed capability paths are dropped.* `why is lwc/heroBanner/heroBanner.js not rendering`
+    loses `lwc/...` as evidence on every automatic surface, including the bypass gate, which reads
+    the already-filtered recorded text; only explicit discovery recovers it. The accepted cost: the
+    gate may warn about a different plugin than the one the path implies. Keeping the leading
+    directory as a capability hint would add a token-rewrite transform with its own false
+    positives, so the precise, auditable rule wins: a path the user names is a thing, not an ask.
 - **A generic word shared with the corpus cannot carry a match alone.** A plugin declares
   `metadata.match.anchorTerms` (marketplace.json) when its capability vocabulary overlaps a
   domain-sounding-but-generic word used elsewhere in the corpus. For example, before package
@@ -123,7 +161,7 @@ Two properties are load-bearing and easy to erode by accident during future edit
   wrong plugin on the word "install" alone. This gate exists to stop a generic-word coincidence
   from **interrupting** the user unprompted, so — mirroring the high/medium band split — only the
   two proactive surfaces (`UserPromptSubmit`, SessionStart) pass `require_anchor_terms=True`;
-  explicit discovery and the reactive bypass gate pass `False` and see plain high+medium matches,
+  explicit discovery and the reactive bypass gate pass `False` and, by default, see plain high+medium matches,
   because the user's own act of invoking those surfaces is itself the missing evidence. A plugin's
   anchor set can therefore still be too narrow to cover every phrase a user would reasonably type
   into explicit discovery — that is an authoring quality issue to fix by broadening the anchor set,
@@ -170,6 +208,52 @@ Two properties are load-bearing and easy to erode by accident during future edit
   state. This matters most for proactive paths: once the user has already seen an install choice
   at startup or before the model answers, a lifecycle replay, next prompt, or tool gate must not
   turn that same choice into another interruption.
+- **The ledger records why a proposal fired, in curated vocabulary only.** Beside `confidence` and
+  `surface`, an entry may carry `match_keywords`: the sorted, comma-joined tokens of the match
+  evidence that belong to that plugin's own curated `keywords`/`anchorTerms`, capped at 8 tokens and
+  120 characters. `plugin_catalog.curated_match_terms` computes that subset, so the privacy step
+  lives next to the scorer and `sf_context` only forwards it; `anchorCompanions` qualify an anchor
+  rather than name a capability and are deliberately not part of it. A `session-start` entry may
+  also carry `match_signal`, one fixed file-signal code (`lwc`, `react`, `agentforce`, `cms`) —
+  never a file name, path, or the human signal label, which stays paint/model copy. Both keys are
+  written once, with the first recorded surface: a repeat match updates `confidence` but never
+  overwrites them, a decline carries them forward beside `decision: "declined"`, and the later
+  `plugin_loaded`/`plugin_installed`/`plugin_suggestion_declined` events report them from the entry.
+  They are additive and best-effort: omitted when there was no curated evidence (the deterministic
+  test-drive writers, or a match carried only by description/example-prompt words), and shed from
+  every entry first if the encoded marker would exceed its 8192-byte cap, so they never cost the
+  first-occurrence ledger itself. `sf_telemetry` keeps its own copy of the signal codes, so a new
+  `_PLUGIN_SIGNALS` code must be added there too or capture drops it. The analytics contract is in
+  [`dynamic-plugins-funnel.md`](./dynamic-plugins-funnel.md).
+
+## Unicode matching and denial audit (W-24445750)
+
+Catalog tokenization applies NFC, case folding, then NFC again to both query and catalog text.
+Words retain Unicode alphanumeric characters and attached combining marks; punctuation and
+underscores separate words. Accents are neither deleted nor transliterated, and an ASCII product
+fragment inside a larger Unicode word is not a token. This is lexical consistency only, not
+translation, multilingual semantic understanding, or Japanese word segmentation.
+
+`_plugin_catalog_match` abstains on non-ASCII letters/combining marks before scoring or ledger
+writes on every surface. Text/emoji presentation selectors U+FE0E/U+FE0F are exempt:
+English requests containing `✔️` or `❤️` remain eligible. Tokenization also ignores these
+selectors, including those attached directly to letters, so they do not change word identity. ZWJ is formatting (category Cf) and
+already does not count as a letter or combining mark. Other marks, accented letters, fullwidth
+Latin, and mixed-script words still cause abstention. Explicit discovery also abstains, so it
+cannot seed a later denial from incomplete evidence. SessionStart still uses its fixed English project-signal queries. Prompt-time
+matching, existing-flow promotion, and the outside-project bridge use eligible intent; non-English
+text is still stored and the Salesforce/CRM cue can still read filtered user words.
+
+The only catalog-to-tool-denial path is `cmd_skills_first_advisory`: no installed owner → captured prompt
+plus full-prompt eligibility marker → `_plugin_catalog_match(..., surface="bypass-gate")` →
+first-occurrence high match → `emit(..., decision="deny")`. Medium/repeated matches advise.
+Other catalog consumers (SessionStart hints, UserPromptSubmit, flow promotion, explicit
+`cmd_plugin_match`) render/open proposals, never deny a tool call. The shared matcher guard and
+the pre-truncation marker close both direct and ledger-mediated multilingual paths. Installed
+skill ownership, dispatch suppression, and enforced installed-skill gates are unchanged.
+Abstention may miss useful suggestions, including mixed English/product requests or an English
+request with a non-ASCII filename/URL (eligibility precedes incidental-token removal); it does not
+assert that no plugin can help. Translation and multilingual catalog expansion remain out of scope.
 
 ## Security boundary: what text may be exposed
 
@@ -194,6 +278,19 @@ are simply invisible to the matcher. Opting in via `keywords` obliges the entry 
 matcher copy), and the generator fails fast if that pairing is missing. Every entry's `source` is a
 relative-path string pointing at the plugin's own directory in this repo; the catalog generator
 rejects any other shape.
+
+**What may be recorded about a match.** The same boundary decides what the proposal ledger and
+telemetry may record about *why* a proposal fired. The scorer's `matched_terms` are query ∩
+document tokens, and the query is normally the user's own prompt or discovery text, so they are
+fragments of what the user typed; they are never persisted or sent verbatim. Only their
+intersection with the plugin's curated `keywords`/`anchorTerms` is, so every recorded token is
+first-party, owner-approved, already-public vocabulary, and a word the catalog does not curate can
+never surface. The SessionStart file scan scores a fixed per-signal query and records a fixed
+signal code, never what file matched. `sf_telemetry` does not trust its in-process caller: at
+capture and again at egress it keeps only tokens of *that* plugin's vocabulary re-derived from the
+shipped `catalog/plugins.json`, and only the fixed signal codes, only on `session-start`. The
+residual disclosure — which curated words a prompt contained — is bounded by that finite
+dictionary; whether the first-run telemetry notice must say so is an open copy review.
 
 ## Accepted-proposal install mechanic
 
@@ -256,7 +353,8 @@ candidates and asks the user to name the single plugin they mean (a named accept
 itself). This preserves the direct-leaf "no best pick" rule while keeping a terse `yes` from
 dead-ending in a bare missing-selection refusal that a model would otherwise be tempted to retry. The marker contains only plugin names, state, and one boolean stating whether the
 recommendation interrupted a concrete task. Marketplace instructions and the user's prompt/task
-text are never persisted.
+text are never persisted — not in this marker, and not in the proposal ledger, whose only match
+evidence is curated catalog tokens and a fixed signal code (see the security boundary above).
 
 If SessionStart or an explicit discovery query opened a recommendation-only flow and the user then
 submits an explicit action request matching one of those candidates, UserPromptSubmit promotes it
@@ -321,3 +419,46 @@ affirmative, or an AskUserQuestion selection — see below). It grants trust on 
 **explicit**, never inferred from source shape alone: the exact local source
 `./plugins/builder/<name>` (`_plugin_install_is_same_marketplace`). Everything else stays on the
 nonce + trust-warning path.
+
+### Optional anchor enforcement on all surfaces
+
+`metadata.match.enforceAnchorsOnAllSurfaces: true` retains the existing
+`anchorTerms`/`anchorCompanions` gate on explicit discovery and the reactive bypass
+as well as proactive surfaces. This is a deliberate precision-over-recall choice
+for entries whose generic vocabulary produces unrelated solicited matches.
+The flag requires nonempty `anchorTerms`; build and runtime loading both validate
+an actual boolean. Omitted or false preserves the existing anchor bypass.
+
+All companions are checked against raw lowercase prompt tokens, including
+`salesforce`, which is removed from BM25 scoring. This rule is independent of the
+all-surface flag: the flag controls only where the anchor gate applies. Existing
+companion sets without stop words or one-letter tokens keep the same behavior.
+Anchors still need to be among the scored matched terms. Each anchor qualifies
+with any one declared companion, anywhere in the prompt; punctuation separates
+words, and no adjacency, phrase matching or multi-word AND groups are implied.
+
+This consolidates capability qualification into one anchor vocabulary. It replaces
+the proposed `requiredEvidence` phrase groups after Omni and Education comparisons
+showed that all-surface anchors plus raw companions preserve the existing discovery
+regressions. Scores, confidence thresholds, scoring corpus, installation policy,
+and task-intent classification remain unchanged. Authors must test supported tasks
+and unrelated overlaps through all four consumers before opting in.
+
+Omni matching favors supported domain context over generic telephony recall.
+Capacity requires `omni`, `agent` or `agents`: generic queue routing plus agent
+capacity is accepted as capability evidence, while storage/API capacity is not.
+Work sharing uses `sharing` with
+`work`. The generic `voice` anchor is omitted: Salesforce/Omni routing and
+`VoiceCall` routing remain covered, while bare "Route voice calls", generic
+Twilio routing and Amazon Connect provisioning do not recommend this plugin.
+No vendor exclusions or additional matching fields implement that boundary.
+
+Education companions require workflow evidence rather than an ordinary calendar or
+hierarchy reference. `academic` accepts years, terms, sessions or registration,
+not `calendar` alone; `institutional` requires Education or a specific Education
+object. `hierarchy` accepts multi-campus wording or Education/object context,
+not `campus` alone. This preserves multi-campus setup while excluding field-service
+territories and institutional knowledge-article hierarchies. A `student` anchor
+with `enrollment` covers the curated recruitment request. Bare academic-calendar
+requests without workflow qualifiers deliberately remain quiet. Shared thresholds
+and the existing all-surface anchor contract remain unchanged.

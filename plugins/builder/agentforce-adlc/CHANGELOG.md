@@ -15,12 +15,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] — 2026-10-09
+
 ### Security
 - **The `guardrails.py` PreToolUse hook no longer auto-approves Bash commands.** It used to return `permissionDecision: "allow"` for every command it did not block, both outside Salesforce projects and for unflagged commands inside them. That bypassed Claude Code's normal Bash permission prompt. It now stays silent and defers to the user's permission settings. It still denies critical patterns, and warnings are added as `additionalContext` without a permission decision. Covered by `scripts/test/test_guardrails_hook.py`.
+
+### Changed
+- `agentforce-architecture-analyze` and `agentforce-d360-analyze` no longer require an org alias. When none is given, they use the Salesforce CLI default target org (`sf config get target-org`); `--org <alias>` is only needed to override it, or when no default is set.
+- `agentforce-architecture-analyze` no longer stops at a usage message when you don't name an agent. It lists the org's agents with a read-only query, uses the obvious match (or the only agent), and otherwise asks you to pick from the list.
+- `agentforce-architecture-analyze` and `agentforce-d360-analyze` now fetch the access token with `sf org auth show-access-token` and check at startup that the installed Salesforce CLI provides it, with an upgrade message if not. Access tokens are redacted from CLI failure output.
+- `agentforce-architecture-analyze` and `agentforce-d360-analyze` now locate their bundled scripts across the known install locations (plugin, `~/.claude/skills`, project `.claude/skills`) instead of assuming a fixed path, and stop with a clear message if the scripts cannot be found.
+- The `agentforce-generate` README now lists the "Migrate a Legacy Agent" task.
 
 ### Fixed
 - Hook `timeout` values in `plugin.json` were written in milliseconds (`5000`, `10000`), but Claude Code reads them as seconds. They are now `5` and `10`.
 - `guardrails.py` and `agent-validator.py` crashed at import on Python 3.9, the README's stated minimum, because of PEP 604 `X | None` annotations. They now use `from __future__ import annotations`.
+
+## [0.12.0] — 2026-10-02
 
 ### Changed
 - Re-synced `agentforce-generate`, `agentforce-test`, and `agentforce-observe` byte-for-byte from the canonical flat `skills/` source of truth and bumped the plugin to **0.12.0**. `agentforce-generate`'s `SKILL.md` was substantially condensed (699 lines changed) and its reference set and shipped `.agent` assets refreshed; `agentforce-observe`'s `SKILL.md` gained Agent Health Monitoring alert guidance. Skill `metadata.version`: `agentforce-observe` 0.8 → 0.9; `agentforce-generate` (0.11) and `agentforce-test` (0.8) unchanged.
@@ -46,6 +57,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   diagnostics separately.
   Model-facing system instructions now state concrete branch-compatible duties
   without naming AgentScript instruction surfaces.
+
+## [0.11.0] — 2026-09-24
+
+### Changed
 - Synced `agentforce-generate`, `agentforce-test`, and `agentforce-observe` byte-for-byte from the canonical flat `skills/` source of truth so the plugin's copies no longer drift from the internal skills. Salesforce-validator-facing changes: each `SKILL.md` frontmatter now declares `metadata.cliTools` (per-tool semver floors) and, for `agentforce-generate`, `minApiVersion` and `relatedSkills`, replacing the prior free-text `compatibility` / `argument-hint` lines. `agentforce-generate` now bundles its own `scripts/` tree (`discover.py`, `scaffold.py`, `org_describe.py`, `generators/`) so the skill is self-contained rather than relying on the repo-root `scripts/`, and `agentforce-observe`'s Apex asset moved from `apex/` to `assets/apex/` to match the source layout. Reference-doc refreshes across all three skills; no behavior change to any documented workflow. Skill `metadata.version` values are unchanged (`agentforce-generate` 0.11, `agentforce-test` 0.8, `agentforce-observe` 0.8) and the plugin stays 0.11.0.
 
 ### Added

@@ -10,7 +10,8 @@ Commands:
     post-deploy-failure  Route a FAILED deploy to the owning skill (PostToolUseFailure hook on deploy) (#405)
     check-tools  Scan all required dev tools and print a JSON status report (/salesforce-development:status)
     discover     Show the capability overview, the journey hints, or run on-demand feature detection.
-    resolution-trace  Render a bounded Skill resolution trace from the current hook payload.
+    resolution-trace  Render a bounded Skill resolution trace from the current hook payload,
+                      and record a qualified skills-first dispatch for the session.
     record-update-decision  Write legacy per-version SF CLI update state (compatibility command)
     wayfinder    Re-orient after an org-connect (PostToolUse hook on sf org login / config set target-org).
     prompt-dispatch  Establish prompt state and route UserPromptSubmit / UserPromptExpansion in-process.
@@ -1404,7 +1405,19 @@ def _ambient_surface(
         return full_surface
     if mode == "off":
         return None
-    current = _sanitize_dynamic_text(state.get("currentStage") or "unknown")
+    return _plain_ambient_surface(state, project_name=project_name, candidate=candidate)
+
+
+def _plain_ambient_surface(
+    state: dict, *, project_name: object = "", candidate: Optional[object] = None,
+) -> str:
+    """The semantic-plain projection `_ambient_surface` returns under "plain".
+
+    Split out so the prompt-time status/orientation paints can build the plain
+    block directly instead of rendering a full surface only to discard it."""
+    # The latest reached stage, the same definition the model-facing notes use
+    # (`_journey_frontier_name`), so this line and its note can never disagree.
+    current = _sanitize_dynamic_text(_journey_frontier_name(state) or "none yet")
     project = _sanitize_dynamic_text(project_name) or "no project"
     # Content parity with the two primary surfaces (journey-nudges Phase 8): this
     # surface no longer shows the "Reached: …" / "No evidence: …" word-lists — a map
@@ -2703,14 +2716,39 @@ _PROMPT_CLEANUP_TURN_SCAN_CAP = 256
 _PROMPT_CLEANUP_CHILD_SCAN_CAP = _PROMPT_MAX_SKILLS + 4
 PromptContext = namedtuple("PromptContext", ("session_key", "prompt_key", "path"))
 
-# The user's raw prompt text, captured at UserPromptSubmit so the plugin-catalog
-# matcher (PreToolUse, below) has something closer to intent than the bypass
-# tool call itself. ASCII-only (matches `_atomic_private_text`'s constraint) and
-# length-capped; the BM25 tokenizer only ever extracts ASCII lowercase
-# alphanumerics anyway, so dropping non-ASCII costs the matcher nothing.
+# Filtered user words captured at UserPromptSubmit, so the PreToolUse catalog
+# matcher reads intent rather than tool syntax. Storage preserves UTF-8 within
+# the byte cap. A separate ASCII eligibility marker proves that the full
+# host-stripped prompt had no non-ASCII letters or combining marks (apart from
+# emoji presentation selectors) before scan/storage truncation. Preservation
+# never implies matching eligibility.
 _PROMPT_TEXT_FILE = "prompt.txt"
+_PROMPT_CATALOG_ELIGIBILITY_FILE = "catalog-eligible"
 _PROMPT_TEXT_MAX_BYTES = 2048
 _PROMPT_TEXT_CONTROL_PATTERN = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+# Context the host wraps around (or sends instead of) the user's words: the IDE
+# extension's open-file/selection notices, background task notifications, system
+# reminders. An unclosed block runs to the end of the prompt. The attribute run is
+# bounded so many unterminated openings in a pasted log stay linear.
+_PROMPT_HOST_BLOCK_PATTERN = re.compile(
+    r"<(ide_opened_file|ide_selection|ide_diagnostics|system-reminder|task-notification)(?=[\s/>])[^>]{0,256}>"
+    r"(?:.*?</\1\s*>|.*\Z)",
+    re.DOTALL,
+)
+# Host-stripped prompt prefix examined for intent; bounds the split/count passes on
+# the UserPromptSubmit hot path (only _PROMPT_TEXT_MAX_BYTES is ever kept).
+_PROMPT_INTENT_SCAN_MAX_CHARS = 65536
+_PROMPT_UPPER_SNAKE_PATTERN = re.compile(r"[A-Z0-9]+(?:_[A-Z0-9]+)+(?:-[A-Za-z0-9]+)*")
+_PROMPT_ROOTED_PATH_PATTERN = re.compile(r"(?:[A-Za-z]:|~|\.{1,2})?[/\\]")
+_PROMPT_PATH_SEPARATOR_PATTERN = re.compile(r"[/\\]")
+# An optional `:line[:col]` suffix still marks a file (`heroBanner.js:42:13`).
+_PROMPT_FILE_EXTENSION_PATTERN = re.compile(r"\.[A-Za-z][A-Za-z0-9]{0,7}(?::\d+){0,2}$")
+# Leading segments that mark a relative token as a project path, and product
+# names whose ".js" is not a file extension (`Apex/Node.js`).
+_PROMPT_PATH_ROOTS = frozenset({"force-app", "src", "node_modules", "scripts", "docs"})
+_PROMPT_DOTTED_PRODUCT_NAMES = frozenset({
+    "node.js", "next.js", "nuxt.js", "vue.js", "react.js", "express.js", "d3.js", "three.js",
+})
 
 # --- Durable phase tracker (journey reachability engine) ----------------
 # An append-only JSONL history of the build-lifecycle phases this project has
@@ -2915,7 +2953,7 @@ def _ensure_private_runtime_dir(path: Path) -> bool:
         return False
 
 
-def _atomic_private_text(path: Path, value: str) -> bool:
+def _atomic_private_text(path: Path, value: str, *, encoding: str = "ascii") -> bool:
     """Atomically replace one private marker without following a destination symlink."""
     temporary = path.with_name(f".{path.name}.{secrets.token_hex(8)}")
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
@@ -2924,7 +2962,7 @@ def _atomic_private_text(path: Path, value: str) -> bool:
     try:
         fd = os.open(temporary, flags, 0o600)
         try:
-            os.write(fd, value.encode("ascii"))
+            os.write(fd, value.encode(encoding))
             os.fsync(fd)
         finally:
             os.close(fd)
@@ -2940,7 +2978,7 @@ def _atomic_private_text(path: Path, value: str) -> bool:
         return False
 
 
-def _private_text(path: Path, max_bytes: int = 4096) -> Optional[str]:
+def _private_text(path: Path, max_bytes: int = 4096, *, encoding: str = "ascii") -> Optional[str]:
     """Read one owned regular marker without following links or accepting hardlinks."""
     flags = os.O_RDONLY
     if hasattr(os, "O_NOFOLLOW"):
@@ -2955,7 +2993,7 @@ def _private_text(path: Path, max_bytes: int = 4096) -> Optional[str]:
             data = os.read(fd, max_bytes + 1)
             if len(data) > max_bytes:
                 return None
-            return data.decode("ascii")
+            return data.decode(encoding)
         finally:
             os.close(fd)
     except (OSError, UnicodeDecodeError):
@@ -3017,26 +3055,136 @@ def _prompt_context(payload: dict, *, rotate_fallback: bool = False) -> Optional
 
 
 def _sanitize_prompt_text(text: str) -> str:
-    """Bound and flatten one prompt for the catalog matcher: ASCII-only (dropping
-    non-ASCII, never raising), control characters folded to spaces so words don't
-    merge, length-capped."""
-    ascii_text = text.encode("ascii", errors="ignore").decode("ascii")
-    flattened = _PROMPT_TEXT_CONTROL_PATTERN.sub(" ", ascii_text)
-    return flattened[:_PROMPT_TEXT_MAX_BYTES]
+    """Flatten controls and cap UTF-8 bytes without splitting a character.
+
+    Preserve user spelling; NFC/case folding belongs to matching, not storage.
+    Invalid surrogate code points cannot be represented in UTF-8 and are dropped.
+    """
+    flattened = _PROMPT_TEXT_CONTROL_PATTERN.sub(" ", text)
+    return flattened.encode("utf-8", errors="ignore")[:_PROMPT_TEXT_MAX_BYTES].decode(
+        "utf-8", errors="ignore"
+    )
+
+
+def _catalog_prompt_eligible(text: str) -> bool:
+    """Unicode words are not proof of multilingual semantic understanding.
+
+    Abstain on non-ASCII letters before normalization can case-fold them to ASCII.
+    """
+    # Text/emoji presentation selectors are formatting, not language evidence.
+    # ZWJ (U+200D, category Cf) already falls outside the letter/mark predicate.
+    return not any(
+        not char.isascii() and char not in ("\ufe0e", "\ufe0f")
+        and (char.isalpha() or unicodedata.category(char).startswith("M"))
+        for char in text
+    )
+
+
+def _is_incidental_prompt_token(token: str) -> bool:
+    """True for a whitespace-delimited token that names a thing rather than asks
+    for one: a URL, a filesystem path, or an UPPER_SNAKE identifier. Their words
+    (`docs/DATA_PARTNER-123_notes.md`, `PROJECT_PARTNER-546`) are incidental."""
+    core = token.strip("`'\"()[]{}<>,;:.!?")
+    if not core:
+        return False
+    if "://" in core or _PROMPT_ROOTED_PATH_PATTERN.match(core):
+        return True
+    if "/" in core or "\\" in core:
+        segments = [segment for segment in _PROMPT_PATH_SEPARATOR_PATTERN.split(core) if segment]
+        # Word lists and product names (`Flow/Apex/LWC`, `B2B/B2C`,
+        # `Experience-Cloud/CMS`, `Apex/Node.js`, `and/or`) stay, hyphen or
+        # digit or not, however many segments. A relative path goes only on
+        # structural evidence: a known project root (`force-app/main`) or a
+        # file extension on the last segment (`src/classes/Foo.cls`). A typed
+        # capability path (`lwc/heroBanner/heroBanner.js`) therefore goes too.
+        last = segments[-1]
+        return (segments[0].lower() in _PROMPT_PATH_ROOTS
+                or (bool(_PROMPT_FILE_EXTENSION_PATTERN.search(last))
+                    and last.lower() not in _PROMPT_DOTTED_PRODUCT_NAMES))
+    return bool(_PROMPT_UPPER_SNAKE_PATTERN.fullmatch(core))
+
+
+def _strip_prompt_host_blocks(text: str) -> str:
+    """One prompt with the host-injected context blocks removed, or "" when
+    nothing else is left. Decision checks (confirm, install, decline) read this:
+    only words the user typed can decide."""
+    if not isinstance(text, str):
+        return ""
+    return _PROMPT_HOST_BLOCK_PATTERN.sub(" ", text).strip()
+
+
+def _prompt_user_words(text: str) -> str:
+    """One prompt with host-injected context blocks and incidental tokens
+    removed. Line breaks survive, so the request checks still split sentences
+    on them ("What is DevOps Center\nSet up a test pipeline")."""
+    text = _strip_prompt_host_blocks(text)[:_PROMPT_INTENT_SCAN_MAX_CHARS]
+    lines = (
+        " ".join(token for token in line.split() if not _is_incidental_prompt_token(token))
+        for line in text.splitlines()
+    )
+    return "\n".join(line for line in lines if line)
+
+
+def _prompt_intent_text(text: str) -> str:
+    """Filtered text eligible for automatic catalog matching, or abstention.
+
+    Inspect the whole host-stripped prompt before the bounded scan: English logs
+    must not hide a non-English instruction beyond the scan/storage window.
+    """
+    if not _catalog_prompt_eligible(_strip_prompt_host_blocks(text)):
+        return ""
+    return _prompt_user_words(text)
 
 
 def _record_prompt_text(context: Optional[PromptContext], text: str) -> None:
     if context is None or not isinstance(text, str) or not text:
         return
-    sanitized = _sanitize_prompt_text(text)
-    if sanitized:
-        _atomic_private_text(context.path / _PROMPT_TEXT_FILE, sanitized)
+    # A separate ASCII marker proves eligibility for the full prompt, not merely
+    # the truncated stored prefix. Missing/corrupt state abstains at the gate.
+    eligibility_path = context.path / _PROMPT_CATALOG_ELIGIBILITY_FILE
+    try:
+        eligibility_path.unlink(missing_ok=True)
+    except OSError:
+        return
+    sanitized = _sanitize_prompt_text(_prompt_user_words(text))
+    if sanitized and _atomic_private_text(
+        context.path / _PROMPT_TEXT_FILE, sanitized, encoding="utf-8"
+    ) and _prompt_intent_text(text):
+        _atomic_private_text(eligibility_path, "yes")
 
 
 def _prompt_text(context: Optional[PromptContext]) -> Optional[str]:
     if context is None:
         return None
-    return _private_text(context.path / _PROMPT_TEXT_FILE, max_bytes=_PROMPT_TEXT_MAX_BYTES)
+    return _private_text(
+        context.path / _PROMPT_TEXT_FILE, max_bytes=_PROMPT_TEXT_MAX_BYTES,
+        encoding="utf-8",
+    )
+
+
+def _recorded_catalog_prompt_eligible(context: Optional[PromptContext]) -> bool:
+    return context is not None and _private_text(
+        context.path / _PROMPT_CATALOG_ELIGIBILITY_FILE
+    ) == "yes"
+
+
+def _remove_skill_markers(path: Path) -> bool:
+    """Remove one shallow `skills/` marker directory written by this plugin."""
+    try:
+        skill_count = 0
+        with os.scandir(path) as skills:
+            for skill in skills:
+                skill_count += 1
+                if skill_count > _PROMPT_MAX_SKILLS:
+                    return False
+                if (not _SKILL_NAME_PATTERN.fullmatch(skill.name)
+                        or not skill.is_file(follow_symlinks=False)):
+                    return False
+                (path / skill.name).unlink()
+        path.rmdir()
+        return True
+    except OSError:
+        return False
 
 
 def _remove_prompt_dir(path: Path) -> bool:
@@ -3053,20 +3201,12 @@ def _remove_prompt_dir(path: Path) -> bool:
                 # prompt dir written by an older install still prunes after upgrade.
                 if entry.name in ("nudge.claim", "rail.claim") and entry.is_file(follow_symlinks=False):
                     child.unlink()
-                elif entry.name == _PROMPT_TEXT_FILE and entry.is_file(follow_symlinks=False):
+                elif (entry.name in (_PROMPT_TEXT_FILE, _PROMPT_CATALOG_ELIGIBILITY_FILE)
+                      and entry.is_file(follow_symlinks=False)):
                     child.unlink()
                 elif entry.name == "skills" and entry.is_dir(follow_symlinks=False):
-                    skill_count = 0
-                    with os.scandir(child) as skills:
-                        for skill in skills:
-                            skill_count += 1
-                            if skill_count > _PROMPT_MAX_SKILLS:
-                                return False
-                            if (not _SKILL_NAME_PATTERN.fullmatch(skill.name)
-                                    or not skill.is_file(follow_symlinks=False)):
-                                return False
-                            (child / skill.name).unlink()
-                    child.rmdir()
+                    if not _remove_skill_markers(child):
+                        return False
                 else:
                     return False
         path.rmdir()
@@ -3086,6 +3226,9 @@ def _remove_session_dir(path: Path, current: Optional[PromptContext]) -> bool:
                 child = path / entry.name
                 if entry.name == "current-fallback" and entry.is_file(follow_symlinks=False):
                     child.unlink()
+                elif entry.name == "skills" and entry.is_dir(follow_symlinks=False):
+                    if not _remove_skill_markers(child):
+                        return False
                 elif (re.fullmatch(r"[a-f0-9]{64}", entry.name)
                       and entry.is_dir(follow_symlinks=False)
                       and (current is None or child != current.path)):
@@ -3101,6 +3244,8 @@ def _remove_session_dir(path: Path, current: Optional[PromptContext]) -> bool:
 
 def _prune_prompt_runtime(current: Optional[PromptContext]) -> None:
     """Bounded best-effort pruning; correctness never depends on cleanup."""
+    if not _owned_private_dir(_PROMPT_RUNTIME_DIR):
+        return
     try:
         now = time.time()
         scanned_sessions = 0
@@ -3185,6 +3330,111 @@ def _dispatched_skills(context: Optional[PromptContext]) -> set[str]:
         return found
     except OSError:
         return set()
+
+
+# --- Session-scoped skills-first dispatch ledger ------------------------------
+# The per-prompt ledger above re-arms every enforced deny on each new user message,
+# so a session pays one extra Skill round-trip per prompt for a skill it has already
+# read (sf-skills#355). Enforced owners and their delegates are therefore also
+# recorded once per session, in `<session>/skills/` beside the prompt dirs (names
+# cannot collide: prompt dirs are 64-hex). Written only by the PostToolUse Skill hook,
+# i.e. after the skill content actually loaded, never by the PreToolUse intent, and
+# only for the `salesforce-development:`-qualified skill name, which always loads this
+# plugin's copy. A bare name loads a same-named user/project `.claude/skills/` copy when
+# one exists and its payload is identical either way (payload probe, 2026-10-06), so bare
+# names only count for the current prompt via the PreToolUse ledger. The deny therefore
+# asks for the qualified name.
+# Subagent hooks carry the parent's session_id but their own context, so a subagent
+# neither writes nor reads this ledger (it keeps the per-prompt behavior).
+#
+# Compaction may truncate or drop re-attached skill content while keeping the same
+# session_id, so every SessionStart (compact/clear/resume/fork/...) discards this
+# session's ledger. `/rewind` fires no hook, so a rewind to before the Skill call
+# keeps the ledger until the next SessionStart. The reader is strict: any missing,
+# linked, foreign-owned, or unexpected entry reads as "nothing dispatched", which is
+# today's deny.
+_PLUGIN_SKILL_PREFIX = "salesforce-development"
+
+
+def _qualified_skill(skill: str) -> str:
+    """The name to ask the model to dispatch; generic fallback labels stay as-is."""
+    return f"{_PLUGIN_SKILL_PREFIX}:{skill}" if _SKILL_NAME_PATTERN.fullmatch(skill) else skill
+
+
+def _hook_from_subagent(payload: dict) -> bool:
+    return bool(payload.get("agent_id") or payload.get("agentId"))
+
+
+def _owned_private_dir(path: Path) -> bool:
+    try:
+        info = path.lstat()
+    except OSError:
+        return False
+    return (stat.S_ISDIR(info.st_mode)
+            and (not hasattr(os, "getuid") or info.st_uid == os.getuid()))
+
+
+def _session_skills_dir(session_id: object) -> Optional[Path]:
+    session = _runtime_id(session_id)
+    if session is None:
+        return None
+    return _PROMPT_RUNTIME_DIR / _runtime_key(session) / "skills"
+
+
+def _record_session_dispatched_skill(session_id: object, skill: str) -> None:
+    if skill not in _SESSION_DISPATCH_SKILLS:
+        return
+    skills = _session_skills_dir(session_id)
+    if (skills is None or not _ensure_private_runtime_dir(_PROMPT_RUNTIME_DIR)
+            or not _ensure_private_runtime_dir(skills.parent)
+            or not _ensure_private_runtime_dir(skills)):
+        return
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
+    try:
+        os.close(os.open(skills / skill, flags, 0o600))
+    except OSError:
+        pass
+
+
+def _session_dispatched_skills(session_id: object) -> set[str]:
+    skills = _session_skills_dir(session_id)
+    if (skills is None or not _owned_private_dir(_PROMPT_RUNTIME_DIR)
+            or not _owned_private_dir(skills.parent) or not _owned_private_dir(skills)):
+        return set()
+    allowed = _SESSION_DISPATCH_SKILLS
+    try:
+        found = set()
+        with os.scandir(skills) as markers:
+            for index, marker in enumerate(markers):
+                if (index >= len(allowed) or marker.name not in allowed
+                        or not _private_marker_exists(skills / marker.name)):
+                    return set()
+                found.add(marker.name)
+        return found
+    except OSError:
+        return set()
+
+
+def _clear_session_dispatched_skills(session_id: object) -> None:
+    skills = _session_skills_dir(session_id)
+    # Same ownership checks as the reader: a symlinked or foreign-owned runtime or
+    # session dir (shared /tmp) must never steer the unlinks at someone's files.
+    if (skills is None or not _owned_private_dir(_PROMPT_RUNTIME_DIR)
+            or not _owned_private_dir(skills.parent)):
+        return
+    try:
+        info = skills.lstat()
+    except OSError:
+        return
+    if stat.S_ISDIR(info.st_mode):
+        _remove_skill_markers(skills)
+    else:
+        try:
+            skills.unlink()
+        except OSError:
+            pass
 
 
 def _claim_prompt_nudge(context: Optional[PromptContext]) -> bool:
@@ -4155,6 +4405,10 @@ def cmd_detect() -> int:
     payload = _read_hook_payload()
     source = payload.get("source") or payload.get("matcher") or ""
     session_id = payload.get("session_id") or payload.get("sessionId") or ""
+    # Any SessionStart is a context boundary the session-scoped skills-first ledger
+    # cannot vouch for (compaction keeps session_id but may drop skill content), so
+    # the next enforced raw call re-requires its skill. Before every early return.
+    _clear_session_dispatched_skills(session_id)
 
     # After a context compaction the SessionStart hook re-fires with
     # source="compact" (PreCompact cannot inject context — it's block-only — so
@@ -5845,16 +6099,19 @@ _JOURNEY_PAINT_COMMAND = re.compile(r"sf-context\S*\s+discover\s+journey\b(?!\s+
 
 def cmd_journey_paint(payload: Optional[dict] = None) -> int:
     """PostToolUse Bash hook: after the model runs `sf-context discover journey`,
-    paint the colored six-stage nudge on the visible systemMessage channel and hand the
+    paint the journey nudge on the visible systemMessage channel (colored under
+    "full", the plain projection under "plain", nothing under "off") and hand the
     model the same "already shown — add only your read" note the UserPromptSubmit
     orientation paint uses.
 
     De-dupes against the SAME turn's UserPromptSubmit paint via the turn-scoped ledger
     — if a nudge already painted this turn (the regex-hit fast path, Lever A), this
-    stays silent, so at most one nudge paints per turn. Requires a session id: a paint
-    we cannot de-dupe (no id) stays silent rather than risk a double, so the model
-    falls back to reproducing the plain nudge (today's behavior). Fail-open: any error
-    degrades to a silent {"continue": true}, so a crash never disrupts the turn."""
+    stays silent, so at most one nudge paints per turn. Honors `ui_mode` like the
+    natural-language paints: silent under "off", the plain projection under "plain".
+    Requires a session id: a paint we cannot de-dupe (no id) stays silent rather than
+    risk a double, so the model falls back to reproducing the plain nudge (today's
+    behavior). Fail-open: any error degrades to a silent {"continue": true}, so a crash
+    never disrupts the turn."""
     try:
         if payload is None:
             payload = _read_hook_payload()
@@ -5871,12 +6128,24 @@ def cmd_journey_paint(payload: Optional[dict] = None) -> int:
         if _nudge_painted_this_turn(prompt_context):
             print(json.dumps({"continue": True}))
             return 0
+        ui_mode = _ui_mode()
+        if ui_mode == "off":
+            # Matches the off natural-language paints, which never claim the turn: the
+            # model ran the command on its own, so nothing is painted on top of it.
+            print(json.dumps({"continue": True}))
+            return 0
         state, root, org_display = _journey_state_with_org()
         # Explicit command invocation, not an ambient repeat: unlike the wayfinder,
         # this always paints its nudge line — session_id only applies the cap
         # suppression to which candidate wins, never a re-render gate.
         candidate = _select_inline_nudge(state, root, org_display, session_id=session_id)
-        surface = "\n" + "\n".join(_render_nudge_inline(state, candidate, color=_banner_color_enabled()))
+        if ui_mode == "plain":
+            surface = _plain_ambient_surface(
+                state, project_name=(state.get("context") or {}).get("project"),
+                candidate=candidate,
+            )
+        else:
+            surface = "\n" + "\n".join(_render_nudge_inline(state, candidate, color=_banner_color_enabled()))
         if not _claim_prompt_nudge(prompt_context):
             print(json.dumps({"continue": True}))
             return 0
@@ -6221,13 +6490,15 @@ _ENFORCEABLE_SKILLS = frozenset({
     "platform-manifest-generate",
 })
 
-# Map an enforced skill to sibling skills whose in-turn dispatch ALSO satisfies
-# its deny (the owning skill itself always does; these are added). platform-soql-query
-# delegates query EXECUTION to platform-data-manage, so a turn where the delegate
-# dispatched is just as validated — its `sf data query` must flow through, not re-deny.
+# Map an enforced skill to sibling skills whose dispatch (this prompt or, once
+# loaded, this session) ALSO satisfies its deny (the owning skill itself always does;
+# these are added). platform-soql-query delegates query EXECUTION to
+# platform-data-manage, so a session where the delegate dispatched is just as validated — its `sf data query` must flow through, not re-deny.
 _DISPATCH_DELEGATES = {
     "platform-soql-query": frozenset({"platform-data-manage"}),
 }
+# The only skills the session-scoped ledger (sf-skills#355) records or honors.
+_SESSION_DISPATCH_SKILLS = _ENFORCEABLE_SKILLS.union(*_DISPATCH_DELEGATES.values())
 
 
 def _skills_first_match(tool_name: str, tool_input: dict) -> Optional[tuple[str, str]]:
@@ -6550,7 +6821,8 @@ def cmd_skills_first_advisory() -> int:
                 captured_prompt, session_id, surface="bypass-gate",
             )
             if (Path("sfdx-project.json").exists()
-                and _load_plugin_flow(session_id) is None)
+                and _load_plugin_flow(session_id) is None
+                and _recorded_catalog_prompt_eligible(prompt_context))
             else []
         )
         if not candidates:
@@ -6601,14 +6873,20 @@ def cmd_skills_first_advisory() -> int:
         return 0
 
     skill, why = match
-    # Turn-aware suppression (#415): if the owning skill has already dispatched in
-    # this turn, the developer/model is already in the validated workflow — don't
+    # Dispatch-aware suppression (#415): if the owning skill has already dispatched in
+    # this prompt, the developer/model is already in the validated workflow — don't
     # re-nudge on every subsequent owned Edit/Write/raw-`sf`. Per-skill scope: a
     # `platform-apex-generate` dispatch silences `.cls`/`.trigger` nudges but NOT a
     # later `platform-permission-set-generate` op. The generic fallbacks ("the
     # matching platform metadata skill") are not real skill names, so they never
     # match the ledger and keep nudging — the conservative choice.
     dispatched = _dispatched_skills(prompt_context)
+    # Enforced denies also honor a dispatch from an earlier prompt of this session
+    # (sf-skills#355). The ledger only ever holds qualified enforced owners and
+    # delegates, so warn-only nudges and bare-name dispatches stay prompt-scoped;
+    # subagents never read it. Lasts until the next SessionStart.
+    if not _hook_from_subagent(payload):
+        dispatched |= _session_dispatched_skills(session_id)
     # The deny is satisfied by the owning skill OR any delegate it hands the call
     # to (platform-soql-query → platform-data-manage), so the delegate's own call
     # flows through instead of re-denying.
@@ -6619,12 +6897,12 @@ def cmd_skills_first_advisory() -> int:
 
     # Enforcement: promote the nudge to a blocking deny so the model dispatches the
     # owning skill instead of a raw CLI/manifest write. Only `_ENFORCEABLE_SKILLS`
-    # denies. The turn-aware suppression above already cleared any op whose owning
-    # skill dispatched this turn, so the deny cannot deadlock the workflow.
+    # denies. The suppression above already cleared any op whose owning skill
+    # dispatched this prompt or session, so the deny cannot deadlock the workflow.
     if skill in _ENFORCEABLE_SKILLS:
         reason = (
             f"Skills-first enforcement: this looks like {why}. Dispatch the "
-            f"`{skill}` skill instead — it owns this operation and encodes the "
+            f"`{_qualified_skill(skill)}` skill instead — it owns this operation and encodes the "
             f"validated workflow, governor-limit/FLS guardrails, and error "
             f"recovery a raw call skips. Once that skill runs, its own underlying "
             f"calls are allowed through."
@@ -6634,7 +6912,7 @@ def cmd_skills_first_advisory() -> int:
 
     advice = (
         f"⚠️ Skills-first check: this looks like {why}. "
-        f"The `{skill}` skill likely owns this operation — it encodes the "
+        f"The `{_qualified_skill(skill)}` skill likely owns this operation — it encodes the "
         f"validated workflow, governor-limit/FLS guardrails, and error recovery "
         f"that a raw call skips. Prefer dispatching it before continuing. "
         f"(Advisory only — proceeding is allowed; see #286.)"
@@ -7635,9 +7913,10 @@ def _journey_frontier_name(state: dict) -> Optional[str]:
     """The latest reached stage, or None when nothing is reached yet. Every
     model-facing note reads its "current stage" from here, derived from the SAME
     `_reached_stage_names` the nudge inputs' reached-set uses, so the two can
-    never disagree by construction. (Pre-Phase-7 this was also the stage the
-    visible glyph rail marked with a green ◉ accent; that rail is retired — this
-    function now serves only the non-visible model-facing note.)"""
+    never disagree by construction. It is also the visible "Current stage" line of
+    the plain projection (`_plain_ambient_surface`), so that line and its note
+    always name the same stage. (Pre-Phase-7 it was also the stage the retired
+    glyph rail marked with a green ◉ accent.)"""
     reached = _reached_stage_names(state)
     return reached[-1] if reached else None
 
@@ -9406,15 +9685,23 @@ _CREATE_FLOW_LOCK_WAIT_SECONDS = 1.0
 # above) since "already proposed this plugin" must survive across prompts within
 # a session: satisfying a tier-2 deny requires install -> /reload-plugins -> a
 # new session, never resolvable in the current turn. A {plugin_name: {confidence,
-# surface}} map, written by every proposal consumer (SessionStart,
-# UserPromptSubmit, PreToolUse bypass gate, and the discovery-command query) so
-# the surfaces share one first-occurrence ledger. Same fail-open discipline as
+# surface[, match_keywords, match_signal, decision]}} map, written by every
+# proposal consumer (SessionStart, UserPromptSubmit, PreToolUse bypass gate, and
+# the discovery-command query) so the surfaces share one first-occurrence ledger. Same fail-open discipline as
 # the rest of the file: missing/corrupt just means "treat as first occurrence."
 _PLUGIN_PROPOSAL_DIR = _PROMPT_RUNTIME_DIR / "plugin-proposals"
 _PLUGIN_PROPOSAL_MAX_BYTES = 8192
 _PLUGIN_PROPOSAL_SURFACES = frozenset({
     "bypass-gate", "discovery-command", "session-start", "user-prompt",
 })
+# Optional, additive ledger keys recording WHY a proposal fired, so the later-turn
+# plugin_loaded / plugin_installed / plugin_suggestion_declined events can report
+# it: `match_keywords` (the comma-joined curated catalog subset of the match
+# evidence, from plugin_catalog.curated_match_terms) and `match_signal` (a fixed
+# session-start file-signal code). Never prompt text, file paths, or human labels.
+# Written once with the first recorded surface and never overwritten; absent when
+# there was no evidence (e.g. the deterministic test-drive writers).
+_PLUGIN_MATCH_REASON_KEYS = ("match_keywords", "match_signal")
 _PLUGIN_DECLINE_INTENT = re.compile(
     r"\b(?:decline|reject|skip)\b"
     r"|\b(?:do\s+not|don['’]?t|never)\b[^\n]{0,48}\b(?:install|add|enable)\b"
@@ -9548,7 +9835,7 @@ _PLUGIN_ACTION_VERB = (
     r"|convert|create|debug|delete|deploy|edit|enable|export|extend|find|fix"
     r"|generate|get|import|inspect|install|integrate|list|locate|make|manage"
     r"|migrate|open|optimi[sz]e|prepare|query|refactor|remove|rename|replace"
-    r"|retrieve|review|run|scaffold|search|secure|set\s+up|submit|switch|test"
+    r"|retrieve|review|route|run|scaffold|search|secure|set\s+up|submit|switch|test"
     r"|troubleshoot|turn\s+on|update|use|validate|wire|write)"
 )
 _PLUGIN_REQUESTER_DESIRE = (
@@ -9661,11 +9948,32 @@ def _save_plugin_proposals(session_id: str, proposals: dict) -> bool:
         return False
     try:
         encoded = json.dumps(proposals, separators=(",", ":"))
+        if len(encoded) > _PLUGIN_PROPOSAL_MAX_BYTES:
+            # The match-reason keys are best-effort telemetry context: shed them
+            # before ever losing the first-occurrence ledger itself.
+            encoded = json.dumps({
+                name: {key: value for key, value in proposal.items()
+                       if key not in _PLUGIN_MATCH_REASON_KEYS}
+                if isinstance(proposal, dict) else proposal
+                for name, proposal in proposals.items()
+            }, separators=(",", ":"))
     except (TypeError, ValueError):
         return False
     if len(encoded) > _PLUGIN_PROPOSAL_MAX_BYTES:
         return False
     return _atomic_private_text(_plugin_proposal_path(session_id), encoded)
+
+
+def _plugin_proposal_match_reason(proposal: object) -> dict:
+    """The recorded match-reason keys of one proposal ledger entry, shaped as
+    `_fire_plugin_telemetry_event` keyword arguments ({} when absent/malformed).
+    sf_telemetry revalidates both values against closed vocabularies anyway."""
+    if not isinstance(proposal, dict):
+        return {}
+    return {
+        key: proposal[key] for key in _PLUGIN_MATCH_REASON_KEYS
+        if isinstance(proposal.get(key), str) and proposal[key]
+    }
 
 
 # --- Plugin-match sensitivity: persisted per-user override -------------------
@@ -10413,7 +10721,10 @@ def _explicit_proposed_plugin_decline(prompt: object, session_id: str) -> Option
     manufactured from non-user text. Multiple named proposals stay with the model
     for clarification rather than being silently collapsed into one action.
     """
-    if not isinstance(prompt, str) or not session_id:
+    # Only words the user typed can decide; a prompt that is all host context
+    # (IDE selection, task notification) decides nothing.
+    prompt = _strip_prompt_host_blocks(prompt)
+    if not prompt or not session_id:
         return None
     named = _named_valid_plugin_proposals(prompt, session_id)
     if len(named) != 1:
@@ -10479,7 +10790,10 @@ def _explicit_proposed_plugin_install(prompt: object, session_id: str) -> Option
     punctuation) so a mere mention inside a question or a different task never
     trips it.
     """
-    if not isinstance(prompt, str) or not session_id:
+    # Only words the user typed can decide; a prompt that is all host context
+    # (IDE selection, task notification) decides nothing.
+    prompt = _strip_prompt_host_blocks(prompt)
+    if not prompt or not session_id:
         return None
     if _PLUGIN_DECLINE_INTENT.search(prompt):
         return None
@@ -10507,7 +10821,10 @@ def _explicit_pending_plugin_confirmation(
     its catalog source, expires, and is consumed when the user changes topic
     or the confirmed install succeeds.
     """
-    if not isinstance(prompt, str) or not session_id:
+    # Only words the user typed can decide; a prompt that is all host context
+    # (IDE selection, task notification) decides nothing.
+    prompt = _strip_prompt_host_blocks(prompt)
+    if not prompt or not session_id:
         return None
     if _PLUGIN_DECLINE_INTENT.search(prompt):
         return None
@@ -10774,7 +11091,22 @@ fit_bullet_line = _plugin_surface.fit_bullet_line
 _PLUGIN_INSTALL_COMMAND_PREFIX = "/salesforce-development:plugin-install"
 
 
-def _plugin_catalog_match(text: str, session_id: str, surface: str) -> list:
+def _plugin_curated_match_keywords(module: object, match: object) -> str:
+    """The comma-joined curated catalog subset of one match's evidence ("" when
+    none). The restriction to the plugin's own curated vocabulary -- the privacy
+    step that keeps prompt words out -- lives in `plugin_catalog.curated_match_terms`;
+    this only forwards it, best-effort, so a failure never costs the match."""
+    try:
+        curated = getattr(module, "curated_match_terms", None)
+        if not callable(curated):
+            return ""
+        terms = curated(match.plugin, match.matched_terms)
+        return ",".join(term for term in terms if isinstance(term, str) and term)
+    except Exception:
+        return ""
+
+
+def _plugin_catalog_match(text: str, session_id: str, surface: str, match_signal: str = "") -> list:
     """Score `text` against the uninstalled-plugin catalog for a proposal
     surface, reconciling first-occurrence state in the session-scoped marker.
 
@@ -10785,25 +11117,43 @@ def _plugin_catalog_match(text: str, session_id: str, surface: str) -> list:
     `score_prompt_against_catalog`'s `require_anchor_terms`): a generic word
     shared with the corpus must never by itself trigger an unprompted
     interruption. Explicit discovery and the reactive bypass gate preserve
-    their existing high+medium, anchor-ungated behavior -- the user's own act
-    of invoking them is already the evidence a proactive surface lacks.
+    their high+medium behavior and skip anchors by default, except for entries
+    with enforceAnchorsOnAllSurfaces. Invoking a solicited surface supplies
+    intent; opted-in entries still require their domain evidence.
 
     Pure data return: never emits, denies, or renders -- each consumer decides
     how to present the result. Fail-open to [] on any error (missing catalog,
     unreadable settings, corrupt marker, ...).
 
     Returns a list of dicts: {name, description, band, score,
-    first_occurrence, install_command}. Only uninstalled plugins are ever
-    returned -- an already-installed match has nothing to recommend and is
-    dropped. `description` is the validated, curated marketplace description;
+    first_occurrence, install_command, match_keywords}. Only uninstalled plugins
+    are ever returned -- an already-installed match has nothing to recommend and
+    is dropped. `description` is the validated, curated marketplace description;
     consumers may present it as capability metadata but must never execute it as
-    instructions.
+    instructions. `match_keywords` is the comma-joined curated catalog subset of
+    the match evidence ("" when none) -- never the prompt's own words.
+
+    `match_signal` is the SessionStart file-signal code (`_PLUGIN_SIGNALS`) that
+    produced `text`; it is honored only on the session-start surface and only
+    when it is a known code. With `match_keywords` it is recorded on the ledger
+    entry and the `plugin_recommended` event of a first occurrence, so a plugin
+    surfaced by several signals carries the first one only.
     """
+    # Shared by all proposal surfaces, including explicit discovery whose ledger
+    # can affect later gates. Abstention creates neither a proposal nor a flow.
+    if not isinstance(text, str) or not _catalog_prompt_eligible(text):
+        return []
     try:
-        if not isinstance(text, str) or not text.strip():
+        if not text.strip():
             return []
         if surface not in _PLUGIN_PROPOSAL_SURFACES:
             return []
+        signal = (
+            match_signal
+            if surface == "session-start" and isinstance(match_signal, str)
+            and match_signal in _PLUGIN_MATCH_SIGNAL_CODES
+            else ""
+        )
         sensitivity = _plugin_match_sensitivity()
         if sensitivity == "off":
             return []
@@ -10869,9 +11219,19 @@ def _plugin_catalog_match(text: str, session_id: str, surface: str) -> list:
             previous = previous if isinstance(previous, dict) else None
             first_occurrence = previous is None
             recorded_surface = previous.get("surface") if previous else None
+            match_keywords = _plugin_curated_match_keywords(module, match)
+            if isinstance(recorded_surface, str):
+                # The reason travels with the first recorded surface, so the
+                # later-turn events report what the first recommendation did.
+                reason = _plugin_proposal_match_reason(previous)
+            else:
+                reason = _plugin_proposal_match_reason(
+                    {"match_keywords": match_keywords, "match_signal": signal}
+                )
             proposals[name] = {
                 "confidence": match.band,
                 "surface": recorded_surface if isinstance(recorded_surface, str) else surface,
+                **reason,
             }
             results.append({
                 "name": name,
@@ -10880,15 +11240,18 @@ def _plugin_catalog_match(text: str, session_id: str, surface: str) -> list:
                 "score": match.score,
                 "first_occurrence": first_occurrence,
                 "install_command": f"{_PLUGIN_INSTALL_COMMAND_PREFIX} {name}",
+                "match_keywords": match_keywords,
             })
             # W-23856691: fire `plugin_recommended` once per plugin per session --
             # only the FIRST time this plugin surfaces on this session's marker (a
             # repeat occurrence of the same plugin is not a new recommendation).
             # Gated on session_id so side-effect-free callers never record; the
-            # telemetry layer re-derives origin and drops any non-high/medium band.
+            # telemetry layer re-derives origin, drops any non-high/medium band, and
+            # revalidates the match reason against the catalog on disk.
             if session_id and first_occurrence:
                 _fire_plugin_telemetry_event(
                     "plugin_recommended", name, None, match.band, surface, session_id,
+                    match_keywords=match_keywords, match_signal=signal,
                 )
         if results:
             _save_plugin_proposals(session_id, proposals)
@@ -11041,28 +11404,36 @@ def _plugin_signal_cms_hit(dir_parts: tuple, filename: str) -> bool:
     return not _PLUGIN_SIGNAL_CMS_DIRS.isdisjoint(dir_parts)
 
 
-# (human label, query text handed to the matcher, predicate(dir_parts, filename)).
+# (code, human label, query text handed to the matcher, predicate(dir_parts, filename)).
 # The query terms overlap the curated catalog text so the scorer lands the intended
 # plugin; no plugin is named here — the matcher decides what (if anything) is
-# uninstalled and relevant. Kept tiny and deterministic.
+# uninstalled and relevant. Kept tiny and deterministic. The code is the stable
+# closed-vocabulary `match_signal` telemetry records (sf_telemetry keeps its own
+# copy of this set); the human label is model/paint copy only and never leaves
+# the process.
 _PLUGIN_SIGNALS = [
-    ("Lightning Web Components in this project",
+    ("lwc",
+     "Lightning Web Components in this project",
      "lightning web component lwc wire service jest slds accessibility",
      _plugin_signal_lwc_hit),
-    ("a React UI bundle in this project",
+    ("react",
+     "a React UI bundle in this project",
      "react ui bundle tsx tailwind shadcn",
      lambda dir_parts, filename: filename.endswith(".tsx")),
-    ("Agentforce agent files in this project",
+    ("agentforce",
+     "Agentforce agent files in this project",
      "agentforce agent agent script",
      lambda dir_parts, filename: filename.endswith(".agent")),
-    ("Salesforce CMS content or media in this project",
+    ("cms",
+     "Salesforce CMS content or media in this project",
      "cms media existing content asset stock image managed content type",
      _plugin_signal_cms_hit),
 ]
+_PLUGIN_MATCH_SIGNAL_CODES = frozenset(code for code, _, _, _ in _PLUGIN_SIGNALS)
 
 
 def _detect_plugin_signals(project: Path) -> list:
-    """Return [(human_label, query)] for each signal with a matching file.
+    """Return [(code, human_label, query)] for each signal with a matching file.
 
     One denylist-pruned os.walk in place of one glob("**/...") per pattern (glob
     doesn't prune node_modules/.git/etc, so an absent signal walked those in full
@@ -11076,13 +11447,13 @@ def _detect_plugin_signals(project: Path) -> list:
         dir_parts = Path(dirpath).relative_to(project).parts
         for filename in filenames:
             for index in list(remaining):
-                _, _, predicate = remaining[index]
+                predicate = remaining[index][3]
                 if predicate(dir_parts, filename):
                     hit_indexes.add(index)
                     del remaining[index]
             if not remaining:
                 break
-    return [(_PLUGIN_SIGNALS[index][0], _PLUGIN_SIGNALS[index][1]) for index in sorted(hit_indexes)]
+    return [_PLUGIN_SIGNALS[index][:3] for index in sorted(hit_indexes)]
 
 
 # The model-facing note for the SessionStart plugin recommendation. Verbatim from
@@ -11122,8 +11493,10 @@ def _session_start_plugin_slot(session_id: str, source: str, project: Path) -> t
         proposal_session_id = session_id if source not in ("resume", "compact") else ""
         found: dict = {}
         why: dict = {}
-        for label, query in signals:
-            for cand in _plugin_catalog_match(query, proposal_session_id, "session-start"):
+        for code, label, query in signals:
+            for cand in _plugin_catalog_match(
+                query, proposal_session_id, "session-start", match_signal=code,
+            ):
                 name = cand.get("name")
                 if not isinstance(name, str) or not name:
                     continue
@@ -12133,7 +12506,7 @@ def _render_no_project_surface() -> str:
 def _status_command_paint(root: Path) -> tuple[str, str]:
     """`/salesforce-development:status`: the full status surface — org + project bands
     and the journey nudge, no logo — the SAME colored surface the natural-language
-    "where am I / status" question paints in steady state. One destination, two front
+    "where am I / status" question paints in steady state under `full`. One destination, two front
     doors. Runs the same single org round-trip as the NL twin (`_resolve_position_and_org`)."""
     if not (root / "sfdx-project.json").exists():
         return _no_project_note(), _render_no_project_surface()
@@ -12212,12 +12585,12 @@ _STATUS_FAMILY_PAINTERS = {
 
 def cmd_command_paint(payload: Optional[dict] = None) -> int:
     """UserPromptExpansion handler: the slash-command front door to the SAME
-    deterministic paints the natural-language path produces.
+    deterministic paints the natural-language path produces under `full`.
 
     Every PAINT-set command lands on the identical colored surface its NL (or
-    SessionStart) twin does, then the model adds only its read (both the shrunk
-    command body and the additionalContext note say so); it never reproduces the
-    block. The twins:
+    SessionStart) twin does under `full` (a typed command paints in every mode), then
+    the model adds only its read (both the shrunk command body and the
+    additionalContext note say so); it never reproduces the block. The twins:
       - `/discover overview` / `/discover` (or `where`/`journey`) → the capability
         overview / journey nudge, as "what can I do here?" / "where am I?".
       - `/status` → the full status surface (bands + nudge), as the NL status question.
@@ -12301,9 +12674,11 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
 
     OUTSIDE a Salesforce project (Side A) the plugin can't presume — it's global —
     so only a prompt that names Salesforce surfaces the getting-started welcome.
-    INSIDE a project (Side B) the context already proves intent, so any orientation
-    question paints. The welcome greets once per session (Side A or B); after that,
-    orientation questions paint just the journey nudge.
+    INSIDE a project (Side B) the context already proves intent, so under `full` any
+    orientation question paints. The welcome greets once per session (Side A or B);
+    after that, orientation questions paint just the journey nudge. Under `plain`
+    status and orientation questions paint the plain projection instead; under `off`
+    these natural-language branches are silent.
 
     All painting rides the user-visible systemMessage channel; the model gets a
     plain note so it adds only its read and never reprints the surface.
@@ -12320,6 +12695,12 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         prompt = payload.get("prompt", "")
         session_id = payload.get("session_id") or payload.get("sessionId") or ""
         _record_prompt_text(prompt_context, prompt)
+        # Host-injected blocks (IDE notices, task notifications) are never the
+        # user's words: every decision check below reads the stripped prompt, and
+        # capability matching reads the narrower intent text. A prompt that is
+        # only host context leaves both empty and decides nothing.
+        prompt = _strip_prompt_host_blocks(prompt)
+        intent = _prompt_intent_text(prompt)
 
         # Proposal decisions are session-scoped, not project-scoped. Explicit
         # discovery can open a workflow from any directory, so route every
@@ -12533,6 +12914,14 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             show_logo = bool(session_id) and not _welcomed_this_session(session_id)
             color = _banner_color_enabled()
             root = Path.cwd().resolve()
+            # The status / orientation / overview questions below are natural-language
+            # paints, so they follow ui_mode like the ambient nudge (W-24363502): "off"
+            # stays fully silent — no visible surface AND no reply-shaping note, never
+            # one without the other — and records nothing, so a hidden turn never
+            # counts as a shown welcome; "plain" paints the semantic-plain projection.
+            # Typed slash commands (cmd_command_paint) are the explicit path and
+            # still paint in every mode.
+            ui_mode = _ui_mode()
 
             # SessionStart or explicit discovery may have introduced a plugin
             # before the user supplied a concrete task. If that task matches one
@@ -12542,10 +12931,10 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             # is the moment the recommendation begins interrupting resumable work.
             if (flow is not None and flow["state"] == "recommended"
                     and not flow["taskBacked"]
-                    and _plugin_prompt_requests_action(prompt)):
+                    and _plugin_prompt_requests_action(intent)):
                 promoted_candidates = [
                     candidate for candidate in _plugin_catalog_match(
-                        prompt, session_id, surface="user-prompt"
+                        intent, session_id, surface="user-prompt"
                     )
                     if candidate.get("name") in flow["candidates"]
                 ]
@@ -12599,24 +12988,36 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             # org and project bands AND the nudge. The org is resolved once, shared
             # by the band and the nudge (no double query).
             if _is_status_question(prompt):
+                if ui_mode == "off":
+                    print(json.dumps({"continue": True}))
+                    return 0
                 state, org = _resolve_position_and_org(root)
-                # Live MCP health here too, so a re-asked "where am I?" reflects
-                # real reachability rather than a stale sidecar (matches /status).
-                mcp_active_org = (org.get("alias"), org.get("username")) if org else None
                 # journey-nudges Phase 5/7: resolved once, reused for the model-facing
                 # note AND the visible nudge slot below (render_status_surface, which now
                 # genuinely paints this candidate's Next line) — one source, no re-probe.
                 candidate = _select_inline_nudge(state, root, org, session_id=session_id)
-                surface = render_status_surface(
-                    state, org, project_meta(), project_stats(), git_status_line(),
-                    _live_mcp_summary(active_org=mcp_active_org),
-                    color=color, logo=show_logo, candidate=candidate,
-                )
+                if ui_mode == "plain":
+                    # The plain block shows project / stage / next only — no org or
+                    # project bands — so the note claims just the nudge is visible.
+                    message = _orientation_paint_note(state, candidate=candidate)
+                    surface = _plain_ambient_surface(
+                        state, project_name=(state.get("context") or {}).get("project"),
+                        candidate=candidate,
+                    )
+                else:
+                    # Live MCP health here too, so a re-asked "where am I?" reflects
+                    # real reachability rather than a stale sidecar (matches /status).
+                    mcp_active_org = (org.get("alias"), org.get("username")) if org else None
+                    message = _status_paint_note(state, candidate=candidate)
+                    surface = render_status_surface(
+                        state, org, project_meta(), project_stats(), git_status_line(),
+                        _live_mcp_summary(active_org=mcp_active_org),
+                        color=color, logo=show_logo, candidate=candidate,
+                    )
                 if not _prompt_nudge_allowed(prompt_context):
                     print(json.dumps({"continue": True}))
                     return 0
-                emit("UserPromptSubmit", _status_paint_note(state, candidate=candidate),
-                     system_message=surface)
+                emit("UserPromptSubmit", message, system_message=surface)
                 _record_entered(session_id)
                 if show_logo:
                     _record_welcomed(session_id)
@@ -12632,7 +13033,22 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             # A positional orientation question paints just the nudge — the logo on
             # the first surface of the session, the nudge thereafter.
             if _is_orientation_question(prompt):
-                if show_logo:
+                if ui_mode == "off":
+                    print(json.dumps({"continue": True}))
+                    return 0
+                if ui_mode == "plain":
+                    # No welcome under plain: the welcome note's reply shaping and
+                    # HEADLESS-identity claims describe a surface that is not shown, so
+                    # the plain block pairs with the plain orientation note instead,
+                    # and the test-drive pointer (welcome chrome) is skipped below.
+                    state = _journey_state()
+                    candidate = _select_inline_nudge(state, root, None, session_id=session_id)
+                    message = _orientation_paint_note(state, candidate=candidate)
+                    surface = _plain_ambient_surface(
+                        state, project_name=(state.get("context") or {}).get("project"),
+                        candidate=candidate,
+                    )
+                elif show_logo:
                     # The welcome now paints the full banner chrome (org + project
                     # bands), so resolve the org once here — _resolve_position_and_org
                     # returns both the state and the org dict, so the band is not a
@@ -12654,7 +13070,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                 if not _prompt_nudge_allowed(prompt_context):
                     print(json.dumps({"continue": True}))
                     return 0
-                if show_logo:
+                if show_logo and ui_mode == "full":
                     # Getting-started welcome (Side B): point at the guided test-drive
                     # onboarding path. Deterministic, deduped, once-per-session; runs
                     # AFTER the nudge gate so its ledger write is never orphaned on a
@@ -12712,6 +13128,11 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             # `is not None` guard is a defensive fail-open (a mocked/None render stays
             # silent and leaves `entered` unset so the ambient nudge can still retry).
             if _is_discovery_overview_intent(prompt):
+                if ui_mode == "off":
+                    # Silent like the status/orientation asks above; the test-drive
+                    # ledger is not armed for a CTA that was never shown.
+                    print(json.dumps({"continue": True}))
+                    return 0
                 block = _render_overview_paint(root)
                 if block is not None:
                     note = _overview_paint_note()
@@ -12734,10 +13155,10 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             # available to explicit discovery and the reactive bypass gate. The
             # shared proposal marker makes any later same-session bypass advisory
             # warn instead of re-denying the task.
-            if session_id and _plugin_prompt_requests_action(prompt):
+            if session_id and _plugin_prompt_requests_action(intent):
                 prompt_candidates = [
                     candidate for candidate in _plugin_catalog_match(
-                        prompt, session_id, surface="user-prompt"
+                        intent, session_id, surface="user-prompt"
                     )
                     if candidate.get("first_occurrence")
                 ]
@@ -12764,6 +13185,12 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             if not session_id or _entered_this_session(session_id):
                 print(json.dumps({"continue": True}))
                 return 0
+            # `_ambient_surface` hides this under "off" anyway; deciding it here skips
+            # the org probe the welcome render would otherwise pay on every ordinary
+            # prompt (an "off" session never records `entered`, so it never stops trying).
+            if ui_mode == "off":
+                print(json.dumps({"continue": True}))
+                return 0
             if show_logo:
                 # First-surface welcome in-project: resolve the org once (state + org
                 # dict together) so the welcome's org band is the full probed block,
@@ -12781,7 +13208,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                 candidate = _select_inline_nudge(state, root, None, session_id=session_id)
                 surface = "\n" + "\n".join(_render_nudge_inline(state, candidate, color=color))
             ambient = _ambient_surface(
-                surface, state, project_name=project_meta().get("name") or root.name,
+                surface, state, project_name=(state.get("context") or {}).get("project"),
                 candidate=candidate,
             )
             if ambient is None:
@@ -12825,7 +13252,13 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         # too; that naming IS the trip, so it must reach the welcome rather than be
         # swallowed silently. A render failure likewise falls through — and there
         # _welcomed is already True, so the check below is silent (no re-welcome).
+        # Both Side A paints follow ui_mode exactly like their in-project twins
+        # (W-24363502): "off" is fully silent, "plain" projects the orientation nudge.
+        ui_mode = _ui_mode()
         if _is_discovery_overview_intent(prompt) and _model_noted_this_session(session_id):
+            if ui_mode == "off":
+                print(json.dumps({"continue": True}))
+                return 0
             block = _render_overview_paint(Path.cwd().resolve())
             if block is not None:
                 emit("UserPromptSubmit", _overview_paint_note(),
@@ -12846,6 +13279,9 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         # this branch the model serviced "where am I" itself (ran the command, then
         # reproduced its stripped-plain stdout), which double-printed a colorless nudge.
         if _is_orientation_question(prompt) and _model_noted_this_session(session_id):
+            if ui_mode == "off":
+                print(json.dumps({"continue": True}))
+                return 0
             state = _journey_state()
             # journey-nudges Phase 7: resolved before the surface is built (the
             # surface now paints this SAME candidate's Next line via
@@ -12853,8 +13289,11 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             candidate = _select_inline_nudge(
                 state, Path.cwd().resolve(), None, session_id=session_id,
             )
-            surface = "\n" + "\n".join(_render_nudge_inline(
-                state, candidate, color=_banner_color_enabled()))
+            if ui_mode == "plain":
+                surface = _plain_ambient_surface(state, candidate=candidate)
+            else:
+                surface = "\n" + "\n".join(_render_nudge_inline(
+                    state, candidate, color=_banner_color_enabled()))
             if not _prompt_nudge_allowed(prompt_context):
                 print(json.dumps({"continue": True}))
                 return 0
@@ -12931,7 +13370,10 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         # whether the mention reflects genuine intent before saying anything. The
         # scaffold trigger (Change 1 — `sf project generate` succeeding) is now the
         # sole visible splash outside the SessionStart banner.
-        if not _is_getting_started_intent(prompt) or _model_noted_this_session(session_id):
+        # The Salesforce/CRM cue reads the user's words in any script; only the
+        # catalog match below needs eligible intent text.
+        if (not _is_getting_started_intent(_prompt_user_words(prompt))
+                or _model_noted_this_session(session_id)):
             print(json.dumps({"continue": True}))
             return 0
         # Welcome bridge, re-homed to the MODEL channel (owner direction): the visible
@@ -12948,7 +13390,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
         if session_id:
             install_candidates = [
                 candidate for candidate in _plugin_catalog_match(
-                    prompt, session_id, surface="user-prompt"
+                    intent, session_id, surface="user-prompt"
                 )
                 if candidate.get("first_occurrence")
             ]
@@ -12957,7 +13399,7 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
                     session_id,
                     [candidate.get("name") for candidate in install_candidates],
                     "user-prompt",
-                    task_backed=_plugin_prompt_is_task_backed(prompt),
+                    task_backed=_plugin_prompt_is_task_backed(intent),
                 )
                 rec_note, _ = _prompt_plugin_recommendation_surface(
                     install_candidates, shown_to_user=False
@@ -12975,7 +13417,11 @@ _SKILL_NAME_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 def cmd_resolution_trace() -> int:
-    """PostToolUse Skill hook: render one safe line from this invocation only."""
+    """PostToolUse Skill hook: render one safe line from this invocation only.
+
+    Also the session skills-first ledger's writer: an enforced owner or delegate loaded
+    by its `salesforce-development:`-qualified name unlocks its enforced operations for
+    the rest of the session; a bare name counts for the current prompt only."""
     payload = _read_hook_payload()
     tool_input = payload.get("tool_input") or payload.get("toolInput") or {}
     if not isinstance(tool_input, dict):
@@ -12988,6 +13434,12 @@ def cmd_resolution_trace() -> int:
     if len(bare) > 64 or not _SKILL_NAME_PATTERN.fullmatch(bare):
         print(json.dumps({"continue": True}))
         return 0
+    # PostToolUse only fires once the skill loaded, so this is the session ledger's
+    # proof the skill was read (the PreToolUse prompt ledger records intent).
+    if (skill.rpartition(":")[0] == _PLUGIN_SKILL_PREFIX
+            and not _hook_from_subagent(payload)):
+        _record_session_dispatched_skill(
+            payload.get("session_id") or payload.get("sessionId"), bare)
     # Tier-C signal: an observe skill ran this turn. Persist it durably (append-only,
     # fail-silent) so it can surface in the micro-tier "activity" fact line. It does
     # NOT move the cursor and NEVER lights Observe's `●`: the reducer reads only
@@ -13700,11 +14152,13 @@ def _plugin_install_args(args: list[str]) -> Optional[dict]:
 
 def _fire_plugin_telemetry_event(
     event: str, name: str, origin: object, confidence: object, surface: object, session_id: str,
+    match_keywords: object = "", match_signal: object = "",
 ) -> None:
     """In-process call into sf_telemetry.capture_event (Phase 4.5) -- never a
     separate hook. capture_event re-derives/validates origin/confidence/surface
-    itself before ever buffering the event; this is fail-silent by design, same
-    as every other telemetry call site in this file."""
+    and the match reason (curated catalog keywords, signal code) itself before
+    ever buffering the event; this is fail-silent by design, same as every other
+    telemetry call site in this file."""
     try:
         sf_telemetry = _load_sf_telemetry()
         if sf_telemetry is None:
@@ -13715,6 +14169,7 @@ def _fire_plugin_telemetry_event(
                 "tool_input": {
                     "plugin": name, "origin": origin,
                     "confidence": confidence, "surface": surface,
+                    "match_keywords": match_keywords, "match_signal": match_signal,
                 },
                 "session_id": session_id,
             },
@@ -13779,7 +14234,10 @@ def _plugin_install_fire_loaded(name: str, entry: dict, session_id: str) -> None
     surface = previous.get("surface")
     if confidence not in ("high", "medium") or surface not in _PLUGIN_PROPOSAL_SURFACES:
         return
-    _fire_plugin_telemetry_event("plugin_loaded", name, entry.get("origin"), confidence, surface, session_id)
+    _fire_plugin_telemetry_event(
+        "plugin_loaded", name, entry.get("origin"), confidence, surface, session_id,
+        **_plugin_proposal_match_reason(previous),
+    )
     del proposals[name]
     _save_plugin_proposals(session_id, proposals)
 
@@ -13792,9 +14250,9 @@ def _plugin_install_fire_installed(name: str, entry: dict, session_id: str) -> N
     proposal and then deletes the marker), this reads the proposal marker
     NON-DESTRUCTIVELY to best-effort recover the surface/confidence that led here;
     with no marker (a cold/self-directed install) it records surface
-    "self-directed"/confidence "none". It must
+    "self-directed"/confidence "none" and no match reason. It must
     run BEFORE `_plugin_install_fire_loaded`, which clears the marker entry."""
-    surface, confidence = "self-directed", "none"
+    surface, confidence, reason = "self-directed", "none", {}
     if session_id:
         try:
             previous = _load_plugin_proposals(session_id).get(name)
@@ -13805,8 +14263,10 @@ def _plugin_install_fire_installed(name: str, entry: dict, session_id: str) -> N
             prev_surface = previous.get("surface")
             if prev_conf in ("high", "medium") and prev_surface in _PLUGIN_PROPOSAL_SURFACES:
                 surface, confidence = prev_surface, prev_conf
+                reason = _plugin_proposal_match_reason(previous)
     _fire_plugin_telemetry_event(
-        "plugin_installed", name, entry.get("origin"), confidence, surface, session_id
+        "plugin_installed", name, entry.get("origin"), confidence, surface, session_id,
+        **reason,
     )
 
 
@@ -13835,16 +14295,19 @@ def _record_plugin_decline(name: str, session_id: str) -> tuple[bool, str]:
     # the next time the plugin scores against a prompt -- dropping the marker, which
     # IS the intended re-open. The key is additive: every existing reader ignores
     # it, and the entry's mere PRESENCE still suppresses a future deny
-    # (first_occurrence becomes False).
+    # (first_occurrence becomes False). The recorded match reason is carried
+    # forward unchanged.
+    reason = _plugin_proposal_match_reason(previous)
     proposals[name] = {
-        "confidence": confidence, "surface": surface, "decision": "declined",
+        "confidence": confidence, "surface": surface, **reason, "decision": "declined",
     }
     _save_plugin_proposals(session_id, proposals)
     if not _select_plugin_flow(session_id, name, "declined"):
         return False, "the private session decision marker could not be updated"
     _clear_plugin_install_pending(session_id, name)
     _fire_plugin_telemetry_event(
-        "plugin_suggestion_declined", name, entry.get("origin"), confidence, surface, session_id
+        "plugin_suggestion_declined", name, entry.get("origin"), confidence, surface, session_id,
+        **reason,
     )
     return True, ""
 

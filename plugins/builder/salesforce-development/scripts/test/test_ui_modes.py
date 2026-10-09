@@ -7,7 +7,7 @@ import json
 import os
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import ExitStack, redirect_stdout
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -91,7 +91,7 @@ class UiModeContracts(unittest.TestCase):
         self.assertNotIn("FULL ART", cases["plain"])
         self.assertNotIn("\x1b", cases["plain"])
         self.assertNotRegex(cases["plain"], r"[●◉○]")
-        self.assertIn("Current stage: Build", cases["plain"])
+        self.assertIn("Current stage: Project", cases["plain"])
         # Content parity with the primary surfaces: no Reached / No-evidence word-lists,
         # and the semantic-plain surface stays emoji-free — the band is announced by its
         # plain WORD instead ("Try next:"), replacing the old literal "Next:".
@@ -199,7 +199,7 @@ class UiModeContracts(unittest.TestCase):
         self.assertIn("skills first", contexts.pop().lower())
         self.assertIn(SFX.BANNER_WORDMARK, strip_ansi(results["full"]["systemMessage"]))
         self.assertNotIn(SFX.BANNER_WORDMARK, results["plain"]["systemMessage"])
-        self.assertIn("Current stage: Build", results["plain"]["systemMessage"])
+        self.assertIn("Current stage: Project", results["plain"]["systemMessage"])
         self.assertNotIn("systemMessage", results["off"])
 
     def test_off_does_not_claim_or_mark_a_hidden_ambient_prompt_surface(self):
@@ -332,6 +332,317 @@ class UiModeContracts(unittest.TestCase):
         # The visible surface is the journey hints list now (no state summary); assert
         # a mode-invariant hint line rather than the removed "current: Build" line.
         self.assertIn("Add tests for 3 changed classes.", outputs[0])
+
+
+PROMPT_ORIENTATION = "where am I in the build and what should I do next"
+PROMPT_STATUS = "what is the status of this project"
+PROMPT_OVERVIEW = "what can I do here?"
+PROMPT_ORDINARY = "add a description to the Industry field on Account"
+PROMPT_TRIP = "I want to build an app on Salesforce"
+
+# Sentinels for the full renders: the full-surface assertions only need to know
+# WHICH surface painted, and the plain/off assertions that none of them leaked.
+FULL_STATUS = "FULL-STATUS-SURFACE"
+FULL_WELCOME = "FULL-WELCOME-SURFACE"
+FULL_NUDGE = "FULL-NUDGE-SURFACE"
+FULL_OVERVIEW = "FULL-OVERVIEW-SURFACE"
+FULL_SENTINELS = (FULL_STATUS, FULL_WELCOME, FULL_NUDGE, FULL_OVERVIEW)
+RUNTIME_DIRS = (
+    "_WELCOME_MARKER_DIR", "_PROMPT_RUNTIME_DIR", "_PLUGIN_PROPOSAL_DIR",
+    "_PLUGIN_INSTALL_PENDING_DIR", "_PLUGIN_FLOW_DIR", "_PLUGIN_LAST_OFFER_DIR",
+    "_DRIVE_MARKER_DIR",
+)
+
+
+class NaturalLanguagePaintUiModes(unittest.TestCase):
+    """W-24363502 / forcedotcom/sf-skills#340: the UserPromptSubmit status,
+    orientation, and overview questions follow ui_mode. "off" is fully silent (no
+    systemMessage AND no additionalContext) and records nothing; "plain" paints the
+    semantic-plain projection with a note that claims only what it shows; typed slash
+    commands still paint in every mode."""
+
+    def setUp(self):
+        self._td = tempfile.TemporaryDirectory()
+        self.base = Path(self._td.name)
+        self.project = self.base / "checkout"
+        self.project.mkdir()
+        self.project.joinpath("sfdx-project.json").write_text("{}", encoding="utf-8")
+        self.outside = self.base / "elsewhere"
+        self.outside.mkdir()
+        self._old_cwd = Path.cwd()
+        # Every runtime dir cmd_orientation_paint reads or writes. The plugin-flow
+        # dirs are derived from _PROMPT_RUNTIME_DIR at import, so each is re-pointed
+        # explicitly rather than left on the shared temp dir.
+        runtime = self.base / "runtime"
+        self._old_dirs = {name: getattr(SFX, name) for name in RUNTIME_DIRS}
+        SFX._WELCOME_MARKER_DIR = self.base / "markers"
+        SFX._PROMPT_RUNTIME_DIR = runtime
+        for name in RUNTIME_DIRS[2:]:
+            setattr(SFX, name, runtime / self._old_dirs[name].name)
+        self._prompt_seq = 0
+
+    def tearDown(self):
+        for name, value in self._old_dirs.items():
+            setattr(SFX, name, value)
+        os.chdir(self._old_cwd)
+        self._td.cleanup()
+
+    def _env(self, mode):
+        # Recommendation scoring is orthogonal to ui_mode; keep it out of the way.
+        env = {"SF_PLUGIN_MATCH_SENSITIVITY": "off"}
+        if mode is not None:
+            env["CLAUDE_PLUGIN_OPTION_UI_MODE"] = mode
+        return mock.patch.dict(os.environ, env, clear=True)
+
+    def _render_mocks(self):
+        patches = (
+            mock.patch.object(SFX, "_resolve_position_and_org",
+                              return_value=(STATE, {"alias": "dev"})),
+            mock.patch.object(SFX, "_journey_state", return_value=STATE),
+            mock.patch.object(SFX, "_select_inline_nudge", return_value=SEED_CANDIDATE),
+            mock.patch.object(SFX, "project_meta", return_value={"name": "acme"}),
+            mock.patch.object(SFX, "project_stats", return_value={}),
+            mock.patch.object(SFX, "git_status_line", return_value=""),
+            mock.patch.object(SFX, "_live_mcp_summary", return_value=""),
+            mock.patch.object(SFX, "render_status_surface", return_value=FULL_STATUS),
+            mock.patch.object(SFX, "_render_getting_started_welcome",
+                              return_value=FULL_WELCOME),
+            mock.patch.object(SFX, "_render_nudge_inline", return_value=[FULL_NUDGE]),
+            mock.patch.object(SFX, "_render_overview_paint", return_value=FULL_OVERVIEW),
+            mock.patch.object(SFX, "_welcome_test_drive_pointer", return_value=None),
+            mock.patch.object(SFX, "_arm_overview_test_drive_proposal"),
+        )
+        stack = ExitStack()
+        mocks = {p.attribute: stack.enter_context(p) for p in patches}
+        return stack, mocks
+
+    def paint(self, mode, prompt, *, session_id, where=None):
+        """Run one UserPromptSubmit turn; return (parsed output, prompt context, mocks)."""
+        os.chdir(where or self.project)
+        self._prompt_seq += 1
+        payload = {"prompt": prompt, "session_id": session_id,
+                   "prompt_id": f"prompt-{self._prompt_seq}"}
+        out = io.StringIO()
+        stack, mocks = self._render_mocks()
+        with stack, self._env(mode), redirect_stdout(out):
+            context = SFX._prompt_context(payload, rotate_fallback=False)
+            self.assertEqual(SFX.cmd_orientation_paint(
+                payload=payload, prompt_context=context), 0)
+        return json.loads(out.getvalue()), context, mocks
+
+    def assert_silent(self, result, context, session_id):
+        self.assertEqual(result, {"continue": True})
+        self.assertFalse(SFX._nudge_painted_this_turn(context))
+        self.assertFalse(SFX._welcomed_this_session(session_id))
+        self.assertFalse(SFX._entered_this_session(session_id))
+        self.assertIsNone(SFX._last_nudge_signature(session_id))
+
+    def assert_plain(self, result, project="acme"):
+        visible = result["systemMessage"]
+        note = result["hookSpecificOutput"]["additionalContext"]
+        self.assertTrue(visible.startswith("Salesforce development\n"), visible)
+        self.assertIn(f"Project: {project}", visible)
+        self.assertIn("Current stage: Project", visible)
+        self.assertIn("Seed message.", visible)
+        # The note's "current stage" is the same stage the plain line shows.
+        self.assertIn("current stage: Project", note)
+        self.assertNotIn("\x1b", visible)
+        for sentinel in FULL_SENTINELS:
+            self.assertNotIn(sentinel, visible)
+        # The plain note claims only the nudge it shows — never the welcome's reply
+        # shaping or the full status surface's org/project bands.
+        self.assertIn("journey nudge is already visible", note)
+        self.assertNotIn("one or two sentences", note)
+        self.assertNotIn("Salesforce status", note)
+
+    def test_in_project_status_and_orientation_by_mode(self):
+        for prompt in (PROMPT_STATUS, PROMPT_ORIENTATION):
+            results = {}
+            for mode in (None, "full", "plain", "off"):
+                sid = f"{prompt[:5]}-{mode}"
+                with self.subTest(prompt=prompt, mode=mode):
+                    result, context, mocks = self.paint(mode, prompt, session_id=sid)
+                    results[mode] = result
+                    pointer = mocks["_welcome_test_drive_pointer"]
+                    if mode == "off":
+                        self.assert_silent(result, context, sid)
+                        # Off decides before any probe or render.
+                        mocks["_resolve_position_and_org"].assert_not_called()
+                        mocks["_journey_state"].assert_not_called()
+                        pointer.assert_not_called()
+                        continue
+                    # The test-drive pointer is welcome chrome: only the full
+                    # first-touch orientation welcome offers it.
+                    if prompt == PROMPT_ORIENTATION and mode != "plain":
+                        pointer.assert_called_once_with(sid)
+                    else:
+                        pointer.assert_not_called()
+                    if mode == "plain":
+                        self.assert_plain(result)
+                    elif prompt == PROMPT_STATUS:
+                        self.assertEqual(result["systemMessage"], FULL_STATUS)
+                        self.assertIn("Salesforce status and the journey nudge",
+                                      result["hookSpecificOutput"]["additionalContext"])
+                    else:
+                        self.assertIn(FULL_WELCOME, result["systemMessage"])
+                        self.assertIn("one or two sentences",
+                                      result["hookSpecificOutput"]["additionalContext"])
+                    # A visible paint (full or plain) is a real first surface.
+                    self.assertTrue(SFX._welcomed_this_session(sid))
+                    self.assertTrue(SFX._entered_this_session(sid))
+            # Unset is the full default, byte for byte.
+            self.assertEqual(results[None], results["full"])
+
+    def test_in_project_overview_is_silent_only_under_off(self):
+        for mode in (None, "full", "plain", "off"):
+            sid = f"overview-{mode}"
+            with self.subTest(mode=mode):
+                result, context, mocks = self.paint(mode, PROMPT_OVERVIEW, session_id=sid)
+                arm = mocks["_arm_overview_test_drive_proposal"]
+                if mode == "off":
+                    self.assert_silent(result, context, sid)
+                    # No test-drive proposal for a CTA that was never shown.
+                    arm.assert_not_called()
+                else:
+                    self.assertIn(FULL_OVERVIEW, result["systemMessage"])
+                    arm.assert_called_once_with(sid)
+
+    def test_off_ordinary_then_orientation_never_paints_a_banner(self):
+        sid = "off-sequence"
+        first, context, mocks = self.paint("off", PROMPT_ORDINARY, session_id=sid)
+        self.assert_silent(first, context, sid)
+        # The hidden first-touch nudge is decided before its org probe.
+        mocks["_resolve_position_and_org"].assert_not_called()
+        mocks["_journey_state"].assert_not_called()
+        second, context, _ = self.paint("off", PROMPT_ORIENTATION, session_id=sid)
+        self.assert_silent(second, context, sid)
+        # Switching to full mid-session: nothing was shown, so the first VISIBLE
+        # surface is the welcome — once — and later asks get the bare nudge.
+        third, _, _ = self.paint("full", PROMPT_ORIENTATION, session_id=sid)
+        self.assertIn(FULL_WELCOME, third["systemMessage"])
+        fourth, _, _ = self.paint("full", PROMPT_ORIENTATION, session_id=sid)
+        self.assertIn(FULL_NUDGE, fourth["systemMessage"])
+        self.assertNotIn(FULL_WELCOME, fourth["systemMessage"])
+
+    def test_plain_welcome_counts_as_shown(self):
+        sid = "plain-then-full"
+        self.assert_plain(self.paint("plain", PROMPT_ORIENTATION, session_id=sid)[0])
+        # The plain paint spends the nudge's dedupe and cap bookkeeping like any shown one.
+        self.assertIsNotNone(SFX._last_nudge_signature(sid))
+        self.assertIn(SEED_CANDIDATE.dedup_key, SFX._nudge_cap_keys(sid))
+        later, _, _ = self.paint("full", PROMPT_ORIENTATION, session_id=sid)
+        self.assertIn(FULL_NUDGE, later["systemMessage"])
+        self.assertNotIn(FULL_WELCOME, later["systemMessage"])
+
+    def test_plain_status_counts_as_shown(self):
+        sid = "plain-status"
+        self.assert_plain(self.paint("plain", PROMPT_STATUS, session_id=sid)[0])
+        self.assertIsNotNone(SFX._last_nudge_signature(sid))
+        self.assertIn(SEED_CANDIDATE.dedup_key, SFX._nudge_cap_keys(sid))
+
+    def test_outside_project_orientation_and_overview_by_mode(self):
+        for prompt in (PROMPT_ORIENTATION, PROMPT_OVERVIEW):
+            for mode in (None, "full", "plain", "off"):
+                sid = f"side-a-{prompt[:5]}-{mode}"
+                with self.subTest(prompt=prompt, mode=mode):
+                    # The session is tripped by an earlier Salesforce mention.
+                    SFX._record_model_noted(sid)
+                    result, context, mocks = self.paint(
+                        mode, prompt, session_id=sid, where=self.outside)
+                    if mode == "off":
+                        self.assertEqual(result, {"continue": True})
+                        self.assertFalse(SFX._nudge_painted_this_turn(context))
+                        self.assertIsNone(SFX._last_nudge_signature(sid))
+                        # Off decides before any state resolution or render, and arms
+                        # no test-drive proposal for a CTA that was never shown.
+                        mocks["_journey_state"].assert_not_called()
+                        mocks["_render_overview_paint"].assert_not_called()
+                        mocks["_arm_overview_test_drive_proposal"].assert_not_called()
+                    elif prompt == PROMPT_OVERVIEW:
+                        self.assertIn(FULL_OVERVIEW, result["systemMessage"])
+                    elif mode == "plain":
+                        self.assert_plain(result, project="no project")
+                    else:
+                        self.assertIn(FULL_NUDGE, result["systemMessage"])
+
+    def journey_hook(self, mode, *, session_id, real_state=False):
+        """Run the PostToolUse `discover journey` hook for the turn `paint` just ran.
+
+        `real_state` leaves `_journey_state_with_org` unmocked so the project name and
+        stage come from the real derivation of the current directory."""
+        payload = {"tool_input": {"command": "sf-context discover journey"},
+                   "session_id": session_id, "prompt_id": f"prompt-{self._prompt_seq}"}
+        out = io.StringIO()
+        stack, mocks = self._render_mocks()
+        if not real_state:
+            mocks["_journey_state_with_org"] = stack.enter_context(mock.patch.object(
+                SFX, "_journey_state_with_org", return_value=(STATE, self.project, {})))
+        with stack, self._env(mode), redirect_stdout(out):
+            self.assertEqual(SFX.cmd_journey_paint(payload), 0)
+        return json.loads(out.getvalue()), mocks
+
+    def journey_turn_context(self, session_id):
+        return SFX._prompt_context(
+            {"session_id": session_id, "prompt_id": f"prompt-{self._prompt_seq}"},
+            rotate_fallback=False)
+
+    def test_off_orientation_then_model_run_journey_stays_silent(self):
+        # The SessionStart directive still routes "where am I?" to `discover journey`,
+        # and the off prompt paint claims no turn, so the PostToolUse paint must honor
+        # the mode itself rather than rely on the dedupe.
+        sid = "off-journey"
+        first, context, _ = self.paint("off", PROMPT_ORIENTATION, session_id=sid)
+        self.assert_silent(first, context, sid)
+        result, mocks = self.journey_hook("off", session_id=sid)
+        self.assertEqual(result, {"continue": True})
+        # Off decides before the org-probing state resolution and nudge selection.
+        mocks["_journey_state_with_org"].assert_not_called()
+        mocks["_select_inline_nudge"].assert_not_called()
+        mocks["_render_nudge_inline"].assert_not_called()
+        self.assertFalse(SFX._nudge_painted_this_turn(context))
+        self.assertIsNone(SFX._last_nudge_signature(sid))
+
+    def test_plain_journey_paint_is_the_plain_projection(self):
+        sid = "plain-journey"
+        os.chdir(self.project)
+        self._prompt_seq += 1  # a fresh turn the prompt hook did not paint
+        result, mocks = self.journey_hook("plain", session_id=sid)
+        self.assert_plain(result)
+        mocks["_render_nudge_inline"].assert_not_called()
+        # A plain paint claims the turn and spends the shown-once bookkeeping.
+        self.assertTrue(SFX._nudge_painted_this_turn(self.journey_turn_context(sid)))
+        self.assertIsNotNone(SFX._last_nudge_signature(sid))
+        self.assertIn(SEED_CANDIDATE.dedup_key, SFX._nudge_cap_keys(sid))
+
+    def test_plain_journey_paint_outside_a_project_names_no_project(self):
+        # Unmocked state: the project line comes from the derived journey context,
+        # not project_meta()'s "Project" placeholder.
+        sid = "plain-journey-outside"
+        os.chdir(self.outside)
+        self._prompt_seq += 1
+        result, _ = self.journey_hook("plain", session_id=sid, real_state=True)
+        visible = result["systemMessage"]
+        self.assertIn("Project: no project", visible)
+        self.assertIn("Current stage: none yet", visible)
+        self.assertNotIn("Project: Project", visible)
+
+    def test_slash_commands_still_paint_under_off(self):
+        os.chdir(self.project)
+        for command, args, sentinel in (
+            ("salesforce-development:status", "", FULL_STATUS),
+            ("salesforce-development:discover", "overview", FULL_OVERVIEW),
+        ):
+            payload = {"hook_event_name": "UserPromptExpansion",
+                       "expansion_type": "slash_command",
+                       "command_name": command, "command_args": args}
+            out = io.StringIO()
+            stack, _ = self._render_mocks()
+            with self.subTest(command=command), stack, self._env("off"), \
+                    redirect_stdout(out):
+                self.assertEqual(SFX.cmd_command_paint(payload=payload), 0)
+                result = json.loads(out.getvalue())
+                self.assertIn(sentinel, result["systemMessage"])
+                self.assertTrue(result["hookSpecificOutput"]["additionalContext"])
 
 
 if __name__ == "__main__":

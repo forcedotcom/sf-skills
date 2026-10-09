@@ -102,7 +102,10 @@ run` anon, the generic metadata fallback) is WARN-ONLY (`continue: true`). Stays
 silent on owner-less metadata and unrelated ops, and applies turn-aware
 suppression once the owning skill has dispatched — including the no-deadlock
 invariant that an allow-listed op is allowed through (not denied) after its
-owning skill runs.
+owning skill runs. For the allow-listed ops that suppression is session-scoped for
+the qualified `salesforce-development:<skill>` name (the PostToolUse resolution-trace
+hook records the loaded skill; any SessionStart clears it, subagents keep per-prompt
+behavior); bare names and warn-only nudges stay prompt-scoped.
 
 ## Plugin recommendation — project-scoped surfaces (W-23856691)
 

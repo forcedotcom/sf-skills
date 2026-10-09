@@ -7,6 +7,7 @@ import copy
 import json
 import re
 import tempfile
+import unicodedata
 import unittest
 from pathlib import Path
 
@@ -113,7 +114,7 @@ class PluginCatalogGenerationTests(unittest.TestCase):
         names = [row["name"] for row in data["plugins"]]
         self.assertEqual(names, sorted(names))
         required_match_keys = {"description", "keywords", "examplePrompts"}
-        optional_match_keys = {"anchorTerms", "anchorCompanions", "entryCommand"}
+        optional_match_keys = {"anchorTerms", "anchorCompanions", "entryCommand", "enforceAnchorsOnAllSurfaces"}
         for row in data["plugins"]:
             self.assertEqual(set(row), {"name", "source", "match"})
             self.assertTrue(required_match_keys <= set(row["match"]) <= required_match_keys | optional_match_keys)
@@ -238,9 +239,6 @@ class InternalPluginHoldsTests(unittest.TestCase):
             config.write_text('internalPlugins: ["Not_Valid"]\n', encoding="utf-8")
             with self.assertRaisesRegex(self.mod.PluginCatalogError, "invalid internalPlugins"):
                 self.mod.read_internal_plugin_holds(config)
-
-    def test_real_config_yml_has_empty_internal_plugins(self):
-        self.assertEqual(self.mod.read_internal_plugin_holds(REPO_ROOT / "config.yml"), set())
 
 
 class BuildCatalogTests(unittest.TestCase):
@@ -398,9 +396,6 @@ class HeldPluginDescriptionsTests(unittest.TestCase):
             with self.assertRaisesRegex(self.mod.PluginCatalogError, "cannot load marketplace manifest"):
                 self.mod.held_plugin_descriptions(repo_root, repo_root)
 
-    def test_real_repo_currently_has_no_held_plugins(self):
-        self.assertEqual(self.mod.held_plugin_descriptions(REPO_ROOT, PLUGIN_ROOT), {})
-
 
 class ScorePromptAgainstCatalogTests(unittest.TestCase):
     @classmethod
@@ -445,6 +440,39 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
             "configure a DevOps Center test pipeline", catalog_data
         )
         self.assertIn("devops-plugin", {match.plugin["name"] for match in matches})
+
+    def test_all_surface_flag_is_per_entry_and_raw_companions_do_not_change_scores(self):
+        row = self._plugin('routing-plugin', 'Configure Salesforce work routing.',
+                           ['work routing'], ['Configure Salesforce routing'],
+                           anchor_terms=['routing'], anchor_companions={'routing': ['salesforce']})
+        unrelated = self._plugin('flow-plugin', 'Build and automate record-triggered flows.',
+                                 ['flow automation'], ['Build a record-triggered flow'])
+        corpus = {'plugins': [row, unrelated]}
+        # Raw companions work without the flag; explicit queries still bypass.
+        self.assertTrue(self.mod.score_prompt_against_catalog('Salesforce routing', corpus))
+        baseline = self.mod.score_prompt_against_catalog(
+            'Salesforce routing', corpus, require_anchor_terms=False)
+        self.assertTrue(baseline)
+        row['match']['enforceAnchorsOnAllSurfaces'] = True
+        for anchors in (True, False):
+            result = self.mod.score_prompt_against_catalog(
+                'Salesforce routing', corpus, require_anchor_terms=anchors)
+            self.assertEqual([(m.score, m.band) for m in baseline],
+                             [(m.score, m.band) for m in result])
+            for prompt in ['routing', 'nonsalesforce routing', 'Sales-force routing']:
+                with self.subTest(anchors=anchors, prompt=prompt):
+                    self.assertFalse(self.mod.score_prompt_against_catalog(
+                        prompt, corpus, require_anchor_terms=anchors))
+        # Removing/turning off the flag restores the original solicited recall.
+        for value in (False, None):
+            if value is None:
+                row['match'].pop('enforceAnchorsOnAllSurfaces')
+            else:
+                row['match']['enforceAnchorsOnAllSurfaces'] = value
+            self.assertTrue(self.mod.score_prompt_against_catalog(
+                'routing', corpus, require_anchor_terms=False))
+            self.assertTrue(self.mod.score_prompt_against_catalog('Salesforce routing', corpus))
+            self.assertFalse(self.mod.score_prompt_against_catalog('routing', corpus))
 
     def test_anchor_companion_gates_a_common_word_anchor_on_a_corroborating_token(self):
         # An anchor term that is itself an everyday word ("drive", a verb in
@@ -947,15 +975,31 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
                     for m in matches
                 ))
 
+    def test_tokenize_normalizes_unicode_words_and_keeps_marks(self):
+        # NFC + casefold must make canonically equivalent Czech spellings produce
+        # identical terms, while Unicode letters and combining marks stay in one
+        # complete token. Underscores remain word separators for identifiers.
+        composed = "PŘÍLIŠ ŽLUŤOUČKÝ"
+        decomposed = unicodedata.normalize("NFD", composed)
+        expected = ["příliš", "žluťoučký"]
+        self.assertEqual(self.mod._tokenize(composed), expected)
+        self.assertEqual(self.mod._tokenize(decomposed), expected)
+        self.assertEqual(self.mod._tokenize("React ApexТриггер 日本語"), ["react", "apexтриггер", "日本語"])
+        self.assertEqual(self.mod._tokenize("My_Object__Account"), ["object", "account"])
+        # This mark has no precomposed Latin form; it still belongs to the word.
+        self.assertEqual(self.mod._tokenize("Q\u0301ulu STRAßE"), ["q\u0301ulu", "strasse"])
+        self.assertNotIn("apex", self.mod._tokenize("ApexТриггер"))
+
+    def test_tokenize_ignores_presentation_selectors_without_dropping_language_marks(self):
+        self.assertEqual(self.mod._tokenize("FLOW\ufe0f fl\ufe0eow"), ["flow", "flow"])
+        self.assertEqual(self.mod._tokenize("café\ufe0f q\u0301ulu Apex\ufe0fТриггер"),
+                         ["café", "q\u0301ulu", "apexтриггер"])
+
     def test_tokenize_lowercases_and_drops_stopwords_and_single_chars(self):
         # _tokenize is the front door of the scorer: everything the BM25 pass
-        # sees is what survives here. Three filters run, each load-bearing:
-        # (1) lowercase, so casing never splits a term; (2) the _GENERIC_MATCH_TERMS
-        # stoplist, so request scaffolding ("build", "a", "with") is not product
-        # evidence; (3) the `len(token) > 1` short-token drop, so a lone letter or
-        # digit ("x", "5") cannot become a scored term. This last filter is
-        # exercised nowhere else -- relaxing it to `>= 1` would readmit single
-        # chars as evidence with no other test failing.
+        # sees is what survives here. It casefolds full Unicode words, drops
+        # request scaffolding through _GENERIC_MATCH_TERMS, and filters single
+        # characters so they cannot become accidental product evidence.
         self.assertEqual(
             self.mod._tokenize("Build and show a FLOW with X 5 Approvals"),
             ["flow", "approvals"],
@@ -1170,6 +1214,233 @@ class ScorePromptAgainstCatalogTests(unittest.TestCase):
         self.assertIn(match.band, {"high", "medium"})
         self.assertTrue(match.matched_terms)
         self.assertIsInstance(match.matched_terms, frozenset)
+
+    def test_curated_match_terms_drops_matched_prompt_words_the_catalog_does_not_curate(self):
+        # The load-bearing privacy step behind match-reason telemetry, end to
+        # end. Match.matched_terms is prompt-vs-document overlap, and the scored
+        # document is description + keywords + examplePrompts -- so a word the
+        # user typed that merely appears in the marketplace prose is genuine
+        # match evidence, i.e. a fragment of the user's own utterance. Only the
+        # plugin's curated vocabulary (keywords + anchorTerms) may be reported
+        # as the reason a suggestion fired; the rest of the evidence must never
+        # surface, however strongly it contributed to the score.
+        flow = self._plugin(
+            "flow-plugin",
+            "Automate record-triggered Salesforce Flows for quarterly approvals.",
+            ["flow", "orchestration"],
+            ["route an expense report through a flow"],
+        )
+        # A disjoint second plugin gives BM25 idf something to work with.
+        unrelated = self._plugin(
+            "apex-plugin",
+            "Analyze and secure Apex code for governor limit violations.",
+            ["apex", "security", "governor limits"],
+            ["analyze my apex code"],
+        )
+        matches = self.mod.score_prompt_against_catalog(
+            "route my quarterly expense report through an orchestration flow",
+            {"plugins": [flow, unrelated]},
+        )
+        match = next(m for m in matches if m.plugin["name"] == "flow-plugin")
+        # The description-only ("quarterly") and examplePrompts-only words really
+        # are part of the scorer's evidence...
+        doc_only = {"quarterly", "expense", "report", "route", "through"}
+        self.assertTrue(doc_only <= match.matched_terms, match.matched_terms)
+        # ...yet only the curated keywords are reported.
+        curated = self.mod.curated_match_terms(match.plugin, match.matched_terms)
+        self.assertEqual(curated, ["flow", "orchestration"])
+        self.assertTrue(doc_only.isdisjoint(curated))
+
+    def test_curated_match_terms_vocabulary_is_tokenized_keywords_plus_anchor_terms(self):
+        # The curated vocabulary is _tokenize(keywords + anchorTerms) -- the same
+        # tokenizer the scorer uses, so it is symmetric with matched_terms: a
+        # multi-word, hyphenated, or mixed-case keyword contributes each of its
+        # tokens individually (no phrase has to match whole), an anchor term
+        # counts even when no keyword names it, and the _GENERIC_MATCH_TERMS
+        # stoplist and the single-character drop apply exactly as in scoring.
+        # anchorCompanions only corroborate the anchor gate; they are not
+        # curated vocabulary. Evidence is hand-built because the scorer itself
+        # can never emit a generic or single-character term.
+        description = "Wire Lightning Web Components to Apex and cover them with Jest tests."
+        keywords = ["Record-Triggered Flow", "wire service", "build a x component"]
+        example_prompts = ["test my lwc with jest"]
+        plugin = self._plugin(
+            "lwc-plugin", description, keywords, example_prompts,
+            anchor_terms=["jest", "app", "z"],
+            anchor_companions={"jest": ["coverage"]},
+        )
+        matched = frozenset({
+            "triggered", "service", "component",  # one token of each multi-word keyword
+            "jest",                               # curated via anchorTerms alone
+            "build", "a", "x", "app", "z",        # generic / single-char, yet in curated text
+            "coverage",                           # anchorCompanions only
+            "tests", "lwc",                       # description / examplePrompts only
+        })
+        self.assertEqual(
+            self.mod.curated_match_terms(plugin, matched),
+            ["component", "jest", "service", "triggered"],
+        )
+        # The anchor term is what makes "jest" curated: the same plugin without
+        # anchorTerms treats it as doc-only evidence.
+        unanchored = self._plugin("lwc-plugin", description, keywords, example_prompts)
+        self.assertEqual(
+            self.mod.curated_match_terms(unanchored, matched),
+            ["component", "service", "triggered"],
+        )
+
+    def test_curated_match_terms_is_a_sorted_deduplicated_list(self):
+        # The comma-joined reason is a dashboard dimension, so it must be
+        # canonical: the same evidence yields the same list whatever the input
+        # order or repetition. The helper is pure -- the plugin row is the live
+        # catalog entry later scoring reuses, so it must not be mutated.
+        plugin = self._plugin(
+            "apex-plugin",
+            "Analyze Apex triggers and metadata.",
+            ["zephyr", "apex trigger", "metadata"],
+            ["analyze my apex trigger"],
+        )
+        before = copy.deepcopy(plugin)
+        repeated = ["zephyr", "trigger", "apex", "zephyr", "metadata", "apex"]
+        for matched in (repeated, list(reversed(repeated)), frozenset(repeated)):
+            with self.subTest(matched=matched):
+                result = self.mod.curated_match_terms(plugin, matched)
+                self.assertIsInstance(result, list)
+                self.assertEqual(result, ["apex", "metadata", "trigger", "zephyr"])
+        self.assertEqual(plugin, before)
+        self.assertEqual(repeated, ["zephyr", "trigger", "apex", "zephyr", "metadata", "apex"])
+
+    def test_curated_match_terms_keeps_the_first_max_terms_sorted_tokens(self):
+        # The dashboard contract is 8 terms / 120 joined chars; sf_telemetry
+        # re-applies the same caps at capture from its own copy, so pin them.
+        self.assertEqual(self.mod.MATCH_REASON_MAX_TERMS, 8)
+        self.assertEqual(self.mod.MATCH_REASON_MAX_CHARS, 120)
+        # More curated evidence than the count cap keeps exactly the first
+        # MATCH_REASON_MAX_TERMS in SORTED order -- the cut follows the sort, so
+        # neither catalog declaration order (reversed here) nor set iteration
+        # order decides which terms survive.
+        words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot",
+                 "golf", "hotel", "india", "juliet", "kilo", "lima"]
+        cap = self.mod.MATCH_REASON_MAX_TERMS
+        plugin = self._plugin(
+            "cap-plugin", "Synthetic cap fixture.", list(reversed(words)), ["use the cap fixture"]
+        )
+        # The char cap is not what binds here: even one term past the count cap fits.
+        self.assertLess(len(",".join(words[: cap + 1])), self.mod.MATCH_REASON_MAX_CHARS)
+        self.assertEqual(self.mod.curated_match_terms(plugin, frozenset(words)), words[:cap])
+        # The count cap is inclusive: exactly MATCH_REASON_MAX_TERMS are all kept.
+        self.assertEqual(self.mod.curated_match_terms(plugin, frozenset(words[:cap])), words[:cap])
+
+    def test_curated_match_terms_char_cap_keeps_the_sorted_prefix_up_to_the_first_overflow(self):
+        # The comma-joined reason never exceeds MATCH_REASON_MAX_CHARS, and the
+        # cut is a sorted PREFIX: it stops at the first token that would overflow
+        # and never skips ahead to a later, shorter token that would still fit,
+        # so the reported reason is always the head of the canonical order.
+        a50, b50, c30, d5 = "a" * 50, "b" * 50, "c" * 30, "d" * 5
+        plugin = self._plugin(
+            "cap-plugin", "Synthetic cap fixture.", [d5, c30, b50, a50], ["use the cap fixture"]
+        )
+        # a50,b50 joins to 101 chars; adding c30 would make 132 (overflow), while
+        # d5 alone would still fit at 107 -- but d5 sorts after the overflow.
+        self.assertEqual(
+            self.mod.curated_match_terms(plugin, frozenset({a50, b50, c30, d5})), [a50, b50]
+        )
+
+        # The boundary is inclusive: a joined length of exactly
+        # MATCH_REASON_MAX_CHARS is kept; one character more is not.
+        limit = self.mod.MATCH_REASON_MAX_CHARS
+        head = "a" * 59
+        fits = "b" * (limit - len(head) - 1)  # len(head + "," + fits) == limit
+        overflows = fits + "b"
+        at_limit = self._plugin("cap-plugin", "Synthetic cap fixture.", [head, fits], ["use it"])
+        self.assertEqual(self.mod.curated_match_terms(at_limit, {head, fits}), [head, fits])
+        over_limit = self._plugin("cap-plugin", "Synthetic cap fixture.", [head, overflows], ["use it"])
+        self.assertEqual(self.mod.curated_match_terms(over_limit, {head, overflows}), [head])
+
+        # A lone curated token longer than the cap leaves only the empty prefix.
+        too_long = "e" * (limit + 1)
+        lone = self._plugin("cap-plugin", "Synthetic cap fixture.", [too_long], ["use it"])
+        self.assertEqual(self.mod.curated_match_terms(lone, {too_long}), [])
+
+    def test_curated_match_terms_malformed_input_yields_an_empty_list(self):
+        # A defensive pure helper: a malformed plugin row or evidence value yields
+        # [] instead of raising, and nothing but string entries of a keywords /
+        # anchorTerms LIST is ever treated as curated vocabulary.
+        matched = frozenset({"flow", "apex"})
+        malformed_plugins = [
+            None, "flow", ["flow"], 42,                                # plugin not a dict
+            {"name": "flow-plugin"},                                   # no match
+            {"match": None}, {"match": "flow"}, {"match": ["flow"]},   # match not a dict
+            {"match": {}},                                             # no curated fields
+            {"match": {"keywords": "flow", "anchorTerms": "apex"}},    # fields not lists
+            {"match": {"keywords": {"flow": "apex"}}},                 # dict keys are not vocabulary
+            {"match": {"keywords": None, "anchorTerms": 42}},
+        ]
+        for plugin in malformed_plugins:
+            with self.subTest(plugin=plugin):
+                self.assertEqual(self.mod.curated_match_terms(plugin, matched), [])
+
+        # Non-str list entries are ignored; the well-formed entries still count.
+        mixed = {"match": {
+            "keywords": ["flow", 7, None, ["apex"], {"apex": 1}],
+            "anchorTerms": [b"apex"],
+        }}
+        self.assertEqual(self.mod.curated_match_terms(mixed, matched), ["flow"])
+
+        # Empty or absent evidence -- and a bare string, which is one term's text
+        # rather than a collection of terms -- yields [] for a well-formed plugin.
+        plugin = self._plugin("flow-plugin", "Build Salesforce Flows.", ["flow"], ["build a flow"])
+        for matched_terms in ([], frozenset(), None, "", "flow"):
+            with self.subTest(matched_terms=matched_terms):
+                self.assertEqual(self.mod.curated_match_terms(plugin, matched_terms), [])
+        # Non-str evidence entries are ignored the same way -- unhashable ones too.
+        self.assertEqual(self.mod.curated_match_terms(plugin, ["flow", 7, None]), ["flow"])
+        self.assertEqual(self.mod.curated_match_terms(plugin, [["flow"], {"flow": 1}]), [])
+        # Truthy, non-iterable evidence yields [] rather than raising.
+        for matched_terms in (42, True, 3.5):
+            with self.subTest(matched_terms=matched_terms):
+                self.assertEqual(self.mod.curated_match_terms(plugin, matched_terms), [])
+
+    def test_real_catalog_curated_match_terms_are_curated_matched_and_capped(self):
+        # Property over the checked-in catalog: score every plugin's own
+        # examplePrompts and description with require_anchor_terms=False (the
+        # widest recall any surface uses) and, for EVERY resulting match --
+        # cross-plugin ones included -- the reported terms come only from that
+        # match's own plugin vocabulary AND its evidence, are sorted and unique,
+        # and respect both caps. They are also complete: the longest sorted
+        # prefix of the curated evidence the caps allow, so the privacy filter
+        # never silently costs a reason that would have fit.
+        data = self.mod.load_catalog(PLUGIN_ROOT)
+        max_terms = self.mod.MATCH_REASON_MAX_TERMS
+        max_chars = self.mod.MATCH_REASON_MAX_CHARS
+        reported = filtered = 0
+        for plugin in data["plugins"]:
+            for text in [*plugin["match"]["examplePrompts"], plugin["match"]["description"]]:
+                matches = self.mod.score_prompt_against_catalog(text, data, require_anchor_terms=False)
+                for match in matches:
+                    row = match.plugin["match"]
+                    vocab = frozenset(self.mod._tokenize(
+                        " ".join([*row["keywords"], *row.get("anchorTerms", [])])
+                    ))
+                    terms = self.mod.curated_match_terms(match.plugin, match.matched_terms)
+                    evidence = sorted(match.matched_terms & vocab)
+                    with self.subTest(prompt=text, plugin=match.plugin["name"]):
+                        self.assertTrue(set(terms) <= vocab, terms)
+                        self.assertTrue(set(terms) <= match.matched_terms, terms)
+                        self.assertEqual(terms, sorted(set(terms)))
+                        self.assertLessEqual(len(terms), max_terms)
+                        self.assertLessEqual(len(",".join(terms)), max_chars)
+                        self.assertEqual(terms, evidence[: len(terms)])
+                        if len(terms) < len(evidence):
+                            self.assertTrue(
+                                len(terms) == max_terms
+                                or len(",".join([*terms, evidence[len(terms)]])) > max_chars
+                            )
+                    reported += bool(terms)
+                    filtered += bool(match.matched_terms - vocab)
+        # Non-vacuity: real reasons were reported, and the privacy filter really
+        # removed uncurated evidence somewhere in the catalog.
+        self.assertGreater(reported, 0)
+        self.assertGreater(filtered, 0)
 
 
 if __name__ == "__main__":
