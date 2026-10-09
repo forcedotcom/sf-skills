@@ -1,3 +1,17 @@
+# [1.62.0](https://github.com/forcedotcom/sf-skills/compare/1.61.0...1.62.0) (2026-10-09)
+
+
+### Bug Fixes
+
+* correct license to Apache-2.0 and update package description @W-24438451@ ([#358](https://github.com/forcedotcom/sf-skills/issues/358)) ([e5164d9](https://github.com/forcedotcom/sf-skills/commit/e5164d94d7511c00fa02a5b8b60754b2361e178f))
+
+
+### Features
+
+* Release 154 skills (1 new, 153 updated) - sf-skills public @W-24467627@ ([d1fd46f](https://github.com/forcedotcom/sf-skills/commit/d1fd46ff0bbaebb69fda40cf5a9a3a43f0ca6af5))
+
+
+
 # [1.61.0](https://github.com/forcedotcom/sf-skills/compare/1.60.0...1.61.0) (2026-10-07)
 
 
