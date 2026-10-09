@@ -1,0 +1,132 @@
+{
+    "runMode": "full",
+    "nodes": {
+        "LOAD_OPPORTUNITY": {
+            "action": "load",
+            "sources": [],
+            "parameters": {
+                "dataset": {
+                    "type": "connectedDataset",
+                    "label": "Opportunity",
+                    "connectionName": "SFDC_LOCAL",
+                    "sourceObjectName": "Opportunity"
+                },
+                "fields": ["Id", "AccountId", "StageName", "CloseDate", "Amount"],
+                "mode": "SYNCED",
+                "preserveCurrencyFields": [],
+                "sampleDetails": { "type": "TopN", "sortBy": [] }
+            }
+        },
+        "LOAD_ACCOUNT": {
+            "action": "load",
+            "sources": [],
+            "parameters": {
+                "dataset": {
+                    "type": "connectedDataset",
+                    "label": "Account",
+                    "connectionName": "SFDC_LOCAL",
+                    "sourceObjectName": "Account"
+                },
+                "fields": ["Id", "Name", "Industry"],
+                "mode": "SYNCED",
+                "preserveCurrencyFields": [],
+                "sampleDetails": { "type": "TopN", "sortBy": [] }
+            }
+        },
+        "FILTER_CLOSED_WON": {
+            "action": "filter",
+            "sources": ["LOAD_OPPORTUNITY"],
+            "parameters": {
+                "filterExpressions": [
+                    { "field": "StageName", "operator": "EQUAL", "operands": ["Closed Won"], "type": "TEXT" }
+                ]
+            }
+        },
+        "JOIN_ACCOUNT": {
+            "action": "join",
+            "sources": ["FILTER_CLOSED_WON", "LOAD_ACCOUNT"],
+            "parameters": {
+                "joinType": "LOOKUP",
+                "leftKeys": ["AccountId"],
+                "rightKeys": ["Id"],
+                "rightQualifier": "Account"
+            }
+        },
+        "COMPUTE_CLOSE_YEAR": {
+            "action": "formula",
+            "sources": ["JOIN_ACCOUNT"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [{ "name": "CloseYear", "label": "Close Year", "type": "TEXT", "formulaExpression": "date_format(CloseDate, 'yyyy')" }]
+            }
+        },
+        "COMPUTE_CLOSE_MONTH": {
+            "action": "formula",
+            "sources": ["COMPUTE_CLOSE_YEAR"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [{ "name": "CloseMonth", "label": "Close Month", "type": "TEXT", "formulaExpression": "date_format(CloseDate, 'MM/yyyy')" }]
+            }
+        },
+        "EXTRACT0": {
+            "action": "extractGrains",
+            "sources": ["COMPUTE_CLOSE_MONTH"],
+            "parameters": { "grainExtractions": [] }
+        },
+        "AGGREGATE_BY_ACCOUNT_MONTH": {
+            "action": "aggregate",
+            "sources": ["EXTRACT0"],
+            "parameters": {
+                "aggregations": [{ "name": "TotalRevenue", "label": "Total Revenue", "action": "SUM", "source": "Amount" }],
+                "groupings": ["AccountId", "Account.Name", "Account.Industry", "CloseYear", "CloseMonth"],
+                "nodeType": "STANDARD",
+                "pivots": []
+            }
+        },
+        "OUTPUT_DTS_OPW": {
+            "action": "save",
+            "sources": ["AGGREGATE_BY_ACCOUNT_MONTH"],
+            "parameters": {
+                "dataset": {
+                    "type": "analyticsDataset",
+                    "label": "DTS_OpportunityRev",
+                    "name": "DTS_OpportunityRev",
+                    "folderName": "OpportunityInsights"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            }
+        }
+    },
+    "ui": {
+        "nodes": {
+            "LOAD_OPPORTUNITY": { "label": "Opportunity", "type": "LOAD_DATASET", "top": 112, "left": 112, "parameters": { "sampleSize": 2000 } },
+            "LOAD_ACCOUNT":     { "label": "Account",     "type": "LOAD_DATASET", "top": 252, "left": 252, "parameters": { "sampleSize": 2000 } },
+            "FILTER_CLOSED_WON": { "label": "FILTER_CLOSED_WON", "type": "FILTER", "top": 112, "left": 252 },
+            "JOIN_ACCOUNT":      { "label": "JOIN_ACCOUNT",      "type": "JOIN",   "top": 112, "left": 392 },
+            "TRANSFORM0": {
+                "label": "TRANSFORM0", "type": "TRANSFORM", "top": 112, "left": 532,
+                "graph": {
+                    "COMPUTE_CLOSE_YEAR":  { "parameters": { "type": "BASE_FORMULA_UI" } },
+                    "COMPUTE_CLOSE_MONTH": { "parameters": { "type": "BASE_FORMULA_UI" } }
+                },
+                "connectors": [{ "source": "COMPUTE_CLOSE_YEAR", "target": "COMPUTE_CLOSE_MONTH" }]
+            },
+            "AGGREGATE0": {
+                "label": "AGGREGATE0", "type": "AGGREGATE", "top": 112, "left": 672,
+                "graph": { "EXTRACT0": null, "AGGREGATE_BY_ACCOUNT_MONTH": null },
+                "connectors": [{ "source": "EXTRACT0", "target": "AGGREGATE_BY_ACCOUNT_MONTH" }]
+            },
+            "OUTPUT_DTS_OPW": { "label": "OUTPUT_DTS_OPW", "type": "OUTPUT", "top": 112, "left": 812 }
+        },
+        "connectors": [
+            { "source": "LOAD_OPPORTUNITY",  "target": "FILTER_CLOSED_WON" },
+            { "source": "FILTER_CLOSED_WON", "target": "JOIN_ACCOUNT" },
+            { "source": "LOAD_ACCOUNT",      "target": "JOIN_ACCOUNT" },
+            { "source": "JOIN_ACCOUNT",      "target": "TRANSFORM0" },
+            { "source": "TRANSFORM0",        "target": "AGGREGATE0" },
+            { "source": "AGGREGATE0",        "target": "OUTPUT_DTS_OPW" }
+        ],
+        "hiddenColumns": []
+    }
+}

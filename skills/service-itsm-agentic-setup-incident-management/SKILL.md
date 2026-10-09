@@ -1,8 +1,8 @@
 ---
 name: service-itsm-agentic-setup-incident-management
-description: "Orchestrator for Incident Management setup in Salesforce Service Cloud ITSM: presents the available features, tracks progress, and configures each — SLA & Milestones, Priority Matrix, Incident preferences, Major Incident Management, Incident persona PSG assignment, and Service Management Privilege. Use for: set up or configure incident management, incident management walkthrough, what incident features can I configure; the incident preference toggles (default field validations, auto-close child incidents, auto-triage, assign with Einstein, restrict assigned group, rich text descriptions); Major Incident Management (approval group + MIM preferences); assigning the Incident Fulfiller or Incident Manager persona PSG to a user; Service Management Privilege / privilege escalation setup. DO NOT TRIGGER for: the master on/off switch (service-itsm-incident-mgmt-configure), the Priority Matrix or SLA alone, the Major Incident Manager PSG, creating/editing PSGs, or Problem/Change/Case Management."
+description: "Orchestrator for Incident Management setup in Service Cloud ITSM: presents the features, tracks progress, and configures each — SLA & Milestones, Priority Matrix, Incident preferences, Major Incident Management, Incident persona PSG assignment, Service Management Privilege, and Incident audit tracking. Use for: set up or configure incident management, incident management walkthrough, what incident features can I configure; the incident preference toggles (default field validations, auto-close child incidents, auto-triage, assign with Einstein, restrict assigned group, rich text descriptions); Major Incident Management (approval group + MIM preferences); assigning the Incident Fulfiller or Incident Manager persona PSG; Service Management Privilege / privilege escalation setup. DO NOT TRIGGER for: the master on/off switch (service-itsm-incident-mgmt-configure), the Priority Matrix, SLA, or field history tracking alone, the Major Incident Manager PSG, creating/editing PSGs, or Problem/Change/Case Management."
 metadata:
-  version: "2.0"
+  version: "2.1"
   domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -16,11 +16,6 @@ metadata:
     headless-360:
       tools: ["describe", "discover", "dispatch", "dispatch_readonly"]
       semver: ">=1.0.0"
-  accessCheck:
-    - type: "userPerm"
-      value: "CustomizeApplication"
-    - type: "orgPerm"
-      value: "IncidentMgmt.orgHasITSMOrgPermission"
 allowed-tools: |
   Read AskUserQuestion
   mcp__headless-360__discover
@@ -32,8 +27,9 @@ allowed-tools: |
 # Incident Management Setup Orchestrator
 
 Guide the user through setting up Incident Management features in Salesforce Service Cloud ITSM by
-presenting the available capabilities, tracking progress, and — per feature — either **delegating** to a
-specialized child skill or **executing the feature inline over its system of record (SOR)**.
+presenting the available capabilities, tracking progress, and — per feature — either **delegating** it (to
+a specialized child skill, or to a Setup Operation Recipe (SOR) whose own steps this skill follows), or
+**executing it inline** from this skill's reference file over its SOR.
 
 ## Goal
 
@@ -51,12 +47,43 @@ until the user is done.
 | 4 | Major Incident Management | **Inline over SOR** → `references/major-incident-management.md` |
 | 5 | Incident Persona PSG | **Inline over SOR** → `references/incident-persona-psg.md` |
 | 6 | Service Management Privilege | **Inline over SOR** → `references/service-mgmt-privilege.md` |
+| 7 | Audit Tracking | **Delegate** → `FieldHistoryTracking` (the Field History Tracking SOR) |
 
-**Delegated** features invoke their child skill (this skill only coordinates). **Inline** features are run
-by this skill directly through the `headless-360` MCP server — **read the matching reference file before
-executing that feature** and follow it. Every inline operation is fetched at runtime: `discover` by intent,
-`describe` for the current route/schema/labels, then `dispatch_readonly` (reads) / `dispatch` (writes).
-**Hardcode nothing — `describe` wins.**
+**Delegated** features hand off to their child skill or SOR. A child skill runs its own confirmations and
+read-backs, so this skill only coordinates. A SOR is a recipe, not an agent: for a SOR hand-off this skill
+runs the SOR's steps itself and owns the confirmation and read-back (see Audit Tracking below).
+**Inline** features are run by this skill directly through the `headless-360` MCP server — **read the
+matching reference file before executing that feature** and follow it. Every inline operation is fetched at
+runtime: `discover` by intent, `describe` for the current route/schema/labels, then `dispatch_readonly`
+(reads) / `dispatch` (writes). **Hardcode nothing — `describe` wins.**
+
+**Audit Tracking is delegated to the Field History Tracking SOR.** This skill has no reference file for it
+and re-derives none of its steps — the SOR's own steps and guidance decide *how*. This skill runs them and
+owns the user-facing gates:
+
+1. `discover` the SOR by intent (e.g. "field history tracking") and `describe` the id `discover` returns
+   (`FieldHistoryTracking`). Judge availability by what the calls return, not by a step's `status` label —
+   a step labelled `proposed` may still be served. A `discover` miss or a `401`/`403`/`404` means the
+   surface isn't available to this user or org: surface it and stop.
+2. Use the Incident fields the user already named, or ask which fields to track if the choice is missing
+   or ambiguous, plus anything else `describe` says it needs. If the user chooses no fields, leave the
+   feature `Not done` and stop; do not treat an empty choice as already configured.
+3. Through the SOR, check Setup access, read Incident with `get-single-entity-data-with-metadata`, and get
+   its per-object tracked-field limit. Use the returned tracking flag, field labels, `canBeTracked` values,
+   current tracked set, and `fieldEnumOrId` keys to resolve the user's choices; do not guess field keys.
+4. The save replaces the object's whole tracked-field set, so send the **union** of what's already tracked
+   and the chosen fields using their returned keys, with Incident's object-level tracking flag on — never
+   drop an already-tracked field unless the user asks. If a chosen field can't be tracked, or the union
+   would exceed the limit, say so plainly; never untrack another field to make room. Report it as done
+   with no write only if the nonempty chosen set is already tracked **and** Incident's object-level tracking
+   is on. If the fields are selected but that flag is off, the change still needs a save.
+5. Show the exact final tracked-field list by field label (disambiguate matching labels) in either case.
+   Before any save, also show that object-level tracking will be enabled and get an explicit yes
+   (`AskUserQuestion`) for that plan; when the user already named the fields, this confirms the selection.
+6. After any save, read Incident's tracked fields back through the SOR. Mark the feature `Done` only when
+   the live read (for the no-write case) or post-save read-back shows Incident's object-level tracking on,
+   the chosen fields tracked, and no field dropped that the user didn't ask to drop — a save response alone
+   is not proof.
 
 ## Behavior
 
@@ -92,9 +119,11 @@ several enqueue for sequential handling in step 4.
 ### 4. Handle each selected feature in order
 
 Handle selected features sequentially in dependency order (or the order given). For each: if it is a
-**delegated** feature, invoke its child skill; if it is an **inline** feature, **read its reference file**
-and execute it there — always **read live state before writing, confirm before every write, and verify
-every write by read-back**. Honor the per-feature invariants below.
+**delegated** feature, hand off to its child skill — or, for Audit Tracking, run the Field History Tracking
+SOR through the six steps above; if it is an **inline** feature, **read its reference file** and execute it
+there. Whenever this skill itself writes (inline, or a SOR hand-off), always **read live state before
+writing, confirm before every write, and verify every write by read-back**. Honor the per-feature
+invariants below.
 
 ### 5. After each feature completes
 
@@ -110,7 +139,8 @@ template in `examples/output-templates.md`.
 
 ## Critical inline-execution invariants (load-bearing — full detail in each reference)
 
-Apply these whenever an inline feature runs. They are irreversible or silently-wrong if missed.
+Apply these whenever an inline feature runs; the **Everywhere** rules also apply to the Audit Tracking SOR
+hand-off. They are irreversible or silently-wrong if missed.
 
 - **Resolve the right node (Preferences).** Target the ITSM Incident Management org-preferences node
   (controller `IPCManagementSetupController`), **not** the Service-Foundation look-alike
@@ -150,6 +180,7 @@ Apply these whenever an inline feature runs. They are irreversible or silently-w
 4. Major Incident Management   (approval group + two MIM preferences)      [inline]
 5. Incident Persona PSG        (Fulfiller / Manager persona for a user)    [inline]
 6. Service Management Privilege (escalation level + privilege assignments) [inline]
+7. Audit Tracking              (field history on chosen Incident fields)   [delegated]
 ```
 
 ---
@@ -166,6 +197,10 @@ Apply these whenever an inline feature runs. They are irreversible or silently-w
   response — the table is the visual view; the tool call is the selection channel
 - For an **inline** feature, ALWAYS read its reference file first and follow the SOR at runtime — never
   hardcode a route, body, or preference name
+- For **Audit Tracking**, ALWAYS keep every already-tracked Incident field in the save unless the user asked
+  to stop tracking it, confirm the exact final field list before the save, and verify by read-back before
+  marking it `Done` (or verify the already-configured state by live read with no write) — the SOR asks the
+  user nothing itself
 - NEVER set up a feature the user did not select; for "set up everything", walk each feature sequentially
   in recommended order, confirming between each step
 - Track progress across the conversation — do not re-present completed features as "Not done"
@@ -187,7 +222,11 @@ Before emitting any menu or summary, confirm each; adjust the output before send
       sequentially with confirmation under an "all" / "everything" request)
 - [ ] For an inline feature: its reference file was read; live state was read before any write; each write
       was confirmed and verified by read-back; one-way / license-ordering invariants were honored
-- [ ] For a delegated feature: the child skill was invoked, not configured inline
+- [ ] For a delegated feature: the child skill (or, for Audit Tracking, the Field History Tracking SOR) was
+      used, not configured inline
+- [ ] For Audit Tracking: a live metadata read resolved the fields and complete labeled set; any save kept
+      every already-tracked field the user didn't ask to drop, was confirmed before it ran, and was verified
+      by read-back; a no-write `Done` also had Incident's object-level tracking confirmed on
 - [ ] No Salesforce record IDs appear in the output — human-readable names only
 
 ---

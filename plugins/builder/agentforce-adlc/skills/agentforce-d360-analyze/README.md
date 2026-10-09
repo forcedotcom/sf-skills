@@ -25,7 +25,7 @@ Output: per-DMO JSON artifacts plus three derived files under `~/.vibe/data/agen
 
 | Tool | Why |
 |---|---|
-| `sf` CLI (authenticated against the target org) | Shells `sf org display --target-org <alias> --json` for the Data Cloud Query REST API access token |
+| `sf` CLI (authenticated against the target org) | Must provide `sf org auth show-access-token` (preflighted at startup). Shells `sf org display --target-org <alias> --json` for the instance URL and `sf org auth show-access-token --target-org <alias> --json --no-prompt` for the Data Cloud Query REST API access token |
 | Data Cloud enabled on the target org | Required — the STDM + GenAI DMOs must have materialized for the session |
 | Python 3.10+ | `pathlib`, dataclasses, `\|` union types |
 

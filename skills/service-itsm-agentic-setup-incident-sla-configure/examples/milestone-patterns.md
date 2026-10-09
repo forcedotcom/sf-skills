@@ -1,14 +1,14 @@
 # Milestone Strategy Patterns — Incident SLA
 
-Phase 1.4 of the SLA workflow either infers the milestone strategy from the user's prompt (see
-"Phase 1.4 skip conditions" below) or asks the user to pick one. This file lists each option with
+Phase 3b of the SLA workflow either infers the milestone strategy from the user's prompt (see
+"Phase 3b skip conditions" below) or asks the user to pick one. This file lists each option with
 its default configuration, MilestoneType-reuse rules, and the exact `Attach Milestone` payloads
-that Phase 2 step 10 dispatches. Every `filterItems.operator` value here uses the exact enum the
+that Phase 4A step 4 dispatches. Every `filterItems.operator` value here uses the exact enum the
 server accepts — `Equals`, `NotEqual` — never `!=` or `Equal`.
 
 ---
 
-## Phase 1.4 skip conditions (do NOT dispatch `AskUserQuestion` when any hold)
+## Phase 3b skip conditions (do NOT dispatch `AskUserQuestion` when any hold)
 
 Every SLA policy needs at least one milestone, but the strategy question is skipped when the
 milestone shape is already determined by the request:
@@ -17,14 +17,14 @@ milestone shape is already determined by the request:
   first-response trigger", "Response + Resolution defaults", "per-priority tiers". Extract the
   described milestone(s) verbatim (time, criteria, name) and use the pattern defaults below. Do
   NOT re-ask.
-- **(b) The eventual branch is an idempotent no-op** — Phase 1 step 6 established `noOp=true`
-  (every requested artifact already exists with matching configuration). Skip Phase 1.4, skip
-  Phase 2, and report the no-op verbatim citing the read evidence.
+- **(b) The eventual branch is an idempotent no-op** — Phase 3a step 6 established `noOp=true`
+  (every requested artifact already exists with matching configuration). Skip Phase 3b, skip
+  Phase 4A, and report the no-op verbatim citing the read evidence.
 - **(c) Explicit up-front authorization** — a phrase that unambiguously waives the confirm gate
   (`"you have my explicit authorization to create"`, `"do not re-ask me to confirm"`,
   `"proceed without asking"`) **and** a concrete milestone shape is derivable per (a). A passing
   mention ("build it", "go ahead") is NOT sufficient by itself. Waives the interactive confirm;
-  does NOT waive Phase 1.5 plan-narration — dispatch only after SLA Policy name, the engagement model
+  does NOT waive Phase 3c plan-narration — dispatch only after SLA Policy name, the engagement model
   (per-Incident via `EntitlementId`; no Account), and the per-milestone list have been written to the
   response.
 
@@ -34,7 +34,8 @@ dispatch `AskUserQuestion` with the five options below. Priority-tiered requires
 
 All strategies share these defaults unless overridden:
 
-- `businessHoursId`: the default BusinessHours resolved in Phase 1 step 4
+- `businessHoursId`: the Business Hours Id resolved in Phase 3a step 4, or created in Phase 4A step 1 (suggested default or
+  user-selected)
 - `startTimeBasedOn`: `MILESTONE_CRITERIA` (timer starts when the milestone's criteria first match; this is the OOB default — send this exact token, see `references/mcp-invocation.md` Attach Milestone)
 - `milestoneAgreementType`: `SLA` — inside each `milestoneCriteria[]` item (mandatory per the UI). Valid UI values are `SLA` (customer-facing) or `OLA` (internal); the API accepts any string because the underlying field is `Text(40)` with no server-side picklist, but the UI renders unrecognized values as blank
 - `milestoneState`: `ACTIVE` (**uppercase — the server matches this value case-sensitively**; `Active`/`active` silently fail to register the criterion) inside `milestoneCriteria[]`
@@ -44,7 +45,7 @@ All strategies share these defaults unless overridden:
 
 ---
 
-## AskUserQuestion prompt (Phase 1.4, only when no skip condition applies)
+## AskUserQuestion prompt (Phase 3b, only when no skip condition applies)
 
 ```text
 Question: How many milestones do you want on this SLA policy?
@@ -63,16 +64,16 @@ Before rendering options 3 and 5, confirm the live `Incident.Priority` picklist 
 the pattern against them in **both** directions: if any value used in a default row is missing from
 the org's picklist, drop that milestone; and if the org has **added** active Priority values beyond
 the four default tiers, add a milestone for each so no active Priority value is left without one.
-Note both adjustments in the Phase-1.5 confirmation.
+Note both adjustments in the Phase-3c confirmation.
 
 **Hard gate — never assume the picklist.** The reconciliation above requires the *actual* live
 `Incident.Priority` picklist. Do **not** present the Priority-tiered milestone list, and do **not**
 state or imply that the picklist "is the four standard tiers" / "needs no reconciliation", **from
 assumption**. The four standard tiers (Critical/High/Moderate/Low) are only *defaults* — they are
 NOT what the org necessarily has. You may present the tier list **only after** the live
-`Incident.Priority` describe (Phase 1 step 3) has actually been dispatched **this session** and you
+`Incident.Priority` describe (Phase 3a step 3) has actually been dispatched **this session** and you
 have its `fields[].picklistValues` in hand. If it has not run yet — e.g. Custom was invoked
-**directly**, skipping the Phase 0.6 fork where the describe is normally pulled forward — run
+**directly**, skipping the Phase 2 fork where the describe is normally pulled forward — run
 `GET /services/data/v{version}/sobjects/Incident/describe` **now**, before offering or rendering any
 per-priority list, and derive the tiers from its **active** `picklistValues`. An org-added active
 value such as `Emergency` MUST appear as its own milestone; silently defaulting to four tiers leaves
@@ -84,11 +85,11 @@ those Incidents with no milestone and no SLA engagement.
 
 Dispatch every pattern below via `mcp__headless-360__dispatch` with `method: "POST"` and
 `url: "/services/data/v{version}/connect/sla-management/sla-policies/<slaId>/milestones"` (substitute
-the SLA policy id captured in Phase 2 step 9). The reusable request-body template lives at
+the SLA policy id captured in Phase 4A step 3). The reusable request-body template lives at
 `assets/attach-milestone.json` — load and populate it rather than reconstructing the JSON.
 
 Substitute per-pattern: `milestoneTypeId` is the id returned when you created the MilestoneType,
-`businessHoursId` is the id resolved in Phase 1, and `timeTrigger` + `order` come from the
+`businessHoursId` is the id resolved in Phase 3a, and `timeTrigger` + `order` come from the
 pattern's row. `filterItems` in the template carries the base "Status != Closed" row that every
 pattern shares; each pattern's table lists **additional** row objects to append to `filterItems`
 (same schema: `table`, `column`, `operator`, `order`, `value`) — do not replace the base row, add
@@ -136,7 +137,7 @@ concurrently on its own 8-hour timer.
 
 Assumes the standard `Critical / High / Moderate / Low` picklist (some orgs and prompts label the
 mid tier `Medium` instead of `Moderate` — same P3 tier, different label). Reconcile the four default
-rows against the **live `Incident.Priority` picklist** (from the Phase-1 Incident describe) before
+rows against the **live `Incident.Priority` picklist** (from the Phase-3a Incident describe) before
 dispatch, handling every difference:
 
 - **Renamed** value → rename the milestone's filter to the live label (e.g. `Medium` for the P3 tier).
@@ -145,7 +146,7 @@ dispatch, handling every difference:
 - **Added / custom active** value (any active Priority value not covered by the four default rows) →
   **add a milestone for it** so those Incidents still engage an SLA. Reuse the `Incident First Response`
   MilestoneType, filter `Incident.Priority Equals <customValue>`, and confirm its `timeTrigger` with the
-  user in Phase 1.5 (offer a sensible default from the nearest standard tier). Do **not** silently skip a
+  user in Phase 3c (offer a sensible default from the nearest standard tier). Do **not** silently skip a
   custom value — an uncovered active Priority means those Incidents get no milestone and no SLA engagement.
 
 The multi-item `filterItems` array combines with `AND` by default — both `Status != Closed` AND
@@ -168,7 +169,7 @@ Incident create (e.g. via the Priority Matrix), the milestone re-evaluates on th
 
 All three run concurrently once their criteria match (`startTimeBasedOn: MILESTONE_CRITERIA`) — the "ladder" is enforced by the timers,
 not by chaining. To fire automation at a milestone's warning/violation checkpoint (warn before
-target, escalate on breach), attach a **milestone action** in Phase 2.5 — see
+target, escalate on breach), attach a **milestone action** in Phase 5 — see
 `references/mcp-invocation.md` (Milestone Actions). (Strictly *sequential* chaining across separate
 milestones is a different mechanism — workflow SLA actions — and remains out of scope.)
 
@@ -191,7 +192,7 @@ For each milestone `i` from 1 to N (where N is confirmed up front):
 5. **Criteria value** — validated against the live picklist for picklist fields; free-form
    otherwise.
 
-After collecting all N milestones, render the full list in Phase 1.5 confirmation and require an
+After collecting all N milestones, render the full list in Phase 3c confirmation and require an
 explicit "yes" before dispatching the create loop.
 
 **Custom-mixed example** (Response for all + per-category resolution):
@@ -211,7 +212,7 @@ before creating the MilestoneType or attaching the milestone.
 ## Predefined preset — "Standard Support for Incidents" (OOB)
 
 This is Salesforce's out-of-box predefined Incident SLA policy — a fixed priority-tiered preset offered
-at the Phase 0.6 fork (not one of the Phase 1.4 custom options above). It pairs an **Acknowledge Within**
+at the Phase 2 fork (not one of the Phase 3b custom options above). It pairs an **Acknowledge Within**
 and a **Resolve Within** milestone per priority tier:
 
 | tier | Acknowledge Within | Resolve Within |
@@ -239,7 +240,7 @@ never a re-seed).
 | Issue | Detail |
 |-------|--------|
 | MilestoneType reuse vs. create | Priority-tiered = 1 MilestoneType reused 4 times. Response + Resolution = 2 types. Escalation ladder = 3 types. |
-| Priority-tiered needs a Priority | The test Incident in Phase 3 must derive a `Priority` value matching one of the milestones — otherwise no EntityMilestone spawns. `Priority` is not directly insertable — set `Impact` and `Urgency` so the org's matrix derives the target Priority (see `references/mcp-invocation.md` → Verify SLA engagement), or create one test Incident per tier. |
+| Priority-tiered needs a Priority | The test Incident in Phase 6 must derive a `Priority` value matching one of the milestones — otherwise no EntityMilestone spawns. `Priority` is not directly insertable — set `Impact` and `Urgency` so the org's matrix derives the target Priority (see `references/mcp-invocation.md` → Verify SLA engagement) — subject to the Phase 6 step 2 stopping rule. |
 | Multi-milestone partial-failure | If milestone #2 of N fails to attach, halt and surface the raw error. Do NOT continue attaching #3..N — the policy will be half-configured. |
 | `order` field | Numeric 1..N. Not load-bearing for runtime evaluation (all milestones fire independently), but controls display order in the UI. |
-| Priority-tiered + Priority Matrix skill | `Incident.Priority` is always derived from the Impact × Urgency matrix (a default matrix always exists). The Priority Matrix skill configures the *mapping* (which Impact × Urgency combination yields which Priority) — it does not turn derivation on or off. Run it first if you need a mapping other than the default. |
+| Priority-tiered + Priority Matrix skill | `Incident.Priority` is derived from the Impact × Urgency matrix only when the matrix is **on** (`IncPriorityMatrixEnabled`); when it is off, every Incident gets the org's default priority, so only that tier's milestone fires. `service-itsm-incident-priority-configure` turns the matrix on and configures the mapping — run it first (see `references/mcp-invocation.md` → Priority matrix flag). |

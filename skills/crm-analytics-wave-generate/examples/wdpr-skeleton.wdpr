@@ -1,0 +1,62 @@
+{
+  "runMode": "full",
+  "nodes": {
+    "LOAD_OPP": {
+      "action": "load",
+      "sources": [],
+      "parameters": {
+        "dataset": { "type": "connectedDataset", "label": "Opportunity", "connectionName": "SFDC_LOCAL", "sourceObjectName": "Opportunity" },
+        "fields": ["Id", "Amount", "CloseDate", "StageName"],
+        "mode": "SYNCED",
+        "preserveCurrencyFields": [],
+        "sampleDetails": { "type": "TopN", "sortBy": [] }
+      }
+    },
+    "COMPUTE_YEAR": {
+      "action": "formula",
+      "sources": ["LOAD_OPP"],
+      "parameters": {
+        "expressionType": "SQL",
+        "fields": [{ "name": "CloseYear", "label": "Close Year", "type": "TEXT", "formulaExpression": "date_format(CloseDate, 'yyyy')" }]
+      }
+    },
+    "EXTRACT0": {
+      "action": "extractGrains",
+      "sources": ["COMPUTE_YEAR"],
+      "parameters": { "grainExtractions": [] }
+    },
+    "AGG0": {
+      "action": "aggregate",
+      "sources": ["EXTRACT0"],
+      "parameters": {
+        "aggregations": [{ "name": "TotalAmount", "label": "Total Amount", "action": "SUM", "source": "Amount" }],
+        "groupings": ["StageName"],
+        "nodeType": "STANDARD",
+        "pivots": []
+      }
+    },
+    "OUTPUT": {
+      "action": "save",
+      "sources": ["AGG0"],
+      "parameters": {
+        "dataset": { "type": "analyticsDataset", "label": "DTS_Opportunity", "name": "DTS_Opportunity", "folderName": "MyApp" },
+        "fields": [],
+        "measuresToCurrencies": []
+      }
+    }
+  },
+  "ui": {
+    "nodes": {
+      "LOAD_OPP":    { "label": "Opportunity", "type": "LOAD_DATASET", "top": 112, "left": 112, "parameters": { "sampleSize": 2000 } },
+      "TRANSFORM0":  { "label": "TRANSFORM0",  "type": "TRANSFORM",    "top": 112, "left": 252, "graph": { "COMPUTE_YEAR": { "parameters": { "type": "BASE_FORMULA_UI" } } }, "connectors": [] },
+      "AGGREGATE0":  { "label": "AGGREGATE0",  "type": "AGGREGATE",    "top": 112, "left": 392, "graph": { "EXTRACT0": null, "AGG0": null }, "connectors": [{ "source": "EXTRACT0", "target": "AGG0" }] },
+      "OUTPUT":      { "label": "Output",      "type": "OUTPUT",       "top": 112, "left": 532 }
+    },
+    "connectors": [
+      { "source": "LOAD_OPP",   "target": "TRANSFORM0" },
+      { "source": "TRANSFORM0", "target": "AGGREGATE0" },
+      { "source": "AGGREGATE0", "target": "OUTPUT" }
+    ],
+    "hiddenColumns": []
+  }
+}

@@ -22,7 +22,7 @@ Scaling note: large bots with many flows scale approximately linearly in flow co
 
 | Tool | Why |
 |---|---|
-| `sf` CLI (authenticated against the target org) | Shells `sf org display --target-org <alias> --json` for access token, and `sf sobject describe` for the 7-day channel probe |
+| `sf` CLI (authenticated against the target org) | Must provide `sf org auth show-access-token` (preflighted at startup). Shells `sf org display --target-org <alias> --json` for org metadata, `sf org auth show-access-token --target-org <alias> --json --no-prompt` for the access token, and `sf sobject describe` for the 7-day channel probe |
 | Python 3.10+ | `pathlib`, dataclasses, `\|` union types, `concurrent.futures` |
 
 ---
@@ -143,6 +143,7 @@ Per-branch ancestor-path cycle detection is the primary termination primitive: t
 
 | Symptom | Fix |
 |---|---|
+| `sf CLI is missing required command 'sf org auth show-access-token'` | Upgrade/reinstall Salesforce CLI, then rerun |
 | `sf org display failed` | Re-authenticate: `sf org login web --alias <alias>` |
 | `INVALID_FIELD` from a SOQL asset | Salesforce renamed / removed the field in a quarterly release. Run with `--reprobe` to refresh the 7-day channel cache and pick up the new schema |
 | `STATUS=PROBE_FAILED` on first run | Channel probe saw a mandatory field missing. Check `channels.json` under the probe cache dir for which sObject / field — may require org-side feature enablement |

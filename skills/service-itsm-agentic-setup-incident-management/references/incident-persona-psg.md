@@ -8,9 +8,9 @@ sets require. This runs **inline** through the Salesforce-hosted **`headless-360
 comes from the OAuth JWT on the MCP session — never handle an org id, alias, or credentials. Minimum API
 version **67.0**.
 
-## Delegate to the systems of record
+## Delegate to the Setup Operation Recipes
 
-Every operation is delegated to a system of record (SOR) and its exact shape is fetched at runtime —
+Every operation is delegated to a Setup Operation Recipe (SOR) and its exact shape is fetched at runtime —
 `discover` by intent, `describe` the SOR step for its **current** route, method, and argument schema, then
 `dispatch_readonly` (reads) / `dispatch` (writes). **Hardcode no routes, SOQL, or request bodies; use what
 `describe` returns, and if it disagrees with anything here, `describe` wins.** Discover by intent, not by

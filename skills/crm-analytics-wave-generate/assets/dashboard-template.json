@@ -1,0 +1,66 @@
+{
+    "dataSourceLinksInfo": {},
+    "gridLayouts": [{
+        "name": "default",
+        "numColumns": 24,
+        "pages": [{
+            "label": "Page 1",
+            "name": "Page_1",
+            "navigationHidden": false,
+            "widgets": [
+                { "name": "wgt_kpi",    "row": 0,  "column": 6,  "colspan": 18, "rowspan": 4 },
+                { "name": "wgt_filter", "row": 0,  "column": 0,  "colspan": 6,  "rowspan": 4 },
+                { "name": "wgt_chart",  "row": 4,  "column": 0,  "colspan": 24, "rowspan": 9 },
+                { "name": "wgt_table",  "row": 13, "column": 0,  "colspan": 24, "rowspan": 9 }
+            ]
+        }]
+    }],
+    "widgets": {
+        "wgt_filter": { "type": "listselector", "parameters": { "step": "step_filter" } },
+        "wgt_kpi":    { "type": "number",       "parameters": { "step": "step_kpi", "measureField": "{MEASURE_FIELD}" } },
+        "wgt_chart":  { "type": "chart",        "parameters": { "step": "step_chart", "visualizationType": "hbar" } },
+        "wgt_table":  { "type": "chart",        "parameters": { "step": "step_table", "visualizationType": "flatTable" } }
+    },
+    "steps": {
+        "step_filter": {
+            "type": "saql",
+            "query": "q = load \"{DATASET_NAME}\"; q = foreach q generate '{FILTER_FIELD}' as '{FILTER_FIELD}'; q = limit q 1000;",
+            "broadcastFacet": true,
+            "useGlobal": true,
+            "selectMode": "multi",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        },
+        "step_kpi": {
+            "type": "saql",
+            "query": "q = load \"{DATASET_NAME}\"; q = group q by all; q = foreach q generate sum('{MEASURE_FIELD}') as '{MEASURE_FIELD}';",
+            "broadcastFacet": true,
+            "useGlobal": true,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        },
+        "step_chart": {
+            "type": "saql",
+            "query": "q = load \"{DATASET_NAME}\"; q = group q by '{DIMENSION_FIELD}'; q = foreach q generate '{DIMENSION_FIELD}' as '{DIMENSION_FIELD}', sum('{MEASURE_FIELD}') as '{MEASURE_FIELD}'; q = order q by '{MEASURE_FIELD}' desc; q = limit q 20;",
+            "broadcastFacet": true,
+            "useGlobal": true,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        },
+        "step_table": {
+            "type": "saql",
+            "query": "q = load \"{DATASET_NAME}\"; q = group q by '{DIMENSION_FIELD}'; q = foreach q generate '{DIMENSION_FIELD}' as '{DIMENSION_FIELD}', sum('{MEASURE_FIELD}') as '{MEASURE_FIELD}'; q = order q by '{MEASURE_FIELD}' desc; q = limit q 100;",
+            "broadcastFacet": true,
+            "useGlobal": true,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        }
+    }
+}

@@ -1,0 +1,236 @@
+{
+    "runMode": "full",
+    "nodes": {
+        "LOAD_OPPORTUNITY": {
+            "action": "load",
+            "sources": [],
+            "parameters": {
+                "dataset": {
+                    "type": "connectedDataset",
+                    "label": "Opportunity",
+                    "connectionName": "SFDC_LOCAL",
+                    "sourceObjectName": "Opportunity"
+                },
+                "fields": ["Id", "AccountId", "Name", "StageName", "CloseDate", "Amount"],
+                "mode": "SYNCED",
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "type": "TopN",
+                    "sortBy": []
+                }
+            }
+        },
+        "LOAD_ACCOUNT": {
+            "action": "load",
+            "sources": [],
+            "parameters": {
+                "dataset": {
+                    "type": "connectedDataset",
+                    "label": "Account",
+                    "connectionName": "SFDC_LOCAL",
+                    "sourceObjectName": "Account"
+                },
+                "fields": ["Id", "Name", "Industry"],
+                "mode": "SYNCED",
+                "preserveCurrencyFields": [],
+                "sampleDetails": {
+                    "type": "TopN",
+                    "sortBy": []
+                }
+            }
+        },
+        "JOIN_ACCOUNT": {
+            "action": "join",
+            "sources": ["LOAD_OPPORTUNITY", "LOAD_ACCOUNT"],
+            "parameters": {
+                "joinType": "LOOKUP",
+                "leftKeys": ["AccountId"],
+                "rightKeys": ["Id"],
+                "rightQualifier": "Account"
+            }
+        },
+        "COMPUTE_TOTAL_REVENUE": {
+            "action": "formula",
+            "sources": ["JOIN_ACCOUNT"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "name": "TotalRevenue",
+                        "label": "Total Revenue",
+                        "type": "NUMBER",
+                        "formulaExpression": "Amount"
+                    }
+                ]
+            }
+        },
+        "COMPUTE_CLOSE_YEAR": {
+            "action": "formula",
+            "sources": ["COMPUTE_TOTAL_REVENUE"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "name": "CloseYear",
+                        "label": "Close Year",
+                        "type": "TEXT",
+                        "formulaExpression": "date_format(CloseDate, 'yyyy')"
+                    }
+                ]
+            }
+        },
+        "COMPUTE_CLOSE_QUARTER": {
+            "action": "formula",
+            "sources": ["COMPUTE_CLOSE_YEAR"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "name": "CloseQuarter",
+                        "label": "Close Quarter",
+                        "type": "TEXT",
+                        "formulaExpression": "case when date_format(CloseDate, 'MM') <= '03' then 'Q1' when date_format(CloseDate, 'MM') <= '06' then 'Q2' when date_format(CloseDate, 'MM') <= '09' then 'Q3' else 'Q4' end"
+                    }
+                ]
+            }
+        },
+        "COMPUTE_INDUSTRY_FILLED": {
+            "action": "formula",
+            "sources": ["COMPUTE_CLOSE_QUARTER"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "name": "IndustryFilled",
+                        "label": "Industry Filled",
+                        "type": "TEXT",
+                        "formulaExpression": "case when (Account.Industry is null or Account.Industry = '') then 'Unknown' else Account.Industry end"
+                    }
+                ]
+            }
+        },
+        "COMPUTE_DEAL_SIZE": {
+            "action": "formula",
+            "sources": ["COMPUTE_INDUSTRY_FILLED"],
+            "parameters": {
+                "expressionType": "SQL",
+                "fields": [
+                    {
+                        "name": "DealSize",
+                        "label": "Deal Size",
+                        "type": "TEXT",
+                        "formulaExpression": "case when Amount >= 100000 then 'Large' when Amount >= 50000 then 'Medium' else 'Small' end"
+                    }
+                ]
+            }
+        },
+        "EXTRACT0": {
+            "action": "extractGrains",
+            "sources": ["COMPUTE_DEAL_SIZE"],
+            "parameters": {
+                "grainExtractions": []
+            }
+        },
+        "AGGREGATE_BY_INDUSTRY_QUARTER": {
+            "action": "aggregate",
+            "sources": ["EXTRACT0"],
+            "parameters": {
+                "aggregations": [
+                    {
+                        "name": "TotalRevenue",
+                        "label": "Total Revenue",
+                        "action": "SUM",
+                        "source": "TotalRevenue"
+                    }
+                ],
+                "groupings": ["AccountId", "Account.Name", "IndustryFilled", "CloseYear", "CloseQuarter", "DealSize"],
+                "nodeType": "STANDARD",
+                "pivots": []
+            }
+        },
+        "OUTPUT_DTS_PIPELINE": {
+            "action": "save",
+            "sources": ["AGGREGATE_BY_INDUSTRY_QUARTER"],
+            "parameters": {
+                "dataset": {
+                    "type": "analyticsDataset",
+                    "label": "DTS_PipelineByIndustry",
+                    "name": "DTS_PipelineByIndustry",
+                    "folderName": "SkillBuildInsights"
+                },
+                "fields": [],
+                "measuresToCurrencies": []
+            }
+        }
+    },
+    "ui": {
+        "nodes": {
+            "LOAD_OPPORTUNITY": {
+                "label": "Opportunity",
+                "type": "LOAD_DATASET",
+                "top": 112,
+                "left": 112,
+                "parameters": { "sampleSize": 2000 }
+            },
+            "LOAD_ACCOUNT": {
+                "label": "Account",
+                "type": "LOAD_DATASET",
+                "top": 252,
+                "left": 252,
+                "parameters": { "sampleSize": 2000 }
+            },
+            "JOIN_ACCOUNT": {
+                "label": "JOIN_ACCOUNT",
+                "type": "JOIN",
+                "top": 112,
+                "left": 392
+            },
+            "TRANSFORM0": {
+                "label": "TRANSFORM0",
+                "type": "TRANSFORM",
+                "top": 112,
+                "left": 532,
+                "graph": {
+                    "COMPUTE_TOTAL_REVENUE": { "parameters": { "type": "BASE_FORMULA_UI" } },
+                    "COMPUTE_CLOSE_YEAR": { "parameters": { "type": "BASE_FORMULA_UI" } },
+                    "COMPUTE_CLOSE_QUARTER": { "parameters": { "type": "BASE_FORMULA_UI" } },
+                    "COMPUTE_INDUSTRY_FILLED": { "parameters": { "type": "BASE_FORMULA_UI" } },
+                    "COMPUTE_DEAL_SIZE": { "parameters": { "type": "BASE_FORMULA_UI" } }
+                },
+                "connectors": [
+                    { "source": "COMPUTE_TOTAL_REVENUE", "target": "COMPUTE_CLOSE_YEAR" },
+                    { "source": "COMPUTE_CLOSE_YEAR", "target": "COMPUTE_CLOSE_QUARTER" },
+                    { "source": "COMPUTE_CLOSE_QUARTER", "target": "COMPUTE_INDUSTRY_FILLED" },
+                    { "source": "COMPUTE_INDUSTRY_FILLED", "target": "COMPUTE_DEAL_SIZE" }
+                ]
+            },
+            "AGGREGATE0": {
+                "label": "AGGREGATE0",
+                "type": "AGGREGATE",
+                "top": 112,
+                "left": 672,
+                "graph": {
+                    "EXTRACT0": null,
+                    "AGGREGATE_BY_INDUSTRY_QUARTER": null
+                },
+                "connectors": [
+                    { "source": "EXTRACT0", "target": "AGGREGATE_BY_INDUSTRY_QUARTER" }
+                ]
+            },
+            "OUTPUT_DTS_PIPELINE": {
+                "label": "OUTPUT_DTS_PIPELINE",
+                "type": "OUTPUT",
+                "top": 112,
+                "left": 812
+            }
+        },
+        "connectors": [
+            { "source": "LOAD_OPPORTUNITY", "target": "JOIN_ACCOUNT" },
+            { "source": "LOAD_ACCOUNT", "target": "JOIN_ACCOUNT" },
+            { "source": "JOIN_ACCOUNT", "target": "TRANSFORM0" },
+            { "source": "TRANSFORM0", "target": "AGGREGATE0" },
+            { "source": "AGGREGATE0", "target": "OUTPUT_DTS_PIPELINE" }
+        ],
+        "hiddenColumns": []
+    }
+}

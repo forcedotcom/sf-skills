@@ -1,0 +1,67 @@
+{
+    "dataSourceLinksInfo": {},
+    "gridLayouts": [
+        {
+            "name": "default",
+            "numColumns": 24,
+            "pages": [
+                {
+                    "label": "Page 1",
+                    "name": "Page_1",
+                    "navigationHidden": false,
+                    "widgets": [
+                        { "name": "wgt_industry_filter", "row": 0, "column": 0, "colspan": 6, "rowspan": 4 },
+                        { "name": "wgt_kpi", "row": 0, "column": 6, "colspan": 18, "rowspan": 4 },
+                        { "name": "wgt_accounts", "row": 4, "column": 0, "colspan": 24, "rowspan": 9 }
+                    ]
+                }
+            ]
+        }
+    ],
+    "widgets": {
+        "wgt_industry_filter": {
+            "type": "listselector",
+            "parameters": { "step": "step_industry_sel" }
+        },
+        "wgt_kpi": {
+            "type": "number",
+            "parameters": { "step": "step_kpi", "measureField": "TotalRevenue" }
+        },
+        "wgt_accounts": {
+            "type": "chart",
+            "parameters": { "step": "step_accounts", "visualizationType": "hbar" }
+        }
+    },
+    "steps": {
+        "step_industry_sel": {
+            "type": "saql",
+            "query": "q = load \"DTS_PipelineByIndustry\"; q = group q by 'Account.Industry'; q = foreach q generate 'Account.Industry' as 'Industry'; q = order q by 'Industry' asc;",
+            "broadcastFacet": false,
+            "useGlobal": false,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        },
+        "step_kpi": {
+            "type": "saql",
+            "query": "q = load \"DTS_PipelineByIndustry\"; q = filter q by {{column(step_industry_sel.selection, [\"Industry\"]).asEquality(\"Account.Industry\")}}; q = group q by all; q = foreach q generate sum('TotalRevenue') as 'TotalRevenue';",
+            "broadcastFacet": false,
+            "useGlobal": false,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        },
+        "step_accounts": {
+            "type": "saql",
+            "query": "q = load \"DTS_PipelineByIndustry\"; q = filter q by {{column(step_industry_sel.selection, [\"Industry\"]).asEquality(\"Account.Industry\")}}; q = group q by 'Account.Name'; q = foreach q generate 'Account.Name' as 'AccountName', sum('TotalRevenue') as 'TotalRevenue'; q = order q by 'TotalRevenue' desc; q = limit q 10;",
+            "broadcastFacet": false,
+            "useGlobal": false,
+            "selectMode": "single",
+            "groups": [],
+            "numbers": [],
+            "strings": []
+        }
+    }
+}

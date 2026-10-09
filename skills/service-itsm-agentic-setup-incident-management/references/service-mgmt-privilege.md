@@ -8,12 +8,12 @@ behind the **Enable Privilege Assignment** master toggle. This runs **inline** t
 `dispatch_readonly`, `dispatch`). The org comes from the OAuth JWT on the MCP session — never handle an org
 id, alias, or credentials. Minimum API version **67.0**.
 
-## Delegate every operation to the system of record
+## Delegate every operation to the Setup Operation Recipe
 
-The **Service Management Privilege setup SOR** is the single source of truth for **how** each step is done —
-the route, method, request/response shape, field names, per-step `status`, and `depends_on`. It is **draft
-and actively evolving**, so **never hardcode a route or request body**. Carry only the **goal, scope,
-ordering, and invariants**, and at runtime:
+The **Service Management Privilege Setup Operation Recipe (SOR)** is the single source of truth for **how**
+each step is done — the route, method, request/response shape, field names, per-step `status`, and
+`depends_on`. It is **draft and actively evolving**, so **never hardcode a route or request body**. Carry
+only the **goal, scope, ordering, and invariants**, and at runtime:
 
 1. `discover` the operation by intent (e.g. `"enable privilege assignment toggle"`, `"set ITSM escalation
    level"`, `"create a service management privilege"`, `"assign employees to a service privilege"`).

@@ -9,9 +9,9 @@ on the MCP session — never handle an org id, alias, or credentials. Minimum AP
 This is **not** the master Incident Management on/off switch (`service-itsm-incident-mgmt-configure`) nor
 the Incident Priority Matrix (`service-itsm-incident-priority-configure`).
 
-## Delegate to the system of record
+## Delegate to the Setup Operation Recipe
 
-Every operation is delegated to a system of record (SOR) and its exact shape is fetched at runtime:
+Every operation is delegated to a Setup Operation Recipe (SOR) and its exact shape is fetched at runtime:
 `discover` the operation by intent, `describe` the SOR for its **current** steps, routes, argument schema,
 the preference list, the on-screen labels, and its `agent_guidance`, then `dispatch_readonly` (reads) /
 `dispatch` (writes). **Hardcode no routes, preference names, labels, or request bodies — use what

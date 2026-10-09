@@ -7,12 +7,12 @@ preferences**. This runs **inline** through the Salesforce-hosted
 `dispatch_readonly`, `dispatch`). The org comes from the OAuth JWT on the MCP session — never handle an org
 id, alias, or credentials. Minimum API version **67.0**.
 
-## Delegate every operation to the MIM system of record
+## Delegate every operation to the MIM Setup Operation Recipe
 
-The **Major Incident Management SOR** is the single source of truth for **how** each step is done — the
-route, method, request/response shape, field names, per-step `status`, and `depends_on` ordering. It is
-**actively evolving**, so **never hardcode a route or request body**. Carry only the **goal, scope,
-ordering, and invariants**, and at runtime:
+The **Major Incident Management Setup Operation Recipe (SOR)** is the single source of truth for **how**
+each step is done — the route, method, request/response shape, field names, per-step `status`, and
+`depends_on` ordering. It is **actively evolving**, so **never hardcode a route or request body**. Carry
+only the **goal, scope, ordering, and invariants**, and at runtime:
 
 1. `discover` the operation by intent (e.g. `"set major incident approval group"`, `"validate major
    incident approval group users"`, `"toggle major incident org preference"`).

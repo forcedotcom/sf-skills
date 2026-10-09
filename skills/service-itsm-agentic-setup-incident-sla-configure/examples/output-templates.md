@@ -12,7 +12,7 @@ Display the error from the `dispatch` response (`{status_code, body}`) exactly a
 Incident SLA Setup Complete (via service-itsm-agentic-setup-incident-sla-configure)
 
 Artifacts created:
-  Milestone Type: <name> (OneTime)
+  Milestone Type: <name> (No Recurrence)
   SLA Policy:     <name> (Active, Incident)
   Milestone:      <time> min, criteria: <criteria summary>
   Entitlement:    <name> (auto-provisioned; no Account — Incident engages per-Incident via EntitlementId)
@@ -35,7 +35,7 @@ Incident SLA Setup Complete (via service-itsm-agentic-setup-incident-sla-configu
 Strategy: <Response + Resolution | Priority-tiered | Escalation ladder | Custom>
 
 Artifacts created:
-  Milestone Types: <name1>, <name2>, ... (OneTime)
+  Milestone Types: <name1>, <name2>, ... (No Recurrence)
   SLA Policy:      <name> (Active, Incident)
   Milestones:
     #1  <MilestoneType name>   <time> min   criteria: <summary>
@@ -62,7 +62,7 @@ Verification:
   No test Incident was created, so EntityMilestone firing was not exercised in this run.
 ```
 
-## Success — milestone actions (Phase 2.5, when Warn/Escalate was requested)
+## Success — milestone actions (Phase 5, when Warn/Escalate was requested)
 
 Append this **Milestone Actions** block to the multi-milestone success report above — do not emit it
 alone. The report must still carry the policy, both milestones (name, time, criteria), the

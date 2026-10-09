@@ -26,6 +26,8 @@ Here are the features available for Incident Management. Select one or more to c
 │   │                               │ persona to a user (bundle + backing licenses)    │          │
 │ 6 │ Service Management Privilege  │ Escalation level, privilege records + employee   │ Not done │
 │   │                               │ assignments, behind Enable Privilege Assignment  │          │
+│ 7 │ Audit Tracking                │ Turn on field history tracking for the Incident  │ Not done │
+│   │                               │ fields you choose (who changed what, and when)   │          │
 └───┴───────────────────────────────┴──────────────────────────────────────────────────┴──────────┘
 
 Reply with the numbers of the features you want to set up (one or more, e.g. `1,3`).
@@ -48,6 +50,7 @@ Incident Preferences — configured successfully
 │ 4 │ Major Incident Management     │ Not done │
 │ 5 │ Incident Persona PSG          │ Not done │
 │ 6 │ Service Management Privilege  │ Not done │
+│ 7 │ Audit Tracking                │ Not done │
 └───┴───────────────────────────────┴──────────┘
 
 Say a number to configure the next feature, or `done` to finish.
@@ -66,7 +69,7 @@ finished — even if some features are still `Not done`. When rendering:
   - All `Done` → `Your Incident Management features are configured.`
   - Otherwise → `You have finished the features you selected. The remaining features can be resumed later by re-invoking this orchestrator.`
 
-Example — user finished with three features configured, three left:
+Example — user finished with three features configured, four left:
 
 ```text
 Incident Management Setup — Finished
@@ -81,6 +84,7 @@ Incident Management Setup — Finished
 │ Major Incident Management     │ Done     │
 │ Incident Persona PSG          │ Not done │
 │ Service Management Privilege  │ Not done │
+│ Audit Tracking                │ Not done │
 └───────────────────────────────┴──────────┘
 
 You have finished the features you selected. The remaining features can be resumed later by re-invoking this orchestrator.

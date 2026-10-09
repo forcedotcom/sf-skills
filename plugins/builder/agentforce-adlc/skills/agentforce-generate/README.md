@@ -15,6 +15,7 @@ The skill routes agent work across the full lifecycle:
 | Diagnose Behavioral Issues | Trace-based debugging, routing/action analysis |
 | Deploy / Release | Draft iteration, deploy, explicit publish + activate |
 | Test an Agent | Coverage design, spec creation, run analysis |
+| Migrate a Legacy Agent | `GenAiPlannerBundle` → `AiAuthoringBundle` (Agent Script) conversion, then optimize |
 
 ## Skill Structure
 
