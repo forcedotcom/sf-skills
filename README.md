@@ -1,15 +1,22 @@
-# Salesforce Skills Library
+# Salesforce Skills and Plugins Library
 
-This repository provides a curated collection of Salesforce agent skills for building applications. It includes skills for Agentforce agents, Lightning apps, Flow, Apex, SOQL, Lightning Web Components (LWC), UI bundles, objects and fields, permission sets, and related areas.
+This repository provides Salesforce agent skills, plugins, and sample apps for building applications. It includes skills for Agentforce agents, Lightning apps, Flow, Apex, SOQL, Lightning Web Components (LWC), UI bundles, objects and fields, permission sets, and related areas. The [builder plugins](plugins/builder/README.md) package skills with additional capabilities such as agents, hooks, commands, and Model Context Protocol (MCP) servers for Claude Code.
 
-The skills are contributed by Salesforce and the broader community. It’s optimized for Agentforce Vibes and can be used with any AI tool that supports skills.
+The skills are contributed by Salesforce and the broader community. The skills library is optimized for Agentforce Vibes and can be used with any AI tool that supports skills. For guided Salesforce development in Claude Code, start with the [Salesforce Development plugin README](plugins/builder/salesforce-development/README.md) and the [Salesforce Development plugin documentation](https://developer.salesforce.com/docs/platform/salesforce-skills-plugins/guide/salesforce-development-overview.html).
 
-> ⚠️ **Expect frequent changes.** The Salesforce skills library is evolving rapidly as we refine patterns and incorporate feedback. Skills may be renamed, restructured, or removed between releases — they do not follow the same stability guarantees as GA platform APIs. If you’ve forked or synced the repository, be prepared for upstream changes that may conflict with local modifications. This repository is always the source of truth.
+> ⚠️ **Expect frequent changes.** The Salesforce skills and plugins library is evolving rapidly as we refine patterns and incorporate feedback. Skills and plugins may be renamed, restructured, or removed between releases — they do not follow the same stability guarantees as GA platform APIs. If you’ve forked or synced the repository, be prepared for upstream changes that may conflict with local modifications. This repository is always the source of truth.
 
 ## 🗂️ Structure
 
 ```
 sf-skills/
+├── .claude-plugin/
+│   └── marketplace.json  # Salesforce plugin marketplace catalog
+├── plugins/
+│   └── builder/          # Claude Code plugins for Salesforce development
+│       ├── README.md     # Plugin catalog and setup guidance
+│       ├── salesforce-development/
+│       └── ...
 ├── skills/               # Directory-based executable workflows
 │   ├── platform-apex-generate/
 │   ├── platform-custom-object-generate/
@@ -28,7 +35,17 @@ sf-skills/
 | **Tool** | **Usage** |
 |----------|-------------|
 | **Agentforce Vibes** | Skills are auto-installed and auto-updated |
-| **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/)** | `npx skills add forcedotcom/sf-skills` |
+| **Claude Code — Salesforce Development plugin** | Follow the [plugin installation guide](https://developer.salesforce.com/docs/platform/salesforce-skills-plugins/guide/install-salesforce-development.html) for skills, guided workflows, and integrated tools |
+| **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/) — standalone skills** | `npx skills add forcedotcom/sf-skills` |
+
+## 🔌 Plugins
+
+Plugins bundle skills with other components that the coding client installs and loads together. The Salesforce Development plugin includes agents, hooks, commands, and MCP servers for building, testing, and deploying on the Salesforce Platform. Specialized builder plugins add capabilities for areas such as Agentforce, code quality, LWC, and React development.
+
+- [Builder plugin catalog and setup](plugins/builder/README.md)
+- [Salesforce Development plugin README](plugins/builder/salesforce-development/README.md) — prerequisites, quick start, and component inventory
+- [Salesforce Development plugin documentation](https://developer.salesforce.com/docs/platform/salesforce-skills-plugins/guide/salesforce-development-overview.html) — installation, project and org setup, workflows, and troubleshooting in Claude Code
+- [Claude Code plugin documentation](https://code.claude.com/docs/en/plugins) — plugin components and how plugins work
 
 ## 📦 Samples
 
