@@ -980,10 +980,10 @@ it('displays data', async () => {
 ### FLS Enforcement
 
 ```apex
-// Always use SECURITY_ENFORCED or stripInaccessible
+// Always use USER_MODE or stripInaccessible
 @AuraEnabled(cacheable=true)
 public static List<Account> getAccounts() {
-    return [SELECT Id, Name FROM Account WITH SECURITY_ENFORCED];
+    return [SELECT Id, Name FROM Account WITH USER_MODE];
 }
 
 // For DML operations
