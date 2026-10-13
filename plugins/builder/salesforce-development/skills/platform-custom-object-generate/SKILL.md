@@ -1,6 +1,6 @@
 ---
 name: platform-custom-object-generate
-description: "Use when users create, generate, or validate Salesforce Custom Object metadata. Trigger on custom objects, .object files, sharing models, name fields, or validation rules — e.g. \"create a custom object\" — and deployment errors around sharing models and Master-Detail relationships. Also keep the object's <description> current when its fields or validation rules change. Do NOT use for non-Custom-Object metadata (Apex, Flows, LWC, Permission Sets, Custom Metadata Types) or standard objects."
+description: "Use when users create, generate, or validate Salesforce Custom Object metadata. Trigger on custom objects, .object files, sharing models, name fields, validation rules, or the object's page layout (.layout-meta.xml) — e.g. \"create a custom object\" — and deployment errors around sharing models and Master-Detail relationships. Also keep the object's <description> current when its fields or validation rules change. Do NOT use for non-Custom-Object metadata (Apex, Flows, LWC, Permission Sets, Custom Metadata Types) or standard objects."
 metadata:
   version: "1.1"
   domains: ["Platform"]
@@ -247,6 +247,14 @@ Validation rule names follow different conventions than custom fields.
 | Validation Rules | No suffix | `Require_Start_Date` |
 | Custom Objects | Ends with `__c` | `Vehicle__c` |
 
+### Tab and App Launcher Visibility
+
+A new object isn't in the App Launcher until a `CustomTab` ships (`platform-custom-tab-generate`) **and** an assigned permission set gives it `<visibility>Visible</visibility>` in `tabSettings` (`platform-permission-set-generate`). Both deploys succeed without it, so nothing flags the gap.
+
+### Page Layout Required Fields
+
+In `Layout` metadata, `Name` and other universally required fields (e.g. Opportunity `StageName`, `CloseDate`) must use `<behavior>Required</behavior>`. `Edit` fails with `Field:Name must be Required`.
+
 ---
 
 ## 5. Verification Checklist
@@ -286,6 +294,8 @@ Before generating the Custom Object XML, verify:
 - [ ] Is `<description>` present? (Enriched per Section B — proposed and confirmed with the user before writing.)
 - [ ] Are `<enableSearch>` and `<enableReports>` set to `true` if user-facing?
 - [ ] Does the filename match the intended API name?
+- [ ] If user-facing, is there a tab plus a permission set with visible `tabSettings`?
+- [ ] Do layouts set `Name` and other required fields to `<behavior>Required</behavior>`?
 
 ---
 

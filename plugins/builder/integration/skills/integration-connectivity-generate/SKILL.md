@@ -214,3 +214,4 @@ When this skill completes an integration task, it produces:
 ## Pre-Delivery Checklist
 
 - [ ] Never hardcode credentials — all secrets stored in Named Credentials or External Credentials
+- [ ] External Service Registration file names (the fullName) are alphanumeric only, no underscores — `StripeAPI`, not `Stripe_API`

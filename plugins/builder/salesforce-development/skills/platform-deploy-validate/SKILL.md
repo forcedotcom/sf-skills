@@ -33,6 +33,8 @@ Classify the org with the gate's classifier — it is the authoritative source o
 "${CLAUDE_PLUGIN_ROOT}/scripts/sf-deploy-gate" bucket <alias>
 ```
 
+If `${CLAUDE_PLUGIN_ROOT}` is unset or the script is missing (e.g. a standalone `npx skills add` install), run `sf org display --target-org <alias> --json` instead and treat the org as `production` unless `isSandbox` or `isScratch` is true or the instance URL contains `--` or `test.salesforce.com`.
+
 Only `production` takes the production path (Step 2b); every other result takes the sandbox/scratch path (Step 2a). `unknown` means the org type could not be confirmed (usually an incomplete org record). Say so plainly: the deploy gate still allows the deploy, auto-deploy on save stays off for that org, and re-authenticating with `sf org login web` usually restores the classification.
 
 ### Step 2a — Sandbox/Scratch path (dry-run)
