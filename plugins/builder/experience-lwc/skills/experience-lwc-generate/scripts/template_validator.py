@@ -7,8 +7,9 @@ Detects common mistakes that LLMs make when generating LWC templates:
 2. Ternary operators in templates ({x ? a : b})
 3. Object/array literals in attributes
 4. Method calls in templates ({items.length})
-5. Comparison operators in if:true
+5. Comparison operators in lwc:if / lwc:elseif (and legacy if:true / if:false)
 6. Event handlers with inline arguments
+7. Legacy if:true / if:false directives (use lwc:if / lwc:elseif / lwc:else)
 
 This validator is ADVISORY - it provides warnings but does not block operations.
 
@@ -28,7 +29,7 @@ class LWCTemplateValidator:
         # Arithmetic operations
         (r'\{[^}]*\s*[\+\-\*\/]\s*[^}]*\}', 'Arithmetic expression', 'Use a getter in your JS file'),
         # Ternary operators
-        (r'\{[^}]*\s*\?\s*[^}]+\s*:\s*[^}]*\}', 'Ternary operator', 'Use a getter or if:true/if:false'),
+        (r'\{[^}]*\s*\?\s*[^}]+\s*:\s*[^}]*\}', 'Ternary operator', 'Use a getter or lwc:if/lwc:else'),
         # String concatenation with +
         (r"\{[^}]*['\"]\s*\+\s*[^}]*\}", 'String concatenation', 'Use a getter with template literals'),
         # Template literals (backticks)
@@ -58,18 +59,22 @@ class LWCTemplateValidator:
         (r'\{[^}]*JSON\.parse\s*\(', 'JSON.parse()', 'Use a getter'),
     ]
 
-    # Patterns for comparisons in if:true/if:false
+    # Patterns for comparisons in conditional directives (lwc:if, lwc:elseif, legacy if:true/if:false)
     COMPARISON_PATTERNS = [
-        # Comparison operators in if:true
-        (r'if:true=\{[^}]*\s*[><=!]+\s*[^}]*\}', 'Comparison in if:true', 'Use a getter: get isGreater() { return x > 5; }'),
-        (r'if:false=\{[^}]*\s*[><=!]+\s*[^}]*\}', 'Comparison in if:false', 'Use a getter'),
+        # Comparison operators
+        (r'(?:lwc:if|lwc:elseif|if:true|if:false)=\{[^}]*\s*[><=!]+\s*[^}]*\}', 'Comparison in conditional directive', 'Use a getter: get isGreater() { return x > 5; }'),
         # Logical operators
-        (r'if:true=\{[^}]*\s*&&\s*[^}]*\}', 'Logical AND in if:true', 'Use a getter: get bothTrue() { return a && b; }'),
-        (r'if:false=\{[^}]*\s*&&\s*[^}]*\}', 'Logical AND in if:false', 'Use a getter'),
-        (r'if:true=\{[^}]*\s*\|\|\s*[^}]*\}', 'Logical OR in if:true', 'Use a getter'),
-        (r'if:false=\{[^}]*\s*\|\|\s*[^}]*\}', 'Logical OR in if:false', 'Use a getter'),
+        (r'(?:lwc:if|lwc:elseif|if:true|if:false)=\{[^}]*\s*&&\s*[^}]*\}', 'Logical AND in conditional directive', 'Use a getter: get bothTrue() { return a && b; }'),
+        (r'(?:lwc:if|lwc:elseif|if:true|if:false)=\{[^}]*\s*\|\|\s*[^}]*\}', 'Logical OR in conditional directive', 'Use a getter'),
         # Negation
-        (r'if:true=\{!\w', 'Negation in if:true', 'Use if:false instead, or use a getter'),
+        (r'(?:lwc:if|lwc:elseif|if:true|if:false)=\{!\w', 'Negation in conditional directive', 'Use a getter, or move the content into an lwc:else branch'),
+    ]
+
+    # Legacy conditional directives (no longer recommended, may be removed in the future)
+    # https://developer.salesforce.com/docs/platform/lwc/guide/reference-directives.html
+    LEGACY_DIRECTIVE_PATTERNS = [
+        (r'\bif:true\s*=', 'Legacy if:true directive', 'Use lwc:if={condition} (with lwc:elseif / lwc:else for other branches)'),
+        (r'\bif:false\s*=', 'Legacy if:false directive', 'Use lwc:else after an lwc:if sibling, or lwc:if with a negated getter'),
     ]
 
     # Patterns for object/array literals
@@ -96,16 +101,16 @@ class LWCTemplateValidator:
         (r'\bv-model\s*=', 'Vue v-model syntax', 'LWC uses value={prop} with onchange handler'),
         (r'\bv-bind:', 'Vue v-bind syntax', 'LWC uses {property} binding'),
         (r'\bv-on:', 'Vue v-on syntax', 'LWC uses on* handlers (onclick, onchange)'),
-        (r'\bv-if\s*=', 'Vue v-if syntax', 'LWC uses if:true={condition}'),
+        (r'\bv-if\s*=', 'Vue v-if syntax', 'LWC uses lwc:if={condition}'),
         (r'\bv-for\s*=', 'Vue v-for syntax', 'LWC uses for:each={array} for:item="item"'),
-        (r'\bv-show\s*=', 'Vue v-show syntax', 'LWC uses if:true/if:false or CSS classes'),
+        (r'\bv-show\s*=', 'Vue v-show syntax', 'LWC uses lwc:if/lwc:else or CSS classes'),
         # React patterns
         (r'\bclassName\s*=', 'React className', 'LWC uses class={classString}'),
         (r'\bhtmlFor\s*=', 'React htmlFor', 'LWC uses for attribute or lightning-input label'),
         (r'\bonClick\s*=\s*\{[^}]*\(\s*\)', 'React onClick with call', 'LWC uses onclick={handler} without parentheses'),
         # Angular patterns
         (r'\[\(ngModel\)\]', 'Angular two-way binding', 'LWC uses value={prop} with onchange'),
-        (r'\*ngIf\s*=', 'Angular *ngIf', 'LWC uses if:true={condition}'),
+        (r'\*ngIf\s*=', 'Angular *ngIf', 'LWC uses lwc:if={condition}'),
         (r'\*ngFor\s*=', 'Angular *ngFor', 'LWC uses for:each={array} for:item="item"'),
         (r'\(click\)\s*=', 'Angular event binding', 'LWC uses onclick={handler}'),
     ]
@@ -158,6 +163,7 @@ class LWCTemplateValidator:
         self._check_patterns(self.METHOD_CALL_PATTERNS, 'method_call', 'CRITICAL')
         self._check_patterns(self.COMPARISON_PATTERNS, 'comparison', 'CRITICAL')
         self._check_patterns(self.LITERAL_PATTERNS, 'literal', 'CRITICAL')
+        self._check_patterns(self.LEGACY_DIRECTIVE_PATTERNS, 'legacy_directive', 'WARNING', 'is no longer recommended')
         self._check_patterns(self.EVENT_HANDLER_PATTERNS, 'event_handler', 'WARNING')
         self._check_patterns(self.FRAMEWORK_SYNTAX_PATTERNS, 'framework_syntax', 'CRITICAL')
         self._check_iteration_keys()
@@ -168,7 +174,8 @@ class LWCTemplateValidator:
             'issue_count': len(self.issues)
         }
 
-    def _check_patterns(self, patterns: List, category: str, severity: str):
+    def _check_patterns(self, patterns: List, category: str, severity: str,
+                        message_suffix: str = 'not supported in LWC templates'):
         """Check for pattern matches in the template."""
         for i, line in enumerate(self.lines, 1):
             # Skip HTML comments
@@ -189,7 +196,7 @@ class LWCTemplateValidator:
                         self.issues.append({
                             'severity': severity,
                             'category': category,
-                            'message': f'{name} not supported in LWC templates',
+                            'message': f'{name} {message_suffix}',
                             'line': i,
                             'fix': fix,
                             'source': 'template-validator'
