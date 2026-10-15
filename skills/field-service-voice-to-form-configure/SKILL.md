@@ -1,12 +1,13 @@
 ---
 name: field-service-voice-to-form-configure
-description: "Set up Voice to Form on Field Service Mobile end-to-end against a Salesforce org. Covers BOTH variants in a single skill: Voice to Record Edit (voice-fills any record edit screen) and Voice to Form Data Capture (voice-fills Discovery Framework / Data Capture forms). For Data Capture, the skill is interactive: it discovers existing DC forms in the org and asks the admin which to enable. If no DC forms exist, it hands off to the fs-data-capture-form-deployer skill in this repo to create them, then resumes. Also assigns every permission a Field Service mobile user needs to actually use voice on-device, and walks the admin through the Einstein generative AI base setup wizard which is the most common reason voice 'works' but returns 'we couldn't recommend any updates'. TRIGGER when: user asks to enable, configure, install, or set up Voice to Form, V2F, Voice to Record Edit, V2RE, the microphone on the mobile app, or voice-fill on Field Service Mobile; user asks to turn on voice for Data Capture forms or for record edit. DO NOT TRIGGER when: user wants Pre-Work Brief (use setting-up-pre-work-brief); user wants to author a brand new Data Capture form (use fs-data-capture-form-deployer); user wants to build a generic Agentforce agent (use developing-agentforce)."
+description: "Set up Voice to Form on Field Service Mobile end-to-end against a Salesforce org, covering both variants: Voice to Record Edit (voice-fills any record-edit screen) and Voice to Form Data Capture (voice-fills Discovery Framework / Data Capture forms). Discovers existing DC forms and asks which to enable, hands off to fs-data-capture-form-deployer to create them if none exist, assigns every permission a mobile user needs, and walks the admin through the Einstein generative AI base setup. TRIGGER when the user asks to enable, configure, install, or set up Voice to Form, V2F, Voice to Record Edit, V2RE, the microphone on the mobile app, or voice-fill on Field Service Mobile. DO NOT TRIGGER when the user wants Pre-Work Brief, wants to author a brand-new Data Capture form, or wants to build a generic Agentforce agent."
+user-invocable: false
 metadata:
   version: "1.0"
+  domains: ["Field Service"]
   cliTools:
-  - tool:
-    - "sf"
-    semver: ">=2.0.0"
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 # Setting up Voice to Form
@@ -43,7 +44,7 @@ The skill is idempotent. Re-running on an already-configured org applies zero ch
 
 ## Platform Notes
 
-- All API paths use `vXX.0` — pin to the org's **current** API version (query `GET /services/data` and use the highest `version`), NOT a fixed floor. This matters for the Step 3 feature test specifically: the `PermissionsFieldServiceVoiceTo*` describe columns only surface at a recent API version. On a live org the columns were **absent** from the `PermissionSet` describe at v62.0/v64.0 but **present** at v68.0 — pinning to an old version produces a false "feature not licensed → Stop" negative. Use the org's latest version so the describe reflects the beta perms. v62.0 is a hard floor only (the V2F Beta assumes a recent release); it is not a safe version for the describe test.
+- All API paths use `vXX.0` — pin to the org's current API version (v62.0 or later; the V2F Beta assumes a recent release).
 - Endpoints marked **Tooling** dispatch to `/services/data/vXX.0/tooling/...`; the rest are the core Data API (`/services/data/vXX.0/...`).
 - The Codey runtime resolves and refreshes the connected org and mints tokens on demand — this skill never manages org aliases, instance URLs, or access tokens.
 - A few setup steps are genuinely clicks-only in **Setup** (the Einstein base-setup wizard org pref, the per-form LLM Targetable flag). For those the skill surfaces the exact Setup deeplink for the admin to click; it never tries to script them.
@@ -195,10 +196,10 @@ If `Metadata.enableLsdkMode` is already `true`, LDS is on — skip to Step 1.5. 
 **1b. PATCH the full `Metadata` back with `enableLsdkMode: true`** — `PATCH /services/data/vXX.0/tooling/sobjects/FieldServiceSettings/{Id}`:
 
 ```json
-{ "FullName": "FieldService", "Metadata": { "...all sibling keys from the GET...", "enableLsdkMode": true } }
+{ "Metadata": { "...all sibling keys from the GET...", "enableLsdkMode": true } }
 ```
 
-`FullName` is **required** on a Tooling `Metadata` PATCH — omitting it 400s with `FIELD_INTEGRITY_EXCEPTION` "Full name must be specified to update metadata" (verified against a live org). For the `FieldServiceSettings` singleton `FullName` is the literal `"FieldService"`; echo back the `FullName` returned by the 1a read. Send the **entire** `Metadata` object read in 1a with only `enableLsdkMode` flipped — a partial body nulls the omitted org prefs (`fieldServiceOrgPref`, `enableWorkOrders`, the search-field arrays, etc.). A 204 is success.
+Send the **entire** `Metadata` object read in 1a with only `enableLsdkMode` flipped — a partial body nulls the omitted org prefs (`fieldServiceOrgPref`, `enableWorkOrders`, the search-field arrays, etc.). A 204 is success.
 
 **1c. Verify it actually flipped** — re-run the 1a Tooling read and confirm `Metadata.enableLsdkMode == true`. This guards the rare SDO/trial-org case where a write reports success but the flag stays false. If it did not flip, surface the Setup deeplink for the admin to toggle it by hand:
 
@@ -267,13 +268,13 @@ V2RE's org-level switch lives on `FieldServiceMobileSettings`, a **regular sObje
 
 A 201 returns the new row Id (which already satisfies Step 2b — skip the PATCH).
 
-**2b. Flip `IsShowEditFullRecord` to true** on the existing row — `PATCH /services/data/vXX.0/sobjects/FieldServiceMobileSettings/{Id}`:
+**2b. Flip `IsShowEditFullRecord` (and `IsDefault`) to true** on the existing row — `PATCH /services/data/vXX.0/sobjects/FieldServiceMobileSettings/{Id}`:
 
 ```json
-{ "IsShowEditFullRecord": true }
+{ "IsShowEditFullRecord": true, "IsDefault": true }
 ```
 
-A 204 is success. **Do NOT include `IsDefault` in the PATCH body** — `IsDefault` is a create-only field and is *not updateable* on an existing row; sending it 400s with `INVALID_FIELD_FOR_INSERT_UPDATE` on `IsDefault` (verified against a live org). Set `IsDefault` only at create time via the 2a POST. If the existing row you're patching is not already the default (`IsDefault = false`) and you need it to be, you cannot flip it in place — the toggle then takes effect only on profiles explicitly mapped to this settings row via `MobileSettingsAssignment`; the simplest path for a pilot is to create the default row via 2a instead. Re-read the row (Step 0 diagnostic 4) to confirm `IsShowEditFullRecord` is `true`. The PATCH is idempotent: re-sending the same value returns 204 and changes nothing.
+A 204 is success. Re-read the row (Step 0 diagnostic 4) to confirm both fields are `true`. Without `IsDefault = true`, the toggle takes effect only on profiles explicitly mapped to this settings row via `MobileSettingsAssignment` — `IsDefault = true` is the simplest path for a pilot. The PATCH is idempotent: re-sending the same values returns 204 and changes nothing.
 
 > **What the user sees on-device.** Per Salesforce help (`mfs_actions_order.xml`): once `IsShowEditFullRecord = true` and the user has Edit access to the object, **Edit Work Order**, **Edit Work Order Line Item**, and **Edit Service Appointment** appear in the Actions launcher on the Work Order Overview screen, after Quick Actions. The mobile app caches the settings — the technician must log out and back in for the new actions to appear.
 
@@ -647,33 +648,3 @@ External (Salesforce Help):
 - **Einstein LLM runtime entitlement.** Trial / SDO orgs commonly have all PSLs assigned but the runtime never turned on. Step 1.5 detects and surfaces this; resolution is a UI wizard click-through. SDO orgs occasionally need Salesforce-side enablement even after the wizard.
 - **LDS on stubborn templates.** On rare SDO/trial templates the `enableLsdkMode` write reports success but doesn't flip; Step 1c re-reads to catch this and falls back to the Setup deeplink.
 - **Component-type coverage.** V2F doesn't support Upload Image, Upload File, Image Preview, Matrix, Lookup, or Signature components in DC forms. A form composed entirely of these shows no mic icon.
-
-<!-- skill-validate: ignore-start -->
-<!-- codey:operations start -->
-## Operations Reference
-
-Operations this skill uses — routing and dependency reference.
-
-| Operation | Purpose | Status | Call | Depends on |
-|-----------|---------|--------|------|------------|
-| `detect-psls` | read | — | `GET /services/data/v62.0/query` | — |
-| `detect-einstein-fs-permset` | read | — | `GET /services/data/v62.0/query` | `detect-psls` |
-| `detect-lds-mode` | read | — | `GET /services/data/v62.0/tooling/query` | — |
-| `detect-v2re-org-switch` | read | — | `GET /services/data/v62.0/query` | — |
-| `detect-dc-forms` | read | — | `GET /services/data/v62.0/tooling/query` | — |
-| `detect-v2f-permset-clone` | read | — | `GET /services/data/v62.0/query` | — |
-| `pick-technician-user` | read | — | `GET /services/data/v62.0/query` | `detect-dc-forms` |
-| `enable-lds-mode` | write | — | `PATCH /services/data/v62.0/tooling/sobjects/FieldServiceSettings/{Id}` | `detect-lds-mode` |
-| `probe-einstein-runtime` | verify | — | `GET /services/data/v62.0/einstein/prompt-templates` | `enable-lds-mode` |
-| `enable-v2re-org-switch` | write | — | `PATCH /services/data/v62.0/sobjects/FieldServiceMobileSettings/{Id}` | `detect-v2re-org-switch` |
-| `describe-permset-fields` | verify | — | `GET /services/data/v62.0/sobjects/PermissionSet/describe` | `detect-einstein-fs-permset` |
-| `create-v2f-permset` | write | — | `POST /services/data/v62.0/sobjects/PermissionSet` | `describe-permset-fields` |
-| `verify-v2f-permset-deployed` | verify | — | `GET /services/data/v62.0/query` | `create-v2f-permset` |
-| `list-active-dc-forms` | read | — | `GET /services/data/v62.0/tooling/query` | `verify-v2f-permset-deployed` |
-| `enable-llm-targetable-on-forms` | write | — | — | `list-active-dc-forms` |
-| `assign-psls-to-user` | write | — | `POST /services/data/v62.0/sobjects/PermissionSetLicenseAssign` | `enable-llm-targetable-on-forms` |
-| `assign-cloned-permset` | write | — | `POST /services/data/v62.0/sobjects/PermissionSetAssignment` | `assign-psls-to-user` |
-| `verify-mobile-user-stack` | verify | — | `GET /services/data/v62.0/query` | `assign-cloned-permset` |
-| `handoff-to-deployer-when-no-forms` | write | — | → `sfs-mobile-core-experience/fs-data-capture-form-deployer` | — |
-<!-- codey:operations end -->
-<!-- skill-validate: ignore-end -->

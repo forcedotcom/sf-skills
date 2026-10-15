@@ -1,8 +1,10 @@
 ---
 name: field-service-data-capture-form-deployer-configure
 description: "Assemble a Data Capture Flow from a JSON spec and deploy it to a connected Field Service org via the Tooling Flow sObject (JSON Metadata, no XML). Use when given a data-capture spec JSON and asked to build or deploy a DataCaptureFlow."
+user-invocable: false
 metadata:
   version: "1.0"
+  domains: ["Field Service"]
 ---
 
 # Build a Data Capture Form (Field Service Mobile)
@@ -176,26 +178,3 @@ This skill has **no executable scripts**. Auth checks, record reads, the `Dynami
 - **`fs-data-capture-reference`** (sibling library skill) — reference manual for hand-authoring patterns, prohibited patterns + exact deploy errors, visual polish HTML, supporting CustomObject/PermissionSet/CustomTab deploy. Read this when diagnosing a deploy error or extending the JSON field mappings.
 - **`fs-data-capture-form-designer`** — produces the spec this skill consumes (from prose or an image/PDF).
 - **`fs-data-capture-form-editor`** — patches an already-deployed flow in the org. Uses the same Tooling `Flow` JSON round-trip (GET Metadata → edit → PATCH) this skill uses to create.
-
-<!-- skill-validate: ignore-start -->
-<!-- codey:operations start -->
-## Operations Reference
-
-Operations this skill uses — routing and dependency reference.
-
-| Operation | Purpose | Status | Call | Depends on |
-|-----------|---------|--------|------|------------|
-| `check-org-auth` | verify | — | `GET /services/data/v67.0/query` | — |
-| `check-flow-name-collision` | read | — | `GET /services/data/v67.0/tooling/query` | `check-org-auth` |
-| `verify-flow-deployed` | verify | — | `GET /services/data/v67.0/tooling/query` | `deploy-flow-metadata-json` |
-| `attach-ddc-to-parent` | write | — | `POST /services/data/v67.0/sobjects/DynamicDataCapture` | `verify-flow-deployed` |
-| `verify-ddc-attached` | verify | — | `GET /services/data/v67.0/query` | `attach-ddc-to-parent` |
-| `verify-parent-object-sharing-model` | verify | — | `GET /services/data/v67.0/tooling/query` | `verify-ddc-attached` |
-| `toggle-fss-sharing-flags` | write | — | `PATCH /headless/invoke/platform/field-service-operations-setup-page/save-field-service-settings-config` | `verify-parent-object-sharing-model` |
-| `verify-fss-sharing-flags` | verify | — | `GET /services/data/v67.0/tooling/query` | `toggle-fss-sharing-flags` |
-| `list-workorder-layouts-by-profile` | read | — | `GET /services/data/v67.0/tooling/query` | `verify-fss-sharing-flags` |
-| `rollback-detach-ddc` | write | — | `DELETE /services/data/v67.0/sobjects/DynamicDataCapture/{id}` | — |
-| `deploy-flow-metadata-json` | write | — | `POST /services/data/v67.0/tooling/sobjects/Flow` | `check-flow-name-collision` |
-| `patch-layout-add-ddc-related-list` | read | — | `GET /services/data/v67.0/tooling/sobjects/Layout/{id}` | `list-workorder-layouts-by-profile` |
-<!-- codey:operations end -->
-<!-- skill-validate: ignore-end -->

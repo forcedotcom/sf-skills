@@ -1,8 +1,10 @@
 ---
 name: field-service-data-capture-form-designer-configure
-description: "Design a Field Service Mobile Data Capture Flow from either a natural-language description OR a PDF/image of an existing paper form. Extracts field labels, types, required-state, and section structure into an intermediate JSON spec, confirms the plan with the user, then hands off to `fs-data-capture-form-deployer` for compile + deploy. Handles both input modes in one skill — prose (\"build a Field Service form for asset inspection that captures…\", \"make a DataCaptureFlow that asks the technician to…\", \"create an inventory transfer form with…\") and visual sources (\"convert this PDF to a Data Capture Flow\", \"make a Field Service form from this image\", \"turn this paper form into a DataCaptureFlow\"). Detects the input mode automatically: if the user supplies a `.pdf`, `.png`, `.jpg`, or `.jpeg` path, extract from the visual source; otherwise extract from the prose. Do NOT use this skill to patch an already-deployed flow — that's `fs-data-capture-form-editor`."
+description: "Design a Field Service Mobile Data Capture Flow from either a natural-language description OR a PDF/image of an existing paper form. Extracts field labels, types, required-state, and section structure into an intermediate JSON spec, confirms the plan with the user, then hands off to fs-data-capture-form-deployer for compile + deploy. Handles both input modes in one skill — prose ('build a Field Service form for asset inspection', 'make a DataCaptureFlow that asks the technician to…', 'create an inventory transfer form') and visual sources ('convert this PDF to a Data Capture Flow', 'make a Field Service form from this image', 'turn this paper form into a DataCaptureFlow'). Detects the input mode automatically from a .pdf/.png/.jpg/.jpeg path, else extracts from the prose. Do NOT use this skill to patch an already-deployed flow — that's fs-data-capture-form-editor."
+user-invocable: false
 metadata:
   version: "1.0"
+  domains: ["Field Service"]
 ---
 
 # Design a Data Capture Form (from prose or from an image / PDF)
@@ -106,15 +108,3 @@ After a successful deploy, the flow exists but is invisible from the Forms tab o
 
 - `reference/extraction-from-prompt.md` — prose-evidence rules for picking field types from user descriptions, screen grouping, visibility rules, outcome-elicitation, validation checklist. Used in **prose mode**.
 - `reference/extraction-from-image.md` — control-evidence rules for picking field types from rendered widgets, repeater extraction rules, screen grouping, visibility rules, outcome-elicitation, validation checklist. Used in **image / PDF mode**.
-
-<!-- skill-validate: ignore-start -->
-<!-- codey:operations start -->
-## Operations Reference
-
-Operations this skill uses — routing and dependency reference.
-
-| Operation | Purpose | Status | Call | Depends on |
-|-----------|---------|--------|------|------------|
-| `handoff-to-deployer` | write | — | → `sfs-mobile-core-experience/fs-data-capture-form-deployer` | — |
-<!-- codey:operations end -->
-<!-- skill-validate: ignore-end -->

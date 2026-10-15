@@ -1,8 +1,10 @@
 ---
 name: field-service-work-rule-designer-configure
-description: "Designs the work rules for a Salesforce Field Service scheduling policy — the hard filters that determine which resources and time slots are eligible for an appointment. Step 2 of the three-part scheduling policy design flow. Receives the policy block from sfs-scheduling-policy-designer and delegates to sfs-service-objective-designer when complete."
+description: "Designs the work rules for a Salesforce Field Service scheduling policy — the hard filters that determine which resources and time slots are eligible for an appointment. Step 2 of the three-part scheduling policy design flow; receives the policy block from sfs-scheduling-policy-designer and delegates to sfs-service-objective-designer when complete. Use this skill when a user wants to design or configure the work rules (hard eligibility filters) for a Field Service scheduling policy."
+user-invocable: false
 metadata:
   version: "1.0"
+  domains: ["Field Service"]
 ---
 
 # Salesforce Field Service – Work Rule Designer
@@ -40,167 +42,29 @@ Each row: **name — engine (DB/Apex) — what it does.** "DB w/ ESO" means the 
 | **TimeSlot Designated Work** | Apex | Reserves a time slot/shift for a specific work type — only that type schedules in that window. All-or-nothing rule (no relevance groups). |
 | **Service Crew Resources Availability** | Apex | Ensures a crew-type resource is only assigned when the crew meets the parent record's minimum crew size. |
 
-### Interview order — MANDATORY
+### Requirements mapping
 
-Walk through the 16 work rule types **in the exact order of the table in *The 16 work rule types* above** — top to bottom, one rule at a time. **Do NOT split the interview into a separate "which rules apply" pass and a later "configure them" pass, and do NOT reorder the rules.** For each rule, in order:
+Don't start from the rule list — start from **what the business needs**, then map each requirement to the rule(s) that satisfy it. Walk the user through this mapping:
 
-1. **Decide whether it applies.** Service Resource Availability is always in (no question). For every other rule, either the user's stated business needs already make it obviously needed, or ask the short **Applies when / ask** question in that rule's entry below. Interpret the user's needs against the *What it does* column — e.g. "resources need the right skills" → Match Skills; "cap travel from home" → Maximum Travel from Home.
-2. **If it applies and it has configuration, ask that rule's config question(s) right now** — before moving on to the next rule. Never defer configuration to the end. If the rule is selection-only (no config), just confirm it and continue.
-
-Then continue to the next rule in the table. Ask one question at a time. Only after you have walked all 16 rules is the rule list final.
-
-**Do NOT ask a relevance-group / subset question on every rule.** Most rules apply policy-wide, and asking "all or a subset?" after each one is noise. Instead:
-
-- **React to scoping the user volunteers.** If while answering a rule's question the user signals the rule is only for a specific scenario, workforce, or work type — e.g. "only for part-time techs," "just for installation jobs," "tighter cap in France" — *then* pursue it: confirm the basis (Service Territory Member for a resource subset, Service Appointment for a work subset), get the Boolean field name, and record `relevanceGroup: { basis, booleanField }` on that rule. (First check the rule supports that basis under ES&O — see *Relevance Groups*.)
-- **Otherwise sweep for it once, at the end.** After all 16 rules are walked, ask a single closing question: *"Are there any constraints here that should apply only to a certain part of your workforce or to certain types of work — rather than to everyone/everything? For example, different break or travel limits for part-time vs. full-time techs, or stricter handling for a specific work type or region."* Only if the user says yes do you scope the affected rules (per the *Relevance Groups* section). If no, leave every `relevanceGroup` null.
+| If the requirement is… | Use this work rule |
+|---|---|
+| Resources need specific skills / proficiency levels | **Match Skills**; **Extended Match** |
+| Non-skill matching factors (e.g., serviceable postal codes) | **Match Boolean**; **Match Skills**; **Extended Match** |
+| Breaks during the day / specific or multiple breaks | **Service Resource Availability** (+ work rule entries for multiple breaks, ESO) |
+| Can work go into overtime? Can resources travel outside working hours? | **Service Resource Availability** |
+| Max number / duration of appointments per resource per day | **Count Rule** |
+| A specific resource **must** be assigned | **Required Resources** |
+| A specific resource **must not** be assigned | **Excluded Resources** |
+| Customer has specific service-call time windows | **Service Appointment Visiting Hours** |
+| Ensure crew-type resources get scheduled | **Service Crew Resources Availability** |
+| Appointments have arrival windows / required arrival times | **Match Time Rule** |
+| Cap travel distance from home / control travel cost across large territories | **Maximum Travel from Home** — ask whether the cap is by **distance** or by **travel time** (see note below) |
+| Assign specific work types to a resource for part/all of a day | **TimeSlot Designated Work** |
+| Restrict work to the resource's **primary and secondary** service territory memberships | **Working Territories** |
 
 Always include exactly one **Service Resource Availability** rule — the only mandatory rule this skill emits. Never emit Earliest Start Permitted or Due Date — provisioned automatically.
 
----
-
-### The rules, in interview order
-
-Take these in the order shown — it matches the table above. For each entry: **Applies when** tells you how to decide it's needed; **Ask** lists the config questions to ask *immediately* on a yes; **Emit** gives the exact `params` keys — use them verbatim so the data-layer skill can map them.
-
----
-
-**1. Service Resource Availability** *(always present — the only mandatory rule)*
-Applies when: always. No applicability question.
-Ask:
-- "Can work run into **overtime**?" (yes/no)
-- "Can resources **travel outside working hours** to/from home?" — if yes, ask how many minutes from home (to first job) and to home (from last job); "no limit" = 120; "no" = 0 for both
-- Breaks interview (see *Interpreting and emitting break times* below)
-
-Emit: `{ "enableOvertime": true|false, "travelFromHomeMinutes": <number>, "travelToHomeMinutes": <number>, "breaks": [ … ] }`
-Note: Travel values are minutes — 0 = no travel outside working hours, 120 = effectively unlimited. If the user gives no availability detail, emit baseline (`enableOvertime: false`, travel keys and breaks omitted).
-
----
-
-**2. Match Time Rule** *(arrival windows)*
-Applies when: appointments should honor customer **arrival windows** / required arrival times. Ask: "Should appointments honor customer arrival windows?"
-Emit: on a yes, emit the **two** default rules from the *Arrival Window Match Time rules* table below — do not ask the user to fill these in.
-
----
-
-**3. Match Skills**
-Applies when: resources need specific skills / proficiency levels.
-Ask: "Should the resource also **meet a minimum skill level** (proficiency), or is simply *having* the skill enough?"
-Emit: `{ "matchSkillLevel": true|false }`
-Note: Do not ask about skill-type AND/OR logic — this skill does not configure `skillTypeLogic`.
-
----
-
-**4. Match Fields**
-Applies when: one appointment field must match one resource field (1:1). (For one appointment field vs. multiple resource values, use Extended Match instead.)
-Ask: "Which Service Appointment field must match which Service Resource field, and with what operator?"
-Emit: `{ "serviceProperty": "<SA field>", "resourceProperty": "<resource field>", "booleanOperator": "=" }`
-Note: Operator is one of `=`, `>=`, `<=`, `>`, `<` (default `=`). Field names are the customer's own — pass through as given.
-
----
-
-**5. Match Boolean**
-Applies when: a checkbox on the resource must be true/false — including non-skill matching factors (e.g., serviceable postal codes).
-Ask: "Which checkbox field on the resource must be true (or false)?"
-Emit: `{ "resourceProperty": "<resource field>", "value": true|false }`
-Note: Max 5 Match Boolean rules per policy.
-
----
-
-**6. Extended Match** *(advisory only — data-layer skill will not build this)*
-Applies when: custom-criteria matching via a junction object (e.g., serviceable postal codes, product lines).
-Ask: None — no params to collect. Advise the user to set up before deploying:
-1. A junction object with exactly **two** Master-Detail relationships (to Service Resource + matched object) — packaged trigger requires exactly two or the rule fails
-2. A Service Appointment Lookup field driving the match; a reference field on the junction matched against it
-3. Once those exist, create and configure the rule manually in Setup (Field Service Settings → Scheduling → Work Rules)
-
-Capture intended objects/fields in `prerequisites` as advisory text — do not emit in `workRules[]`.
-
----
-
-**7. Match Territory** — *(skip entirely; not part of the interview)*
-This interview never emits a standalone Match Territory rule. **Skip it silently** — do not ask a Match Territory question, and do not announce or narrate that you are skipping it. Move straight from rule 6 to rule 8 with no mention of Match Territory at all. (If a user explicitly asks for primary/relocation-only territory scoping, advise manual configuration then — but never raise it yourself. Also: don't cover a resource by both Match Territory and Working Territories.)
-
----
-
-**8. Working Territories**
-Applies when: work must be restricted to the resource's **primary and secondary** service territory memberships.
-Ask: None — selecting the rule is sufficient.
-Emit: `{ "workingLocationEnablePrimary": true }`
-
----
-
-**9. Maximum Travel from Home**
-Applies when: capping distance/travel time between a resource's home and any assigned appointment / controlling travel cost across large territories.
-Ask: "Is the cap by **distance** or by **travel time**?" (see the cap-type note below), plus the cap value.
-Emit: `{ "maxTravelFromHome": <number>, "maxTravelFromHomeType": "Distance"|"Travel Time" }`
-Note: Distance unit (miles vs km) is not part of the rule — governed by org locale. For Travel Time, value is minutes.
-
----
-
-**10. Required Resources** *(selection-only)*
-Applies when: any work order ever has a resource marked **Required** that must always be assigned. Ask: "Do any work orders ever have a specific resource marked *Required* that must always be assigned to that job?"
-Emit: `{}`
-Prerequisite: Resource Preference records must exist on the work order / WOLI — the rule enforces them but does not create them.
-
----
-
-**11. Excluded Resources** *(selection-only)*
-Applies when: any work order ever has a resource marked **Excluded** that must never be assigned. Ask: "Do any work orders ever have a resource marked *Excluded* that must never be assigned?"
-Emit: `{}`
-Prerequisite: Resource Preference records must exist on the work order / WOLI — the rule enforces them but does not create them.
-
----
-
-**12. Count Rule**
-Applies when: capping the number/duration of appointments (or a custom value) per resource per day.
-Ask: Have the user describe the limit in plain terms, then classify into:
-- `countBy` — `"Appointments"` (count of jobs), `"Hours"` (duration cap), or `"Custom"` (sum of a custom SA field)
-- `maxValue` — the numeric cap (for Hours, convert to hours)
-- `fieldHint` — the SA field to sum; `null` for a plain Appointments count
-
-Emit: `{ "countBy": "Appointments"|"Hours"|"Custom", "maxValue": <number>, "fieldHint": "<SA field>"|null }`
-Note: Time Resolution is always Daily; counted object is always Service Appointment — data-layer skill sets both automatically. Up to 10 custom-field count rules per policy. When countBy is Custom or Hours against a field, add prerequisite: "Confirm field `<fieldHint>` exists on Service Appointment."
-
----
-
-**13. Work Capacity** *(ESO only — selection-only)*
-Applies when: Work Capacity Limit records cap how much work schedules per territory. Ask: "Do you use Work Capacity Limit records to cap how much work can be scheduled per territory?"
-Emit: `{}`
-Prerequisite: WorkCapacityLimit records must be configured per territory outside the policy.
-
----
-
-**14. Service Appointment Visiting Hours** *(selection-only)*
-Applies when: customers have allowed visit windows that should block scheduling outside those hours. Ask: "Do customers have allowed visit windows (e.g., weekdays only, or mornings only) that should block scheduling outside those hours?"
-Emit: `{}`
-Note: Do not ask for the windows — they are per-account data on OperatingHours records, not a policy-wide value. All-or-nothing rule — no relevance-group scoping.
-Prerequisite: Each account must have visiting/operating hours populated; the Work Order's Visiting Hours must resolve from the account.
-
----
-
-**15. TimeSlot Designated Work** *(selection-only)*
-Applies when: certain time slots must be reserved for specific types of work. Ask: "Do you need to reserve certain time slots for specific types of work (e.g., install work only in morning slots)?"
-Emit: `{}`
-Note: Do not ask for slot→work mappings — that is data setup. Phrase the selection as "types of work," not "Work Type" (the designation is broader than the Work Type object). All-or-nothing rule — no relevance-group scoping.
-Prerequisite: Time slots must be configured to designate the intended work.
-
----
-
-**16. Service Crew Resources Availability**
-Applies when: crew-type resources must only be assigned when the crew meets the parent record's minimum crew size.
-Ask:
-- "Should the rule evaluate individual crew members' availability and skills, not just the crew record?" → `considerCrewMembership`
-- "What is the maximum number of extra resources beyond the base crew that can be pulled in?" → `maxAdditionalResources` (optional)
-
-Emit: `{ "considerCrewMembership": true|false, "maxAdditionalResources": <number> }` (omit `maxAdditionalResources` if blank)
-
----
-
-### Configuration reference notes
-
-These deep-dives support the **Ask** lines above; consult them when configuring the rule that references them.
-
-**Arrival Window Match Time rules (default pair — rule 2).** When the user confirms appointments should honor customer arrival windows, emit **two** Match Time rules with these exact default settings — do not ask the user to fill these in, they are the standard arrival-window configuration:
+**Arrival Window Match Time rules (opt-in default pair).** If the user wants appointments to honor customer **arrival windows**, ask them to confirm, and if they agree, emit **two** Match Time rules with these exact default settings — do not ask the user to fill these in, they are the standard arrival-window configuration:
 
 | Setting | Rule A | Rule B |
 |---|---|---|
@@ -212,7 +76,7 @@ These deep-dives support the **Ask** lines above; consult them when configuring 
 
 Emit each as a Match Time work rule whose `params` carry those four values (keys `serviceScheduleTimeProperty`, `serviceTimeOperator`, `serviceTimeProperty`, `passEmptyValues`). These are separate from the mandatory Earliest Start Permitted / Due Date rules (never emitted).
 
-**Interpreting and emitting break times — clock time vs. shift-start offset (rule 1).** A Service Resource Availability rule expresses breaks in one of two shapes, and **this skill decides the shape and emits the values the data-layer skill needs** — the data-layer skill never receives a clock time it has to convert. Choose the shape as follows:
+**Interpreting and emitting break times (clock time vs. shift-start offset):** A Service Resource Availability rule expresses breaks in one of two shapes, and **this skill decides the shape and emits the values the data-layer skill needs** — the data-layer skill never receives a clock time it has to convert. Choose the shape as follows:
 
 - **One fixed daily break at an absolute clock time** (e.g. "30 minutes at 12:00 every day") → emit it as an **absolute** break: `{ "mode": "absolute", "startClock": "12:00", "durationMinutes": 30 }`. No offset math, no working-day start needed.
 - **One or more breaks defined as an offset from the start of the working day** (e.g. "a 30-minute lunch starting 3 hours into the shift") → emit each as an **offset** break, in **minutes from the start of the working day**: `{ "mode": "offset", "earliestStartOffsetMinutes": 180, "latestEndOffsetMinutes": 240, "durationMinutes": 30 }`. All three of `earliestStartOffsetMinutes`, `latestEndOffsetMinutes`, and `durationMinutes` are **mandatory** for an offset break. **When the user states the break in offset terms already** (e.g. "3 hours after the start of day"), that offset *is* `earliestStartOffsetMinutes` (180) — **do not ask for the working-day start; you don't need it.**
@@ -220,7 +84,130 @@ Emit each as a Match Time work rule whose `params` carry those four values (keys
 
 **Always emit `latestEndOffsetMinutes` for every offset break — ask for it directly, do not fabricate a window.** The earliest start comes from what the user stated (an offset, or a converted clock time) — **do not invent ± tolerance windows around it** (no "±1 hour" / "±2 hour" options). If the user only gave a break start (or a duration with no stated finish-by), **ask them plainly for the latest the break may end**, phrased in the *same terms they used*: if they gave an offset ("starts 3 hours after start of day"), ask "what is the latest it may end, as time after the start of the day?" and convert (e.g. "4 hours after start" → 240); if they gave a clock time, ask for a clock time and convert with the day start. If the user says the break is fixed/pinned with no flex, set `latestEndOffsetMinutes = earliestStartOffsetMinutes + durationMinutes`. Never emit an offset break missing any of the three fields, and never guess the latest-end. If a break requirement is too involved to convert reliably, ask clarifying questions or recommend the manual approach rather than guessing.
 
-**Maximum Travel from Home — establish the cap type, not the unit (rule 9).** When a requirement caps how far a resource may travel from home, **ask the user whether the cap is by distance or by travel time** — the two are configured differently and the data-layer skill needs to know which. Emit the value and the type in `params`: `{ "maxTravelFromHome": 50, "maxTravelFromHomeType": "Distance" | "Travel Time" }`. Interpret the user's phrasing to set the *type* — "50 miles"/"50 km" ⇒ `Distance`, "45 minutes" ⇒ `Travel Time` — but **do not ask for or emit a distance unit (miles vs km): it is not part of the work-rule config**; the unit is governed by the org's locale/distance settings elsewhere, so the rule stores only the number. For `Travel Time` the value is minutes. Never emit the cap value without its type.
+**Maximum Travel from Home — establish the cap type, not the unit.** When a requirement caps how far a resource may travel from home, **ask the user whether the cap is by distance or by travel time** — the two are configured differently and the data-layer skill needs to know which. Emit the value and the type in `params`: `{ "maxTravelFromHome": 50, "maxTravelFromHomeType": "Distance" | "Travel Time" }`. Interpret the user's phrasing to set the *type* — "50 miles"/"50 km" ⇒ `Distance`, "45 minutes" ⇒ `Travel Time` — but **do not ask for or emit a distance unit (miles vs km): it is not part of the work-rule config**; the unit is governed by the org's locale/distance settings elsewhere, so the rule stores only the number. For `Travel Time` the value is minutes. Never emit the cap value without its type.
+
+### Per-rule configuration
+
+Once the requirements mapping has selected which rules to build, configure the specifics for each. The **`Emit` line gives the exact `params` keys** — use these verbatim so the data-layer skill can map them. Only configure rules the user selected; skip the rest.
+
+---
+
+**Service Resource Availability** *(always present)*
+Gate: Always included — no selection needed.
+Ask:
+- "Can work run into **overtime**?" (yes/no)
+- "Can resources **travel outside working hours** to/from home?" — if yes, ask how many minutes from home (to first job) and to home (from last job); "no limit" = 120; "no" = 0 for both
+- Breaks interview (see *Interpreting and emitting break times*)
+
+Emit: `{ "enableOvertime": true|false, "travelFromHomeMinutes": <number>, "travelToHomeMinutes": <number>, "breaks": [ … ] }`
+Note: Travel values are minutes — 0 = no travel outside working hours, 120 = effectively unlimited. If user gives no availability detail, emit baseline (`enableOvertime: false`, travel keys and breaks omitted).
+
+---
+
+**Match Time Rule** *(arrival windows)*
+Gate: Only if selected in requirements mapping.
+Ask: "Should appointments honor customer **arrival windows**?"
+Emit: Two default rules from the Arrival Window table — no further questions.
+
+---
+
+**Match Skills**
+Gate: Only if selected in requirements mapping.
+Ask: "Should the resource also **meet a minimum skill level** (proficiency), or is simply *having* the skill enough?"
+Emit: `{ "matchSkillLevel": true|false }`
+Note: Do not ask about skill-type AND/OR logic — this skill does not configure `skillTypeLogic`.
+
+---
+
+**Match Fields**
+Gate: Only if selected in requirements mapping.
+Ask: "Which Service Appointment field must match which Service Resource field, and with what operator?"
+Emit: `{ "serviceProperty": "<SA field>", "resourceProperty": "<resource field>", "booleanOperator": "=" }`
+Note: Operator is one of `=`, `>=`, `<=`, `>`, `<` (default `=`). Field names are the customer's own — pass through as given.
+
+---
+
+**Match Boolean**
+Gate: Only if selected in requirements mapping.
+Ask: "Which checkbox field on the resource must be true (or false)?"
+Emit: `{ "resourceProperty": "<resource field>", "value": true|false }`
+Note: Max 5 Match Boolean rules per policy.
+
+---
+
+**Maximum Travel from Home**
+Gate: Only if selected in requirements mapping.
+Ask: "Is the cap by **distance** or by **travel time**?" (see cap-type note in Requirements mapping)
+Emit: `{ "maxTravelFromHome": <number>, "maxTravelFromHomeType": "Distance"|"Travel Time" }`
+Note: Distance unit (miles vs km) is not part of the rule — governed by org locale. For Travel Time, value is minutes.
+
+---
+
+**Working Territories**
+Gate: Only if selected in requirements mapping.
+Ask: None — selecting the rule is sufficient.
+Emit: `{ "workingLocationEnablePrimary": true }`
+Note: No separate Match Territory question — the interview does not emit a standalone Match Territory rule. If primary/relocation-only scoping is needed, advise manual configuration.
+
+---
+
+**Service Crew Resources Availability**
+Gate: Only if selected in requirements mapping.
+Ask:
+- "Should the rule evaluate individual crew members' availability and skills, not just the crew record?" → `considerCrewMembership`
+- "What is the maximum number of extra resources beyond the base crew that can be pulled in?" → `maxAdditionalResources` (optional)
+
+Emit: `{ "considerCrewMembership": true|false, "maxAdditionalResources": <number> }` (omit `maxAdditionalResources` if blank)
+
+---
+
+**Extended Match** *(advisory only — data-layer skill will not build this)*
+Gate: Only if selected in requirements mapping.
+Ask: None — no params to collect.
+Advise the user to set up before deploying:
+1. A junction object with exactly **two** Master-Detail relationships (to Service Resource + matched object) — packaged trigger requires exactly two or the rule fails
+2. A Service Appointment Lookup field driving the match; a reference field on the junction matched against it
+3. Once those exist, create and configure the rule manually in Setup (Field Service Settings → Scheduling → Work Rules)
+
+Capture intended objects/fields in `prerequisites` as advisory text — do not emit in `workRules[]`.
+
+---
+
+**Count Rule**
+Gate: Only if selected in requirements mapping.
+Ask: Have the user describe the limit in plain terms, then classify into:
+- `countBy` — `"Appointments"` (count of jobs), `"Hours"` (duration cap), or `"Custom"` (sum of a custom SA field)
+- `maxValue` — the numeric cap (for Hours, convert to hours)
+- `fieldHint` — the SA field to sum; `null` for a plain Appointments count
+
+Emit: `{ "countBy": "Appointments"|"Hours"|"Custom", "maxValue": <number>, "fieldHint": "<SA field>"|null }`
+Note: Time Resolution is always Daily; counted object is always Service Appointment — data-layer skill sets both automatically. Up to 10 custom-field count rules per policy. When countBy is Custom or Hours against a field, add prerequisite: "Confirm field `<fieldHint>` exists on Service Appointment."
+
+---
+
+**Selection-only rules** *(no config fields — each rule acts as an on/off switch that tells the scheduler to enforce constraints defined elsewhere in the org; selected in requirements mapping, no further questions needed)*
+
+**Required Resources / Excluded Resources**
+Gate: Only if selected in requirements mapping.
+Emit: `{}`
+Prerequisite: Resource Preference records must exist on the work order / WOLI — the rule enforces them but does not create them.
+
+**Work Capacity** *(ESO only)*
+Gate: Only if selected in requirements mapping.
+Emit: `{}`
+Prerequisite: WorkCapacityLimit records must be configured per territory outside the policy.
+
+**Service Appointment Visiting Hours**
+Gate: Only if selected in requirements mapping.
+Emit: `{}`
+Note: Do not ask for the windows — they are per-account data on OperatingHours records, not a policy-wide value. (No relevance-group scoping.)
+Prerequisite: Each account must have visiting/operating hours populated; the Work Order's Visiting Hours must resolve from the account.
+
+**TimeSlot Designated Work**
+Gate: Only if selected in requirements mapping.
+Emit: `{}`
+Note: Do not ask for slot→work mappings — that is data setup. Phrase the selection as "types of work," not "Work Type" (the designation is broader than the Work Type object). (No relevance-group scoping.)
+Prerequisite: Time slots must be configured to designate the intended work.
 
 ---
 
@@ -299,16 +286,3 @@ When the user confirms the work rules, delegate to `sfs-service-objective-design
 Do not start the service objective interview here. Transition message:
 
 > "Work rules are locked in. Next: service objectives — the scoring criteria that rank the eligible candidates. I'll walk through the trade-off questions one at a time."
-
-<!-- skill-validate: ignore-start -->
-<!-- codey:operations start -->
-## Operations Reference
-
-Operations this skill uses — routing and dependency reference.
-
-| Operation | Purpose | Status | Call | Depends on |
-|-----------|---------|--------|------|------------|
-| `emit-work-rules-block` | write | — | — | — |
-| `handoff-to-service-objective-designer` | delegate | — | → `sfs-setup-experience/sfs-service-objective-designer` | `emit-work-rules-block` |
-<!-- codey:operations end -->
-<!-- skill-validate: ignore-end -->

@@ -1,8 +1,10 @@
 ---
 name: field-service-mobile-branding-configure
-description: "Derive a Field Service mobile app color scheme from a brand source (URL, hex codes, brand-guide paste, or color description), validate WCAG AA contrast in both light and dark mode, and apply the 14-field scheme to the org-default `FieldServiceMobileSettings` record. Trigger phrases include \"brand the mobile app\", \"apply branding to Field Service mobile\", \"update the mobile app colors\", \"use this brand guide for the app\", \"set the color scheme for the mobile app\". Do NOT use this skill for Dispatcher console / Gantt branding (`FSLQA__GanttPalette__c`), Experience Cloud `BrandingSet` records, or scheduling policy colors — out of scope."
+description: "Derive a Field Service mobile app color scheme from a brand source (URL, hex codes, brand-guide paste, or color description), validate WCAG AA contrast in both light and dark mode, and apply the 14-field scheme to the org-default FieldServiceMobileSettings record. Trigger phrases include 'brand the mobile app', 'apply branding to Field Service mobile', 'update the mobile app colors', 'use this brand guide for the app', 'set the color scheme for the mobile app'. Do NOT use this skill for Dispatcher console / Gantt branding, Experience Cloud BrandingSet records, or scheduling policy colors — out of scope."
+user-invocable: false
 metadata:
   version: "1.0"
+  domains: ["Field Service"]
 ---
 
 # Field Service Mobile Branding
@@ -129,19 +131,3 @@ Contrast validation and scheme derivation are performed by the agent inline (see
 
 - `configure-field-service-mobile` — page layouts, permissions, and `FieldServiceSettings` toggles. This skill defers branding to here, and this skill defers structural mobile config to it.
 - `fs-data-capture-form-deployer` — generates and deploys Data Capture Flow metadata.
-
-<!-- skill-validate: ignore-start -->
-<!-- codey:operations start -->
-## Operations Reference
-
-Operations this skill uses — routing and dependency reference.
-
-| Operation | Purpose | Status | Call | Depends on |
-|-----------|---------|--------|------|------------|
-| `check-org-auth` | verify | — | `GET /services/data/v63.0/query` | — |
-| `describe-fsms-object` | verify | — | `GET /services/data/v63.0/sobjects/FieldServiceMobileSettings/describe` | `check-org-auth` |
-| `query-default-fsms-record` | read | — | `GET /services/data/v63.0/query` | `describe-fsms-object` |
-| `apply-fsms-scheme` | write | — | `PATCH /services/data/v63.0/sobjects/FieldServiceMobileSettings/{id}` | `query-default-fsms-record` |
-| `verify-fsms-scheme` | verify | — | `GET /services/data/v63.0/sobjects/FieldServiceMobileSettings/{id}` | `apply-fsms-scheme` |
-<!-- codey:operations end -->
-<!-- skill-validate: ignore-end -->
