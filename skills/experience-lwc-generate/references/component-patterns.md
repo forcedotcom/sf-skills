@@ -612,7 +612,9 @@ const BATCH_CREATE = gql`
 
 ## Modal Component Pattern
 
-Based on [James Simone's composable modal pattern](https://www.jamessimone.net/blog/joys-of-apex/lwc-composable-modal/).
+**Default to the native `lightning/modal` service** — see [assets/native-modal-component](../assets/native-modal-component/nativeModalComponent.js). It ships focus trap, ESC-to-close, ARIA, and size variants out of the box, so there's nothing to reinvent. Confirm it's supported on the target surface (some Experience Builder site templates historically lagged Lightning Experience support) before falling back to a custom implementation.
+
+Only reach for a custom composable modal below when `lightning/modal` genuinely can't cover the case (e.g. a confirmed gap on your site template, or composition needs beyond what `LightningModal` slots support). It's based on [James Simone's composable modal pattern](https://www.jamessimone.net/blog/joys-of-apex/lwc-composable-modal/); see [assets/modal-component](../assets/modal-component/modalComponent.js) for the fuller version with cleanup and multi-slot composition. Prefer a `save`/`cancel` `CustomEvent` over a function-reference `@api` prop for the save handler — function references can't be passed from Aura markup, which breaks on Aura-based Experience Builder pages.
 
 ```javascript
 // composableModal.js
