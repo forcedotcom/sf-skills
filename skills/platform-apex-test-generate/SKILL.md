@@ -156,6 +156,7 @@ Focus on:
 - uncovered lines and weak coverage areas
 - whether failures indicate bad test data, brittle assertions, or broken production logic
 - when class metadata crosses from versions 66.0 and below to 67.0 and above, check explicit sharing, decide user/system mode per operation, grant required CRUD/FLS in test users or permission sets, and rerun affected tests
+- on 67.0+, `INVALID_CROSS_REFERENCE_KEY, Record Type ID: this ID value isn't valid for the user` means the running user isn't granted the record type; insert record-typed data in `System.runAs` as a test user with a permission set that grants it (see `references/test-data-factory.md`)
 
 ### Step 5 — Fix Loop
 

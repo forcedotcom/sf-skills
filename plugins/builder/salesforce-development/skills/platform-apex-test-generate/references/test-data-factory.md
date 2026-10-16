@@ -52,6 +52,8 @@ public static Account createAccountByRecordType(String recordTypeName, Boolean d
 }
 ```
 
+From API 67.0 the insert fails with `INVALID_CROSS_REFERENCE_KEY, Record Type ID: this ID value isn't valid for the user` unless the running user is granted the record type (a just-deployed record type isn't granted to the deploying admin). Create a test user and assign a permission set with the record type's `recordTypeVisibilities` (both outside `System.runAs`, to avoid mixed DML), then call this inside `System.runAs(user)`.
+
 ## Handling Duplicate Rules
 
 When unique field values alone are not sufficient, use `Database.insert()` with a `DuplicateRuleHeader`:

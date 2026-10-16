@@ -19,6 +19,8 @@ Before doing ANYTHING, verify all four:
    ```bash
    "${CLAUDE_PLUGIN_ROOT}/scripts/sf-deploy-gate" bucket <alias>
    ```
+   If `${CLAUDE_PLUGIN_ROOT}` is unset or the script is missing (e.g. a standalone `npx skills add` install), run `sf org display --target-org <alias> --json` instead and treat the org as `production` unless `isSandbox` or `isScratch` is true or the instance URL contains `--` or `test.salesforce.com`.
+
    Production means not a scratch org or sandbox (no `--` or `test.salesforce.com` host marker) **and not a trial/Developer Edition org** (`orgfarm-*`, `*.develop.my.salesforce.com`, `*.pc-rnd.*` hosts, or a future trial expiration date, as on SDOs). A Dev Hub with none of those signals is production.
 
    If target is NOT production (classifier returns anything other than `production`) → STOP and redirect to `platform-metadata-deploy` (which handles non-prod natively). `unknown` means the org type could not be confirmed (usually an incomplete org record). Say so plainly: the deploy gate still allows the deploy, auto-deploy on save stays off for that org, and re-authenticating with `sf org login web` usually restores the classification.
