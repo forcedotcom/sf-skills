@@ -8,13 +8,14 @@
     - Row actions
     - Infinite scrolling
     - Bulk actions
+    - Conditional rendering (lwc:if / lwc:elseif / lwc:else)
 -->
 <template>
     <lightning-card title={tableTitle} icon-name="standard:account">
         <!-- Card Actions -->
         <div slot="actions">
             <!-- Bulk Delete Button (shown when rows selected) -->
-            <template if:true={hasSelection}>
+            <template lwc:if={hasSelection}>
                 <lightning-button
                     variant="destructive"
                     label={selectedCount}
@@ -33,7 +34,7 @@
         </div>
 
         <!-- Loading Spinner -->
-        <template if:true={isLoading}>
+        <template lwc:if={isLoading}>
             <div class="slds-is-relative" style="height: 100px;">
                 <lightning-spinner
                     alternative-text="Loading"
@@ -43,7 +44,7 @@
         </template>
 
         <!-- Error State -->
-        <template if:true={error}>
+        <template lwc:elseif={error}>
             <div class="slds-p-around_medium">
                 <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
                     <span class="slds-assistive-text">Error</span>
@@ -53,7 +54,7 @@
         </template>
 
         <!-- Data Table -->
-        <template if:true={hasData}>
+        <template lwc:elseif={hasData}>
             <div class="slds-p-around_small">
                 <lightning-datatable
                     key-field="Id"
@@ -76,7 +77,7 @@
                 </lightning-datatable>
 
                 <!-- Load More Status -->
-                <template if:true={loadMoreStatus}>
+                <template lwc:if={loadMoreStatus}>
                     <div class="slds-text-align_center slds-p-top_small">
                         <span class="slds-text-color_weak">{loadMoreStatus}</span>
                     </div>
@@ -85,27 +86,23 @@
         </template>
 
         <!-- Empty State -->
-        <template if:false={hasData}>
-            <template if:false={isLoading}>
-                <template if:false={error}>
-                    <div class="slds-p-around_medium slds-text-align_center">
-                        <div class="slds-illustration slds-illustration_small">
-                            <lightning-icon
-                                icon-name="utility:info"
-                                size="large"
-                                alternative-text="No data"
-                                class="slds-m-bottom_small">
-                            </lightning-icon>
-                            <div class="slds-text-longform">
-                                <h3 class="slds-text-heading_medium">No Records Found</h3>
-                                <p class="slds-text-body_regular slds-text-color_weak">
-                                    There are no records to display.
-                                </p>
-                            </div>
-                        </div>
+        <template lwc:else>
+            <div class="slds-p-around_medium slds-text-align_center">
+                <div class="slds-illustration slds-illustration_small">
+                    <lightning-icon
+                        icon-name="utility:info"
+                        size="large"
+                        alternative-text="No data"
+                        class="slds-m-bottom_small">
+                    </lightning-icon>
+                    <div class="slds-text-longform">
+                        <h3 class="slds-text-heading_medium">No Records Found</h3>
+                        <p class="slds-text-body_regular slds-text-color_weak">
+                            There are no records to display.
+                        </p>
                     </div>
-                </template>
-            </template>
+                </div>
+            </div>
         </template>
     </lightning-card>
 </template>

@@ -119,7 +119,7 @@ handleSearchChange(event) {
 **Purpose**: Optimize performance and resource efficiency.
 
 **Performance Checklist**:
-- [ ] Lazy load with `if:true` / `lwc:if`
+- [ ] Lazy load with `lwc:if` / `lwc:elseif` / `lwc:else` (not legacy `if:true` / `if:false`)
 - [ ] Use `key` directive in iterations
 - [ ] Cache computed values in getters
 - [ ] Avoid property updates that trigger re-renders

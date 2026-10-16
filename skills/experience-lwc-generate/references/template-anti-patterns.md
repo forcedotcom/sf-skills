@@ -155,22 +155,24 @@ export default class StatusDisplay extends LightningElement {
 </template>
 ```
 
-### GOOD: Use if:true/if:false for Conditional Rendering
+### GOOD: Use lwc:if/lwc:elseif/lwc:else for Conditional Rendering
+
+> The legacy `if:true` / `if:false` directives are no longer recommended and may be removed in the future. Always generate `lwc:if`, `lwc:elseif`, and `lwc:else`. See [HTML Template Directives](https://developer.salesforce.com/docs/platform/lwc/guide/reference-directives.html) and [Render DOM Elements Conditionally](https://developer.salesforce.com/docs/platform/lwc/guide/create-conditional.html).
 
 ```html
 <!-- component.html -->
 <template>
-    <template if:true={isActive}>
+    <template lwc:if={isActive}>
         <p class="active">Active</p>
     </template>
-    <template if:false={isActive}>
+    <template lwc:else>
         <p class="inactive">Inactive</p>
     </template>
 
-    <template if:true={hasCount}>
+    <template lwc:if={hasCount}>
         <span>{count}</span>
     </template>
-    <template if:false={hasCount}>
+    <template lwc:else>
         <span>None</span>
     </template>
 </template>
@@ -327,11 +329,11 @@ export default class DataDisplay extends LightningElement {
 ```html
 <!-- DOES NOT WORK -->
 <template>
-    <template if:true={count > 5}>
+    <template lwc:if={count > 5}>
         <p>Many items</p>
     </template>
 
-    <template if:true={status === 'active'}>
+    <template lwc:if={status === 'active'}>
         <p>Active</p>
     </template>
 </template>
@@ -353,11 +355,11 @@ get isActive() {
 ```html
 <!-- component.html -->
 <template>
-    <template if:true={hasManyItems}>
+    <template lwc:if={hasManyItems}>
         <p>Many items</p>
     </template>
 
-    <template if:true={isActive}>
+    <template lwc:if={isActive}>
         <p>Active</p>
     </template>
 </template>
@@ -368,11 +370,11 @@ get isActive() {
 ```html
 <!-- DOES NOT WORK -->
 <template>
-    <template if:true={isAdmin && hasPermission}>
+    <template lwc:if={isAdmin && hasPermission}>
         <button>Delete</button>
     </template>
 
-    <template if:true={!isLoading}>
+    <template lwc:if={!isLoading}>
         <p>Content</p>
     </template>
 </template>
@@ -394,11 +396,11 @@ get isNotLoading() {
 ```html
 <!-- component.html -->
 <template>
-    <template if:true={canDelete}>
+    <template lwc:if={canDelete}>
         <button>Delete</button>
     </template>
 
-    <template if:true={isNotLoading}>
+    <template lwc:if={isNotLoading}>
         <p>Content</p>
     </template>
 </template>
@@ -595,18 +597,18 @@ get processedCategories() {
 
 ## 7. Conditional Rendering Issues
 
-### BAD: if:true on Non-Boolean Values
+### BAD: lwc:if on Non-Boolean Values
 
 ```html
 <!-- LLM assumes truthy/falsy works like JS - it doesn't always -->
 <template>
     <!-- String 'false' is truthy! -->
-    <template if:true={stringValue}>
+    <template lwc:if={stringValue}>
         <p>Shown even for 'false' string!</p>
     </template>
 
     <!-- 0 might not behave as expected -->
-    <template if:true={count}>
+    <template lwc:if={count}>
         <p>Count: {count}</p>
     </template>
 </template>
@@ -628,20 +630,21 @@ get hasCount() {
 ```html
 <!-- component.html -->
 <template>
-    <template if:true={hasStringValue}>
+    <template lwc:if={hasStringValue}>
         <p>Has value</p>
     </template>
 
-    <template if:true={hasCount}>
+    <template lwc:if={hasCount}>
         <p>Count: {count}</p>
     </template>
 </template>
 ```
 
-### BAD: Multiple Conditions Without Else
+### BAD: Multiple Independent Conditions (Legacy if:true / if:false)
 
 ```html
-<!-- Verbose and error-prone -->
+<!-- Verbose, error-prone, and uses deprecated directives -->
+<!-- Several branches can render at once (e.g. loading AND error) -->
 <template>
     <template if:true={isLoading}>
         <lightning-spinner></lightning-spinner>
@@ -655,36 +658,22 @@ get hasCount() {
 </template>
 ```
 
-### GOOD: Use a State Getter
-
-```javascript
-// component.js
-get viewState() {
-    if (this.isLoading) return 'loading';
-    if (this.error) return 'error';
-    if (this.data) return 'success';
-    return 'empty';
-}
-
-get isLoadingState() { return this.viewState === 'loading'; }
-get isErrorState() { return this.viewState === 'error'; }
-get isSuccessState() { return this.viewState === 'success'; }
-get isEmptyState() { return this.viewState === 'empty'; }
-```
+### GOOD: Use an lwc:if / lwc:elseif / lwc:else Chain
 
 ```html
 <!-- component.html -->
+<!-- Exactly one branch renders; directives must be on sibling elements -->
 <template>
-    <template if:true={isLoadingState}>
+    <template lwc:if={isLoading}>
         <lightning-spinner></lightning-spinner>
     </template>
-    <template if:true={isErrorState}>
+    <template lwc:elseif={error}>
         <c-error-display error={error}></c-error-display>
     </template>
-    <template if:true={isSuccessState}>
+    <template lwc:elseif={data}>
         <c-data-display data={data}></c-data-display>
     </template>
-    <template if:true={isEmptyState}>
+    <template lwc:else>
         <c-empty-state></c-empty-state>
     </template>
 </template>
@@ -912,13 +901,14 @@ get containerClass() {
 
 | What You Want | Wrong (Other Frameworks) | Right (LWC) |
 |---------------|-------------------------|-------------|
+| Conditional rendering | `if:true={x}` / `if:false={x}` (legacy) | `lwc:if={x}` / `lwc:elseif={y}` / `lwc:else` |
 | Arithmetic | `{a + b}` | Getter: `get sum() { return a + b; }` |
 | String concat | `{a + ' ' + b}` | Getter with template literal |
-| Ternary | `{x ? a : b}` | Getter or if:true/if:false |
+| Ternary | `{x ? a : b}` | Getter or `lwc:if`/`lwc:else` |
 | Method call | `{items.length}` | Getter: `get count() { return items.length; }` |
-| Comparison | `if:true={x > 5}` | Getter: `get isBig() { return x > 5; }` |
-| Logical AND | `if:true={a && b}` | Getter: `get both() { return a && b; }` |
-| Negation | `if:true={!x}` | `if:false={x}` or getter |
+| Comparison | `lwc:if={x > 5}` | Getter: `get isBig() { return x > 5; }` |
+| Logical AND | `lwc:if={a && b}` | Getter: `get both() { return a && b; }` |
+| Negation | `lwc:if={!x}` | Getter, or put content in the `lwc:else` branch |
 | Object literal | `config={{ key: val }}` | Class property |
 | Event args | `onclick={fn(x)}` | Use data attributes |
 | Two-way bind | `value={name}` auto-update | `value={name}` + `onchange` |
@@ -935,6 +925,7 @@ Before deploying LWC templates, verify:
 - [ ] No method calls (`.length`, `.toUpperCase()`)
 - [ ] No comparisons (`>`, `<`, `===`, `!==`)
 - [ ] No logical operators (`&&`, `||`, `!`)
+- [ ] Conditional rendering uses `lwc:if` / `lwc:elseif` / `lwc:else` (no legacy `if:true` / `if:false`)
 - [ ] All iterations have unique `key` attributes
 - [ ] Event handlers don't have inline arguments
 - [ ] Dynamic styles use CSS custom properties or computed strings
@@ -945,4 +936,5 @@ Before deploying LWC templates, verify:
 
 - **LWC Best Practices**: See `references/lwc-best-practices.md`
 - **Component Patterns**: See `references/component-patterns.md`
+- **HTML Template Directives**: [developer.salesforce.com/docs/platform/lwc/guide/reference-directives.html](https://developer.salesforce.com/docs/platform/lwc/guide/reference-directives.html)
 - **Source**: [Salesforce Diaries - LLM Mistakes](https://salesforcediaries.com/2026/01/16/llm-mistakes-in-apex-lwc-salesforce-code-generation-rules/)
