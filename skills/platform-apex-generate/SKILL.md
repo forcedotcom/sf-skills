@@ -134,6 +134,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 
 - Default to `with sharing`; document justification for `without sharing` or `inherited sharing`
 - `WITH USER_MODE` in SOQL and `AccessLevel.USER_MODE` for `Database` DML for CRUD/FLS enforcement — these are the defaults for _all_ Apex classes with API versions of 67.0 or higher
+- Match the access mode of a follow-up query to the access mode of the DML that created the record. A guest self-registration controller that inserts `as system` and then queries `WITH USER_MODE` (or with no access-mode clause at 67.0+) gets no row back: the guest does not own the record and user mode still applies the guest's object and field permissions, so the page behaves as if the verification code expired. Read with `WITH SYSTEM_MODE` in that create-then-read path, keep `without sharing` for record visibility, and do not grant the guest Edit to make user mode work. See [Set an Access Mode for Database Operations](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_enforce_usermode.htm) and [Give Guest Users Access to Create Records](https://developer.salesforce.com/docs/platform/communities-dev/guide/communities-dev-give-guest-users-access-to-create-records.html)
 - Validate dynamic field/operator names via allowlist or `Schema.describe`
 - Named Credentials for all external credentials/API keys
 - `AuraHandledException` for `@AuraEnabled` user-facing errors (no internal details)
