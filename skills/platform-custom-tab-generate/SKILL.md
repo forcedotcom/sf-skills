@@ -132,8 +132,8 @@ Also forbidden:
 - **Custom**: Can specify custom tab styles if needed
 
 ### Tab Visibility
-- **Default**: Visible to all users with access
-- **Custom**: Can be configured for specific user profiles
+- **Default**: A metadata-deployed tab is hidden from everyone, admins included, until a permission set or profile sets `<visibility>Visible</visibility>` in `tabSettings` (see `platform-permission-set-generate`)
+- A visible tab appears in the App Launcher without being in any app; an app's `navigationItems` only controls that app's nav bar
 
 ## Supported Applications
 - **Standard Apps**: Available in standard Salesforce applications

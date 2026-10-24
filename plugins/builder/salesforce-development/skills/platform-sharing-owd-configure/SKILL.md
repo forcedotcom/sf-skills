@@ -117,6 +117,7 @@ All steps are sequential. Do not skip or reorder.
 | `ControlledByParent` not available | Object has no Master-Detail relationship — use Private, Public Read Only, or Public Read/Write |
 | External access field not showing | External sharing model only appears when external org-wide defaults are enabled |
 | Query returns no results | Object may not be customizable or API name may be incorrect — verify spelling |
+| Role deploy fails with `Opportunity access level below organization default` (or Case/Contact) | `Role` `caseAccessLevel`/`contactAccessLevel`/`opportunityAccessLevel` must be at or above that object's OWD. Omit any you aren't restricting (it inherits the OWD). Valid values are `None`, `Read`, `Edit`; `ReadWrite` fails with a generic `An unexpected error occurred` |
 | Deploy fails with invalid value for Price Book | Price Book only accepts `Use`/`None` (internal) and external is fixed at `None` — do not retry with other values, explain to user |
 
 ---
