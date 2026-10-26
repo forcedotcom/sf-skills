@@ -44,6 +44,7 @@ Always wrap the code under test in `Test.startTest()` / `Test.stopTest()`:
 | God test class (>500 lines) | Split into multiple test classes by behavior area |
 | Long test methods (>30 lines) | Extract Given/When/Then into helper methods |
 | Generic `Exception` catch | Catch the specific expected type (e.g., `DmlException`) |
+| Setup-object DML (`UserRole`, `User`, `PermissionSetAssignment`) and record DML in one test method | `MIXED_DML_OPERATION`. Insert the role and its user first, then wrap Account / custom-object DML in `System.runAs(thatUser)`. See [references/test-data-factory.md](references/test-data-factory.md#setup-objects-users-and-roles) |
 
 ## Workflow
 
