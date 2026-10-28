@@ -62,7 +62,7 @@ Real-world custom PMD rules targeting Salesforce metadata XML files for org gove
         <properties>
             <property name="xpath">
                 <value><![CDATA[
-//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(@Text)]]
+//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(.//*[@Text])]]
 ]]></value>
             </property>
         </properties>
