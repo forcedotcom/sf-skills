@@ -143,6 +143,14 @@ sf project deploy report --job-id <job-id> --target-org <alias> --json
 ```
 Then verify tests, Flow state, permission assignments, and smoke-test behavior.
 
+**Check the test count whenever a test level was requested.** A deploy or validation with `--test-level` can return success with `runTestsEnabled: true` and **zero tests run** — no warning (forcedotcom/sf-skills#391). Read the totals from the deploy, validate, or report JSON:
+
+```bash
+jq '{status: .result.status, runTestsEnabled: .result.runTestsEnabled, numberTestsTotal: .result.numberTestsTotal, numberTestsCompleted: .result.numberTestsCompleted, numberTestErrors: .result.numberTestErrors}'
+```
+
+If `numberTestsTotal` is `0` (or missing) while a test level other than `NoTestRun` was requested, do NOT report tests as passed. Report "deploy succeeded, but 0 tests ran", then run the tests separately with [platform-apex-test-run](../platform-apex-test-run/SKILL.md) and report those results. (`RunRelevantTests` can legitimately select 0 tests for a change with no Apex impact — say so rather than treating it as a pass.)
+
 ### 6. Report clearly
 Summarize what deployed, what failed, what was skipped, and what the next safe action is.
 
@@ -164,7 +172,7 @@ sf project deploy validate --target-org <alias> --json [scope flags] --test-leve
 
 Scope flags — use exactly one: `--source-dir <path>`, `--metadata <Type:Name>`, or `--manifest manifest/package.xml`.
 
-The response returns a **job ID** (`result.id`) valid for **10 days**. Persist it **with the target's immutable identity** — the org ID and instance URL from `sf org display`, not just the alias — so the quick deploy can prove the validation belongs to the org it is about to promote to:
+Before treating the validation as good, apply the [test-count check](#5-verify): a validation that ran 0 tests is not a passing validation. The response returns a **job ID** (`result.id`) valid for **10 days**. Persist it **with the target's immutable identity** — the org ID and instance URL from `sf org display`, not just the alias — so the quick deploy can prove the validation belongs to the org it is about to promote to:
 
 ```bash
 mkdir -p .sfdx

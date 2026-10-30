@@ -88,6 +88,10 @@ sf org create scratch --source-org <source-org-id> --target-dev-hub <alias> --al
 - `--duration-days <days>` — default 7, max 30
 - `--set-default` — make this the default org
 - `--no-track-source` — disable source tracking (for CI/CD)
+- `--no-namespace` — create the org without a namespace, even if the Dev Hub has one linked (e.g. "no-namespace org", "un-namespaced", "without namespace")
+- `--no-ancestors` — do not include second-generation package ancestors
+
+**Never silently drop a requirement.** If the user asks for something that no flag above or definition-file field covers, say so explicitly before (or instead of) creating the org — do NOT create an org that ignores the request.
 
 **Step 4. MANDATORY - Run org list and write output (SUCCESS path only):** This step runs only when Step 3 created an org successfully. If Step 3 returned an error, SKIP this step and follow **Error handling** below instead. After the org is created, you MUST run this command:
 
@@ -104,6 +108,9 @@ Then:
     - Alias: [alias from the org list entry]
     - Username: [username]
     - Org ID: [orgId]
+    - Namespace: [`namespace` from the org list entry, or "none" if null]
+
+   If the user asked for `--no-namespace` and the namespace is not null (or asked for a namespace and it is null), say clearly that the org does not match the request.
 
 5. If an output directory is available (per the output artifacts rule above), write that extracted org object to `<output-dir>/scratch-org-result.json` **as-is — this skill is a pass-through wrapper**. Write every field the CLI returns for that org; do NOT curate, whitelist, or drop non-secret fields (e.g. `instanceName`, `createdOrgInstance`, `signupUsername`, `orgName`, `edition` are non-secret metadata the CLI returns freely — keep them). The one thing you never emit is a live secret: `accessToken` and `sfdxAuthUrl` — and the CLI already redacts these in `--json` output (they arrive as `"[REDACTED] …"`), so simply preserve that redaction and never un-redact or re-derive the real value.
 
