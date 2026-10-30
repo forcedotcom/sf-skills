@@ -46,6 +46,8 @@ External Services in Salesforce automatically generate Apex classes from OpenAPI
 **Template**: `assets/external-services/openapi-registration.externalServiceRegistration-meta.xml`
 **Reference**: `assets/external-services/external-service-operations.md`
 
+**Naming:** the file basename is the registration's fullName, and it must start with a letter and contain only letters and digits. `StripeAPI.externalServiceRegistration-meta.xml` deploys; `Stripe_API.externalServiceRegistration-meta.xml` fails with `Enter a name that starts with a letter and contains only alphanumeric characters.` The `<label>` can contain spaces.
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">

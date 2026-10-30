@@ -10,6 +10,8 @@ allowed-tools:
 
 Validate all required prerequisites and surface a clear, actionable status report. This skill is on-demand — it does not run automatically on session start. Run it explicitly to check or repair your local setup.
 
+The `sf-context` scripts ship with the salesforce-development Claude Code plugin. If `${CLAUDE_PLUGIN_ROOT}` is unset or the script is missing, run the verification commands in [Tools Checked](#tools-checked) directly and report each tool's status yourself.
+
 ## Phase 1: Prerequisite Scan
 
 Run the tool check:
