@@ -16,6 +16,8 @@ FROM object
 [FOR UPDATE]
 ```
 
+`FOR UPDATE` can't be combined with `ORDER BY` (locked rows are returned in Id order). Lock without `ORDER BY` and sort in Apex. See `anti-patterns.md` #11.
+
 ---
 
 ## Operators
