@@ -3304,6 +3304,33 @@ class OrgCacheTests(TelemetryCaptureTestBase):
         self.assertEqual(env["FORCE_COLOR"], "0")
         self.assertEqual(env["NO_COLOR"], "1")
 
+    def test_resolve_hides_sf_console_window_on_windows(self):
+        # The resolve runs in the DETACHED sender, which has no console, so
+        # `cmd.exe /c sf.cmd` would open a visible window at every session end
+        # unless it is spawned with CREATE_NO_WINDOW.
+        self._org.stop()
+        proc = mock.Mock()
+        proc.stdout = json.dumps({"result": {}})
+        with mock.patch.object(sft.os, "name", "nt"), \
+                mock.patch.object(sft, "_sf_command",
+                                  return_value=["cmd.exe", "/c", "sf.cmd", "org", "display", "--json"]), \
+                mock.patch.object(sft.subprocess, "run", return_value=proc) as run:
+            sft._resolve_org_context()
+        self._org.start()
+        self.assertEqual(run.call_args.kwargs.get("creationflags"), 0x08000000)
+
+    def test_resolve_passes_no_creationflags_off_windows(self):
+        self._org.stop()
+        proc = mock.Mock()
+        proc.stdout = json.dumps({"result": {}})
+        with mock.patch.object(sft.os, "name", "posix"), \
+                mock.patch.object(sft, "_sf_command",
+                                  return_value=["sf", "org", "display", "--json"]), \
+                mock.patch.object(sft.subprocess, "run", return_value=proc) as run:
+            sft._resolve_org_context()
+        self._org.start()
+        self.assertNotIn("creationflags", run.call_args.kwargs)
+
     def test_org_context_read_reports_empty_org_id(self):
         # Even if a stale cache somehow held an org_id, the reader zeroes it — the
         # coarse bucket is the only org signal any caller may rely on.

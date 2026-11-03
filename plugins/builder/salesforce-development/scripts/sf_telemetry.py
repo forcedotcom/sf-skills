@@ -1227,6 +1227,9 @@ def _resolve_org_context() -> dict:
             cmd,
             capture_output=True, text=True, timeout=_ORG_RESOLVE_TIMEOUT_S,
             env=_shim.no_color_env(),
+            # This runs in the DETACHED sender, which has no console: without the
+            # flag, `cmd.exe /c sf.cmd` opens a visible window at every session end.
+            **_shim.no_window_kwargs(),
         )
         result = (json.loads(proc.stdout) or {}).get("result", {}) if proc.stdout else {}
     except (subprocess.TimeoutExpired, FileNotFoundError, json.JSONDecodeError, ValueError):

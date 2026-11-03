@@ -157,6 +157,8 @@ def _subprocess_runner(argv: list[str], timeout: Optional[int] = None) -> Comman
             # Same as sf_shim.no_color_env() (#349); inlined because this module is
             # loaded by path and stays import-free of its siblings.
             env={**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1"},
+            # Same as sf_shim.no_window_kwargs(): no console window on Windows.
+            **({"creationflags": 0x08000000} if os.name == "nt" else {}),
         )
     except subprocess.TimeoutExpired:
         return CommandResult(False, "", None, "timeout")

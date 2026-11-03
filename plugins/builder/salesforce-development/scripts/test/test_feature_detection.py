@@ -10,6 +10,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 from _test_support import load_module
 
@@ -417,6 +418,28 @@ class FeatureDetectionTests(unittest.TestCase):
                 blob = out + err
                 self.assertLess(len(blob), 500)
                 self.assertNotIn("private", blob)
+
+
+class SubprocessRunnerTests(unittest.TestCase):
+    """The fallback runner launches `sf.cmd` through cmd.exe on Windows; it must not
+    open a console window there, and must leave POSIX spawns unchanged."""
+
+    def _run(self, os_name, executable):
+        completed = mock.Mock(returncode=0, stdout="{}")
+        with mock.patch.object(feature.os, "name", os_name), \
+                mock.patch.object(feature.shutil, "which", return_value=executable), \
+                mock.patch.object(feature.subprocess, "run", return_value=completed) as run:
+            result = feature._subprocess_runner(["sf", "org", "display", "--json"])
+        self.assertTrue(result.ok)
+        return run.call_args.kwargs
+
+    def test_windows_shim_spawn_hides_console_window(self):
+        kwargs = self._run("nt", r"C:\sf\bin\sf.cmd")
+        self.assertEqual(kwargs.get("creationflags"), 0x08000000)
+
+    def test_posix_spawn_passes_no_creationflags(self):
+        kwargs = self._run("posix", "/usr/local/bin/sf")
+        self.assertNotIn("creationflags", kwargs)
 
 
 if __name__ == "__main__":

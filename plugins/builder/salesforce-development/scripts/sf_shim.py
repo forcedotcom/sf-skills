@@ -109,6 +109,21 @@ def no_color_env() -> dict:
     return {**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1"}
 
 
+# subprocess.CREATE_NO_WINDOW, spelled out because the subprocess constant only
+# exists on Windows builds of Python.
+_CREATE_NO_WINDOW = 0x08000000
+
+
+def no_window_kwargs() -> dict:
+    """Spawn kwargs that keep a console child (`cmd.exe /c sf.cmd`, npm, node) from
+    opening a console window on Windows. A hook process without a console of its
+    own (the DETACHED telemetry sender, or a hook its host launched without one)
+    otherwise gives every such child a new, visible cmd.exe window. Output is
+    captured through pipes, so the child needs no console. Empty off Windows, so
+    POSIX spawns are unchanged."""
+    return {"creationflags": _CREATE_NO_WINDOW} if os.name == "nt" else {}
+
+
 _ASSIGNMENT = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*=')
 _REDIRECT = re.compile(r'(?:[<>]+[&|]?|&>+)')
 _SEPARATOR_CHARS = '();|&'

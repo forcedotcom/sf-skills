@@ -226,6 +226,7 @@ def run_result(cmd: list, timeout: Optional[int] = None) -> RunResult:
             timeout=timeout,
             shell=False,
             env=_shim.no_color_env(),
+            **_shim.no_window_kwargs(),
         )
     except subprocess.TimeoutExpired as exc:
         return RunResult(False, "", None, "timeout", exc.stderr or "")
@@ -2380,7 +2381,8 @@ def _detect_update_notice() -> Optional[dict]:
         return None
     try:
         result = subprocess.run(
-            argv, capture_output=True, text=True, timeout=timeout, shell=False
+            argv, capture_output=True, text=True, timeout=timeout, shell=False,
+            **_shim.no_window_kwargs(),
         )
     except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
         return None

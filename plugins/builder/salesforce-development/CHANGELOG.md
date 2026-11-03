@@ -7,6 +7,13 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+
+- On Windows, hooks no longer open visible `cmd.exe` console windows when a session starts or
+  ends (or on `/clear`). Salesforce CLI calls made by the hooks and by the detached telemetry
+  sender now start without a console window.
+  ([sf-skills#412](https://github.com/forcedotcom/sf-skills/issues/412))
+
 ## [2.6.0] — 2026-10-30
 
 ### Added

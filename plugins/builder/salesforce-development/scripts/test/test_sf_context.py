@@ -297,6 +297,52 @@ class RunTests(unittest.TestCase):
         self.assertEqual(captured["env"]["NO_COLOR"], "1")
         self.assertEqual(captured["env"]["SF_KEEP"], "1")
 
+    def test_run_hides_console_window_on_windows(self):
+        # On Windows `sf` is the batch shim sf.cmd, launched as `cmd.exe /c`. A hook
+        # without a console of its own gives that child a new, visible console window,
+        # so every CLI call must pass CREATE_NO_WINDOW.
+        captured = {}
+
+        def fake_run(argv, **kwargs):
+            captured.update(kwargs)
+            return _completed(stdout="{}", returncode=0)
+
+        with mock.patch.object(sfx, "resolve_executable", return_value=r"C:\sf\bin\sf.cmd"), \
+                mock.patch.dict(sfx.os.environ, {"COMSPEC": "cmd.exe"}, clear=False), \
+                mock.patch.object(sfx.os, "name", "nt"), \
+                mock.patch.object(sfx.subprocess, "run", side_effect=fake_run):
+            sfx.run(["sf", "org", "display", "--json"])
+        self.assertEqual(captured.get("creationflags"), 0x08000000)
+
+    def test_run_passes_no_creationflags_off_windows(self):
+        captured = {}
+
+        def fake_run(argv, **kwargs):
+            captured.update(kwargs)
+            return _completed(stdout="{}", returncode=0)
+
+        with mock.patch.object(sfx, "resolve_executable", return_value="/usr/local/bin/sf"), \
+                mock.patch.object(sfx.os, "name", "posix"), \
+                mock.patch.object(sfx.subprocess, "run", side_effect=fake_run):
+            sfx.run(["sf", "org", "display", "--json"])
+        self.assertNotIn("creationflags", captured)
+
+    def test_update_notice_probe_hides_console_window_on_windows(self):
+        # The PreToolUse `cli-update-notice` hook runs `sf version` the same way.
+        with mock.patch.object(sfx, "resolve_executable", return_value=r"C:\sf\bin\sf.cmd"), \
+                mock.patch.dict(sfx.os.environ, {"COMSPEC": "cmd.exe"}, clear=False), \
+                mock.patch.object(sfx.os, "name", "nt"), \
+                mock.patch.object(sfx.subprocess, "run",
+                                  return_value=_completed(stdout="", returncode=0)) as run:
+            sfx._detect_update_notice()
+        self.assertEqual(run.call_args.kwargs.get("creationflags"), 0x08000000)
+
+    def test_no_window_kwargs_is_windows_only(self):
+        with mock.patch.object(sfx.os, "name", "nt"):
+            self.assertEqual(sfx._shim.no_window_kwargs(), {"creationflags": 0x08000000})
+        with mock.patch.object(sfx.os, "name", "posix"):
+            self.assertEqual(sfx._shim.no_window_kwargs(), {})
+
 
 class OrgListTests(unittest.TestCase):
     def test_org_list_skips_connection_status(self):
