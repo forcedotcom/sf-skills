@@ -8,6 +8,8 @@
 # detected from its tnk claim by validate-token.js: prod → api.salesforce.com,
 # stage → stage.api.salesforce.com, dev → dev.api.salesforce.com. So a prod org
 # hits prod and an internal dev/scratch org hits dev, with no extra config.
+# If the environment cannot be detected the script exits with an error rather than
+# defaulting to prod; set APEXGURU_ENV=prod|stage|dev to choose explicitly.
 #
 # Output (stdout, single line JSON): {"baseUrl":"...","tokenFile":"...","source":"..."}
 # The SFAP JWT is a secret, so it is NEVER printed to stdout. Instead it is
@@ -87,24 +89,54 @@ if [ -z "$TOKEN" ] && command -v sf >/dev/null 2>&1 && command -v jq >/dev/null 
     FRONTDOOR_URL="$(printf '%s' "$OPEN_JSON" | jq -r '.result.url // empty')"
   fi
 
-  if [ -n "$INSTANCE_URL" ] && [ -n "$FRONTDOOR_URL" ]; then
+  # Host part of an https URL (lowercased, no port/userinfo); empty if not https.
+  url_host() {
+    case "$1" in
+      https://*) printf '%s' "$1" | sed -e 's#^https://##' -e 's#[/?\#].*$##' -e 's#^.*@##' -e 's#:[0-9]*$##' | tr 'A-Z' 'a-z' ;;
+      *) printf '' ;;
+    esac
+  }
+  INSTANCE_HOST="$(url_host "$INSTANCE_URL")"
+  FRONTDOOR_HOST="$(url_host "$FRONTDOOR_URL")"
+
+  # Only proceed when both URLs are https and the frontdoor is on the org's own host.
+  if [ -n "$INSTANCE_HOST" ] && [ -n "$FRONTDOOR_HOST" ] && [ "$INSTANCE_HOST" = "$FRONTDOOR_HOST" ]; then
     COOKIE_JAR="$(mktemp "${TMPDIR:-/tmp}/apexguru-sid.XXXXXX")"
-    chmod 600 "$COOKIE_JAR"
-    trap 'rm -f "$COOKIE_JAR"' EXIT
-    # Follow the frontdoor to capture the session cookie; discard the HTML body.
-    curl -sS -c "$COOKIE_JAR" -L -o /dev/null "$FRONTDOOR_URL" 2>/dev/null || true
+    HDR_FILE="$(mktemp "${TMPDIR:-/tmp}/apexguru-sidhdr.XXXXXX")"
+    chmod 600 "$COOKIE_JAR" "$HDR_FILE"
+    trap 'rm -f "$COOKIE_JAR" "$HDR_FILE"' EXIT
+    # Follow the frontdoor (bounded, https-only redirects) to capture the session
+    # cookie; discard the HTML body. The URL carries a one-time pad, so it is passed
+    # via a curl config on stdin (-K -) rather than on the command line.
+    printf 'url = "%s"\n' "$FRONTDOOR_URL" | curl -sS -K - -c "$COOKIE_JAR" \
+      -L --max-redirs 5 --proto =https --proto-redir =https \
+      --connect-timeout 15 --max-time 60 -o /dev/null 2>/dev/null || true
+
+    # Cookie jar columns: domain, subdomains, path, secure, expiry, name, value.
+    # HttpOnly cookies have their domain prefixed with "#HttpOnly_".
     SID="$(awk -F'\t' 'tolower($6)=="sid"{print $7}' "$COOKIE_JAR" 2>/dev/null | head -1)"
+    SID_DOMAIN="$(awk -F'\t' 'tolower($6)=="sid"{d=$1; sub(/^#HttpOnly_/,"",d); sub(/^\./,"",d); print tolower(d)}' "$COOKIE_JAR" 2>/dev/null | head -1)"
+    # Accept the sid only if it was issued for the org's own host (or a parent domain of it).
+    if [ -n "$SID" ]; then
+      case "$INSTANCE_HOST" in
+        "$SID_DOMAIN"|*".$SID_DOMAIN") : ;;
+        *) echo "Unexpected sid cookie domain '$SID_DOMAIN' for $INSTANCE_HOST; ignoring it." >&2; SID="" ;;
+      esac
+      [ -n "$SID_DOMAIN" ] || SID=""
+    fi
 
     if [ -n "$SID" ]; then
       # Exchange the session id for the SFAP JWT. Response: {"jwt":"...","message":"..."}.
-      AUTH_JSON="$(curl -sS "${INSTANCE_URL%/}/ide/auth" -H "Authorization: Bearer $SID" 2>/dev/null || true)"
+      # The sid goes in a 0600 header file (-H @file), never on the command line.
+      printf 'Authorization: Bearer %s' "$SID" > "$HDR_FILE"
+      AUTH_JSON="$(curl -sS --connect-timeout 15 --max-time 60 "${INSTANCE_URL%/}/ide/auth" -H @"$HDR_FILE" 2>/dev/null || true)"
       CANDIDATE="$(printf '%s' "$AUTH_JSON" | jq -r '.jwt // empty' 2>/dev/null || true)"
       if [ -n "$CANDIDATE" ] && [ "$CANDIDATE" != "null" ]; then
         TOKEN="$CANDIDATE"
         SOURCE="sf-cli:/ide/auth${ORG_ALIAS:+ (org=$ORG_ALIAS)}"
       fi
     fi
-    rm -f "$COOKIE_JAR"; trap - EXIT
+    rm -f "$COOKIE_JAR" "$HDR_FILE"; trap - EXIT
   fi
 fi
 
@@ -128,11 +160,18 @@ if command -v node >/dev/null 2>&1; then
   DETECTED_ENV="$(printf '%s' "$VALIDATION" | jq -r '.detectedEnv // empty' 2>/dev/null || true)"
 fi
 
-# Route to the host matching the token's env; default to prod when undetectable.
-case "$DETECTED_ENV" in
+# Route to the host matching the token's env. APEXGURU_ENV (prod|stage|dev) overrides
+# detection. An undetectable env is an error: we never silently send an org token to prod.
+TOKEN_ENV="${APEXGURU_ENV:-$DETECTED_ENV}"
+case "$TOKEN_ENV" in
+  prod)  API_HOST="$PROD_HOST" ;;
   dev)   API_HOST="$DEV_HOST" ;;
   stage) API_HOST="$STAGE_HOST" ;;
-  *)     API_HOST="$PROD_HOST" ;;
+  *)
+    jq -cn --arg env "$TOKEN_ENV" \
+      '{error:("could not determine token environment (got: \($env | if . == "" then "none" else . end))"), hint:"Set APEXGURU_ENV=prod|stage|dev explicitly."}'
+    exit 1
+    ;;
 esac
 BASE_URL="https://${API_HOST}/${API_PATH}"
 
@@ -145,7 +184,6 @@ chmod 600 "$TOKEN_FILE"
 printf '%s' "$TOKEN" > "$TOKEN_FILE"
 
 # Emit only non-secret fields. jq handles escaping. `env` reflects the token's
-# detected environment (prod when undetectable), matching the chosen baseUrl.
-ENV_LABEL="${DETECTED_ENV:-prod}"
-jq -cn --arg baseUrl "$BASE_URL" --arg tokenFile "$TOKEN_FILE" --arg source "$SOURCE" --arg env "$ENV_LABEL" \
+# environment, matching the chosen baseUrl.
+jq -cn --arg baseUrl "$BASE_URL" --arg tokenFile "$TOKEN_FILE" --arg source "$SOURCE" --arg env "$TOKEN_ENV" \
   '{baseUrl:$baseUrl, tokenFile:$tokenFile, source:$source, env:$env}'

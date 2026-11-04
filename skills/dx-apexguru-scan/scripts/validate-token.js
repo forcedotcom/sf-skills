@@ -90,7 +90,7 @@ const detectedEnv = looksStage && !looksDev
   ? "prod"
   : null;
 
-if (!tnk) warnings.push("no tnk claim found — could not detect the token's environment; defaulting to prod endpoint");
+if (!tnk) warnings.push("no tnk claim found: could not detect the token's environment; set APEXGURU_ENV=prod|stage|dev explicitly");
 
 // --- 2. scope must include sfap_api. Scope may be a space-delimited string
 // (scp/scope) or an array. Only fail if we can read it AND sfap_api is absent. ---

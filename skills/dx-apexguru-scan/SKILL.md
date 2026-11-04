@@ -4,13 +4,13 @@ description: "Run an ApexGuru performance scan on a Salesforce Apex project via 
 allowed-tools: Read, Bash(bash), Bash(node), Bash(curl), Bash(zip), Bash(unzip), Bash(jq), Bash(sf), Bash(date), Write
 argument-hint: "[project-path] [--org <alias>] [--fast]"
 metadata:
-  version: "1.1"
+  version: "1.2"
   domains: ["Developer Experience"]
   relatedSkills:
     - "dx-code-analyzer-run"
   cliTools:
     - tool: ["curl"]
-      semver: ">=7.0.0"
+      semver: ">=7.55.0"
     - tool: ["jq"]
       semver: ">=1.6.0"
     - tool: ["node"]
@@ -204,12 +204,13 @@ bash "<skill_dir>/scripts/run-scan.sh" "./apexguru-${TS}.zip" "./apexguru-raw-${
   generation).
 - **The endpoint follows the token's environment** — the base URL is derived
   from the token's `tnk` claim: a prod org hits `api.salesforce.com`, and an
-  internal stage/dev org hits `stage.`/`dev.api.salesforce.com`. Customers
-  authenticate a prod org, so they always hit prod; no extra flags or config.
+  internal stage/dev org hits `stage.`/`dev.api.salesforce.com`. If the
+  environment cannot be detected the script stops with an error; set
+  `APEXGURU_ENV=prod|stage|dev` to choose explicitly.
 - `--org <alias>` picks which authenticated `sf` org the JWT is derived from
   (omit to use the CLI's default org).
 - Progress (`QUEUED → RUNNING → SUCCEEDED`) streams to stderr; the script polls
-  ~every 15s. Default ceiling is 10 min (`--max-polls`, `--interval` to adjust).
+  ~every 15s. Default ceiling is about 10 min of polling (`--max-polls`, `--interval` to adjust); each request is also capped by curl timeouts.
 - On success, stdout is a one-line JSON summary and the full raw body is written to
   `apexguru-raw-${TS}.json`. On failure, stdout is `{error, httpStatus, status, hint}` —
   relay the hint. For status-code specifics see `<skill_dir>/references/error-handling.md`.

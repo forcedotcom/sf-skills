@@ -26,10 +26,10 @@ that to `/ide/auth` yields a bare `401 "No session ID sent"`. So the resolver do
 
 1. reads the (non-redacted) `instanceUrl` from `sf org display --json`,
 2. gets a frontdoor URL from `sf org open --url-only --json`,
-3. follows that URL with `curl` to mint the real `sid` session cookie, and
+3. follows that URL with `curl` (https only, at most 5 redirects, URL passed via stdin config so the one-time pad never appears in `ps`) to mint the real `sid` session cookie, and
 4. sends the `sid` as `Authorization: Bearer` to `<instanceUrl>/ide/auth`.
 
-The `sid` is a secret: it lives only in a `0600` temp cookie jar that the script
+The `sid` cookie is accepted only if its domain matches the org's own host (or a parent domain of it); otherwise it is ignored. The `sid` is a secret: it is sent to `/ide/auth` via a `0600` header file (never on the command line), lives only in a `0600` temp cookie jar that the script
 deletes on exit, and is never echoed.
 
 ## How `resolve-token.sh` resolves the token
@@ -128,7 +128,9 @@ always lands where the token was issued:
 | stage | `stage.api.salesforce.com`  | `https://stage.api.salesforce.com/platform/scale/v1-beta.1/apex-guru` |
 | dev   | `dev.api.salesforce.com`    | `https://dev.api.salesforce.com/platform/scale/v1-beta.1/apex-guru`   |
 
-There is no `--env` flag: routing is automatic from the `tnk` claim, and an
-undetectable environment defaults to prod. Customers authenticate a production
-org, so they always hit `api.salesforce.com`; the stage/dev hosts exist for
-internal testing against non-prod orgs.
+There is no `--env` flag: routing is automatic from the `tnk` claim. An
+undetectable environment causes the script to exit with an error (it never
+defaults to prod); set the `APEXGURU_ENV=prod|stage|dev` environment variable
+explicitly if auto-detection fails. Customers authenticate a production org, so
+they normally hit `api.salesforce.com`; the stage/dev hosts exist for internal
+testing against non-prod orgs.

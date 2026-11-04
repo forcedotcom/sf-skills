@@ -48,11 +48,18 @@ rm -f "$OUT_ABS"
 # The set of Apex source files under the root (relative paths, noise excluded).
 # Defined once as a function so the count pass and the zip pass use the exact
 # same list. `zip -@` reads a newline-delimited list, so we emit newline-
-# terminated relative paths with the leading "./" stripped.
+# terminated relative paths with the leading "./" stripped. Names are read NUL-
+# delimited and any containing a newline/CR are skipped, so a hostile filename
+# cannot inject extra entries into the zip input list.
 apex_files() {
   find . -type f \( -name '*.cls' -o -name '*.trigger' \) \
-    -not -path '*/node_modules/*' -not -path '*/.git/*' -print \
-    | sed 's#^\./##'
+    -not -path '*/node_modules/*' -not -path '*/.git/*' -print0 \
+    | while IFS= read -r -d '' f; do
+        case "$f" in
+          *$'\n'*|*$'\r'*) echo "SKIP: filename with newline or CR: ${f//[$'\n\r']/?}" >&2; continue ;;
+        esac
+        printf '%s\n' "${f#./}"
+      done
 }
 
 APEX_COUNT=0

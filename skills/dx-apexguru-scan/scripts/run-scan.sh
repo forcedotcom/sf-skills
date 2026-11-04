@@ -66,6 +66,17 @@ if [ -n "$TOKEN_FILE" ] && [ -f "$TOKEN_FILE" ]; then
 fi
 [ -n "$TOKEN" ] || err "could not read resolved token" 0 "" "re-run; if it persists, resolve the token manually via APEXGURU_SFAP_TOKEN"
 
+# Keep the JWT off the curl command line (visible to other local users via `ps`):
+# write the Authorization header to a 0600 file and hand it to curl with -H @file.
+# `printf` is a shell builtin, so the token never appears in any process's argv.
+SUBMIT_BODY=""
+POLL_BODY=""
+TOKEN_HEADER_FILE="$(mktemp "${TMPDIR:-/tmp}/apexguru-hdr.XXXXXX")"
+trap 'rm -f "$TOKEN_HEADER_FILE" "$SUBMIT_BODY" "$POLL_BODY"' EXIT
+chmod 600 "$TOKEN_HEADER_FILE"
+printf 'Authorization: Bearer %s' "$TOKEN" > "$TOKEN_HEADER_FILE"
+unset TOKEN
+
 hint_for_status() { # maps HTTP status → actionable hint (see references/error-handling.md)
   case "$1" in
     401) echo "Token bad or expired. Re-authenticate the Salesforce org (or supply a fresh sfap_api JWT) and retry." ;;
@@ -94,8 +105,8 @@ SUBMIT_BODY="$(mktemp)"
 FAST_ARG=()
 [ -n "$FAST" ] && FAST_ARG=(-F "fastMode=true")
 
-HTTP=$(curl -sS -o "$SUBMIT_BODY" -w '%{http_code}' -X POST "$BASE_URL/scan" \
-  -H "Authorization: Bearer $TOKEN" \
+HTTP=$(curl -sS --connect-timeout 15 --max-time 600 -o "$SUBMIT_BODY" -w '%{http_code}' -X POST "$BASE_URL/scan" \
+  -H @"$TOKEN_HEADER_FILE" \
   -H "x-apexguru-client: ApexGuru-Skill" \
   -F "file=@${ZIP_PATH};type=application/zip" \
   ${FAST_ARG[@]+"${FAST_ARG[@]}"}) || err "network error submitting scan" 0 "" "check connectivity to the API host"
@@ -118,8 +129,8 @@ i=0
 while [ "$i" -lt "$MAX_POLLS" ]; do
   i=$((i + 1))
   sleep "$INTERVAL"
-  HTTP=$(curl -sS -o "$POLL_BODY" -w '%{http_code}' -X GET "$BASE_URL/scan/$SCAN_ID" \
-    -H "Authorization: Bearer $TOKEN" \
+  HTTP=$(curl -sS --connect-timeout 15 --max-time 60 -o "$POLL_BODY" -w '%{http_code}' -X GET "$BASE_URL/scan/$SCAN_ID" \
+    -H @"$TOKEN_HEADER_FILE" \
     -H "x-apexguru-client: ApexGuru-Skill") || { echo "poll $i: network hiccup, retrying" >&2; continue; }
 
   if [ "$HTTP" != "200" ]; then
@@ -150,4 +161,4 @@ done
 
 rm -f "$POLL_BODY"
 err "scan did not finish within $((MAX_POLLS * INTERVAL))s (last status: $STATUS)" 0 "$STATUS" \
-  "Large projects can take longer — re-run with --max-polls higher, or use --fast."
+  "Large projects can take longer. Re-run with --max-polls higher, or use --fast."
