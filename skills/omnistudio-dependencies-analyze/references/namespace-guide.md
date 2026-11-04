@@ -8,7 +8,7 @@ Salesforce OmniStudio exists under three distinct namespaces depending on the or
 
 | Namespace | Package Context | Typical Orgs |
 |-----------|----------------|--------------|
-| **Core** (no prefix) | Industries / OmniStudio managed package migrated to Core | Orgs on API 234.0+ (Spring '22+) that have completed the Core migration |
+| **Core** (no prefix) | Standard OmniStudio objects (OmniProcess, OmniUiCard, OmniDataTransform) | Orgs on Spring '22 (API 54.0)+ using standard OmniStudio objects (the `omnistudio` package supplies the runtime/designers) |
 | **vlocity_cmt** | Vlocity Communications, Media & Energy | Telco, media, energy & utilities industry orgs |
 | **vlocity_ins** | Vlocity Insurance & Health | Insurance, health, and life sciences industry orgs |
 
@@ -80,7 +80,7 @@ These objects store OmniScript, Integration Procedure, FlexCard, and Data Mapper
 | Concept | Core | vlocity_cmt | vlocity_ins |
 |---------|------|-------------|-------------|
 | Element → Process lookup | `OmniProcessId` | `vlocity_cmt__OmniScriptId__c` | `vlocity_ins__OmniScriptId__c` |
-| DM Item → DM lookup | `OmniDataTransformId` | `vlocity_cmt__DRBundleId__c` | `vlocity_ins__DRBundleId__c` |
+| DM Item → DM lookup | `OmniDataTransformationId` | `vlocity_cmt__DRBundleId__c` | `vlocity_ins__DRBundleId__c` |
 
 ---
 
@@ -95,12 +95,12 @@ These objects store OmniScript, Integration Procedure, FlexCard, and Data Mapper
 | Language | `Language` | `vlocity_cmt__Language__c` | `vlocity_ins__Language__c` |
 | Is Active | `IsActive` | `vlocity_cmt__IsActive__c` | `vlocity_ins__IsActive__c` |
 | Version | `VersionNumber` | `vlocity_cmt__Version__c` | `vlocity_ins__Version__c` |
-| Type Category | `TypeCategory` | N/A (use `vlocity_cmt__IsIntegrationProcedure__c`) | N/A (use `vlocity_ins__IsIntegrationProcedure__c`) |
+| OS vs IP discriminator | `IsIntegrationProcedure` (boolean; `OmniProcessType` picklist is derived) | `vlocity_cmt__IsIntegrationProcedure__c` | `vlocity_ins__IsIntegrationProcedure__c` |
 | Custom HTML | `CustomHtmlTemplates` | `vlocity_cmt__CustomHtmlTemplates__c` | `vlocity_ins__CustomHtmlTemplates__c` |
-| Is Reusable | `IsReusable` | `vlocity_cmt__IsReusable__c` | `vlocity_ins__IsReusable__c` |
-| Procedure Key | N/A | `vlocity_cmt__ProcedureKey__c` | `vlocity_ins__ProcedureKey__c` |
+| Is Reusable | `IsOmniScriptEmbeddable` | `vlocity_cmt__IsReusable__c` | `vlocity_ins__IsReusable__c` |
+| Procedure Key | `OmniProcessKey` (IPs, `Type_SubType`) | `vlocity_cmt__ProcedureKey__c` | `vlocity_ins__ProcedureKey__c` |
 
-**Note on TypeCategory vs IsIntegrationProcedure**: In Core namespace, `TypeCategory` distinguishes OmniScripts from Integration Procedures (`'OmniScript'` vs `'IntegrationProcedure'`). In Vlocity namespaces, use the boolean field `IsIntegrationProcedure__c` instead.
+**Note on IsIntegrationProcedure**: There is no `TypeCategory` field on `OmniProcess`. In Core, the boolean `IsIntegrationProcedure` distinguishes OmniScripts from Integration Procedures; the read-only-on-create picklist `OmniProcessType` (`'OmniScript'` / `'Integration Procedure'`) mirrors it and can be used in WHERE clauses. In Vlocity namespaces, use the boolean field `IsIntegrationProcedure__c`.
 
 ### Element Fields
 
@@ -120,10 +120,10 @@ These objects store OmniScript, Integration Procedure, FlexCard, and Data Mapper
 |---------|-------------------|-----------------------------------|-----------------------------------|
 | Name | `Name` | `Name` | `Name` |
 | Is Active | `IsActive` | `vlocity_cmt__IsActive__c` | `vlocity_ins__IsActive__c` |
-| Definition | `Definition` | `vlocity_cmt__Definition__c` | `vlocity_ins__Definition__c` |
+| Definition | `DataSourceConfig` + `PropertySetConfig` (no `Definition` field) | `vlocity_cmt__Definition__c` | `vlocity_ins__Definition__c` |
 | Author Name | `AuthorName` | `vlocity_cmt__Author__c` | `vlocity_ins__Author__c` |
 | Version | `VersionNumber` | `vlocity_cmt__Version__c` | `vlocity_ins__Version__c` |
-| Template Type | N/A | `vlocity_cmt__TemplateType__c` | `vlocity_ins__TemplateType__c` |
+| Template Type | `OmniUiCardType` (`Parent` / `Child`) | `vlocity_cmt__TemplateType__c` | `vlocity_ins__TemplateType__c` |
 
 ### Data Mapper / DataRaptor Fields
 
@@ -158,7 +158,6 @@ When using `sf project retrieve start` or `sf project deploy start`, reference t
 | Integration Procedure | `OmniIntegrationProcedure` | N/A (use Vlocity Build Tool) |
 | FlexCard | `OmniUiCard` | N/A (use Vlocity Build Tool) |
 | Data Mapper | `OmniDataTransform` | N/A (use Vlocity Build Tool) |
-| Data Mapper Item | `OmniDataTransformItem` | N/A (use Vlocity Build Tool) |
 
 **Note**: Only Core namespace components support standard Salesforce metadata API deployment. Vlocity namespace components require the Vlocity Build Tool (`vlocity_build`) for migration between orgs.
 
@@ -223,13 +222,13 @@ The `Type` field on OmniDataTransform / DRBundle indicates the mapper's purpose:
 -- All OmniScripts
 SELECT Id, Type, SubType, Language, IsActive, VersionNumber, LastModifiedDate
 FROM OmniProcess
-WHERE TypeCategory = 'OmniScript'
+WHERE IsIntegrationProcedure = false
 ORDER BY Type, SubType, Language, VersionNumber DESC
 
 -- All Integration Procedures
 SELECT Id, Type, SubType, Language, IsActive, VersionNumber, LastModifiedDate
 FROM OmniProcess
-WHERE TypeCategory = 'IntegrationProcedure'
+WHERE IsIntegrationProcedure = true
 ORDER BY Type, SubType, Language, VersionNumber DESC
 
 -- All FlexCards

@@ -1,6 +1,6 @@
 global with sharing class MyCustomRemoteClass implements omnistudio.VlocityOpenInterface2 {
     
-    global Boolean invokeMethod(String methodName, Map<String,Object> inputMap, Map<String,Object> outputMap, Map<String,Object> options) {
+    global Object invokeMethod(String methodName, Map<String,Object> inputMap, Map<String,Object> outputMap, Map<String,Object> options) {
         if (methodName.equals('calculateTotal')) {
             calculateTotal(inputMap, outputMap);
             return true;

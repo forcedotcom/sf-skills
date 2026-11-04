@@ -86,13 +86,13 @@ Output field names in the Data Mapper JSON response should follow these conventi
 
 ### Input Path Conventions
 
-Input paths reference the source data structure. Use consistent dot notation:
+Input paths reference the source data structure. Use `:` between JSON nodes:
 
 ```text
-AccountData.Name          -- Simple field
-AccountData.Owner.Name    -- Relationship traversal
-AccountData.Contacts[0]   -- Collection index
-RequestBody.payload.id    -- Nested JSON path
+AccountData:Name          -- Simple field
+AccountData:Owner.Name    -- Relationship traversal (SOQL dot inside an Extract object)
+AccountData:Contacts|1    -- Collection index (1-based)
+RequestBody:payload:id    -- Nested JSON path
 ```
 
 ### Output Path Conventions
@@ -100,10 +100,10 @@ RequestBody.payload.id    -- Nested JSON path
 Output paths define the JSON structure returned by the Data Mapper:
 
 ```text
-AccountInfo.Name           -- Nested output
-AccountInfo.OwnerName      -- Flattened relationship
-AccountInfo.Contacts       -- Collection output
-Result.status              -- Top-level result wrapper
+AccountInfo:Name           -- Nested output
+AccountInfo:OwnerName      -- Flattened relationship
+AccountInfo:Contacts       -- Collection output
+Result:status              -- Top-level result wrapper
 ```
 
 ---

@@ -1,16 +1,19 @@
 #!/bin/bash
 # Deploy an OmniScript and verify activation.
-# Usage: ./deploy-omniscript.sh <Name> <Type> <SubType> <org>
-# Example: ./deploy-omniscript.sh ServiceRequest_NewCase_English ServiceRequest NewCase myOrg
+# Usage: ./deploy-omniscript.sh <Type> <SubType> <Language> <Version> <org>
+# Example: ./deploy-omniscript.sh ServiceRequest NewCase English 1 myOrg
+# Metadata member name is <Type>_<SubType>_<Language>_<Version> (e.g. ServiceRequest_NewCase_English_1).
 # Run AFTER deploying all dependencies (DataRaptors, Integration Procedures).
 
-NAME="${1:?Usage: $0 <Name> <Type> <SubType> <org>}"
-TYPE="${2:?}"
-SUBTYPE="${3:?}"
-ORG="${4:?}"
+TYPE="${1:?Usage: $0 <Type> <SubType> <Language> <Version> <org>}"
+SUBTYPE="${2:?}"
+LANGUAGE="${3:?}"
+VERSION="${4:?}"
+ORG="${5:?}"
+NAME="${TYPE}_${SUBTYPE}_${LANGUAGE}_${VERSION}"
 
 # Validate inputs to prevent SOQL injection
-for var in "$TYPE" "$SUBTYPE"; do
+for var in "$TYPE" "$SUBTYPE" "$LANGUAGE" "$VERSION"; do
   if [[ ! "$var" =~ ^[a-zA-Z0-9_\ ]+$ ]]; then
     echo "ERROR: Invalid input '$var'. Only alphanumeric, underscores, and spaces allowed." >&2
     exit 1
@@ -25,13 +28,15 @@ sf project deploy start -m "OmniScript:${NAME}" -o "${ORG}"
 if [ $? -ne 0 ]; then
   echo "ERROR: Deployment failed. To recover:"
   echo "  1. Check the error message above for the specific cause."
-  echo "  2. If a partial OmniProcess record was created, deactivate and delete it:"
-  echo "     sf data delete record -s OmniProcess -w \"Name='${NAME}'\" -o ${ORG}"
+  echo "  2. Metadata API deploys are transactional, so a failed deploy does not leave a partial OmniProcess record."
+  echo "     If a stray record exists, check it with:"
+  echo "     sf data query -q \"SELECT Id,Name,IsActive,VersionNumber FROM OmniProcess WHERE Type='${TYPE}' AND SubType='${SUBTYPE}' AND Language='${LANGUAGE}' AND IsIntegrationProcedure=false\" -o ${ORG}"
+  echo "     and review it before deleting anything."
   echo "  3. Fix the issue and re-run this script."
   exit 1
 fi
 
 echo "Step 3: Verify activation"
 sf data query \
-  -q "SELECT Id,Name,Type,SubType,Language,IsActive,VersionNumber FROM OmniProcess WHERE Type='${TYPE}' AND SubType='${SUBTYPE}' AND OmniProcessType='OmniScript' AND IsActive=true LIMIT 5" \
+  -q "SELECT Id,Name,Type,SubType,Language,IsActive,VersionNumber FROM OmniProcess WHERE Type='${TYPE}' AND SubType='${SUBTYPE}' AND Language='${LANGUAGE}' AND IsIntegrationProcedure=false AND IsActive=true LIMIT 5" \
   -o "${ORG}"

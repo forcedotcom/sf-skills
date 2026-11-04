@@ -7,16 +7,21 @@
 public with sharing class MyCustomCallable implements System.Callable {
 
     public Object call(String action, Map<String, Object> args) {
-        Map<String, Object> inputMap = (args != null && args.containsKey('inputMap'))
-            ? (Map<String, Object>) args.get('inputMap') : (args != null ? args : new Map<String, Object>());
+        // OmniStudio passes { 'input', 'output', 'options' }; flat args are accepted for direct Apex callers
+        Map<String, Object> inputMap = (args != null && args.containsKey('input'))
+            ? (Map<String, Object>) args.get('input') : (args != null ? args : new Map<String, Object>());
+        Map<String, Object> output   = (args != null && args.containsKey('output'))
+            ? (Map<String, Object>) args.get('output') : new Map<String, Object>();
         Map<String, Object> options  = (args != null && args.containsKey('options'))
             ? (Map<String, Object>) args.get('options')  : new Map<String, Object>();
         if (inputMap == null) { inputMap = new Map<String, Object>(); }
+        if (output   == null) { output   = new Map<String, Object>(); }
         if (options  == null) { options  = new Map<String, Object>(); }
 
         switch on action {
             when 'calculateTotal' {
-                return calculateTotal(inputMap, options);
+                output.putAll(calculateTotal(inputMap, options));
+                return output;
             }
             when else {
                 throw new IndustriesCallableException('Unsupported action: ' + action);

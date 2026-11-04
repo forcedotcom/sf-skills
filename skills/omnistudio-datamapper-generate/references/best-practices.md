@@ -72,18 +72,18 @@ Bad:   Account.* (extracts all fields, wastes bandwidth and heap)
 
 ### Input/Output Path Structure
 
-Data Mapper fields use dot-notation paths for input and output:
+Data Mapper JSON paths use `:` to separate JSON nodes. Inside an Extract, `.` is only used for SOQL relationship traversal on a queried object (e.g. `Contact.Account.Name`). Array elements are addressed with `|N` (1-based):
 
 ```text
-Input Path:   AccountData.Name
-Output Path:  Account.Name
+Input Path:   AccountData:Name
+Output Path:  Account:Name
 ```
 
 For nested structures:
 
 ```text
-Input Path:   Response.data.accounts[0].name
-Output Path:  AccountList.Name
+Input Path:   Response:data:accounts|1:name
+Output Path:  AccountList:Name
 ```
 
 ### Type Conversion Handling
@@ -148,7 +148,7 @@ Bad:   Account.Parent.Parent.Parent.Owner.Name (3+ levels)
 
 ### Limit and Offset
 
-Always set a LIMIT on Extract queries unless the consuming component guarantees a bounded input:
+Always set a LIMIT on Extract queries unless the consuming component guarantees a bounded input. In a Data Mapper, LIMIT (and ORDER BY) are added as filter rows on the extract object (`FilterOperator` = `LIMIT` / `ORDER BY`, `FilterValue` = the number / field):
 
 ```text
 LIMIT 200    -- Standard batch size
@@ -176,8 +176,8 @@ Set default values for fields that may be null to prevent downstream errors:
 
 When mapping fields that may be null:
 
-1. Set `isNullable: true` on the OmniDataTransformItem
-2. Configure a default value where business logic requires one
+1. Configure a default value (`DefaultValue` on the OmniDataTransformItem) where business logic requires one
+2. Enable "Null Inputs Included in Output" (`IsNullInputsIncludedInOutput`) on the Data Mapper if downstream steps need null keys present
 3. Document which fields are expected to be null in certain scenarios
 4. Test with records that have null values in mapped fields
 

@@ -13,12 +13,17 @@ The most common FlexCard data source is an Integration Procedure. The data sourc
   "dataSource": {
     "type": "IntegrationProcedures",
     "value": {
+      "dsDelay": "",
       "ipMethod": "Type_SubType",
+      "vlocityAsync": false,
       "inputMap": {
         "recordId": "{recordId}"
       },
-      "resultListPath": ""
-    }
+      "jsonMap": "{\"recordId\":\"{recordId}\"}",
+      "resultVar": ""
+    },
+    "orderBy": { "name": "", "isReverse": "" },
+    "contextVariables": []
   }
 }
 ```
@@ -28,7 +33,9 @@ The most common FlexCard data source is an Integration Procedure. The data sourc
 | `type` | Data source type identifier | `"IntegrationProcedures"` (plural, capital P) |
 | `ipMethod` | IP Type and SubType joined by underscore | `"Account_GetSummary"` |
 | `inputMap` | Key-value pairs sent as IP input | `{ "recordId": "{recordId}" }` |
-| `resultListPath` | JSON path to the array node for list-type cards | `"records"` or `""` for root |
+| `jsonMap` | Stringified map of context variables used in `inputMap` | `"{\"recordId\":\"{recordId}\"}"` |
+| `resultVar` | JSON path to the node to use as card records (for list-type cards) | `"['records']"` or `""` for root |
+| `contextVariables` | Sample values for context merge fields used at design time | `[{"name":"recordId","val":"","id":0}]` |
 
 ### IP Method Naming Convention
 
@@ -60,9 +67,10 @@ Input parameters pass context from the FlexCard's hosting environment into the I
 | Syntax | Resolves To |
 |--------|------------|
 | `{recordId}` | The current record's ID from the hosting Lightning page |
-| `{Account.Id}` | A field from a parent FlexCard's data source |
+| `{Parent.Id}` | A value passed from a parent FlexCard |
 | `"Active"` | A static/literal value |
-| `{param.customKey}` | A URL parameter or custom context variable |
+| `{Params.customKey}` | A URL parameter |
+| `{User.userId}` | The running user's Id |
 
 ---
 
@@ -100,14 +108,14 @@ IP Response JSON:                         FlexCard Merge Field:
 
 ### Array Field Mapping
 
-For card list layouts, set `resultListPath` to the array node. Each card in the list renders one item from the array:
+For card list layouts, set `resultVar` to the array node (e.g. `"['contacts']"`). Each card in the list renders one item from the array, available as `{record}`:
 
 ```json
 {
   "dataSource": {
     "value": {
       "ipMethod": "Contact_GetRelated",
-      "resultListPath": "contacts"
+      "resultVar": "['contacts']"
     }
   }
 }
@@ -220,11 +228,10 @@ FlexCard: AccountOverview
 
 ### Data Source Naming
 
-When a card has multiple data sources, reference fields using the data source name prefix:
+A FlexCard has exactly one `dataSource` in `DataSourceConfig`. To combine several sources, either merge them in one Integration Procedure, or give each section its own child FlexCard (each child has its own data source). Fields are always referenced without a data source prefix:
 
 ```text
-Single data source:     {Name}
-Multiple data sources:  {ds1.Name}  or  {accountSummary.Name}
+{Name}  or  {record.Name}
 ```
 
 ### Load Order and Dependencies
@@ -289,7 +296,7 @@ Configure an explicit error state rather than letting the card fail silently:
 
 ### Debugging Data Source Issues
 
-1. **Check IP activation**: Query `SELECT Name, IsActive FROM OmniProcess WHERE Name = 'Type_SubType'`
+1. **Check IP activation**: Query `SELECT Name, IsActive FROM OmniProcess WHERE IsIntegrationProcedure = true AND Type = '<Type>' AND SubType = '<SubType>'`
 2. **Verify IP input**: Use the OmniStudio Preview tool to test the IP with the same input parameters
 3. **Check field paths**: Ensure merge field paths (`{field.subfield}`) match the actual IP response structure
 4. **Review permissions**: Confirm the running user has access to the IP and the underlying objects
@@ -304,7 +311,7 @@ Before deploying a FlexCard, verify each data source:
 - [ ] IP is activated
 - [ ] IP Type and SubType match the `ipMethod` value exactly (case-sensitive)
 - [ ] Input parameters use correct merge field syntax
-- [ ] `resultListPath` points to the correct array node (for list cards)
+- [ ] `resultVar` points to the correct array node (for list cards)
 - [ ] All merge fields in the card map to actual fields in the IP response
 - [ ] Error state is configured for graceful failure
 - [ ] Empty state is configured for zero-record responses

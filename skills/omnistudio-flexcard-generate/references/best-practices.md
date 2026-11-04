@@ -110,7 +110,7 @@ Use for progressive disclosure: show a summary, then expand for details on deman
 ### Minimize IP Calls
 
 - Use a single IP that returns all required data rather than multiple IPs for individual fields
-- If the card has multiple data sources, ensure they do not query overlapping data
+- If parent and child cards each have a data source, ensure they do not query overlapping data
 - Cache IP responses where the data does not change frequently (use IP caching options)
 
 ### Input Parameter Efficiency
@@ -123,7 +123,7 @@ Use for progressive disclosure: show a summary, then expand for details on deman
 
 - Design IP responses to match the FlexCard's field mapping structure directly
 - Avoid deep nesting in IP responses when the FlexCard only needs top-level fields
-- Use `resultListPath` to point directly to the array node in list-type cards
+- Use `resultVar` to point directly to the array node in list-type cards
 
 ### Error Handling in Data Sources
 
@@ -250,7 +250,7 @@ Wrong:    Hardcoded rgb    →  rgb(1, 118, 211)
 
 - Set appropriate IP cache durations for data that does not change frequently
 - Avoid chaining multiple IPs when a single IP can return all needed data
-- Use `resultListPath` to avoid client-side data transformation
+- Use `resultVar` to avoid client-side data transformation
 - Monitor IP execution times; optimize IPs that take longer than 2 seconds
 
 ---

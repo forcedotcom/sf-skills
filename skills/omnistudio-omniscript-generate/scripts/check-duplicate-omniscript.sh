@@ -17,5 +17,5 @@ for var in "$TYPE" "$SUBTYPE" "$LANGUAGE"; do
 done
 
 sf data query \
-  -q "SELECT Id,Name,Type,SubType,Language,IsActive,VersionNumber FROM OmniProcess WHERE Type='${TYPE}' AND SubType='${SUBTYPE}' AND Language='${LANGUAGE}' AND OmniProcessType='OmniScript' LIMIT 10" \
+  -q "SELECT Id,Name,Type,SubType,Language,IsActive,VersionNumber FROM OmniProcess WHERE Type='${TYPE}' AND SubType='${SUBTYPE}' AND Language='${LANGUAGE}' AND IsIntegrationProcedure=false LIMIT 10" \
   -o "${ORG}"

@@ -101,12 +101,12 @@ Read `references/best-practices.md` for layout patterns, SLDS compliance, access
 Each FlexCard data source connects to an Integration Procedure (or other source type) and maps response fields to display elements.
 
 ```text
-FlexCard → Data Source (type: IntegrationProcedure)
+FlexCard → Data Source (type: IntegrationProcedures)
          → IP Name + Input Mapping
          → Response Field Mapping → Card Elements
 ```
 
-- Map IP response fields to card display elements using `{datasource.fieldName}` merge syntax
+- Map IP response fields to card display elements using `{fieldName}` merge syntax (in list cards each repeated card's item is `{record}`; e.g. `{record.Name}`, `{Name}`)
 - Configure input parameters to pass record context (e.g., `{recordId}`) to the IP
 - Set data source order when multiple sources feed the same card
 
@@ -214,10 +214,12 @@ Read `assets/omni-ui-card.json` for the complete OmniUiCard record template incl
 | Type | `dataSource.type` | When to Use |
 |------|-------------------|-------------|
 | **Integration Procedure** | `IntegrationProcedures` (plural, capital P) | Primary pattern; calls an IP for live data |
+| **Data Mapper** | `DataRaptor` | Direct Data Mapper Extract call (`value.bundle`) |
 | **SOQL** | `SOQL` | Direct query (use sparingly; prefer IP for abstraction) |
 | **Apex Remote** | `ApexRemote` | Custom Apex class invocation |
 | **REST** | `REST` | External API call via Named Credential |
 | **Custom** | `Custom` | Custom data provider (pass JSON body directly) |
+| **None** | `null` | Card with no data source (e.g. wraps a custom LWC) |
 
 ### Field Mapping from IP Response
 
@@ -244,8 +246,9 @@ Pass context from the hosting page into the IP data source:
 | Context Variable | Source | Example |
 |-----------------|--------|---------|
 | `{recordId}` | Current record page | Pass to IP to query related data |
-| `{userId}` | Running user | Filter data by current user |
-| `{param.customKey}` | URL parameter or parent card | Pass from parent FlexCard or URL |
+| `{User.userId}` | Running user | Filter data by current user (declare `User.userId` in `contextVariables`) |
+| `{Params.customKey}` | URL parameter | Pass from page URL |
+| `{Parent.customKey}` | Parent FlexCard | Value passed down from the parent card |
 
 ---
 
@@ -299,7 +302,9 @@ Pass context from the hosting page into the IP data source:
 
 **Idempotency**: `sf project deploy start` upserts metadata — safe to re-run without creating duplicates. Query first to confirm current state: see `scripts/flexcard-commands.sh`.
 
-**Namespace handling**: In managed-package orgs, the metadata type may be prefixed (e.g., `omnistudio__OmniUiCard`). Check `sfdx-project.json` for the namespace. See `scripts/flexcard-commands.sh` for the namespaced deploy command.
+**Namespace handling**: The `OmniUiCard` metadata type is never namespace-prefixed. It applies when the org uses standard OmniStudio objects (Core). Orgs still on managed-package custom objects (`vlocity_cmt__` / `vlocity_ins__` / `omnistudio__` custom objects) store FlexCards as `VlocityUITemplate__c` records and move them with Vlocity Build DataPacks instead.
+
+**Metadata member name**: The `OmniUiCard` fullName is `<Name>_<AuthorName>_<VersionNumber>` (e.g. `AccountSummary_MyAuthor_1` → `omniUiCard/AccountSummary_MyAuthor_1.ouc-meta.xml`), not just `Name`.
 
 **Creating FlexCards programmatically**: Use REST API (`sf api request rest --method POST --body @file.json`). Required fields: `Name`, `VersionNumber`, `OmniUiCardType` (e.g., `Child`). Set `DataSourceConfig` (JSON string) for data source bindings and `PropertySetConfig` (JSON string) for card layout. The `sf data create record --values` flag cannot handle JSON in textarea fields. Activate by updating `IsActive=true` after creation.
 

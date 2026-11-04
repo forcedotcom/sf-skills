@@ -11,13 +11,13 @@ private class MyCustomCallableTest {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * @description Tests calculateTotal returns total with inputMap/options format
+     * @description Tests calculateTotal returns total with input/output/options format
      */
     @IsTest
     static void testCalculateTotal_Success() {
         System.Callable svc = new MyCustomCallable();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>{
+            'input'    => new Map<String, Object>{
                 'price'    => 10.50,
                 'quantity' => 3
             },
@@ -60,7 +60,7 @@ private class MyCustomCallableTest {
     static void testCalculateTotal_StringInputs_Success() {
         System.Callable svc = new MyCustomCallable();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>{
+            'input'    => new Map<String, Object>{
                 'price'    => '25.00',
                 'quantity' => '4'
             },
@@ -86,7 +86,7 @@ private class MyCustomCallableTest {
         try {
             System.Callable svc = new MyCustomCallable();
             svc.call('unknownAction', new Map<String, Object>{
-                'inputMap' => new Map<String, Object>(),
+                'input'    => new Map<String, Object>(),
                 'options'  => new Map<String, Object>()
             });
             Assert.fail('Expected IndustriesCallableException');
@@ -102,7 +102,7 @@ private class MyCustomCallableTest {
     static void testCalculateTotal_MissingPrice_ReturnsError() {
         System.Callable svc = new MyCustomCallable();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>{ 'quantity' => 2 },
+            'input'    => new Map<String, Object>{ 'quantity' => 2 },
             'options'  => new Map<String, Object>()
         };
 
@@ -121,7 +121,7 @@ private class MyCustomCallableTest {
     static void testCalculateTotal_MissingQuantity_ReturnsError() {
         System.Callable svc = new MyCustomCallable();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>{ 'price' => 50 },
+            'input'    => new Map<String, Object>{ 'price' => 50 },
             'options'  => new Map<String, Object>()
         };
 
@@ -141,6 +141,6 @@ private class MyCustomCallableTest {
 
         Map<String, Object> result = (Map<String, Object>) svc.call('calculateTotal', null);
 
-        Assert.isFalse((Boolean) result.get('success'), 'Should fail with null inputMap');
+        Assert.isFalse((Boolean) result.get('success'), 'Should fail with null input');
     }
 }

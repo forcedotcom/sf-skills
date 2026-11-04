@@ -12,8 +12,8 @@
  */
 global with sharing class Industries_XxxOpenInterface implements omnistudio.VlocityOpenInterface2 {
 
-    global Boolean invokeMethod(String methodName, Map<String, Object> inputMap,
-                                Map<String, Object> outputMap, Map<String, Object> options) {
+    global Object invokeMethod(String methodName, Map<String, Object> inputMap,
+                               Map<String, Object> outputMap, Map<String, Object> options) {
         switch on methodName {
             when 'actionOne' {
                 Map<String, Object> result = actionOne(inputMap, options);

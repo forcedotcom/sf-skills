@@ -1,6 +1,7 @@
 /**
  * Test class skeleton for System.Callable implementations.
  * Covers: positive, negative (missing input), unsupported action, and null-args cases.
+ * Args use the OmniStudio contract { input, output, options }; assertions read the output map.
  *
  * Replace Industries_XxxCallable, Industries_XxxCallableTest, and actionOne
  * with the actual class/action names. Add @TestSetup data for your specific SObjects.
@@ -19,12 +20,14 @@ private class Industries_XxxCallableTest {
     @IsTest
     static void testActionOne_success() {
         System.Callable svc = new Industries_XxxCallable();
+        Map<String, Object> result = new Map<String, Object>();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>{ 'requiredKey' => 'requiredValue' },
-            'options'  => new Map<String, Object>()
+            'input'   => new Map<String, Object>{ 'requiredKey' => 'requiredValue' },
+            'output'  => result,
+            'options' => new Map<String, Object>()
         };
 
-        Map<String, Object> result = (Map<String, Object>) svc.call('actionOne', args);
+        svc.call('actionOne', args);
 
         Assert.isTrue((Boolean) result.get('success'), 'Expected success=true');
         Assert.isNotNull(result.get('data'), 'Expected data to be present');
@@ -33,12 +36,14 @@ private class Industries_XxxCallableTest {
     @IsTest
     static void testActionOne_missingInput() {
         System.Callable svc = new Industries_XxxCallable();
+        Map<String, Object> result = new Map<String, Object>();
         Map<String, Object> args = new Map<String, Object>{
-            'inputMap' => new Map<String, Object>(),
-            'options'  => new Map<String, Object>()
+            'input'   => new Map<String, Object>(),
+            'output'  => result,
+            'options' => new Map<String, Object>()
         };
 
-        Map<String, Object> result = (Map<String, Object>) svc.call('actionOne', args);
+        svc.call('actionOne', args);
 
         Assert.isFalse((Boolean) result.get('success'), 'Expected success=false for missing input');
     }

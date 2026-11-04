@@ -66,8 +66,8 @@ Data Mappers referenced by the IP must exist FIRST. Build and deploy DataRaptors
 |---------|---------|
 | **Chaining** | IPs call other IPs via Integration Procedure Action elements. Output of one step feeds input of the next via response mapping. Design data flow linearly where possible. |
 | **Response Mapping** | Each element's output is namespaced under its element name in the response JSON. Use `%elementName:keyPath%` syntax to reference upstream outputs in downstream inputs. |
-| **Caching** | IPs support platform cache for read-heavy orchestrations. Set `cacheType` and `cacheTTL` in the procedure's PropertySet. Avoid caching procedures that perform DML. |
-| **Versioning** | Type/SubType pairs uniquely identify an IP. Use SubType for versioning (e.g., `Type=AccountOnboarding`, `SubType=v2`). Only one version can be active at a time per Type/SubType. |
+| **Caching** | IPs support platform cache for read-heavy orchestrations. Set the procedure's cache type (`ResponseCacheType` field: `Org Cache` / `Session Cache`) and Time To Live in the Procedure Configuration, or use a Cache Block for part of the IP. Avoid caching procedures that perform DML. |
+| **Versioning** | Type/SubType pairs uniquely identify an IP (plus `VersionNumber`). Only one version can be active at a time per Type/SubType. |
 
 **Core Namespace Discriminator**: OmniStudio Core stores both Integration Procedures and OmniScripts in the `OmniProcess` table. Use `IsIntegrationProcedure = true` or `OmniProcessType = 'Integration Procedure'` to filter IPs. Without a filter, queries return mixed results.
 
@@ -94,14 +94,17 @@ Data Mappers referenced by the IP must exist FIRST. Build and deploy DataRaptors
 | Element Type | Use Case | PropertySet Key |
 |--------------|----------|-----------------|
 | DataRaptor Extract Action | Read Salesforce data | `bundle` |
-| DataRaptor Load Action | Write Salesforce data | `bundle` |
+| DataRaptor Post Action | Write Salesforce data (Load Data Mapper) | `bundle` |
 | DataRaptor Transform Action | Data shaping/mapping | `bundle` |
 | Remote Action | Call Apex class method | `remoteClass`, `remoteMethod` |
-| Integration Procedure Action | Call nested IP | `ipMethod` (format: `Type_SubType`) |
-| HTTP Action | External API callout | `path`, `method` |
-| Conditional Block | Branching logic | -- |
-| Loop Block | Iterate over collections | -- |
-| Set Values | Assign variables/constants | -- |
+| Integration Procedure Action | Call nested IP | `integrationProcedureKey` (format: `Type_SubType`) |
+| HTTP Action (element type `Rest Action`) | External API callout | `path`, `method` |
+| Conditional Block | Branching logic | `executionConditionalFormula`, `isIfElseBlock` |
+| Loop Block | Iterate over collections | `loopList`, `loopOutput` |
+| Set Values | Assign variables/constants | `elementValueMap` |
+| Response Action | Return the IP response (and optionally stop) | `sendJSONPath`, `additionalOutput`, `returnOnlyAdditionalOutput` |
+| List Merge Action | Merge lists | `mergeListsOrder`, `primaryListKey` |
+| Delete Action | Delete records | `deleteSObject` |
 
 **Naming Convention**: `[Type]_[SubType]` using PascalCase. Element names within the IP should describe their action clearly (e.g., `GetAccountDetails`, `ValidateInput`, `CreateOrderRecord`).
 
@@ -126,7 +129,7 @@ Build the IP definition with:
 | Anti-Pattern | Impact | Correct Pattern |
 |--------------|--------|-----------------|
 | Circular IP calls (A calls B calls A) | **Infinite loop / stack overflow** | Map dependency graph; no cycles allowed |
-| DML without error handling | **Silent data corruption** | Wrap DataRaptor Load in try/catch or conditional error check |
+| DML without error handling | **Silent data corruption** | Wrap DataRaptor Post Action in a Try Catch Block or add a conditional error check |
 | Unbounded DataRaptor Extract | **Governor limits / timeout** | Set LIMIT on extracts; paginate large datasets |
 | Hardcoded Salesforce IDs in PropertySetConfig | **Deployment failure across orgs** | Use input variables, Custom Settings, or Custom Metadata |
 | Sequential calls that could be parallel | **Unnecessary latency** | Group independent elements; no serial dependency needed |
@@ -137,7 +140,7 @@ Build the IP definition with:
 ### Phase 4: Deployment
 
 1. Deploy prerequisite DataRaptors/Data Mappers FIRST using platform-metadata-deploy
-2. Deploy the Integration Procedure: `sf project deploy start -m OmniIntegrationProcedure:<Name> -o <org>`
+2. Deploy the Integration Procedure: `sf project deploy start -m OmniIntegrationProcedure:<Type>_<SubType>_<Language>_<Version> -o <org>`
 3. Activate the IP in the target org (set `IsActive=true`)
 4. Verify activation via CLI query
 
@@ -179,7 +182,7 @@ Test each element individually before testing the full chain:
 
 | Criterion | Points | Description |
 |-----------|--------|-------------|
-| DML error handling | 8 | All DataRaptor Load actions have error handling |
+| DML error handling | 8 | All DataRaptor Post actions have error handling |
 | HTTP error handling | 4 | All HTTP actions check status codes and handle failures |
 | Remote Action error handling | 4 | Apex exceptions caught and surfaced |
 | Rollback strategy | 4 | Multi-step DML has conditional rollback or compensating actions |
@@ -283,6 +286,7 @@ Deliverables produced by this skill:
 | `assets/scoring-report-format.txt` | Phase 3 — Validation: use as the output layout template when presenting the 110-point validation report |
 | `references/best-practices.md` | Phase 2-5 — Design patterns: element composition, error handling, caching, parallel execution, and security guidance |
 | `references/element-types.md` | Phase 2 — Element selection: read before configuring PropertySetConfig for any element type |
+| `references/formula-functions.md` | Phase 2-3 — Read before writing any formula (Set Values `=` values, `executionConditionalFormula`, `failureConditionalFormula`); lists supported Data Mapper / IP functions and gotchas |
 | `scripts/cli-commands.sh` | Phase 1 & 4 — CLI queries and deploy/retrieve commands; adapt by replacing `<Name>` and `<org>` placeholders |
 
 ---

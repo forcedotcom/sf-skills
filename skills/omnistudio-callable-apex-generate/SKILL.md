@@ -92,8 +92,8 @@ invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object
 | Parameter | Role | Callable equivalent |
 |-----------|------|---------------------|
 | `methodName` | Action selector (same semantics as `action`) | `action` in `call(action, args)` |
-| `inputMap` | Primary input data (required keys, types) | `args.get('inputMap')` |
-| `outputMap` | Mutable map where results are written (out-by-reference) | Return value; Callable returns envelope instead |
+| `inputMap` | Primary input data (required keys, types) | `args.get('input')` |
+| `outputMap` | Mutable map where results are written (out-by-reference) | `args.get('output')` — OmniStudio reads the response from this map, same as Open Interface |
 | `options` | Additional context (parent DataRaptor/OmniScript context, invocation metadata) | `args.get('options')` |
 
 Design rules for Open Interface contracts:
@@ -106,15 +106,15 @@ Design rules for Open Interface contracts:
 
 ### Phase 3: Implementation Pattern
 
-**Vanilla System.Callable** (flat args, no Open Interface coupling):
+**Vanilla System.Callable** (flat args, called from Apex — not from OmniStudio):
 
-**Read `assets/pattern_callable_vanilla.cls`** before generating — use when callers pass flat args and no VlocityOpenInterface integration is required.
+**Read `assets/pattern_callable_vanilla.cls`** before generating — use only when the caller is your own Apex code passing flat args. Classes invoked by OmniStudio Remote Actions must use the `input`/`output`/`options` contract below.
 
 **Callable skeleton** (same inputs as VlocityOpenInterface):
 
-**Read `assets/pattern_callable_openinterface.cls`** before generating — use `inputMap` and `options` keys in `args` when integrating with Open Interface or when callers pass that structure.
+**Read `assets/pattern_callable_openinterface.cls`** before generating — the OmniStudio Remote Action contract (OmniScript / Integration Procedure / Data Mapper callers).
 
-**Input format**: Callers pass `args` as `{ 'inputMap' => Map<String, Object>, 'options' => Map<String, Object> }`. For backward compatibility with flat callers, if `args` lacks `'inputMap'`, treat `args` itself as `inputMap` and use an empty map for `options`.
+**Input format**: OmniStudio passes `args` as `{ 'input' => Map<String, Object>, 'output' => Map<String, Object>, 'options' => Map<String, Object> }`. Read inputs from `input`, write results into `output` (OmniStudio returns the contents of `output` to the caller — e.g. under the Remote Action element's name / `responseJSONNode`), and read Remote Options from `options`. The `call()` return value is not what OmniStudio uses as the response.
 
 **Implementation rules**:
 1. Keep `call()` thin; delegate to private methods or service classes
@@ -129,19 +129,20 @@ Design rules for Open Interface contracts:
 When implementing `omnistudio.VlocityOpenInterface` or `omnistudio.VlocityOpenInterface2`, use the signature:
 
 ```apex
-global Boolean invokeMethod(String methodName, Map<String, Object> inputMap,
-                           Map<String, Object> outputMap, Map<String, Object> options)
+// VlocityOpenInterface2 (VlocityOpenInterface declares Boolean instead of Object)
+global Object invokeMethod(String methodName, Map<String, Object> inputMap,
+                          Map<String, Object> outputMap, Map<String, Object> options)
 ```
 
 **Read `assets/pattern_openinterface.cls`** before generating — complete `VlocityOpenInterface2` skeleton with `switch on` dispatch and `outputMap` contract.
 
 Open Interface implementation rules:
 - Write results into `outputMap` via `putAll()` or individual `put()` calls; do not return the envelope from `invokeMethod`
-- Return `true` for success, `false` for unsupported or failed actions
+- Return `true` for success, `false` for unsupported or failed actions (`VlocityOpenInterface2.invokeMethod` is declared to return `Object`; returning a `Boolean` is fine)
 - Use the same internal private methods as the Callable (same `inputMap` and `options` parameters); only the entry point differs
 - Populate `outputMap` with the same envelope shape (`success`, `data`, `errors`) for consistency
 
-Both Callable and Open Interface accept the same inputs (`inputMap`, `options`) and delegate to identical private method signatures for shared logic.
+Both Callable and Open Interface receive the same three maps (`input`/`inputMap`, `output`/`outputMap`, `options`) and delegate to identical private method signatures for shared logic.
 
 ---
 
@@ -165,9 +166,9 @@ action contract stable.
 
 **Guidance**:
 - Preserve action names (`methodName`) as `action` strings in `call()`
-- Pass `inputMap` and `options` as keys in `args`: `{ 'inputMap' => inputMap, 'options' => options }`
-- Return a consistent response envelope instead of mutating `outMap`
-- Keep `call()` thin; delegate to the same internal methods with `(inputMap, options)` signature
+- OmniStudio passes `inputMap`, `outMap` and `options` as keys in `args`: `{ 'input' => inputMap, 'output' => outMap, 'options' => options }`
+- Keep writing results into the `output` map (OmniStudio reads the response from it); keep the envelope shape consistent
+- Keep `call()` thin; delegate to the same internal methods with `(input, output, options)` signature
 - Add tests for each action and unsupported action
 
 **Read `assets/pattern_migration.cls`** — annotated before/after migration example (VlocityOpenInterface2 → System.Callable) before starting migration work.
@@ -205,10 +206,10 @@ Stop and ask the user if any of these would be introduced:
 
 | Issue | Resolution |
 |-------|-----------|
-| Caller passes flat args but code expects `inputMap` key | Guard defensively: if `args` lacks `'inputMap'` key, treat `args` itself as the input map |
+| Caller passes flat args but code expects `input` key | Guard defensively: if `args` lacks `'input'` key, treat `args` itself as the input map (Apex callers only — OmniStudio always sends `input`/`output`/`options`) |
 | `call()` receives `null` for `args` | Always null-check `args` before accessing keys; initialize to empty map if null |
-| Test class uses `(Map<String, Object>) svc.call(...)` but call returns a wrong type | Ensure every action returns the same envelope type (`Map<String, Object>`) — mixed return types break callers |
-| VlocityOpenInterface2 migration breaks callers that read `outputMap` by reference | After migrating to Callable, callers must read the return value instead of reading `outputMap` — update all callers |
+| Test reads the result from `call()`'s return value | For OmniStudio-invoked classes assert on the `output` map passed in `args` — that is what OmniStudio returns to the caller |
+| VlocityOpenInterface2 migration breaks callers | OmniStudio still reads results from the `output` map after migrating to Callable — keep writing to `args.get('output')`; only direct Apex callers need updating |
 | `IndustriesCallableException` class missing in project | This custom exception must be deployed alongside the callable class — include it in every deployment package |
 | Org has both legacy Open Interface and new Callable wired to same action | Only one entry point should be active at a time; disable the old interface after confirming the callable works |
 
@@ -251,7 +252,7 @@ Use the core Apex standards, testing patterns, and guardrails in:
 
 Deliverables produced by this skill:
 
-- `<ClassName>.cls` — Callable class implementing `System.Callable` with `switch on action` dispatch
+- `<ClassName>.cls` — Callable class implementing `System.Callable` with `switch on action` dispatch (reads `input`/`output`/`options` from `args`)
 - `<ClassName>Test.cls` — Test class with positive, negative, contract, and bulk test methods
 - `IndustriesCallableException.cls` — Custom exception class (if not already present in the project)
 
@@ -269,8 +270,8 @@ Deliverables produced by this skill:
 
 | File | When to read |
 |------|-------------|
-| `assets/pattern_callable_vanilla.cls` | Phase 3 — vanilla `System.Callable` skeleton (flat args, no Open Interface coupling) |
-| `assets/pattern_callable_openinterface.cls` | Phase 3 — `System.Callable` skeleton with `inputMap`/`options` args (Open Interface-compatible) |
+| `assets/pattern_callable_vanilla.cls` | Phase 3 — vanilla `System.Callable` skeleton (flat args; Apex callers only) |
+| `assets/pattern_callable_openinterface.cls` | Phase 3 — `System.Callable` skeleton with OmniStudio `input`/`output`/`options` args |
 | `assets/pattern_openinterface.cls` | Phase 3 — `VlocityOpenInterface2` skeleton with `switch on` dispatch and `outputMap` contract |
 | `assets/pattern_test_class.cls` | Phase 4 — test class skeleton (positive, negative, contract, bulk, and null-args cases) |
 | `assets/pattern_migration.cls` | Migration — annotated before/after migration pattern (VlocityOpenInterface2 → System.Callable) |
@@ -294,7 +295,8 @@ Deliverables produced by this skill:
 ## Pre-Delivery Checklist
 
 - [ ] `call()` null-checks `args` before accessing keys
+- [ ] OmniStudio-invoked classes read `args.get('input')` / `'options'` and write results to `args.get('output')`
 - [ ] `IndustriesCallableException` class included in deployment package
 - [ ] Namespace qualified for `omnistudio.VlocityOpenInterface2` (if applicable)
 - [ ] `outputMap` keys documented per action (success and error cases)
-- [ ] Migrated callers read return value instead of `outputMap` by reference
+- [ ] Results are written to the `output` map (OmniStudio callers); direct Apex callers updated if they read the return value

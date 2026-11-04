@@ -1,6 +1,7 @@
 /**
  * Vanilla System.Callable skeleton — flat args, no Open Interface coupling.
- * Use when callers pass flat args and no VlocityOpenInterface integration is required.
+ * Use only when the caller is your own Apex passing flat args. Classes invoked by OmniStudio
+ * Remote Actions receive { input, output, options } — use pattern_callable_openinterface.cls.
  *
  * Replace Industries_XxxCallable and actionOne with the actual class/action names.
  */
@@ -20,12 +21,11 @@ public with sharing class Industries_XxxCallable implements System.Callable {
     }
 
     private Map<String, Object> actionOne(Map<String, Object> args) {
-        // 1. Validate required keys
-        Map<String, Object> inputMap = (Map<String, Object>) args.get('inputMap');
-        if (inputMap == null || inputMap.isEmpty()) {
+        // 1. Validate required keys (args are flat: the keys are the inputs)
+        if (args == null || args.isEmpty()) {
             return new Map<String, Object>{
                 'success' => false,
-                'error'   => 'Missing required input in inputMap'
+                'error'   => 'Missing required input'
             };
         }
         // 2. Coerce types safely

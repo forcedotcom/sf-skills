@@ -87,7 +87,7 @@ Elements execute top-to-bottom in the order they appear in the procedure definit
 3. **Data Retrieval** — DataRaptor Extract or HTTP Action to fetch required data
 4. **Data Transformation** — DataRaptor Transform to shape data for downstream use
 5. **Business Logic** — Conditional Blocks, Remote Actions for decisions
-6. **Data Modification** — DataRaptor Load to write records
+6. **Data Modification** — DataRaptor Post Action to write records
 7. **Response Assembly** — Set Values to build the output response
 
 ### Ordering Rules
@@ -163,7 +163,7 @@ Define clear contracts for what the IP expects and returns:
 
 Every element that performs DML or makes an external call should have error handling:
 
-1. **DataRaptor Load Actions**: Check the response for error indicators. Use a Conditional Block after the Load to inspect the result and branch to error handling if needed.
+1. **DataRaptor Post Actions**: Check the response for error indicators. Use a Conditional Block after the Load to inspect the result and branch to error handling if needed.
 
 2. **HTTP Actions**: Check the HTTP status code in the response. Branch on non-2xx responses.
 
@@ -171,9 +171,9 @@ Every element that performs DML or makes an external call should have error hand
 
 ### Try/Catch Pattern
 
-Structure error handling as a three-step pattern:
+Structure error handling as a three-step pattern (or wrap the steps in a `Try Catch Block` element):
 
-1. **Try**: Execute the data-modifying element
+1. **Try**: Execute the data-modifying element (set `failOnStepError: true` if the IP should stop on failure)
 2. **Check**: Conditional Block inspects the element's response for errors
 3. **Handle**: Set Values element builds an error response or a Conditional Block routes to compensating actions
 
@@ -201,13 +201,13 @@ When an IP performs multiple sequential DML operations and a later step fails:
 ### Compensating Action Pattern
 
 1. After each successful DML, store the created record IDs in variables
-2. If a subsequent step fails, use stored IDs to execute compensating DataRaptor Load actions (delete/update) to undo prior changes
+2. If a subsequent step fails, use stored IDs to execute compensating DataRaptor Post / Delete actions to undo prior changes
 3. Return a clear error response indicating which steps succeeded and which failed
 
 ### Design Considerations
 
 - IPs do not have native transaction rollback across elements
-- Each DataRaptor Load action may commit independently
+- Each DataRaptor Post action may commit independently
 - Plan for partial failure in multi-step write operations
 - Consider whether the business process can tolerate partial completion
 - For strict atomicity requirements, move the multi-DML logic to an Apex Remote Action where you control the transaction boundary
@@ -233,15 +233,15 @@ Each element's output is stored under a key matching the element name. For examp
 In downstream elements, reference upstream data using the element namespace:
 
 - **In PropertySetConfig**: `%GetAccount:Name%`
-- **In Set Values**: Map from `GetAccount.Name` to the target variable
+- **In Set Values**: Map from `%GetAccount:Name%` to the target variable
 
 ### Common Mapping Issues
 
 | Problem | Cause | Fix |
 |---------|-------|-----|
 | Null value in downstream element | Element name mismatch in reference | Verify exact element name spelling and case |
-| Array vs object confusion | DataRaptor returns collection, consumer expects single | Use `[0]` accessor or Transform to extract first item |
-| Nested path not resolving | Deep path syntax incorrect | Use dot notation: `GetAccount.BillingAddress.City` |
+| Array vs object confusion | DataRaptor returns collection, consumer expects single | Use `\|1` accessor (1-based, e.g. `%GetAccount\|1:Name%`) or a Transform to extract the first item |
+| Nested path not resolving | Deep path syntax incorrect | Use `:` between nodes: `%GetAccount:BillingAddress:City%` |
 
 ---
 
@@ -285,10 +285,10 @@ Avoid this pattern for datasets exceeding 10,000 records — use Apex Batch or a
 
 ### Cache Configuration
 
-Set caching properties in the IP's PropertySet:
+Set caching in the IP's Procedure Configuration (or use a Cache Block for part of the IP):
 
-- `cacheType`: `Platform` for org-level cache, `Session` for user-session cache
-- `cacheTTL`: Time-to-live in seconds (e.g., 300 for 5 minutes, 3600 for 1 hour)
+- Cache type (`ResponseCacheType` on `OmniProcess`): `Org Cache` for org-level cache, `Session Cache` for user-session cache
+- Time To Live: in **minutes** (minimum 5)
 
 ### Cache Key Considerations
 

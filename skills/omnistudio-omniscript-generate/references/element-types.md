@@ -5,7 +5,7 @@
 > **Applies to**: OmniStudio OmniScripts (OmniProcessType='OmniScript')
 > **Companion**: See `best-practices.md` for design patterns and usage guidance
 
-Each OmniScript element is stored as an `OmniProcessElement` child record. The `ElementType` field identifies the type, and the `PropertySetConfig` field contains a JSON blob with all configuration.
+Each OmniScript element is stored as an `OmniProcessElement` child record. The `Type` field identifies the type, and the `PropertySetConfig` field contains a JSON blob with all configuration.
 
 ---
 
@@ -65,19 +65,21 @@ Top-level container representing a page/screen in the OmniScript wizard. All oth
 
 ---
 
-### Conditional Block
+### Block (conditional view)
 
-Groups elements that appear or disappear together based on a condition.
+In OmniScripts, a group of elements that appear or disappear together is a `Block` element (Type `Block`) with a `show` condition. (`Conditional Block` is an Integration Procedure element.)
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `conditionType` | String | Yes | `"group"` for complex conditions, `"simpleFormula"` for formula |
 | `show` | Object | Yes | Condition expression (same syntax as Step `show`) |
+| `conditionType` | String | No | What happens when `show` is false: `"Hide if False"` (default), `"Readonly if False"`, `"Optional if False"` |
 | `label` | String | No | Display label for the block |
+| `collapse` | Boolean | No | Render as a collapsible section |
 
 ```json
 {
-  "conditionType": "group",
+  "label": "Business Details",
+  "conditionType": "Hide if False",
   "show": {
     "group": {
       "operator": "AND",
@@ -93,30 +95,29 @@ Groups elements that appear or disappear together based on a condition.
 
 ---
 
-### Loop Block
+### Block (repeat)
 
-Iterates over a data array and renders its child elements for each item.
+Repeats its child elements for each item of an array in the data JSON. In OmniScripts this is a `Block` element with `repeat: true` (`Loop Block` is an Integration Procedure element). The array is the data JSON node whose key equals the Block's element name.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `loopData` | String | Yes | JSON path to the data array (e.g., `%LineItems%`) |
+| `repeat` | Boolean | Yes | `true` to repeat the Block per array item |
+| `repeatClone` | Boolean | No | When the user adds an item, clone the values of the previous item |
+| `repeatLimit` | Number | No | Maximum number of items the user can add |
+| `repeatLimitMin` | Number | No | Minimum number of items |
+| `addLabel` / `removeLabel` | String | No | Labels for the add/remove controls |
 | `label` | String | No | Display label |
-| `repeat` | String | No | Merge field referencing array length or explicit count |
-| `allowAdd` | Boolean | No | Allow user to add items to the loop |
-| `allowDelete` | Boolean | No | Allow user to remove items from the loop |
-| `minItems` | Number | No | Minimum required items |
-| `maxItems` | Number | No | Maximum allowed items |
 
 ```json
 {
-  "loopData": "%OrderLines%",
-  "allowAdd": true,
-  "allowDelete": true,
-  "minItems": 1,
-  "maxItems": 20,
-  "label": "Order Line Items"
+  "label": "Order Line Items",
+  "repeat": true,
+  "repeatClone": false,
+  "repeatLimit": 20
 }
 ```
+
+Inside a repeat Block, reference the current item's fields with `|n` (e.g. `%Step1:OrderLines|n:Amount%`).
 
 **Level**: 1+ (child of a Step)
 
@@ -167,12 +168,15 @@ All input elements share these base properties:
 | `readOnly` | Boolean | No | Display value without allowing edit |
 | `defaultValue` | Mixed | No | Default value on load |
 | `placeholder` | String | No | Placeholder text in the empty field |
-| `helpText` | String | No | Tooltip or help text |
+| `help` | Boolean | No | Show a help icon |
+| `helpText` | String | No | Tooltip or help text (shown when `help` is true) |
 | `show` | Object | No | Conditional visibility expression |
-| `accessibleInPreview` | Boolean | No | Include in review/confirmation Step |
+| `accessibleInFutureSteps` | Boolean | No | Keep the element's value accessible to later Steps |
 | `hide` | Boolean | No | Hide from display (still in data JSON) |
-| `debounce` | Number | No | Milliseconds to debounce input changes |
-| `maskValue` | Boolean | No | Mask the displayed value (for sensitive data) |
+| `debounceValue` | Number | No | Milliseconds to debounce input changes |
+| `mask` | String | No | Input mask pattern |
+| `conditionType` | String | No | Effect of `show` when false: `"Hide if False"`, `"Readonly if False"`, `"Optional if False"` |
+| `controlWidth` | Number | No | Column width (1-12 grid) |
 
 ---
 
@@ -183,10 +187,9 @@ Single-line text input.
 | Property | Type | Description |
 |----------|------|-------------|
 | `pattern` | String | Regex pattern for validation |
-| `patternErrorMessage` | String | Error shown when pattern fails |
+| `ptrnErrText` | String | Error shown when pattern fails |
 | `minLength` | Number | Minimum character count |
 | `maxLength` | Number | Maximum character count |
-| `inputType` | String | HTML input type override (`text`, `email`, `tel`, `url`) |
 
 ```json
 {
@@ -196,7 +199,7 @@ Single-line text input.
   "minLength": 2,
   "maxLength": 80,
   "pattern": "^[a-zA-Z\\s'-]+$",
-  "patternErrorMessage": "Name may only contain letters, spaces, hyphens, and apostrophes."
+  "ptrnErrText": "Name may only contain letters, spaces, hyphens, and apostrophes."
 }
 ```
 
@@ -208,14 +211,12 @@ Multi-line text input.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `rows` | Number | Number of visible text rows |
 | `maxLength` | Number | Maximum character count |
-| `richText` | Boolean | Enable rich text editing |
+| `minLength` | Number | Minimum character count |
 
 ```json
 {
   "label": "Description",
-  "rows": 4,
   "maxLength": 32000,
   "placeholder": "Describe the issue in detail..."
 }
@@ -279,23 +280,27 @@ Date picker input.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `dateFormat` | String | Display format (e.g., `"MM/DD/YYYY"`) |
-| `minDate` | String | Earliest selectable date (`"TODAY"`, `"-30"`, `"2025-01-01"`) |
-| `maxDate` | String | Latest selectable date (`"TODAY"`, `"+365"`) |
+| `dateFormat` | String | Display format (e.g., `"d MMM yyyy"`, `"MM-dd-yyyy"`) |
+| `modelDateFormat` | String | Format stored in the data JSON (e.g., `"yyyy-MM-dd"`) |
+| `dateType` | String | Data type stored (`"string"` or `"date"`) |
+| `minDate` | String | Earliest selectable date |
+| `maxDate` | String | Latest selectable date |
 
 ```json
 {
   "label": "Requested Start Date",
   "required": true,
-  "dateFormat": "MM/DD/YYYY",
-  "minDate": "TODAY",
-  "maxDate": "+365"
+  "dateType": "string",
+  "modelDateFormat": "yyyy-MM-dd",
+  "dateFormat": "d MMM yyyy",
+  "minDate": "",
+  "maxDate": ""
 }
 ```
 
 ---
 
-### Date/Time
+### Date/Time (Local)
 
 Combined date and time picker.
 
@@ -361,15 +366,15 @@ Radio button group for single selection.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `options` | Array | Static options `[{ "name": "label", "value": "val" }]` |
-| `optionSource` | Object | Data-driven options from a DataRaptor or data JSON |
-| `orientation` | String | `"horizontal"` or `"vertical"` |
+| `options` | Array | Static options `[{ "name": "<stored value>", "value": "<display label>" }]` (`name` is saved to the data JSON, `value` is shown) |
+| `optionSource` | Object | Options from a picklist: `{ "type": "SObject", "source": "Object__c.Field__c" }` (or `"image"`, or `""` for static) |
+| `horizontalMode` | Boolean | Lay options out horizontally |
 
 ```json
 {
   "label": "Contact Preference",
   "required": true,
-  "orientation": "vertical",
+  "horizontalMode": false,
   "options": [
     { "name": "Email", "value": "Email" },
     { "name": "Phone", "value": "Phone" },
@@ -386,9 +391,9 @@ Dropdown selection input.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `options` | Array | Static options `[{ "name": "label", "value": "val" }]` |
-| `optionSource` | Object | Data-driven options configuration |
-| `multiselect` | Boolean | Allow multiple selections (use Multi-select element instead) |
+| `options` | Array | Static options `[{ "name": "<stored value>", "value": "<display label>" }]` (`name` is saved to the data JSON, `value` is shown) |
+| `optionSource` | Object | Options from a picklist: `{ "type": "SObject", "source": "Object__c.Field__c" }` (or `""` for static) |
+| `controllingField` | Object | Dependent picklist: `{ "element": "<ElementName>", "type": "SObject", "source": "Object__c.ControllingField__c" }` |
 
 ```json
 {
@@ -410,10 +415,9 @@ Multiple item selection input.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `options` | Array | Static options |
-| `optionSource` | Object | Data-driven options configuration |
-| `maxSelections` | Number | Maximum number of selections allowed |
-| `minSelections` | Number | Minimum number of selections required |
+| `options` | Array | Static options `[{ "name": "<stored value>", "value": "<display label>" }]` |
+| `optionSource` | Object | Options from a picklist: `{ "type": "SObject", "source": "Object__c.Field__c" }` (or `""` for static) |
+| `controllingField` | Object | Dependent picklist configuration (same as Select) |
 
 ```json
 {
@@ -422,41 +426,36 @@ Multiple item selection input.
     { "name": "Product A", "value": "ProdA" },
     { "name": "Product B", "value": "ProdB" },
     { "name": "Product C", "value": "ProdC" }
-  ],
-  "maxSelections": 3
+  ]
 }
 ```
 
 ---
 
-### Type Ahead
+### Type Ahead Block
 
-Search/autocomplete input that queries a data source as the user types.
+Search/autocomplete input (Type `Type Ahead Block`). Matches are taken either from a node in the data JSON or from a child action element (DataRaptor Extract / IP / Remote Action) placed inside the block.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `dataSource` | String | DataRaptor bundle or IP to query |
-| `searchField` | String | Field to search against |
-| `displayField` | String | Field to display in results |
-| `valueField` | String | Field to store as the selected value |
-| `minCharacters` | Number | Minimum characters before search fires |
-| `maxResults` | Number | Maximum results to display |
-| `debounce` | Number | Milliseconds to debounce search requests |
-| `inputMap` | Object | Additional parameters to pass to the data source |
+| `typeAheadKey` | String | Field of each result object to search and display |
+| `useDataJson` | Boolean | Search a list already in the data JSON instead of calling an action |
+| `dataJsonPath` | String | Data JSON path to the list (when `useDataJson` is true) |
+| `minSearchLength` | Number | Minimum characters before search fires |
+| `callFrequency` | Number | Milliseconds between search calls |
+| `enableLookup` | Boolean | Show as a lookup (list all options on click) |
+| `disableDataFilter` | Boolean | Do not filter results client-side |
+| `editMode` / `hideEditButton` | Boolean | Allow editing the selected value |
 
 ```json
 {
   "label": "Search Account",
-  "dataSource": "DR_SearchAccounts",
-  "searchField": "Name",
-  "displayField": "Name",
-  "valueField": "Id",
-  "minCharacters": 3,
-  "maxResults": 10,
-  "debounce": 300,
-  "inputMap": {
-    "RecordType": "Customer"
-  }
+  "typeAheadKey": "Name",
+  "useDataJson": true,
+  "dataJsonPath": "AccountList",
+  "minSearchLength": 3,
+  "callFrequency": 300,
+  "enableLookup": false
 }
 ```
 
@@ -527,7 +526,7 @@ Masked text input for sensitive values.
 | `minLength` | Number | Minimum password length |
 | `maxLength` | Number | Maximum password length |
 | `pattern` | String | Complexity regex |
-| `patternErrorMessage` | String | Error when pattern fails |
+| `ptrnErrText` | String | Error when pattern fails |
 
 ```json
 {
@@ -536,7 +535,7 @@ Masked text input for sensitive values.
   "minLength": 6,
   "maxLength": 6,
   "pattern": "^\\d{6}$",
-  "patternErrorMessage": "PIN must be exactly 6 digits."
+  "ptrnErrText": "PIN must be exactly 6 digits."
 }
 ```
 
@@ -598,18 +597,20 @@ File upload input.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `maxFileSize` | Number | Maximum file size in bytes |
-| `allowedExtensions` | String | Comma-separated allowed extensions |
-| `maxFiles` | Number | Maximum number of files |
-| `uploadLabel` | String | Custom upload button label |
+| `fileSizeLimit` | Number | Maximum file size (MB) |
+| `minFileSizeLimit` | Number | Minimum file size (MB) |
+| `fileExtension` | String | Comma-separated allowed extensions (e.g. `".pdf,.docx"`) |
+| `allowMultiple` | Boolean | Allow multiple files |
+| `uploadContDoc` | Boolean | Upload as ContentDocument |
+| `contentParentId` | Array | Records to link the uploaded files to |
 
 ```json
 {
   "label": "Supporting Documents",
-  "maxFileSize": 5242880,
-  "allowedExtensions": "pdf,jpg,png,docx",
-  "maxFiles": 5,
-  "uploadLabel": "Upload Document"
+  "fileSizeLimit": 5,
+  "fileExtension": ".pdf,.jpg,.png,.docx",
+  "allowMultiple": true,
+  "uploadContDoc": true
 }
 ```
 
@@ -623,14 +624,15 @@ Static content display. Supports HTML and merge fields.
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `textContent` | String | HTML content to display |
+| `text` | String | HTML content to display |
 | `HTMLTemplateId` | String | Reference to an HTML template |
 | `sanitize` | Boolean | Sanitize HTML content |
+| `dataJSON` | Boolean | Display the data JSON (debug) |
 
 ```json
 {
-  "textContent": "<p>Welcome, <strong>%FirstName%</strong>. Please review the following information.</p>",
-  "sanitize": true
+  "text": "<p>Welcome, <strong>%FirstName%</strong>. Please review the following information.</p>",
+  "sanitize": false
 }
 ```
 
@@ -714,30 +716,6 @@ Image display element.
 
 ---
 
-### Chart
-
-Data visualization element.
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `chartType` | String | Chart type (`"bar"`, `"pie"`, `"line"`, `"donut"`) |
-| `dataSource` | String | JSON path to chart data |
-| `labelField` | String | Field for chart labels |
-| `valueField` | String | Field for chart values |
-| `title` | String | Chart title |
-
-```json
-{
-  "chartType": "pie",
-  "dataSource": "%CoverageBreakdown%",
-  "labelField": "CoverageType",
-  "valueField": "Amount",
-  "title": "Coverage Distribution"
-}
-```
-
----
-
 ## 4. Action Elements
 
 ### DataRaptor Extract Action
@@ -747,60 +725,66 @@ Executes a DataRaptor Extract to pull data from Salesforce.
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `bundle` | String | Yes | DataRaptor Extract bundle name |
-| `inputMap` | Object | No | Input parameters mapped from data JSON |
-| `outputMap` | Object | No | Output mapping to data JSON keys |
-| `executionConditionFormula` | String | No | Formula to conditionally execute |
-| `showError` | Boolean | No | Display error on failure |
-| `errorMessage` | String | No | Custom error message |
+| `dataRaptor Input Parameters` | Array | No | Input parameters: `[{ "element": "<data JSON path>", "inputParam": "<DR input key>" }]` |
 | `responseJSONPath` | String | No | Path to extract from response |
-| `sendOnlyIfNotEmpty` | Boolean | No | Skip if input values are empty |
+| `responseJSONNode` | String | No | Data JSON node to store the response under |
+| `ignoreCache` | Boolean | No | Bypass the response cache |
+| `show` | Object | No | Run only when the condition is true |
+| `enableDefaultAbort` | Boolean | No | Show the default abort option on failure |
+| `failureAbortMessage` | String | No | Message shown when the user aborts after a failure |
+| `errorMessage` | Object | No | `{ "custom": [], "default": null }` |
+| `validationRequired` | String | No | `"Step"`, `"Submit"` or `"None"` |
 
 ```json
 {
   "bundle": "DR_ExtractAccountDetails",
-  "inputMap": {
-    "AccountId": "%SelectedAccountId%"
+  "dataRaptor Input Parameters": [
+    { "element": "SelectedAccountId", "inputParam": "AccountId" }
+  ],
+  "responseJSONPath": "",
+  "responseJSONNode": "",
+  "show": {
+    "group": { "operator": "AND", "rules": [ { "field": "SelectedAccountId", "condition": "<>", "data": null } ] }
   },
-  "outputMap": {
-    "AccountName": "AccountName",
-    "BillingStreet": "BillingStreet",
-    "BillingCity": "BillingCity",
-    "BillingState": "BillingState",
-    "BillingPostalCode": "BillingPostalCode"
-  },
-  "executionConditionFormula": "IF(%SelectedAccountId% != '', true, false)",
-  "showError": true,
-  "errorMessage": "Unable to retrieve account details. Please try again."
+  "enableDefaultAbort": false,
+  "failureAbortMessage": "Are you sure?",
+  "errorMessage": { "custom": [], "default": null },
+  "validationRequired": "Step"
 }
 ```
 
 ---
 
-### DataRaptor Load Action
+### DataRaptor Post Action
 
-Executes a DataRaptor Load to write data to Salesforce.
+Executes a DataRaptor Load to write data to Salesforce (Type `DataRaptor Post Action`).
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `bundle` | String | Yes | DataRaptor Load bundle name |
-| `inputMap` | Object | No | Input parameters from data JSON |
-| `executionConditionFormula` | String | No | Conditional execution formula |
-| `showError` | Boolean | No | Display error on failure |
-| `errorMessage` | String | No | Custom error message |
+| `sendJSONPath` | String | No | Data JSON path to send (empty = whole data JSON) |
+| `sendJSONNode` | String | No | Key to wrap the sent JSON under |
+| `show` | Object | No | Run only when the condition is true |
+| `enableDefaultAbort` / `failureAbortMessage` / `errorMessage` | — | No | Failure handling (see DataRaptor Extract Action) |
 
 ```json
 {
   "bundle": "DR_CreateServiceRequest",
-  "inputMap": {
-    "AccountId": "%SelectedAccountId%",
-    "Subject": "%RequestSubject%",
-    "Description": "%RequestDescription%",
-    "Priority": "%RequestPriority%"
-  },
-  "showError": true,
-  "errorMessage": "Failed to create the service request. Please contact support."
+  "sendJSONPath": "ServiceRequestStep",
+  "sendJSONNode": "",
+  "errorMessage": { "custom": [], "default": null }
 }
 ```
+
+### DataRaptor Transform Action
+
+Reshapes the data JSON with a Transform Data Mapper.
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `bundle` | String | Yes | DataRaptor Transform bundle name |
+| `sendJSONPath` / `sendJSONNode` | String | No | What to send |
+| `responseJSONPath` / `responseJSONNode` | String | No | Where to store the result |
 
 ---
 
@@ -810,37 +794,39 @@ Calls a server-side Integration Procedure.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `ipMethod` | String | Yes | IP identifier (`"Type_SubType"` format) |
-| `inputMap` | Object | No | Input parameters from data JSON |
-| `outputMap` | Object | No | Output mapping to data JSON keys |
-| `remoteOptions` | Object | No | Execution options (chainable, preTransform, postTransform) |
-| `executionConditionFormula` | String | No | Conditional execution formula |
-| `showError` | Boolean | No | Display error on failure |
-| `errorMessage` | String | No | Custom error message |
-| `remoteTimeout` | Number | No | Timeout in milliseconds |
+| `integrationProcedureKey` | String | Yes | IP identifier (`"Type_SubType"` format) |
+| `extraPayload` | Object | No | Extra input key-values (merge fields allowed) |
+| `sendOnlyExtraPayload` | Boolean | No | Send only `extraPayload` instead of the whole data JSON |
+| `sendJSONPath` / `sendJSONNode` | String | No | Send a sub-node of the data JSON / wrap it under a key |
 | `responseJSONPath` | String | No | Path to extract from response |
-| `preTransformBundle` | String | No | DataRaptor to transform input before sending |
-| `postTransformBundle` | String | No | DataRaptor to transform output after receiving |
+| `responseJSONNode` | String | No | Data JSON node to store the response under |
+| `remoteOptions` | Object | No | Execution options (`chainable`, `useFuture`, `preTransformBundle`, `postTransformBundle`) |
+| `preTransformBundle` / `postTransformBundle` | String | No | DataRaptor to transform input before sending / output after receiving |
+| `remoteTimeout` | Number | No | Timeout in milliseconds |
+| `useContinuation` | Boolean | No | Use Apex continuation for long-running calls |
+| `show` | Object | No | Run only when the condition is true |
+| `enableDefaultAbort` / `failureAbortMessage` / `errorMessage` | — | No | Failure handling |
 
 ```json
 {
-  "ipMethod": "Eligibility_CheckMember",
-  "inputMap": {
+  "integrationProcedureKey": "Eligibility_CheckMember",
+  "extraPayload": {
     "MemberId": "%MemberId%",
     "ServiceDate": "%RequestedDate%"
   },
-  "outputMap": {
-    "IsEligible": "EligibilityResult",
-    "PlanName": "MemberPlan",
-    "CopayAmount": "EstimatedCopay"
-  },
+  "sendOnlyExtraPayload": true,
+  "responseJSONPath": "",
+  "responseJSONNode": "EligibilityResult",
   "remoteOptions": {
     "preTransformBundle": "DR_TransformEligibilityInput",
-    "postTransformBundle": "DR_TransformEligibilityOutput"
+    "postTransformBundle": "DR_TransformEligibilityOutput",
+    "useFuture": false,
+    "chainable": false
   },
   "remoteTimeout": 30000,
-  "showError": true,
-  "errorMessage": "Eligibility check failed. Please verify member ID and try again."
+  "enableDefaultAbort": false,
+  "failureAbortMessage": "Are you sure?",
+  "errorMessage": { "custom": [], "default": null }
 }
 ```
 
@@ -848,28 +834,29 @@ Calls a server-side Integration Procedure.
 
 ### Remote Action
 
-Calls an Apex @RemoteAction method or REST endpoint.
+Calls a method on an Apex class that implements `Callable` or `omnistudio.VlocityOpenInterface(2)`.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `remoteClass` | String | Yes | Apex class name |
-| `remoteMethod` | String | Yes | Method name |
-| `inputMap` | Object | No | Input parameters |
-| `outputMap` | Object | No | Output mapping |
-| `remoteOptions` | Object | No | Execution options |
-| `showError` | Boolean | No | Display error on failure |
+| `remoteMethod` | String | Yes | Method (action) name |
+| `extraPayload` | Object | No | Extra input key-values |
+| `sendOnlyExtraPayload` | Boolean | No | Send only `extraPayload` instead of the whole data JSON |
+| `responseJSONPath` / `responseJSONNode` | String | No | Where to store the result |
+| `remoteOptions` | Object | No | Options passed to the class as `options` |
+| `enableDefaultAbort` / `failureAbortMessage` / `errorMessage` | — | No | Failure handling |
 
 ```json
 {
   "remoteClass": "CustomEligibilityService",
   "remoteMethod": "checkEligibility",
-  "inputMap": {
+  "extraPayload": {
     "memberId": "%MemberId%"
   },
-  "outputMap": {
-    "result": "EligibilityResult"
-  },
-  "showError": true
+  "sendOnlyExtraPayload": true,
+  "responseJSONNode": "EligibilityResult",
+  "remoteOptions": {},
+  "errorMessage": { "custom": [], "default": null }
 }
 ```
 
@@ -954,16 +941,16 @@ Assigns values to data JSON keys. Used for data transformation, defaults, and co
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `elementValueMap` | Object | Yes | Key-value pairs to set in the data JSON |
-| `executionConditionFormula` | String | No | Conditional execution |
+| `elementValueMap` | Object | Yes | Key-value pairs to set in the data JSON. Prefix a value with `=` to evaluate it as a formula |
+| `show` | Object | No | Run only when the condition is true |
 
 ```json
 {
   "elementValueMap": {
-    "FullName": "CONCAT(%FirstName%, ' ', %LastName%)",
-    "SubmissionDate": "TODAY()",
+    "FullName": "=CONCATENATE(%FirstName%, \" \", %LastName%)",
+    "SubmissionDate": "=TODAY()",
     "Status": "Submitted",
-    "RequestId": "CONCAT('SR-', %CaseNumber%)"
+    "RequestId": "=CONCATENATE(\"SR-\", %CaseNumber%)"
   }
 }
 ```
@@ -972,74 +959,78 @@ Assigns values to data JSON keys. Used for data transformation, defaults, and co
 
 ### Validation
 
-Validates data using a formula expression. Blocks Step advancement when validation fails.
+Validates data using a condition group. Blocks Step advancement when validation fails.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `validationFormula` | String | Yes | Formula that must evaluate to `true` to pass |
-| `errorMessage` | String | Yes | Error displayed when validation fails |
+| `validateExpression` | Object | Yes | Condition group (same syntax as `show`) that must be true to pass |
+| `messages` | Array | Yes | `[{ "value": true, "type": "Success"\|"Warning", "text": "", "active": false }, { "value": false, "type": "Requirement", "text": "<error message>", "active": true }]` |
+| `hideLabel` | Boolean | No | Hide the element label |
 
 ```json
 {
-  "validationFormula": "%EndDate% > %StartDate%",
-  "errorMessage": "End date must be after the start date."
+  "validateExpression": {
+    "group": {
+      "operator": "AND",
+      "rules": [
+        { "field": "EndDate", "condition": ">", "data": "%StartDate%" }
+      ]
+    }
+  },
+  "messages": [
+    { "value": true, "type": "Success", "text": "", "active": false },
+    { "value": false, "type": "Requirement", "text": "End date must be after the start date.", "active": true }
+  ],
+  "hideLabel": true
 }
 ```
 
-Multiple conditions example:
+Multiple conditions example (both must hold):
 ```json
 {
-  "validationFormula": "AND(%Age% >= 18, %Age% <= 120)",
-  "errorMessage": "Age must be between 18 and 120."
+  "validateExpression": {
+    "group": {
+      "operator": "AND",
+      "rules": [
+        { "field": "Age", "condition": ">=", "data": "18" },
+        { "field": "Age", "condition": "<=", "data": "120" }
+      ]
+    }
+  },
+  "messages": [
+    { "value": true, "type": "Success", "text": "", "active": false },
+    { "value": false, "type": "Requirement", "text": "Age must be between 18 and 120.", "active": true }
+  ]
 }
 ```
+
+### Set Errors
+
+Attaches error messages to specific elements (blocks advancing while shown).
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `elementErrorMap` | Object | Yes | `{ "<ElementName>": "<error message>" }` |
+| `show` | Object | No | When the errors should be set |
 
 ---
 
 ### Formula
 
-Calculates a value using a formula expression and stores the result in the data JSON.
+Calculates a value using a formula expression and stores the result in the data JSON. For the supported functions see `formula-functions.md`.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
 | `expression` | String | Yes | Formula expression |
-| `dataType` | String | No | Result type (`"number"`, `"text"`, `"boolean"`, `"date"`) |
-| `decimalPlaces` | Number | No | Decimal precision for number results |
+| `dataType` | String | No | Result type (e.g. `"Text"`, `"Boolean"`; leave unset for numbers) |
+| `mask` | String | No | Display mask for numeric results |
+| `hide` | Boolean | No | Hide the formula from the UI (value still in data JSON) |
 
 ```json
 {
   "label": "TotalWithTax",
   "expression": "%SubTotal% * (1 + %TaxRate% / 100)",
-  "dataType": "number",
-  "decimalPlaces": 2
-}
-```
-
----
-
-### Submit Action
-
-Final submission action that processes collected data. Typically the last element in the last Step.
-
-| Property | Type | Required | Description |
-|----------|------|----------|-------------|
-| `postMessage` | String | No | Success message displayed after submission |
-| `postSuccessMessage` | String | No | Message shown on the post-submit screen |
-| `preTransformBundle` | String | No | DataRaptor to transform data before submission |
-| `postTransformBundle` | String | No | DataRaptor to transform data after submission |
-| `submitLabel` | String | No | Custom label for the submit button |
-| `validationRequired` | Boolean | No | Re-validate all Steps before submitting |
-| `redirectPageName` | String | No | Page to redirect after submission |
-| `redirectTemplateUrl` | String | No | URL template for redirect |
-
-```json
-{
-  "postMessage": "Your service request has been submitted successfully.",
-  "preTransformBundle": "DR_PrepareSubmission",
-  "postTransformBundle": "DR_ProcessResponse",
-  "submitLabel": "Submit Request",
-  "validationRequired": true,
-  "redirectTemplateUrl": "/case/%CreatedCaseId%"
+  "hide": true
 }
 ```
 
@@ -1068,7 +1059,9 @@ Controls whether an element is rendered.
 ```
 
 **Operators**: `AND`, `OR`
-**Conditions**: `=`, `!=`, `>`, `<`, `>=`, `<=`, `contains`, `starts with`, `ends with`, `is null`, `is not null`
+**Conditions**: `=`, `<>` (not equal), `>`, `<`, `>=`, `<=`. To test for blank use `"data": null` with `=` / `<>`.
+
+**`conditionType`** controls what happens when the condition is false: `"Hide if False"` (default), `"Readonly if False"`, `"Optional if False"`.
 
 ### Nested Groups
 
@@ -1101,51 +1094,48 @@ Reference data JSON values in element configuration using `%FieldName%` syntax.
 | Syntax | Description |
 |--------|-------------|
 | `%FieldName%` | Direct reference to a data JSON key |
-| `%Step1:FieldName%` | Qualified reference with Step prefix |
-| `%LoopBlock:CurrentItem:FieldName%` | Reference within a Loop Block iteration |
-| `%ParentOmni:FieldName%` | Reference to parent OmniScript data (when embedded) |
-| `%UserInfo:FirstName%` | Current user information |
+| `%Step1:Block1:FieldName%` | Full path through Step / Block names |
+| `%Step1:RepeatBlock\|n:FieldName%` | Current item inside a repeat Block (`\|n`) |
+| `%List\|1:FieldName%` | Array element by 1-based index (`\|1`, `\|2`, …) — not `[0]` |
+| `%userId%`, `%ContextId%` | Built-in runtime values (running user Id; record Id passed to the OmniScript) |
 
 ### Layout Properties
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `colSize` | Number | Column width (1-12 grid system) |
-| `offset` | Number | Column offset (1-12) |
-| `horizontalAlign` | String | `"left"`, `"center"`, `"right"` |
-| `verticalAlign` | String | `"top"`, `"middle"`, `"bottom"` |
+| `controlWidth` | Number | Column width (1-12 grid system) |
 
 ### Data Binding
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `JSONPath` | String | Custom JSON path for storing the element value |
+| `sendJSONPath` / `sendJSONNode` | String | What part of the data JSON an action sends, and the key to wrap it under |
+| `extraPayload` | Object | Extra key-values sent by IP / Remote Actions |
 | `responseJSONPath` | String | Path to extract from action response |
-| `inputMap` | Object | Maps data JSON values to action input parameters |
-| `outputMap` | Object | Maps action output to data JSON keys |
+| `responseJSONNode` | String | Data JSON node where the action response is stored |
 
 ---
 
-## Quick Reference: Element Type to OmniProcessElement.ElementType
+## Quick Reference: Element Type to OmniProcessElement.Type
 
-| Display Name | ElementType Value | Category |
+| Display Name | Type Value | Category |
 |-------------|-------------------|----------|
 | Step | `Step` | Container |
-| Conditional Block | `Conditional Block` | Container |
-| Loop Block | `Loop Block` | Container |
+| Block | `Block` | Container |
+| Action Block | `Action Block` | Container |
 | Edit Block | `Edit Block` | Container |
 | Text | `Text` | Input |
 | Text Area | `Text Area` | Input |
 | Number | `Number` | Input |
 | Currency | `Currency` | Input |
 | Date | `Date` | Input |
-| Date/Time | `Date/Time` | Input |
+| Date/Time | `Date/Time (Local)` | Input |
 | Time | `Time` | Input |
 | Checkbox | `Checkbox` | Input |
 | Radio | `Radio` | Input |
 | Select | `Select` | Input |
 | Multi-select | `Multi-select` | Input |
-| Type Ahead | `Type Ahead` | Input |
+| Type Ahead | `Type Ahead Block` | Input |
 | Email | `Email` | Input |
 | Telephone | `Telephone` | Input |
 | URL | `URL` | Input |
@@ -1154,13 +1144,16 @@ Reference data JSON values in element configuration using `%FieldName%` syntax.
 | Signature | `Signature` | Input |
 | File | `File` | Input |
 | Text Block | `Text Block` | Display |
+| Line Break | `Line Break` | Display |
+| Custom Lightning Web Component | `Custom Lightning Web Component` | Display |
+| OmniScript (embedded) | `OmniScript` | Container |
 | Headline | `Headline` | Display |
 | Aggregate | `Aggregate` | Display |
 | Disclosure | `Disclosure` | Display |
 | Image | `Image` | Display |
-| Chart | `Chart` | Display |
 | DataRaptor Extract Action | `DataRaptor Extract Action` | Action |
-| DataRaptor Load Action | `DataRaptor Load Action` | Action |
+| DataRaptor Transform Action | `DataRaptor Transform Action` | Action |
+| DataRaptor Post Action (Load) | `DataRaptor Post Action` | Action |
 | Integration Procedure Action | `Integration Procedure Action` | Action |
 | Remote Action | `Remote Action` | Action |
 | Navigate Action | `Navigate Action` | Action |
@@ -1168,5 +1161,5 @@ Reference data JSON values in element configuration using `%FieldName%` syntax.
 | DocuSign Envelope Action | `DocuSign Envelope Action` | Action |
 | Set Values | `Set Values` | Logic |
 | Validation | `Validation` | Logic |
+| Set Errors | `Set Errors` | Logic |
 | Formula | `Formula` | Logic |
-| Submit Action | `Submit Action` | Logic |

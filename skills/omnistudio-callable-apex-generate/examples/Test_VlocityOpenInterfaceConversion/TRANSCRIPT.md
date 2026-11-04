@@ -30,18 +30,18 @@ Convert `MyCustomClass.cls` (VlocityOpenInterface) to System.Callable and create
 
 | Decision | Rationale |
 |----------|------------|
-| **Open Interface–compatible args** | Use `inputMap` and `options` keys per skill Phase 3 so OmniScript/IP callers can pass the same structure |
-| **Flat args fallback** | Skill allows flat args when `inputMap` is absent; supports both calling styles |
-| **Response envelope** | Return `{ success, data, errors }` instead of mutating `outputMap` per migration guidance |
+| **Open Interface–compatible args** | Read `input`, `output` and `options` keys per skill Phase 3 — the structure OmniScript/IP Remote Actions pass |
+| **Flat args fallback** | Skill allows flat args when `input` is absent; supports both calling styles |
+| **Response envelope** | Write `{ success, data, errors }` into the `output` map (OmniStudio reads the response from it) and also return it |
 | **Input validation** | Skill requires null-safe type coercion; OmniScript can send numbers as String |
 | **Unsupported action** | Skill: use `switch on action` and throw `IndustriesCallableException` |
 | **`with sharing`** | Skill guardrail: enforce sharing on callable classes |
 
 ### 3. Implementation Pattern
 
-- **Entry point**: Extract `inputMap` and `options` from `args` (or treat flat `args` as `inputMap`)
+- **Entry point**: Extract `input`, `output` and `options` from `args` (or treat flat `args` as `input`)
 - **Action dispatch**: `switch on action` with `when 'calculateTotal'` and `when else` throwing
-- **Business logic**: `calculateTotal(inputMap, options)` returns envelope
+- **Business logic**: `calculateTotal(inputMap, options)` returns envelope; `call()` copies it into `output`
 - **Type coercion**: `toDecimal()` and `toInteger()` handle Decimal, Integer, Long, String (OmniScript casts)
 - **Error envelope**: Missing/invalid inputs → `success: false` with `INVALID_INPUT` error code
 
@@ -69,7 +69,7 @@ Convert `MyCustomClass.cls` (VlocityOpenInterface) to System.Callable and create
 
 ## Skill References
 
-- **Phase 2 (Design)**: Contract mapping (`methodName`→`action`, `inputMap`/`options`→`args`)
-- **Phase 3 (Implementation)**: Callable skeleton (inputMap/options), implementation rules (validate early, null-safe)
+- **Phase 2 (Design)**: Contract mapping (`methodName`→`action`, `inputMap`/`outputMap`/`options`→`args.input`/`args.output`/`args.options`)
+- **Phase 3 (Implementation)**: Callable skeleton (input/output/options), implementation rules (validate early, null-safe)
 - **Phase 4 (Testing)**: Positive, negative, contract tests
 - **Migration**: Preserve action names, return envelope instead of mutating output

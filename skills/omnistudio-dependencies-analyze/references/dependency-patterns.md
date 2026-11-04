@@ -4,7 +4,7 @@
 
 ## Overview
 
-OmniStudio components form a directed graph where each component type can reference others. Dependencies are not stored in lookup fields — they are embedded in JSON configuration fields (`PropertySetConfig`, `Definition`, `InputObjectName`/`OutputObjectName`). Extracting dependencies requires parsing these JSON structures.
+OmniStudio components form a directed graph where each component type can reference others. Dependencies are not stored in lookup fields — they are embedded in JSON configuration fields (`PropertySetConfig`, FlexCard `DataSourceConfig`, `InputObjectName`/`OutputObjectName`). Extracting dependencies requires parsing these JSON structures.
 
 ---
 
@@ -39,38 +39,32 @@ Data Mapper ──→ Salesforce Object (via OutputObjectName — write)
 
 ### Element Types and Their Dependency Targets
 
-OmniScript elements are stored as `OmniProcessElement` records (Core) or `Element__c` records (Vlocity). Each element has a `PropertySetConfig` / `PropertySet__c` JSON field containing the configuration.
+OmniScript elements are stored as `OmniProcessElement` records (Core) or `Element__c` records (Vlocity). Each element has a `PropertySetConfig` / `PropertySet__c` JSON field containing the configuration. In Core, `PropertySetConfig` is a **flat** JSON object of the element's properties; the element type is the separate `Type` field on `OmniProcessElement` (`<type>` in `.os-meta.xml` / `.oip-meta.xml`), not a key inside the JSON.
 
-#### DataRaptor Transform Action
+#### DataRaptor Extract / Transform / Post Action
 
-Calls a Data Mapper to extract, transform, or load data.
+Calls a Data Mapper (`DataRaptor Extract Action` = Extract, `DataRaptor Transform Action` = Transform, `DataRaptor Post Action` = Load).
 
-**PropertySetConfig structure**:
+**PropertySetConfig structure** (Type = `DataRaptor Transform Action`):
 ```json
 {
-  "Type": "DataRaptor Transform Action",
-  "PropertySet": {
-    "bundle": "AccountExtract",
-    "bundleName": "AccountExtract",
-    "dataRaptorType": "Extract"
-  }
+  "bundle": "AccountTransform",
+  "ignoreCache": false,
+  "sendJSONPath": "",
+  "responseJSONPath": ""
 }
 ```
 
-**Extraction rule**: `PropertySet.bundle` or `PropertySet.bundleName` → resolves to an `OmniDataTransform` record by `Name`.
+**Extraction rule**: `bundle` → resolves to an `OmniDataTransform` record by `Name`.
 
 #### DataRaptor Turbo Action
 
 High-performance variant of DataRaptor Transform Action. Same JSON structure, same extraction rule.
 
-**PropertySetConfig structure**:
+**PropertySetConfig structure** (Type = `DataRaptor Turbo Action`):
 ```json
 {
-  "Type": "DataRaptor Turbo Action",
-  "PropertySet": {
-    "bundle": "AccountTurboExtract",
-    "bundleName": "AccountTurboExtract"
-  }
+  "bundle": "AccountTurboExtract"
 }
 ```
 
@@ -81,17 +75,12 @@ Calls an Integration Procedure.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "Integration Procedure Action",
-  "PropertySet": {
-    "integrationProcedureKey": "TypeName_SubTypeName",
-    "ipMethod": "TypeName",
-    "ipType": "SubTypeName",
-    "integrationProcedureVersion": 1
-  }
+  "integrationProcedureKey": "TypeName_SubTypeName",
+  "remoteOptions": { "chainable": false, "useFuture": false }
 }
 ```
 
-**Extraction rule**: `PropertySet.integrationProcedureKey` → resolves to an `OmniProcess` record where `Type_SubType` matches and `TypeCategory = 'IntegrationProcedure'`.
+**Extraction rule**: `integrationProcedureKey` → resolves to an `OmniProcess` record where `Type_SubType` matches and `IsIntegrationProcedure = true`.
 
 #### OmniScript Action (Embedded OmniScript)
 
@@ -100,16 +89,13 @@ Embeds or launches another OmniScript.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "OmniScript",
-  "PropertySet": {
-    "Type": "ChildScriptType",
-    "Sub Type": "ChildScriptSubType",
-    "Language": "English"
-  }
+  "Type": "ChildScriptType",
+  "Sub Type": "ChildScriptSubType",
+  "Language": "English"
 }
 ```
 
-**Extraction rule**: `PropertySet.Type` + `PropertySet["Sub Type"]` + `PropertySet.Language` → resolves to an `OmniProcess` where `TypeCategory = 'OmniScript'` and fields match.
+**Extraction rule**: `Type` + `["Sub Type"]` + `Language` → resolves to an `OmniProcess` where `IsIntegrationProcedure = false` and fields match. The same reference is also on the element record itself as `EmbeddedOmniScriptKey` (`<embeddedOmniScriptKey>ChildScriptType|ChildScriptSubType|English</embeddedOmniScriptKey>` in source).
 
 #### Remote Action
 
@@ -118,16 +104,13 @@ Calls an Apex class method.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "Remote Action",
-  "PropertySet": {
-    "remoteClass": "MyApexClassName",
-    "remoteMethod": "myMethodName",
-    "remoteTimeout": 30000
-  }
+  "remoteClass": "MyApexClassName",
+  "remoteMethod": "myMethodName",
+  "remoteTimeout": 30000
 }
 ```
 
-**Extraction rule**: `PropertySet.remoteClass` → Apex class name. `PropertySet.remoteMethod` → method name. Dependency is `remoteClass.remoteMethod`.
+**Extraction rule**: `remoteClass` → Apex class name. `remoteMethod` → method name. Dependency is `remoteClass.remoteMethod`.
 
 #### HTTP Action
 
@@ -136,16 +119,13 @@ Calls an external HTTP endpoint.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "HTTP Action",
-  "PropertySet": {
-    "httpUrl": "{externalEndpointUrl}",
-    "httpMethod": "POST",
-    "namedCredential": "MyNamedCredential"
-  }
+  "httpUrl": "{externalEndpointUrl}",
+  "httpMethod": "POST",
+  "namedCredential": "MyNamedCredential"
 }
 ```
 
-**Extraction rule**: `PropertySet.httpUrl` or `PropertySet.namedCredential` → external dependency. If `namedCredential` is present, it references a Named Credential record.
+**Extraction rule**: `httpUrl` or `namedCredential` → external dependency. If `namedCredential` is present, it references a Named Credential record.
 
 #### Custom Lightning Web Component
 
@@ -154,15 +134,13 @@ Embeds an LWC inside the OmniScript.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "Custom Lightning Web Component",
-  "PropertySet": {
-    "lwcName": "myCustomComponent",
-    "lwcComponentName": "c-my-custom-component"
-  }
+  "lwcName": "myCustomComponent",
+  "bStandalone": false,
+  "customAttributes": []
 }
 ```
 
-**Extraction rule**: `PropertySet.lwcName` or `PropertySet.lwcComponentName` → LWC component reference.
+**Extraction rule**: `lwcName` → LWC component reference (camelCase bundle name, e.g. `cfMyCard` for a FlexCard-generated LWC).
 
 #### DocuSign Envelope Action
 
@@ -171,26 +149,25 @@ Triggers a DocuSign envelope.
 **PropertySetConfig structure**:
 ```json
 {
-  "Type": "DocuSign Envelope Action",
-  "PropertySet": {
-    "docuSignTemplateId": "template-uuid"
-  }
+  "docuSignTemplateId": "template-uuid"
 }
 ```
 
-**Extraction rule**: `PropertySet.docuSignTemplateId` → DocuSign template (external dependency).
+**Extraction rule**: `docuSignTemplateId` → DocuSign template (external dependency).
 
 ---
 
 ## Integration Procedure Dependencies
 
-Integration Procedures use the same element types as OmniScripts but are filtered by `TypeCategory = 'IntegrationProcedure'` (Core) or `IsIntegrationProcedure__c = true` (Vlocity).
+Integration Procedures use the same element types as OmniScripts but are filtered by `IsIntegrationProcedure = true` (Core) or `IsIntegrationProcedure__c = true` (Vlocity).
 
 ### Element Types Available in IPs
 
 | Element Type | Available in IP | Dependency Target |
 |-------------|----------------|-------------------|
+| DataRaptor Extract Action | Yes | Data Mapper |
 | DataRaptor Transform Action | Yes | Data Mapper |
+| DataRaptor Post Action | Yes | Data Mapper (Load) |
 | DataRaptor Turbo Action | Yes | Data Mapper |
 | Remote Action | Yes | Apex Class |
 | HTTP Action | Yes | External endpoint |
@@ -200,7 +177,8 @@ Integration Procedures use the same element types as OmniScripts but are filtere
 | Conditional Block | Yes | None (internal) |
 | Loop Block | Yes | None (internal) |
 | Response Action | Yes | None (internal) |
-| List Action | Yes | None (internal) |
+| List Merge Action | Yes | None (internal) |
+| Delete Action | Yes | sObject (via `deleteSObject[].Type`) |
 
 ### Nested IP Pattern
 
@@ -219,40 +197,26 @@ IP: OrderValidation
 
 ## FlexCard Dependencies
 
-FlexCards store their entire configuration in the `Definition` JSON field on `OmniUiCard` (Core) or `VlocityUITemplate__c` (Vlocity).
+In Core, FlexCards (`OmniUiCard`) split their configuration across two JSON fields: `DataSourceConfig` (data source) and `PropertySetConfig` (states, elements, actions). There is NO `Definition` field on `OmniUiCard` (`Definition__c` exists only on Vlocity `VlocityUITemplate__c`).
 
 ### Data Source Parsing
 
-The `Definition` JSON contains a `dataSources` array:
+`DataSourceConfig` contains a single `dataSource` object (not an array):
 
 ```json
 {
-  "dataSources": [
-    {
-      "name": "AccountData",
-      "type": "IntegrationProcedure",
-      "value": {
-        "key": "fetchAccountData",
-        "inputMap": { "AccountId": "{recordId}" }
-      }
+  "dataSource": {
+    "type": "IntegrationProcedures",
+    "value": {
+      "dsDelay": "",
+      "ipMethod": "Type_SubType",
+      "vlocityAsync": false,
+      "inputMap": { "AccountId": "{recordId}" },
+      "jsonMap": "{\"recordId\":\"{recordId}\"}"
     },
-    {
-      "name": "DirectApex",
-      "type": "Apex",
-      "value": {
-        "className": "AccountSummaryController",
-        "methodName": "getSummary"
-      }
-    },
-    {
-      "name": "SObjectData",
-      "type": "SObject",
-      "value": {
-        "sObjectType": "Account",
-        "fields": ["Name", "Industry", "Phone"]
-      }
-    }
-  ]
+    "orderBy": { "name": "", "isReverse": "" },
+    "contextVariables": []
+  }
 }
 ```
 
@@ -260,48 +224,45 @@ The `Definition` JSON contains a `dataSources` array:
 
 | Data Source Type | JSON Path | Dependency Target |
 |-----------------|-----------|-------------------|
-| `IntegrationProcedure` | `value.key` | Integration Procedure (Type_SubType key) |
-| `Apex` | `value.className` | Apex Class |
-| `SObject` | `value.sObjectType` | Salesforce Object (direct SOQL) |
-| `DataRaptor` | `value.bundle` | Data Mapper |
+| `IntegrationProcedures` (plural) | `dataSource.value.ipMethod` | Integration Procedure (Type_SubType key) |
+| `ApexRemote` | `dataSource.value.className` | Apex Class |
+| `DataRaptor` | `dataSource.value.bundle` | Data Mapper |
+| `Custom` | `dataSource.value.body` | None (static JSON) |
 
 ### Child Card References
 
-FlexCards can embed other FlexCards:
+FlexCards can embed other FlexCards. In `PropertySetConfig`, a child card is an element with `"element": "childCardPreview"`:
 
 ```json
 {
-  "children": [
-    {
-      "cardName": "ContactListCard",
-      "cardType": "childCard"
-    }
-  ]
+  "name": "FlexCard",
+  "element": "childCardPreview",
+  "property": {
+    "cardName": "ContactListCard",
+    "recordId": "{recordId}",
+    "cardNode": "{record}"
+  }
 }
 ```
 
-**Extraction rule**: `children[].cardName` → resolves to another `OmniUiCard` by Name.
+**Extraction rule**: `element === 'childCardPreview'` → `property.cardName` → resolves to another `OmniUiCard` by Name. Flyout actions with `flyoutType: "childCard"` also reference a child card via `stateAction.flyoutLwc` / `stateAction.cardName`.
 
 ### Action References
 
-FlexCard actions can launch OmniScripts:
+FlexCard actions are `"element": "action"` entries in `PropertySetConfig`; each has a `property.actionList[].stateAction`. Actions can launch OmniScripts in a flyout:
 
 ```json
 {
-  "actions": [
-    {
-      "actionType": "OmniScript",
-      "actionValue": {
-        "type": "editAccount",
-        "subType": "step1",
-        "language": "English"
-      }
-    }
-  ]
+  "stateAction": {
+    "type": "Flyout",
+    "flyoutType": "OmniScripts",
+    "osName": "editAccount/step1/English",
+    "openFlyoutIn": "Modal"
+  }
 }
 ```
 
-**Extraction rule**: `actions[].actionValue.type` + `subType` + `language` → resolves to an OmniScript.
+**Extraction rule**: `stateAction.type === 'Flyout'` and `flyoutType === 'OmniScripts'` → `osName` (`Type/SubType/Language`) → resolves to an OmniScript.
 
 ---
 
@@ -438,10 +399,10 @@ a termination condition.
    - Extract dependency reference per extraction rules above
    - Resolve reference to a known component record
 
-5. PARSE each FlexCard's Definition:
-   - Extract dataSources array
-   - Extract children array
-   - Extract actions array
+5. PARSE each FlexCard's DataSourceConfig and PropertySetConfig:
+   - Extract dataSource (single object)
+   - Extract childCardPreview elements
+   - Extract action elements (actionList[].stateAction)
    - Resolve references to known components
 
 6. PARSE each Data Mapper's items:
@@ -492,16 +453,13 @@ Full impact set: [IP:fetchAccountData, OS:updateAccount, FC:AccountSummaryCard]
 ### Nested Property Sets
 
 Some elements have nested structures. Always check for:
-- `PropertySet.bundle` (top-level reference)
-- `PropertySet.elementProperties` (per-field configs)
-- `PropertySet.conditionalProperties` (conditional logic)
-- `PropertySet.remoteOptions` (additional remote action config)
+- `bundle` (top-level reference)
+- `remoteOptions` (additional remote action config, e.g. `preTransformBundle` / `postTransformBundle` which also reference Data Mappers)
 
 ### Common Pitfalls
 
 | Pitfall | Handling |
 |---------|---------|
-| `bundleName` vs `bundle` | Both may exist; prefer `bundle` as the canonical reference |
 | `integrationProcedureKey` format | Always `Type_SubType` with underscore separator |
 | Version-specific references | Some elements reference a specific version; default is latest active |
 | Null PropertySetConfig | Skip elements with null/empty config — they have no dependencies |

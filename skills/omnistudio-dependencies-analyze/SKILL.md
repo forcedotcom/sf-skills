@@ -83,7 +83,7 @@ Each analysis run produces one or more of:
 | Insight | Detail |
 |---------|--------|
 | Three namespaces coexist | Core (OmniProcess), vlocity_cmt (vlocity_cmt__OmniScript__c), vlocity_ins (vlocity_ins__OmniScript__c) |
-| Dependencies are stored in JSON | PropertySetConfig (elements), Definition (FlexCards), InputObjectName/OutputObjectName (Data Mappers) |
+| Dependencies are stored in JSON | PropertySetConfig (elements), DataSourceConfig + PropertySetConfig (FlexCards), InputObjectName/OutputObjectName (Data Mappers) |
 | Circular references are possible | OmniScript A → IP B → OmniScript A via embedded call |
 | FlexCard data sources are typed | `dataSource.type === 'IntegrationProcedures'` (plural) in DataSourceConfig JSON |
 | Active vs Draft matters | Only active components participate in runtime dependency chains |
@@ -102,7 +102,7 @@ Each analysis run produces one or more of:
    ```soql
    SELECT COUNT() FROM OmniProcess
    ```
-   If this succeeds, the org uses the Core namespace (API 234.0+ / Spring '22+).
+   If this succeeds, the org uses the Core namespace (standard OmniStudio objects, Spring '22 / API 54.0+).
 
 2. **vlocity_cmt (Communications, Media & Energy)**:
    ```soql
@@ -224,14 +224,16 @@ OmniScript and IP elements store references in the `PropertySetConfig` JSON fiel
 
 | Element Type | JSON Path in PropertySetConfig | Dependency Target |
 |-------------|-------------------------------|-------------------|
-| DataRaptor Transform Action | `bundle`, `bundleName` | Data Mapper (by name) |
-| DataRaptor Turbo Action | `bundle`, `bundleName` | Data Mapper (by name) |
+| DataRaptor Extract Action | `bundle` | Data Mapper (by name) |
+| DataRaptor Transform Action | `bundle` | Data Mapper (by name) |
+| DataRaptor Post Action | `bundle` | Data Mapper (Load, by name) |
+| DataRaptor Turbo Action | `bundle` | Data Mapper (by name) |
 | Remote Action | `remoteClass`, `remoteMethod` | Apex Class.Method |
 | Integration Procedure Action | `integrationProcedureKey` | IP (Type_SubType) |
-| OmniScript Action | `omniScriptKey` or `Type/SubType` | OmniScript (Type_SubType) |
+| OmniScript (embedded) | `Type`, `Sub Type`, `Language` in PropertySetConfig; also the element-level `EmbeddedOmniScriptKey` field (`Type\|SubType\|Language`) | OmniScript |
+| Custom Lightning Web Component | `lwcName` | LWC |
 | HTTP Action | `httpUrl`, `httpMethod` | External endpoint (URL) |
 | DocuSign Envelope Action | `docuSignTemplateId` | DocuSign template |
-| Apex Remote Action | `remoteClass` | Apex Class |
 
 **Parsing PropertySetConfig**:
 ```text
@@ -254,11 +256,19 @@ Parse DataSourceConfig JSON:
   2. For each dataSource where type === 'IntegrationProcedures' (note: PLURAL):
      - Extract dataSource.value.ipMethod (IP Type_SubType)
      - Add edge: FlexCard → Integration Procedure
-  3. For each dataSource where type === 'ApexRemote':
+  3. For each dataSource where type === 'DataRaptor':
+     - Extract dataSource.value.bundle
+     - Add edge: FlexCard → Data Mapper
+  4. For each dataSource where type === 'ApexRemote':
      - Extract dataSource.value.className
      - Add edge: FlexCard → Apex Class
-  4. For childCard references, parse PropertySetConfig:
+  5. For childCard references, parse PropertySetConfig:
+     - `childCardPreview` elements: `property.cardName`
+     - Flyout actions (`stateAction.type === 'Flyout'`, `flyoutType === 'childCard'`): `stateAction.flyoutLwc` / `cardName`
      - Add edge: FlexCard → child FlexCard
+  6. For OmniScript launches, parse PropertySetConfig:
+     - Flyout actions with `flyoutType === 'OmniScripts'`: `stateAction.osName` (`Type/SubType/Language`)
+     - Add edge: FlexCard → OmniScript
 ```
 
 > **IMPORTANT**: The data source type for IPs is `IntegrationProcedures` (plural with capital P), not `IntegrationProcedure`.
@@ -464,7 +474,7 @@ sf data query --query "SELECT Id, OmniDataTransformationId, InputObjectName, Out
 | PropertySetConfig exceeds SOQL field length | Use Tooling API or REST API to fetch full JSON body for elements with truncated config. |
 | Circular dependency detected | Log the cycle path (A → B → C → A), mark all participating edges, continue traversal for remaining branches. |
 | Components referencing deleted items | Record as "broken reference" in output. Flag for cleanup. |
-| Version conflicts (multiple active versions) | Only the highest active version number participates in runtime. Warn if lower versions have unique dependencies. |
+| Version conflicts (multiple active versions) | Only one version per Type/SubType/Language can be active; that active version is the one used at runtime. Warn if inactive versions have unique dependencies. |
 
 ---
 

@@ -33,13 +33,13 @@ Convert a VlocityOpenInterface2 implementation (`MyCustomRemoteClass`) to `Syste
 
 - **Migration guidance (SKILL § Migration: VlocityOpenInterface to System.Callable):**
   - Preserved action name: `calculateTotal` → `action` in `call()`
-  - Pass `inputMap` and `options` as keys in `args`: `{ 'inputMap' => inputMap, 'options' => options }`
-  - Return response envelope instead of mutating `outputMap`
+  - OmniStudio passes the maps as keys in `args`: `{ 'input' => inputMap, 'output' => outputMap, 'options' => options }`
+  - Keep writing the result into the `output` map (OmniStudio reads the response from it)
   - Keep `call()` thin; delegate to `calculateTotal(inputMap, options)`
-  - Backward compatibility: if `args` lacks `inputMap`, treat `args` as `inputMap`
+  - Backward compatibility: if `args` lacks `input`, treat `args` as the input map
 
 - **Callable skeleton (SKILL § Phase 3 – Callable skeleton):**
-  - Extracted `inputMap` and `options` from `args` with null guards
+  - Extracted `input`, `output` and `options` from `args` with null guards
   - `switch on action` with `when else` throwing `IndustriesCallableException`
 
 - **Response envelope:**
@@ -74,7 +74,7 @@ Convert a VlocityOpenInterface2 implementation (`MyCustomRemoteClass`) to `Syste
 
 **Application:**
 
-- **Positive:** Success with `inputMap`/`options`, flat args, and string inputs (type coercion)
+- **Positive:** Success with `input`/`output`/`options`, flat args, and string inputs (type coercion)
 - **Contract:** Missing `price`, missing `quantity`, null args → error envelope
 - **Negative:** Unsupported action throws `IndustriesCallableException`
 - GIVEN/WHEN/THEN implied via clear assertions and method names
@@ -90,7 +90,7 @@ Convert a VlocityOpenInterface2 implementation (`MyCustomRemoteClass`) to `Syste
 | **Error envelope for validation** | Return structured errors instead of throwing; callers can handle without try/catch |
 | **Exception for unsupported action** | Skill pattern; `IndustriesCallableException` makes misuse explicit |
 | **Type coercion helpers** | OmniScript/Integration Procedures often pass strings; `toDecimal`/`toInteger` allow `'25.00'`, `'4'` etc. |
-| **Flat args fallback** | When `args` lacks `inputMap`, treat `args` as `inputMap` for backward compatibility |
+| **Flat args fallback** | When `args` lacks `input`, treat `args` as the input map for backward compatibility |
 
 ---
 
@@ -108,8 +108,8 @@ Convert a VlocityOpenInterface2 implementation (`MyCustomRemoteClass`) to `Syste
 | VlocityOpenInterface2 | System.Callable |
 |----------------------|-----------------|
 | `methodName` = `'calculateTotal'` | `action` = `'calculateTotal'` |
-| `inputMap.get('price')`, `inputMap.get('quantity')` | Same keys in `args.inputMap` or flat `args` |
-| `outputMap.put('total', ...)` | `return { success => true, data => { total => ... } }` |
+| `inputMap.get('price')`, `inputMap.get('quantity')` | Same keys in `args.input` or flat `args` |
+| `outputMap.put('total', ...)` | `args.output` receives `{ success => true, data => { total => ... } }` (also returned) |
 | `return false` for unsupported | `throw IndustriesCallableException` |
 | `options` (unused in original) | Passed through for future use |
 

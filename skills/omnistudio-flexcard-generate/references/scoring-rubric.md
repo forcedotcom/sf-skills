@@ -17,9 +17,9 @@ Detailed point-by-point scoring criteria for the 130-point FlexCard validation. 
 | Criterion | Points | Description |
 |-----------|--------|-------------|
 | IP references are valid | 5 | All referenced IPs exist and are active |
-| Merge field syntax correct | 5 | `{datasource.field}` paths resolve to actual IP response fields |
+| Merge field syntax correct | 5 | `{field}` / `{record.field}` paths resolve to actual IP response fields |
 | Input parameters mapped | 5 | Record context passed correctly to IP inputs |
-| Multi-source coordination | 5 | Multiple data sources load in correct order without conflicts |
+| Multi-source coordination | 5 | Parent/child card data sources load in correct order without conflicts |
 
 ## Actions & Navigation (20 points)
 

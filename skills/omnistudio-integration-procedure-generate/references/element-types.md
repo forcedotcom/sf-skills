@@ -12,11 +12,11 @@ This reference documents every element type available in Integration Procedures,
 ## Table of Contents
 
 1. [DataRaptor Extract Action](#1-dataraptor-extract-action)
-2. [DataRaptor Load Action](#2-dataraptor-load-action)
+2. [DataRaptor Post Action](#2-dataraptor-post-action)
 3. [DataRaptor Transform Action](#3-dataraptor-transform-action)
 4. [Remote Action](#4-remote-action)
 5. [Integration Procedure Action](#5-integration-procedure-action)
-6. [HTTP Action](#6-http-action)
+6. [HTTP Action (`Rest Action`)](#6-http-action)
 7. [Conditional Block](#7-conditional-block)
 8. [Loop Block](#8-loop-block)
 9. [Set Values](#9-set-values)
@@ -34,8 +34,9 @@ Reads data from Salesforce objects using a DataRaptor (Data Mapper) Extract defi
 ```json
 {
   "bundle": "DRExtract_AccountDetails",
-  "disableFlushCacheForGet": false,
-  "useQueueableApexRemoting": false,
+  "ignoreCache": false,
+  "failOnStepError": false,
+  "executionConditionalFormula": "",
   "additionalInput": {},
   "additionalOutput": {},
   "sendOnlyAdditionalInput": false,
@@ -53,7 +54,7 @@ Reads data from Salesforce objects using a DataRaptor (Data Mapper) Extract defi
 | `sendOnlyAdditionalInput` | Boolean | No | If true, only sends `additionalInput`, ignoring upstream data |
 | `responseJSONPath` | String | No | JSONPath expression to extract a subset of the response |
 | `responseJSONNode` | String | No | Key name to wrap the response under |
-| `disableFlushCacheForGet` | Boolean | No | If true, uses cached DataRaptor results |
+| `ignoreCache` | Boolean | No | If true, bypasses cached DataRaptor results |
 
 ### Input Mapping
 
@@ -86,17 +87,17 @@ For multi-record results, the output is an array.
 
 ---
 
-## 2. DataRaptor Load Action
+## 2. DataRaptor Post Action
 
-Writes data to Salesforce objects using a DataRaptor (Data Mapper) Load definition.
+Writes data to Salesforce objects using a DataRaptor (Data Mapper) Load definition (element type `DataRaptor Post Action`).
 
 ### PropertySetConfig
 
 ```json
 {
   "bundle": "DRLoad_CreateContact",
-  "disableFlushCacheForGet": false,
-  "useQueueableApexRemoting": false,
+  "failOnStepError": false,
+  "executionConditionalFormula": "",
   "additionalInput": {},
   "additionalOutput": {},
   "sendOnlyAdditionalInput": false,
@@ -143,7 +144,7 @@ Returns the result of the DML operation:
 
 ### Error Handling
 
-Always follow a DataRaptor Load with error inspection. Check for:
+Always follow a DataRaptor Post Action with error inspection. Check for:
 - `success` field (boolean)
 - `errors` array (contains error objects with `statusCode` and `message`)
 
@@ -189,7 +190,7 @@ Output: The transformed JSON structure, stored under the element name
 
 ## 4. Remote Action
 
-Calls an Apex class method. The Apex class must implement the `vlocity_cmt.VlocityOpenInterface` (managed package) or `omnistudio.VlocityOpenInterface2` (Core namespace) interface.
+Calls an Apex class method. The Apex class must implement `System.Callable` or `omnistudio.VlocityOpenInterface` / `omnistudio.VlocityOpenInterface2` (`vlocity_cmt.` / `vlocity_ins.` in Vlocity managed-package orgs).
 
 ### PropertySetConfig
 
@@ -202,8 +203,8 @@ Calls an Apex class method. The Apex class must implement the `vlocity_cmt.Vloci
   "sendOnlyAdditionalInput": false,
   "responseJSONPath": "",
   "responseJSONNode": "",
-  "useQueueableApexRemoting": false,
-  "useFuture": false
+  "remoteOptions": {},
+  "failOnStepError": false
 }
 ```
 
@@ -213,8 +214,8 @@ Calls an Apex class method. The Apex class must implement the `vlocity_cmt.Vloci
 |----------|------|----------|-------------|
 | `remoteClass` | String | Yes | Apex class name |
 | `remoteMethod` | String | Yes | Method name to invoke |
-| `useQueueableApexRemoting` | Boolean | No | If true, executes as a Queueable job (async) |
-| `useFuture` | Boolean | No | If true, executes as a future method (async, no return value) |
+| `remoteOptions` | Object | No | Passed to the class as `options` |
+| `failOnStepError` | Boolean | No | Stop the IP if this step fails |
 
 ### Apex Interface
 
@@ -277,13 +278,13 @@ Calls another Integration Procedure. Enables composition and reuse of IP logic.
 
 ```json
 {
-  "ipMethod": "SharedLookup_Standard",
+  "integrationProcedureKey": "SharedLookup_Standard",
   "additionalInput": {},
   "additionalOutput": {},
   "sendOnlyAdditionalInput": false,
   "responseJSONPath": "",
   "responseJSONNode": "",
-  "chainable": false
+  "disableChainable": false
 }
 ```
 
@@ -291,8 +292,8 @@ Calls another Integration Procedure. Enables composition and reuse of IP logic.
 
 | Property | Type | Required | Description |
 |----------|------|----------|-------------|
-| `ipMethod` | String | Yes | The nested IP's Type_SubType identifier |
-| `chainable` | Boolean | No | If true, allows chaining outputs from the nested IP |
+| `integrationProcedureKey` | String | Yes | The nested IP's Type_SubType identifier |
+| `disableChainable` | Boolean | No | If true, the nested IP does not chain (runs within the caller's limits) |
 | `sendOnlyAdditionalInput` | Boolean | No | If true, only sends `additionalInput` to the nested IP |
 
 ### Input Mapping
@@ -301,7 +302,7 @@ By default, the entire IP data context is passed to the nested IP. Use `sendOnly
 
 ```json
 {
-  "ipMethod": "ContactLookup_Standard",
+  "integrationProcedureKey": "ContactLookup_Standard",
   "sendOnlyAdditionalInput": true,
   "additionalInput": {
     "accountId": "%GetAccountDetails:Id%"
@@ -330,7 +331,7 @@ Before configuring an IP Action, verify that the target IP does not call back to
 
 ## 6. HTTP Action
 
-Makes an HTTP callout to an external API endpoint.
+Makes an HTTP callout to an external API endpoint. The element's `Type` value is `Rest Action`.
 
 ### PropertySetConfig
 
@@ -415,16 +416,25 @@ Evaluates conditions and branches execution based on the result. Contains child 
 
 ### Configuration
 
-Conditional Blocks do not use PropertySetConfig in the same way as action elements. Instead, conditions are defined in the element's condition configuration:
+The condition is a formula in `executionConditionalFormula` (the same property every IP element has for conditional execution). `isIfElseBlock: true` turns the block into an if / else-if / else container.
+
+```json
+{
+  "executionConditionalFormula": "%ActionType% == \"New\" || %ActionType% == \"Edit\"",
+  "isIfElseBlock": false
+}
+```
 
 ### Condition Types
 
+IP formulas use `==`, `!=`, `>`, `<`, `&&`, `||` to combine conditions. For the functions available in IP formulas see `formula-functions.md`.
+
 | Condition Type | Description | Example |
 |----------------|-------------|---------|
-| Value Comparison | Compare two values | `%GetAccount:Industry% EQUALS 'Technology'` |
-| Null Check | Check if a value is null/empty | `%GetAccount:Id% IS NOT NULL` |
-| Boolean Check | Evaluate a boolean value | `%ValidateInput:isValid% EQUALS true` |
-| Group (AND/OR) | Combine multiple conditions | `condition1 AND condition2` |
+| Value Comparison | Compare two values | `%GetAccount:Industry% == "Technology"` |
+| Null Check | Check if a value is null/empty | `ISNOTBLANK(%GetAccount:Id%)` |
+| Boolean Check | Evaluate a boolean value | `%ValidateInput:isValid% == true` (or just `%ValidateInput:isValid%`) |
+| Group (AND/OR) | Combine multiple conditions | `condition1 && condition2`, `condition1 \|\| condition2` |
 
 ### Nested Elements
 
@@ -434,8 +444,10 @@ Elements inside a Conditional Block execute only when the condition is true. The
 
 Use two Conditional Blocks with complementary conditions:
 
-1. **Conditional Block A**: condition = `%check:value% EQUALS true` -> contains success path elements
-2. **Conditional Block B**: condition = `%check:value% NOT EQUALS true` -> contains error/alternate path elements
+1. **Conditional Block A**: condition = `%check:value% == true` -> contains success path elements
+2. **Conditional Block B**: condition = `%check:value% != true` -> contains error/alternate path elements
+
+(Or a single Conditional Block with `isIfElseBlock: true` containing the branches.)
 
 ---
 
@@ -447,12 +459,12 @@ Iterates over a collection (array) and executes child elements for each item.
 
 | Property | Description |
 |----------|-------------|
-| Loop collection | JSONPath to the array to iterate over (e.g., `%GetContacts:records%`) |
-| Loop element variable | Variable name for the current item in each iteration |
+| `loopList` | Data JSON path (no `%`) to the array to iterate over (e.g., `GetContacts:records`) |
+| `loopOutput` | Map of keys to collect from each iteration (e.g., `{ "SetItem": "%SetItem%" }`) |
 
 ### Child Elements
 
-Elements inside a Loop Block execute once per iteration. The current item is accessible via the loop element variable.
+Elements inside a Loop Block execute once per iteration. The current item is accessible under the `loopList` path (e.g., `%GetContacts:records:Name%` inside the loop refers to the current record).
 
 ### Performance Considerations
 
@@ -466,13 +478,13 @@ Elements inside a Loop Block execute once per iteration. The current item is acc
 
 Instead of:
 ```text
-Loop -> DataRaptor Load (per item)  // BAD: N DML operations
+Loop -> DataRaptor Post Action (per item)  // BAD: N DML operations
 ```
 
 Use:
 ```text
 Loop -> Set Values (collect items into array)
-DataRaptor Load (entire array)  // GOOD: 1 DML operation
+DataRaptor Post Action (entire array)  // GOOD: 1 DML operation
 ```
 
 ---
@@ -483,14 +495,14 @@ Assigns values to variables within the IP context. Used for initialization, resp
 
 ### Configuration
 
-Set Values elements define key-value mappings:
+Set Values elements define key-value mappings in `elementValueMap`. Prefix a value with `=` to evaluate it as a formula (e.g. `"=YEAR(TODAY())"`, `"=%A% + 1"`). Supported functions: `formula-functions.md`.
 
 | Mapping Type | Description | Example |
 |--------------|-------------|---------|
 | Static value | Hardcoded constant | `"status": "Processed"` |
 | Element reference | Value from upstream element | `"accountName": "%GetAccount:Name%"` |
-| Formula | Computed value | Concatenation, conditional expressions |
-| Input reference | Value from IP input | `"requestId": "%input:requestId%"` |
+| Formula | Computed value | `"fullName": "=CONCATENATE(%First%, \" \", %Last%)"` |
+| Input reference | Value from IP input (input keys are top-level in the data JSON) | `"requestId": "%requestId%"` |
 
 ### Common Uses
 
@@ -533,9 +545,9 @@ The IP maintains a cumulative data context. Each element's output is added to th
 | Syntax | Description | Example |
 |--------|-------------|---------|
 | `%elementName:key%` | Reference a specific key from an element's output | `%GetAccount:Name%` |
-| `%elementName:nested.key%` | Reference a nested key using dot notation | `%GetAccount:BillingAddress.City%` |
-| `%elementName:array[0]%` | Reference an array element by index | `%GetContacts:records[0].Name%` |
-| `%input:key%` | Reference an IP input parameter | `%input:accountId%` |
+| `%elementName:nested:key%` | Reference a nested key (`:` between nodes) | `%GetAccount:BillingAddress:City%` |
+| `%elementName:array\|N%` | Reference an array element by 1-based index (`\|1`, `\|2`, …) — not `[0]` | `%GetContacts:records\|1:Name%` |
+| `%key%` | Reference an IP input parameter (input is merged at the top level of the data JSON) | `%accountId%` |
 
 ### Data Passing to Nested IPs
 
@@ -565,12 +577,15 @@ These properties are available on most action elements:
 | `sendOnlyAdditionalInput` | Boolean | `false` | If true, only `additionalInput` is sent (upstream context excluded) |
 | `responseJSONPath` | String | `""` | JSONPath to extract a subset of the element's response |
 | `responseJSONNode` | String | `""` | Key name to wrap the response under |
-| `useQueueableApexRemoting` | Boolean | `false` | Execute asynchronously via Queueable Apex |
-| `disableFlushCacheForGet` | Boolean | `false` | Use cached results if available |
+| `executionConditionalFormula` | String | `""` | Run the element only when the formula is true |
+| `failOnStepError` | Boolean | `false` | Stop the IP if this element fails |
+| `failureConditionalFormula` | String | `""` | Formula that marks the step as failed |
+| `sendJSONPath` / `sendJSONNode` | String | `""` | Send a sub-node of the data JSON / wrap it under a key |
+| `chainOnStep` | Boolean | `false` | Chain (new transaction) at this step |
 
 ### `responseJSONPath` vs `responseJSONNode`
 
-- `responseJSONPath`: Extracts a subset of the response. For example, `$.records` extracts only the `records` array from the response.
+- `responseJSONPath`: Extracts a subset of the response. For example, `records` extracts only the `records` array from the response (plain data JSON path with `:` separators — no `$.`).
 - `responseJSONNode`: Wraps the response under a named key. For example, setting `responseJSONNode` to `accountData` wraps the entire response under `{"accountData": {...}}`.
 
 These can be combined: first extract via path, then wrap under a node name.

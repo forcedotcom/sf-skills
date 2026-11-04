@@ -9,7 +9,7 @@ rubric and migration guidance from legacy `VlocityOpenInterface` implementations
 - **Callable Generation**: Create `System.Callable` classes with safe action dispatch
 - **Callable Review**: Analyze existing callable implementations for risks and fixes
 - **120-Point Scoring**: Validation across 7 callable-specific categories
-- **VlocityOpenInterface / VlocityOpenInterface2 Support**: Phase 2 contract mapping and Phase 3 implementation patterns for `invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outputMap, Map<String, Object> options)`
+- **VlocityOpenInterface / VlocityOpenInterface2 Support**: Phase 2 contract mapping and Phase 3 implementation patterns for `invokeMethod(String methodName, Map<String, Object> inputMap, Map<String, Object> outputMap, Map<String, Object> options)` and the matching Callable `args` keys (`input`, `output`, `options`)
 - **Migration Guidance**: Patterns for moving from `VlocityOpenInterface`/`VlocityOpenInterface2` to `System.Callable`
 - **Testing Examples**: Test class patterns for actions, errors, and bulk inputs
 

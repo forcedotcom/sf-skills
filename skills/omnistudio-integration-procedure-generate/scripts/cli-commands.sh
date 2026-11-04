@@ -1,6 +1,7 @@
 #!/bin/bash
 # Integration Procedure CLI Commands
-# Replace <Name> with the IP's Type_SubType name and <org> with your authenticated org alias.
+# Replace <Name> with the IP's metadata member name <Type>_<SubType>_<Language>_<Version> (e.g. AccountOnboarding_Standard_English_1)
+# and <org> with your authenticated org alias.
 
 # Query active Integration Procedures (add filters as needed)
 sf data query -q "SELECT Id,Name,Type,SubType,IsActive FROM OmniProcess WHERE IsActive=true AND IsIntegrationProcedure=true LIMIT 200" -o <org>

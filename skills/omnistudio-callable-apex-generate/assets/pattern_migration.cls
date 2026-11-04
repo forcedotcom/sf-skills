@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // BEFORE: VlocityOpenInterface2
-// Results written into outputMap by reference; return value is Boolean success flag.
+// Results written into outputMap by reference; return value is a success flag.
 // ─────────────────────────────────────────────────────────────────────────────
 // global class OrderOpenInterface implements omnistudio.VlocityOpenInterface2 {
-//     global Boolean invokeMethod(String methodName, Map<String, Object> input,
+//     global Object invokeMethod(String methodName, Map<String, Object> input,
 //                                 Map<String, Object> output,
 //                                 Map<String, Object> options) {
 //         if (methodName == 'createOrder') {
@@ -21,24 +21,30 @@
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AFTER: System.Callable
-// Same inputs (inputMap, options); return value replaces outputMap mutation.
+// OmniStudio passes the same three maps in args: { 'input', 'output', 'options' }.
+// Results are still written into the output map — OmniStudio reads the response from it.
 // Action strings mirror the original methodName values to keep callers stable.
 // ─────────────────────────────────────────────────────────────────────────────
 public with sharing class Industries_XxxCallable implements System.Callable {
 
     public Object call(String action, Map<String, Object> args) {
-        Map<String, Object> inputMap = (args != null && args.containsKey('inputMap'))
-            ? (Map<String, Object>) args.get('inputMap')
+        Map<String, Object> inputMap = (args != null && args.containsKey('input'))
+            ? (Map<String, Object>) args.get('input')
             : (args != null ? args : new Map<String, Object>());
+        Map<String, Object> output   = (args != null && args.containsKey('output'))
+            ? (Map<String, Object>) args.get('output')
+            : new Map<String, Object>();
         Map<String, Object> options  = (args != null && args.containsKey('options'))
             ? (Map<String, Object>) args.get('options')
             : new Map<String, Object>();
         if (inputMap == null) { inputMap = new Map<String, Object>(); }
+        if (output   == null) { output   = new Map<String, Object>(); }
         if (options  == null) { options  = new Map<String, Object>(); }
 
         switch on action {
             when 'createOrder' {
-                return createOrder(inputMap, options);
+                output.putAll(createOrder(inputMap, options));
+                return output;
             }
             when else {
                 throw new IndustriesCallableException('Unsupported action: ' + action);

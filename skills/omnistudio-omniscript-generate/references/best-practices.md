@@ -42,10 +42,10 @@ The default and most common pattern. Each Step represents a phase of the process
 
 **Example structure:**
 ```text
-Step 1: "Account Selection"    -> Type Ahead (account search) + DataRaptor Extract (prefill)
+Step 1: "Account Selection"    -> Type Ahead Block (account search) + DataRaptor Extract (prefill)
 Step 2: "Service Details"      -> Select, Text, Date inputs for the request
 Step 3: "Attachments"          -> File upload + Text Area for notes
-Step 4: "Review & Submit"      -> Text Blocks displaying collected data + Submit Action
+Step 4: "Review & Submit"      -> Text Blocks displaying collected data + IP Action that saves the data
 ```
 
 ### Single-Page (All Elements Visible)
@@ -120,21 +120,19 @@ A central Step allows navigation to sub-sections, each completing independently.
 Use DataRaptor Extract Actions at the beginning of a Step to populate elements with existing Salesforce data.
 
 **Best practice:**
-- Place the Extract Action as the first element in the Step (lowest Order value)
-- Configure `executionConditionFormula` to skip the fetch if data already exists
+- Place the Extract Action before the Step (or as its first element — lowest `SequenceNumber`)
+- Configure a `show` condition to skip the fetch if data already exists
 - Map Extract output keys to match element names for automatic binding
 - Filter the Extract query to return only the needed fields
 
 ```json
 {
   "bundle": "DR_ExtractAccountDetails",
-  "inputMap": {
-    "AccountId": "%SelectedAccountId%"
-  },
-  "outputMap": {
-    "AccountName": "AccountName",
-    "BillingAddress": "BillingAddress"
-  }
+  "dataRaptor Input Parameters": [
+    { "element": "SelectedAccountId", "inputParam": "AccountId" }
+  ],
+  "responseJSONPath": "",
+  "responseJSONNode": ""
 }
 ```
 
@@ -144,7 +142,7 @@ Use IP Actions for complex prefill that requires server-side logic, aggregation,
 
 **Best practice:**
 - Set `remoteOptions.preTransformBundle` if data needs shaping before display
-- Use `executionConditionFormula` to avoid re-fetching on back navigation
+- Use a `show` condition to avoid re-fetching on back navigation
 - Cache results in the data JSON so subsequent Steps can reference them without additional calls
 
 ### Contextual Prefill (Launch Parameters)
@@ -194,8 +192,16 @@ Use Validation elements for cross-field and business rule validation.
 
 ```json
 {
-  "validationFormula": "%EndDate% > %StartDate%",
-  "errorMessage": "End date must be after the start date."
+  "validateExpression": {
+    "group": {
+      "operator": "AND",
+      "rules": [ { "field": "EndDate", "condition": ">", "data": "%StartDate%" } ]
+    }
+  },
+  "messages": [
+    { "value": true, "type": "Success", "text": "", "active": false },
+    { "value": false, "type": "Requirement", "text": "End date must be after the start date.", "active": true }
+  ]
 }
 ```
 
@@ -266,7 +272,7 @@ Override default Next/Previous with Navigate Actions for non-linear flows.
 Configure action elements to execute only when their containing Step becomes visible.
 
 **Best practice:**
-- Set `executionConditionFormula` on DataRaptor Extract and IP Actions
+- Set `show` conditions on DataRaptor Extract and IP Actions
 - Use Step-level activation triggers rather than OmniScript-level `onLoad` actions
 - Prefetch only the data needed for the first Step on initial load
 
@@ -279,16 +285,16 @@ Configure action elements to execute only when their containing Step becomes vis
 
 **Best practice:**
 - Use the `show` property for elements that may not be needed at all
-- Avoid rendering large data tables or Loop Blocks that the user may never see
+- Avoid rendering large data tables or repeat Blocks that the user may never see
 
-### Data Volume in Loop Blocks
+### Data Volume in repeat Blocks
 
-Loop Blocks render elements for each item in a data array. Large arrays degrade performance.
+Repeat Blocks (`Block` with `repeat: true`) render elements for each item in a data array. Large arrays degrade performance.
 
 **Best practice:**
-- Limit the data array to 50 items or fewer for interactive Loop Blocks
+- Limit the data array to 50 items or fewer for interactive repeat Blocks
 - Implement server-side pagination via Integration Procedures for large datasets
-- Use Type Ahead elements instead of Loop Blocks when the user needs to search/select from a large list
+- Use Type Ahead Block elements instead of repeat Blocks when the user needs to search/select from a large list
 
 ### Minimize Action Element Count
 
@@ -320,7 +326,7 @@ An OmniScript rendered inside another OmniScript as a reusable sub-process.
 - The user should not leave the parent context
 
 **Design rules:**
-- Pass required data from parent to child via `prefillJSON` mapping
+- The embedded child shares the parent's data JSON; make sure the keys the child expects are already set in the parent (e.g. with Set Values before the embed)
 - Configure the child to suppress its own navigation when embedded
 - Test data merge behavior: child data is added to the parent JSON under the child element's name
 - Avoid embedding more than 2 levels deep (parent -> child -> grandchild is the practical limit)
@@ -383,7 +389,7 @@ A Navigate Action redirects to a separate OmniScript in a new context.
 Every DataRaptor, Integration Procedure, and Remote Action element should handle failures.
 
 **Best practice:**
-- Set `showError: true` and provide a meaningful `errorMessage` in PropertySetConfig
+- Configure failure handling (`enableDefaultAbort`, `failureAbortMessage`, `errorMessage`) in PropertySetConfig, and/or check the response in a following Set Values / Set Errors
 - Use `responseJSONPath` to extract specific error details from the response
 - Implement a fallback Step that displays when critical actions fail
 - Log errors server-side via an IP Action for monitoring
@@ -423,10 +429,10 @@ Every DataRaptor, Integration Procedure, and Remote Action element should handle
 ### Integration Testing
 
 - [ ] Verify all DataRaptor Extract Actions return expected data
-- [ ] Verify all DataRaptor Load Actions create/update records correctly
+- [ ] Verify all DataRaptor Post Actions create/update records correctly
 - [ ] Verify all IP Actions execute and return expected responses
 - [ ] Test with integration failures (disable a DataRaptor, verify error handling)
-- [ ] Test with large data volumes in Loop Blocks
+- [ ] Test with large data volumes in repeat Blocks
 
 ### Cross-Browser and Device Testing
 
@@ -442,8 +448,8 @@ Every DataRaptor, Integration Procedure, and Remote Action element should handle
 ### Data Exposure
 
 - OmniScript data JSON is client-side. Sensitive data (SSNs, passwords, tokens) should be processed server-side in Integration Procedures and never stored in the client JSON.
-- Use `maskValue` on sensitive input elements to prevent shoulder-surfing.
-- Strip sensitive fields from the data JSON before the Submit Action using Set Values.
+- Use `mask` on sensitive input elements to prevent shoulder-surfing.
+- Strip sensitive fields from the data JSON before the final save action using Set Values.
 
 ### Access Control
 
@@ -453,7 +459,7 @@ Every DataRaptor, Integration Procedure, and Remote Action element should handle
 
 ### Input Sanitization
 
-- Validate all user input before passing to DataRaptor Load or IP Actions.
+- Validate all user input before passing to DataRaptor Post or IP Actions.
 - Use `pattern` (regex) on text inputs to restrict input format.
 - Server-side IPs should validate input independently; do not trust client-side validation alone.
 
@@ -463,9 +469,9 @@ Every DataRaptor, Integration Procedure, and Remote Action element should handle
 
 | Symptom | Cause | Resolution |
 |---------|-------|------------|
-| OmniScript not rendering | OmniScript is inactive or element hierarchy is broken | Check `IsActive=true` on the OmniProcess record; verify all Steps (Level=0) and child elements are correctly parented |
-| Data not prefilling | DataRaptor Extract output mapping mismatch or wrong JSON path | Verify DataRaptor Extract output key names exactly match element names; check JSON path syntax in outputMap |
-| IP action failing silently | Integration Procedure input shape mismatch or IP is inactive | Test the IP independently with the same inputMap payload; verify IP is active; check `showError: true` is set on the action element |
+| OmniScript not rendering | OmniScript is inactive or element hierarchy is broken | Check `IsActive=true` on the OmniProcess record; verify all Steps (Level=0) and child elements are correctly parented (`ParentElementId`) |
+| Data not prefilling | DataRaptor Extract output mapping mismatch or wrong JSON path | Verify DataRaptor Extract output key names exactly match element names; check `responseJSONPath` / `responseJSONNode` |
+| IP action failing silently | Integration Procedure input shape mismatch or IP is inactive | Test the IP independently with the same input payload (`extraPayload` / sent JSON); verify IP is active; check failure handling is configured on the action element |
 | Steps not showing | Conditional visibility expression on the Step evaluates incorrectly | Review the `show` expression on the Step element; log data JSON values to verify the controlling field is set |
 
 ---
@@ -475,6 +481,6 @@ Every DataRaptor, Integration Procedure, and Remote Action element should handle
 1. **Keep Steps focused**: 7-10 elements maximum per Step. Split complex processes into more Steps rather than cramming elements.
 2. **Prefill early, validate often**: Load data at the start of each Step and validate before allowing progression.
 3. **Error handling is not optional**: Every server call needs a failure path. Every required input needs validation.
-4. **Performance is a design constraint**: Lazy-load data, limit Loop Block iterations, and minimize server round-trips.
+4. **Performance is a design constraint**: Lazy-load data, limit repeat Block iterations, and minimize server round-trips.
 5. **Embed sparingly, link freely**: Embedding couples OmniScripts tightly. Reserve it for genuine sub-processes.
 6. **Security is server-side**: The client JSON is not a trust boundary. Sensitive logic belongs in Integration Procedures.

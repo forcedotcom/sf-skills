@@ -56,7 +56,7 @@ Data Mappers are the data access layer of the OmniStudio stack. They must be cre
 | **Extract vs Turbo Extract** | Extract uses standard SOQL with relationship queries. Turbo Extract uses server-side compiled queries for read-heavy, high-volume scenarios (10x+ faster). Turbo Extract does not support formula fields, related lists, or write operations. |
 | **Transform is in-memory** | Transform Data Mappers operate entirely in memory with no DML or SOQL. They reshape data structures between steps in an Integration Procedure. Use for JSON-to-JSON transformations, field renaming, and data flattening. |
 | **Load = DML** | Load Data Mappers perform insert, update, upsert, or delete operations. They require proper FLS checks and error handling. Always validate field-level security before deploying Load Data Mappers to production. |
-| **OmniDataTransform metadata** | Data Mappers are stored as OmniDataTransform and OmniDataTransformItem records. Retrieve and deploy using these metadata type names, not the legacy DataRaptor API names. |
+| **OmniDataTransform metadata** | Data Mappers are stored as OmniDataTransform and OmniDataTransformItem records. In source they are a single `OmniDataTransform` metadata file (`omniDataTransforms/<Name>_<VersionNumber>.rpt-meta.xml`) with the items nested as `<omniDataTransformItem>` children. Retrieve and deploy using the `OmniDataTransform` metadata type, not the legacy DataRaptor API names. |
 
 ---
 
@@ -72,8 +72,8 @@ Data Mappers are the data access layer of the OmniStudio stack. They must be cre
 - Data volume expectations (record counts, frequency)
 
 **Then**:
-1. Check existing Data Mappers: `Glob: **/OmniDataTransform*`
-2. Check existing OmniStudio metadata: `Glob: **/omnistudio/**`
+1. Check existing Data Mappers: `Glob: **/omniDataTransforms/*.rpt-meta.xml`
+2. Check existing OmniStudio metadata: `Glob: **/{omniScripts,omniIntegrationProcedures,omniUiCard}/**`
 3. Create a task list
 
 ---
@@ -150,9 +150,9 @@ Use the **platform-metadata-deploy** skill: "Deploy OmniDataTransform [Name] to 
 **Step 2: Deploy** (only if validation succeeds)
 Use the **platform-metadata-deploy** skill: "Proceed with actual deployment to [target-org]"
 
-**Post-Deploy**: Activate the Data Mapper in the target org. Verify it appears in OmniStudio Designer.
+**Post-Deploy**: Verify it appears in OmniStudio Designer and runs in Preview. Data Mappers have an `IsActive` field, but it does not gate runtime calls: Integration Procedures, OmniScripts and FlexCards call a Data Mapper by `Name` whether or not `IsActive` is set (in source it is commonly `<active>false</active>`).
 
-**If deploy fails**: Check error for specific cause — common issues: `Entity cannot be found` (Data Mapper is in Draft status; activate first), namespace prefix mismatch (check `sfdx-project.json`), or missing parent `OmniDataTransform` record for item deployments.
+**If deploy fails**: Check error for specific cause — common issues: namespace prefix mismatch (check `sfdx-project.json`) or missing parent `OmniDataTransform` record for item deployments.
 
 **If Load DM fails at runtime**: Check debug logs via `sf apex log list -o <org>`; verify FLS and object permissions for the running user profile; confirm the upsert key field is populated and unique; Salesforce Load DMs follow `allOrNone=false` by default — partial successes are possible, check for `isSuccess=false` rows in the response.
 
@@ -202,13 +202,13 @@ sf data query -q "SELECT Id,Name,InputObjectName,OutputObjectName,LookupObjectNa
 ### Retrieve Data Mapper Metadata
 
 ```bash
-sf project retrieve start -m OmniDataTransform:<Name> -o <org>
+sf project retrieve start -m OmniDataTransform:<Name>_<VersionNumber> -o <org>
 ```
 
 ### Deploy Data Mapper Metadata
 
 ```bash
-sf project deploy start -m OmniDataTransform:<Name> -o <org>
+sf project deploy start -m OmniDataTransform:<Name>_<VersionNumber> -o <org>
 ```
 
 ---
@@ -252,7 +252,7 @@ Deliverables produced by this skill:
 | Namespace-prefixed fields | Include namespace prefix in field paths (e.g., `ns__Field__c`); verify prefix matches target org |
 | Multi-currency orgs | Map CurrencyIsoCode explicitly; do not rely on default currency assumption |
 | RecordType-dependent mappings | Filter by RecordType in Extract; set RecordTypeId in Load; document which RecordTypes are supported |
-| Draft Data Mapper not retrievable | `sf project retrieve start -m OmniDataTransform:<Name>` only works for active DMs; activate before retrieving |
+| Metadata member name | The `OmniDataTransform` fullName includes the version: `<Name>_<VersionNumber>` (e.g. `DR_Extract_Account_Details_1`) |
 | Foreign key field name wrong | The parent lookup on `OmniDataTransformItem` is `OmniDataTransformationId` (full word "Transformation"), not `OmniDataTransformId` |
 
 ---
@@ -260,10 +260,10 @@ Deliverables produced by this skill:
 ## Notes
 
 - **Metadata Type**: OmniDataTransform (not DataRaptor — legacy name deprecated)
-- **API Version**: Requires OmniStudio managed package or Industries Cloud
+- **API Version**: Requires OmniStudio (standard objects) or Industries Cloud
 - **Scoring**: Block deployment if score < 67; read `assets/completion-summary-template.md` for score format
 - **Turbo Extract Limitations**: No formula fields, no related lists, no aggregate queries, no polymorphic fields
-- **Activation**: Data Mappers must be activated after deployment to be callable from Integration Procedures (see Gotchas for draft retrieval behavior)
+- **Activation**: `IsActive` on `OmniDataTransform` does not gate runtime calls; callers reference the Data Mapper by `Name`
 - **Creating via Data API**: Use `sf api request rest --method POST --body @file.json` to create OmniDataTransform and OmniDataTransformItem records. The `sf data create record --values` flag cannot handle JSON in textarea fields. Write the JSON body to a temp file first.
 
 ---
@@ -279,5 +279,6 @@ Deliverables produced by this skill:
 | `assets/completion-summary-template.md` | Phase 3 & 5 — scoring output format and completion summary template |
 | `references/best-practices.md` | Phase 3 Guardrails — detailed patterns for field mapping, query optimization, null handling, and performance |
 | `references/naming-conventions.md` | Phase 2 Design — full naming rules for all Data Mapper types and field mapping conventions |
+| `references/formula-functions.md` | Phase 2-3 — Read before adding Data Mapper formulas; lists supported Data Mapper / IP functions and gotchas (e.g. `SORTBY` is Data Mapper-only, `LISTSIZE` of an empty array is 1) |
 
 ---
