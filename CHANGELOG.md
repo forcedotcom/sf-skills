@@ -1,3 +1,14 @@
+# [1.69.0](https://github.com/forcedotcom/sf-skills/compare/1.68.0...1.69.0) (2026-11-06)
+
+
+### Features
+
+* Move plugin gate suites to plugins/tests/ on main @W-24757103@ ([face44b](https://github.com/forcedotcom/sf-skills/commit/face44b6bd3f02210d4d542106de9aa50f20d7aa))
+* Plugins Promotion: education-cloud 0.2.0 and 10 more @W-24728242@ ([a8a18ce](https://github.com/forcedotcom/sf-skills/commit/a8a18ce1e4ba12e69b4073eab98ce31bfbd8271e))
+* Release 433 skills (32 new, 397 updated, 4 removed) - sf-skills or headless360Mcp public @W-24799694@ ([4e57392](https://github.com/forcedotcom/sf-skills/commit/4e5739246583d9c941a188e8c3eea5643e2849cb))
+
+
+
 # [1.68.0](https://github.com/forcedotcom/sf-skills/compare/1.67.0...1.68.0) (2026-10-30)
 
 
