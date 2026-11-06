@@ -24,11 +24,6 @@ Use `marketing-message-test` when the user wants to:
 - render content-only with no recipient (**unpersonalized preview**)
 - send a **test message** to their own address / phone / individual id
 
-Delegate elsewhere when the user is:
-- building Data Cloud segments or calculated insights → [data360-segment](../data360-segment/SKILL.md)
-- building DMOs, mappings, or identity resolution → [data360-harmonize](../data360-harmonize/SKILL.md)
-- activating a segment downstream → [data360-activate](../data360-activate/SKILL.md)
-
 ## Required Context to Gather First
 
 - **`contentKey`** — required, irreducible. The caller must supply it; it is not derivable.

@@ -656,6 +656,5 @@ connectedCallback() {
 | Topic | Resource |
 |-------|----------|
 | Platform Event definition | [integration-connectivity-generate/references/platform-events-guide.md](../../integration-connectivity-generate/references/platform-events-guide.md) |
-| Publishing from Apex | [sf-apex/references/best-practices.md](../../sf-apex/references/best-practices.md) |
+| Publishing from Apex | [integration-connectivity-generate/references/platform-events-guide.md#from-apex](../../integration-connectivity-generate/references/platform-events-guide.md#from-apex) |
 | State management | [state-management.md](state-management.md) |
-| Agentforce Models API | [agentforce-generate/references/models-api.md](../../agentforce-generate/references/models-api.md) |

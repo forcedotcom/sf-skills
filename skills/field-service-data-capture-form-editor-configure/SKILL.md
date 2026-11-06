@@ -48,13 +48,13 @@ The Tooling `Flow` sObject exposes the flow definition as a JSON `Metadata` fiel
 
    Edit the **latest** version (`LatestVersionId`) so the patch builds on the newest draft, not a stale active version. If `LatestVersionId` is null, fall back to `ActiveVersionId`.
 
-2. **Read the Metadata blob.** Dispatch `GET /services/data/vXX.0/tooling/sobjects/Flow/<versionId>` and take the `Metadata` object from the response. This JSON is the flow — screens, choices, decisions, variables, and the post-screen chain. See [../fs-data-capture-form-deployer/reference/flow-metadata-json.md](../fs-data-capture-form-deployer/reference/flow-metadata-json.md) for the shape.
+2. **Read the Metadata blob.** Dispatch `GET /services/data/vXX.0/tooling/sobjects/Flow/<versionId>` and take the `Metadata` object from the response. This JSON is the flow — screens, choices, decisions, variables, and the post-screen chain. See [../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md](../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md) for the shape.
 
 If the FlowDefinition query returns zero rows, the API name is wrong or the user is pointed at the wrong org. Confirm with the user before retrying. List the candidate flows in the org if useful — dispatch `GET /services/data/vXX.0/tooling/query` with `SELECT DeveloperName FROM FlowDefinition ORDER BY DeveloperName`.
 
 ### 3. Read the retrieved Metadata JSON and the rule sheet
 
-Before patching, **read** the retrieved `Metadata` JSON to understand the current structure, then read [fs-data-capture-reference/SKILL.md](../fs-data-capture-reference/SKILL.md) for the platform's hard constraints. The constraints are identical whether the flow is expressed as XML or JSON — a repeated XML element is a JSON array, so "grouping" becomes "the array" (see the JSON↔XML mapping rule in [../fs-data-capture-form-deployer/reference/flow-metadata-json.md](../fs-data-capture-form-deployer/reference/flow-metadata-json.md)). Pay particular attention to:
+Before patching, **read** the retrieved `Metadata` JSON to understand the current structure, then read [field-service-data-capture-reference-configure/SKILL.md](../field-service-data-capture-reference-configure/SKILL.md) for the platform's hard constraints. The constraints are identical whether the flow is expressed as XML or JSON — a repeated XML element is a JSON array, so "grouping" becomes "the array" (see the JSON↔XML mapping rule in [../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md](../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md)). Pay particular attention to:
 
 - **Element arrays**: `screens`, `choices`, `decisions`, `recordLookups`, `recordCreates`, `recordUpdates`, `loops`, `assignments`, `variables` are each a single JSON array. Add a new element by appending to the right array — never introduce a duplicate top-level key.
 - **CUD ordering**: no record-lookup or screen after any CUD (recordCreate/recordUpdate/recordDelete) in the connector chain. No decision between sequential CUDs.
@@ -63,7 +63,7 @@ Before patching, **read** the retrieved `Metadata` JSON to understand the curren
 - **Required-field behind visibility-rule** anti-pattern (see `fs-data-capture-reference` SKILL.md).
 - **`isLlmTargetable`**: carried as a `{ "stringValue": "true" }`-style wrapper, not a raw JSON boolean — match whatever the retrieved flow uses.
 
-The prohibited-patterns table at the bottom of [fs-data-capture-reference/SKILL.md](../fs-data-capture-reference/SKILL.md) is the fastest reference for "what would break this patch".
+The prohibited-patterns table at the bottom of [field-service-data-capture-reference-configure/SKILL.md](../field-service-data-capture-reference-configure/SKILL.md) is the fastest reference for "what would break this patch".
 
 ### 4. Plan the patch and confirm with the user
 
@@ -89,7 +89,7 @@ Edit the in-memory `Metadata` JSON object retrieved in step 2. Some specific gui
 - **Booleans and numbers stay JSON scalars.** `"isRequired": true`, `"locationX": 0` — not strings. Typed value wrappers keep their key (`{ "stringValue": "X" }`, `{ "booleanValue": true }`, `{ "elementReference": "Foo" }`).
 - **Preserve `locationX` / `locationY`** for existing elements. For new elements set both to `0` — Flow Builder re-layouts on open.
 - **If the change touches a Repeater, preserve the existing `.AllItems` / `.AddedItems` accessor in any loops** — switching accessors will break runtime behavior.
-- **If you add a new field, copy the shape from a sibling field** in the same flow (label inputParameter, `inputsOnNextNavToAssocScrn`, `storeOutputAutomatically`, `styleProperties`, `isRequired`). Don't compose from memory — the rules at [fs-data-capture-reference/SKILL.md](../fs-data-capture-reference/SKILL.md) show what's required per component, but the deployed flow already has working examples.
+- **If you add a new field, copy the shape from a sibling field** in the same flow (label inputParameter, `inputsOnNextNavToAssocScrn`, `storeOutputAutomatically`, `styleProperties`, `isRequired`). Don't compose from memory — the rules at [field-service-data-capture-reference-configure/SKILL.md](../field-service-data-capture-reference-configure/SKILL.md) show what's required per component, but the deployed flow already has working examples.
 - **If the change requires a new `choices` entry**, dedupe — check whether a choice with the same `value` already exists in the `choices` array.
 - **Never emit a `required` inputParameter** on a screen component — some `dc*` components (`dcName`, `dcSignature`) reject it. Carry requiredness via the field's `isRequired` key only.
 
@@ -113,7 +113,7 @@ On success:
 - Remind the user the active version hasn't changed yet — they need to activate the new draft in Flow Builder.
 
 On failure (the `PATCH` returned a 400 — read the error from the response body's `message`):
-- Cross-reference the prohibited-patterns table at [fs-data-capture-reference/SKILL.md](../fs-data-capture-reference/SKILL.md). Common diagnoses for edits: element-array grouping violation, CUD ordering, `Element X doesn't exist` (typo'd reference), `extension not found` (wrong component name), `'Range' is not a valid value` (slider not supported), `We can't find this input attribute: 'required'` (drop the `required` inputParameter — use `isRequired`).
+- Cross-reference the prohibited-patterns table at [field-service-data-capture-reference-configure/SKILL.md](../field-service-data-capture-reference-configure/SKILL.md). Common diagnoses for edits: element-array grouping violation, CUD ordering, `Element X doesn't exist` (typo'd reference), `extension not found` (wrong component name), `'Range' is not a valid value` (slider not supported), `We can't find this input attribute: 'required'` (drop the `required` inputParameter — use `isRequired`).
 - If the error is about an element you didn't touch, the retrieved flow might have been in a broken state already. Re-read the current version's Metadata and compare against the active version (`GET /tooling/sobjects/Flow/<ActiveVersionId>`).
 - Don't loop more than twice without showing the user.
 
@@ -127,8 +127,8 @@ On failure (the `PATCH` returned a 400 — read the error from the response body
 ## Related skills
 
 - **`fs-data-capture-reference`** (library) — read this *before* every edit. Source of truth for valid flow patterns, prohibited patterns + exact deploy errors, visual polish HTML, supporting CustomObject/PermissionSet/CustomTab deploy.
-- **`fs-data-capture-form-deployer`** — creates flows via the same Tooling `Flow` JSON round-trip this skill uses to patch them. Its [reference/flow-metadata-json.md](../fs-data-capture-form-deployer/reference/flow-metadata-json.md) is the authoritative `Metadata` shape for both skills.
+- **`fs-data-capture-form-deployer`** — creates flows via the same Tooling `Flow` JSON round-trip this skill uses to patch them. Its [references/flow-metadata-json.md](../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md) is the authoritative `Metadata` shape for both skills.
 
 ## Files in this skill
 
-This skill has **no executable scripts**. The auth probe, the flow retrieve (`GET /tooling/sobjects/Flow/{id}`), and the redeploy (`PATCH /tooling/sobjects/Flow/{id}`) are all single REST calls dispatched through the Codey runtime. The JSON patch is authored by the agent inline against [../fs-data-capture-form-deployer/reference/flow-metadata-json.md](../fs-data-capture-form-deployer/reference/flow-metadata-json.md).
+This skill has **no executable scripts**. The auth probe, the flow retrieve (`GET /tooling/sobjects/Flow/{id}`), and the redeploy (`PATCH /tooling/sobjects/Flow/{id}`) are all single REST calls dispatched through the Codey runtime. The JSON patch is authored by the agent inline against [../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md](../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md).
