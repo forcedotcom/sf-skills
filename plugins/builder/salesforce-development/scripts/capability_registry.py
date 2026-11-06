@@ -43,7 +43,7 @@ TREE_SCAN_MAX_TOTAL_BYTES = 64 * 1024 * 1024
 # (both gitignored at the repo root) that would otherwise make a tree hash
 # depend on unrelated local tool invocations (e.g. running the Python test
 # suite populates ``__pycache__``, and the journey/phase-history tests write
-# a relative ``.sf/`` runtime dir under ``scripts/test/``).
+# a relative ``.sf/`` runtime dir under the cwd the gate suites run from).
 BUILD_ARTIFACT_DIR_NAMES = frozenset({"__pycache__", ".sf"})
 TREE_SCAN_CHUNK_BYTES = 1024 * 1024
 TREE_SCAN_DIR_FD_SUPPORTED = (

@@ -191,7 +191,9 @@ Two properties are load-bearing and easy to erode by accident during future edit
   all-projects value unchanged. `on` without `--project` clears only the all-projects value and
   keeps project values (the output notes when this project still has its own). `status` prints the
   winning tier as `Source` (your saved preference for this project / for all projects, env var,
-  `plugin default (userConfig)`, or `built-in default`) and the `Project` key. The file is capped at
+  `plugin default (userConfig)`, or `built-in default`) and the `Project` key.
+  Known limitation: Codex `resume` replays the cached startup surface, so a change made after the
+  session started shows on the next fresh Codex session. The file is capped at
   64 KiB, and an empty document deletes it. Updates hold a persistent OS lock across the
   read/modify/write operation and refuse to replace or delete an unreadable document. A save
   exceeding the cap reports capacity explicitly and leaves the file unchanged. The explicit
@@ -219,6 +221,12 @@ Two properties are load-bearing and easy to erode by accident during future edit
   fail-open on anything malformed, falling through to the next tier — matching this file's existing
   `except Exception: return []` posture — while the write-time `plugin-match-config set` command
   fails loud on an invalid value.
+  - Session notice: when the resolved value is not `standard`, the SessionStart banner (Claude Code
+    and Codex, inside a project only) shows a muted two-line notice under the plugin summary: the
+    level with its threshold, the same `Source` label `status` prints, and how to reset it. An
+    explicit `standard` from any source stays silent; Claude Code `plain` shows the first line only
+    (Codex `plain` shows both) and `off` shows nothing. The notice is visible-only and never enters
+    model context.
 - **Successful command-owned preference mutations emit one bounded telemetry event.** After (and
   only after) `/salesforce-development:plugin-recommendations` successfully writes or clears the
   saved override, it emits `plugin_recommendation_configured` with only a closed action/level pair:

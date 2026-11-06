@@ -56,6 +56,15 @@ In Codex, `plugin-recommendations` `set`, `on`, `off`, and `prune` write `~/.sf`
 workspace sandbox, so the Codex sandbox may block the write. If it does, the command asks you to
 re-run it with escalation, and Codex asks you to approve that run. `status` only reads.
 
+When the setting is not `standard`, session start shows it with its source and how to reset
+it. A resumed Codex session shows the notice as it was when the session started; start a new
+session to see a change.
+
+For the `plugin default (userConfig)` source, the hint
+`/salesforce-development:plugin-recommendations set standard` saves an all-projects preference. That
+saved preference then takes precedence over later changes to the userConfig default, and the banner
+reports it as "your saved preference for all projects".
+
 The plugin treats a session as Codex when `SF_AGENT_CLIENT=codex` is set. Otherwise it infers the
 host: Codex session markers (`CODEX_THREAD_ID`, `CODEX_SESSION_ID`, or the plugin installed under
 Codex's plugin cache) mean Codex, unless Claude markers are also present (then the host is

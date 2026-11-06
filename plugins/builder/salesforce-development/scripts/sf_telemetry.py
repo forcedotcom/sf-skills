@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import json
 import locale as _locale_mod
+import math
 import os
 import platform
 import re
@@ -2146,6 +2147,35 @@ def cmd_consent(argv: list[str]) -> int:
 # like the SF CLI's own detached uploader. The Python side owns the mapping (so it
 # is unit-testable offline); the Node side is a thin transmitter.
 
+def _valid_duration_ms(ms) -> bool:
+    """True for a finite, positive, non-bool int/float. 0 is the missing-start-marker
+    sentinel, so it is not a valid duration."""
+    if isinstance(ms, bool) or not isinstance(ms, (int, float)):
+        return False
+    try:
+        return math.isfinite(ms) and ms > 0
+    except OverflowError:  # huge int that cannot convert to float
+        return False
+
+
+def _duration_bucket(ms) -> str:
+    """Map a session duration in ms to a fixed coarse-range string (bounded
+    cardinality for the PDP contextValue). Invalid input maps to "unknown"."""
+    if not _valid_duration_ms(ms):
+        return "unknown"
+    if ms < 60_000:
+        return "lt_1m"
+    if ms < 300_000:
+        return "1m_5m"
+    if ms < 900_000:
+        return "5m_15m"
+    if ms < 3_600_000:
+        return "15m_60m"
+    if ms < 14_400_000:
+        return "1h_4h"
+    return "gt_4h"
+
+
 def _to_pdp_event(record: dict, org_bucket: Optional[str] = None) -> Optional[dict]:
     """Project one buffered {envelope..., payload} record onto an O11y PDP event.
 
@@ -2184,7 +2214,8 @@ def _to_pdp_event(record: dict, org_bucket: Optional[str] = None) -> Optional[di
         vol = p.get("event_count")
         return {**base, "eventName": "session.ended", "componentId": "session",
                 "eventVolume": vol if isinstance(vol, (int, float)) else 0,
-                "contextName": "duration_ms", "contextValue": str(p.get("duration_ms", 0))}
+                "contextName": "duration_bucket",
+                "contextValue": _duration_bucket(p.get("duration_ms"))}
     if event == "command_invoked":
         # Only the plugin's own bins are captured now, so componentId is
         # binary(.subcommand) — e.g. `sf-context.status-org` — never a parsed CLI path.
@@ -2365,6 +2396,10 @@ def _to_a4d_event(record: dict, org_bucket: Optional[str] = None,
     }
     if rec.get("event") == "session_start":
         attributes["is_first_run"] = "true" if p.get("is_first_run") else "false"
+    if rec.get("event") == "session_end" and _valid_duration_ms(p.get("duration_ms")):
+        # Raw duration rides UIP ONLY (PDP carries just the coarse duration_bucket).
+        # Taken from the payload, never derived from the PDP contextValue.
+        attributes["duration_ms"] = str(p["duration_ms"])
     if rec.get("event") == "command_invoked":
         attributes["commandSurface"] = _command_surface(
             p.get("binary"), p.get("subcommand"))

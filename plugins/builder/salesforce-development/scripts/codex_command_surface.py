@@ -31,7 +31,8 @@ def startup_surface(root: Path) -> str:
     org_group = [[('org: ', 'body'), (sf_context._clip(rest, 73), 'muted')]]
     return sf_context.render_degraded_banner(
         org_group, project=project, stats=stats, git_line='git status unprobed',
-        state=state, notice_lines=[], candidate=candidate)
+        state=state, notice_lines=[], candidate=candidate,
+        sensitivity_lines=sf_context._plugin_match_sensitivity_notice_lines())
 
 
 def main():

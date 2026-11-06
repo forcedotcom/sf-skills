@@ -7,6 +7,26 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.7.0] — 2026-11-06
+
+### Added
+
+- Session start now shows when plugin recommendations are not at the default `standard`
+  sensitivity, or are off: the level and threshold, where it is set, and how to reset it. It
+  appears in Claude Code and Codex inside a Salesforce project, as one line in Claude Code `plain` mode
+  (Codex shows both lines), and not at all in `off` mode.
+- **Packaging is now a recommended companion plugin.** The `dx-packaging` plugin is available for
+  recommendation as of 2.7.0. Plugin recommendations can suggest it, and
+  `/salesforce-development:plugin-install` can install it, when you work on managed-package
+  post-install setup, subscriber push upgrades, or the 2GP cutover for a converted 1GP managed
+  package.
+
+### Changed
+
+- `dx-project-create` drops the `salesforce-metadata-experts` MCP server reference and adds the Vue
+  template and the optional `sf template generate project` flags.
+- Updated skills: `platform-custom-field-generate`, `platform-custom-metadata-type-generate`, `platform-custom-setting-generate`, `platform-flexipage-generate`, `platform-report-generate`.
+
 ## [2.6.0] — 2026-10-30
 
 ### Added

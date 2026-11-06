@@ -2070,6 +2070,7 @@ def render_session_banner(
     show_logo: bool = True,
     show_invitation: bool = True,
     candidate: Optional[object] = None,
+    sensitivity_lines: Optional[list] = None,
 ) -> str:
     """The ONE unified banner renderer — the same fixed slots, in the same order,
     on every SessionStart-family surface. Only the DATA differs by entry point; the
@@ -2079,7 +2080,8 @@ def render_session_banner(
       1. logo lockup (`render_banner_block`) — shown when `show_logo`; the caller
          owns logo-once, so it passes show_logo=False on a repaint.
       2. plugin summary (`render_plugin_summary`) — installed & available counts,
-         the one printing of those facts.
+         the one printing of those facts. Followed, when given, by `sensitivity_lines`
+         (the non-default plugin-recommendation sensitivity notice), muted.
       3+4. org band + project band (`org_group`/`project_group`) — the telemetry
          notice, when due, leads this rule-region; the three share single dividers.
       5. journey nudge (`_render_nudge_inline`, include_context=False) — one
@@ -2110,6 +2112,9 @@ def render_session_banner(
     if show_logo:
         parts += [render_banner_block(color=color, facts=facts), ""]
     summary = render_plugin_summary(color, facts=facts)
+    if sensitivity_lines:
+        summary = summary + [_paint_line([(_clip(line, 78), "muted")], color=color)
+                             for line in sensitivity_lines]
     if summary:
         parts += summary + [""]
     # The telemetry notice (when due) leads the rule-region, then org and project —
@@ -2186,7 +2191,8 @@ def render_banner_message(org: dict, project: dict, stats: dict, git_line: str, 
 def render_degraded_banner(org_group: list, project: Optional[dict] = None,
                            stats: Optional[dict] = None, git_line: str = "",
                            state: Optional[dict] = None, notice_lines: Optional[list] = None,
-                           candidate: Optional[object] = None) -> str:
+                           candidate: Optional[object] = None,
+                           sensitivity_lines: Optional[list] = None) -> str:
     """The in-project SessionStart surface for non-probed states (no default org, or
     a target configured but not probed at startup). SessionStart never runs a live org
     subprocess, so this — not `render_banner_message` — is what a normal project startup
@@ -2206,7 +2212,9 @@ def render_degraded_banner(org_group: list, project: Optional[dict] = None,
     here adds no new read, network or otherwise.
 
     `notice_lines` (optional) is the one-time telemetry notice's plain text; when given
-    it leads the rule-region, above the org line. Passed on the visible channel only."""
+    it leads the rule-region, above the org line. Passed on the visible channel only.
+    `sensitivity_lines` (optional) is the non-default plugin-match sensitivity notice; it
+    rides under the plugin summary, muted."""
     # The splash (SessionStart + scaffold) shows the project header only — the
     # code-inventory rows and git line are dropped mid-dev-flow (owner direction);
     # /status keeps the full inventory via its own show_stats=True call.
@@ -2220,6 +2228,7 @@ def render_degraded_banner(org_group: list, project: Optional[dict] = None,
         state=state,
         notice_lines=notice_lines,
         candidate=candidate,
+        sensitivity_lines=sensitivity_lines,
     )
 
 
@@ -4640,6 +4649,7 @@ def cmd_detect() -> int:
     # the banner, so the notice must not burn its fire-once flag there — it will
     # show on the next full-banner session instead.
     notice_lines = _telemetry_notice_lines() if stats is not None else []
+    sensitivity_lines = _plugin_match_sensitivity_notice_lines() if ui_mode != "off" else []
 
     if not target:
         state = _derive_journey_state(root, has_project=True, target="",
@@ -4659,7 +4669,8 @@ def cmd_detect() -> int:
                       (_clip(_host_text("none set — /salesforce-development:login"), 73), "muted")]]
         msg = render_degraded_banner(
             org_group, project=project, stats=stats, git_line=git_line, state=state,
-            notice_lines=notice_lines, candidate=candidate) if stats is not None else ""
+            notice_lines=notice_lines, candidate=candidate,
+            sensitivity_lines=sensitivity_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org="", displayed_org="",
             project_present=True, candidate=candidate,
@@ -4683,7 +4694,8 @@ def cmd_detect() -> int:
         org_group = [[("org: ", "body"), (_clip(rest, 73), "muted")]]
         msg = render_degraded_banner(
             org_group, project=project, stats=stats, git_line=git_line, state=state,
-            notice_lines=notice_lines, candidate=candidate) if stats is not None else ""
+            notice_lines=notice_lines, candidate=candidate,
+            sensitivity_lines=sensitivity_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org=target,
             displayed_org=target, project_present=True, candidate=candidate,
@@ -4693,6 +4705,8 @@ def cmd_detect() -> int:
         msg, state, project_name=project.get("name") or project.get("path") or "project",
         candidate=candidate,
     )
+    if ui_mode == "plain" and visible is not None and sensitivity_lines:
+        visible = f"{visible}\n{_clip_cells(sensitivity_lines[0], 80)}"
     # Slot 7 — the 🧩 plugin recommendation — folds into this single emit, collapsing
     # what used to be a second SessionStart hook (session_plugin_hint.py) with its own
     # "SessionStart:… says:" wrapper. It rides ONLY the full banner: plain/off
@@ -10819,6 +10833,10 @@ def _plugin_match_write_failure(what: str, fallback: str = "") -> str:
 
 _PLUGIN_MATCH_SOURCE_PROJECT = "your saved preference for this project"
 _PLUGIN_MATCH_SOURCE_USER = "your saved preference for all projects"
+_PLUGIN_MATCH_SOURCE_DISABLE = "SF_DISABLE_PLUGIN_MATCH"
+_PLUGIN_MATCH_SOURCE_ENV = "SF_PLUGIN_MATCH_SENSITIVITY"
+_PLUGIN_MATCH_SOURCE_USERCONFIG = "plugin default (userConfig)"
+_PLUGIN_MATCH_SOURCE_DEFAULT = "built-in default"
 
 
 def _plugin_match_sensitivity_with_source() -> tuple:
@@ -10839,12 +10857,12 @@ def _plugin_match_sensitivity_with_source() -> tuple:
     path -- every hook invocation -- does no extra string-building work.
     """
     if os.environ.get("SF_DISABLE_PLUGIN_MATCH"):
-        return "off", "SF_DISABLE_PLUGIN_MATCH"
+        return "off", _PLUGIN_MATCH_SOURCE_DISABLE
     env_value = _parse_plugin_match_sensitivity(
         os.environ.get("SF_PLUGIN_MATCH_SENSITIVITY")
     )
     if env_value is not None:
-        return env_value, "SF_PLUGIN_MATCH_SENSITIVITY"
+        return env_value, _PLUGIN_MATCH_SOURCE_ENV
     config = _read_plugin_match_config()
     project_saved = _load_plugin_match_project_override(config=config)
     if project_saved is not None:
@@ -10857,13 +10875,62 @@ def _plugin_match_sensitivity_with_source() -> tuple:
             os.environ.get("CLAUDE_PLUGIN_OPTION_PLUGIN_MATCH_SENSITIVITY")
         )
         if option_value is not None:
-            return option_value, "plugin default (userConfig)"
-    return "standard", "built-in default"
+            return option_value, _PLUGIN_MATCH_SOURCE_USERCONFIG
+    return "standard", _PLUGIN_MATCH_SOURCE_DEFAULT
 
 
 def _plugin_match_sensitivity() -> object:
     """Resolve the effective sensitivity, discarding the source (hot path)."""
     return _plugin_match_sensitivity_with_source()[0]
+
+
+_PLUGIN_MATCH_RESET_HINTS = {
+    # source label -> (Claude hint, Codex hint)
+    _PLUGIN_MATCH_SOURCE_DISABLE: (
+        "unset SF_DISABLE_PLUGIN_MATCH in your launch environment",) * 2,
+    _PLUGIN_MATCH_SOURCE_ENV: (
+        "unset SF_PLUGIN_MATCH_SENSITIVITY in your launch environment",) * 2,
+    _PLUGIN_MATCH_SOURCE_PROJECT: (
+        "/salesforce-development:plugin-recommendations --project on",
+        "ask Codex to reset plugin recommendations for this project"),
+    _PLUGIN_MATCH_SOURCE_USER: (
+        "/salesforce-development:plugin-recommendations on",
+        "ask Codex to reset plugin recommendations for all projects"),
+    _PLUGIN_MATCH_SOURCE_USERCONFIG: (
+        "/salesforce-development:plugin-recommendations set standard",) * 2,
+}
+
+
+def _plugin_match_number_text(value: float) -> str:
+    text = f"{float(value):.2f}".rstrip("0")
+    return text + "0" if text.endswith(".") else text
+
+
+def _plugin_match_sensitivity_notice_lines() -> list:
+    """Two plain lines naming a non-default sensitivity and how to reset it, else [].
+
+    SessionStart only, visible channel only. Reads env + one local file through the
+    same resolver `plugin-match-config status` uses, so the source label is shared.
+    Never raises: any failure is "no notice"."""
+    try:
+        sensitivity, source = _plugin_match_sensitivity_with_source()
+        if sensitivity == "standard":
+            return []
+        if sensitivity == "off":
+            state = "off"
+        elif isinstance(sensitivity, str):
+            threshold = _resolve_plugin_match_threshold(sensitivity)
+            state = (f"{sensitivity} ({_plugin_match_number_text(threshold)})"
+                     if threshold is not None else sensitivity)
+        else:
+            state = f"custom ({_plugin_match_number_text(sensitivity)})"
+        lines = [f"Plugin recommendations: {state} — {source}"]
+        hints = _PLUGIN_MATCH_RESET_HINTS.get(source)
+        if hints:
+            lines.append("Reset: " + hints[1 if _plugin_client() == "codex" else 0])
+        return [_clip_cells(line, 78) for line in lines]
+    except Exception:
+        return []
 
 
 def _plugin_install_pending_path(session_id: str) -> Path:

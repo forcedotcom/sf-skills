@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "generatedFrom": {
     "marketplace": ".claude-plugin/marketplace.json",
-    "marketplaceSha256": "d59b75356c22a02858931b99e26144687885468fe9929c5195f0473cda0fe2e1"
+    "marketplaceSha256": "31ef0dc5a4127f5f622a01d6b380adbcb9a93da65bb2ca4b0dc88d3cb76398e7"
   },
   "plugins": [
     {
@@ -287,7 +287,7 @@
       "name": "dx-org-lifecycle",
       "source": "./plugins/builder/dx-org-lifecycle",
       "match": {
-        "description": "Administer Salesforce environments, Dev Hubs, and sandbox lifecycle: manage or inspect Dev Hub status and scratch allocation, configure and refresh sandboxes, run post-copy automation, provision trials, inspect expiration, assign permission sets, set the default target, and perform package post-install configuration. Use for environment setup and maintenance, especially Dev Hub administration, sandbox refresh, post-copy configuration, time-limited provisioning, access assignment, target selection, or managed-package setup.",
+        "description": "Administer Salesforce environments, Dev Hubs, and sandbox lifecycle: manage or inspect Dev Hub status and scratch allocation, configure and refresh sandboxes, run post-copy automation, provision trials, inspect expiration, assign permission sets, and set the default target. Use for environment setup and maintenance, especially Dev Hub administration, sandbox refresh, post-copy configuration, time-limited provisioning, access assignment, or target selection.",
         "keywords": [
           "salesforce environment lifecycle",
           "dev hub",
@@ -301,16 +301,14 @@
           "expiration check",
           "permission set assignment",
           "default target",
-          "target selection",
-          "package post install"
+          "target selection"
         ],
         "examplePrompts": [
           "inspect Dev Hub status and show my scratch allocation",
           "configure post-copy steps for my Salesforce sandbox refresh",
           "create a Salesforce trial environment for this demo",
           "switch my default Salesforce target",
-          "assign a Salesforce permission set to a user",
-          "run post-install configuration for this managed package"
+          "assign a Salesforce permission set to a user"
         ],
         "anchorTerms": [
           "sandbox",
@@ -319,9 +317,65 @@
           "environment",
           "permission",
           "default",
-          "target",
-          "package"
+          "target"
         ]
+      }
+    },
+    {
+      "name": "dx-packaging",
+      "source": "./plugins/builder/dx-packaging",
+      "match": {
+        "description": "Set up managed packages after installation, operate subscriber push upgrades, and finalize the 2GP cutover for converted 1GP managed packages: automate configuration after installation, plan and schedule controlled rollouts, monitor or abort package push jobs across subscriber fleets, and check eligibility and plan the 2GP cutover, which is finalized only after explicit confirmation.",
+        "keywords": [
+          "salesforce packaging",
+          "managed package",
+          "package post install",
+          "package setup",
+          "push upgrade",
+          "subscriber org",
+          "package rollout",
+          "2gp cutover",
+          "2gp",
+          "unlocked package"
+        ],
+        "examplePrompts": [
+          "finish setup for this managed package after installation",
+          "set package permissions and layouts after installing LMA",
+          "plan a batched push upgrade for my package subscribers",
+          "monitor this PackagePushRequest",
+          "abort a scheduled package push upgrade",
+          "finalize the 2GP cutover for my converted 1GP managed package",
+          "check whether my converted 1GP package is eligible for the 2GP cutover",
+          "plan the 2GP cutover for my converted managed package"
+        ],
+        "anchorTerms": [
+          "post",
+          "push",
+          "installing",
+          "lma",
+          "fma",
+          "packagepushrequest",
+          "packagesubscriber",
+          "2gp"
+        ],
+        "anchorCompanions": {
+          "post": [
+            "install"
+          ],
+          "push": [
+            "upgrade"
+          ],
+          "installing": [
+            "package"
+          ],
+          "2gp": [
+            "move",
+            "moves",
+            "moved",
+            "moving",
+            "cutover"
+          ]
+        }
       }
     },
     {
