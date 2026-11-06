@@ -17,12 +17,12 @@ The XML does not contain literal `<left>` or `<right>` elements. The operand typ
 | Right reference or literal | `policyRuleValueSet` |
 | Right record/domain value | `valueDomain` |
 | Right principal-derived value | `valuePrincipalPath` |
-| Clause polarity | `clause` inside the matching WHEN/UNLESS wrapper |
+| Clause polarity | `clause` is always `WHEN`, inside `whenPolicyRuleDefinitionClauseConjunction` |
 
 Every condition must be constructed in this order:
 
-1. Select the wrapper: `whenPolicyRuleDefinitionClauseConjunction` or `unlessPolicyRuleDefinitionClauseConjunction`.
-2. Set `<clause>` to `WHEN` or `UNLESS` to match the wrapper.
+1. Use the `whenPolicyRuleDefinitionClauseConjunction` wrapper. Never author `unlessPolicyRuleDefinitionClauseConjunction`: the Data Governance UI has no UNLESS section and drops it on save. Express "unless X" as a `WHEN` condition with the negated operator (`ASSIGNED_PERMISSIONS_PATH CONTAINS_NONE`, `TAG CONTAINS_NONE`, `RECORDFIELD NOT_EQUALS`); see `policy-shapes.md` "Deny unless".
+2. Set `<clause>` to `WHEN`.
 3. Select the left path. Most conditions use one of `resourcePath`, `principalPath`, or `contextPath`; a record-field-to-principal comparison uses both `resourcePath=RECORDFIELD` and a principal expression.
 4. Add a `resourceExpression` or `principalExpression` if the selected left operand requires an expression.
 5. Select the operator valid for that operand.

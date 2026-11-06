@@ -59,7 +59,7 @@ Use this when user provides Einstein Bot artifacts and asks to migrate/upgrade i
      - Flow metadata under `flows/` (when present)
      - Apex classes under `classes/` (when present)
      - any other local files referenced by bot artifacts that are needed for extraction/mapping fidelity
-   - In offline mode, do not limit ingestion to only two XML files if additional referenced artifacts are available locally.
+   - In offline mode, prioritize existing local implementation files: when Flow metadata, Apex classes, or other referenced artifacts are present in `--offline-dir`, use them as the primary source for action signatures and contracts. Fall back to the bot and botVersion XML mappings only for actions whose implementation files are not present locally.
 2. **Extract migration structure** — Read [Extraction Blueprint](extraction-blueprint.md) and derive:
    - bot capabilities
    - dialog graph
@@ -74,8 +74,7 @@ Use this when user provides Einstein Bot artifacts and asks to migrate/upgrade i
    - `<run_project_dir>/<AgentName>-open-questions.md`
    Use the same run-specific SFDX project directory created in the SF CLI setup step; do not write handoff artifacts to repository root.
    The Agent Spec markdown MUST use the same section names/order as
-   `skills/agentforce-generate/assets/agent-spec-template.md`, then append the
-   `## Migration Notes (Einstein Bot -> Agentforce)` appendix defined in [Handoff Output Format](handoff-output-format.md).
+   [agent-spec-template.md](../assets/_vendored/agent-spec-template.md) from the `agentforce-generate` skill.
 5. **Validate handoff quality** — Read [Quality Checklist](quality-checklist.md) and verify all required sections and mapping completeness before presenting output.
 6. **Resolve open questions loop (required)** — After generating artifacts, resolve all entries in `<run_project_dir>/<AgentName>-open-questions.md`. In interactive mode, guide the user through them one-by-one; when `--interactive=false`, auto-apply the recommended default for each entry without prompting. For each resolved item, immediately update:
    - `<run_project_dir>/<AgentName>-AgentSpec.md`
@@ -90,6 +89,23 @@ Use this when user provides Einstein Bot artifacts and asks to migrate/upgrade i
    - `<run_project_dir>/extraction-summary.json` as supporting context
    - `<run_project_dir>/<AgentName>-einstein-bot-handoff.json` and `<run_project_dir>/<AgentName>-open-questions.md`
    - `input_mode` (`online` or `offline`) explicit context
+   - as the final section of the prompt, a `## Hand-back and remaining orchestrator steps` section. It contains this hand-back instruction verbatim:
+     > This `/agentforce-generate` run is a sub-step of the `agentforce-bot-upgrade` orchestrator, not the end of the task. When generation finishes, do NOT write a final summary or end your turn. Write the outputs required by `agentforce-generate-output-contract.md`, then immediately return to `agentforce-bot-upgrade` and execute the remaining steps below in the same turn. The task is complete only after Step 5 has written `report.md`.
+
+     It is followed by a "Remaining orchestrator steps" checklist. Fill in this bot's concrete paths, org alias, and agent API name:
+     1. **Step 4 — Post-conversion enhancements.** Run the [Post-Conversion Enhancements Reference](post-conversion-enhancements-reference.md) workflow on the generated `.agent` file, editing it in place.
+     2. **Step 4 — Compile** (online mode only). Redeploy the bundle and run `sf agent validate authoring-bundle --api-name <AgentApiName> --target-org <org-alias> --json`.
+     3. **Step 4 — Commit** (online mode only, and only when compile succeeds). Run `sf agent publish authoring-bundle --api-name <AgentApiName> --target-org <org-alias> --json`.
+        - This commit is pre-authorized by the orchestrator. Do not ask for publish approval, and do not require live preview.
+        - Never activate.
+        - If publish fails, fix the cause and retry, or record the failure and continue.
+     4. **Step 4 — Publish audit** (online mode only). Append one record to `<orchestrator_working_dir>/publish-audit.jsonl` for every publish attempt, with actor, action, target, timestamp, and outcome. Never include tokens, session IDs, or credentials.
+     5. **Step 4 — Agent ID and version** (online mode only, after a successful commit). Query `BotDefinition` and `BotVersion` for the agent ID and the committed version number.
+     6. **Step 4 — Summary.** Prepare the color-coded per-agent summary as input to Step 5. Do not end the turn here.
+     7. **Step 5 — Report.** Write `<orchestrator_working_dir>/report.md` last. The run ends only after this file is written; then emit the final message.
+
+     For `input_mode=offline`, the checklist marks items 2–5 as skipped (no compile, commit, or audit) and keeps items 1, 6, and 7.
+   The output contract must end with the same hand-back reminder: capturing these outputs is not completion; the orchestrator continues with the remaining Step 4 and Step 5 checklist in the invocation prompt.
    For `input_mode=offline`, include these strict instructions in the prompt:
    - syntax/structural validation is still mandatory
    - skip only org-dependent CLI operations

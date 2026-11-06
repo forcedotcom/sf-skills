@@ -15,9 +15,13 @@ owns every user-facing gate. This file adds what is specific to this feature.
    changing it, and skip any already in the requested state.
 3. Confirm the exact change, write each chosen switch and read each back; mark the feature `Done` only
    when every read-back matches.
-4. If triage or Einstein assignment can't be read or changed, the org lacks that switch's license (*IT
-   Services: Agentforce Features for Employees* for triage, *IT Services: Einstein Features* for Einstein
-   assignment): say so, skip it, and carry on with the others.
+4. If the SOR's read or change of triage or Einstein assignment is refused, read and change that switch
+   through the `IncidentMgmt` SOR's preference steps instead (`getOrgPref_1`, `updateOrgPref_2`,
+   `verify-update-org-pref`) — the same org preferences, and some orgs refuse the SOR's path even when the
+   switch is licensed and on; this is the one exception to stopping on a refused call. Only if that path
+   fails too does the org lack that switch's license (*IT Services: Agentforce Features for Employees* for
+   triage, *IT Services: Einstein Features* for Einstein assignment): say so, skip it, and carry on with the
+   others.
 5. When turning on the chat and voice switch, ask whether the org already captures transcripts (an active
    messaging channel for chat, call transcription for voice); set one up only if the user asks, through the
    SOR's channel hand-offs. Offer the SOR's smoke test only after that switch reads on — it drafts from one

@@ -31,8 +31,15 @@ Paths below are shown relative to the bots root directory. For org-backed retrie
    - variables updated by the action (bot variables set from invocation outputs)
    - escalation actions from system messages:
      - if a dialog contains `conversationSystemMessage` of type `Transfer`, add an action entry with `action_type: "escalate"`
-     - determine escalation target type (`queue`, `flow`, `bot`, or `skill`) by reading `systemMessageMappings` under that `conversationSystemMessage` and resolving referenced variables against declarations in `<conversationVariables>`
-     - store both the resolved `target_type` and mapped target identifier/value on the action record
+     - resolve the escalation target (`target_type` is one of `queue`, `flow`, `bot`, or `skill`) from the `systemMessageMappings` under that `conversationSystemMessage`:
+       - **`systemMessageMappings` present:** for each mapped variable (`variableName`):
+         - **target type** — infer from the variable's `SObjectType` in its `<conversationVariables>` declaration (for example `FlowDefinition` -> `flow`, `Queue` -> `queue`). If `SObjectType` is absent or matches none of these, record it as an open question; do not guess.
+         - **target value/name** — infer from the variable/value assignments that write the mapped variable earlier in the conversation: `VariableOperation` `Set` steps whose `botVariableOperands` `targetName` is the mapped variable (use `sourceName` for a metadata reference such as `sourceType: FlowDefinition`, or `sourceValue` for a literal), and action output mappings (`invocationMappings` of type `Output`) that write it. When an action output writes the variable, the value is dynamic: record the action and output parameter instead of a fixed name. When different paths assign different values, record each value with the condition under which it is assigned. If no assignment is found, record it as an open question.
+       - **`systemMessageMappings` absent:** the transfer uses the bot's default routing. Read the `<defaultOutboundFlow>` entry in `bots/<BotName>/<BotName>.bot-meta.xml`. The target type is `flow` and the target name is that entry's value. If the bot has no `<defaultOutboundFlow>`, record the unresolved target as an open question.
+     - store the resolved `target_type`, the target identifier/value, the source of the resolution (`systemMessageMappings` variable + assignment step, or `defaultOutboundFlow`), and the condition guarding the transfer step on the action record
+   - end chat from system messages:
+     - if a dialog contains `conversationSystemMessage` of type `EndChat`, add an action entry with `action_type: "end_session"`
+     - this is the terminal step in the conversation and indicates that the conversation should be ended
    - persist this as `invoked_actions` on the dialog node and as action-level records in `action_inventory`
 5. While scanning each step, detect transition-producing step types:
    - `Navigation` with `<botNavigationLinks>`
@@ -166,8 +173,8 @@ Paths below are shown relative to the bots root directory. For org-backed retrie
 
 When input mode is offline (`.bot-meta.xml` + `.botVersion-meta.xml` provided, no org fetch):
 
-1. Generate action signatures from bot metadata mappings only (do not block on missing Apex/Flow source code).
-2. For each invocation mapping:
+1. Prioritize existing local implementation files. For each invoked action, if its Apex class (under `classes/`, using `@InvocableMethod` / `@InvocableVariable`), Flow (under `flows/`), or other referenced artifact is present in `--offline-dir`, generate the signature from that file.
+2. Fall back to bot metadata mappings only for actions whose implementation files are not present locally (do not block on missing Apex/Flow source code). For each such invocation mapping:
    - extract action parameter names from invocation input/output mapping keys
    - resolve mapped bot variable names from mapping values
    - infer parameter types from mapped variable declarations in `<conversationVariables>` / `<contextVariables>` when available

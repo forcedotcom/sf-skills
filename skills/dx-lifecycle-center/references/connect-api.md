@@ -15,7 +15,7 @@ Part of the DevOps Center Connect API (v67.0).
 | Method | Path | Body | Result |
 |---|---|---|---|
 | POST | `/connect/devops/environment` | `{envName, orgType, isDevEnv?, replaceEnvironmentId?}` | `{id, name, namedCredential, externalCredential, redirectUrl, orgType, isDevEnv}` |
-| PATCH | `/connect/devops/environment/{id}` | none | `{id, organizationId, orgUrl, status, message}` after the login. `name` and `namedCredential` are not returned; keep them from the POST |
+| PATCH | `/connect/devops/environment/{id}` | optional query `registerWorkspaceAlias=true` (connect only) | `{id, organizationId, orgUrl, status, message}` after the login. `name` and `namedCredential` are not returned; keep them from the POST |
 | GET | `/connect/devops/environment/{id}` | none | The environment, with a fresh `redirectUrl` pinned to the row's org URL: use it for the repair link |
 | DELETE | `/connect/devops/environment/{id}` | none | Removes the NC/EC and the row |
 
@@ -66,7 +66,36 @@ The POST is **idempotent**: existing NCs and ECs are reused. Errors inside steps
 
 Error wrapping: `DOCE_AUTHENTICATION_FAILED:<msg>` or `DOCE_AUTH_UNKNOWN_ERROR:<msg>` (500), and `INVALID_INPUT` (400).
 
+### Workspace alias registration (`registerWorkspaceAlias=true`)
+
+After the PATCH commits, Core resolves the running workspace (the local container when the local-workspace gate is open, else the user's remote workspace and its proxy token), gets a fresh access token and instance URL from the Named Credential, and posts them from a background thread:
+
+```text
+POST {workspaceUrl}/auth-service/v1/auths/
+{ "alias": "<envName>", "accessToken": "...", "instanceUrl": "...", "setDefault": false }
+```
+
+It retries up to 10 times on 502, 503, or 504 while the workspace boots and stops at once on any other error. Failures are logged and swallowed, so the PATCH response never shows them. The auth service validates the token against the org, stores the login in `~/.sfdx/<username>.json`, and maps the alias; an existing username just gets its token updated. To check from inside the workspace (never print the token):
+
+```bash
+sf alias list
+sf org list --json            # the environment name appears as an alias
+```
+
+Builder Central itself registers only the signed-in org, as `default`. It does not create aliases for DevOps environments, so this PATCH is the only way a connected environment gets one. A token that has expired shows as `Session expired or invalid` on `sf`: repeat the PATCH once to overwrite it.
+
+Two logins can go stale, and they are fixed differently:
+
+| Login | Held by | Stale shows as | Fix |
+|---|---|---|---|
+| Workspace alias token | The workspace auth-service (`~/.sfdx`) | `sf` says `Session expired or invalid`; `resolve-environment.sh --check-sessions` reports `needs-refresh` | Repeat the PATCH once (no browser) |
+| DX Inspector credential | The Named Credential and External Credential in the source org | Only at deploy time (`Bad_OAuth_Token`, `TARGET_ORG_SESSION_EXPIRED`), or the PATCH itself fails on auth | Repair path: sign-in button, login, PATCH |
+
+The PATCH reads its token from the Named Credential, so a stale DX Inspector credential can never be fixed by repeating it; that is why a PATCH that fails on auth moves to the repair path.
+
 ### PATCH: finalize after the OAuth login
+
+`/connect/devops/environment/{id}` also accepts the optional query `registerWorkspaceAlias=true`. When set, after the steps below Core registers the environment name as an org alias in the caller's running Builder Central workspace (same auth store as `default-org`). It is best effort and never changes the response or fails the PATCH.
 
 Server behavior (`updateNamedCredentialsForDevops`):
 
@@ -88,18 +117,18 @@ Use the standard Named Credentials Connect API in the dev org:
 ```bash
 # External credential and its per-user principal status
 sf api request rest "/services/data/v<ver>/named-credentials/external-credentials/<name>" \
-  --target-org <dev-org-alias>
+  --target-org "<dev-org-alias>"
 # → principals[].principalType == "PerUserPrincipal", principals[].authenticationStatus == "Configured" | "NotConfigured"
 
 # Named credential callout URL
 sf api request rest "/services/data/v<ver>/named-credentials/named-credential-setup/<name>" \
-  --target-org <dev-org-alias>
+  --target-org "<dev-org-alias>"
 # → calloutUrl  (placeholder login host before PATCH, org My Domain after); calloutStatus "Enabled"
 
 # List named credentials (diagnostics only; deploy targets come from DevopsEnvironment)
 sf data query --use-tooling-api \
   --query "SELECT DeveloperName FROM NamedCredential ORDER BY CreatedDate DESC" \
-  --target-org <dev-org-alias> --json
+  --target-org "<dev-org-alias>" --json
 ```
 
 Tooling `NamedCredential.Endpoint` is `null` for these `SecuredEndpoint` credentials, so always read `calloutUrl` from the `named-credential-setup` GET. DevOps-created target credentials match `<letters>_<millis>`. Never build the deploy-target list from this query.

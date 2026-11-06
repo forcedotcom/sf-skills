@@ -26,7 +26,7 @@ Source: `conjunctionExpressionSteelthread`
 </unlessPolicyRuleDefinitionClauseConjunction>
 ```
 
-> Note: `<unlessPolicyRuleDefinitionClauseConjunction>` blocks are **not UI-editable** — silently dropped on first save. Prefer WHEN + negated operator for UI-compatible policies.
+> Note: `<unlessPolicyRuleDefinitionClauseConjunction>` blocks are **not UI-editable** — silently dropped on first save. Never author UNLESS; always use WHEN + negated operator (see `policy-shapes.md` "Deny unless"). This block is shown only so you can recognize it in retrieved API-only policies.
 
 ---
 

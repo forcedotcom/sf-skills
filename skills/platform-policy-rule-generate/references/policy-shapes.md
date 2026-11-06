@@ -42,6 +42,39 @@ Start with two conditions in this exact order: entity type `OBJECT`, entity type
 
 The validated FLS example uses `Forbid`. Condition 1 is entity type `FIELD`; it has no `OBJECT` condition. Add requested principal conditions and tag/classification resource conditions after it. Construct the conjunction from the requested semantics rather than copying the example's grouping blindly. This evidence does not establish whether a Permit FLS variant is valid.
 
+### Deny unless
+
+Request: "block field F for everyone unless they have custom permission P" (or "only people with P can see it"). The UI-renderable shape is `Forbid` + `Read` + `FIELD`, with the exemption written as a negated principal condition in the `WHEN` conjunction. Do not emit `<unlessPolicyRuleDefinitionClauseConjunction>` or `<clause>UNLESS</clause>`: the Data Governance UI nulls it on save and cannot open the policy.
+
+```xml
+<whenPolicyRuleDefinitionClauseConjunction>
+    <conditions>   <!-- 1: entity type -->
+        <clause>WHEN</clause><operator>IS</operator>
+        <policyRuleValueSet><valueText>FIELD</valueText></policyRuleValueSet>
+        <resourcePath>ENTITYTYPE</resourcePath>
+    </conditions>
+    <conditions>   <!-- 2: the field's tag -->
+        <clause>WHEN</clause><operator>CONTAINS_ANY</operator>
+        <policyRuleValueSet>
+            <valueReference>{RESOLVED_TAG}</valueReference>
+            <valueReferenceType>STANDARD_TAG</valueReferenceType>
+        </policyRuleValueSet>
+        <resourcePath>TAG</resourcePath>
+    </conditions>
+    <conditions>   <!-- 3: user.permission != P -->
+        <clause>WHEN</clause><operator>CONTAINS_NONE</operator>
+        <policyRuleValueSet>
+            <valueReference>{RESOLVED_CUSTOM_PERMISSION}</valueReference>
+            <valueReferenceType>CUSTOM_PERMISSION</valueReferenceType>
+        </policyRuleValueSet>
+        <principalPath>ASSIGNED_PERMISSIONS_PATH</principalPath>
+    </conditions>
+    <conjunctionExpression>(AND 1 (AND 2) (AND 3))</conjunctionExpression>
+</whenPolicyRuleDefinitionClauseConjunction>
+```
+
+Check before deploy: no `UNLESS` anywhere, the permission condition uses `CONTAINS_NONE` (not `CONTAINS_ANY`), and the permission is a resolved developer name. If the user instead asks to deny the permission *holders*, that is `CONTAINS_ANY` and a different request; ask rather than rewriting. The category is `GOVERNANCE_POLICY_RULE_DEFINITION` for this DATACLOUD FLS/OLS shape, as in `examples/FieldReadDeny/`.
+
 ## Masking
 
 Use category `TRANSFORM_POLICY_RULE_DEFINITION`, effect `Transform`, action `Read`, and resource scope `FIELD`. Set `resourceTransform` to the requested transform. Condition 1 is entity type `FIELD`. Do not add an `OBJECT` condition.

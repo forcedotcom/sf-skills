@@ -47,9 +47,10 @@ from btlib import tokens as tokenlib  # noqa: E402
 from btlib import units as unitlib  # noqa: E402
 from btlib import versions as versionlib  # noqa: E402
 from btlib.redact import redact  # noqa: E402
-from btlib.sfap import DEFAULT_TIMEOUT, SfapClient, build_payload, request_sha  # noqa: E402
+from btlib.sfap import DEFAULT_TIMEOUT, SfapClient, build_payload, request_sha, restore_param_names  # noqa: E402
 
 AGENT_CONFIG_KEYS = {"router_nodes", "equivalent_tools", "arg_defaults", "description"}
+MAX_REPLAY_TARGETS = 5000
 
 
 def parse_args(argv=None):
@@ -108,6 +109,10 @@ def parse_args(argv=None):
     p.add_argument("--patch", metavar="FILE",
                    help="edit ops (bt.patch/1) applied to the requests before the replay; "
                         "writes patch_coverage.json and stops if an op matches nothing")
+    p.add_argument("--max-replay-targets", type=int,
+                   default=int(os.environ.get("MAX_REPLAY_TARGETS", str(MAX_REPLAY_TARGETS))),
+                   help=f"upper bound on replay jobs (units x k); env MAX_REPLAY_TARGETS "
+                        f"(default {MAX_REPLAY_TARGETS})")
     p.add_argument("--dry-run", action="store_true",
                    help="build units.jsonl (and patch_coverage.json) only; no SFAP calls")
     p.add_argument("--overwrite", action="store_true", help="replace an existing run in --out-dir")
@@ -318,6 +323,7 @@ def replay(units, requests, args, client, judge, equivalence, out_dir, arg_defau
     def work(job):
         u, messages, tools, patch, rep, model, seed, sha = job
         call = client.generate(build_payload(model, messages, tools, seed=seed))
+        call["response"] = restore_param_names(call.get("response"), tools)
         # scored against the unit as captured: a patch edits texts, never tool names or schemas
         scores = (scoring.score_unit(u, call["response"], judge, equivalence, arg_defaults)
                   if call["status"] == "ok" else None)
@@ -421,6 +427,11 @@ def main(argv=None):
     if not units:
         raise SystemExit("no units to replay (the skipped steps above say why)")
     requests, patch_info = apply_patch(units, args.patch, args.out_dir)
+    total_jobs = len(units) * args.k
+    if total_jobs > args.max_replay_targets:
+        raise SystemExit(f"run would dispatch {total_jobs} replay calls ({len(units)} units x {args.k}), "
+                         f"exceeding --max-replay-targets {args.max_replay_targets}; "
+                         f"reduce --limit or --k, or raise --max-replay-targets")
     if args.dry_run:
         print(f"dry run: wrote {args.out_dir}/units.jsonl" + (" and patch_coverage.json" if args.patch else ""))
         return 0

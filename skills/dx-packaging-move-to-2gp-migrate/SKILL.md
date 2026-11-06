@@ -6,7 +6,7 @@ metadata:
   - dx-org-devhub-configure
   - dx-pkg-post-install-configure
   - experience-ui-bundle-2gp-deploy
-  version: "1.0"
+  version: "1.1"
   accessCheck: "UserPermissions.CreatePackaging"
   cliTools:
   - tool:
@@ -83,7 +83,6 @@ Only the 1GP DE (packaging) org is required for the finalize dispatch + wire-ver
 
 After every write operation, confirm the effect by re-reading state:
 
-- After `finalize-move-to-2gp`: call `verify-finalize-by-user-confirmation`
-- After `verify-finalize-by-user-confirmation`: call `verify-finalize-on-packaging-org`
+- After `finalize-move-to-2gp`: call `verify-finalize-on-packaging-org` directly (normal 266+ path) OR `verify-finalize-by-user-confirmation` then `verify-finalize-on-packaging-org` (pre-266 manual fallback only).
 
 Read [Operations reference](references/api-operations.md) before executing this workflow. It contains the original operation definitions, dependencies, inputs, and verification instructions.

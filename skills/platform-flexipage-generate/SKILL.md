@@ -3,18 +3,14 @@ name: platform-flexipage-generate
 description: "Use when users create, generate, modify, or validate Salesforce Lightning pages (FlexiPages). Trigger on RecordPage, AppPage, HomePage, Lightning pages, adding components to a page, page customization (e.g. 'customize the record page'), or .flexipage-meta.xml files (regions, components, deployment errors). DO NOT TRIGGER for Visualforce pages, page layout assignments in the UI, UI Bundle/Experience Cloud site pages, or Aura/Lightning Web Component development without FlexiPage context."
 allowed-tools: Bash Read Write
 metadata:
-  version: "1.1"
+  version: "1.2"
   domains: ["Platform"]
-  minApiVersion: "60.0"
+  minApiVersion: "68.0"
   cliTools:
     - tool: ["python3"]
       semver: ">=3.10.0"
     - tool: ["sf"]
       semver: ">=2.126.4"
-  mcpTools:
-    metadata-experts:
-      tools: ["execute_metadata_action"]
-      semver: ">=1.0.0"
 ---
 
 ## When to Use This Skill
@@ -227,7 +223,7 @@ Complete each tier for ALL components before moving to the next tier — do NOT 
 | Tier | Source | When | Calls |
 |------|--------|------|-------|
 | **1** | Local workspace scan | Always first — run for ALL components | 0 (local only) |
-| **2** | `discoverUiComponents` MCP action | Single call for all components unresolved after Tier 1 | 1 |
+| **2** | `discoverUiComponents` invocable action | Single call for all components unresolved after Tier 1 | 1 |
 | **3** | Generate new LWC bundle | Only for components still unresolved after Tier 2 + user confirms | 0 |
 
 After Tier 1 completes for all components, collect only the unresolved ones and pass them to Tier 2 in a single MCP call. Only components still unresolved after Tier 2 proceed to Tier 3.
@@ -279,14 +275,15 @@ sf project deploy start --dry-run -d "<packageDirectory>/main/default" --test-le
 
 **Read `references/mcp_action_examples.md`** for full input/output examples and parameter tables.
 
-Two MCP actions via `execute_metadata_action`:
+Two invocable actions, called with the `dispatch` MCP tool against `POST /services/data/<ver>/headless/invocableaction`. The body is `{ "action": "<action>", "inputs": { ... } }`; results come back under `outputs`:
 
 | Action | Purpose | When |
 |--------|---------|------|
-| `DISCOVER_UI_COMPONENTS` | Find components for a page type | Tier 2 discovery — single call for all unresolved components |
-| `GET_UI_COMPONENT_SCHEMAS` | Get property schemas | Property inference Step 1 (Tier 2 org components only) |
+| `discoverUiComponents-discoverUiComponents` | Find components for a page type | Tier 2 discovery — single call for all unresolved components |
+| `getUiComponentSchemas-getUiComponentSchemas` | Get property schemas | Property inference Step 1 (Tier 2 org components only) |
 
 **Key conventions:**
+- `<ver>` is the API version: use `v68.0` or later. On earlier versions both calls fail with "apiVersion not supported in current API version"
 - Component definition format: `namespace/blockName` (forward-slash) in MCP calls, `namespace:blockName` (colon) in XML
 - `pageContext` with `entityName` is required for RECORD_PAGE
 - `getUiComponentSchemas` supports partial failures — check each component's `success` boolean

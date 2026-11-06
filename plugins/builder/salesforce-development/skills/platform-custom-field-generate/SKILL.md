@@ -73,7 +73,7 @@ Mandatory for Long/Rich text and Multi-select picklists to control UI height.
 | Type | `<type>` Value | Required Attributes |
 |------|----------------|---------------------|
 | Auto Number | `AutoNumber` | `displayFormat` (must include `{0}`), `startingNumber` |
-| Checkbox | `Checkbox` | Default `defaultValue` to `false` |
+| Checkbox | `Checkbox` | Default `defaultValue` to `false` for non-formulas only |
 | Date | `Date` | No precision/length required |
 | Date/Time | `DateTime` | No precision/length required |
 | Email | `Email` | Built-in format validation |
@@ -95,7 +95,7 @@ Mandatory for Long/Rich text and Multi-select picklists to control UI height.
 
 | Type | `<type>` Value | Required Attributes |
 |------|----------------|---------------------|
-| Formula | Result type (e.g., `Number`) | `formula`, `formulaTreatBlanksAs` |
+| Formula | Result type (e.g., `Number`) | `formula` (see Section 6), `formulaTreatBlanksAs` |
 | Roll-Up Summary | `Summary` | See Section 5 for complete requirements |
 | Multi-Select Picklist | `MultiselectPicklist` | `valueSet`, `visibleLines` (default 4) |
 
@@ -343,23 +343,26 @@ ChildObjectAPIName__c.FieldAPIName__c
 
 ## 6. Formula Field Rules
 
-### Formula Result Types
+1. **Before delegating/writing XML, recursively list/read the user's `**/*.field-meta.xml` files for API names/types; or retrieve SObject schema, not metadata-type docs.**
+2. Use `formula-management`'s returned expression; otherwise call its **Create** if available: original request verbatim; no guessed names/types,
+`entityName`=object API, `formulaType=CustomField`, `returnType`=`<type>`
+(`Checkbox`→`Boolean`; input, not XML). Use expression in field XML; **Modify** updates.
+If unavailable, author here.
 
-A Formula is not a type itself. The `<formula>` tag is added to a field whose `<type>` is the **result data type** (`Checkbox`, `Currency`, `Date`, `DateTime`, `Number`, `Percent`, `Text`).
+`<type>`: `Checkbox`, `Currency`, `Date`, `DateTime`, `Number`, `Percent`, or `Text` — never `Formula`.
 
-- **A formula field never carries `<length>`** — not even a Text-result formula. The API rejects it: `Can not specify a length for CustomFields that have a formula`.
+- No `<length>`/`<defaultValue>`; numeric: `<precision>` + `<scale>`.
 
-### Formula XML Generation Rules
+### XML
 
-- The contents of the `<formula>` tag MUST be wrapped in `<![CDATA[ ... ]]>`, so the parser does not read formula operators (`&`, `<`, `>`) as XML markup.
-- If the formula text itself contains the literal sequence `]]>`, escape it by breaking the CDATA block: e.g., `<![CDATA[Text_Field__c & "]]]]><![CDATA[>"]]>`
-- NEVER use an attribute or tag named `returnType`. This does not exist in the Metadata API. The `<type>` tag defines the return data type of the formula result.
+- `<formula>` uses `<![CDATA[ ... ]]>` for `&`, `<`, `>`.
+- Escape `]]>`: `<![CDATA[Text_Field__c & "]]]]><![CDATA[>"]]>`.
+- No XML `returnType`; use `<type>`.
 
-### formulaTreatBlanksAs Rule
+### Blanks
 
-**Decision Logic:**
-- IF formula result type = `Number`, `Currency`, or `Percent` → set `<formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>`
-- IF formula result type = `Text`, `Date`, or `DateTime` → set `<formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>`
+- `Number`, `Currency`, `Percent` → `<formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>`
+- `Text`, `Date`, `DateTime` → `<formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>`
 
 ### INCORRECT — Using Formula as type:
 
@@ -387,11 +390,15 @@ A Formula is not a type itself. The `<formula>` tag is added to a field whose `<
 </CustomField>
 ```
 
-### Formula Field Dependencies & Functions
+### References
 
-- Formula fields that reference other fields fail deployment if the referenced field doesn't exist or hasn't deployed yet — deploy referenced fields first.
+- Deploy referenced fields first; missing references fail deployment.
 - Use `ISPICKVAL()` (not `==`) for picklist comparisons.
-- For the full formula-function reference (TEXT/VALUE/CASE/DAY/MONTH/DATEVALUE/ISCHANGED type rules), defer to the `platform-validation-rule-generate` skill, which owns formula-function correctness.
+- Use `VALUE()` for Text/AutoNumber in numeric functions like `MOD()`.
+- Percent: 5% = 0.05.
+- Subtract like types: `TODAY()-DateField`, `NOW()-DateTimeField`. Use `DATEVALUE(DateTimeField)` with `YEAR()`/`MONTH()`/`DAY()`, never wrap a Date.
+- No `URLENCODE()`.
+- Full formula-function reference: `platform-validation-rule-generate`.
 
 ---
 
@@ -450,6 +457,7 @@ Before generating CustomField XML, verify:
 - [ ] Does the child object have a Master-Detail field to this parent?
 
 ### Formula Field Checks
+- [ ] Was the expression delegated when available, or authored using Section 6's fallback?
 - [ ] Is `<type>` set to result type (NOT "Formula")?
 - [ ] Is `<formula>` content wrapped in `<![CDATA[ ... ]]>`?
 - [ ] Is `<returnType>` attribute ABSENT? (does not exist in Metadata API)

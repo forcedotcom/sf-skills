@@ -9,14 +9,14 @@
 The extraction step also persists `extraction-summary.json` in the same directory (see [Extraction Blueprint](extraction-blueprint.md)); it is carried forward as supporting context in the handoff.
 
 Write all required files in the run-specific SFDX project directory for the selected input mode:
-- Mode A: org-backed run project directory created during SF CLI setup
-- Mode B: offline run project directory containing/associated with provided XML inputs
+- Online: org-backed run project directory created during SF CLI setup
+- Offline: run project directory containing/associated with provided XML inputs
 Do not write handoff artifacts in the repository root.
 
 ## 1) Agent Spec Markdown
 
 Create `<run_project_dir>/<AgentName>-AgentSpec.md` by copying:
-`skills/agentforce-generate/assets/agent-spec-template.md`
+[agent-spec-template.md](../assets/_vendored/agent-spec-template.md) from the `agentforce-generate` skill.
 
 The handoff Agent Spec MUST:
 
@@ -36,49 +36,26 @@ Required section order:
 9. `## Architecture Pattern`
 10. `## Agent Configuration`
 
-### Section-by-section generation guidance (from `extraction-summary.json`)
+### How the generated agent works
 
-#### `## Purpose & Scope`
+Write every section below for this runtime model.
 
-1. Derive a meaningful purpose statement from bot description/identity and extracted intent summaries.
-2. Describe the agent's business scope using the intents the bot actually handles.
-3. Restrict scope to capabilities backed by configured actions:
-   - do not claim unsupported capabilities
-   - call out out-of-scope requests when no action support exists
+The generated agent is an intelligent, LLM-backed conversational experience provider. Unlike the bot, it does not follow a fixed dialog tree: it interprets each user message and decides which subagent should handle it.
 
-#### `## Behavioral Intent`
+1. **Router first.** Every incoming user message is processed first by the router subagent — the `start_agent` block. The router only classifies and routes; it never answers the user directly.
+2. **Intent-based transitions.** The router transitions to the subagent that best matches the user's intent, judged against each subagent's `description` and its transition action descriptions. Write every subagent description with a clear positive scope and important exclusions, so routing stays unambiguous.
+3. **Default `ambiguous` and `off_topic` subagents.** Always include both subagents, each with its own router transition, in every generated Agent Spec — even if the bot had no equivalent dialogs. List them in `## Subagent Posture` and `## Subagent Map` like any other subagent. Neither invokes any action.
+   - **`ambiguous`** — handles requests whose intent is unclear or could match more than one subagent. Say briefly that the request is unclear and ask one focused question for the missing detail. Do not guess an intent.
+   - **`off_topic`** — handles requests that no subagent covers. Say that the request is outside what the agent can help with, state the supported capabilities, and ask which of them the user wants help with. Do not answer the out-of-scope question.
+   - Write the two router transition descriptions so they do not overlap: unclear-but-possibly-supported requests go to `ambiguous`; clearly unsupported requests go to `off_topic`.
+   - Once the user's reply makes the intent clear, the router can route the request.
 
-1. Start traversal from `Welcome` (or extracted entry dialog when `Welcome` is absent).
-2. Build each workflow using:
-   - `dialog_functionality_summary`
-   - ordered `step_functionality`
-3. Handle navigations by following target dialogs recursively, while preserving navigation semantics:
-   - **`Call` navigation**: transfer control to the target dialog, then return control back to the source dialog after target execution completes. Continue source-dialog remaining steps after return.
-   - **`Redirect` navigation**: transfer control permanently to the target dialog and halt source-dialog execution immediately (no return to source flow).
-4. While reconstructing flows, track `Call` vs `Redirect` semantics internally so downstream agent design preserves return/non-return behavior.
-5. For `Call` flows, capture both:
-   - the delegated target workflow behavior, and
-   - the resumed source workflow behavior after return.
-6. For `Redirect` flows, do not append post-redirect source steps to the same path unless there is an explicit later re-entry edge.
-7. Reconstruct meaningful user conversation flows across traversed dialogs.
-8. Identify hard checkpoints by capturing strict ordering constraints, mandatory preconditions, and enforced branches/escalations.
-9. Final behavioral intent must include:
-   - ordered events for one or more workflows
-   - action invocation scope and sequencing
-   - variable usage scope (reads/writes and gating variables)
-   - escalation/routing behavior
-   - normalized transition behavior (return-after-delegation vs one-way transfer) expressed in agent-native terms only
-   - other critical bot-specific constraints that affect conversation behavior
+   This default applies to every bot upgrade. It overrides agentforce-generate's general guidance to create `ambiguous_question` or `off_topic` subagents only when needed.
 
-10. Do NOT emit raw bot navigation constructs (`Call`, `Redirect`) in the final Agent Spec text. Convert them into agent-native behavioral descriptions only.
-
-#### `## Subagent Posture`
-
-1. Derive baseline subagents from dialog clusters (`1 cluster -> 1 subagent`).
-2. Ensure each subagent has coherent responsibility boundaries based on associated dialog behavior and actions.
-3. Add additional subagents when dialogs are not assigned to any cluster but represent distinct bot functionality.
-4. Ensure all dialog functionality is covered by at least one subagent.
-5. Record any uncertain assignments in open questions instead of forcing low-confidence grouping.
+Related agentforce-generate references:
+- [Router-First Architecture Mechanics](_vendored/architecture-patterns.md#router-first-architecture-mechanics) — router behavior and transition paths.
+- [Guardrail subagents](_vendored/agent-design-and-spec-creation.md) ("Guardrail Subagents") — example `ambiguous_question` and `off_topic` instructions.
+- [Off-Topic and Escalation Routing](_vendored/agent-subagent-map-diagrams.md#off-topic-and-escalation-routing) — how ambiguity and out-of-scope paths appear in the Subagent Map.
 
 ### Bot-specific artifact translation rules (required)
 
@@ -106,14 +83,6 @@ When generating the Agent Spec, do not retain raw bot-only entities. Translate t
    - retain a lightweight guided-choice pattern only when it materially improves clarity or control
 6. If menu translation approach is ambiguous, ask the user and record the decision in open questions before finalizing. When `--interactive=false`, do not ask — apply the recommended translation, record it in open questions as an auto-applied decision, and continue.
 
-Then add this migration-specific appendix section at the end:
-
-11. `## Migration Notes (Einstein Bot -> Agentforce)`
-    - Source bot identity and version
-    - Mapping confidence summary
-    - Unmapped constructs
-    - Open decisions requiring user approval
-
 ### Action Invocation Optimization Rules
 
 Use this step to optimize conversation efficiency by reducing unnecessary action invocations while preserving behavior and data contracts.
@@ -135,10 +104,19 @@ Use this step to optimize conversation efficiency by reducing unnecessary action
 
 If an action is applicable only to Einstein Bot runtime (for example, internal bot-state bookkeeping actions):
 
-1. Mark the action as `candidate_for_removal`.
+Examples of bot-only actions:
+- storing the previous or current dialog name (for example, to return the user to a dialog later)
+- updating bot-only variables, such as dialog counters, menu-selection flags, or retry and fallback counters
+- tracking bot navigation state, such as recording which menu option or dialog path the user took
+- logging dialog visits or bot-session telemetry that no business process consumes
+
+An action that also changes business data, or sets a variable that a business action or a routing decision still needs, is not bot-only.
+
+1. Mark the action as `CANDIDATE_FOR_REMOVAL`.
 2. Show the user why it is bot-only and why it is not needed in Agentforce.
 3. Do not remove it automatically.
-4. Remove only after explicit user confirmation. When `--interactive=false`, do not remove it — keep the action in place as the safe recommended default and record it as a deferred `candidate_for_removal` decision in open questions.
+4. Remove only after explicit user confirmation. When `--interactive=false`, do not remove it — keep the action in place as the safe recommended default and record it as a deferred `CANDIDATE_FOR_REMOVAL` decision in open questions.
+5. After the user confirms a removal, update `## Behavioral Intent` to match: in every workflow that invoked the removed action, drop its invocation from the ordered events and action sequencing, and drop any variable reads/writes that only that action used. Keep the rest of each workflow's behavior and ordering unchanged. Also remove the action from `## Actions` and `## Action Invocation Strategy`.
 
 #### User review gate (required)
 
@@ -158,7 +136,58 @@ Before finalizing optimized actions, present a complete change summary to the us
 
 Apply changes only after user approval.
 
-#### Persistence requirement
+### Section-by-section generation guidance (from `extraction-summary.json`)
+
+#### `## Purpose & Scope`
+
+1. Derive a meaningful purpose statement from bot description/identity and extracted intent summaries.
+2. Describe the agent's business scope using the intents the bot actually handles.
+3. Restrict scope to capabilities backed by configured actions:
+   - do not claim unsupported capabilities
+   - call out out-of-scope requests when no action support exists
+
+#### `## Behavioral Intent`
+
+1. Start traversal from `Welcome` (or extracted entry dialog when `Welcome` is absent).
+2. Build each workflow using:
+   - `dialog_functionality_summary`
+   - ordered `step_functionality`
+3. Handle navigations by following target dialogs recursively, while preserving navigation semantics:
+   - **`Call` navigation**: transfer control to the target dialog, then return control back to the source dialog after target execution completes. Continue source-dialog remaining steps after return.
+   - **`Redirect` navigation**: transfer control permanently to the target dialog and halt source-dialog execution immediately (no return to source flow).
+4. While reconstructing flows, track `Call` vs `Redirect` semantics internally so downstream agent design preserves return/non-return behavior.
+5. For `Call` flows, capture both:
+   - the delegated target workflow behavior, and
+   - the resumed source workflow behavior after return.
+6. For `Redirect` flows, do not append post-redirect source steps to the same path unless there is an explicit later re-entry edge.
+7. Reconstruct meaningful user conversation flows across traversed dialogs.
+   - Each workflow might contain variable-based conditions for routing to other dialogs. Parse these and convert routing-specific conditions into equivalent natural-language LLM instructions. For example, `if selected_option == 'Bookings'` can be converted into "If the user wants bookings information, route to the bookings subagent."
+8. Identify hard checkpoints by capturing strict ordering constraints, mandatory preconditions, and enforced branches/escalations.
+   - If the ordering of actions is strictly enforced, retain the same ordering in the agent. For example, the user can check their bookings only after logging in: enforce this with variable-based conditions (via `available when`) in `## Deterministic Controls (When Needed)`, in `## Behavioral Intent`, or both.
+9. Final behavioral intent must include:
+   - ordered events for one or more workflows
+   - action invocation scope and sequencing
+   - variable usage scope (reads/writes and gating variables)
+   - escalation/routing behavior
+   - normalized transition behavior (return-after-delegation vs one-way transfer) expressed in agent-native terms only
+   - other critical bot-specific constraints that affect conversation behavior
+
+10. Do NOT emit raw bot navigation constructs (`Call`, `Redirect`) in the final Agent Spec text. Convert them into agent-native behavioral descriptions only.
+
+#### `## Subagent Posture`
+
+Use [posture-and-determinism.md](_vendored/posture-and-determinism.md) from the `agentforce-generate` skill as the definition of posture (scripted / mixed / agentic) and of how to choose it. Read it before deriving this section; do not invent posture categories or criteria beyond it.
+
+1. Derive baseline subagents from dialog clusters (`1 cluster -> 1 subagent`).
+2. Ensure each subagent has coherent responsibility boundaries based on associated dialog behavior and actions.
+3. Add additional subagents when dialogs are not assigned to any cluster but represent distinct bot functionality.
+4. Ensure all dialog functionality is covered by at least one subagent.
+5. Record any uncertain assignments in open questions instead of forcing low-confidence grouping.
+6. For each subagent, choose its posture per the posture definition, based on the extracted dialog behavior. A rigid bot step order does not by itself require scripted posture; pin only what the definition says needs a guarantee (for example authorization or identity checks, confirmed consequential actions, or externally required ordering).
+7. Fill the template's posture table for every subagent: `Subagent`, `Posture`, `Why this posture?` (grounded in the bot's dialog behavior), and `Deterministic controls (if any)`. Keep the deterministic controls consistent with `## Deterministic Controls (When Needed)`.
+8. If the posture of a subagent is ambiguous, record it in open questions with a recommended posture.
+
+### Persistence requirement
 
 After user confirms, update the Agent Spec file to reflect all finalized action changes (adds/updates/deletes), including:
 
@@ -166,6 +195,7 @@ After user confirms, update the Agent Spec file to reflect all finalized action 
 - input/output contracts
 - variable read/write assignments
 - action invocation strategy updates required by the optimization
+- `## Behavioral Intent` workflow updates for removed actions (see Bot-only action handling, step 5)
 
 Do not treat non-confirmed changes as final.
 

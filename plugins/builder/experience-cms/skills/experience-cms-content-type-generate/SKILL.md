@@ -431,7 +431,7 @@ Full anti-pattern table (violation / rationalization / correct action) → `refe
 
 - Folder name, `<masterLabel>`, and the bundle's `title` should be consistent (PascalCase folder, human-readable label and title).
 - Avoid `lightning__fileType` and `lightning__contentReferenceType` — currently unsupported.
-- Eval datasets live in `packages/adk-eval/eval/domains/experience-cms-content-type-generate/`, not in `tests/evals/`.
+- Eval datasets live in `eval/experience-cms-content-type-generate/`, not in `tests/evals/`.
 
 ## Reference file index
 

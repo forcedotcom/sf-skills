@@ -46,7 +46,7 @@ Identical body shape to CREATE, with `"method": "PUT"`.
 }
 ```
 
-The response body contains `xmlRep` with the persisted XML. Use this as the verification step after every CREATE/UPDATE, and to confirm the UI-renderable-contract check (see `SKILL.md` step 12): the parent set's `xmlRep` must carry server-added `<builderCompatible>false</builderCompatible>` and `<builderValidated>false</builderValidated>` even though neither was authored.
+The response body contains `xmlRep` with the persisted XML. Use this as the verification step after every CREATE/UPDATE, and to confirm the UI-renderable-contract check (see `SKILL.md` step 12): the parent set's `xmlRep` must carry the authored `<builderCompatible>true</builderCompatible>` (or `false` if the user opted out) plus a server-set `<builderValidated>` (observed `true` when `builderCompatible=true` was authored; do not assert a specific value).
 
 ### DELETE — Data 360 MCP `d360_data_governance_access_policy_delete` (NOT `/headless/metadata`)
 
@@ -59,7 +59,7 @@ Data 360 MCP: execute(tool=d360_data_governance_access_policy_delete, params={ "
 A `PolicyRuleDefinitionSet` created via this skill surfaces as an **Access Policy** keyed by its developer name. `access_policy_delete` is a **whole-policy delete** — one call removes the policy **and every embedded rule** (its `PolicyRuleDefinition` members). Consequences:
 
 - There is **no leaf-before-parent ordering** and **no discrete single-rule delete**. To drop a single rule while keeping the policy, re-author the surviving rule set via `d360_data_governance_access_policy_rule_replace`.
-- Hand-authored sets are `builderCompatible: false`, so `d360_data_governance_access_policy_list` needs `includeIncompatible: true` to enumerate them; `access_policy_get` and `access_policy_delete` address them by `name` regardless.
+- Sets with the default `builderCompatible: true` appear in a plain `d360_data_governance_access_policy_list`; opted-out (`false`) sets need `includeIncompatible: true` to enumerate them. `access_policy_get` and `access_policy_delete` address sets by `name` regardless.
 - Confirm the delete with `d360_data_governance_access_policy_get` by `name`: a not-found result (or the policy being absent from an `includeIncompatible` list) is the success signal.
 
 There is no `sf` CLI fallback. On the off-core Data Cloud path this delete can fail on DC connectivity — surface that as a provisioning gap to the operator.

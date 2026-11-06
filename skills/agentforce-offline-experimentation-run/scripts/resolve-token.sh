@@ -51,7 +51,7 @@ if command -v sf >/dev/null 2>&1 && command -v jq >/dev/null 2>&1 && command -v 
     SID="$(awk -F'\t' 'tolower($6)=="sid"{print $7}' "$COOKIE_JAR" 2>/dev/null | head -1)"
 
     if [ -n "$SID" ]; then
-      AUTH_JSON="$(curl -sS "${INSTANCE_URL%/}/ide/auth" -H "Authorization: Bearer $SID" 2>/dev/null || true)"
+      AUTH_JSON="$(printf 'Authorization: Bearer %s' "$SID" | curl -sS "${INSTANCE_URL%/}/ide/auth" -H @- 2>/dev/null || true)"
       CANDIDATE="$(printf '%s' "$AUTH_JSON" | jq -r '.jwt // empty' 2>/dev/null || true)"
       if [ -n "$CANDIDATE" ] && [ "$CANDIDATE" != "null" ]; then
         TOKEN="$CANDIDATE"
@@ -77,13 +77,20 @@ ISS=$(printf '%s' "$DECODED" | jq -r '.iss // empty' 2>/dev/null || true)
 SFAP_RH=$(printf '%s' "$DECODED" | jq -r '.sfap_rh // empty' 2>/dev/null || true)
 
 # Determine environment and base URL
-DETECTED_ENV="prod"
+DETECTED_ENV=""
 if echo "$ISS$SFAP_RH" | grep -qi 'test1\|test\b'; then
   DETECTED_ENV="test"
 elif echo "$ISS$SFAP_RH" | grep -qi 'stage'; then
   DETECTED_ENV="stage"
 elif echo "$ISS$SFAP_RH" | grep -qi 'dev\b'; then
   DETECTED_ENV="dev"
+elif [ -n "$ISS$SFAP_RH" ]; then
+  DETECTED_ENV="prod"
+fi
+
+if [ -z "$DETECTED_ENV" ]; then
+  printf '{"error":"cannot detect SFAP environment from JWT claims (issuer and sfap_rh are both empty)","hint":"set SFAP_BASE_URL or check the org authentication"}\n'
+  exit 1
 fi
 
 case "$DETECTED_ENV" in

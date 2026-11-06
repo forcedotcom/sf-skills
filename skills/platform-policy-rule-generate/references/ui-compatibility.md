@@ -2,11 +2,11 @@
 
 The Data Governance Policy Builder edits a **strict subset** of the MDAPI. Anything outside that subset must be maintained through the MDAPI package path for the policy's lifetime — admins cannot open it in the builder without silent data loss or a hard crash.
 
-> **Default goal**: produce policies that can eventually be validated in Policy Builder. `<builderCompatible>` and `<builderValidated>` are both server-managed fields — the server sets them on save/create, authoring either one in generated XML has no effect, and authoring `true` is never legitimate regardless of how many items on this checklist a shape satisfies. Omit both. Only an actual Policy Builder open/save/retrieve comparison can establish UI compatibility for a specific shape.
+> **Default goal**: produce policies that can eventually be validated in Policy Builder. Author `<builderCompatible>true</builderCompatible>` on the set by default; omit it (or author `false`) only when the user explicitly asks for a policy that is not builder-compatible. `<builderValidated>` is server-managed — never author it. Authoring `builderCompatible=true` declares intent; only an actual Policy Builder open/save/retrieve comparison can establish UI compatibility for a specific shape, so keep the checklist below satisfied.
 
-> **Evidence boundary:** MDAPI dry-run, deploy, and retrieve prove metadata validity and persistence. They do not prove that Policy Builder can open and save the policy without normalization or loss. A retrieved set with `<builderCompatible>false</builderCompatible>` is persisted-shape evidence only.
+> **Evidence boundary:** MDAPI dry-run, deploy, and retrieve prove metadata validity and persistence. They do not prove that Policy Builder can open and save the policy without normalization or loss. A retrieved set's `<builderCompatible>` and `<builderValidated>` values are persisted-shape evidence only.
 
-> **ACCESS distinction:** An OR-of-ENTITYTYPE discriminator prevents the builder crash for object-level ACCESS-shaped rules, but ACCESS categories still do not round-trip as ACCESS; the builder rewrites them to GOVERNANCE. Treat explicitly requested ACCESS output as API-only and record that status in the description or an XML comment, not in compatibility fields.
+> **ACCESS distinction:** An OR-of-ENTITYTYPE discriminator prevents the builder crash for object-level ACCESS-shaped rules, but ACCESS categories still do not round-trip as ACCESS; the builder rewrites them to GOVERNANCE. Treat explicitly requested ACCESS output as API-only and record that status in the description or an XML comment and author `<builderCompatible>false</builderCompatible>` on the parent set (the policy is not authored with builder-renderable intent).
 
 ---
 
@@ -95,7 +95,7 @@ The policy will **not** round-trip through the UI without data loss or silent fa
 - [ ] `ruleConsumer` ≠ `DATACLOUD`
 - [ ] More than one `<action>`, or action is not `Read` / `TupleRead`
 - [ ] **No top-level `resourcePath=ENTITYTYPE` discriminator group** for ACCESS/GOVERNANCE rules — this causes a **hard crash** (`Cannot use 'in' operator to search for 'Permit' in undefined`), not a graceful degradation. OLS uses an `(OR OBJECT FIELD)` group; FLS uses `FIELD` only. A `TupleRead` OLS rule without its OR group still deploys and works at runtime — the crash is UI-only.
-- [ ] **Bare top-level condition index** in `<conjunctionExpression>` (e.g. `3` instead of `(AND 3)`) — causes crash in `buildCriteria` (`param.params.map(...)` = `undefined.map()`)
+- [ ] **Bare top-level condition index** in `<conjunctionExpression>` for a tag/classification, permission, record-field or dataspace condition (e.g. `3` instead of `(AND 3)`) — causes crash in `buildCriteria` (`param.params.map(...)` = `undefined.map()`). Only a solitary `ENTITYTYPE IS FIELD` condition (FLS/Transform) may stay bare, as in `examples/FieldReadDeny`.
 - [ ] More than one `<resourceDomain>`
 - [ ] An `<unlessPolicyRuleDefinitionClauseConjunction>` block present
 - [ ] Any `<conditions>` uses `<clause>UNLESS</clause>`
@@ -138,7 +138,7 @@ Whenever a request would produce a UI-incompatible policy:
 
 3. **Wait for explicit confirmation.** Do not write the file until confirmed.
 
-4. **On confirmation**, add an in-source marker to `<description>` (or a comment above the rule): `# API-only: not editable in Data Governance Policy Builder. Reasons: <bullets>`. Do not author server-managed compatibility fields on the parent set.
+4. **On confirmation**, add an in-source marker to `<description>` (or a comment above the rule): `# API-only: not editable in Data Governance Policy Builder. Reasons: <bullets>`. Author `<builderCompatible>false</builderCompatible>` on the parent set; never author `builderValidated` (server-managed).
 
 ---
 

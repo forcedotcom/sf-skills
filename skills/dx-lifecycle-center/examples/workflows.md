@@ -9,10 +9,10 @@ Worked prompts, grouped by operation (`SKILL.md`, Operations). Listing, status c
 **A1. "Show the list of connected orgs I can deploy to."**
 
 ```bash
-bash <skill_dir>/scripts/resolve-environment.sh my-dev-org
+bash scripts/resolve-environment.sh my-dev-org
 ```
 
-Reply with only the table and the closing sentence (`references/list-orgs.md`, section 4). The Lifecycle Center org is not in it and is not mentioned.
+Run the resolver with `--check-sessions`. Reply with the table of usable orgs, the action buttons (Sync / Re-sync / Refresh, and **Sync all N** when two or more rows need it), the one left-out line when some rows are `needs-signin` or `retired`, and the closing sentence (`references/list-orgs.md`, section 4). There is no status column. The Lifecycle Center org is not part of the deploy targets. The list never syncs by itself.
 
 **A2. "What org am I in?"**
 
@@ -20,7 +20,7 @@ Answer from the `source` block: alias, username, URL, and org id. Nothing else.
 
 **A3. The query fails because the session expired.**
 
-The script reports "query failed, not an enablement problem". Say the error plainly and tell them to reconnect the source org (Reconnect prompt in Builder Central, or `sf org login web --alias <alias>` on a local CLI), then try again. Never say DX Inspector is disabled.
+The script reports "query failed, not an enablement problem". Say the error plainly and tell them to reconnect the source org (Reconnect prompt in Builder Central, or `sf org login web --alias "<alias>"` on a local CLI), then try again. Never say DX Inspector is disabled.
 
 **A4. The query fails because DX Inspector is off.**
 
@@ -28,7 +28,23 @@ The script reports "DevOps Center not enabled or no access". Reply only: "DX Ins
 
 **A5. "Show my DevOps Center orgs."**
 
-The phrase is plural, so it is not the Lifecycle Center org. List the environments (A1) and do not mention the hub.
+The phrase is plural, so it is not the Lifecycle Center org. List the environments (A1). The hub appears only as its labelled row, when connected.
+
+**A6. Org connected in DX Inspector, not in Builder Central.**
+
+The row is listed (the list reads DX Inspector environments) but the resolver says `needs-sync`: no workspace CLI alias exists. The row gets a **Sync `<name>`** button. A click sends `Sync workspace access for <name>`, which runs the sync procedure (`references/connect-org.md`, *Sync workspace access*): one PATCH with `?registerWorkspaceAlias=true`, no sign-in, a check after about 5 seconds, then the list again.
+
+**A7. "Sync all" with a mix of states.**
+
+Three rows: `QA` needs-sync, `UAT` needs-refresh, `Prod` ready. Buttons: **Sync all 2**, **Refresh UAT**, **Sync QA**, **Re-sync Prod**. Sync all runs QA then UAT, one PATCH each and never in parallel, and reports one line each. A failure on one does not stop the other.
+
+**A8. Name clash.**
+
+An alias named `UAT` already points at a different org, so the row is `alias-conflict` and gets **Fix name UAT**. Do not PATCH: it would overwrite the other org's alias. Offer `sf alias unset UAT` then a sync, or connecting under another name.
+
+**A9. The user replies with an action.**
+
+The actions under the table are plain text. A reply such as `Sync DevSand` or `Sync all 3` is the confirmation: run the sync procedure for those rows, then show the list again.
 
 ---
 
@@ -36,11 +52,11 @@ The phrase is plural, so it is not the Lifecycle Center org. List the environmen
 
 **B1. "Connect a new sandbox."**
 
-1. Ask for the environment name (letters only). The type is `SANDBOX`; confirm it.
+1. Ask for the environment name. The type is `SANDBOX`; confirm it.
 2. Check the org is not already connected (`references/connect-org.md`, Step 0).
 3. After the user confirms, `POST /connect/devops/environment`.
-4. Give the `redirectUrl` as a clickable link and wait for **done**. Never say a browser was opened.
-5. `PATCH /connect/devops/environment/<id>`, then list again and confirm the new row shows its URL and org id.
+4. Show the sign-in as in `connect-org.md` Step 2 and wait for **done**. Never say a browser was opened.
+5. `PATCH /connect/devops/environment/<id>?registerWorkspaceAlias=true --body '{}'` (the CLI rejects a PATCH with no body), then list again and confirm the new row shows its URL and org id (if the resolver reports `needs-sync`, wait about 5 seconds once and check again; if it still does, say the org is connected and deployable but has no CLI alias here).
 
 **B2. "Connect https://mydomain--qa.sandbox.my.salesforce.com."**
 
@@ -60,16 +76,15 @@ The row shows as not authenticated. Do not POST again. Get a fresh link with `GE
 
 **B6. What the user sees while connecting.**
 
-Sign-in (Step 2):
+Sign-in (Step 2), a heading, one line of instructions, and a single **Sign in to `QA`** link that opens the login page:
 
 > **Connect `QA`**
 >
-> **[Sign in to `QA` →](https://mydomain--qa.sandbox.my.salesforce.com/services/oauth2/authorize?...)**
+> Sign in with the user DX Inspector should act as, and approve access. Then come back here and reply **done**.
 >
-> 1. Sign in with the user DX Inspector should act as, and approve access.
-> 2. Come back here and reply **done**.
->
-> Link not working? Copy it: `https://mydomain--qa.sandbox.my.salesforce.com/services/oauth2/authorize?...`
+> `[ Sign in to QA ]`
+
+The link is the full `redirectUrl`, also repeated once as "Link not working? Copy it".
 
 Connected (Step 5):
 
@@ -79,7 +94,23 @@ Connected (Step 5):
 > |---|---|---|
 > | `mydomain--qa.sandbox.my.salesforce.com` | Sandbox | Ready to deploy to |
 
-The Lifecycle Center org uses the same two layouts with its own heading, button text, and a Hub type column. When the `render_widget` tool is available, it shows them as cards instead (C7).
+The Lifecycle Center org uses the same two layouts with its own heading, button text, and a Hub type column.
+
+**B7. "sf command failed: Session expired or invalid" on `--target-org "QA"`.**
+
+Run the sync procedure for `QA`: resolve the row from the alias, PATCH once with `?registerWorkspaceAlias=true`, check after about 5 seconds, then retry the command once. If the PATCH fails with 401 or 403, the stored sign-in is stale: show a fresh sign-in link, wait for **done**, PATCH once. If the alias is not a DX Inspector environment, offer to connect it; do not PATCH anything. Never retry with another alias or `default-org`.
+
+**B8. The PATCH times out.**
+
+`TARGET_ORG_AUTHENTICATION_TIMEOUT` (408/504) is transient. Wait about 10 seconds and PATCH once more. If it times out again, say "`QA` didn't respond in time. Try again in a few minutes." Do not show a sign-in button and do not call the credential stale.
+
+**B9. Sync succeeds but the alias never appears.**
+
+The PATCH returns success, yet the resolver still says `needs-sync` after one repeat. Registration is best effort on the server: the feature may be off for the org, no workspace may be running, or the name has spaces (Core may still skip those) or is `default-org`. Say the org is connected and deploys work, but its CLI alias isn't available here. Stop; do not loop.
+
+**B10. Environment name with a space.**
+
+"Connect `My UAT`." Accept `My UAT` as is. If the sync leaves it `needs-sync`, Core skipped the spaced name: say the org is connected but has no CLI alias, and offer `MyUAT` only as an optional rename. Every command uses `--target-org "My UAT"`.
 
 ---
 
@@ -97,7 +128,7 @@ These are spelling variants of the same name. Normalize (lowercase, drop spaces 
 
 **C6. Wording variants of the other operations.**
 
-After normalizing, these route the same way as the plain phrase: "Pls push AccountService into my QA-sandbox", "ship my flows to prod", "deployment to org-farm env", "dry run to my sandbox" → **D**. "Hook up a new scratch-org", "add sandbx", "sign in to prod", "set up an orgfarm env" → **B** (scratch and `sandbx` are `SANDBOX`, prod is `PRODUCTION`). "which envs can I use", "show linked orgs", "where can I deploy" → **A**.
+After normalizing, these route the same way as the plain phrase: "Pls push AccountService into my QA-sandbox", "ship my flows to prod", "publish AccountService to my QA sandbox", "deployment to org-farm env", "dry run to my sandbox" → **D**. "Hook up a new scratch-org", "add sandbx", "sign in to prod", "set up an orgfarm env" → **B** (scratch and `sandbx` are `SANDBOX`, prod is `PRODUCTION`). "which envs can I use", "show linked orgs", "where can I deploy" → **A**.
 
 **C2. "Is the Lifecycle Center org connected?"**
 
@@ -109,21 +140,7 @@ Make no API call. Ask: "Do you mean the Lifecycle Center org, or a different org
 
 **C4. "Why isn't the Lifecycle Center org in my list?"**
 
-Say it is the Lifecycle Center hub, kept separate from deploy targets, and is never part of the deploy list.
-
-**C7. "Connect the Lifecycle Center org", in a chat that has the `render_widget` tool.**
-
-1. Check the credential and, after confirming, create it as in C1. With the `redirectUrl` from the POST after the `&amp;` fix, run:
-
-   ```bash
-   bash <skill_dir>/scripts/widget.sh connect-sign-in '{"signInUrl":"https://<dev-org-host>/services/oauth2/authorize?..."}'
-   ```
-
-   It prints `CARD_JSON {"nodes":{"definition":"tile/widget","children":[...]}}`.
-2. Call `render_widget` once with the JSON after `CARD_JSON`, exactly as printed, and write no other text about the sign-in. The chat shows a **Sign in to Lifecycle Center** card with the steps and a **Connect to Lifecycle Center org** button.
-3. After **done**, run Steps 3 to 5. The status check passes and the type call answers Core, so run `bash <skill_dir>/scripts/widget.sh connect-connected '{"hubHost":"<hub-host>","hasHubType":true,"hubTypeLabel":"Core"}'` and call `render_widget` once with its JSON. The card reads "Connected to Lifecycle Center", the org host, and "Hub type: Core".
-
-If `widget.sh` prints `CARD_UNAVAILABLE <reason>` or fails, or `render_widget` answers `{rendered: false, reason}`, use the Markdown layouts of B6 in hub form instead.
+Say it is the Lifecycle Center hub, kept separate from deploy targets, and is never a deploy target.
 
 ---
 
@@ -132,7 +149,7 @@ If `widget.sh` prints `CARD_UNAVAILABLE <reason>` or fails, or `render_widget` a
 **D1. "Deploy AccountService to https://mydomain--mysandbox.sandbox.my.salesforce.com."**
 
 ```bash
-bash <skill_dir>/scripts/resolve-environment.sh my-dev-org https://mydomain--mysandbox.sandbox.my.salesforce.com
+bash scripts/resolve-environment.sh my-dev-org https://mydomain--mysandbox.sandbox.my.salesforce.com
 ```
 
 - `matched` and `selectable`: confirm the row back with name, URL, and org id, build the request, show the Step 4 confirmation, then submit.
@@ -157,7 +174,7 @@ Make no API call. Ask one question: which components to deploy. Then ask for the
 State what you will validate, then submit with `"isCheckDeploy": true` (`references/request-body.md`), then:
 
 ```bash
-bash <skill_dir>/scripts/poll-deploy-status.sh <requestId> my-dev-org 10 100
+bash scripts/poll-deploy-status.sh <requestId> "my-dev-org" 10 100
 # Exit codes: 0 succeeded, 2 failed or not found, 3 timeout, 1 usage or call error (4 only with --once)
 ```
 
@@ -168,13 +185,13 @@ On success, report the validation id from `metadata.deployId` and offer a quick 
 Skip the component and target steps. Poll once:
 
 ```bash
-bash <skill_dir>/scripts/poll-deploy-status.sh --once <requestId> my-dev-org
+bash scripts/poll-deploy-status.sh --once <requestId> "my-dev-org"
 # Exit 4 means still processing: report the status and step
 ```
 
 **D9. The deploy takes more than 2 minutes.**
 
-The poll exits `3`. Reply: "Your deploy is still running. Request id: `<requestId>`. Send me this id and I'll check its status." Stop polling. When the user sends the id, run `bash <skill_dir>/scripts/poll-deploy-status.sh --once <requestId> my-dev-org` and report the status in plain language.
+The poll exits `3`. Reply: "Your deploy is still running. Request id: `<requestId>`. Send me this id and I'll check its status." Stop polling. When the user sends the id, run `bash scripts/poll-deploy-status.sh --once <requestId> "my-dev-org"` and report the status in plain language.
 
 **D8. The user gives only an id starting `0Af`.**
 
@@ -187,3 +204,9 @@ Deploy to the first, report, then ask before starting the second. Each target ge
 **D7. The target answers `Bad_OAuth_Token` or `TARGET_ORG_SESSION_EXPIRED`.**
 
 The stored login for that environment is stale. Say so, reconnect that environment (`references/connect-org.md`, repair path), and ask before trying the deploy again.
+
+### A10. Org connected by another user
+
+User: "list my orgs". The resolver returns `UatOrg` with `userAuth: notConfigured` (`needs-my-signin`) and `DevSand` as `needs-sync`.
+
+Reply: the table, then buttons **Sign in as me: UatOrg** and **Sync DevSand**, and the line "1 org was connected by someone else; sign in to use it." No Sync button for UatOrg, and it is not in Sync all. On the sign-in click, run the repair path (fresh link, login as this user, PATCH once), then rebuild the list.

@@ -191,12 +191,12 @@ def _card(rec, unit, idx, transcript=True):
     return f'''
     <details class="card">
       <summary class="card-header">
-        <span class="card-idx">#{idx}</span>
+        <span class="card-idx">#{_esc(str(idx))}</span>
         <span class="{badge}">{badge_txt}</span>
         <span class="card-bucket">{_esc(BUCKET_LABELS.get(category, category))}</span>
         <span class="card-bucket">{_esc(rec["node"])}</span>
         <span class="card-utterance">{_esc((rec.get("user_utterance") or "")[:100])}</span>
-        <span class="card-session">r{rec["repeat"]} · {_esc(rec["unit_id"][-24:])}</span>
+        <span class="card-session">r{_esc(str(rec["repeat"]))} · {_esc(rec["unit_id"][-24:])}</span>
       </summary>
       <div class="card-body">
         <div class="flags">{" ".join(flags)}</div>

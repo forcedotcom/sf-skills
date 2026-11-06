@@ -12,6 +12,7 @@ Convert extracted Einstein Bot behavior into a high-quality Agent Spec that `/ag
 - **Action inventory** -> **Action inventory in spec** (`NEEDS_STUB` when implementation unknown)
 - **Fallback dialogs** -> **Boundary handling and recovery behavior**
 - **Transfer/system handoff** -> **Built-in `@utils.escalate`** (escalation policy; never a new/standalone action)
+- **End chat** -> **Built-in `@utils.end_session`** (conversation close; never a new/standalone action)
 
 ## Escalation Mapping Rule
 
@@ -25,6 +26,19 @@ Instead:
 
 - Express the escalation as an explicit `@utils.escalate` invocation in the relevant subagent's instructions (typically a terminal step of an escalation subagent).
 - Exclude the transfer from the action inventory entirely (it is not an authored action).
+
+## End Chat Mapping Rule
+
+End-chat behavior (Einstein Bot `SystemMessage` `EndChat`, or any step that closes the conversation) MUST be mapped implicitly to the built-in `@utils.end_session` utility. Do NOT:
+
+- create a new action for it in the action inventory (no `End_Chat`/`End_Session`-style action, no `NEEDS_STUB`/`NEEDS_CREATION` entry for the end chat),
+- model it as a flow/apex/standard-invocable action, or
+- represent it as generic "end the conversation" prose without the explicit `@utils.end_session` control.
+
+Instead:
+
+- Express the end chat as an explicit `@utils.end_session` invocation in the relevant subagent's instructions, at the point in the flow where the bot ended the chat (typically the terminal step of that path).
+- Exclude the end chat from the action inventory entirely (it is not an authored action).
 
 ## Dialog Functionality Extraction Rules
 
@@ -57,8 +71,7 @@ When generating `step_functionality`, handle all supported Einstein Bot step fam
    - **Set**: capture source -> target variable assignment.
    - **Unset**: capture variable clear/reset behavior.
    - **Collect**: capture which variable is collected, requiredness, and option source (static/dynamic).
-   - **SetConversationLanguage**: capture locale/language state update.
-   - **CollectAttachment**: capture file-collection requirement and resulting variable update.
+   - **SetConversationLanguage** and **CollectAttachment** are not supported: do not convert them, and record each skipped step (dialog + step) in open questions so it appears in the run report.
 3. **Invocation**
    - Capture invocation target, invocation type (`apex`, `flow`, `standardInvocableAction`, `externalService`, `quickAction`, `api`), input mappings, output mappings, and resulting variable writes.
 4. **Navigation**
@@ -68,14 +81,14 @@ When generating `step_functionality`, handle all supported Einstein Bot step fam
 6. **Group**
    - Process nested steps recursively in order, preserving parent conditions and emitting child step sentences in sequence.
 7. **SystemMessage**
-   - **Transfer**: capture escalation behavior and resolved target type/value, and map it implicitly to the built-in `@utils.escalate` (see Escalation Mapping Rule) — do not emit it as a new action.
-   - **EndChat**: capture terminal behavior and conversation close.
+   - **Transfer**: capture escalation behavior and resolved target type/value (resolved per [Extraction Blueprint](extraction-blueprint.md) step 4: from `systemMessageMappings` variable `SObjectType` + assignments when present, otherwise from the bot's `defaultOutboundFlow`), and map it implicitly to the built-in `@utils.escalate` (see Escalation Mapping Rule) — do not emit it as a new action.
+   - **EndChat**: capture terminal behavior and conversation close, and map it implicitly to the built-in `@utils.end_session` (see End Chat Mapping Rule) — do not emit it as a new action.
 8. **RecordLookup**
    - Capture queried object/entity, filter criteria, and output variable/list assignment.
 9. **RichMessage**
-   - Capture rich interaction type (for example forms/payments/selectors/links) and expected follow-up behavior.
+   - Not supported: do not convert it, and record each skipped step (dialog + step) in open questions so it appears in the run report.
 10. **GoalStep**
-    - Mark as bot-specific/non-agentic telemetry unless it drives business behavior; include only if behaviorally relevant.
+    - Not supported and not needed in the agent: do not convert it, and record each skipped step (dialog + step) in open questions so it appears in the run report.
 
 ### Step rendering rules
 

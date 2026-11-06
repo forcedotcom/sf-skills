@@ -13,7 +13,7 @@ from .redact import redact
 
 DEFAULT_JUDGE_MODEL = "llmgateway__OpenAIGPT41"
 
-TEXT_PROMPT = """You compare two replies an AI assistant could send at the same point of a customer conversation.
+TEXT_RUBRIC = """You compare two replies an AI assistant could send at the same point of a customer conversation.
 The REFERENCE reply is what production sent. The CANDIDATE reply was produced by another model for the identical request.
 
 The CANDIDATE is equivalent when, for the customer, it does the same thing:
@@ -21,35 +21,17 @@ The CANDIDATE is equivalent when, for the customer, it does the same thing:
 - no fact, number, product, price or commitment that conflicts with the REFERENCE or that the conversation does not support.
 Wording, order, tone and length may differ.
 
-Answer with JSON only: {{"equivalent": true or false, "reasoning": "<one sentence>"}}
+The user message is a JSON object with keys "context", "reference_reply", and "candidate_reply".
+Answer with JSON only: {"equivalent": true or false, "reasoning": "<one sentence>"}"""
 
-[recent conversation, oldest first]
-{context}
-
-[REFERENCE reply]
-{golden}
-
-[CANDIDATE reply]
-{candidate}
-"""
-
-ARGS_PROMPT = """You compare the arguments two AI models passed to the same tool at the same point of a conversation.
+ARGS_RUBRIC = """You compare the arguments two AI models passed to the same tool at the same point of a conversation.
 The REFERENCE arguments are what production sent. The CANDIDATE arguments were produced by another model for the identical request.
 
 The CANDIDATE is equivalent when the tool would do the same thing with it: the same search results, the same record, the same change.
 Differences in wording, case or word order that the tool would treat the same do not matter. A missing optional argument matters only if the REFERENCE value changes the result.
 
-Answer with JSON only: {{"equivalent": true or false, "reasoning": "<one sentence>"}}
-
-[tool] {tool}
-[parameter schema] {schema}
-
-[recent conversation, oldest first]
-{context}
-
-[REFERENCE arguments] {golden}
-[CANDIDATE arguments] {candidate}
-"""
+The user message is a JSON object with keys "tool", "parameter_schema", "context", "reference_arguments", and "candidate_arguments".
+Answer with JSON only: {"equivalent": true or false, "reasoning": "<one sentence>"}"""
 
 
 class JudgeConfigError(ValueError):
@@ -125,9 +107,12 @@ class Judge:
         self.client = client
         self.model = model
 
-    def _ask(self, prompt):
+    def _ask(self, system_prompt, data):
         payload = {"model": self.model,
-                   "messages": [{"role": "user", "content": redact(prompt)}],  # a reply may echo a token
+                   "messages": [
+                       {"role": "system", "content": system_prompt},
+                       {"role": "user", "content": redact(json.dumps(data, ensure_ascii=False))},
+                   ],
                    "generation_settings": {"num_generations": 1, "max_tokens": 400, "temperature": 0.0}}
         res = self.client.generate(payload)
         if res["status"] != "ok":
@@ -139,10 +124,17 @@ class Judge:
         return verdict, None
 
     def text(self, golden, candidate, messages):
-        return self._ask(TEXT_PROMPT.format(context=render_context(messages),
-                                            golden=golden, candidate=candidate))
+        return self._ask(TEXT_RUBRIC, {
+            "context": render_context(messages),
+            "reference_reply": golden,
+            "candidate_reply": candidate,
+        })
 
     def args(self, tool, schema, golden_args, candidate_args, messages):
-        return self._ask(ARGS_PROMPT.format(
-            tool=tool, schema=json.dumps(schema or {}), context=render_context(messages),
-            golden=json.dumps(golden_args, sort_keys=True), candidate=json.dumps(candidate_args, sort_keys=True)))
+        return self._ask(ARGS_RUBRIC, {
+            "tool": tool,
+            "parameter_schema": schema or {},
+            "context": render_context(messages),
+            "reference_arguments": golden_args,
+            "candidate_arguments": candidate_args,
+        })

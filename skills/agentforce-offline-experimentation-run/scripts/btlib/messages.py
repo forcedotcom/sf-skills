@@ -1,7 +1,8 @@
 """Rebuild an LLM step's request messages exactly as production sent them.
 
 STDM keeps every LLM_STEP's request in `gen_ai.input.messages`. Production sends those
-messages in that order, nothing merged or dropped:
+messages in that order, nothing merged; its LLM client drops only assistant messages with no
+text and no tool calls (btlib.sfap, with its other last-mile steps):
 
     system                      agent-level prompt
     user / assistant ...        conversation so far

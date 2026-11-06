@@ -35,8 +35,8 @@ SLAs.
    Support for Incidents* already exists: say so, **never re-seed** (the seed isn't idempotent — a second
    run duplicates every artifact), and stop unless the user explicitly asks for a custom policy. Don't
    upsell one.
-4. **Read what the choice needs** — from `IncidentPriorityMatrix`, only these two reads: the active Incident
-   `Priority` values (`describe-incident-priority-picklist`) and the matrix flag
+4. **Read what the choice needs** — from `ItsmPriorityMatrix` (entity type `Incident`), only these two
+   reads: the active Incident `Priority` values (`describe-priority-picklist`) and the matrix flag
    (`read-priority-matrix-prefs`, `IncPriorityMatrixEnabled`). With the matrix off, every Incident gets the
    default priority, so only that tier's milestones fire: warn plainly and point to the **Priority Matrix**
    feature. A warning, never a gate — never turn the matrix on from here.

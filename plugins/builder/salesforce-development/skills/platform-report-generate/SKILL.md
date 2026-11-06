@@ -95,6 +95,20 @@ Determine `<sourceDir>` from `sfdx-project.json` (commonly `force-app/main/defau
 
 Use `INTERVAL_CURRENT` for "this quarter", `INTERVAL_CURY` for "this year", `INTERVAL_LAST30` for last 30 days. Do NOT use `INTERVAL_CURQ` — it is not valid. See `references/date-intervals.md` for the full list.
 
+### Rule 16: Custom Summary Formulas Need Summary/Matrix + a Grouping Context
+
+`<aggregates>` (custom summary formulas, CSFs) evaluate **only** in `Summary`, `Matrix`, or `Joined` reports — never `Tabular`. Each CSF must declare where it is computed via `<downGroupingContext>` (and `<acrossGroupingContext>` for Matrix): use `GRAND_SUMMARY` for the report total, or a 0-based grouping level (`0`, `1`, …). A context that references a grouping level that does not exist is a deploy failure. See `references/summary-formulas-sorting-limits.md`.
+
+### Rule 17: Report-Level Sort Is `<sortColumn>` + `<sortOrder>`; Group Sort Lives on the Grouping
+
+- **Detail sort:** set top-level `<sortColumn>` (a platform column name that also appears in `<columns>`) plus `<sortOrder>` (`Asc` or `Desc`).
+- **Grouping sort:** do NOT use `<sortColumn>` — set `<sortOrder>` on the `<groupingsDown>` / `<groupingsAcross>` element. To sort a grouping by a measure, match `<sortType>` to what `<sortByName>` names: `<sortType>Aggregate</sortType>` with a summarized column name (e.g. `AMOUNT`, which must carry an `<aggregateTypes>`, or `RowCount`); `<sortType>CustomSummaryFormula</sortType>` with a CSF `<developerName>` (e.g. `FORMULA1`). Pairing `Aggregate` with a CSF name deploys but silently sorts by the grouping field instead. Default `<sortType>` is `Column`.
+- `<sortOrder>` is case-sensitive: `Asc` / `Desc` (not `ASC`/`Ascending`). See `references/summary-formulas-sorting-limits.md`.
+
+### Rule 18: Row Limit / Top-N Is Tabular-Only and Requires a Sort
+
+`<rowLimit>` (the "Row Limit" / top-N feature used for tabular dashboard components) is valid **only** on `Tabular` reports and **must** be paired with `<sortColumn>` + `<sortOrder>` that define what "top" means: `Desc` = top N, `Asc` = bottom N. Setting `<rowLimit>` on Summary/Matrix, or without a sort column, fails to deploy. Max 99. See `references/summary-formulas-sorting-limits.md`.
+
 ## Top-Level Elements
 
 | Element | Required | Notes |
@@ -105,8 +119,12 @@ Use `INTERVAL_CURRENT` for "this quarter", `INTERVAL_CURY` for "this year", `INT
 | `<scope>` | Recommended | `organization` (or `org` for LeadList) |
 | `<columns>` | Yes | Field columns — each has `<field>` and optional `<aggregateTypes>` |
 | `<filter>` | No | Contains `<criteriaItems>` with `<column>`, `<operator>`, `<value>` |
-| `<groupingsDown>` | Conditional | Row groupings: `<field>`, `<dateGranularity>`, `<sortOrder>` |
+| `<groupingsDown>` | Conditional | Row groupings: `<field>`, `<dateGranularity>`, `<sortOrder>`, and `<sortType>`/`<sortByName>` for measure sort |
 | `<groupingsAcross>` | Conditional | Column groupings (Matrix only) |
+| `<aggregates>` | No | Custom summary formulas (Summary/Matrix/Joined only) — see Rule 16 |
+| `<sortColumn>` | No | Platform column name to sort detail rows by; pair with `<sortOrder>`; required for `<rowLimit>` |
+| `<sortOrder>` | No | `Asc` or `Desc` (case-sensitive) — used at report level and on each grouping |
+| `<rowLimit>` | No | Tabular-only top-N (1–99); requires `<sortColumn>` + `<sortOrder>` — see Rule 18 |
 | `<timeFrameFilter>` | Recommended | `<dateColumn>`, `<interval>`, optional `<startDate>`/`<endDate>` |
 | `<chart>` | No | See `references/chart-types.md` |
 | `<buckets>` | No | Bucket field definitions |
@@ -159,6 +177,7 @@ Common operators: `equals`, `notEqual`, `lessThan`, `greaterThan`, `contains`, `
 | `references/filter-operations.md` | When building filters — complete operator reference |
 | `references/verification-checklist.md` | Step 6 — pre-deploy validation |
 | `references/errors-and-troubleshooting.md` | When fields are missing or deployment fails |
+| `references/summary-formulas-sorting-limits.md` | When adding custom summary formulas, sorting, or a row limit / top-N (Rules 16–18) |
 | `examples/TabularOpportunitiesReport.report-meta.xml` | Tabular report template |
 | `examples/OpportunitiesByStageReport.report-meta.xml` | Summary report with chart |
 | `examples/OpportunitiesByStageAndQuarter.report-meta.xml` | Matrix report template |

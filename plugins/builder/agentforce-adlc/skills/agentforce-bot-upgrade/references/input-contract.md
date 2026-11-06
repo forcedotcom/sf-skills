@@ -4,15 +4,15 @@
 
 Input mode is selected from `--mode <online|offline>`:
 
-1. **Online (Mode A: org-backed retrieval)** — Use org alias + bot identity, then fetch metadata/dependencies via SF CLI.
-2. **Offline (Mode B: local metadata input)** — Use provided local metadata/artifacts directly without org fetch.
+1. **Online (org-backed retrieval)** — Use org alias + bot identity, then fetch metadata/dependencies via SF CLI.
+2. **Offline (local metadata input)** — Use provided local metadata/artifacts directly without org fetch.
 
 If `--mode` is omitted, default to **online**.
 Only ask the user to clarify mode when provided inputs are insufficient or contradictory for the inferred/default mode. When `--interactive=false`, do not ask — proceed with the inferred/default mode and record the assumption; halt only if the inputs cannot support any mode.
 
 ## Supported Input Modes
 
-### Mode A: Org-backed retrieval
+### Online: Org-backed retrieval
 
 Required inputs:
 
@@ -20,7 +20,7 @@ Required inputs:
 2. `--bot <bot-name>` — Einstein Bot developer name/identifier to migrate.
 3. `--bot-version <bot-version>` — specific version to migrate (for example: `v3`).
 
-### Mode B: Offline metadata input (new)
+### Offline: Local metadata input (new)
 
 Required inputs:
 
@@ -54,8 +54,8 @@ If required inputs for the selected mode are missing, stop and ask for them befo
 
 ## Identity Resolution Rules
 
-- For Mode A, use `org-alias + bot + bot-version` as the run identity key.
-- For Mode B, use `bot + bot-version` derived from provided XML metadata (or confirmed from user when not derivable).
+- For Online mode, use `org-alias + bot + bot-version` as the run identity key.
+- For Offline mode, use `bot + bot-version` derived from provided XML metadata (or confirmed from user when not derivable).
 - Do not merge artifacts from different versions in the same run.
 - If source files contain a mismatched bot identity, pause and ask the user which identity is authoritative. When `--interactive=false`, do not pause — treat the identity declared in the authoritative bot metadata as the recommended default and record the assumption in `open_questions`.
 
@@ -67,7 +67,7 @@ If required inputs for the selected mode are missing, stop and ask for them befo
 
 ## Post-Input Finalization Workflow (Required)
 
-### Mode A: Org-backed retrieval
+### Online: Org-backed retrieval
 
 After `--org-alias + --bot + --bot-version` are finalized, execute the SF CLI sequence in:
 
@@ -82,7 +82,7 @@ This is the canonical command list for:
 
 Any unresolved dependency must be recorded in `open_questions` and mapped as `NEEDS_STUB` where applicable.
 
-### Mode B: Offline metadata input
+### Offline: Local metadata input
 
 When both XML files are provided (`.bot-meta.xml` + `.botVersion-meta.xml`):
 

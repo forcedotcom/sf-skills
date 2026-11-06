@@ -48,7 +48,7 @@ Apex edits, and permission-set assignment are real, side-effecting writes.
 
 | Thing | Value |
 |---|---|
-| Repo clone URL | `https://github.com/trailheadapps/commerce-b2b-headless.git` (ask for an existing clone first; a new clone goes to a user-confirmed path under the cwd — Step 3) |
+| Repo clone URL | `https://github.com/trailheadapps/commerce-b2b-headless.git` (Step 3) |
 | UI Bundle dir (`$BUNDLE`) | `force-app/main/default/uiBundles/commerceb2bheadless` |
 | WebStore config file | `$BUNDLE/src/config/commerce.ts` |
 | Registration Apex | `UIBundleRegistration.cls` (in the repo's Apex classes folder) |
@@ -61,14 +61,9 @@ Apex edits, and permission-set assignment are real, side-effecting writes.
 ## The four values you must set
 
 Everything else in the repo is portable. These four are environment-specific — resolve each against
-the target org, then write it into the file. Steps 4a–4d below do this.
-
-| # | Value | File / symbol | Prefix |
-|---|---|---|---|
-| 1 | WebStore Id | `commerce.ts` → `WEBSTORE_ID` | `0ZE` |
-| 2 | Default BuyerGroup Id | `UIBundleRegistration.cls` → `DEFAULT_BUYER_GROUP_ID` | `0ZI` |
-| 3 | Buyer permission set group | `UIBundleRegistration.cls` → `BUYER_PERMISSION_SET_GROUP` (DeveloperName) | — |
-| 4 | Vite org alias (optional) | `vite.config.ts` → `salesforce({ orgAlias: '…' })` | — |
+the target org, then write it into the file (Steps 4a–4d): the **WebStore Id** (`0ZE…`), the default
+**BuyerGroup Id** (`0ZI…`), the buyer **permission set group** DeveloperName, and the optional Vite
+**org alias**.
 
 ---
 
@@ -87,7 +82,14 @@ If the user gave an org alias, use it. Otherwise list what's connected and ask w
 sf org list --json | jq -r '.result.nonScratchOrgs[]?.alias, .result.scratchOrgs[]?.alias'
 ```
 
-Confirm it's reachable: `sf org display --target-org <alias>`. If not connected, log in:
+Confirm it's reachable. Do **not** run bare `sf org display` — it prints the org's access token into
+the conversation. Project only the non-secret fields:
+
+```bash
+sf org display --target-org <alias> --json | jq -r '.result | "\(.connectedStatus) \(.instanceUrl) API \(.apiVersion)"'
+```
+
+Expect `Connected`. If it prints anything else, log in:
 `sf org login web --alias <alias> --instance-url https://<my-domain>.my.salesforce.com`.
 
 ### Step 2 — Discover the org's WebStores, let the user pick
@@ -142,6 +144,14 @@ If the clone fails with "Repository not found" or an auth prompt, the user's Git
 see the repo — don't stop; ask for a URL they can reach (e.g. their fork) or an existing local
 clone, and continue from there. Set `$REPO` to the confirmed path.
 
+Either way, show the user the code Step 5 will build and run on this machine, and get their OK unless
+the origin is `trailheadapps/commerce-b2b-headless` on github.com (any URL form).
+
+```bash
+git -C "$REPO" remote get-url origin | sed -E 's#(://)[^/@]*@#\1#'   # credentials stripped
+git -C "$REPO" log -1 --date=short --format='%h %cd'
+```
+
 Either way, the repo is a **reference implementation you adapt**, not a drop-in — the placeholder
 edits below are mandatory. Skim `$REPO/README.md` to
 confirm you're on a compatible version if anything looks different from the Fixed-facts table.
@@ -187,14 +197,36 @@ falls back to `65.0`, which mismatches newer orgs and 401s every authenticated r
 
 ### Step 5 — Build the UI Bundle, then hand off the deploy
 
-The `dist/` is what gets shipped, and the WebStore Id (Step 4a) is baked into it at build time. Build from
-inside the bundle, deleting any existing `dist/` first — if the build fails partway, a leftover
-`dist/` from an earlier build (old or placeholder values baked in) would otherwise deploy silently.
-Confirm the chosen WebStore Id made it into the bundle before deploying:
+The `dist/` is what gets shipped, with the WebStore Id (Step 4a) baked in at build time. Build inside
+the bundle and delete any existing `dist/` first — if the build fails partway, an earlier build's
+`dist/` (old or placeholder values) would otherwise deploy silently. Confirm the chosen WebStore Id
+made it into the bundle before deploying.
+
+**First, check the clone holds nothing but your Step 4 edits** — the install and build run the repo's
+scripts and `vite.config.ts` on this machine. With `REPO` set to the repo's absolute path:
 
 ```bash
-cd $REPO && npm install
-cd $BUNDLE && npm install && rm -rf dist && npm run build   # tsc -b && vite build → fresh dist/
+( set -eu -o pipefail
+  cd "${REPO:?}"
+  D=force-app/main/default; U=$D/uiBundles/commerceb2bheadless
+  ok="( M|M |MM) ($U/src/config/commerce\.ts|$U/vite\.config\.ts|$D/classes/UIBundleRegistration\.cls)"
+  ok="$ok|!! ($U/(node_modules|dist)(/.*)?|\.sf(dx)?/|.*\.tsbuildinfo)"
+  left=$( { git status --porcelain --ignored -unormal --ignore-submodules=none
+            git ls-files -v | sed -n 's/^[^H] /hidden-by-index-flag: /p'; } | { grep -vE "^($ok)\$" || [ $? = 1 ]; } )
+  [ -z "$left" ] || { printf 'GATE FAIL:\n%s\n' "$left"; exit 1; }
+  echo "GATE PASS" )
+```
+
+Only `GATE PASS` lets you continue; `GATE FAIL`, an error, or no output is a **STOP** — show the user
+the output and go on only if they confirm each item (say, the Chatter change from an earlier run).
+Then skim `git diff HEAD`: only the Step 4 values should differ. This doesn't vet the repo's code,
+`.git` hooks, or install scripts.
+
+Install with `npm ci`, not `npm install`: it installs exactly what the committed `package-lock.json`
+pins and fails rather than resolve anything new. If it fails, stop and tell the user.
+
+```bash
+cd "$REPO/force-app/main/default/uiBundles/commerceb2bheadless" && rm -rf dist && npm ci && npm run build   # tsc -b && vite build → fresh dist/
 grep -l '<0ZE…>' dist/assets/*.js >/dev/null && echo "WebStore Id baked"
 ```
 
@@ -286,7 +318,7 @@ Report the `siteUrl` as **"here is your hosted React Storefront"**. If `status` 
 site needs publishing — direct the user to **Setup → Digital Experiences → All Sites →
 commerceb2bheadless → Publish** (Experience Builder), then re-fetch the URL. If the endpoint returns
 nothing, construct the fallback `https://<my-domain>.my.site.com/commerceb2bheadless` — the path is
-the site name, not the `vforcesite` prefix. Get `<my-domain>` from `sf org display`'s instance URL;
+the site name, not the `vforcesite` prefix. Get `<my-domain>` from the `instanceUrl` Step 1 printed;
 non-production instances use a different site-domain suffix, so tell the user to verify the URL in
 All Sites.
 
@@ -298,14 +330,15 @@ If the four values are already set (Step 4 done), the repo's own orchestrator do
 permset in one go:
 
 ```bash
-cd $REPO && npm run setup -- --target-org <alias> --skip-dev --skip-data
+cd "$REPO" && npm run setup -- --target-org <alias> --skip-dev --skip-data
 ```
 
 Caveats — it does **not** replace the placeholders and it assigns `UIBundleApexAccess` to the
 **current user**, not the guest user, so you **still** run Step 4 before it and Step 6 (the guest
-assignment) after it. Drop `--skip-dev` only if the user wants the local Vite dev server
-(`localhost:5173`) instead of / in addition to the hosted site. If the bundle has no GraphQL
-codegen wired, add `--skip-graphql`.
+assignment) after it. Run Step 3's origin print and Step 5's check before it too: it runs the repo's
+code and installs with `npm install`, not `npm ci`. Drop `--skip-dev` only if the user wants the
+local Vite dev server (`localhost:5173`) instead of / in addition to the hosted site. If the bundle
+has no GraphQL codegen wired, add `--skip-graphql`.
 
 ## Troubleshooting (from the repo README)
 

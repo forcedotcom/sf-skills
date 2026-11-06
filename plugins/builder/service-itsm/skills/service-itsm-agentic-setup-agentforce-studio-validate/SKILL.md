@@ -14,7 +14,7 @@ metadata:
       semver: ">=18.0.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
-  accessCheck: "License.Agentforce"
+  accessCheck: "OrgPermissions.EinsteinAgentPlatform"
 allowed-tools: |
   Bash
   Read

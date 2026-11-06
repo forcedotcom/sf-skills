@@ -53,3 +53,15 @@ Run through these checks before deploying any generated report metadata.
 - [ ] Maximum 3 cross-filters per report
 - [ ] Maximum 5 criteria items per cross-filter
 - [ ] `<operation>` is `with` or `without`
+
+## Custom Summary Formula Checks (if applicable)
+- [ ] `<aggregates>` only on Summary/Matrix/Joined (never Tabular)
+- [ ] `<datatype>` is `number`, `currency`, or `percent`; `<scale>` is 0–18
+- [ ] `<downGroupingContext>` (and `<acrossGroupingContext>` for Matrix) resolves to `GRAND_SUMMARY` or an existing grouping level
+- [ ] `<developerName>` is unique within the report
+
+## Sort & Row Limit Checks (if applicable)
+- [ ] `<sortColumn>` (when present) names a column that appears in `<columns>`; `<sortOrder>` is exactly `Asc` or `Desc`
+- [ ] Grouping `<sortType>Aggregate</sortType>` pairs with a summarized column name in `<sortByName>` (like `AMOUNT` or `RowCount` — NOT the Analytics-REST `s!` prefix)
+- [ ] Grouping sorted by a CSF uses `<sortType>CustomSummaryFormula</sortType>` with the CSF `<developerName>` (like `FORMULA1`) — `Aggregate` + a CSF name deploys but silently sorts by the grouping field
+- [ ] `<rowLimit>` only on `Tabular`, value 1–99, with `<sortColumn>` + `<sortOrder>` present

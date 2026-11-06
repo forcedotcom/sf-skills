@@ -1,8 +1,8 @@
 ---
 name: service-itsm-agentic-setup-incident-management
-description: "Orchestrator for Incident Management setup in Service Cloud ITSM: presents the features, tracks progress, and configures each — Incident preferences, Incident persona PSG assignment, Priority Matrix, SLA & Milestones, Incident dashboards, Email-to-Incident, Major Incident Management (approval group + MIM preferences), Broadcast Communications, Manage Incidents with AI, Service Management Privilege (privilege escalation), and audit tracking. Use for: set up or configure incident management, a walkthrough, what incident features can I configure; the incident preference toggles (default field validations, auto-close child incidents, auto-triage, assign with Einstein, restrict assigned group, rich text descriptions); assigning the Incident Fulfiller or Incident Manager persona PSG. DO NOT TRIGGER for: the master on/off switch alone (use the IncidentMgmt SOR), the Priority Matrix, SLA, or field history tracking alone, the Major Incident Manager PSG, creating/editing PSGs, or Problem/Change/Case Management."
+description: "Orchestrator for Incident Management setup in Service Cloud ITSM: presents the features with live org status, and configures each — Incident preferences, Incident persona PSG assignment, Priority Matrix, SLA & Milestones, Incident dashboards, Email-to-Incident, Major Incident Management (approval group + MIM preferences), Broadcast Communications, Manage Incidents with AI, Service Management Privilege (privilege escalation), and audit tracking. Use for: set up or configure incident management, a walkthrough, what incident features can I configure; the incident preference toggles (default field validations, auto-close child incidents, auto-triage, assign with Einstein, restrict assigned group, rich text descriptions); assigning the Incident Fulfiller or Incident Manager persona PSG. DO NOT TRIGGER for: the master on/off switch alone (use the IncidentMgmt SOR), the Priority Matrix, SLA, or field history tracking alone, the Major Incident Manager PSG, creating/editing PSGs, or Problem/Change/Case Management."
 metadata:
-  version: "3.0"
+  version: "3.2"
   domains: ["Service"]
   minApiVersion: "67.0"
   relatedSkills:
@@ -23,14 +23,14 @@ allowed-tools: |
 # Incident Management Setup Orchestrator
 
 Guide the user through setting up Incident Management features in Salesforce Service Cloud ITSM by
-presenting the available capabilities, tracking progress, and **delegating** each feature to the Setup
-Operation Recipes (SORs) whose own steps this skill runs.
+presenting the available capabilities with their status read from the org, and **delegating** each feature
+to the Setup Operation Recipes (SORs) whose own steps this skill runs.
 
 ## Goal
 
 Act as the coordinator for Incident Management feature configuration. Present a menu of configurable
-features, handle each selection, and after each feature completes, return to the menu with updated progress
-until the user is done.
+features with each one's status read from the org, handle each selection, and after each feature completes,
+re-read the statuses and return to the menu until the user is done.
 
 ## How each feature is handled
 
@@ -38,7 +38,7 @@ until the user is done.
 |---|---------|-----------|-----------|
 | P | Incident Preferences | **Delegate** → `IncidentMgmt` (its preference steps) | `references/incident-preferences.md` |
 | 1 | Incident Persona PSG | **Delegate** → `service-itsm-incident-persona-assign` | `references/incident-persona-psg.md` |
-| 2 | Priority Matrix | **Delegate** → `IncidentPriorityMatrix` | `references/priority-matrix.md` |
+| 2 | Priority Matrix | **Delegate** → `ItsmPriorityMatrix` (entity type `Incident`) | `references/priority-matrix.md` |
 | 3 | SLA & Milestones | **Delegate** → `SLASettings`, then `sla-management-setup` (custom policy) | `references/sla-milestones.md` |
 | 4 | Incident Dashboards | **Delegate** → `itsm-incident-dashboard-enablement` (Manager) and `itsm-incident-fulfiller-dashboard-enablement` (Fulfiller) | `references/incident-dashboards.md` |
 | 5 | Email-to-Incident | **Delegate** → `EmailToIncident` | `references/email-to-incident.md` |
@@ -69,29 +69,29 @@ send the prefix once.
    never run a SOR's own enable or delegate step for them, and never follow a hand-off a SOR names for
    either gate or for another feature on this menu.
 3. **Read before write.** Read the current state through the SOR's read steps. If it already matches what
-   the user wants, that read is the verification: mark the feature `Done` with no write.
+   the user wants, that read is the verification — no write.
 4. **Confirm the exact change.** State the current value and the exact change, and get an explicit yes
    (`AskUserQuestion`) before any write. The user's initial request is not that confirmation; one yes can
    cover several writes if you listed them all.
 5. **Write, then read back.** Write only through the SOR's write steps, then read back through its verify
-   steps. Mark the feature `Done` only when the read-back shows the chosen state — a write response alone
+   steps. The feature is finished only when the read-back shows the chosen state — a write response alone
    is not proof.
 
 ## Behavior
 
-### 0. Reuse what the session already knows
+### 0. Read every status from the org
 
-Before running any preflight below, check whether the same fact was already established earlier in this
-conversation. Cache-eligible: the **IT Service Enablement and master switch states** (reuse each **only
-when confirmed *enabled***; a cached "off" MUST NOT let step 2 skip), **already-completed features** (stay "Done"; don't re-run unless
-asked to reconfigure), and the **target org**. **When in doubt, re-check.** Skip only when the earlier fact
-is unambiguously in context AND you have not switched orgs — a wrong skip on a live write is worse than a
-duplicated read.
+Every status you show — both prerequisite gates, the menu, the table after a feature runs, the completion
+summary — comes from reading the org with `references/status-checks.md` just before you show it. Never
+carry a status over from earlier in the conversation, from a previous session, or from what the user says
+is already done: setup may have changed since. A failed read is **Couldn't check**, never **Not done**. If
+the org disagrees with what the user said, show the org's status and say so. Only the **target org**
+carries over, unless the user switches orgs.
 
 ### 1. Extract context from conversation
 
-Scan chat history for which features are already done, any stated preferences/constraints, the target org,
-and business context that informs which features are relevant.
+Scan chat history for the target org, the features the user named, any stated preferences/constraints, and
+business context that informs which features are relevant — never for which features are done.
 
 ### 2. Verify IT Service Enablement, then ensure the Incident Management master switch is on
 
@@ -105,9 +105,10 @@ version with its minor, such as `v68.0`, never a bare major. If a feature read f
 other version strings. Never read or toggle `service-cloud-incident-management`, and do
 not use the Service-Foundation `IncidentManagement` look-alike or its broadcast toggles.
 
-Decide on `status` first: `ENABLED` is an idempotent no-op even if `enableBlockedReasons` is non-empty;
-`NOT_AVAILABLE` means halt (do not attempt enable). Show any `enableBlockedReasons` as plain text (their
-messages are HTML-escaped markup) and halt if present. Never infer success from a write response.
+Read each gate with the Salesforce Go rule in `references/status-checks.md` and act on it as that file's
+gates section says: `ENABLED` continues even with blocked reasons or an unfinished Salesforce Go setup step;
+`NOT_AVAILABLE` or a blocked reason halts — show the reason as plain text (its message is HTML-escaped
+markup) and do not attempt enable. Never infer success from a write response.
 
 1. **IT Service Enablement** — only exact `ENABLED` continues. Exact `NOT_ENABLED` with no blocked reasons:
    ask **“IT Service Enablement is off — enable it now?”** with `AskUserQuestion` (single-select, exactly
@@ -127,15 +128,15 @@ messages are HTML-escaped markup) and halt if present. Never infer success from 
 
 Never offer to bypass either gate.
 
-**Skip only when both gates were already confirmed *enabled* in this session** (see step 0). A cached
-"off" or unknown state MUST fall through to the checks above.
+**Re-read both gates each time the menu is about to show and before a direct single-feature handoff** —
+never reuse an earlier result (step 0).
 
-### 3. Present the feature menu as a multi-select
+### 3. Present the feature menu
 
-Emit the **Feature menu** template from `examples/output-templates.md` AND, in the same response, a single
-`AskUserQuestion` (`multiSelect: true`) whose options mirror the rendered rows — the table is the visual
-view; the tool call collects the selection. Both MUST appear together. Selecting one feature is valid;
-several enqueue for sequential handling in step 4.
+Read every row's status (step 0), then emit the **Feature menu** template from `examples/output-templates.md`.
+The table is the menu; the user replies with the numbers they want. Never collect the choice with
+`AskUserQuestion`: a question holds four options at most, so it can't carry every row. Every row stays
+selectable. Selecting one feature is valid; several enqueue for sequential handling in step 4.
 
 ### 4. Handle each selected feature in order
 
@@ -146,13 +147,14 @@ the per-feature invariants below.
 
 ### 5. After each feature completes
 
-Mark it "Done", suggest the next logical step, and re-present the menu with updated status using the
-**Post-feature progress** template in `examples/output-templates.md`.
+Re-read every status (step 0), suggest the next logical step — the first row that isn't **Done** or **Not
+available** — and re-present the menu using the **Post-feature progress** template in
+`examples/output-templates.md`.
 
 ### 6. Completion summary
 
-When the user says they're done (or all features are configured), present the **Completion summary**
-template in `examples/output-templates.md`.
+When the user says they're done (or every row reads **Done**), present the **Completion summary** template
+in `examples/output-templates.md`, with every status read just before it (step 0).
 
 ---
 
@@ -232,8 +234,7 @@ so only that tier's milestones fire.
 
 - ALWAYS show "(via service-itsm-agentic-setup-incident-management)" in the setup header
 - ALWAYS check the IT Service Enablement and master-switch prerequisites (Behavior step 2) through
-  the `IncidentMgmt` SOR before showing the menu or handing off a named feature, unless both were
-  confirmed enabled earlier in this conversation
+  the `IncidentMgmt` SOR before showing the menu or handing off a named feature
 - ALWAYS ask each off gate with `AskUserQuestion` (single-select Yes/No), every time, never as plain text,
   before delegating the enable; No stops and points to Setup
 - ALWAYS require exact `ENABLED` verification for `service-cloud-itsm-setup` before the Incident switch;
@@ -241,15 +242,16 @@ so only that tier's milestones fire.
 - ALWAYS present the feature menu before configuring any selected feature (the master-switch prerequisite
   is the only permitted action before the menu) — do not assume which feature the user wants, **except**
   when the user named a specific feature, in which case go straight to it (single-select is fine)
-- ALWAYS pair the rendered feature-menu table with an `AskUserQuestion` (`multiSelect: true`) in the same
-  response — the table is the visual view; the tool call is the selection channel
+- ALWAYS show the feature menu as the table and take the choice from the user's typed reply, never from
+  an `AskUserQuestion`
 - ALWAYS read a feature's reference file before executing it, follow its rules, and follow the SOR at
   runtime — never hardcode a route, body, or preference name
 - ALWAYS run a feature's SORs under the hand-off protocol; NEVER hand a feature off to another skill, and
   never follow a SOR's hand-off for either prerequisite gate or for another feature on this menu
 - NEVER set up a feature the user did not select; for "set up everything", walk each feature sequentially
   in recommended order, confirming between each step
-- Track progress across the conversation — do not re-present completed features as "Not done"
+- ALWAYS read each status from the org just before you show it (step 0) — a failed read is **Couldn't
+  check**, never **Not done**
 - Do not show Salesforce record IDs in any output — human-readable names only
 
 ---
@@ -259,14 +261,14 @@ so only that tier's milestones fire.
 Before emitting any menu or summary, confirm each; adjust the output before sending if any is unchecked.
 
 - [ ] The header line ends with `(via service-itsm-agentic-setup-incident-management)`
-- [ ] The `IncidentMgmt` SOR confirmed both prerequisite gates before the menu or direct feature
-      handoff, unless both were already confirmed enabled earlier in this conversation; each off gate was
-      asked with `AskUserQuestion` (Yes/No), not plain text, before the enable was delegated
+- [ ] Both prerequisite gates were read from the org through the `IncidentMgmt` SOR just before the menu
+      or direct feature handoff; each off gate was asked with `AskUserQuestion` (Yes/No), not plain text,
+      before the enable was delegated
 - [ ] The exact `service-cloud-itsm-setup` entry verified exact `ENABLED` before the Incident-switch
       sequence; any other result stopped
-- [ ] The feature menu emitted BOTH the ASCII table AND an `AskUserQuestion` (`multiSelect: true`) in the
-      same response (single-select only if the user already named a specific feature)
-- [ ] Each feature row's `Status` reflects the actual tracked state (`Not done`, `In progress`, `Done`)
+- [ ] The feature menu is the full table, every row with its status, then the reply line — no
+      `AskUserQuestion` for the choice
+- [ ] Each status was read from the org just before this output (step 0) — a label and a short note
 - [ ] A feature is being handled only because the user explicitly selected it (or is being walked through
       sequentially with confirmation under an "all" / "everything" request)
 - [ ] For each feature: its reference file was read and its checks passed; its SORs ran under the
@@ -283,7 +285,8 @@ Read each `references/` file before executing its feature.
 
 | File | When to read |
 |------|--------------|
-| `examples/output-templates.md` | Behavior steps 3, 5, 6 — feature menu (multi-select), post-feature progress, completion summary |
+| `references/status-checks.md` | **Every run** — every status you show (step 0) and both gates (step 2): the labels, the Salesforce Go rule, each row's reads, the track roll-up |
+| `examples/output-templates.md` | Behavior steps 3, 5, 6 — feature menu, post-feature progress, completion summary |
 | `references/incident-preferences.md` | **Incident Preferences** — where to start in the `IncidentMgmt` SOR, the steps never to run, the one-way confirmations, and the licensed toggles |
 | `references/incident-persona-psg.md` | **Incident Persona PSG** — the not-provisioned stop, the persona menu, one pass per PSG, and the settling status |
 | `references/priority-matrix.md` | **Priority Matrix** — the reads, the full-replacement save, the read-back, and the Salesforce Go step |

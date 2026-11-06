@@ -73,7 +73,7 @@ Outside contract: `SESSION_CONSUMER_ID`, `CONTEXT_AGENT_ID`, `CONTEXT_AGENT_VERS
 
 | Element | Notes |
 |---------|-------|
-| `<clause>` | `WHEN` or `UNLESS` — match the wrapper |
+| `<clause>` | Always `WHEN`. Do not author `UNLESS`; use the negated operator (`CONTAINS_NONE`, `NOT_EQUALS`) instead |
 | `<operator>` | Always required |
 | `<resourcePath>` | What about the resource to inspect |
 | `<principalPath>` | What about the principal to inspect |

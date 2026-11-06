@@ -1,17 +1,16 @@
 # Onboarding contract — delegated mode, transport, pre-scan, registration
 
 Read this when the invocation carries a `context` object, before any org write, or when registering the skill in an
-onboarding module. It implements the Feature Setup Skill Guidelines (Conversational Onboarding, Service Cloud) for
-this skill. The sibling `service-digital-engagement-deployment-configure` has the same structure.
+onboarding module. The sibling `service-digital-engagement-deployment-configure` has the same structure.
 
 ## 1. Two entry points, one write procedure
 
 | | Delegated | Standalone |
 |---|---|---|
 | Detected by | `context.calledFrom == "service-onboarding"` | no `context` object |
-| Values come from | `values` in the payload — already approved in the plan table | you ask, using the defaults in SKILL.md |
-| Questions | none. A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Clarifying Questions in SKILL.md |
-| Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Clarifying Questions as written) |
+| Values come from | `values` in the payload — already approved in the plan table | you ask for the Inputs in SKILL.md; defaults are in `references/channel_settings.md` |
+| Questions | none. A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
+| Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Inputs as written) |
 | Ends with | the structured result in section 5 | a plain-language summary of the same outcome |
 
 Delegated payload:
@@ -23,15 +22,16 @@ Delegated payload:
     "routingType": "Queue",
     "routingTarget": "Support_Queue",
     "fallbackQueue": null,
-    "userVerification": true
+    "userVerification": false
   },
   "context": { "calledFrom": "service-onboarding", "discoveryMode": "guided" }
 }
 ```
 
 Required `values`: `channelLabel`, `routingType`, `routingTarget`; `fallbackQueue` is required when `routingType` is
-`Flow`, `User` or `AgentforceServiceAgent`. `userVerification` defaults to `true`, matching SKILL.md. Every other
-channel setting uses the SKILL.md defaults unless a key is supplied.
+`Flow`, `User` or `AgentforceServiceAgent`. `userVerification` defaults to `false` (`UnAuth`); when `true`, `verificationKeyset` (an existing
+keyset name) and `authIdentifier` are optional. Every other channel setting uses the defaults in
+`references/channel_settings.md` unless a key is supplied.
 
 Missing routing target, delegated: return `failed`, `errorMessage` = "<Flow|User|Bot|Queue> <name> not found". Never
 create one — queues come from the `queues` feature this one depends on.
@@ -80,7 +80,7 @@ Run before any write, both modes. `GET` `MessagingChannel` by `fullName` = the n
 | Exists, some targeted setting differs | **drift** — announce each change ("routing: Queue A → Queue B"), then write the full document. Standalone: ask for a yes first. Delegated: the plan approval covers it |
 | Exists but was created by Connect `channel/setup` (defaults populated: opt-out/help keywords, `embeddedConfig`) | you now own the whole document: GET, modify only targeted fields, PUT the full result |
 
-Standalone, channel exists: offer exactly three choices — no change / override / add to existing.
+Standalone, channel exists: offer exactly three choices — no change (stop) / override (replace the targeted settings, keep the rest) / add to existing (keep current settings, add only what the user lists).
 
 ## 4. Questions in the admin's language (guided mode)
 
@@ -90,9 +90,9 @@ Ask about the outcome; state the default with each; keep it to a handful.
 |---|---|
 | "Routing type: Queue, Flow, User or Agentforce Service Agent?" | "When a customer starts a chat, who should get it first: a team (queue), a specific person, or your AI agent? (Default: a team.)" |
 | "Fallback queue developer name?" | "If that person or agent isn't available, which team should the chat go to?" |
-| "Enable User Verification (JWT)?" | "Will customers be signed in to your site when they chat, so you know who they are? (Default: yes.)" Yes → Auth mode; setting up the signing keys is a separate step |
+| "Enable User Verification (JWT)?" | "Will customers be signed in to your site when they chat, so you know who they are? (Default: no.)" Yes → Auth mode; an existing signing keyset name is optional, and setting up the keys is a separate step |
 | "Pre-chat form / custom parameters" | "What should we ask customers before the chat starts? (Default: name and email.)" |
-| "`isAbandonedChatsEnabled`, `chatAbandonmentTimeout`…" | Not asked; use the SKILL.md defaults |
+| "`isAbandonedChatsEnabled`, `chatAbandonmentTimeout`…" | Not asked; use the defaults in `references/channel_settings.md` |
 
 ## 5. Result returned to the coordinator
 
@@ -108,10 +108,10 @@ Ask about the outcome; state the default with each; keep it to a handful.
 }
 ```
 
-`status` and `errorMessage` are the contract. `outputs` is always returned; it is an addition to the documented shape.
+`status` and `errorMessage` are the contract. `outputs` is always returned.
 On `failed`: `errorMessage` names the failed step and the platform error; stop; do not retry.
 
-## 6. Registration entry (draft for the onboarding team to place in a module)
+## 6. Registration entry (for the onboarding team to place in a module)
 
 ```yaml
 - id: messagingChannel
@@ -120,13 +120,14 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
   delegateSkill: service-digital-engagement-channel-configure
   dependsOn: [queues]
   revisionOwner: service-digital-engagement-channel-configure
-  # org perms: confirm exact names with Digital Engagement licensing (not yet confirmed)
   values:
     channelLabel:     { from: signal.messagingChannelName, default: "<company> Support Chat" }
     routingType:      { from: signal.messagingRouting,     default: "Queue" }
     routingTarget:    { from: signal.messagingRoutingTarget }
     fallbackQueue:    { from: signal.messagingFallbackQueue }
-    userVerification: { from: signal.messagingSignedIn,    default: true }
+    userVerification: { from: signal.messagingSignedIn,    default: false }
+    verificationKeyset: { from: signal.messagingKeyset }
+    authIdentifier:   { from: signal.messagingAuthIdentifier }
   writes: "MessagingChannel (Metadata CRUD); IsActive via sObject update"
   gating:
     irreversible: false
@@ -136,8 +137,3 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
     passWhen: "GET MessagingChannel fullName=<normalized name> returns the targeted sessionHandlerType and target and the intended authMode; SOQL SELECT IsActive, SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName=<name> returns IsActive=true, and non-null SessionHandlerId/FallbackQueueId where the routing type requires them"
   alternative: "Setup > Messaging Settings > New Channel > Messaging for In-App and Web; choose routing, then activate."
 ```
-
-Open items for the onboarding team: the `signal.*` keys do not exist in `onboarding-state.schema.json` yet
-(`channels` allows only email/web); `userVerification: true` makes an Auth channel, which also needs the
-user-verification step before signed-in customers can chat — decide if that is its own feature; the coordinator must
-accept `outputs`; org perm names are not yet confirmed.

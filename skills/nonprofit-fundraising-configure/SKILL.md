@@ -33,7 +33,7 @@ Designation record, configure basic gift/recurring-donation-failure settings and
 feature toggles, and offer optional enhanced features. Every read/write runs through the **Salesforce-hosted
 headless-360 MCP server** via its four meta-tools. Toggle writes use named or org-preference operations, never the
 `IndustriesSettings` Metadata API (not available on every org). The org comes from the
-session's OAuth JWT; this skill never handles an org id, alias, or credentials.
+session's OAuth JWT; this skill never handles credentials, and uses an org alias only to pin the optional CLI fallback to the session's org.
 
 ## Scope
 

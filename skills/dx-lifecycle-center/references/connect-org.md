@@ -37,8 +37,8 @@ If the type is still ambiguous (for example only an environment name like "MySan
 
 ## Step 0 — Resolve inputs and check for an existing credential
 
-1. Resolve `<dev-org-alias>`: the alias the user named, else the default org from `sf org display --json`. Read `result.apiVersion` as `<ver>`; it must be at least `67.0`.
-2. Determine the mode. Hub mode only when reached from `hub-org.md`; every other connect is deploy mode. In deploy mode also determine the target org type and a short environment name.
+1. Resolve `<dev-org-alias>`: the alias the user named, else the default org from `sf org display --json`. Read `result.apiVersion` as `<ver>`; it must be at least `67.0`; the alias registration below needs `68.0`, and on `67.0` the connect works but no alias is registered, so do not add the flag.
+2. Determine the mode. Hub mode only when reached from `hub-org.md`; every other connect is deploy mode. In deploy mode also determine the target org type and a short environment name. The name is also the workspace alias. Spaces are allowed (`Dev 12 Org`), but never `default-org`, and never a name an existing alias already uses for another org: check `bash scripts/resolve-environment.sh "<dev-org-alias>"` for `aliasConflict: true` and `sf alias list` for the name. If it is taken, ask for a different one.
 3. Check whether a usable credential already exists (`connect-api.md`, *Check credential status*).
    - **Hub mode:** check `ALMDevOpsCenterHub`.
    - **Deploy mode:** run the environment lookup (`list-orgs.md`) using the org's **URL, org id, or local alias only**, never the environment name the user wants to give it. If `sourceMatched` is `true`, say it cannot be connected as its own deploy target and ask for another org. If a row matches, check its `NamedCredential`. A row that matches only by name belongs to another org: that name is taken, so ask for a different one. If the user gave no URL, org id, or alias, there is nothing to match: create.
@@ -65,7 +65,7 @@ If the type is still ambiguous (for example only an environment name like "MySan
 sf api request rest "/services/data/v<ver>/connect/devops/environment" \
   --method POST \
   --body '{"envName":"<name>","orgType":"<PRODUCTION|SANDBOX|ORGFARM>","isDevEnv":false}' \
-  --target-org <dev-org-alias>
+  --target-org "<dev-org-alias>"
 ```
 
 Response: `{id, name, namedCredential, redirectUrl, orgType, ...}`. Keep `id` (the `DevopsEnvironment` Id) and `namedCredential`. Send only `envName`, `orgType`, and `isDevEnv`. A `BAD_REQUEST` naming `Invalid org type` means the value above was wrong.
@@ -76,7 +76,7 @@ Response: `{id, name, namedCredential, redirectUrl, orgType, ...}`. Keep `id` (t
 sf api request rest "/services/data/v<ver>/connect/devops/setupNamedCredential" \
   --method POST \
   --body '{"namedCredentialName":"ALMDevOpsCenterHub","namedCredentialType":"ORG_TO_ORG"}' \
-  --target-org <dev-org-alias>
+  --target-org "<dev-org-alias>"
 ```
 
 Response: `{"redirectUrl": "..."}`. In both modes replace every `&amp;` in `redirectUrl` with `&`.
@@ -96,21 +96,10 @@ This step **requires a human** (authorization code with PKCE, stored per user). 
 >
 > Link not working? Copy it: `<redirectUrl>`
 
-Hub mode uses the same layout with the heading **Connect the Lifecycle Center org** and the button text **Connect to Lifecycle Center org →**.
-
-**Hub mode, as a card.** Only when the `render_widget` tool is available. Without it, use the layout above and skip this. Run, with the `redirectUrl` after the `&amp;` fix, unmodified:
-
-```bash
-bash <skill_dir>/scripts/widget.sh connect-sign-in '{"signInUrl":"<redirectUrl>"}'
-```
-
-It prints one line. The card has the heading **Sign in to Lifecycle Center**, the steps (sign in as a user with the **DevOps Center User** permission set, allow access, confirm access in the working org, then reply **done**), and a **Connect to Lifecycle Center org** button that opens the URL in a new tab.
-
-- `CARD_JSON <json>`: call `render_widget` once with `<json>` as its arguments, exactly as printed. The card holds the heading, the steps, and the link, so write no other text about the sign-in. Never put the card JSON or the URL in your message.
-- `CARD_UNAVAILABLE <reason>`, any other output or an error, or `render_widget` answers `{rendered: false, reason}`: use the layout above. Never edit the URL or the card JSON to make a card fit.
+Hub mode uses the heading **Connect the Lifecycle Center org** and the link text **Connect to Lifecycle Center org**.
 
 Rules for the link:
-- Use the full `redirectUrl` after the `&amp;` fix, unmodified, as the Markdown link, and again in the "Link not working?" line. Show the sign-in once, as the layout or as the card; do not repeat it in other words.
+- Use the full `redirectUrl` after the `&amp;` fix, unmodified, as the Markdown link, and again in the "Link not working?" line. Show the sign-in once; do not repeat it in other words.
 - Only the newest link works. Each new Step 1 run (hub) or `GET /connect/devops/environment/<id>` (deploy) replaces the previous one, so never run one while the user is still signing in, and never show an older link again. If the user reports it expired or failed, get a fresh one the same way.
 - The user should open it in a browser that is signed in to the dev org as the same user the CLI uses (the final confirmation happens on the dev org). Otherwise the browser lands on that org's login page: tell them to sign in there, then use the link again.
 - Right after showing the layout, wait for the user to reply **done**. Do not run other steps in between.
@@ -133,11 +122,17 @@ The NC is created pointing at a placeholder login host. The PATCH calls `/servic
 **Deploy mode:**
 
 ```bash
-sf api request rest "/services/data/v<ver>/connect/devops/environment/<id>" \
-  --method PATCH --target-org <dev-org-alias>
+sf api request rest "/services/data/v<ver>/connect/devops/environment/<id>?registerWorkspaceAlias=true" \
+  --method PATCH --body '{}' --target-org "<dev-org-alias>"
 ```
 
+`registerWorkspaceAlias=true` makes Core also register the environment name (the name the user chose) as an org alias in this workspace, next to `default-org`, so `sf ... --target-org "<name>"` works here. Core reads the token itself; the token never comes back in the response. This is best effort: if no workspace is running or the registration fails, the PATCH still succeeds and the response is unchanged. The CLI rejects a PATCH with no body, so keep `--body '{}'`. On an org below API `68.0` drop the query string (and still send `--body '{}'`); the connect completes without an alias. Send the flag only on this connect PATCH, never in hub mode.
+
 Success returns `id`, `organizationId`, `orgUrl`, `status`, and `message`. Keep `namedCredential` from the POST. Verify `orgUrl` is a My Domain URL and **not** `login.salesforce.com` or `test.salesforce.com`.
+
+Core names the alias after the environment (trimmed). It skips a blank name and `default-org`, and, in the Core build checked so far, a name with spaces (the environment itself still connects; only the alias is skipped until Core accepts spaced names); Core has no other rule for the alias: digits and hyphens are allowed. Only the credential name keeps just the letters of the environment name. If the local workspace gate is closed, Core registers through the remote workspace instead; the result is the same alias.
+
+The alias is for the user's convenience in the workspace. It does not change how targets are chosen (see the rules in `SKILL.md`). The workspace token expires after about an hour. If an `sf` command with the alias fails on auth, repeat this same PATCH once to refresh it.
 
 **Hub mode:**
 
@@ -145,21 +140,22 @@ Success returns `id`, `organizationId`, `orgUrl`, `status`, and `message`. Keep 
 sf api request rest "/services/data/v<ver>/connect/devops/setupNamedCredential" \
   --method PATCH \
   --body '{"namedCredentialName":"ALMDevOpsCenterHub","namedCredentialType":"ORG_TO_ORG"}' \
-  --target-org <dev-org-alias>
+  --target-org "<dev-org-alias>"
 ```
 
 Success returns `{"namedCredentialName": "...", "calloutUrl": "https://<org>.my.salesforce.com", "redirectUrl": null}`. Verify `calloutUrl` the same way.
 
-- On failure (`DOCE_CONNECTION_UPDATE_FAILED`, a 404, a userinfo failure, or `TARGET_ORG_*` codes) see `troubleshooting.md`.
+- On failure (`DOCE_CONNECTION_UPDATE_FAILED`, a 404, a userinfo failure, or `TARGET_ORG_*` codes) see `troubleshooting.md`. A `TARGET_ORG_AUTHENTICATION_TIMEOUT` is transient: wait about 10 seconds and PATCH once more, and do not give a new sign-in link for it.
 - **Never retry the PATCH in a loop.** **Hub mode only:** a failed PATCH also **clears the user's saved DX Inspector selections**. Tell the user.
 
 ## Step 5 — Verify and hand off
 
 1. Re-run the status check. Expect principal `Configured` and a callout URL equal to the PATCH `calloutUrl`.
+   **Deploy mode:** also check the alias with `bash scripts/resolve-environment.sh "<dev-org-alias>" "<name>"` and read `match.readiness` (never `sf org display`, which prints the token). Registration runs in the background after the PATCH returns, so if it is `needs-sync` wait about 5 seconds and check once more. If it is still `needs-sync`, tell the user the org is connected but the workspace alias is not available yet, and offer to repeat the PATCH once. `ready` or `unverified`: say nothing about the alias.
 2. **Hub mode only:** optionally record the hub type the way DX Inspector does. A `CORE` or `MANAGED_PACKAGE` response proves the NC works end to end.
 
    ```bash
-   sf api request rest "/services/data/v<ver>/connect/devops/doceConnectionType" --target-org <dev-org-alias>
+   sf api request rest "/services/data/v<ver>/connect/devops/doceConnectionType" --target-org "<dev-org-alias>"
    ```
 
 3. Show the result with exactly this layout, no raw JSON, and never the credential name.
@@ -181,16 +177,51 @@ Success returns `{"namedCredentialName": "...", "calloutUrl": "https://<org>.my.
    > | `<host of calloutUrl>` | Core or Managed package | Connected |
 
    Say "Sandbox" for a scratch org too. If the status check in item 1 did not return `Configured`, do not show this layout: say the sign-in is not complete and offer a fresh link.
-
-   **Hub mode, as a card.** Only when item 1 passed and the `render_widget` tool is available. Without it, use the layout above and skip this. Run, with the `calloutUrl` host and the hub type from item 2:
-
-   ```bash
-   bash <skill_dir>/scripts/widget.sh connect-connected '{"hubHost":"<host of calloutUrl>","hasHubType":true,"hubTypeLabel":"<Core or Managed package>"}'
-   ```
-
-   When the type call was skipped or unknown, send `"hasHubType":false,"hubTypeLabel":""`. On `CARD_JSON <json>`, call `render_widget` once with `<json>` as its arguments, exactly as printed, in place of the layout above; the card shows the org host and the hub type, so do not repeat them in text. On `CARD_UNAVAILABLE <reason>`, any other output or an error, or `{rendered: false, reason}`, use the layout above.
 4. **Deploy mode:** re-run the environment lookup (`list-orgs.md`) and confirm the row with the `id` from Step 1 is listed, `selectable`, with its `NamedCredential`. Carry that `id` and `namedCredential` forward. If it is missing, do not deploy and do not invent an id; report that the credential is connected but the row was not found.
 5. **If this connect started from a deploy request** (`deploy.md`, Step 2): tell the user in one sentence that `<name>` is connected and that you are continuing the deploy of the components they gave. Then go to `deploy.md`, Step 3 and Step 4. The deploy confirmation is theirs to give; do not submit anything before it. If the connect did not start from a deploy, end here and do not offer anything beyond the result.
+
+---
+
+## Sync workspace access (alias only)
+
+Registers or refreshes the environment's workspace CLI alias without a sign-in. Use it when the user clicks a **Sync**, **Refresh**, or **Re-sync** button (`list-orgs.md`), asks for CLI access to a connected org, or an `sf ... --target-org "<alias>"` command fails with `Session expired or invalid`. It is the same PATCH as Step 4 and never creates an environment.
+
+**Why it is needed.** Core registers the alias only when the connect PATCH runs with `registerWorkspaceAlias=true` against a **running** workspace. So an org connected in **DX Inspector** (the Lifecycle Center UI) has a row and a credential but no alias here; an org connected in Builder Central chat has both. Alias tokens also expire after about an hour.
+
+1. **Find the row.** Run `bash scripts/resolve-environment.sh "<dev-org-alias>" "<name-or-alias>"`. For a failed command, pass the alias from the command. Use `match` only when `matchStatus` is `matched`.
+   - No match (`not-connected`): the alias is not a DX Inspector environment. Do **not** PATCH anything. Offer to connect it (`connect-org.md`, Step 0).
+   - `state` is `expired`: retired, not repairable. `unauthenticated`: repair path (fresh sign-in link), not a sync.
+   - `readiness` is `needs-my-signin` (`userAuth: notConfigured`): another user connected this environment and this user has not signed in. Do not sync. Use the repair path (fresh link from `GET /connect/devops/environment/<id>` `redirectUrl`, login **as this user**, PATCH once with `registerWorkspaceAlias=true`), then rebuild the list.
+   - `readiness` is `alias-conflict`: stop; the name belongs to another org (`troubleshooting.md`).
+   - Otherwise take `match.id`. A button click or the user's explicit ask is the confirmation, so do not ask again.
+2. **PATCH once.**
+
+   ```bash
+   sf api request rest "/services/data/v<ver>/connect/devops/environment/<id>?registerWorkspaceAlias=true" \
+     --method PATCH --body '{}' --target-org "<dev-org-alias>"
+   ```
+
+   On an org below API `68.0` drop the query string; the alias cannot be registered there, so say so and stop.
+3. **Read the outcome.**
+
+   | Result | Do |
+   |---|---|
+   | Success | Go to step 4. |
+   | `TARGET_ORG_AUTHENTICATION_TIMEOUT` (408/504) | Transient: the org did not answer in time. Wait about 10 seconds and PATCH **once more**. If it times out again, stop: "`<name>` didn't respond in time. Try again in a few minutes." Do **not** show a sign-in link and do not call the credential stale. |
+   | `TARGET_ORG_AUTHENTICATION_STATUS_CHECK_FAILED` (401/403) | The DX Inspector credential is stale or revoked. Repair path: fresh sign-in link, login, then PATCH once. |
+   | `TARGET_ORG_UNKNOWN_ERROR` | Report the plain-language cause (for example "Environment record not found" means the id is wrong; "does not have a named credential" means the connect never finished and needs repair). Stop. |
+4. **Verify.** The alias is registered in the background after the PATCH returns, and a failure there is swallowed, so the response proves nothing about it. Wait about 5 seconds, run the resolver again, and read `readiness` for that row.
+
+   | `readiness` | Say |
+   |---|---|
+   | `ready` or `unverified` | Nothing about the alias beyond "`<name>` is ready in this workspace." |
+   | `needs-sync` | Repeat step 2 **once**. If still `needs-sync`: "`<name>` is connected and deploys work, but its CLI alias isn't available in this workspace. Registration needs a running workspace and the feature enabled for this org." Stop; never loop. |
+   | `alias-conflict` | Stop; explain the name clash. |
+
+   Registration targets the user's **already running** workspace only; it never starts one. If the CLI runs in a different workspace from the running one, the alias lands in the running one: tell the user which if they report it missing.
+5. **Retry the command** that triggered a failed-command sync, once, **without asking**. The same applies when a task needs CLI access to an org whose `readiness` is `needs-sync` or `needs-refresh`: run steps 1 to 4 first, then the task. Listing alone still does not sync. If it fails the same way, report it and stop. Never retry with another org's alias or `default-org`.
+6. **Batch** (`Sync all N`): run steps 1 to 4 for each row, one at a time, then report one line each (synced, timed out, sign-in needed, name clash, not available). Stop a row's retries independently; one failure does not stop the others.
+7. **Show the list again** (`list-orgs.md`, section 4) so the user sees the result.
 
 ## Rules
 
@@ -198,6 +229,6 @@ Success returns `{"namedCredentialName": "...", "calloutUrl": "https://<org>.my.
 - Never print access tokens, and never pass `headerTargetAccessToken` in place of a stored connection.
 - One environment per target org. Do not reuse a deploy NC for a different org; create a new environment.
 - Deploy-target connections always use the Environment API so the `DevopsEnvironment` row exists. Never use `setupNamedCredential` alone for a deploy target.
-- Never tell the user a browser was opened. Give the link.
+- Never tell the user a browser was opened. Show the sign-in as in Step 2.
 - Do not rename `ALMDevOpsCenterHub`. DX Inspector looks it up by that exact name.
 - Only the org-to-org types (`ORG_TO_ORG`, `ORG_TO_SANDBOX_ORG`, `ORG_TO_ORGFARM_ORG`) are used here.

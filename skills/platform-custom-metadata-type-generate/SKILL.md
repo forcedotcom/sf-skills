@@ -3,6 +3,7 @@ name: platform-custom-metadata-type-generate
 description: "Use to create, generate, or validate Salesforce Custom Metadata Type metadata — the __mdt object, fields, and deployable records. Trigger on custom metadata types, CMDT, __mdt objects, .md-meta.xml files, or cross-org reference/config data; also admin-maintained mapping/lookup/crosswalk tables (config that changes without a deploy belongs in a CMDT, never hardcoded in Apex/Flow), and CMDT deploy errors. DO NOT TRIGGER for Custom Settings (use platform-custom-setting-generate), business-record objects (use platform-custom-object-generate), or secrets/API keys (use a Named Credential)."
 metadata:
   version: "1.0"
+  tags: ["setup"]
   minApiVersion: "60.0"
   domains: ["Platform"]
   relatedSkills:

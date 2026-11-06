@@ -45,7 +45,15 @@ For an object-level TupleRead policy with two entity-type alternatives, two alte
 (AND (OR 1 2) (OR 3 4) (AND 5))
 ```
 
-Here `(OR 1 2)` is the `ENTITY_TYPE` group, `(OR 3 4)` is the `TAG_CLASSIFICATION` group, and `(AND 5)` is the `PERMISSION` group. If the policy is RLS, its direct field or `EXPRESSION` conditions form the `RECORD_FIELD` group instead of being mixed into the tag or permission group. The numbers are assigned only after final condition ordering.
+For a field-level (FLS) deny with alternative tags and a permission exemption, the single `FIELD` entity-type condition is persisted bare and every other section is grouped:
+
+```text
+(AND 1 (OR 2 3 4) (AND 5))
+```
+
+Here `1` is `ENTITYTYPE IS FIELD` (the only condition that may stay bare, as in `examples/FieldReadDeny`), `(OR 2 3 4)` is `TAG_CLASSIFICATION`, and `(AND 5)` is `PERMISSION`. A bare `5` is the common mistake: it persists but Policy Builder cannot open the rule.
+
+In the OLS example above, `(OR 1 2)` is the `ENTITY_TYPE` group, `(OR 3 4)` is the `TAG_CLASSIFICATION` group, and `(AND 5)` is the `PERMISSION` group. If the policy is RLS, its direct field or `EXPRESSION` conditions form the `RECORD_FIELD` group instead of being mixed into the tag or permission group. The numbers are assigned only after final condition ordering.
 
 ## Shape Restrictions
 

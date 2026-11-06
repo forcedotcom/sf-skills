@@ -1,13 +1,15 @@
-# Feature: Priority Matrix (delegated to the `IncidentPriorityMatrix` SOR)
+# Feature: Priority Matrix (delegated to the `ItsmPriorityMatrix` SOR)
 
 How the orchestrator runs the **Priority Matrix** feature, which maps each Impact × Urgency combination on
-Incident to a Priority. The `IncidentPriorityMatrix` SOR's own steps and guidance decide *how*; the
+Incident to a Priority. The `ItsmPriorityMatrix` SOR's own steps and guidance decide *how*; the
 orchestrator runs them itself under its **SOR hand-off protocol** and owns every user-facing gate. This file
 adds what is specific to the Priority Matrix.
 
 1. `discover` the SOR by intent (e.g. "incident priority matrix impact urgency") and `describe` the id
-   `discover` returns (`IncidentPriorityMatrix`). Its own prerequisite checks fall under protocol step 2.
-2. Read first: the org's **active** Incident `Priority` values (`describe-incident-priority-picklist` —
+   `discover` returns (`ItsmPriorityMatrix`). Its own prerequisite checks fall under protocol step 2. The
+   SOR serves Incident and Problem, so pass the entity type `Incident` on every call (`entityType` on the
+   `Priority` read, the matrix reads, and the save; `details` on the default-priority reads).
+2. Read first: the org's **active** Incident `Priority` values (`describe-priority-picklist` —
    never hardcode or invent them), the current rows (`fetch-priority-matrix`), both preferences
    (`read-priority-matrix-prefs`, one call each: `IncPriorityMatrixEnabled`, the *Turn on Automatic
    Priority Assignment for IT Service* toggle, and `IncPriorityOverrideEnabled`, the *Set priority
@@ -19,7 +21,7 @@ adds what is specific to the Priority Matrix.
 4. **The save is a full replacement**: `save-priority-matrix` deletes every row it isn't sent. Build the
    complete set from the fetched rows, change only the cells the user asked to change, and keep the
    override as read unless asked. Show which cells are added, changed, or removed, the resulting default,
-   and the override state, and get an explicit yes. Re-run `describe-incident-priority-picklist` right
+   and the override state, and get an explicit yes. Re-run `describe-priority-picklist` right
    before the save and send only its active values. A change to only the matrix toggle or only the
    override uses `update-priority-matrix-enablement` instead, one preference per call, confirmed the same
    way.

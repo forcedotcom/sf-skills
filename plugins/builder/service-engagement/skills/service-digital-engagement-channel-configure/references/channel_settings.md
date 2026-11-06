@@ -99,7 +99,7 @@ Comma-separated string, no spaces between extensions.
 When user verification is enabled:
 - Set `authMode` to `Auth`
 - The customer's backend must issue a signed JWT containing user identity claims
-- Requires a configured connected app with certificate for JWT signature verification
+- JWTs are verified only once a keyset (public key certificate set) whose key `kid` and issuer match them is attached via `messagingAuthorizations`; the channel itself deploys without one. Creating keys is a separate setup
 
 ---
 
@@ -107,24 +107,28 @@ When user verification is enabled:
 
 Only applicable when `authMode` is `Auth`. Do not include when `authMode` is `UnAuth`.
 
-Configures the authorization settings for verified user identity in the messaging channel.
+Nested inside `<embeddedConfig>`. Configures verified user identity for the channel.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `authorizationType` | Enum | Yes | Always `PublicKeyCertificateSet` |
-| `authProviderName` | String | Yes | The name of the auth provider |
-| `publicKeyCertificateSetName` | String | Yes | The certificate set used for public key verification |
+| `publicKeyCertificateSetName` | String | Yes | API name of an existing keyset used for public key verification |
 | `enabled` | Boolean | Yes | Whether this authorization is active |
-| `authIdentifier` | String | Yes | The identifier used to match the authenticated user |
+| `authIdentifier` | String | Yes | Free-form configuration name (default: the channel file name); not the JWT `sub` claim |
+
+Do not emit `authProviderName`. With `Auth`, set `verifiedUserJwtExpirationTime` (60-240) and omit `anonymousUserJwtExpirationTime`.
 
 ```xml
-<messagingAuthorizations>
-    <authorizationType>PublicKeyCertificateSet</authorizationType>
-    <authProviderName>MyAuthProvider</authProviderName>
-    <publicKeyCertificateSetName>MyCertificateSet</publicKeyCertificateSetName>
-    <enabled>true</enabled>
-    <authIdentifier>Sub</authIdentifier>
-</messagingAuthorizations>
+<embeddedConfig>
+    <authMode>Auth</authMode>
+    <verifiedUserJwtExpirationTime>60</verifiedUserJwtExpirationTime>
+    <messagingAuthorizations>
+        <authIdentifier>Customer_Support_Chat</authIdentifier>
+        <authorizationType>PublicKeyCertificateSet</authorizationType>
+        <enabled>true</enabled>
+        <publicKeyCertificateSetName>Support_Keyset</publicKeyCertificateSetName>
+    </messagingAuthorizations>
+</embeddedConfig>
 ```
 
 ---
@@ -137,8 +141,8 @@ Configures the authorization settings for verified user identity in the messagin
 | `endUserIdleAction` | Enum | — | Action taken when the idle timeout elapses: `Inactivate`, `End`, or `InactivateAndEnd` |
 | `endInactiveSessionTimeOut` | Integer | — | Minutes after `endUserIdleAction` fires before the inactive session itself ends |
 | `isAgentMessageResetInactivityEnabled` | Boolean | — | Restart the customer's inactivity timer when a rep sends a message (Setup label: "Rep messages reset customer's inactivity timer"). Only takes effect when `endUserIdleTimeOut` is set; it is forced to `false` otherwise |
-| `isEstimatedWaitTimeEnabled` | Boolean | `false` | Show estimated wait time |
-| `isQueuePositionEnabled` | Boolean | `false` | Show queue position to user |
+| `isEstimatedWaitTimeEnabled` | Boolean | `false` | Show estimated wait time. Setup's **Notification** list (None / Estimated Wait Time / Queue Position) allows one choice, so never set this and `isQueuePositionEnabled` both `true` (deploy fails: "You can't enable Queue Position and Estimated Wait Time options at the same time") |
+| `isQueuePositionEnabled` | Boolean | `false` | Show queue position to user. At most one of this and `isEstimatedWaitTimeEnabled` may be `true` |
 | `isSynchronousChatEnabled` | Boolean | `false` | Enable real-time synchronous chat |
 | `isVoiceModeEnabled` | Boolean | `false` | Enable voice mode capability |
 

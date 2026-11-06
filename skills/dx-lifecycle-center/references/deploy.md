@@ -83,7 +83,7 @@ sf api request rest \
   "/services/data/v67.0/connect/devops/simple-deploy/deploy" \
   --method POST \
   --body @"$BODY" \
-  --target-org <source-org-alias>
+  --target-org "<source-org-alias>"
 ```
 
 Read `response.requestId`. If it is absent, the call failed: use `references/error-handling.md`. Make **one** attempt. Never retry in a loop, never resubmit after a timeout, and never invent a `requestId`.
@@ -93,7 +93,7 @@ Read `response.requestId`. If it is absent, the call failed: use `references/err
 Polling is automatic and read-only. Every check reads **two sources**, and a terminal state from **either** one ends it: the Simple Deploy status endpoint (live `step`, `metadata.deployId`) and the `DevopsRequestInfo` record for the `requestId` (`Status` is `SUCCESS` or `ERROR`; it is the same record commit polling uses).
 
 ```bash
-bash <skill_dir>/scripts/poll-deploy-status.sh <requestId> <source-org-alias> 10 100
+bash scripts/poll-deploy-status.sh <requestId> "<source-org-alias>" 10 100
 ```
 
 Checks come at 3 s, then 5 s, then every 10 s, for at most **100 seconds**, about 2 minutes in all. Set the shell tool timeout to at least 180 seconds so the run is not killed before it exits. Progress lines (`status=… step=… request-info=…`) go to stderr; relay the current step to the user while waiting. Never say the deploy is "still waiting" after the script has printed a result.
@@ -127,7 +127,7 @@ On timeout (exit `3`, `outcome` `TIMEOUT`, about 2 minutes), stop polling and te
 
 Example: "Your deploy to `<target>` hasn't reported a final status after 2 minutes. It was at `DEPLOY_METADATA` and may still be running. Request token: `<requestId>`. Deployment id: `<deployId>`. Send me the request token any time and I'll check it, or look up the deployment id in `<target>` under Setup → Deployment Status." Never resubmit, and do not keep polling.
 
-For a one-off check, put `--once` **first**: `bash <skill_dir>/scripts/poll-deploy-status.sh --once <requestId> <source-org-alias>`. It exits `4` while the request is still processing: report the current `step` and do not poll again unless the user asks. With `--once` there is no grace period, so `NOT_FOUND` right after a submit may be transient: say the request is not visible yet and check again shortly, not that it failed.
+For a one-off check, put `--once` **first**: `bash scripts/poll-deploy-status.sh --once <requestId> "<source-org-alias>"`. It exits `4` while the request is still processing: report the current `step` and do not poll again unless the user asks. With `--once` there is no grace period, so `NOT_FOUND` right after a submit may be transient: say the request is not visible yet and check again shortly, not that it failed.
 
 If the user gives a `requestId` to check (also when they come back with the id from a timeout), skip Steps 1 to 5 and check it once with `--once`, using the source org alias. If the user asks for the status without an id, use the `requestId` from earlier in this conversation; if there is none, ask for it. Then report as in Step 7.
 

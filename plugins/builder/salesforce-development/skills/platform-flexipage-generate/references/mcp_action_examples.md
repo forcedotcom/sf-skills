@@ -1,6 +1,6 @@
 # MCP Action Integration — Examples & Reference
 
-Two MCP actions provide component discovery and schema retrieval. Call them via `execute_metadata_action`.
+Two invocable actions provide component discovery and schema retrieval, called via the `dispatch` MCP tool. The API-version requirement and shared conventions are in SKILL.md → MCP Action Integration.
 
 ## discoverUiComponents
 
@@ -9,19 +9,19 @@ Discovers components available for a page type in the user's org.
 **When to call:** Tier 2 discovery — after local scan finds no match.
 
 **Input:**
-```json
-execute_metadata_action({
-  "actionName": "DISCOVER_UI_COMPONENTS",
-  "metadataType": "FLEXI_PAGE",
-  "parameters": {
-    "pageType": "RECORD_PAGE",
-    "pageContext": { "entityName": "Account" },
-    "searchQuery": "related list"
+```text
+dispatch POST /services/data/<ver>/headless/invocableaction
+  body: {
+    "action": "discoverUiComponents-discoverUiComponents",
+    "inputs": {
+      "pageType": "RECORD_PAGE",
+      "pageContext": { "entityName": "Account" },
+      "searchQuery": "related list"
+    }
   }
-})
 ```
 
-**Parameters:**
+**Parameters** (all go in `inputs`):
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -32,14 +32,16 @@ execute_metadata_action({
 **Output:**
 ```json
 {
-  "componentDefinitions": [
-    {
-      "definition": "lst/dynamicRelatedList",
-      "label": "Dynamic Related List",
-      "description": "Shows related records...",
-      "attributes": [{"name": "parentFieldApiName", "description": "..."}]
-    }
-  ]
+  "outputs": {
+    "componentDefinitions": [
+      {
+        "definition": "lst/dynamicRelatedList",
+        "label": "Dynamic Related List",
+        "description": "Shows related records...",
+        "attributes": [{"name": "parentFieldApiName", "description": "..."}]
+      }
+    ]
+  }
 }
 ```
 
@@ -60,20 +62,20 @@ Retrieves the full property schema for one or more components.
 **When to call:** Tier 2 (org-discovered) components only — skip for Tier 1 (local) and Tier 3 (generated) components; read @api properties from source instead.
 
 **Input:**
-```json
-execute_metadata_action({
-  "actionName": "GET_UI_COMPONENT_SCHEMAS",
-  "metadataType": "FLEXI_PAGE",
-  "parameters": {
-    "pageType": "RECORD_PAGE",
-    "pageContext": { "entityName": "Account" },
-    "componentDefinitions": ["lst/dynamicRelatedList", "flexipage/richText"],
-    "includeKnowledge": true
+```text
+dispatch POST /services/data/<ver>/headless/invocableaction
+  body: {
+    "action": "getUiComponentSchemas-getUiComponentSchemas",
+    "inputs": {
+      "pageType": "RECORD_PAGE",
+      "pageContext": { "entityName": "Account" },
+      "componentDefinitions": ["lst/dynamicRelatedList", "flexipage/richText"],
+      "includeKnowledge": true
+    }
   }
-})
 ```
 
-**Parameters:**
+**Parameters** (all go in `inputs`):
 
 | Param | Type | Required | Description |
 |-------|------|----------|-------------|
@@ -85,14 +87,16 @@ execute_metadata_action({
 **Output:**
 ```json
 {
-  "componentSchemas": [
-    {
-      "definition": "lst/dynamicRelatedList",
-      "success": true,
-      "schema": "{...JSON Schema string...}",
-      "knowledge": "Optional guidance text for this component"
-    }
-  ]
+  "outputs": {
+    "componentSchemas": [
+      {
+        "definition": "lst/dynamicRelatedList",
+        "success": true,
+        "schema": "{...JSON Schema string...}",
+        "knowledge": "Optional guidance text for this component"
+      }
+    ]
+  }
 }
 ```
 

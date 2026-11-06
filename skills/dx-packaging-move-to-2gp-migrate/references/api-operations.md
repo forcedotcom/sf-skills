@@ -13,7 +13,7 @@ Operations grouped by purpose. Use these as the building blocks for the workflow
 | `confirm-affirmations` | validate | implemented | — | `check-already-done` |
 | `finalize-move-to-2gp` | write | implemented | `finalizeMoveTo2gp` | `confirm-affirmations` |
 | `verify-finalize-by-user-confirmation` | verify | implemented | — | `finalize-move-to-2gp` |
-| `verify-finalize-on-packaging-org` | verify | implemented | `queryPackageConversion` | `verify-finalize-by-user-confirmation` |
+| `verify-finalize-on-packaging-org` | verify | implemented | `queryPackageConversion` | `finalize-move-to-2gp` |
 
 ### Dependency graph
 
@@ -33,7 +33,7 @@ graph TD
   check_already_done --> confirm_affirmations
   confirm_affirmations --> finalize_move_to_2gp
   finalize_move_to_2gp --> verify_finalize_by_user_confirmation
-  verify_finalize_by_user_confirmation --> verify_finalize_on_packaging_org
+  finalize_move_to_2gp --> verify_finalize_on_packaging_org
 ```
 
 ### Read operations
@@ -47,7 +47,10 @@ Look up the 2GP Package2 record on DevHub for the 1GP package the user wants to 
 **Inputs:**
 
 - `devhub_alias` *(`String`)* — Source: user_input. The `sf` alias of the user's DevHub org. Captured at skill start (see agent_guidance "AT START").
-- `subscriber_package_id` *(`String`)* — The 1GP package's SubscriberPackageId (033... key prefix). User provides this directly, or agent obtains it via a MetadataPackage name lookup on the 1GP DE org (see agent_guidance).
+- `subscriber_package_id` *(`String`)* — The 1GP package's SubscriberPackageId (033... key prefix). User provides this directly, or agent obtains it via a MetadataPackage name lookup on the 1GP DE org (see agent_guidance). Validate it against the `validation` pattern before substituting it into any query or URL path; if it does not match, stop and ask the user for the correct Id.
+  - **Validation:** Must match `/^033[A-Za-z0-9]{12}([A-Za-z0-9]{3})?$/` (a 15- or 18-character 033-prefix Id). Reject any value containing single quotes, backslashes, or whitespace.
+
+**Name lookup:** if the user only knows the package name, query `SELECT Id, Name, NamespacePrefix FROM MetadataPackage` on the 1GP DE org and filter the results client-side by Name. Do not interpolate user input into SOQL literals.
 
 ### Write operations
 
@@ -86,18 +89,18 @@ Human cross-check for the pre-266 manual fallback path ONLY: ask the user what t
 
 #### `verify-finalize-on-packaging-org`
 
-The canonical wire-verification: re-query the PackageConversion record on the 1GP DE org to confirm EndDate is populated (non-null). EndDate is set by the package-conversion finalization service as part of finalize and is the reliable post-finalize wire signal. Uses the read-only PackageConversion Tooling exposure shipped in 264 (1GP DE org auth is already a hard precondition for this skill, so no auth-state branching needed). This is the canonical wire-verify and supplements (rather than replaces) the optional user attestation in verify-finalize-by-user-confirmation. Note: the finalize step's own 266 response also returns finalizedAt + conversionId directly, so this step is a durable cross-check rather than the sole success signal.
+The canonical wire-verification: re-query the PackageConversion record on the 1GP DE org to confirm EndDate is populated (non-null). EndDate is set by the package-conversion finalization service as part of finalize and is the reliable post-finalize wire signal. Uses the read-only PackageConversion Tooling exposure shipped in 264 (1GP DE org auth is already a hard precondition for this skill, so no auth-state branching needed). This is the canonical wire-verify and runs directly after finalize-move-to-2gp; on the pre-266 manual fallback it also follows the user attestation in verify-finalize-by-user-confirmation. Note: the finalize step's own 266 response also returns finalizedAt + conversionId directly, so this step is a durable cross-check rather than the sole success signal.
 
 **Call:** `queryPackageConversion`   — status: `implemented`
 
 **Inputs:**
 
-- `packaging_org_alias` *(`String`)* — Source - output of verify-finalize-by-user-confirmation (transitively from check-eligibility-1gp-released.packaging_org_alias).
+- `packaging_org_alias` *(`String`)* — Source - output of finalize-move-to-2gp (transitively from check-eligibility-1gp-released.packaging_org_alias).
   - **Source:** output of `check-eligibility-1gp-released`
-- `subscriber_package_id` *(`String`)* — Source - output of verify-finalize-by-user-confirmation (transitively from discover-package-on-devhub.subscriber_package_id).
+- `subscriber_package_id` *(`String`)* — Source - output of finalize-move-to-2gp (transitively from discover-package-on-devhub.subscriber_package_id).
   - **Source:** output of `discover-package-on-devhub`
 
-**Depends on:** `verify-finalize-by-user-confirmation`
+**Depends on:** `finalize-move-to-2gp`
 
 **Notes:** 264 shipped the read-only public Tooling exposure of PackageConversion (available when packaging is enabled for the org). The fields queried here — Id, EndDate, FinalizedVersionId (FK → SubscriberPackageVersion), FinalizedVersionNumber, and the WHERE key ConvertedFromPackageId (FK → SubscriberPackage) — are all exposed read-only. EndDate non-null means finalize completed. Move-to-2GP does NOT auto-create native Package2Version records on DevHub (native creation is a separate user-driven step), so there is no Package2Version-based wire-verify; EndDate is the reliable signal.
 

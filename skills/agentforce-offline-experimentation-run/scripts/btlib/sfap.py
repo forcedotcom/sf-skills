@@ -18,6 +18,19 @@ Production request fields (from captured gateway payloads) reproduced here:
                          "parameters": {"seed": n}}  — no max_tokens, no temperature
   system_prompt_strategy "use_model_parameter";  enable_pii_masking false
 Not reproduced: safety/bias scoring flags, trust settings, localization, turn ids, tags.
+
+STDM records a step's request before production's LLM client changes it. These of its
+last-mile transform steps are ported as written, so the model sees what production's model saw:
+  tools      every top-level property gets title = its name; ":" in a property name becomes
+             "_" (in properties, required and that title), unless the new name is taken
+  messages   an assistant message with no text and no tool calls is dropped; earlier calls to
+             a renamed tool get the same renaming of their argument keys
+  answer     the renamed argument keys are mapped back (restore_param_names), as production
+             records them, so they score against the golden as production's did
+Not ported, since no recorded request needs them: tool names cut to 64 characters (a longer
+name fails loudly, HTTP 400), the repair of unpaired tool calls, URL placeholders. The seed is
+--seed + repeat, not production's constant 75197747: it only picks the draw, and a constant
+would make the k repeats one cached answer.
 """
 
 import copy
@@ -26,6 +39,7 @@ import json
 import socket
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 from .redact import redact, register_secret
@@ -50,13 +64,110 @@ def sanitize_tools_for_sfap(tools):
     return sanitized
 
 
+def _param_renames(properties):
+    """[(name, name with ":" -> "_")], skipping a rename onto another property's name."""
+    return [(k, k.replace(":", "_")) for k in properties
+            if ":" in k and k.replace(":", "_") not in properties]
+
+
+def param_name_lookup(tools):
+    """{tool name: {sent parameter name: recorded name}} for the tools whose names production renames."""
+    lookup = {}
+    for t in tools or []:
+        fn = t.get("function") or {}
+        props = (fn.get("parameters") or {}).get("properties")
+        renames = _param_renames(props) if isinstance(props, dict) else []
+        if renames:
+            lookup[fn.get("name")] = {new: old for old, new in renames}
+    return lookup
+
+
+def _production_parameters(parameters):
+    """In place: titles added, ":" renamed, as production sends a tool's parameters."""
+    props = parameters.get("properties")
+    if not isinstance(props, dict):
+        return
+    for key, value in props.items():
+        if isinstance(value, dict):
+            value.setdefault("title", key)
+    renames = _param_renames(props)
+    for old, new in renames:
+        props[new] = props.pop(old)
+        if isinstance(props[new], dict) and props[new].get("title") == old:
+            props[new]["title"] = new
+    if isinstance(parameters.get("required"), list):
+        rename = dict(renames)
+        parameters["required"] = [rename.get(r, r) for r in parameters["required"]]
+
+
+def _remap_arguments(arguments, mapping):
+    """Top-level keys of a JSON arguments string renamed; anything else returned as is."""
+    if not arguments or not mapping:
+        return arguments
+    try:
+        parsed = json.loads(arguments)
+    except (json.JSONDecodeError, TypeError):
+        return arguments
+    if not isinstance(parsed, dict):
+        return arguments
+    return json.dumps({mapping.get(k, k): v for k, v in parsed.items()})
+
+
+def _empty_assistant(m):
+    content = m.get("content")
+    return (m.get("role") == "assistant" and not m.get("tool_invocations")
+            and not (content.strip() if isinstance(content, str) else content))
+
+
+def production_messages(messages, lookup):
+    """The messages as production sends them: empty assistant messages dropped, and earlier
+    calls to a tool in `lookup` with their argument keys renamed as its parameters are. A new
+    list; a message that changes is copied, the others are shared."""
+    out = []
+    for m in messages:
+        if _empty_assistant(m):
+            continue
+        calls = m.get("tool_invocations") or []
+        if any((c.get("function") or {}).get("name") in lookup for c in calls):
+            renamed = []
+            for c in calls:
+                fn = c.get("function") or {}
+                if fn.get("name") in lookup:
+                    forward = {old: new for new, old in lookup[fn["name"]].items()}
+                    c = dict(c, function=dict(fn, arguments=_remap_arguments(fn.get("arguments"), forward)))
+                renamed.append(c)
+            m = dict(m, tool_invocations=renamed)
+        out.append(m)
+    return out
+
+
+def restore_param_names(response, tools):
+    """A parsed answer with the renamed argument keys mapped back, as production records it."""
+    lookup = param_name_lookup(tools)
+    if not response or not any(c.get("name") in lookup for c in response.get("tool_calls") or []):
+        return response
+    calls = []
+    for c in response["tool_calls"]:
+        mapping = lookup.get(c.get("name"))
+        if mapping and "args_raw" not in c:
+            c = dict(c, args={mapping.get(k, k): v for k, v in c["args"].items()})
+        calls.append(c)
+    return dict(response, tool_calls=calls)
+
+
 def to_sfap_tools(tools):
     """Step tool definitions (gen_ai.request.tools) in the production request shape."""
-    return [{"function": t.get("function") or {}} for t in sanitize_tools_for_sfap(tools)]
+    out = []
+    for t in sanitize_tools_for_sfap(tools):
+        fn = t.get("function") or {}
+        if isinstance(fn.get("parameters"), dict):
+            _production_parameters(fn["parameters"])
+        out.append({"function": fn})
+    return out
 
 
 def build_payload(model, messages, tools=None, seed=None, parameters=None):
-    payload = {"model": model, "messages": messages}
+    payload = {"model": model, "messages": production_messages(messages, param_name_lookup(tools))}
     if tools:
         payload["tools"] = to_sfap_tools(tools)
         payload["tool_config"] = {
@@ -122,6 +233,11 @@ class SfapClient:
         if missing:
             raise ValueError("SFAP config missing: " + ", ".join(missing)
                              + " (run scripts/resolve-token.sh and pass --token-info)")
+        parsed = urllib.parse.urlparse(base_url)
+        if parsed.scheme != "https":
+            raise ValueError(f"base_url must use https (got {parsed.scheme!r})")
+        if not parsed.hostname or not parsed.hostname.endswith(".salesforce.com"):
+            raise ValueError(f"base_url hostname must be *.salesforce.com (got {parsed.hostname!r})")
         self.url = base_url.rstrip("/") + "/chat/generations"
         self.token_file = token_file
         self.core_tenant_id = core_tenant_id

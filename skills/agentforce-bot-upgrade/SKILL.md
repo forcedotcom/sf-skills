@@ -1,6 +1,6 @@
 ---
 name: agentforce-bot-upgrade
-description: "Use this skill to Upgrade Einstein Bots into Agentforce agents end-to-end in a single pass, orchestrating per-bot Agent Spec generation, planner reconciliation across bots, agentforce-generate authoring, and post-conversion .agent enhancements. TRIGGER when: user asks to migrate, upgrade, or convert one or more Einstein Bots (BotDefinition/BotVersion chatbots) to Agentforce agents; runs a multi-bot bot-to-agent upgrade; needs Einstein Bot metadata turned into Agent Spec handoffs and generated .agent agents; convert bots to agents; upgrade my service bots; move bots to Agentforce. DO NOT TRIGGER when: user already has an approved Agent Spec and only wants direct .agent authoring, deploy, test, or observe flows; user wants to migrate or upgrade an EXISTING Agentforce agent from a legacy GenAiPlannerBundle to an NGA aiAuthoringBundle (that is agentforce-generate's 'Migrate a Legacy Agent to Agent Script' flow, not an Einstein Bot upgrade); the request is unrelated to Einstein Bot migration."
+description: "Use this skill to upgrade Einstein Bots into Agentforce agents end-to-end in a single pass, orchestrating per-bot Agent Spec generation, agentforce-generate authoring, and post-conversion .agent enhancements. TRIGGER when: user asks to migrate, upgrade, or convert one or more Einstein Bots (BotDefinition/BotVersion chatbots) to Agentforce agents; runs a multi-bot bot-to-agent upgrade; needs Einstein Bot metadata turned into Agent Spec handoffs and generated .agent agents; convert bots to agents; upgrade my service bots; move bots to Agentforce. DO NOT TRIGGER when: user already has an approved Agent Spec and only wants direct .agent authoring, deploy, test, or observe flows; user wants to migrate or upgrade an EXISTING Agentforce agent from a legacy GenAiPlannerBundle to an NGA aiAuthoringBundle (that is agentforce-generate's 'Migrate a Legacy Agent to Agent Script' flow, not an Einstein Bot upgrade); the request is unrelated to Einstein Bot migration."
 argument-hint: "[--mode <online|offline>] [--org-alias <org-alias> --bots <bot1:v1,bot2:v2,...> | --offline-dir <offline-dir> [--bots <bot1,bot2,...>]] [--interactive <true|false>]"
 metadata:
   version: "1.0"
@@ -9,6 +9,12 @@ metadata:
   relatedSkills:
     - "agentforce-generate"
   cliTools:
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["node"]
+      semver: ">=20.0.0"
+    - tool: ["npm"]
+      semver: ">=9.0.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
 ---
@@ -17,15 +23,71 @@ metadata:
 
 ## Purpose
 
-Run a multi-bot upgrade-and-handoff cycle:
+Run a multi-bot upgrade-and-handoff cycle. Each bot is converted into its own Agentforce agent; bots are processed independently and never combined or restructured across one another:
 
 1. Parse and validate bot/version pairs from `--bots`
 2. Follow [Generate Agent Spec Reference](references/generate-agent-spec.md) per bot-version pair (parallelizable)
-3. Aggregation step that requires all generated Agent Specs
-4. `/agentforce-generate` per Agent Spec (parallelizable)
-5. Post-conversion enhancement pass per generated Agent Script (parallelizable)
+3. `/agentforce-generate` per Agent Spec (parallelizable)
+4. Post-conversion enhancement pass per generated Agent Script (parallelizable)
+5. Consolidated run report
+
+### Run Completion Contract
+
+The skill run is complete only after Step 4 and Step 5 have both been executed for every bot that reached Step 3. Generating the Agent Spec (Step 2) or the `.agent` file (Step 3) is NOT a completed run.
+
+- A run is complete only when `report.md` has been written (Step 5). The only other way to end a run is a hard stop listed under Interactive Mode.
+- None of these end the run:
+  - the Step 2 deliverables;
+  - `/agentforce-generate` finishing or printing its own completion summary;
+  - an approval or release gate inside `/agentforce-generate`;
+  - the Step 4 per-agent summary;
+  - a failed compile or a failed publish.
+
+  Record each outcome and continue to the next step.
+- Online mode: Step 4 always ends with a publish (commit) attempt, or a recorded reason why no attempt was made (for example, compile failed). Every attempt gets a `publish-audit.jsonl` record. Never activate.
+- If a step fails for a bot, record the failure and still run Step 5. `report.md` is written for partial runs too.
+- Do not end your turn while any step from 1 to 5 is still pending. If you send a progress update, send the next tool call in the same response.
 
 **Scope — this skill only converts Einstein Bots** (`BotDefinition`/`BotVersion` chatbots) into new Agentforce agents. It does NOT migrate an existing Agentforce agent from a legacy `GenAiPlannerBundle` to an NGA `aiAuthoringBundle` — for that, use the **agentforce-generate** skill's "Migrate a Legacy Agent to Agent Script" flow.
+
+## Start-of-Run Disclaimer
+
+Display this disclaimer to the user as the very first output of every invocation, in both online and offline mode, before Missing Input Handling, Step 1, or any tool call, file read, or org query. Rules:
+
+1. Output the block between `BEGIN DISCLAIMER` and `END DISCLAIMER` verbatim as rendered Markdown — not inside a code block, not summarized, reworded, or reordered. Keep every emoji marker; they are the color coding that draws the user's attention.
+2. Display it exactly once per invocation (not once per bot).
+3. Do not wait for an acknowledgement or end your turn after displaying it; continue the run in the same response with Missing Input Handling and Step 1. When `--interactive=false`, still display it.
+
+BEGIN DISCLAIMER
+
+> ## ⚠️ IMPORTANT — Read Before You Upgrade
+>
+> This upgrade uses generative AI to turn your Einstein Bot's dialogs, intents, and variables into an Agentforce agent with subagents and actions. The result is a **committed agent version that has not been activated**. Review and test it before you activate it.
+>
+> ### 🔵 How your bot's design is translated
+> - **Menus become intent-based routing.** The agent doesn't reproduce menus and option-driven navigation. It identifies what the customer wants and routes to the right subagent. Each menu option's outcome is kept, but the step-by-step menu flow is not.
+>
+> ### 🔴 Not converted
+> - **Bot goals.** Agents don't need them.
+> - **Some action steps:** steps that produce no output, exist only to move between dialogs, or write feedback logs.
+> - **Actions other than Apex classes and flows**, such as object search. You can add these to the agent as custom actions.
+> - **Menus in welcome messages.** Use pre-chat configuration to collect routing information up front.
+> - **Option buttons for questions with more than 11 options.** The options aren't shown as buttons.
+> - **Rich content and messaging components.** Use adaptive response formats to format the agent's responses.
+> - **File attachments**, sent or received.
+> - **Steps that change the conversation language** partway through a conversation.
+>
+> ### 🟡 Configure after the upgrade
+> - **Agent user.** Assign a user to the agent.
+> - **Channels and Omni-Flows.** Connect the agent to your customer channels.
+>
+> ### 🟢 Recommendations
+> - Configure intents along with their descriptions in your bot, to match the corresponding dialog functionality before upgrading. Results depend on how good the source bot is.
+> - Review and test the agent before you activate it.
+> - If your bot uses context variables, deploy the agent to an embedded messaging channel and test the main use cases there.
+> - 💲 Agentforce Service Agent is billed on consumption, by usage type.
+
+END DISCLAIMER
 
 ## Inputs
 
@@ -47,11 +109,11 @@ If required inputs are missing, handle per the Missing Input Handling and Intera
 - `--interactive true` (default): resolve ambiguities, open questions, and approval gates by asking the user, as described in this skill and its references.
 - `--interactive false`: run autonomously. Do NOT prompt the user at any decision point. For every open question, ambiguity, or approval gate, apply the documented recommended default/solution and record the auto-applied decision in the run artifacts (Agent Spec, open questions, extraction summary). The only hard stops permitted without prompting are inputs that are missing or contradictory with no safe recommended default — a missing mandatory launch input (`--org-alias`/`--bots` for online, `--offline-dir` for offline), no bots discovered, or the same bot given multiple versions. In those cases, report the issue and halt without prompting.
 
-Propagate the effective `--interactive` value to the per-bot Generate Agent Spec workflow (Step 2), the planner workflow (Step 3), and the post-conversion enhancement pass (Step 5).
+Propagate the effective `--interactive` value to the per-bot Generate Agent Spec workflow (Step 2) and the post-conversion enhancement pass (Step 4).
 
 ## Missing Input Handling
 
-Resolve missing required launch inputs before Step 1:
+After displaying the Start-of-Run Disclaimer, resolve missing required launch inputs before Step 1:
 
 1. **Online mode — `--org-alias` not provided.** Resolve this before attempting to list bots (listing requires a target org).
    - Interactive: list the available aliases of logged-in orgs and ask the user to select the target org. Use the SF CLI patterns in [SF CLI Bot Reference](references/sf-cli-bot-reference.md).
@@ -69,13 +131,12 @@ Use these reference files during execution:
 
 1. [SF CLI Bot Reference](references/sf-cli-bot-reference.md)
 2. [Generate Agent Spec Reference](references/generate-agent-spec.md)
-3. [Planner Workflow Reference](references/planner-workflow-reference.md)
-4. [Post-Conversion Enhancements Reference](references/post-conversion-enhancements-reference.md)
-5. [Extraction Blueprint](references/extraction-blueprint.md)
-6. [Input Contract](references/input-contract.md)
-7. [Mapping Rules](references/mapping-rules.md)
-8. [Handoff Output Format](references/handoff-output-format.md)
-9. [Quality Checklist](references/quality-checklist.md)
+3. [Post-Conversion Enhancements Reference](references/post-conversion-enhancements-reference.md)
+4. [Extraction Blueprint](references/extraction-blueprint.md)
+5. [Input Contract](references/input-contract.md)
+6. [Mapping Rules](references/mapping-rules.md)
+7. [Handoff Output Format](references/handoff-output-format.md)
+8. [Quality Checklist](references/quality-checklist.md)
 
 ## Execution Contract
 
@@ -123,52 +184,25 @@ Ensure each invocation (online/offline) uses isolated working directories to avo
 Hard rules:
 - Do not skip this step.
 
-### Step 3: Aggregation + Planner Step (Conditional)
-
-After all upgrade invocations complete:
-
-1. Always build a consolidated list of `{bot_name, bot_version, run_project_dir, agent_spec_path}`.
-2. Always build list of failed/incomplete upgrade runs (if any).
-3. Always build an initial ready-for-authoring list containing only valid Agent Spec entries.
+Collect results:
+1. Build a ready-for-authoring list containing one entry per bot whose Agent Spec was generated successfully.
    - Each entry must include: `{bot_name, bot_version, run_project_dir, agent_spec_path, handoff_json_path, open_questions_path}`.
-4. If total bot workload count is greater than 1:
-   - Execute planner workflow from [Planner Workflow Reference](references/planner-workflow-reference.md) using:
-     - all ready-for-authoring `agent_spec_path` values as `spec_paths`
-     - orchestrator working directory as `working_dir`
-     - the associated per-spec artifacts from each ready-for-authoring entry: `handoff_json_path` (handoff JSON) and `open_questions_path` (open questions)
-   - Require output file at `<orchestrator working directory>/bot-upgrade-planner-output.json`.
-   - Read `bot-upgrade-planner-output.json` and apply:
-     - if `specs_changed=true`: replace ready-for-authoring entries using planner fields (`updated_spec_path`, `run_project_dir`, `handoff_json_path`, `open_questions_path`)
-     - if `specs_changed=false`: keep original ready-for-authoring list unchanged
-5. If total bot workload count is 1:
-   - Skip planner workflow entirely.
-   - Keep original ready-for-authoring list unchanged.
+2. Build a list of failed/incomplete upgrade runs (if any). Failed runs are excluded from Step 3 and reported in Step 5; they do not block other bots.
 
-Planner output expectations:
-1. boolean `specs_changed`
-2. `updated_specs` array with entries:
-   - `original_spec_path`
-   - `updated_spec_path`
-   - `run_project_dir`
-   - `handoff_json_path`
-   - `open_questions_path`
-3. `updated_specs` must be empty when `specs_changed=false`
+### Step 3: Invoke Agentforce-Generate (Per Agent Spec)
 
-### Step 4: Invoke Agentforce-Generate (Per Agent Spec)
-
-For each entry in final ready-for-authoring list (post Step 3 planner reconciliation):
+For each entry in the ready-for-authoring list from Step 2:
 
 0. Add this recommendation to the generated invocation context before calling `/agentforce-generate`:
    - Do **not activate** Agent Script versions in this orchestrated run.
+   - Do **not publish (commit)** the authoring bundle in this step. The orchestrator commits each agent once, after post-conversion enhancements and a successful compile (Step 4).
    - Draft iteration is required: generating `.agent`, validating, deploying, and preview testing are allowed.
    - Activate should be deferred unless the user explicitly asks for release.
-1. Resolve effective `run_project_dir` from the final ready-for-authoring entry.
+1. Resolve `run_project_dir` from the ready-for-authoring entry.
 2. Read `<run_project_dir>/agentforce-generate-invocation-prompt.md` fully.
-3. If Step 3 produced planner-updated spec paths/artifacts, apply path substitutions in the invocation context so spec/handoff/open-questions references point to updated files.
-   - If planner also changed `run_project_dir`, use that updated `run_project_dir` for resolving prompt/output-contract paths.
-4. Keep all non-path instructions unchanged from the original generated prompt.
-5. Invoke `/agentforce-generate` with this resolved invocation context.
-6. Read `<run_project_dir>/agentforce-generate-output-contract.md` and capture outputs exactly as specified.
+3. Keep all instructions unchanged from the generated prompt.
+4. Invoke `/agentforce-generate` with this invocation context.
+5. Read `<run_project_dir>/agentforce-generate-output-contract.md` and capture outputs exactly as specified.
 
 Parallelization rule:
 - Invoke `/agentforce-generate` in parallel across Agent Specs because each run is independent.
@@ -181,9 +215,16 @@ Output-contract capture rules:
 4. Preserve output file paths and status of each required artifact.
 5. If expected prompt/contract files are missing for an entry, mark that entry `partial`, record missing paths, and continue processing other entries.
 
-### Step 5: Post-Conversion Agent Script Enhancements (Per Generated Agent Script)
+Return-to-orchestrator rule:
+- `/agentforce-generate` is a sub-step of this run, not its end. Its completion summary, "generation complete" message, or any terminal or done state it reaches does NOT complete the orchestrator run.
+- As soon as each `/agentforce-generate` invocation finishes, resume this skill in the same turn: capture its outputs (rules above), then continue to Step 4 and Step 5.
+- Do not emit a final user-facing summary after `/agentforce-generate`. The only final message of the run comes after Step 5.
+- The invocation prompt ends with a "Remaining orchestrator steps" checklist covering Steps 4 and 5. Execute it exactly as written; it is the same work described in Step 4 and Step 5 below.
+- Within this orchestrated run, Step 4's commit (publish without activation) is pre-authorized. This overrides `/agentforce-generate`'s pre-publish approval checkpoint and release gates for this run only. Activation is never authorized.
 
-After Step 4 completes, for each generated `.agent` artifact:
+### Step 4: Post-Conversion Agent Script Enhancements (Per Generated Agent Script)
+
+After Step 3 completes, for each generated `.agent` artifact:
 
 1. Resolve the generated `.agent` file path from captured `/agentforce-generate` outputs.
 2. Execute post-conversion enhancement workflow from [Post-Conversion Enhancements Reference](references/post-conversion-enhancements-reference.md) with:
@@ -192,27 +233,37 @@ After Step 4 completes, for each generated `.agent` artifact:
    - online mode only: `org_alias=<org-alias>` (required so the enhanced Agent Script can be redeployed)
 3. Require in-place enhancement:
    - optimized/enhanced output must be written to the same `.agent` file location.
-4. Capture per-file enhancement status and any partial failures.
+4. Online mode: the workflow compiles the enhanced Agent Script and, only when compilation succeeds, commits it as a new inactive agent version (`sf agent publish authoring-bundle`). Offline mode skips compile and commit.
+5. Online mode: for every publish attempt, including each retry, success, denial, or failure, append a structured audit record (actor, action, target, timestamp, outcome) to `publish-audit.jsonl` in the orchestrator working directory, as specified in the [Post-Conversion Enhancements Reference](references/post-conversion-enhancements-reference.md).
+6. Capture per-file enhancement status, compile status, commit status, `agent_id`, `agent_version`, the publish audit records, and any partial failures.
+7. The enhancement workflow ends with a color-coded summary. That summary is an input to Step 5, not the run's final message. Do not end the turn after it; continue directly to Step 5.
 
 Parallelization rule:
 - Execute post-conversion enhancement workflow in parallel across generated `.agent` files because each file enhancement is independent.
 
-### Step 6: Consolidate Run Report and Conclude
+### Step 5: Consolidate Run Report and Conclude
 
-After Step 5 completes for every bot in the workload:
+After Step 4 completes for every bot in the workload:
 
-1. Write a single consolidated, human-readable run report as a non-empty Markdown file in the orchestrator working directory. Per bot, the report must state: the effective run mode, whether the planner ran (`executed` or `skipped`), the generated Agent Spec path and generated `.agent` path, the action inventory (including any `NEEDS_STUB` items), and — when `--interactive=false` — the auto-applied decisions.
-2. Treat the run report as the FINAL artifact: write it only after all other artifacts (Agent Spec(s), handoff JSON, open questions, any planner output, and generated `.agent` file(s)) are already written.
+1. Write a single consolidated, human-readable run report as a non-empty Markdown file named `report.md` (unless the caller names a different path) in the orchestrator working directory. Per bot, the report must state: the effective run mode, the bot id, the bot version, the generated Agent Spec path and generated `.agent` path, the commit status, agent ID, and agent version (online mode; state that the version is committed but not activated), the publish audit outcome with its timestamp and the path to `publish-audit.jsonl` (online mode), and — when `--interactive=false` — the auto-applied decisions.
+2. Treat the run report as the FINAL artifact: write it only after all other artifacts (Agent Spec(s), handoff JSON, open questions, and generated `.agent` file(s)) are already written.
+3. The run concludes only after `report.md` is written. Emit the final summary message then, and not before.
+4. Before emitting the final message, confirm for each bot:
+   - Step 4 ran;
+   - online mode only: a publish attempt was made, or the reason for skipping it is recorded, and `publish-audit.jsonl` holds a record for each attempt;
+   - `report.md` exists and is non-empty.
+
+   If any of these is missing, go back and complete it first.
 
 ## Deliverable
 
 Return:
 1. parsed bot/version list
 2. per-bot upgrade execution status
-3. aggregation output (full Agent Spec list + final ready-for-authoring subset)
-4. planner workflow status (`executed` or `skipped`) and `bot-upgrade-planner-output.json` path when executed
-5. per-spec `/agentforce-generate` execution status
-6. generated handoff artifact paths per bot/spec (including planner-updated artifacts when applicable)
-7. captured `/agentforce-generate` outputs per output contract
-8. per-agent post-conversion enhancement status (including enhanced `.agent` file paths)
-9. path to the consolidated run report written in Step 6
+3. ready-for-authoring Agent Spec list and failed/incomplete runs from Step 2
+4. per-spec `/agentforce-generate` execution status
+5. generated handoff artifact paths per bot/spec
+6. captured `/agentforce-generate` outputs per output contract
+7. per-agent post-conversion enhancement status (including enhanced `.agent` file paths, compile status, commit status, agent ID, and agent version)
+8. path to the consolidated run report written in Step 5
+9. path to `publish-audit.jsonl` (online mode)

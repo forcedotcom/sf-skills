@@ -1,8 +1,8 @@
 # SF CLI Bot Reference
 
-Essential SF CLI command sequence for Mode A (org-backed retrieval) after inputs are finalized (`--org-alias`, `--bot`, `--bot-version`).
+Essential SF CLI command sequence for Online mode (org-backed retrieval) after inputs are finalized (`--org-alias`, `--bot`, `--bot-version`).
 
-Do not use this reference in Mode B (offline metadata input). In offline mode, skip SF CLI retrieval and continue with extraction/mapping from local XML metadata files.
+Do not use this reference in Offline mode (local metadata input). In offline mode, skip SF CLI retrieval and continue with extraction/mapping from local XML metadata files.
 
 ## 1) Prerequisite checks
 
@@ -31,7 +31,7 @@ sf org login web --instance-url <LOGIN_URL> --alias <ALIAS>
 Listing bots:
 ```bash
 sf data query --json --target-org <org-alias> \
-  --query "SELECT BotDefinition.MasterLabel FROM BotDefinition WHERE Type = 'Bot'"
+  --query "SELECT MasterLabel FROM BotDefinition WHERE Type = 'Bot'"
 ```
 
 Listing bot versions:
@@ -39,6 +39,20 @@ Listing bot versions:
 sf data query --json --target-org <org-alias> \
   --query "SELECT Id, VersionNumber, Status FROM BotVersion WHERE BotDefinition.Type = 'Bot'"
 ```
+
+Validating the target bot:
+```bash
+sf data query --json --target-org <org-alias> \
+  --query "SELECT Id, DeveloperName, MasterLabel FROM BotDefinition WHERE Type = 'Bot' AND DeveloperName = '<bot-name>'"
+```
+
+Validating the target bot version:
+```bash
+sf data query --json --target-org <org-alias> \
+  --query "SELECT Id, VersionNumber, Status FROM BotVersion WHERE BotDefinition.DeveloperName = '<bot-name>' AND VersionNumber = <version-number>"
+```
+
+Each validation query must return exactly one record. If either returns zero records, the bot or version does not exist in the target org: in interactive mode, show the user the bot/version listing above and ask them to pick a valid entry; in non-interactive mode, halt with an explicit error naming the missing `<bot-name>` or `<bot-version>`.
 
 ## 3) Retrieve bot metadata
 
