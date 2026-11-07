@@ -73,3 +73,27 @@ public static List<Account> createAccountsAllowDuplicates(Integer count, Boolean
     return accounts;
 }
 ```
+
+## Setup Objects (Users and Roles)
+
+`UserRole`, `User`, and `PermissionSetAssignment` are setup objects. Inserting one and then inserting an Account or a custom object in the same test method fails with `MIXED_DML_OPERATION`, at any API version. The sharing and portal-owner tests that seed a role hit this on the first run.
+
+Insert the role and the user first, then run the record DML inside `System.runAs(thatUser)`. Give each test method its own `UserRole.DeveloperName`; two methods in one class that insert the same role collide.
+
+```apex
+@IsTest
+static void portalOwner_sharesAccountWithRole() {
+    UserRole role = new UserRole(Name = 'Portal Owner', DeveloperName = 'PortalOwner_sharesAccount');
+    insert role;
+    User owner = TestDataFactory.createUser(new Map<String, Object>{ 'UserRoleId' => role.Id }, true);
+
+    System.runAs(owner) {
+        Account acc = TestDataFactory.createAccount(true);   // record DML runs here, not alongside the role insert
+        Test.startTest();
+        // ... code under test
+        Test.stopTest();
+    }
+}
+```
+
+See [Mixed DML Operations in Test Methods](https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_dml_non_mix_sobjects_test_methods.htm).
