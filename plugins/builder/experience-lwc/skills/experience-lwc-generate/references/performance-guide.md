@@ -253,7 +253,7 @@ slds-linter lint force-app/main/default/lwc/
 ```javascript
 // BAD: Re-renders entire list
 <template for:each={allItems} for:item="item">
-    <div if:true={item.visible} key={item.id}>
+    <div lwc:if={item.visible} key={item.id}>
         {item.name}
     </div>
 </template>
@@ -276,11 +276,19 @@ get visibleItems() {
     <c-dashboard data={dashboardData}></c-dashboard>
 </template>
 
-<!-- if:true hides with CSS (better for frequent toggling) -->
-<div if:true={showMessage} class="message">
+<!-- For frequent toggling of small elements, keep them in the DOM and toggle a CSS class -->
+<div class={messageClass}>
     {message}
 </div>
 ```
+
+```javascript
+get messageClass() {
+    return this.showMessage ? 'message' : 'message slds-hide';
+}
+```
+
+> Note: the legacy `if:true` / `if:false` directives also remove elements from the DOM (they do not hide with CSS) and are no longer recommended. Use `lwc:if` / `lwc:elseif` / `lwc:else`. See [HTML Template Directives](https://developer.salesforce.com/docs/platform/lwc/guide/reference-directives.html).
 
 ### Key Directive for Lists
 
