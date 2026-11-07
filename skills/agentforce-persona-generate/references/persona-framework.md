@@ -788,9 +788,3 @@ Persona dimension expectations vary by culture. For global agents, consider per-
 - **Warmth norms differ** - Bright warmth in one culture may feel overwhelming in another. Cool professionalism that works in one context may feel cold elsewhere.
 - **Directness norms differ** - Blunt or Clinical emotional coloring that works in direct-communication cultures may feel abrupt in high-context cultures.
 - **Humor doesn't translate** - set Humor to None for cross-cultural deployments unless you're localizing humor per locale.
-
----
-
-## Change History
-
-See [CHANGELOG.md](../CHANGELOG.md) for the full version history.

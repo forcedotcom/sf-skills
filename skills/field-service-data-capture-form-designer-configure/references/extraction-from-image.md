@@ -2,7 +2,7 @@
 
 These are the rules to follow when given a `.pdf`, `.png`, `.jpg`, or `.jpeg` and asked to produce the intermediate JSON spec for a Data Capture Flow.
 
-The spec schema is the input contract of the build skill — see [field-types.md](../../fs-data-capture-form-deployer/reference/field-types.md) and [post-screen-automation.md](../../fs-data-capture-form-deployer/reference/post-screen-automation.md). This file covers extraction *behavior*; that file covers what the converter accepts.
+The spec schema is the input contract of the build skill — see [field-types.md](../../field-service-data-capture-form-deployer-configure/references/field-types.md) and [post-screen-automation.md](../../field-service-data-capture-form-deployer-configure/references/post-screen-automation.md). This file covers extraction *behavior*; that file covers what the converter accepts.
 
 ## Output schema
 
@@ -218,7 +218,7 @@ Before returning, verify:
 
 - [ ] Every screen key is PascalCase.
 - [ ] Every `fieldName` is a valid API name, unique across the form (including inside repeaters).
-- [ ] Every `fieldType` is one of the supported types in [field-types.md](../../fs-data-capture-form-deployer/reference/field-types.md) (case-sensitive).
+- [ ] Every `fieldType` is one of the supported types in [field-types.md](../../field-service-data-capture-form-deployer-configure/references/field-types.md) (case-sensitive).
 - [ ] `Radio`, `Picklist`, `CheckboxGroup` have non-empty `options`.
 - [ ] `Matrix` has both `options` (columns) and `matrixRows`.
 - [ ] `Repeater` has `repeaterFields` (each child has its own valid `fieldType`).

@@ -31,7 +31,7 @@ One of:
 - Direct hex codes — accept as-is.
 - A color description (e.g. "we're a red and white company") — ask for at least one specific hex code or URL before proceeding.
 
-See [reference/derivation-methodology.md](reference/derivation-methodology.md) for the four ingestion cases (A–D) in detail.
+See [references/derivation-methodology.md](references/derivation-methodology.md) for the four ingestion cases (A–D) in detail.
 
 ## Output
 
@@ -50,27 +50,27 @@ Then ask: "Which org should I apply this to?" and wait for explicit confirmation
 
 ### 2. Ingest the brand source
 
-Follow the cases (A–D) in [reference/derivation-methodology.md](reference/derivation-methodology.md). At the end of this step you should have two anchors:
+Follow the cases (A–D) in [references/derivation-methodology.md](references/derivation-methodology.md). At the end of this step you should have two anchors:
 
 - **Primary brand color** — for non-interactive surfaces and the navbar.
 - **Secondary/interactive color** — for buttons, links, FAB.
 
 ### 3. Derive the full 14-field scheme
 
-Apply the derivation rules in [reference/derivation-methodology.md](reference/derivation-methodology.md) and the field semantics in [reference/color-fields.md](reference/color-fields.md).
+Apply the derivation rules in [references/derivation-methodology.md](references/derivation-methodology.md) and the field semantics in [references/color-fields.md](references/color-fields.md).
 
 Hold the scheme in memory as a flat object whose keys match the 14 `FieldServiceMobileSettings` color fields. Use [examples/salesforce-default-scheme.json](examples/salesforce-default-scheme.json) as a template. Before continuing, self-check that all 14 fields are present and every value matches `^#[0-9A-Fa-f]{6}$` (6-digit hex, `#` prefix — 3-digit shorthand and missing `#` are invalid); fix any that don't before proposing.
 
 ### 4. Validate contrast (light + dark mode)
 
-Compute the WCAG AA contrast ratio for each pair in [reference/contrast-validation.md](reference/contrast-validation.md) **inline** — this is deterministic arithmetic on the hex values you already hold, not an external tool. For each `#RRGGBB` pair:
+Compute the WCAG AA contrast ratio for each pair in [references/contrast-validation.md](references/contrast-validation.md) **inline** — this is deterministic arithmetic on the hex values you already hold, not an external tool. For each `#RRGGBB` pair:
 
 1. Normalize each channel: `r = R/255, g = G/255, b = B/255`.
 2. Linearize each channel: `c ≤ 0.03928 → c/12.92`, else `((c+0.055)/1.055)^2.4`.
 3. Relative luminance: `L = 0.2126·r + 0.7152·g + 0.0722·b`.
 4. Contrast ratio: `(L_lighter + 0.05) / (L_darker + 0.05)`.
 
-Evaluate all 5 light-mode pairs and all 5 dark-mode pairs from [reference/contrast-validation.md](reference/contrast-validation.md); a pair PASSES at `≥ 4.5:1` (WCAG AA, normal text). Surface any FAIL pairs to the user with a suggested fix in step 5. Note that brand colors are fixed across both modes, so a passing light-mode scheme can still fail dark-mode pairs.
+Evaluate all 5 light-mode pairs and all 5 dark-mode pairs from [references/contrast-validation.md](references/contrast-validation.md); a pair PASSES at `≥ 4.5:1` (WCAG AA, normal text). Surface any FAIL pairs to the user with a suggested fix in step 5. Note that brand colors are fixed across both modes, so a passing light-mode scheme can still fail dark-mode pairs.
 
 ### 5. Present proposal & confirm
 
@@ -80,7 +80,7 @@ Show the user:
 - The light-mode and dark-mode contrast results from step 4, with FAIL pairs flagged.
 - The target org alias.
 
-Ask the user to confirm before applying. Use the suggested fixes in [reference/contrast-validation.md](reference/contrast-validation.md) when proposing alternatives for failing pairs.
+Ask the user to confirm before applying. Use the suggested fixes in [references/contrast-validation.md](references/contrast-validation.md) when proposing alternatives for failing pairs.
 
 ### 6. Apply to org
 

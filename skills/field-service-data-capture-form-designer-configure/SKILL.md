@@ -39,18 +39,18 @@ Extract only the fields the user actually mentioned. Don't invent extra fields b
 
 If the user's description is too vague to produce a usable form ("build a form that captures stuff about a service appointment"), ask one or two targeted questions before extracting — what fields they want, whether there's a parent record, what should happen on submit. Don't guess.
 
-Then apply the prose-evidence rules in [reference/extraction-from-prompt.md](reference/extraction-from-prompt.md).
+Then apply the prose-evidence rules in [references/extraction-from-prompt.md](references/extraction-from-prompt.md).
 
 **Image / PDF mode — read the file.**
 Use the `Read` tool on the path the user gave you. PDFs and images are natively supported. If the PDF is more than 10 pages, ask the user which pages contain the form (the `Read` tool requires a `pages` parameter for large PDFs).
 
-Then apply the control-evidence rules in [reference/extraction-from-image.md](reference/extraction-from-image.md).
+Then apply the control-evidence rules in [references/extraction-from-image.md](references/extraction-from-image.md).
 
 ### 2. Extract the intermediate JSON
 
 Apply every rule in the mode-appropriate extraction reference (from step 1). The output schema is defined by the **input contract of the build skill**:
-- [field-types.md](../fs-data-capture-form-deployer/reference/field-types.md) — field type → component mapping, required Flow boilerplate, choice/repeater shapes, visibility rules.
-- [post-screen-automation.md](../fs-data-capture-form-deployer/reference/post-screen-automation.md) — schema for the optional `postScreen` block.
+- [field-types.md](../field-service-data-capture-form-deployer-configure/references/field-types.md) — field type → component mapping, required Flow boilerplate, choice/repeater shapes, visibility rules.
+- [post-screen-automation.md](../field-service-data-capture-form-deployer-configure/references/post-screen-automation.md) — schema for the optional `postScreen` block.
 
 Write the JSON to `/tmp/data-capture-spec.json`.
 
@@ -89,15 +89,15 @@ Do not proceed to step 5 without explicit approval.
 
 Once approved, hand the approved spec to `fs-data-capture-form-deployer`. Pick a `<FlowApiName>` matching `^[A-Z][A-Za-z0-9_]*$` (default: PascalCase of `formTitle`), then follow that skill's workflow — it runs entirely over REST through the Codey runtime, with **no `sf` CLI, no scripts, and no `.flow-meta.xml`**:
 
-1. **Verify org auth** — [fs-data-capture-form-deployer/SKILL.md](../fs-data-capture-form-deployer/SKILL.md) §1 (a cheap `SELECT Id FROM Organization LIMIT 1` REST probe; the runtime resolves the connected org — this family does not manage aliases).
-2. **Build the Flow Metadata JSON inline** from the approved spec — deployer §3 + [reference/flow-metadata-json.md](../fs-data-capture-form-deployer/reference/flow-metadata-json.md). The agent assembles the `Metadata` object directly; there is no XML compile step.
+1. **Verify org auth** — [field-service-data-capture-form-deployer-configure/SKILL.md](../field-service-data-capture-form-deployer-configure/SKILL.md) §1 (a cheap `SELECT Id FROM Organization LIMIT 1` REST probe; the runtime resolves the connected org — this family does not manage aliases).
+2. **Build the Flow Metadata JSON inline** from the approved spec — deployer §3 + [references/flow-metadata-json.md](../field-service-data-capture-form-deployer-configure/references/flow-metadata-json.md). The agent assembles the `Metadata` object directly; there is no XML compile step.
 3. **Deploy** with a single `POST /services/data/vXX.0/tooling/sobjects/Flow` carrying `{ "FullName": "<FlowApiName>", "Metadata": { ... } }` — deployer §4.
 
-After deploy, follow the reporting + error-handling steps in [fs-data-capture-form-deployer/SKILL.md](../fs-data-capture-form-deployer/SKILL.md) §5.
+After deploy, follow the reporting + error-handling steps in [field-service-data-capture-form-deployer-configure/SKILL.md](../field-service-data-capture-form-deployer-configure/SKILL.md) §5.
 
 ### 6. Offer to attach the form to a parent record
 
-After a successful deploy, the flow exists but is invisible from the Forms tab on any Service Appointment / Work Order. Ask the user whether they want it attached to a specific parent (the canonical "pending form" pattern). If yes, follow the attach steps in [fs-data-capture-form-deployer/SKILL.md](../fs-data-capture-form-deployer/SKILL.md) §6 — a single `POST /services/data/vXX.0/sobjects/DynamicDataCapture` (no scripts). For SA-context testing, attach to the SA's parent Work Order, not the SA itself — FSL Mobile reads Forms from the parent Work Order.
+After a successful deploy, the flow exists but is invisible from the Forms tab on any Service Appointment / Work Order. Ask the user whether they want it attached to a specific parent (the canonical "pending form" pattern). If yes, follow the attach steps in [field-service-data-capture-form-deployer-configure/SKILL.md](../field-service-data-capture-form-deployer-configure/SKILL.md) §6 — a single `POST /services/data/vXX.0/sobjects/DynamicDataCapture` (no scripts). For SA-context testing, attach to the SA's parent Work Order, not the SA itself — FSL Mobile reads Forms from the parent Work Order.
 
 ## Out of scope
 

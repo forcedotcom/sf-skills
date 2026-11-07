@@ -166,12 +166,12 @@ Present the channel types via `AskUserQuestion` (multiSelect: true) **only when 
 After the user picks channel type(s), for each one ask a follow-up via `AskUserQuestion`:
 - **Web Chat:** "Create a new Web Chat channel" OR list each existing `EmbeddedMessaging` channel as *"Add agent to: {MasterLabel}"*
 - **Help Portal:** "Create a new Help Portal" — delegate to `service-concierge-portal-generate`.
-- **Voice:** list each existing `PstnVoice` channel as *"Add agent to: {MasterLabel}"* — read [`references/channel-voice.md`](references/channel-voice.md) and follow it fully.
+- **Voice:** list each existing `PstnVoice` channel as *"Add agent to: {MasterLabel}"* — read [`references/channel-voice.md`](../references/channel-voice.md) and follow it fully.
 - **WhatsApp / SMS:** list each existing MessagingChannel as *"Add agent to: {MasterLabel}"*. "Create a new [type] channel" is NOT offered.
 
 **Step 3 — Branch by selection.**
 
-- **New Web Chat channel** → read [`references/channel-web-chat.md`](references/channel-web-chat.md) and follow it fully (domain, `authMode`, channel + ESD + site provisioning).
+- **New Web Chat channel** → read [`references/channel-web-chat.md`](../references/channel-web-chat.md) and follow it fully (domain, `authMode`, channel + ESD + site provisioning).
 - **New Help Portal** → delegate to `service-concierge-portal-generate`, passing `$ORG`, `$BOT_ID`, and `$BOT_DEV_NAME`. **Immediately after that skill returns, capture its `PUBLISHED_PORTAL_URL` return value and store it as `$PORTAL_URL`. Then run Step 4 (the channel-add loop) before doing anything else — do NOT advance to Checkpoint 4 yet.**
 - **Existing channel (any type, including Voice/WhatsApp/SMS)** → delegate wiring to `service-agentforce-channel-configure`, passing the agent DeveloperName and the selected channel's DeveloperName. That skill owns queue resolution, routing flow, and agent wiring for existing channels.
 
