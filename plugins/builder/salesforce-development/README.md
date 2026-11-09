@@ -85,7 +85,7 @@ Once you're all set up, use natural language to describe what you want to do; th
 - **Headless 360 opt-in** — H360 defaults off. In disabled mode its launcher completes an empty MCP handshake without starting the proxy, minting auth, or making network requests. Claude Code users enable the **Headless 360 MCP server** plugin setting. Codex CLI and desktop users ask **“Enable Headless 360 in Codex”** to save a local preference, then start a new session normally. No special environment variable or terminal launch is required for that saved opt-in. Enable it only after H360 has been activated in the target org. See `platform-headless-360-integrate` for setup and validation scope, and the [integration design](docs/design/headless-360-mcp-server.md) for startup, authentication, and agent flows.
 
   Codex saves this user-wide preference and the installed launcher's location in `~/.sf/salesforce-development/headless-360.json`, outside the plugin cache, so the preference survives plugin updates and applies to both CLI and desktop. H360 inherits the selected chat's project directory, rather than the plugin cache or the desktop app's launch directory. If a plugin version update reports that setup is required, ask to enable H360 again to refresh the launcher registration. Ask to disable it to save `false`; neither action changes an org. After registering the launcher, advanced users can still override the opt-in with `SF_HEADLESS_360_ENABLED=enabled|disabled`. Existing environment-only setups must run the local enable command once to register the launcher. If an override is present, it takes precedence over the saved setting. The launcher honors Node on PATH first, then checks `~/.local/bin`, `~/.volta/bin`, `~/.asdf/shims`, `~/.local/share/mise/shims`, `/opt/homebrew/bin`, and `/usr/local/bin`. Node must be installed; it does not download a runtime or source shell profiles. Arbitrary version-manager locations may still require PATH configuration.
-- **MCP servers** — `salesforce-metadata-experts` (metadata guidance), `salesforce-metadata-grounding` (finds metadata by meaning through Salesforce Catalog; available in orgs where Catalog is provisioned. `status` and setup report it as an optional row that warns when it is not connected, without blocking), `salesforce-headless-360` (the optional Salesforce-hosted Headless 360 server: org state, Setup settings, and feature access that no CLI command reads; disabled by default. `status` and setup report H360 separately, recommend enabling it for live Setup answers, and probe only when local opt-in is known enabled. Cached health is labeled; endpoint reachability does not prove host tool exposure. See `platform-headless-360-integrate`), and `salesforce-lsp`, a local host that lazily spawns the **Apex** and **SOQL** language servers and exposes their semantic capabilities as MCP tools. See the `platform-lsp-integrate` skill for the tool contract.
+- **MCP servers** — `salesforce-metadata-grounding` (finds metadata by meaning through Salesforce Catalog; available in orgs where Catalog is provisioned. `status` and setup report it as an optional row that warns when it is not connected, without blocking), `salesforce-headless-360` (the optional Salesforce-hosted Headless 360 server: org state, Setup settings, and feature access that no CLI command reads; disabled by default. `status` and setup report H360 separately, recommend enabling it for live Setup answers, and probe only when local opt-in is known enabled. Cached health is labeled; endpoint reachability does not prove host tool exposure. See `platform-headless-360-integrate`), and `salesforce-lsp`, a local host that lazily spawns the **Apex** and **SOQL** language servers and exposes their semantic capabilities as MCP tools. See the `platform-lsp-integrate` skill for the tool contract.
 - **Hooks** — org-context detection on session start; a production deploy-safety gate and an Apex pre-deploy diagnostics gate on `sf project deploy`; and skills-first advisories that, when no installed skill matches, also propose an uninstalled plugin whose curated description does.
 
 In Claude Code, your progress through **Connect → Project → Build → Test → Deploy → Observe** is tracked from real, successful actions in your project — never assumed. Run `/salesforce-development:discover journey inspect` to review it, or `journey reset` to clear it.
@@ -113,11 +113,17 @@ The manual feedback command doesn't collect ratings in Codex. Its optional end-o
 
 ### Install, enable and uninstall
 
-Use Codex CLI 0.145.0 or later, Bash, and Python 3.8 or later on a POSIX host. Clone a release of [sf-skills](https://github.com/forcedotcom/sf-skills) that includes the Codex manifests. The shared marketplace catalog is `.claude-plugin/marketplace.json`.
+Use Codex CLI 0.145.0 or later, Bash, and Python 3.8 or later on a POSIX host.
+Add the Salesforce marketplace directly from GitHub:
 
-Register the local checkout with `codex plugin marketplace add <repository-checkout> --json`, then
-install with `codex plugin add salesforce-development@salesforce --json`; repeating that add
-command refreshes the installed files. Enable or disable the plugin through the Codex setting
+```bash
+codex plugin marketplace add forcedotcom/sf-skills --json
+codex plugin add salesforce-development@salesforce --json
+```
+
+You can also use `https://github.com/forcedotcom/sf-skills.git` as the marketplace source.
+You do not need to clone the repository. The shared marketplace catalog is `.claude-plugin/marketplace.json`.
+Repeat the plugin add command to refresh the installed files. Enable or disable the plugin through the Codex setting
 `plugins."salesforce-development@salesforce".enabled`, and uninstall with
 `codex plugin remove salesforce-development@salesforce --json`. Start a new Codex session after
 any of these changes. The package declares its Codex hooks separately from the Claude manifest;
@@ -146,6 +152,8 @@ the `$` skill list. Messages generated on Codex use this wording instead of
 | `SF_TARGET_ORG` / `SFDX_TARGET_ORG` | The org the MCP servers and the deploy gate use. When both are set they must agree. Unset, the MCP launcher uses the project's own `.sf/config.json` `target-org` (or `.sfdx/sfdx-config.json` `defaultusername`) (`.sf/config.json` wins when both name an org) and refuses to start when there is none; run `sf config set target-org <alias>` in the project or set the variable in the MCP server's environment. |
 | `SF_PLUGIN_UI_MODE` | `full`, `plain` or `off`; selects the presentation mode ahead of the other settings. Safety and routing guidance stay active when it is `off`. |
 | `SF_AGENT_CLIENT` | Set to `codex` on plugin runtime commands run from the shell (for example `scripts/sf-context feedback-record <1-5>`) so they use the Codex session identity. |
+| `SF_DISABLE_TELEMETRY` | Set to `true` to disable telemetry for both the plugin and Salesforce CLI. |
+| `DO_NOT_TRACK` | Set to `true` to disable plugin telemetry only. This variable does not control Salesforce CLI telemetry. |
 | `SFDX_FEEDBACK` | `1` enables the end-of-turn numeric feedback nudge; it never asks for typed comments. |
 
 ### Behavior and known limits
@@ -193,3 +201,4 @@ the `$` skill list. Messages generated on Codex use this wording instead of
   production override counts only as a leading `CONFIRM_PROD=1` on each deploy command itself or
   its `--I-CONFIRM-PROD` argument. The default org honors `SF_TARGET_ORG` / `SFDX_TARGET_ORG`.
 - `SF_PLUGIN_UI_MODE` selects the presentation mode ahead of the other settings.
+
