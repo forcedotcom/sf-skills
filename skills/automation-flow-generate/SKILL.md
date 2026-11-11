@@ -201,6 +201,12 @@ When no custom objects needed:
 
 The pipeline selects flow elements from your `userPrompt`. Vague prompts lead the pipeline to pick wrong structures, producing metadata that fails deployment. When the request matches one of the patterns below, make the intent explicit in the `userPrompt` you pass to Step 1 and Step 2 so the pipeline selects the correct elements.
 
+### Record-Triggered flows — verify triggerability first
+
+Not all SObjects support Record-Triggered Flows — before running the pipeline, check the target object against `references/non-triggerable-sobjects.md`.
+If the object is on that list, stop and explain — do not run the generation pipeline for that object.
+The list is a heuristic covering obvious cases (setup/audit/history/log objects) and isn't exhaustive; if the object isn't on it, proceed with generation.
+
 ### Scheduled flows ("daily", "weekly", "every Sunday", "runs once a week at 10PM")
 
 A recurring, time-based flow is a **Scheduled** flow. The schedule lives on the **start element**: `triggerType` is `Scheduled` and a `<schedule>` block holds `<frequency>` (e.g. `Weekly`), `<startDate>`, and `<startTime>`. Do NOT expect `startDate`/`startTime` on a `FlowScheduledPath` element — a scheduled flow's cadence is on `<start><schedule>`, not a scheduled path.
