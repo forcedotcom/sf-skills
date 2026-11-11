@@ -19,7 +19,7 @@ Read this when a generated `.report-meta.xml` is rejected during deployment or f
 | `Block format cannot be Tabular` | A `<block>` inside a Joined report has `<format>Tabular</format>` | Change block format to `Summary` or `Matrix` |
 | `Aggregate types not valid for Tabular format` | `<aggregateTypes>` specified on a column in a Tabular report | Remove aggregates or change format to `Summary`/`Matrix` |
 | `Invalid date interval 'X'` | Typo in `<interval>` value inside `<timeFrameFilter>` | Use a valid interval constant (e.g. `INTERVAL_CURRENT`, `INTERVAL_CURY`) |
-| `Custom start/end date required for INTERVAL_CUSTOM` | Interval is `INTERVAL_CUSTOM` but `<startDate>` or `<endDate>` is missing | Add both `<startDate>` and `<endDate>` in `YYYY-MM-DD` format |
+| Report returns records from all dates | Interval is `INTERVAL_CUSTOM` with no `<startDate>`/`<endDate>`, which deploys and runs as an all-time range (not an error) | If all time is intended, leave it. Otherwise add `<startDate>` and `<endDate>` in `YYYY-MM-DD` format, or use a relative interval for a rolling window. See `date-intervals.md` |
 
 ## Common Pitfalls
 
