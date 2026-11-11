@@ -31,6 +31,8 @@ This skill provides a complete workflow for developing, testing, and deploying c
 - User needs to test a code extension locally
 - User wants to scan code for required permissions
 - User needs to deploy a code extension to Data Cloud
+- User wants to run a deployed code extension in the org
+- User wants to query code extension logs in an org
 - User is working with Data Cloud transformations
 - User wants to read/write DLO or DMO data programmatically
 
@@ -64,6 +66,10 @@ Before executing any code extension commands, verify prerequisites:
 4. **Docker running** (for deploy only)
    ```bash
    docker ps
+   ```
+   If Docker is not running, automatically launch it and wait for the daemon:
+   ```bash
+   open -a Docker && for i in $(seq 1 30); do docker ps > /dev/null 2>&1 && echo "Docker ready" && break || sleep 2; done
    ```
 
 5. **Authenticated org**
@@ -122,24 +128,39 @@ my-transform/              # Project root
 Edit `payload/entrypoint.py` with transformation logic.
 
 **Script Example (Batch):**
+
+`client.read_dlo()` returns a **PySpark DataFrame**, not Pandas. Data Cloud's sandboxed Spark environment blocks certain operations (UDFs, `rdd.map()`, Arrow config). The safest pattern for row-level Python transformations is `.toPandas()` → transform → `spark.createDataFrame()`:
+
 ```python
-from datacustomcode import Client
+from pyspark.sql import SparkSession
 
-client = Client()
+from datacustomcode.client import Client
+from datacustomcode.io.writer.base import WriteMode
 
-# Read from DLO
-df = client.read_dlo('Employee__dll')
+def main():
+    client = Client()
 
-# Transform data (uppercase position field)
-df['position_upper'] = df['position'].str.upper()
+    # Read from DLO (returns PySpark DataFrame)
+    df = client.read_dlo('Employee__dll')
 
-# Write to output DLO
-client.write_to_dlo('Employee_Upper__dll', df, 'overwrite')
+    # Convert to Pandas, transform, convert back
+    pdf = df.toPandas()
+    pdf['position__c'] = pdf['position__c'].str.upper()
+    spark = SparkSession.builder.getOrCreate()
+    df_result = spark.createDataFrame(pdf, schema=df.schema)
+
+    # Write to output DLO
+    client.write_to_dlo('Employee_Upper__dll', df_result, write_mode=WriteMode.APPEND)
+
+if __name__ == "__main__":
+    main()
 ```
+
+For PySpark-native column operations that don't require Python UDFs (e.g., `withColumn`, `filter`, `select`), you can operate directly on the DataFrame without converting to Pandas.
 
 **Function Example (Real-time):**
 ```python
-from datacustomcode import FunctionClient
+from datacustomcode.function_client import FunctionClient
 
 def transform(event, context):
     client = FunctionClient(context)
@@ -152,10 +173,17 @@ def transform(event, context):
 ```
 
 **Common Operations:**
-- `client.read_dlo('DLO_Name__dll')` - Read from DLO
-- `client.read_dmo('DMO_Name')` - Read from DMO
-- `client.write_to_dlo('DLO_Name__dll', df, 'overwrite')` - Write to DLO
-- `client.write_to_dmo('DMO_Name', df, 'upsert')` - Write to DMO
+- `client.read_dlo('DLO_Name__dll')` - Read from DLO (returns PySpark DataFrame)
+- `client.read_dmo('DMO_Name')` - Read from DMO (returns PySpark DataFrame)
+- `client.write_to_dlo('DLO_Name__dll', df, write_mode=WriteMode.APPEND)` - Write to DLO
+- `client.write_to_dlo('DLO_Name__dll', df, write_mode=WriteMode.OVERWRITE)` - Overwrite DLO
+- `client.write_to_dmo('DMO_Name', df, write_mode=WriteMode.UPSERT)` - Upsert to DMO
+
+**Sandbox Limitations (Data Cloud Spark Environment):**
+- `spark.sql.execution.pythonUDF.arrow.enabled` config is **blocked** — PySpark UDFs will fail
+- `rdd.map()` is **blocked** — cannot use RDD-level Python transformations
+- Use `.toPandas()` for row-level Python logic, then convert back with `spark.createDataFrame()`
+- PySpark-native column operations (`withColumn`, `filter`, `select`, SQL expressions) work fine without conversion
 
 ### Phase 3: Scan for Permissions
 
@@ -213,17 +241,41 @@ Before proceeding to run, ensure:
 - [ ] Primary key fields are correctly identified
 - [ ] Write target DLOs are created and accessible
 
-### Phase 5: Test Locally
+### Phase 5: Run and Test Locally
 
 After validating DLO schemas, run the code extension locally against your Data Cloud org.
 
-**Command:**
+If you arrived here because you were asked to run a code extension in the org, skip to phases 7a and 7b.
+
+#### Step 5a: Determine Target Org
+
+**Infer the default org** by running:
+```bash
+sf config get target-org --json
+```
+
+If a default org is found, present it to the user for confirmation rather than asking them to provide one from scratch.
+
+#### Step 5b: Run the Code Extension
+
+**For script code extensions:**
 ```bash
 sf data-code-extension script run --entrypoint <entrypoint_file> --target-org <org_alias> [options]
 ```
 
+**For function code extensions (with model callouts):**
+```bash
+sf data-code-extension function run --entrypoint <entrypoint_file> --test-with <test_json> --target-org <org_alias>
+```
+
+**For function code extensions (no model callouts):**
+```bash
+sf data-code-extension function run --entrypoint <entrypoint_file> --test-with <test_json>
+```
+
 **Options:**
-- `--target-org, -o` - SF CLI org alias (required)
+- `--target-org, -o` - SF CLI org alias (required for scripts only)
+- `--test-with, -t` - Path to test.json input (required for functions only)
 - `--config-file, -c` - Custom config file path
 
 **If you get errors:**
@@ -255,12 +307,133 @@ sf data-code-extension script deploy --target-org <org_alias> --name <name> --pa
 - `--function-invoke-opt` - Function invoke options (for function type)
 - `--network` - Docker network (default: default)
 
-**After deployment:**
-- Navigate to Data Cloud in Salesforce UI
-- Go to Data Transforms section
-- Find your deployment by name
-- Click "Run Now" to execute
-- Schedule for recurring execution
+After this phase, choose 7a or 7b, depending if it's a script or a function.
+
+### Phase 7a: Run a Batch Transform Script in the Org (needs Data 360 MCP server - https://github.com/forcedotcom/d360-mcp-server).
+
+- A deployed code extension script creates a matching Data Transform in the org
+- The transform status will initially be `PROCESSING` — wait ~30 seconds and poll `d360_transform_get` until it becomes `ACTIVE` before attempting running it
+- Continue with the next instructions:
+
+#### Step 7a.1: Find the Transform
+
+Use `d360_transform_list` to find the deployed code extension by name:
+```
+mcp__data360__execute(toolName="d360_transform_list", paramsJson="{}")
+```
+
+Look for the transform matching your deployment name (the `--name` value from deploy). It will have `"creationSource": "Code Extension"` in the response.
+
+#### Step 7a.2: Run the Transform
+
+Use `d360_transform_run` with the transform name (the `name` field, not `label`):
+```
+mcp__data360__execute(toolName="d360_transform_run", paramsJson="{\"transformId\":\"<transform_name>\"}")
+```
+
+A successful response returns `{"success": true}`.
+
+**Note:** After triggering a run, the transform status will change to `PROCESSING`. Poll with `d360_transform_get` to check `lastRunStatus` for completion. If the status was `PROCESSING` right after deploy, wait for `ACTIVE` before running.
+
+#### Step 7a.3: Verify the Output
+
+Once the run completes successfully (`lastRunStatus: "SUCCESS"`), query the target DLO to confirm data was written:
+
+```sql
+SELECT * FROM <target_DLO>__dll LIMIT 10
+```
+
+Use `d360_query_sql` to execute the query. Check that:
+- Records exist in the target DLO
+- The transformed fields contain expected values
+- Row count matches expectations (compare with source DLO if applicable)
+
+### Phase 7b: Use a Chunking Function in a Search Index (needs Data 360 MCP server - https://github.com/forcedotcom/d360-mcp-server).
+
+A deployed **function-based** code extension can be used as a custom chunking strategy in a Data Cloud Search Index. The function runs automatically each time the search index processes data — there's no manual "run" step.
+
+#### Step 7b.1: Verify the Function is Deployed and Active
+
+Use `d360_transform_list` or check the code extension list to confirm the function is deployed. Note the exact deployment name (e.g., `text_chunking_v2`) — this is the `function_name` value you'll use.
+
+#### Step 7b.2: Create a Search Index with Custom Code Chunking
+
+Use `d360_search_index_create`. The key difference from standard search indexes is the chunking configuration — use strategy `custom_code` with a `function_name` parameter pointing to your deployed function:
+
+```json
+"chunkingConfiguration": {
+  "fieldLevelConfigurations": [
+    {
+      "sourceDmoDeveloperName": "YourSource__dlm",
+      "sourceDmoFieldDeveloperName": "your_text_field__c",
+      "config": {
+        "id": "custom_code",
+        "userValues": [
+          {
+            "id": "function_name",
+            "value": "<your_deployed_function_name>"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+The `function_name` value must exactly match the `--name` used during `sf data-code-extension function deploy`.
+
+#### Step 7b.3: The Function Runs Automatically
+
+Unlike batch script transforms (Phase 7a), function-based code extensions used in search indexes do **not** need to be triggered manually. The search index processing pipeline invokes the function automatically when:
+- The index is first created (processes existing data)
+- New data arrives in the source DMO (if `processingType` is `NEAR_REALTIME`)
+
+#### Step 7b.4: Verify the Index Built Successfully
+
+Check the search index status:
+```
+mcp__data360__execute(toolName="d360_search_index_get", paramsJson="{\"developerName\":\"<index_name>\"}")
+```
+
+Look for `activationStatus: "ACTIVE"` and check `d360_search_index_process_history` for build completion details.
+
+#### Step 7b.5: Verify Chunks
+
+Query the chunk DMO to confirm your function produced the expected output:
+```sql
+SELECT chunk_text__c, seq_no__c 
+FROM <ChunkDMO>__dlm 
+LIMIT 10
+```
+
+### Phase 8: Monitor Logs (needs Data 360 MCP server - https://github.com/forcedotcom/d360-mcp-server).
+
+Code extension `print()` output, when it runs in an org, is stored in `DataCustomCodeLogs__dll`. Query logs after a run:
+
+```sql
+SELECT Message__c, Timestamp__c 
+FROM DataCustomCodeLogs__dll 
+WHERE ProcessDefinitionName__c = '<transform_name>' 
+ORDER BY Timestamp__c DESC 
+LIMIT 50
+```
+
+Key fields:
+- `ExecutionId__c` — unique ID per code extension execution
+- `DataCustomCodeName__c` — the code extension name
+- `ProcessDefinitionName__c` — the transform that triggered the run
+- `Message__c` — the log message (from `print()` statements)
+- `Timestamp__c` — when the log was emitted
+
+To get logs for a specific run, filter by `ExecutionId__c`. To find the latest execution:
+```sql
+SELECT DISTINCT ExecutionId__c, MAX(Timestamp__c) as last_log
+FROM DataCustomCodeLogs__dll
+WHERE ProcessDefinitionName__c = '<transform_name>'
+GROUP BY ExecutionId__c
+ORDER BY last_log DESC
+LIMIT 1
+```
 
 ## Error Handling
 
@@ -277,6 +450,9 @@ sf data-code-extension script deploy --target-org <org_alias> --name <name> --pa
 | `DLO not found` | Verify DLO exists (use data360-schema-get skill), check spelling and `__dll` suffix |
 | `Permission denied writing` | Re-run scan, verify target DLO exists and is writable |
 | `Deploy fails - wrong directory` | Ensure `--package-dir` points to `payload/` directory, not project root |
+| `spark.sql.execution.pythonUDF.arrow.enabled` permission denied | Sandbox blocks UDFs/Arrow. Use `.toPandas()` → transform → `spark.createDataFrame()` pattern instead |
+| `rdd.map()` fails or transform shows FAILURE | RDD operations blocked in sandbox. Use `.toPandas()` pattern instead |
+| Transform status is `PROCESSING` after deploy | Wait ~30 seconds, then poll `d360_transform_get` until status is `ACTIVE` before running |
 
 ## Best Practices
 
@@ -315,7 +491,9 @@ The `data360-schema-get` skill is **required** for validating DLOs before testin
 | `script init` | Create new script project | --package-dir |
 | `function init` | Create new function project | --package-dir |
 | `script scan` | Generate config | entrypoint file |
-| `script run` | Test locally | entrypoint file, --target-org |
+| `function scan` | Generate config | entrypoint file |
+| `script run` | Test script locally | entrypoint file, --target-org |
+| `function run` | Test function locally | entrypoint file, --test-with (--target-org only if using models) |
 | `script deploy` | Deploy to Data Cloud | --target-org, --name, --package-dir, --package-version, --description |
 
 ## Resources
