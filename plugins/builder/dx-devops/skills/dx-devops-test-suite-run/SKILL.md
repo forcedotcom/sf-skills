@@ -58,6 +58,8 @@ Run the prerequisite checks in `references/prerequisite-checks.md` — Prerequis
 
 Do not make the API call until the user confirms.
 
+**Default Suite warning.** The Apex Unit Tests provider's **Default Suite** contains every Apex test class in the org, managed packages included. One reported org had 768 classes (~6,800 methods), about 2.5 hours per run. Before assigning or running it, say so explicitly, recommend a targeted `ApexTestSuite` delivered through the pipeline instead, and proceed only if the user confirms they want the full run.
+
 ### API call
 
 ```bash
@@ -104,6 +106,7 @@ Summary of the loop (the `runId` is a `DevopsTestSuiteExecution` Id — poll tha
 - `Passed` / `Failed` → surface `Coverage`, `SuccessCount`, `FailureCount`, and `QualityGateStatus` inline (no raw JSON). If `FailureCount > 0`, fetch the child `DevopsTestExecution` failure rows and hand off to **`dx-devops-test-failures-analyze`**.
 - `Error` → the run itself errored (not test failures); surface `ResultDetails`/`Message` in plain language and offer retry or skip.
 - **Timeout** → surface the `runId`, do NOT auto-retry, wait for user instruction.
+- An **aborted** run's execution record can stay `InProgress` indefinitely. If the user says a run was aborted, stop polling and report the `runId` rather than waiting for a terminal status.
 
 ---
 
