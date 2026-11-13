@@ -27,13 +27,15 @@ authoritative map of guessed personal data.
 (1) the **resolved subject** — identifier (email/name/id) → root-entity Id + type — and the
 **policy chosen** (noting if it was ambiguous and you asked); (2) consent confirmed, or the run
 withheld as ambiguous; (3) that this was an **export, not a deletion**; (4) the **poll ordering**
-made explicit — a couple of polls, the file retrieved only after the run reaches a terminal state,
+made explicit — execute, poll, interpret the envelope/run status, then retrieve the file only after terminal success;
 an early not-ready response is expected, and if still non-terminal you **asked** the user before
 continuing (never looped); stated even on the accepted preflight-error path; (5) outcome from the
 **envelope / run status** in plain terms — running / completed / errored — not the HTTP code; (6)
-file location on success (from the `dsr` getfile route, after terminal); (7) any missing
+file location on success (from the `dsr` getfile route, after confirmed terminal success); (7) any missing
 permission/feature named with the raw error. A non-terminal run is a valid stopping point — report
 it as *still running* and defer to the user, don't diagnose the async backend.
+
+Terminal failure is not permission to download. Read and report the outcome before deciding whether to call getfile; HTTP 201 alone does not establish success. Preserve this order in proposed commands as well as executed calls.
 
 **Preflight-error path (feature/policy/subject absent — the run never started):** keep it short.
 Lead with the blocker(s) and the prerequisite to unblock each; state export-not-deletion **once**;

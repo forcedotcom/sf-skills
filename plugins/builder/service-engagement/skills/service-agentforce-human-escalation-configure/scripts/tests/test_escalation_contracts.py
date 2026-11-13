@@ -113,6 +113,14 @@ class InputContractTests(unittest.TestCase):
         self.assertEqual(rc, 1, out)
         self.assertIn("planner_bundle_api_name", out)
 
+    def test_injection_service_channel_name_rejected(self):
+        # Substituted into the flow XML via sed: a `|` would end the s||| expression and run
+        # a `w` (write-file) command.
+        rc, out = run(["myorg"], scrub_sf=True,
+                      extra_env={"SERVICE_CHANNEL_DEV_NAME": "x|w /tmp/esc-pwn"})
+        self.assertEqual(rc, 1, out)
+        self.assertIn("service_channel_developer_name", out)
+
 
 class ProductionGuardTests(unittest.TestCase):
     def test_production_org_refused(self):
@@ -699,6 +707,7 @@ class NgaClassifierHardeningTests(unittest.TestCase):
         self.assertEqual(rc, 3)
 
 
+@unittest.skipIf(FLAT_SKILLS_ROOT is None, "ITSM coordinator skill not present in this checkout")
 class CoordinatorGateTests(unittest.TestCase):
     def test_escalation_verdict_mapping(self):
         rc, out = run_node(VERDICT_SCRIPT, ["escalation", "CONFIGURED"], root=FLAT_SKILLS_ROOT)
@@ -894,6 +903,42 @@ class AuthorSurfacesContractTests(unittest.TestCase):
     def test_refuses_when_no_authoring_identifiers(self):
         self.assertIn("AUTHOR_SURFACES=1 requires escalation_topic_api_name and/or planner_bundle_api_name",
                       self.block)
+
+    def test_no_activation_result_is_swallowed(self):
+        offending = [ln.strip() for ln in self.src.splitlines()
+                     if "agent activate" in ln and "|| true" in ln]
+        self.assertEqual(offending, [], f"activation outcome discarded: {offending}")
+
+
+class RecoveryReportingTests(unittest.TestCase):
+    """A patch failure after deactivate must report both the failure and whether reactivation worked."""
+
+    def _run(self, activate_fails):
+        env = {"AUTHOR_SURFACES": "1", "FAKE_AUTHORING_FIXTURE": "1"}
+        if activate_fails:
+            env["FAKE_ACTIVATE_FAIL"] = "1"
+        with FakeSf(_FAKE_SF_SANDBOX) as fake:
+            rc, out = run(["sbx", "Support_Agent", "Human_Support_Queue", "Escalate_Topic"],
+                          path_prefix=fake, extra_env=env)
+        return rc, out, _last_json(out) or {}
+
+    def test_failed_reactivation_is_reported(self):
+        rc, out, verdict = self._run(activate_fails=True)
+        self.assertEqual(rc, 1, out)
+        self.assertEqual(verdict.get("status"), "BLOCKED", out)
+        issue = verdict.get("blocking_issue", "")
+        self.assertIn("could not safely set canEscalate", issue)
+        self.assertIn("Recovery FAILED", issue)
+        self.assertIn("INACTIVE", issue)
+        self.assertTrue(verdict.get("manual_actions"), "a stranded agent needs a manual fix")
+
+    def test_successful_reactivation_is_reported(self):
+        rc, out, verdict = self._run(activate_fails=False)
+        self.assertEqual(rc, 1, out)
+        self.assertEqual(verdict.get("status"), "BLOCKED", out)
+        issue = verdict.get("blocking_issue", "")
+        self.assertIn("could not safely set canEscalate", issue)
+        self.assertIn("was reactivated", issue)
 
 
 if __name__ == "__main__":

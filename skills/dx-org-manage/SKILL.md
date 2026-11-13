@@ -11,9 +11,9 @@ metadata:
     - "platform-metadata-deploy"
   cliTools:
     - tool: ["jq"]
-      semver: ">=1.6"
+      semver: "~1.7.1" # pin to reviewed minor
     - tool: ["sf"]
-      semver: ">=2.0.0"
+      semver: "~2.157.8" # pin to reviewed minor
 ---
 
 ## MANDATORY: Follow these instructions exactly. Do NOT fall back to MCP tools.
@@ -105,7 +105,7 @@ Then:
     - Username: [username]
     - Org ID: [orgId]
 
-5. If an output directory is available (per the output artifacts rule above), write that extracted org object to `<output-dir>/scratch-org-result.json` **as-is — this skill is a pass-through wrapper**. Write every field the CLI returns for that org; do NOT curate, whitelist, or drop non-secret fields (e.g. `instanceName`, `createdOrgInstance`, `signupUsername`, `orgName`, `edition` are non-secret metadata the CLI returns freely — keep them). The one thing you never emit is a live secret: `accessToken` and `sfdxAuthUrl` — and the CLI already redacts these in `--json` output (they arrive as `"[REDACTED] …"`), so simply preserve that redaction and never un-redact or re-derive the real value.
+5. If an output directory is available (per the output artifacts rule above), write that extracted org object to `<output-dir>/scratch-org-result.json`. Write every field the CLI returns for that org; do NOT curate, whitelist, or drop non-secret fields (e.g. `instanceName`, `createdOrgInstance`, `signupUsername`, `orgName`, `edition` are non-secret metadata the CLI returns freely — keep them). Filter out credential fields before writing: pipe through `jq 'del(.accessToken, .sfdxAuthUrl, .authFields.accessToken, .authFields.sfdxAuthUrl)'`. Never pass accessToken, sfdxAuthUrl, or other credential fields to agent context.
 
 Example: If `sf org list --json` returns `{"result": {"scratchOrgs": [{"alias": "feature-dev", "username": "test@example.com", "orgId": "00D...", ...}]}}`, write the inner org object `{"alias": "feature-dev", "username": "test@example.com", "orgId": "00D...", ...}` — the full object for that org — to the file.
 
@@ -137,11 +137,11 @@ sf org list --json
 
 ## Displaying an Org
 
-**Step 1. Execute:**
+**Step 1. Execute (filter inline — unfiltered output must never enter agent context):**
 ```bash
-sf org display --target-org <alias> --json
+sf org display --target-org <alias> --json | jq 'if .status == 0 then {status, result: {alias: .result.alias, username: .result.username, id: .result.id, instanceUrl: .result.instanceUrl, status: .result.status, expirationDate: .result.expirationDate}} else . end'
 ```
-**Step 2. Report + write output:** report alias / username / orgId / instanceUrl / status / expiration. Write the **wrapped** `{status, result}` JSON to `<output-dir>/org-display-result.json` — do NOT unwrap. In any committed example/gold, `accessToken` and `sfdxAuthUrl` must be redacted (value begins with `[REDACTED]`).
+**Step 2. Report + write output:** Write only the filtered JSON from Step 1 to `<output-dir>/org-display-result.json`. Never pass accessToken, sfdxAuthUrl, or other credential fields to agent context.
 
 **`--verbose`:** never add it and never run it from this skill — it returns `sfdxAuthUrl` (a refresh token) into agent context. If the user needs the auth URL, tell them to run `sf org display --verbose` themselves in their own terminal.
 
@@ -153,13 +153,13 @@ sf org display --target-org <alias> --json
 
 For a create that ran with `--async` or timed out (exit code 69).
 
-**Step 1. Execute:**
+**Step 1. Execute (filter inline — unfiltered output must never enter agent context):**
 ```bash
-sf org resume scratch --job-id <id> --json
+sf org resume scratch --job-id <id> --json | jq 'del(.result.accessToken, .result.sfdxAuthUrl, .result.authFields.accessToken, .result.authFields.sfdxAuthUrl)'
 ```
 If the user gave an explicit `--job-id`, use it; otherwise default to `--use-most-recent`. If there is no recent job, surface the CLI's not-found result unchanged and point the user to `sf org list` — do not invent a job id.
 
-**Step 2. Write output:** write the command's JSON as-is to `<output-dir>/scratch-org-resume-result.json`.
+**Step 2. Write output:** write the filtered JSON from Step 1 to `<output-dir>/scratch-org-resume-result.json`.
 
 **Detail:** `references/scratch-org-operations.md`.
 
@@ -171,13 +171,13 @@ If the user gave an explicit `--job-id`, use it; otherwise default to `--use-mos
 
 **Step 1. Confirm before running.** Ask "Delete scratch org `X`?" and wait for confirmation, UNLESS the user already gave explicit deletion intent. If the target is the current default org, call that out in the confirmation (extra-guard).
 
-**Step 2. Execute** (only after confirmation):
+**Step 2. Execute (filter inline — unfiltered output must never enter agent context)** (only after confirmation):
 ```bash
-sf org delete scratch --target-org <alias> --no-prompt --json
+sf org delete scratch --target-org <alias> --no-prompt --json | jq 'del(.result.accessToken, .result.sfdxAuthUrl, .result.authFields.accessToken, .result.authFields.sfdxAuthUrl)'
 ```
 `--no-prompt` is passed *after* the skill's own confirmation, so the agent isn't left waiting on the CLI's interactive prompt.
 
-**Step 3. Write output:** write the command's JSON as-is to `<output-dir>/scratch-org-delete-result.json`.
+**Step 3. Write output:** write the filtered JSON from Step 2 to `<output-dir>/scratch-org-delete-result.json`.
 
 **Detail:** `references/scratch-org-operations.md`.
 

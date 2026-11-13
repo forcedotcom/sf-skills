@@ -83,8 +83,8 @@ Run before any write, both modes. Read `EmbeddedServiceConfig` by `fullName` = t
 
 Standalone, deployment exists: offer exactly three choices — no change / override / add to existing.
 
-The metadata read does not say whether the latest edits are **published**. Publishing is never automatic (SKILL.md
-step 17c); delegated returns `published: false` so the coordinator can ask the admin.
+The metadata read does not say whether the latest edits are **published**. Web creation auto-publishes. If auto-publish succeeded
+(isPublishSuccess=true), return published: true. For updates, publishing is a separate step (SKILL.md step 17c); delegated returns `published: false` so the coordinator can ask the admin.
 
 ## 4. Questions in the admin's language (guided mode)
 
@@ -112,6 +112,8 @@ Ask about the outcome, not the Salesforce feature. Keep it to a handful; state t
   }
 }
 ```
+
+`published` is `true` only when a Web create auto-published (`isPublishSuccess=true`).
 
 `status` and `errorMessage` are the contract. `outputs` is always returned; it is an addition to the documented shape.
 On `failed`: `errorMessage` names the failed step and the platform error; stop; do not retry.

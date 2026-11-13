@@ -47,3 +47,22 @@ metadata:
 - `{ISO_COUNTRY_CODE}` — optional, default `US`. Pass the real country if the number is non-US.
 
 The orchestrator validates type-specific inputs upfront; missing ones raise a prompt before we burn a Stage 0 SOQL.
+
+## Optional, any type
+
+- `{QUEUE}` — a routing queue the user named (label, DeveloperName, or `00G` Id). Forwarded to `service-de-channel-routing-configure`, which validates it instead of prompting.
+- `{REQUESTED_SETTINGS}` — not a field the user fills in; extract it from the request in Stage 0. One item per thing asked for:
+
+| User says (examples) | Item | Facet / leaf input |
+| --- | --- | --- |
+| "initial response: 'Thanks for reaching out…'" | `auto-response:InitialResponse` | `auto-responses`, `TextResponse` with that text |
+| "when an agent engages: '…'" | `auto-response:AgentEngagedResponse` | `auto-responses` |
+| "when the customer goes idle, after 10 minutes: '…'" | `auto-response:EndUserIdleResponse` | `auto-responses`, `responseTimeoutInMins=10` |
+| "when the conversation ends / customer stopped responding: '…'" | `auto-response:AgentEndEngagementResponse` / `auto-response:EndUserInactiveResponse` | `auto-responses` |
+| "implicit opt-in consent with STOP, END as opt-out keywords" (keywords given with a consent type) | none — these are consent inputs, not a separate item | Stage 3.5: forwarded as the language-keyword record's `OptOutKeywords` / `OptInKeywords` |
+| "a Help keyword 'help'", "add OptOut keywords STOP, END" (no consent type) | `keywords:<Help\|OptOut\|OptIn>:<language>` | `keywords` |
+| "session idle timeout 15 minutes", "end inactive sessions after 20" | `inactivity:endUserIdleTimeOut` / `inactivity:endInactiveSessionTimeOut` | `inactivity` (MIAW-only → `notApplicable` here) |
+| "reset the timer when an agent replies" | `inactivity:isAgentMessageResetInactivityEnabled` | `inactivity` (Apple/Facebook only) |
+| "use explicit / double opt-in" | `consent:<ConsentType>` | Stage 3.5, not Stage 4.5 |
+
+Response text that references an existing messaging component by name (`ConversationMessageDefinition`) uses the `MessageDefinition` shape instead of `TextResponse` — the settings leaf handles both. Don't create messaging components from this orchestrator.

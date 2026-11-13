@@ -34,7 +34,7 @@ Given a `{CHANNEL_ID}`, reads the channel's `MessagingChannelUsage.Id`, then fir
      - `TEXT` → `registerCsotSms`.
      - `AppleBusinessChat`, `Line`, everything else → `default` branch, no external callout, no network wait.
    - On success: writes `DeploymentStatus = 'Active'` via PLSQL.
-   - On failure: writes `DeploymentStatus = 'Error'` plus `ErrorReason` / `ErrorDetails`.
+   - On failure: writes `DeploymentStatus = 'Error'` plus `ErrorDetails` (the actual cause — always read this) and a coarse `ErrorReason` category.
 4. Inside the same observer, a second pass syncs `MessagingChannel.IsActive = true` once MCU reaches `Active` (the `isTransitioningStatus` flag skips the flip while status is still `Provisioning`).
 
 All synchronous within the PATCH request — the 204 response only comes back after the full chain completes. WhatsApp: ~15-21s (Meta `/register` round-trip). Apple / Line: ~1s (no external call; just the local save-hook + observer + PLSQL write). Verified on wadtesting 2026-04-30.
@@ -43,7 +43,7 @@ All synchronous within the PATCH request — the 204 response only comes back af
 
 | Reference file | Load when |
 | --- | --- |
-| `references/phone-verification.md` | Stage 3 comes back with `ErrorReason === "VERIFICATION_REQUIRED"` (WhatsApp only) — the phone-number OTP verification sub-flow. |
+| `references/phone-verification.md` | Stage 3 comes back `Error` on a WhatsApp channel with `ErrorDetails` containing `NUMBER_NOT_VERIFIED` or `REVERIFICATION` — the phone-number OTP verification sub-flow. |
 | `references/worked-examples.md` | You want a reference run of the WhatsApp happy-path, Apple activation, a readiness failure, or the already-active no-op. |
 | `references/gotchas.md` | Troubleshooting an unexpected result, or before modifying this skill — the eleven known gotchas. |
 
@@ -90,7 +90,7 @@ Unlike the old Aura-based version of this skill, there are no `{POLL_TIMEOUT_S}`
 ```json
 {"ok": false, "kind": "readiness-failed", "errorCode": "FIELD_INTEGRITY_EXCEPTION",
  "message": "...", "hint": "validateChannelReadinessOnProvisioning rejected the write — most commonly missing consent; run service-de-channel-settings-configure first"}
-{"ok": false, "kind": "provisioning-error", "mcuId": "0gL...", "errorReason": "MetaRegistrationFailed", "errorDetails": "..."}
+{"ok": false, "kind": "provisioning-error", "mcuId": "0gL...", "errorReason": "ProvisioningError", "errorDetails": "WhatsAppNumberRegistrationError__..."}
 {"ok": false, "kind": "verification-failed", "hint": "WhatsApp phone number verification failed or was declined by user"}
 {"ok": false, "kind": "verification-request-failed", "errorCode": "...", "message": "...", "hint": "Could not request verification code from Meta"}
 ```
@@ -150,10 +150,10 @@ sf api request rest \
   --body '{"DeploymentStatus":"Provisioning"}' \
   --include \
   > /tmp/amc-patch-response.txt 2>&1
-HTTP_CODE=$(head -1 /tmp/amc-patch-response.txt | grep -oE '[0-9]{3}')
+HTTP_CODE=$(grep -m1 -oE '^HTTP/[0-9.]+ [0-9]{3}' /tmp/amc-patch-response.txt | awk '{print $2}')
 ```
 
-`--include` prints the HTTP status/headers block ahead of the (typically empty, on 204) body — read the status line from that block rather than a `-w`-style trailing marker.
+`--include` prints the HTTP status/headers block ahead of the (typically empty, on 204) body. Match the `HTTP/x.y NNN` status line itself — **not** `head -1`: with `2>&1`, the CLI's `Warning: @salesforce/cli update available from 2.150.6 to 2.154.4` line can come first, and a bare 3-digit grep then returns `150`.
 
 Classify by HTTP status:
 
@@ -190,14 +190,14 @@ sf data query --target-org '{ORG_ALIAS}' \
 | Status | Handling |
 | --- | --- |
 | `Active` | Continue to Stage 4. |
-| `Error` with `ErrorReason === "VERIFICATION_REQUIRED"` | For WhatsApp channels only: phone number needs OTP verification. Continue to Stage 3.2 (WhatsApp verification flow). |
-| `Error` (other) | Emit `{ok:false, kind:"provisioning-error", mcuId, errorReason, errorDetails}`. |
+| `Error`, WhatsApp, `ErrorDetails` contains `NUMBER_NOT_VERIFIED` or `REVERIFICATION` | Phone number needs OTP verification with Meta. Continue to Stage 3.2. (`ErrorReason` is just `ProvisioningError` here — the verification signal is only in `ErrorDetails`; see gotcha #9.) `ErrorDetails` is capped at 255 chars, so the Meta message at the end will usually be cut off mid-sentence — that's expected and harmless. All you need is the `NUMBER_NOT_VERIFIED (code 100, subcode 2593005)` part near the start, which always survives. |
+| `Error` (other) | Emit `{ok:false, kind:"provisioning-error", mcuId, errorReason, errorDetails}`, with `errorDetails` verbatim — it is the actual cause; surface it to the user, not just `errorReason` (gotcha #8). |
 | `Provisioning` | Unexpected — the observer was supposed to terminate before the PATCH returned 204. Fall through to a defensive poll (see Stage 3.1). |
 | `Disabled` | The PATCH returned 204 but the write didn't take? Emit `{ok:false, kind:"transport", message:"PATCH returned 204 but MCU is still Disabled — observer didn't commit"}`. |
 
-### Stage 3.2: WhatsApp phone number verification (only if ErrorReason === "VERIFICATION_REQUIRED")
+### Stage 3.2: WhatsApp phone number verification (only if `ErrorDetails` contains `NUMBER_NOT_VERIFIED` or `REVERIFICATION`)
 
-This sub-flow only runs for WhatsApp channels when activation fails with `ErrorReason === "VERIFICATION_REQUIRED"` — the phone number needs OTP verification with Meta before it can be registered. **If the MCU comes back with `ErrorReason === "VERIFICATION_REQUIRED"` (WhatsApp only), load `references/phone-verification.md` and follow it** to drive the phone-number verification sub-flow (request code → prompt user → validate code → retry activation once).
+This sub-flow only runs for WhatsApp channels whose activation failed because Meta hasn't verified the phone number. **If the MCU comes back `Error` with `ErrorDetails` containing `NUMBER_NOT_VERIFIED` or `REVERIFICATION` (WhatsApp only), load `references/phone-verification.md` and follow it** to drive the phone-number verification sub-flow (request code → prompt user → validate code → retry activation once). Move into it directly — don't emit `provisioning-error` for this case. Its terminal envelopes are the Stage 4 success, `verification-declined`, `verification-request-failed`, or `verification-failed`.
 
 ### Stage 3.1: Defensive poll (only if Stage 3 saw `Provisioning`)
 
@@ -269,4 +269,4 @@ For end-to-end activation traces (WhatsApp happy-path, Apple activation, a readi
 
 ## Gotchas
 
-Eleven known gotchas — synchronous PATCH timing for WhatsApp, valid API status transitions, the `IsActive` sync pass, relationship-name variance across orgs, consent preconditions, `DeploymentStatus` picklist casing, the REST-vs-Apex equivalence, `ErrorReason` values, `VERIFICATION_REQUIRED` handling, OAuth token extraction, and the Status-code-409 Admin API conflict. Before troubleshooting an unexpected result or modifying this skill, load `references/gotchas.md` and follow it.
+Eleven known gotchas — synchronous PATCH timing for WhatsApp, valid API status transitions, the `IsActive` sync pass, relationship-name variance across orgs, consent preconditions, `DeploymentStatus` picklist casing, the REST-vs-Apex equivalence, reading failures from `ErrorDetails` (not `ErrorReason`), detecting the OTP-verification case, OAuth token extraction, and the Status-code-409 Admin API conflict. Before troubleshooting an unexpected result or modifying this skill, load `references/gotchas.md` and follow it.

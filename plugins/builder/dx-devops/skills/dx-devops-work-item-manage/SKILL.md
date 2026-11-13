@@ -4,7 +4,7 @@ description: "Use this skill to manage the full lifecycle of DevOps Center work 
 metadata:
   relatedSkills:
     - "dx-devops-promote"
-  version: "1.1"
+  version: "1.2"
   domains: ["Developer Experience"]
   minApiVersion: "58.0"
   cliTools:
@@ -36,7 +36,7 @@ Gather or infer before proceeding:
 - **For create**: project ID (required), subject (required), description (optional)
 - **For commit**: work item name or ID (required), commit message, and either the files to commit (git path) or the components to commit (API path). Optional: **dev org alias** — the org that holds the changes. When provided, try the DevOps Center commit API first (see step 5); otherwise use git
 - **For update**: work item name (e.g., WI-000001) or work item ID (required), fields to update (subject, description, status)
-- **For create-review**: work item name (e.g., WI-000001) or work item ID (required)
+- **For create-review**: work item name (e.g., WI-000001) or work item ID (required). Optional: **dev org alias**. When provided, try the DevOps Center review API first (see step 7); otherwise use `sf devops review create`
 
 Defaults unless specified:
 - Output format: `--json` for headless consumption
@@ -149,7 +149,18 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
    - Parse the JSON response: `.result.name`, `.result.subject`, `.result.status` contain the updated values
    - **For status transitions specifically**: after the command completes, explicitly confirm the new status by checking `.result.status` in the response. If the status field is absent from the update response, re-query the work item via list to verify the status persisted
 
-7. **Create pull request** — when the user wants to create a PR for code review:
+7. **Create pull request** — when the user wants to create a PR for code review. Choose the path first:
+   - **API path** — when the user gave a dev org alias and the `doceConnectionType` preflight (step 5, API path, item 1) succeeds. The call runs on the dev org and DevOps Center creates the PR with its stored VCS credentials.
+   - **CLI path** — everything else.
+
+   **API path** (body, errors and idempotency in `references/review-api.md`):
+   1. Resolve the work item id and name on the hub (`sf devops work-item list --project-id <id> --target-org <hub>`). The work item must have a committed component list and must not be Nevered.
+   2. `POST /connect/devops/createReview` on the **dev org** with `{workItemId, workItemName, workItemLink}`; the body is the inner object (no `createReview` wrapper).
+   3. The call is synchronous. Errors return HTTP 200 with `status: "Error"` and `errorMessage` = `CODE:detail`. Surface it using the error table in the reference and stop.
+   4. On `Success`, `reviewUrl` is the PR URL. Calling again for the same work item returns the same URL, so a repeat call is safe.
+   5. Confirm on the hub that the work item is `IN_REVIEW` and `ReviewRemoteReference` holds the PR number.
+
+   **CLI path:**
    ```bash
    sf devops review create \
      --work-item-name <WI-name> \
@@ -178,7 +189,8 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
    - **For commit (API path)**: verify the POST `status`, then `DevopsRequestInfo.Status`, are `SUCCESS`, and that a new `WorkItemComponentList` with a `CommitReference` exists on the hub. A new list with an empty `CommitReference` means nothing new was committed; report that, not a clean success.
    - **For update (general fields)**: verify the CLI returned status 0 and compare the returned JSON fields against the user's requested changes. If updating subject, confirm `.result.subject` matches the new value.
    - **For update (status transition)**: verify the CLI returned status 0, then **explicitly confirm the status transition** by checking `.result.status` in the JSON response matches the target status (e.g., "Ready to Promote"). If the response doesn't include the status field, re-run `sf devops work-item list` filtered to this work item and verify the status persisted.
-   - **For create-review**: verify the CLI returned status 0 and the JSON output contains `.result.pullRequestUrl` (the PR URL) and `.result.status` (should be "open" or equivalent). If VCS credentials are missing, the CLI returns an error — surface this to the user.
+   - **For create-review (CLI path)**: verify the CLI returned status 0 and the JSON output contains `.result.pullRequestUrl` (the PR URL) and `.result.status` (should be "open" or equivalent). If VCS credentials are missing, the CLI returns an error — surface this to the user.
+   - **For create-review (API path)**: verify the response `status` is `Success` with a non-empty `reviewUrl`, then that the hub work item is `IN_REVIEW` with `ReviewRemoteReference` set.
 
 9. **Report results**:
    - **List**: present work items in a readable format showing work item name, subject, status, branch, and environment. If filtering by status was requested, show only matching work items.
@@ -186,7 +198,7 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
    - **Commit**: git path — confirm which files were staged, the commit SHA (from git output), and "Changes committed and pushed to branch <branch-name>." API path — confirm the `reqId`, components committed and hub `CommitReference` (author is DevOps Center)
    - **Update (general)**: confirm which fields changed with before/after values (e.g., "Subject updated from 'X' to 'Y'").
    - **Status transition**: explicitly state the transition with old → new status (e.g., "Status updated: In Progress → Ready to Promote").
-   - **Create-review**: return the PR URL and confirm "Pull request created successfully. Status: open. URL: <url>"
+   - **Create-review**: return the PR URL and confirm "Pull request created successfully. Status: open. URL: <url>". API path — report `reviewUrl`, and note when the call returned an existing PR rather than creating one
 
 ---
 
@@ -203,6 +215,7 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
 | Commit before creating a PR | Commit first and confirm a component list exists on the hub before `review create` |
 | API commit only sends components already in the dev org | The API retrieves from the dev org, not from local disk; deploy local-only edits first (`sf project deploy start`) or use the git path |
 | Check `status` in the commit API response | Errors are returned as HTTP 200 with `status: "ERROR"` |
+| Check `status` in the review API response | Errors are returned as HTTP 200 with `status: "Error"` and `errorMessage` as `CODE:detail` |
 | PR creation requires VCS credentials in org | DevOps Center API uses stored VCS credentials; no local git auth needed |
 | Never use interactive prompts | Skills run in headless environments; all inputs must be via CLI flags |
 
@@ -223,6 +236,7 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
 | **Commit pushed while work item is New** | The hub ignores external pushes for New work items; set In Progress first and, if already pushed, re-check after the status change |
 | **API commit still in progress past the deadline** | Report it as stuck; do not retry automatically (a new request could race it) |
 | **Git push fails - no commits or branch not found** | Verify files are staged with `git status` and branch name retrieved from work item via list command |
+| **Review API returns `REVIEW_VCS_AUTHENTICATION_FAILED`** | Core maps any "not found" to this code, so a missing branch looks like an auth failure; check the work item and target branches exist as well as the credential |
 | **PR creation fails - VCS credentials** | VCS credentials not configured in DevOps Center UI; instruct user to configure in Setup → DevOps Center → VCS Credentials |
 
 ---
@@ -235,9 +249,9 @@ Deliverables vary by operation:
 - **Create**: Work item name (e.g., WI-000001), ID, branch name, and environment of the newly created work item
 - **Commit**: Confirmation of git commit and push success with commit SHA, or for the API path the `reqId`, final request status and `CommitReference`
 - **Update**: Confirmation of updated fields (old value → new value for subject/description, or status change)
-- **Create-review**: Pull request URL, PR number, and status
+- **Create-review**: Pull request URL, PR number, and status (API path: `reviewUrl` and hub `IN_REVIEW` confirmation)
 
-Outputs are derived from `sf devops work-item` CLI, `sf devops review create` CLI, and standard git commands.
+Outputs are derived from `sf devops work-item` CLI, `sf devops review create` CLI, the DevOps Center commit and review APIs, and standard git commands.
 
 ---
 
@@ -276,7 +290,8 @@ Before reporting results to the user:
 
 ### Create-Review Operation Checks
 - [ ] Was work item identifier provided (name or ID)?
-- [ ] Was a PR URL returned in JSON output?
+- [ ] Was a PR URL returned (`.result.pullRequestUrl` for the CLI, `reviewUrl` for the API)?
+- [ ] API path: was the response `status` checked, and was the hub work item confirmed `IN_REVIEW`?
 - [ ] Was the PR creation confirmed?
 
 ---
@@ -286,5 +301,6 @@ Before reporting results to the user:
 | File | When to read |
 |------|-------------|
 | `references/commit-api.md` | When committing through the DevOps Center API: request body, response and error codes, polling, preflight |
+| `references/review-api.md` | When creating a review through the DevOps Center API: request body, response and error codes, idempotency, hub confirmation |
 | `references/cli-commands.md` | When you need detailed CLI flag documentation, JSON output schemas, or error handling patterns |
 | `examples/common-workflows.md` | When the user's request matches a common pattern (bulk updates, reassignment, idempotent creation, sequential transitions) |

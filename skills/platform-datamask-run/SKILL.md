@@ -117,7 +117,7 @@ Then author one with the **two-step** recipe (the
 2. **Tooling-insert** the `DataMaskPolicyObject` (one per object) then its `DataMaskPolicyField`
    rows. Each field row's treatment is `MaskingCategory` + `MaskValue`. For `library`, `MaskValue` is a
    snake_case token like `first_name`, `email`, `phone`. For `characters` and `replaceRandom`, `MaskValue`
-   is the field's Salesforce type (`Text`, `Date`). There is **no `MaskingRuleType` column**.
+   is the field's type group (`Text`, `Date`; Long Text Area is `Text`). There is **no `MaskingRuleType` column**.
 
 > Insert order matters: a Tooling-created parent (no active revision) makes the child insert fail
 > `INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY`. Metadata-deploy the shell first.

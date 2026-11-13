@@ -11,8 +11,10 @@ Resolve the org's **true max** supported API version and stop if it is below 68.
 ```bash
 ORG_API_VERSION=$(sf api request rest --target-org "$ORG" "/services/data" \
   | python3 -c "import sys, json; print(max((v['version'] for v in json.load(sys.stdin)), key=float))")
+API_VERSION_RE='^[0-9]{2}\.[0-9]$'
+[[ "$ORG_API_VERSION" =~ $API_VERSION_RE ]] || { echo "Org API version '$ORG_API_VERSION' fails the ORG_API_VERSION grammar. Stopping without making changes."; exit 1; }
 
-python3 -c "import sys; sys.exit(0 if float('$ORG_API_VERSION') >= 68.0 else 1)" || {
+python3 -c "import sys; sys.exit(0 if float(sys.argv[1]) >= 68.0 else 1)" "$ORG_API_VERSION" || {
   echo "Org API version $ORG_API_VERSION is below 68.0 — Agentforce Email-to-Case (BotEmailDefinition) is not available on this org. Stopping without making changes."
   exit 1
 }
@@ -52,6 +54,8 @@ Ask the user via `AskUserQuestion`:
 
    > *"What email address should receive support emails? This is the address customers will email — e.g. `support@yourcompany.com`.*
    > *Note: Salesforce will send a verification email to this address. You must click the verification link before inbound emails will be processed."*
+
+   Validate `SUPPORT_EMAIL` against its grammar in `input-validation.md` before any command uses it; if it doesn't match, ask again. Never escape and continue: the value is pasted into the `--values` string below and into SOQL and XML later.
 
 2. Create the `EmailRoutingAddress` record:
    ```bash
@@ -94,7 +98,7 @@ Ask the user via `AskUserQuestion`:
 
 ### If using an existing routing address
 
-Set `ROUTING_ADDRESS_ID` to the selected record's `Id` and continue. No provisioning steps needed.
+Set `ROUTING_ADDRESS_ID` to the selected record's `Id` and `SUPPORT_EMAIL` to its `Address`, validate both per `input-validation.md`, and continue. No provisioning steps needed.
 
 ---
 
@@ -145,10 +149,10 @@ This is a surface-only add with no outbound flow, so it is self-contained here �
 
 3. Republish and activate. The agent is already active at this point (Phase 1), and **publishing a surface/connection change onto an active agent fails** with `We couldn't find the default agent user <username>` — the active version holds the agent user, so it must be released first. Deactivate → publish → activate:
    ```bash
-   echo "Y" | sf agent deactivate     --api-name {AGENT_DEVELOPER_NAME} --json
-   sf agent validate authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --json
-   sf agent publish  authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --json
-   echo "Y" | sf agent activate       --api-name {AGENT_DEVELOPER_NAME} --json
+   echo "Y" | sf agent deactivate     --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
+   sf agent validate authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
+   sf agent publish  authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
+   echo "Y" | sf agent activate       --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
    ```
 
    **Batch escalation here to avoid a second publish cycle.** Each surface/connection change on an active agent costs a full deactivate → publish → activate. If the user will also want outbound escalation (Phase 3), wire it in *this* edit instead of republishing again later: resolve the escalation queue and create the outbound `QueueBased` RoutingFlow first (`references/queue-resolution.md`, `references/routing-flow.md`), then add the outbound-route fields to this same `connection service_email:` block (per `references/agent-wiring.md`) before the single publish/activate above — the surface `description` and the outbound route then go live together.
@@ -160,6 +164,8 @@ Verify the block is present in the deployed bundle before continuing. Escalation
 ## Step 4 — BotEmailDefinition (Email Configuration)
 
 The `BotEmailDefinition` component links the agent to Service Email (the "Agentforce for Service on Email" feature). Read `references/botemaildefinition.md` in full before this step. Run this only after Step 3 confirmed `connection service_email:` is deployed on the agent.
+
+Create a private work directory once with `mktemp -d` and use the path it prints as `{WORK_DIR}` in Steps 4c and 4d. Shell variables don't persist between commands, so substitute the literal path. Don't use a fixed `/tmp` path: another local user can create it first and swap the files you deploy.
 
 ### Step 4a — Preflight the save-time gates (fail fast, in Core's order)
 
@@ -203,17 +209,17 @@ The agent needs an ASA-valid `EmailTemplate` (`uiType=SFX`, HTML, public, contai
 
 Elicit `label`, `legalDisclaimer` (≥10 chars), `signature` (≥10 chars), and `replyAll` (reply-all vs reply-to-sender) from the user. Choose a `DeveloperName`, e.g. `{AgentDevName}_Email_Config`.
 
-1. Copy `assets/BotEmailDefinition.botEmailDefinition-meta.xml` to `/tmp/sfskills/{DeveloperName}.botEmailDefinition-meta.xml` and substitute `{AGENT_DEVELOPER_NAME}`, `{EMAIL_TEMPLATE_FOLDER}/{EMAIL_TEMPLATE_DEVELOPER_NAME}` (= `EMAIL_TEMPLATE`), `{LABEL}`, `{LEGAL_DISCLAIMER_TEXT}`, `{SIGNATURE_TEXT}`, and `replyAll`.
+1. Copy `assets/BotEmailDefinition.botEmailDefinition-meta.xml` to `{WORK_DIR}/{DeveloperName}.botEmailDefinition-meta.xml` and substitute `{AGENT_DEVELOPER_NAME}`, `{EMAIL_TEMPLATE_FOLDER}/{EMAIL_TEMPLATE_DEVELOPER_NAME}` (= `EMAIL_TEMPLATE`), `{LABEL}`, `{LEGAL_DISCLAIMER_TEXT}`, `{SIGNATURE_TEXT}`, and `replyAll`. Make the substitutions with the Edit/Write tools, never `sed` or a heredoc, and XML-escape the free-text values (`input-validation.md`).
 
 2. Validate:
    ```bash
-   python3 scripts/validate-botemaildefinition.py /tmp/sfskills/{DeveloperName}.botEmailDefinition-meta.xml
+   python3 scripts/validate-botemaildefinition.py "{WORK_DIR}/{DeveloperName}.botEmailDefinition-meta.xml"
    ```
    Resolve any errors before deploying.
 
 3. Assemble the metadata-format package and deploy (source deploy naming the type directly fails — it is absent from the SDR registry):
    ```bash
-   MDDIR=/tmp/sfskills/botemaildef-mdapi
+   MDDIR="{WORK_DIR}/botemaildef-mdapi"
    mkdir -p "$MDDIR/botEmailDefinitions"
    # package.xml: from assets/mdapi-package.xml, substituting the member name and
    # {API_VERSION} = ORG_API_VERSION from the Precondition.
@@ -221,7 +227,7 @@ Elicit `label`, `legalDisclaimer` (≥10 chars), `signature` (≥10 chars), and 
        -e "s/{API_VERSION}/{ORG_API_VERSION}/" \
        assets/mdapi-package.xml > "$MDDIR/package.xml"
    # component file: same XML as the source file, WITHOUT the -meta.xml suffix
-   cp /tmp/sfskills/{DeveloperName}.botEmailDefinition-meta.xml \
+   cp "{WORK_DIR}/{DeveloperName}.botEmailDefinition-meta.xml" \
       "$MDDIR/botEmailDefinitions/{DeveloperName}.botEmailDefinition"
    sf project deploy start --metadata-dir "$MDDIR" --target-org $ORG --json
    ```
@@ -233,10 +239,11 @@ Elicit `label`, `legalDisclaimer` (≥10 chars), `signature` (≥10 chars), and 
 
 In one `Settings:Case` metadata deploy, set on the routing address (`{SUPPORT_EMAIL}` from Step 1): the `botEmailDefinition` binding to `BOT_EMAIL_DEFINITION_NAME`, **plus** the Step 2 inbound-routing fields — either `caseOwner` = `BOT_USER_USERNAME` + `caseOwnerType: User` (Path A), or `routingFlow` = `INBOUND_FLOW_DEVELOPER_NAME` + `fallbackQueue` = `QUEUE_DEVELOPER_NAME` (Path B). `casePriority` is **required** on every routing address — carry it, or the deploy fails with `Missing casePriority`. A settings deploy **replaces** the `emailToCase.routingAddresses` collection, so the deployed file must carry **every** existing address — dropping one unbinds it. There is no pre-existing `Case.settings-meta.xml` in the project; you must generate it from the current org state first.
 
-1. **Read the current CaseSettings** to get the full `emailToCase` block, including all routing addresses:
+1. **Read the current CaseSettings** to get the full `emailToCase` block, including all routing addresses. Keep the response as the pre-deploy snapshot; the read-back check after point 3 compares against it:
    ```bash
    sf api request rest -o "$ORG" --method GET \
-     "/services/data/v{ORG_API_VERSION}/tooling/query?q=SELECT+Metadata+FROM+CaseSettings+LIMIT+1"
+     "/services/data/v{ORG_API_VERSION}/tooling/query?q=SELECT+Metadata+FROM+CaseSettings+LIMIT+1" \
+     > "{WORK_DIR}/casesettings-before.json"
    ```
 
 2. **Write `Case.settings-meta.xml`** to the project's settings directory (e.g. `force-app/main/default/settings/Case.settings-meta.xml`). Include the `emailToCase` toggles and **one `<routingAddresses>` entry per existing address** from the read. For each address, carry over **every** field the read returned except the read-only `emailServicesAddress`/`isVerified` — preserve whatever the org actually set (e.g. `addressType`, `caseOrigin`, `emailAddress`, `routingName`, and fields like `casePriority`), rather than a fixed subset. On the entry whose `emailAddress` matches `{SUPPORT_EMAIL}`, add `<botEmailDefinition>{BOT_EMAIL_DEFINITION_NAME}</botEmailDefinition>` plus the Step 2 path's fields. The example below shows **Path A** (case owner); for **Path B**, swap in `<routingFlow>`+`<fallbackQueue>` instead:
@@ -259,14 +266,16 @@ In one `Settings:Case` metadata deploy, set on the routing address (`{SUPPORT_EM
            <!-- Path B: replace <caseOwner>/<caseOwnerType> with
                 <fallbackQueue>{QUEUE_DEVELOPER_NAME}</fallbackQueue> + <routingFlow>{INBOUND_FLOW_DEVELOPER_NAME}</routingFlow>.
                 casePriority is required. Include whatever else the read returned (minus emailServicesAddress/isVerified).
-                Repeat <routingAddresses> for every OTHER existing address, without botEmailDefinition/caseOwner/routingFlow. -->
+                Repeat <routingAddresses> for every OTHER existing address, carrying every field over exactly as read
+                (including any botEmailDefinition, caseOwner, caseOwnerType, routingFlow, fallbackQueue, casePriority).
+                Only the target address changes. -->
        </emailToCase>
    </CaseSettings>
    ```
 
 3. **Deploy in metadata format** so the version comes from the manifest — do **not** mutate `sfdx-project.json`. A source deploy of `Settings:Case` reads `sourceApiVersion` (which `--api-version` does not override), so pinning it there would persist to every later deploy in the user's project. Assemble a metadata-format package versioned at `ORG_API_VERSION` (already ≥68.0 from the Precondition — `botEmailDefinition` on a routing address needs v68.0+):
    ```bash
-   MDDIR=/tmp/sfskills/casesettings-mdapi
+   MDDIR="{WORK_DIR}/casesettings-mdapi"
    mkdir -p "$MDDIR/settings"
    # package.xml: from assets/settings-mdapi-package.xml, {API_VERSION} = ORG_API_VERSION.
    sed -e "s/{API_VERSION}/{ORG_API_VERSION}/" \
@@ -276,7 +285,7 @@ In one `Settings:Case` metadata deploy, set on the routing address (`{SUPPORT_EM
    sf project deploy start --metadata-dir "$MDDIR" --target-org $ORG --json
    ```
 
-Verify the read-back (`emailToCase.routingAddresses`): the **set of `emailAddress` values matches the pre-deploy set** — not just that the count is unchanged, since a dropped-and-added swap preserves the count — and the target address (`{SUPPORT_EMAIL}`) now carries `<botEmailDefinition>{BOT_EMAIL_DEFINITION_NAME}</botEmailDefinition>` and the chosen path's fields (`<caseOwner>` with `caseOwnerType` `User`, or `<routingFlow>`+`<fallbackQueue>`). If any pre-deploy address is missing from the read-back, stop and surface it — a live routing address was unbound.
+Verify the read-back (`emailToCase.routingAddresses`): the **set of `emailAddress` values matches the pre-deploy set** — not just that the count is unchanged, since a dropped-and-added swap preserves the count — and the target address (`{SUPPORT_EMAIL}`) now carries `<botEmailDefinition>{BOT_EMAIL_DEFINITION_NAME}</botEmailDefinition>` and the chosen path's fields (`<caseOwner>` with `caseOwnerType` `User`, or `<routingFlow>`+`<fallbackQueue>`). If any pre-deploy address is missing from the read-back, stop and surface it — a live routing address was unbound. Then compare every **non-target** address field by field with `casesettings-before.json` (including `botEmailDefinition`, `caseOwner`, `caseOwnerType`, `routingFlow`, `fallbackQueue`, and `casePriority`). If any field changed, stop and report the drift — another address's live routing was altered.
 
 Branch C is complete once the binding is verified. Outbound escalation is added via Phase 3 (`agent-wiring.md`) exactly like the other channels — offer it rather than skipping it (the user can decline; it does not block inbound completion). If you already batched the outbound route into the Step 3 `connection service_email:` block, escalation is done — just confirm `outboundRouteName`/`outboundRouteType` round-tripped (per `agent-wiring.md`) instead of republishing.
 

@@ -1,335 +1,243 @@
 ---
 name: data360-code-extension-generate
-description: "Develop and deploy Data Cloud Code Extensions using SF CLI plugin. Use this skill when creating custom Python transformations for Data Cloud, deploying code extensions, or testing data transformations. Supports init, run, scan, and deploy operations."
+description: "Create, develop, test, and deploy Data 360 (Data Cloud) Code Extensions with the sf CLI data-code-extension plugin and the salesforce-data-customcode Python SDK. Use this skill when creating or writing a code extension script or function (for example one that reads a DLO and writes a DLO), creating custom PySpark transformations for Data 360, editing an existing code extension payload/entrypoint.py, setting up a local code extension environment, scanning, running locally, deploying, or redeploying code extensions. Supports environment setup, init, scan, run, zip, and deploy for script and function packages."
 metadata:
-  version: "1.0"
+  version: "2.0.0"
   domains: ["Data 360", "Developer Experience"]
-  relatedSkills:
-    - "data360-schema-get"
   cliTools:
     - tool: ["docker"]
       semver: ">=20.0.0"
-    - tool: ["pip"]
+    - tool: ["git"]
+      semver: ">=2.0.0"
+    - tool: ["java"]
+      semver: ">=11.0.0"
+    - tool: ["jq"]
+      semver: ">=1.6.0"
+    - tool: ["npm"]
+      semver: ">=8.0.0"
+    - tool: ["pip", "pip3"]
       semver: ">=23.0.0"
-    - tool: ["python"]
-      semver: ">=3.11.0"
-    - tool: ["python3"]
+    - tool: ["python3.11", "python3"]
       semver: ">=3.11.0"
     - tool: ["sf"]
       semver: ">=2.0.0"
 ---
 
-# data360-code-extension-generate Skill
+# data360-code-extension-generate
 
 ## Overview
 
-This skill provides a complete workflow for developing, testing, and deploying custom Python code extensions to Salesforce Data Cloud. Code extensions allow you to write Python transformations that read from and write to Data Lake Objects (DLOs) and Data Model Objects (DMOs).
+A Data 360 code extension is customer-owned Python (PySpark) that runs inside Data 360:
 
-## When to Use
+| Type | Purpose | Local test |
+|---|---|---|
+| **script** | Batch transformation deployed as a **data transform**. Reads and writes DLOs or DMOs. | `script run` against real org data |
+| **function** | Custom node for **Search Index Chunking** (`--use-in-feature SearchIndexChunking`). | `function run --test-with test.json` |
 
-- User wants to create a new code extension project
-- User needs to test a code extension locally
-- User wants to scan code for required permissions
-- User needs to deploy a code extension to Data Cloud
-- User is working with Data Cloud transformations
-- User wants to read/write DLO or DMO data programmatically
+Workflow: environment check → init → discover schemas → develop → scan → run locally → deploy → run the deployed transform. The skill needs only a shell, file editing, and the ability to ask the user questions. It works with a project venv or with a single system Python 3.11 (cloud workspaces, containers).
 
-## Prerequisites Check
+Use it to set up a code extension environment, create a script or function package, change `payload/entrypoint.py`, scan, run locally, deploy, redeploy, or clean up.
 
-Before executing any code extension commands, verify prerequisites:
+## Agent Rules (apply to every phase)
 
-1. **SF CLI with plugin installed**
-   ```bash
-   sf plugins --core | grep data-code-extension
-   ```
-   If not installed:
-   ```bash
-   sf plugins install @salesforce/plugin-data-code-extension
-   ```
+1. **Pass `--target-org <ORG_ALIAS>` explicitly** to `run`, `deploy` and every `sf org` / `sf api` command, even when it's the CLI default. `init`, `scan` and `zip` reject it (`Nonexistent flag: --target-org`).
+2. **Shell state doesn't persist.** Start every block that runs `sf data-code-extension`, `python3` or `pip` with the `<PY_ENV>` line from Phase 0b; other commands don't need it. Write `<ORG_ALIAS>`, `<PROJECT_DIR>`, `<API_VERSION>` and `<package_name>` literally. Never use `$(…)`, backticks or `eval`: some hosts (for example Code Builder) ask for approval on each one. Copy `PY_ENV` and `API_VERSION` exactly as `check_env.sh` prints them.
+3. **Check before you install**, and skip anything already present.
+4. **Confirm with the user before changing the org**: deploy, delete, or running a deployed transform.
+5. **Hand interactive or privileged steps to the user**: `sf org login web`, enabling Code Extension, installing or starting Docker Desktop, `sudo`, installing Homebrew.
+6. **Never print secrets** (access tokens, session IDs, OAuth client IDs or consumer keys).
+7. **Resolve, print, proceed.** Don't ask for values the environment determines (Phase 0a). Ask only when a value is missing or ambiguous. If your shell can't prompt, ask in the conversation and write the files yourself.
+8. **Schema first, then code** (Phase 2). Never write code first and ask the user to check the schema afterwards.
+9. **Data 360 MCP server first for org lookups** (schemas, queries, runs, deletes). Do the MCP check (Phase 0b) once per session before the first lookup, even if Phase 0 was skipped. Fall back to `sf api` or the UI only when it isn't connected or a call fails, and say which you used. On `Session not found` (404), retry once before falling back. Details: [references/mcp-integration.md](references/mcp-integration.md).
+10. **stderr:** when piping `sf … --json` into `jq`, use `2>/dev/null`, never `2>&1` (warnings break the JSON). Never redirect stderr on `scan`, `run` or `deploy`; their errors and tracebacks go there.
 
-2. **Python 3.11**
-   ```bash
-   python --version  # Should show 3.11.x
-   ```
+## Phase 0: Environment and Org Readiness
 
-3. **Data Cloud Custom Code SDK**
-   ```bash
-   pip list | grep salesforce-data-customcode
-   ```
-   If not installed:
-   ```bash
-   pip install salesforce-data-customcode
-   ```
+### 0a. Resolve parameters
 
-4. **Docker running** (for deploy only)
-   ```bash
-   docker ps
-   ```
+Take what the user already gave and pass `""` for the rest; `check_env.sh` (0b) resolves it:
 
-5. **Authenticated org**
-   ```bash
-   sf org display --target-org <org_alias> --json
-   ```
+| Parameter | Resolution order (first match wins) |
+|---|---|
+| `PROJECT_DIR` | User value → `$D360_PROJECT_DIR` → `/home/codebuilder/dx-project` if it exists (Code Builder) → current folder |
+| `ORG_ALIAS` | User value → `$D360_TARGET_ORG` → CLI default org if Connected → the only Connected org. Alias, or username if there's no alias |
+| `<package_name>` | User value, else a snake_case name from the request (for example `employee_upper`) |
 
-## Skill Workflow
+Tell the user the values in one line and continue without waiting ("Using org `…` and project `…`. Say so if you want different ones."). Stop and ask only if several orgs are Connected with no Connected default (show them), or if none is Connected (ask for the My Domain URL and hand the browser login to the user: environment-setup.md §2).
 
-### Phase 1: Initialize Project
+### 0b. Run the read-only check
 
-Create a new code extension project with scaffolding.
+The plugin needs **exactly Python 3.11** and uses whatever `python3` is on `PATH`. The check picks **system mode** (`python3` is 3.11 and pip isn't blocked; `<PY_ENV>` puts the user-base `bin` folder on `PATH`) or **venv mode** (`<PROJECT_DIR>/.venv`; `<PY_ENV>` activates it). An existing `.venv` always means venv mode. Details: [references/environment-setup.md](references/environment-setup.md) §3.
 
-**Commands:**
-
-For **script-based** code extensions (batch transformations):
 ```bash
-sf data-code-extension script init --package-dir <directory>
+bash <SKILL_DIR>/scripts/check_env.sh "<PROJECT_DIR or empty>" "<ORG_ALIAS or empty>"   # optional 3rd argument: system | venv
 ```
 
-For **function-based** code extensions (real-time):
+It changes nothing. It prints ✅/❌ for `sf` and the plugin, Python 3.11 (after `<PY_ENV>`), pip or venv state, `salesforce-data-customcode` and `pipreqs`, Java, Docker and the org connection, then `PROJECT_DIR=`, `ORG_ALIAS=`, `MODE=`, `PY_ENV=` and `API_VERSION=`. Use the printed `PY_ENV` and `API_VERSION` from here on.
+
+For each ❌, follow environment-setup.md in this order, then rerun the check:
+
+1. `sf` can't run in this shell: your host's sandbox blocks it. Rerun with permission to run outside the sandbox; until then, ignore the other ❌s.
+2. Venv mode: create the venv with `python3.11 -m venv .venv` (not `uv venv`), then run `bash <SKILL_DIR>/scripts/venv_hook.sh "<PROJECT_DIR>"`.
+3. Install the SDK **and** `pipreqs` in one command with `python3 -m pip` (never bare `pip3`), as the check prints it. The first install downloads PySpark (about 300 MB); let it finish.
+
+**Don't start Phase 1 until every ❌ except Docker (deploy only) is fixed.** If an install fails (for example, no network), stop and tell the user. Use only this project's Python; never borrow another project's venv. Java: JDK 17 is recommended (11 works); JDK 21 works except for `toPandas()` and pandas UDFs (environment-setup.md §Java).
+
+**MCP check (once, here).** Look at your own tool list, including deferred tools listed by name only, for a server whose name contains `d360` or `data360` and whose tools end in `search`, `payload_examples` and `execute`. Load them if your host requires it, then print `MCP: available (<server>)` or `MCP: not connected`. Reuse this answer for the rest of the session.
+
+### 0c. Enable Code Extension (manual, UI only)
+
+There's no API or CLI for this. Before deploying, ask the user to turn on **Data Cloud Setup → Feature Manager → Code Extension** and confirm. The user also needs Data 360 admin permissions.
+
+## Phase 1: Initialize
+
+Use `script` unless the user asks for a function or mentions Search Index Chunking. Print the choice and continue.
+
 ```bash
-sf data-code-extension function init --package-dir <directory>
+<PY_ENV>
+cd <PROJECT_DIR>
+sf data-code-extension script init --package-dir <package_name>
+# function: sf data-code-extension function init --package-dir <package_name> --use-in-feature SearchIndexChunking
 ```
 
-**Required Option:**
-- `--package-dir, -p` - Directory path where the package will be created
+The package root `<package_name>/` holds `payload/entrypoint.py`, `payload/config.json` (written by `scan`) and `requirements.txt`. Run `scan`, `run` and `deploy` from the package root (Command Reference). Full layout: [references/quick-reference.md](references/quick-reference.md).
 
-**What it creates:**
-```text
-my-transform/              # Project root
-├── payload/               # CRITICAL: This is what --package-dir must point to for deploy
-│   ├── entrypoint.py      # Main transformation code
-│   └── config.json        # Code extension configuration
-├── requirements.txt       # Python dependencies
-└── README.md
-```
+**The stock entrypoint reads `Account_std__dll` and writes `Account_std_copy__dll`, which usually don't exist** (`table does not exist`). Replace them with real objects (Phase 2).
 
-## Directory Context During Workflow
+## Phase 2: Discover Source and Target Schemas (before writing code)
 
-**IMPORTANT:** Understanding the directory structure is critical for successful deployment.
+Do this **every time before you write or edit `entrypoint.py`**, including follow-ups such as "update entrypoint.py to read X and write Y". You can reuse schemas already fetched in this session.
 
-**Commands and their directory requirements:**
+1. Identify the source and target objects. If one isn't named, ask.
+2. Get each object's fields and types. If MCP is available you must use it: `payload_examples` for `d360_dlo_get`, then `execute`, one DLO per call. Otherwise use the `sf api` fallback. Say which you used. Commands and response shapes: [references/schema-discovery.md](references/schema-discovery.md).
+3. If the logic filters or joins, look at about 20 rows of input data first (MCP `d360_query_sql`, or the fallback in schema-discovery.md), especially for self-joins and root conditions (null vs `0`).
+4. Print the field mapping, one line per target column: `<target column> ← <source field or expression>`. Then write the code.
 
-| Command | Run From | Path/File Argument |
-|---------|----------|-------------------|
-| `init` | Parent directory | `<project-name>` or `.` |
-| `scan` | Project root | `./payload/entrypoint.py` |
-| `run` | Project root | `./payload/entrypoint.py` |
-| `deploy` | Project root | `--package-dir ./payload` (**REQUIRED**) |
+**Mapping rules:**
 
-**CRITICAL: The `--package-dir` argument in deploy command MUST point to the `payload` directory, not the project root.**
+- Take column names from the **target schema**, not from the request wording. Match on the same or a similar name first, then on what the request asks for. Never invent a column.
+- **Lowercase only.** The SDK lowercases the columns it reads, and writes accept only lowercase names. Leave out target fields with capitals, such as the standard ingestion fields `KQ_id__c`, `DataSource__c`, `DataSourceObject__c`, `InternalOrganization__c` and `cdp_sys_SourceVersion__c`, and say why. If the user needs one, they must add a lowercase field to the target DLO in Data Cloud.
+- **Stop before writing code** if a DLO doesn't exist, if no target column can hold a requested value, or if the user named a column the target doesn't have. If several columns fit, ask. Offer the options (add the field in Data Cloud, use another column or DLO, change the logic). Never create or change DLOs yourself.
 
-### Phase 2: Develop Transformation
+Checklist before Phase 3:
 
-Edit `payload/entrypoint.py` with transformation logic.
+- [ ] Mapping printed; every read and write object and every field exists
+- [ ] The code will end with a `select()` of lowercase target columns only
+- [ ] Join keys have the same type. A Number reads as `1.0`, so cast it before comparing with Text: `F.col("<key>").cast("long").cast("string")`
+- [ ] No other data transform writes to the output DLO
 
-**Script Example (Batch):**
+## Phase 3: Develop the Transformation
+
+Write the code from the Phase 2 mapping, using only names it returned. `read_dlo` and `read_dmo` return **PySpark** DataFrames, not pandas.
+
 ```python
-from datacustomcode import Client
+from pyspark.sql.functions import col, upper
 
-client = Client()
+from datacustomcode.client import Client
+from datacustomcode.io.writer.base import WriteMode
 
-# Read from DLO
-df = client.read_dlo('Employee__dll')
 
-# Transform data (uppercase position field)
-df['position_upper'] = df['position'].str.upper()
+def main():
+    client = Client()
 
-# Write to output DLO
-client.write_to_dlo('Employee_Upper__dll', df, 'overwrite')
+    df = client.read_dlo("<SOURCE_DLO>")
+
+    # One expression per target column, in the order of the Phase 2 mapping.
+    result = df.select(
+        col("<source_field_a>").alias("<target_column_a>"),
+        upper(col("<source_field_b>")).alias("<target_column_b>"),
+    )
+
+    client.write_to_dlo("<TARGET_DLO>", result, WriteMode.OVERWRITE)
+
+
+if __name__ == "__main__":
+    main()
 ```
 
-**Function Example (Real-time):**
-```python
-from datacustomcode import FunctionClient
+**SDK rules (`scan` enforces them):** read DLOs **or** DMOs, never both; DLO→DLO or DMO→DMO only; at least one read, with the object name as a string literal; the output DLO must exist and match the columns you write.
 
-def transform(event, context):
-    client = FunctionClient(context)
-    input_data = event['data']
-    output = {
-        'name': input_data['name'].upper(),
-        'status': 'processed'
-    }
-    return output
-```
+Use `WriteMode.OVERWRITE` for a full recompute. `APPEND`, `MERGE` and `MERGE_UPSERT_DELETE` are also available; `OVERWRITE_PARTITIONS` raises an error. More patterns, write modes and the optional SDK helpers (LLM text generation, Einstein predictions, bundled files): [references/quick-reference.md](references/quick-reference.md). For a function, implement `function(request: SearchIndexChunkingV1Request, runtime: Runtime) -> SearchIndexChunkingV1Response` from the generated template.
 
-**Common Operations:**
-- `client.read_dlo('DLO_Name__dll')` - Read from DLO
-- `client.read_dmo('DMO_Name')` - Read from DMO
-- `client.write_to_dlo('DLO_Name__dll', df, 'overwrite')` - Write to DLO
-- `client.write_to_dmo('DMO_Name', df, 'upsert')` - Write to DMO
+## Phase 4: Scan
 
-### Phase 3: Scan for Permissions
-
-Scan the entrypoint file to detect required permissions and generate config.json.
-
-**Command:**
 ```bash
+<PY_ENV>
+cd <PROJECT_DIR>/<package_name>
 sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
 ```
 
-**What it detects:**
-- Read permissions for DLOs/DMOs
-- Write permissions for DLOs/DMOs
-- Python package dependencies
-- Updates `config.json` and `requirements.txt`
+`scan` rewrites `payload/config.json` (read and write permissions) and `requirements.txt` (with `pipreqs`). Rerun it after every code change, and check that `permissions.read` and `permissions.write` list exactly the Phase 2 objects. On `PipreqsScanError`, install `pipreqs` and rerun. **Don't use `--no-requirements`** unless the user asks: the deployed transform would be missing packages.
 
-### Phase 4: Validate DLO Schema (Pre-Test Check)
-
-**CRITICAL: Before running tests locally, validate that all DLOs used in your code exist and have the expected fields.**
-
-#### Step 4a: Extract DLOs from config.json
-
-After scanning, review the generated `config.json` to identify all DLOs:
+## Phase 5: Run Locally
 
 ```bash
-cat payload/config.json
+<PY_ENV>
+cd <PROJECT_DIR>/<package_name>
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org <ORG_ALIAS>
+# function: sf data-code-extension function run --entrypoint ./payload/entrypoint.py --test-with ./payload/tests/test.json
 ```
 
-#### Step 4b: Validate Each DLO Schema
+- `run` reads real org data (1,000 rows per read) and **prints** the output instead of writing it, so the target DLO stays empty. That's expected.
+- An empty printed table usually means the filter or join matched nothing. Check the input data (Phase 2) before changing the code.
+- On Java 21, the `Arrow optimization ... DirectByteBuffer` `UserWarning` is harmless.
 
-**Use the `data360-schema-get` skill to verify DLOs exist and check field names.**
+## Phase 6: Deploy
 
-For each DLO referenced in your code:
+**This changes the org. Confirm with the user first.** Docker must be running (`docker info`), and Code Extension must be enabled (0c).
 
-1. **Verify DLO exists:**
-   ```bash
-   python3 scripts/get_dlo_schema.py <org_alias> <dlo_name>
-   ```
-
-2. **Verify field names match** — compare fields used in your `entrypoint.py` against the DLO schema.
-
-3. **Check all DLOs:**
-   - Validate all DLOs in `read` permissions
-   - Validate all DLOs in `write` permissions
-   - Check field names match exactly (case-sensitive)
-   - Verify data types are compatible with operations
-
-#### Step 4c: Validation Checklist
-
-Before proceeding to run, ensure:
-
-- [ ] All DLOs in config.json exist in target org
-- [ ] All field names used in code exist in DLO schemas
-- [ ] Field data types match your transformation logic
-- [ ] Primary key fields are correctly identified
-- [ ] Write target DLOs are created and accessible
-
-### Phase 5: Test Locally
-
-After validating DLO schemas, run the code extension locally against your Data Cloud org.
-
-**Command:**
 ```bash
-sf data-code-extension script run --entrypoint <entrypoint_file> --target-org <org_alias> [options]
+<PY_ENV>
+cd <PROJECT_DIR>/<package_name>
+sf data-code-extension script deploy \
+  --target-org <ORG_ALIAS> \
+  --name <name> \
+  --package-dir ./payload \
+  --package-version 0.0.1 \
+  --description "<description>" \
+  [--cpu-size CPU_L|CPU_XL|CPU_2XL|CPU_4XL]
 ```
 
-**Options:**
-- `--target-org, -o` - SF CLI org alias (required)
-- `--config-file, -c` - Custom config file path
+- `-d` is `--description`, not the directory. `--package-dir` is always `./payload`, never the package root. `--cpu-size` defaults to `CPU_2XL`. `function deploy` takes the same flags.
+- **Redeploy:** a second `deploy` with the same `--name` fails with `DeploymentExists`, even with a new `--package-version`. Delete the **data transform**, then the **code extension** (UI or MCP, confirming each delete), then deploy again.
+- An output DLO can belong to only one data transform (`Output objects ... are already in use`).
 
-**If you get errors:**
-- Re-validate DLO schemas
-- Check field names are exact matches
-- Verify data types are compatible
-- Review error messages for field/DLO issues
+## Phase 7: Run the Deployed Transform and Verify
 
-### Phase 6: Deploy to Data Cloud
+Writing to the DLO happens only when the deployed transform runs. **Confirm with the user first.** Start it from Data Cloud → **Data Transforms** → `<name>` → **Run Now** (runs take about 10 minutes), or with the MCP transform tools. Then check the output DLO in the UI or with an MCP query.
 
-Deploy the code extension to Data Cloud for scheduled or on-demand execution.
+After every run, successful or not, read the run's messages and tracebacks in the system DLO **`DataCustomCodeLogs__dll`**: filter on `DataCustomCodeName__c = '<name>'` and take the latest `ExecutionId__c`. The query and how to read the rows: [references/run-logs.md](references/run-logs.md). To trace a deployed run, add `print()` or `logging` calls and redeploy.
 
-**CRITICAL: You MUST specify `--package-dir ./payload` to point to the payload directory created by init.**
+**Cleanup:** delete the data transform, then the code extension, confirming each delete with the user.
 
-**Command:**
-```bash
-sf data-code-extension script deploy --target-org <org_alias> --name <name> --package-dir ./payload --package-version <version> --description <description> [options]
-```
+## Error Handling (most common)
 
-**Required Options:**
-- `--target-org, -o` - SF CLI org alias
-- `--name, -n` - Name for code extension deployment
-- `--package-dir` - Path to payload directory (**REQUIRED** - must be `./payload` when running from project root)
-- `--package-version` - Version string (default: 0.0.1)
-- `--description` - Description of code extension
+| Error | Fix |
+|---|---|
+| `PythonVersionMismatch` / `PYTHON_VERSION_MISMATCH` | Start the block with `<PY_ENV>`. Venv mode: rerun `scripts/venv_hook.sh <PROJECT_DIR>` |
+| `PipreqsScanError` | Install `pipreqs` with `python3 -m pip`, start the block with `<PY_ENV>`, and rerun `scan` |
+| `table does not exist` | Wrong DLO name (for example the stock `Account_std__dll`). See Phase 2 |
+| `ValueError: The following columns are not present in the DLO` | The listed columns have capital letters. Apply the lowercase rule (Phase 2) |
+| `DeploymentExists` | Delete the transform, then the code extension, then redeploy |
+| Deployed run fails or writes nothing | Read `DataCustomCodeLogs__dll` (Phase 7) |
 
-**Optional Options:**
-- `--cpu-size` - CPU size: CPU_L, CPU_XL, CPU_2XL (default), CPU_4XL
-- `--function-invoke-opt` - Function invoke options (for function type)
-- `--network` - Docker network (default: default)
-
-**After deployment:**
-- Navigate to Data Cloud in Salesforce UI
-- Go to Data Transforms section
-- Find your deployment by name
-- Click "Run Now" to execute
-- Schedule for recurring execution
-
-## Error Handling
-
-### Common Issues and Solutions
-
-| Error | Solution |
-|-------|----------|
-| `command data-code-extension not found` | `sf plugins install @salesforce/plugin-data-code-extension` |
-| `datacustomcode CLI not found` | `pip install salesforce-data-customcode` |
-| `Python version mismatch` | Use pyenv: `pyenv install 3.11.0 && pyenv local 3.11.0` |
-| `Cannot connect to Docker daemon` | Start Docker Desktop |
-| `No org found for alias` | `sf org login web --alias <org_alias>` |
-| `config.json not found` | `sf data-code-extension script scan --entrypoint ./payload/entrypoint.py` |
-| `DLO not found` | Verify DLO exists (use data360-schema-get skill), check spelling and `__dll` suffix |
-| `Permission denied writing` | Re-run scan, verify target DLO exists and is writable |
-| `Deploy fails - wrong directory` | Ensure `--package-dir` points to `payload/` directory, not project root |
-
-## Best Practices
-
-### Development
-1. Always scan before testing — run scan after code changes
-2. Test locally first — use `run` command before deploying
-3. Use version control — git commit after each successful test
-4. Version your deployments — use semantic versioning (1.0.0, 1.1.0, etc.)
-5. Deploy from project root with `--package-dir ./payload`
-
-### Performance
-- **CPU_L**: Small datasets (< 1M records)
-- **CPU_2XL**: Medium datasets (1M-10M records)
-- **CPU_4XL**: Large datasets (> 10M records)
-
-### Security
-1. No hardcoded credentials — use SF CLI authentication only
-2. Validate input data — check for nulls and data types
-3. Limit write permissions — only grant necessary DLO/DMO access
-
-## Integration with Other Skills
-
-**Use with data360-schema-get skill (CRITICAL for validation):**
-
-The `data360-schema-get` skill is **required** for validating DLOs before testing code extensions.
-
-**Use with Datakit Workflow:**
-1. Create DLO via code extension
-2. Map DLO to DMO using datakit workflow
-3. Use DMO in segments and activations
+Everything else: [references/troubleshooting.md](references/troubleshooting.md).
 
 ## Command Reference
 
-| Command | Purpose | Required Args |
-|---------|---------|---------------|
-| `script init` | Create new script project | --package-dir |
-| `function init` | Create new function project | --package-dir |
-| `script scan` | Generate config | entrypoint file |
-| `script run` | Test locally | entrypoint file, --target-org |
-| `script deploy` | Deploy to Data Cloud | --target-org, --name, --package-dir, --package-version, --description |
+| Command | Run from | Required flags | Optional flags |
+|---|---|---|---|
+| `script init` / `function init` | Parent folder | `-p/--package-dir <package_name>` | function: `-u/--use-in-feature SearchIndexChunking` |
+| `script scan` / `function scan` | Package root | (`-e/--entrypoint ./payload/entrypoint.py`) | `-d/--dry-run`, `-n/--no-requirements`, `--config-file` |
+| `script run` | Package root | `-e/--entrypoint`, `-o/--target-org` | `--config-file`, `--dependencies` |
+| `function run` | Package root | `-e/--entrypoint`, `-t/--test-with` | `--target-org`, `--config-file`, `--dependencies` |
+| `script zip` / `function zip` | Package root | `-p/--package-dir` | `-n/--network` |
+| `script deploy` / `function deploy` | Package root | `-n/--name`, `--package-version`, `-d/--description`, `-p/--package-dir ./payload`, `-o/--target-org` | `--cpu-size`, `--network` (Jupyter packages only) |
+
+Verified against plugin `data-code-extension` 1.4.1 and SDK `salesforce-data-customcode` 6.1.0. If the plugin version differs, check with `sf data-code-extension <type> <command> --help`.
 
 ## Resources
 
-- SF CLI Plugin: https://github.com/salesforcecli/plugin-data-code-extension
-- Python SDK: https://github.com/forcedotcom/datacloud-customcode-python-sdk
-- Data Cloud Docs: https://help.salesforce.com/s/articleView?id=sf.c360_a_intro.htm
-- Python SDK PyPI: https://pypi.org/project/salesforce-data-customcode/
-
-## Notes
-
-- Code extensions run in isolated Python 3.11 environment
-- Docker is required only for deployment, not for local testing
-- Use SF CLI authentication only (no separate credential files)
-- Scan command auto-detects permissions from code
-- Local run uses actual Data Cloud data (not mocked)
-- Deployments are versioned and can be rolled back in UI
+- SF CLI plugin: https://github.com/salesforcecli/plugin-data-code-extension
+- Python SDK: https://github.com/forcedotcom/datacloud-customcode-python-sdk (PyPI: `salesforce-data-customcode`)
+- Hosted MCP servers (optional setup): https://developer.salesforce.com/docs/platform/hosted-mcp-servers/overview

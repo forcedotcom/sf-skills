@@ -1,6 +1,6 @@
 ---
 name: service-de-headless-channel-configure-output-envelopes
-description: "Load when you need the canonical JSON envelope shapes this orchestrator emits — success, step-annotated failure, and terms-declined — before wiring error handling or parsing a leaf skill's response. Covers the exact field names (channelId, mcuId, stepsRun, failedStep, resumeHint, etc.) for each of the three top-level outcomes. DO NOT load for the per-stage envelope-handling tables in Stage 2-4, which already reference these shapes."
+description: "Load when you need the canonical JSON envelope shapes this orchestrator emits — success (including requested-settings results), step-annotated failure, terms-declined, and missing-AuthProvider — before wiring error handling or parsing a leaf skill's response. Covers the exact field names (channelId, mcuId, stepsRun, failedStep, resumeHint, etc.) for each of the three top-level outcomes. DO NOT load for the per-stage envelope-handling tables in Stage 2-4, which already reference these shapes."
 metadata:
   version: "1.0"
   related-skills: service-de-headless-channel-configure
@@ -16,6 +16,20 @@ metadata:
  "stepsRun": ["insert","route","activate"], "stepsSkipped": ["consent"],
  "totalDurationMs": 12345}
 ```
+
+**Success with requested settings** (`settings` present only when the request asked for any):
+```json
+{"ok": true, "messageType": "Facebook", "channelId": "0Mj...", "isActive": true,
+ "stepsRun": ["insert","route","activate"], "stepsSkipped": ["consent"],
+ "settings": {
+   "configured": ["auto-response:InitialResponse", "auto-response:AgentEngagedResponse"],
+   "notApplicable": [{"item": "inactivity:endUserIdleTimeOut", "reason": "endUserIdleTimeOut is MIAW-only; not supported on Facebook channels"}],
+   "failed": [{"item": "auto-response:EndUserIdleResponse", "kind": "metadata-deploy-failed", "message": "..."}]},
+ "warnings": ["channel is live, but 1 requested setting was not applied"],
+ "totalDurationMs": 12345}
+```
+
+`ok` stays `true` when only settings failed — the channel is live. `"settings"` is in `stepsRun` only if at least one item was configured. Every item extracted in Stage 0 lands in exactly one of the three buckets.
 
 On a typical fresh run `consent` lands in `stepsSkipped`, not `stepsRun`: the Connect insert
 auto-seeds `ConsentType=ImplicitOptIn` + a default opt-out keyword, so the consent leaf no-ops
@@ -50,4 +64,12 @@ before Stage 3.5) means unconfigured.
 ```json
 {"ok": false, "kind": "terms-not-accepted",
  "hint": "user did not accept the Enhanced Messaging Terms and Conditions — channel setup cannot proceed. Re-run when ready to accept."}
+```
+
+**Missing AuthProvider** (Stage 1 preflight — `failedStep: "insert"`, `kind: "missing-authprovider"`). Render:
+```text
+Error: This org isn't ready for {CHANNEL_LABEL} channels yet — the 'LiveMessageSetup' auth provider
+   doesn't exist. Turning on Messaging (enableLiveMessage) doesn't create it; only the Messaging
+   Setup wizard does, and that's a one-time manual step no skill can do.
+   Fix: run the Messaging Setup wizard once in Setup → Messaging Settings, then re-run this skill.
 ```

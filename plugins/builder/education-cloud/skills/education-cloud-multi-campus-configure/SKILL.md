@@ -115,6 +115,7 @@ All steps are sequential. Do not skip or reorder. If blocked, stop and ask for m
    - Show a summary BEFORE writing any records — new setup shows counts per level + RecordType; update/reconcile shows the delta explicitly (create/rename/move/unchanged/extra). See `examples/output_examples.md` for both templates.
    - If any EXTRA nodes exist and the user wants them removed, that deletion is destructive — confirm each explicitly in Step 7; default is to leave them.
    - Ask: "Proceed with these changes?" (Yes/No). If "No": stop workflow.
+   - If any record name is modified after this confirmation (e.g., DUPLICATE_VALUE recovery), re-present the changed name and obtain fresh confirmation before writing.
 
 7. **Apply changes (create / rename / move)**
    - Once the user confirmed in Step 6, apply the delta via the transport resolved in Mechanism — call shapes for create/rename/move/delete are in `references/mcp-invocation.md` (Step 7). Capture each created Account's returned Id. Do not stop at a "pending"/"intended delta" plan — the confirmation is the go-ahead.

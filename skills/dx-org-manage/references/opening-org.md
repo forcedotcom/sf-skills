@@ -134,7 +134,7 @@ sf org open --source-file force-app/main/default/classes/MyController.cls
 |-------|------------|
 | No target org found | Set default: `sf config set target-org <alias>` or specify `--target-org <alias>` |
 | Auth error | Re-authenticate: `sf org login web --alias <alias>` |
-| `--source-file` opens wrong page or throws `FlowIdNotFound` / `ApexClassIdNotFound` / `CustomObjectIdNotFound` | Metadata is not deployed in the org. Run `sf project deploy start --source-file <path> --target-org <alias>` first. FlexiPage silently falls back to org home; Flow/ApexClass/CustomObject throw an error. |
+| `--source-file` opens wrong page or throws `FlowIdNotFound` / `ApexClassIdNotFound` / `CustomObjectIdNotFound` | Metadata is not deployed in the org. Tell the user: "This metadata is not deployed. Use `platform-metadata-deploy` to deploy it first, then retry the open command." Do NOT deploy from this skill -- deployment is out of scope. |
 | Metadata file opens wrong Builder | Verify the file extension matches the metadata type (e.g. `.flow-meta.xml` for Flow Builder) |
 | User wants the raw login URL | The skill never runs `--url-only` (it returns a live login token). Tell the user to run `sf org open --url-only` in their own terminal. |
 | Path not found / 404 | Verify the path is correct; some paths require specific permissions or licenses |

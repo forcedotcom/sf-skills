@@ -76,7 +76,7 @@ through harmlessly.
 
 Repeater/Matrix/Counter/Lookup/FileView carry extra keys (`repeaterFields`,
 `matrixRows`, `min`/`max`/`value`, `lookupObject`, `fileName`) — see
-`build-data-capture-form/reference/field-types.md`. The converter does not emit
+`field-types.md` in the Data Capture form deployer skill. The converter does not emit
 these yet.
 
 ### Sections & nesting
@@ -112,7 +112,7 @@ Signature, UploadFile, UploadImage, Address, Matrix, Images, Lookup, FileView
 ```
 
 The converter maps legacy `extensionName`s to a subset of these (see
-`reference/component-mapping.md`). Any legacy component with no mapping is
+[component-mapping.md](component-mapping.md)). Any legacy component with no mapping is
 emitted as `ShortText` with a `_migrationNote`.
 
 ## Renamed keys (legacy converter → current contract)

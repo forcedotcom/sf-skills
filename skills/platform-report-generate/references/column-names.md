@@ -1,6 +1,17 @@
 # Column Names by Report Type
 
-Report metadata uses **platform report column names**, NOT raw API field names. These names are report-type-specific — ALWAYS verify using MCP tools (`get_metadata_type_sections` or `get_metadata_type_context`).
+Report metadata uses **platform report column names**, NOT raw API field names. These names are report-type-specific — ALWAYS verify against the tables below, the custom report type's section layout, or the target org's report-type metadata.
+
+## Target-org report-type lookup
+
+For columns not covered below, use the read-only [Report Type REST resource](https://developer.salesforce.com/docs/analytics/salesforce-analytics-rest-api/guide/analytics-api-reporttypes-reference-reporttype.html):
+
+```bash
+sf api request rest '/services/data' --target-org <alias>
+sf api request rest '/services/data/v<supported-version>/analytics/reportTypes/<report-type-API-name>' --target-org <alias>
+```
+
+Select an API version returned by the org. Match fields through `reportTypeMetadata.categories[].columns`: use each column map's key as the report column name, not its label or `entityColumnName`. Check `filterable` before using a filter. For custom report types, confirm the XML `$` path against the section layout below; do not blindly copy REST field IDs into XML. Metadata schema assets do not enumerate org-specific columns. If neither the bundled mappings/layout nor a successful lookup establishes a column, report the gap and stop rather than inventing it.
 
 ## Standard Report Type API Names
 

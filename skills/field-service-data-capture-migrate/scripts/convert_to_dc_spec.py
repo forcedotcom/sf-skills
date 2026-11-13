@@ -113,7 +113,7 @@ def extract_field_type(field_element: ET.Element) -> tuple:
     # `lightning:*` / `c:*` name never appears as a fieldType — it only ever
     # shows up as a ComponentInstance <extensionName>, and core (FieldService-
     # MobileFlowValidator) whitelists exactly one such extension:
-    # forceContent:fileUpload. See reference/fsm-dc-capability-catalog.md.
+    # forceContent:fileUpload. See references/fsm-dc-capability-catalog.md.
 
     # Already a DC component (partially hand-migrated source) — pass through.
     if ext_name and 'runtime_service_fieldservice:dc' in ext_name:

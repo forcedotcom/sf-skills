@@ -50,7 +50,7 @@ All calls over Headless `dispatch`/`dispatch_readonly`; substitute the org's cur
 
 ### Common edit for every cloned flow — system-context run mode
 
-Set `metadata.runInMode = "SystemModeWithoutSharing"` (the UI's *Show Advanced → How to Run the Flow → "System Context Without Sharing – Access All Data"*). **Mandatory** for the unauthenticated/Service path, not optional polish.
+Set `metadata.runInMode = "SystemModeWithoutSharing"` (the UI's *Show Advanced → How to Run the Flow → "System Context Without Sharing – Access All Data"*). Required for the unauthenticated/Service path. **This removes sharing enforcement, so it needs written approval from the customer's security owner for each flow** (an *exception approval*): it must name the specific flow and the target org, and you quote it in the run summary. Before setting this mode on any clone, (1) confirm the flow's data access pattern requires system context (not just convenience) and (2) obtain that approval. If there is no approval, do not set the mode and do not activate that clone: stop the unauthenticated/Service path, tell the customer which flows are waiting on approval, and finish only the parts that don't depend on them. Do not apply `SystemModeWithoutSharing` as a blanket default.
 
 ### Consumer edits (wave 2) — subflow swap + owner constant
 

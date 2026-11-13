@@ -5,7 +5,7 @@ Read this when a generated `.report-meta.xml` is rejected during deployment or f
 | Error | Cause | Fix |
 |-------|-------|-----|
 | `Invalid report type 'X'` | Report type doesn't exist or isn't deployed in the target org | Verify the report type API name. For custom report types, ensure `<deployed>true</deployed>` is set. Use `platform-custom-report-type-generate` skill to create if missing |
-| `Invalid field 'X' for report type 'Y'` | Column name not recognized for the report type — used raw field API name instead of platform column name | Use platform column names (e.g. `ACCOUNT_NAME` not `Account.Name`). For custom fields, use `ObjectApiName.FieldApiName__c`. Use `get_metadata_type_shape` MCP tool to discover valid column names |
+| `Invalid field 'X' for report type 'Y'` | Column name not recognized for the report type — used raw field API name instead of platform column name | Use platform column names (e.g. `ACCOUNT_NAME` not `Account.Name`). For custom fields, use `ObjectApiName.FieldApiName__c`. Use the report-type lookup in `column-names.md` to discover valid column names |
 | `Grouping field 'X' not found in columns` | A `<groupingsDown>` or `<groupingsAcross>` field is not also listed as a `<columns>` entry | Add the grouping field as a `<columns>` block |
 | `Chart not valid for Tabular format` | `<chart>` element present on a Tabular report | Remove the chart or change format to `Summary` or `Matrix` |
 | `Summary report requires at least one grouping` | Format is `Summary` but no `<groupingsDown>` is defined | Add at least one `<groupingsDown>` block or change format to `Tabular` |

@@ -49,6 +49,7 @@ Provisioning behavior:
 | --- | --- |
 | `references/queue-creation.md` | The user picked "create a new queue" on the Queue routing path — full Metadata API scaffold → deploy → ID lookup → optional member add. |
 | `references/target-locate.md` | You need the per-domain SOQL to locate and validate an eligible target (Queue, Flow, ASA, Digital Worker, User) and the FallbackQueue requirement matrix. |
+| `references/named-queue.md` | The caller supplied `{QUEUE}` (a queue the user named). |
 | `references/asa-routing.md` | The user picked ASA (Agentforce Service Agent) routing — precondition check, enumerating live ASAs, and selection. |
 | `references/gotchas.md` | Troubleshooting an unexpected result, or before modifying this skill — the known gotchas. |
 | `references/worked-examples.md` | You want a reference run of the reuse-existing-queue, create-new-queue, Flow, or ASA paths. |
@@ -62,6 +63,7 @@ Provisioning behavior:
 ## Inputs (from caller)
 
 - `{CHANNEL_ID}` — a 15- or 18-char `MessagingChannel.Id` (prefix `0Mj`). The channel must already exist.
+- `{QUEUE}` — optional; a queue the user named (label, DeveloperName, or `00G` Id). Implies Queue routing — no routing-type prompt.
 - `{ORG_ALIAS}` — optional; the `sf` CLI target-org alias. Default: whatever `sf config get target-org` returns. All SOQL, PATCH, and Metadata deploys run against this org.
 
 ## Output (to caller)
@@ -175,7 +177,7 @@ sf data query --target-org '{ORG_ALIAS}' \
 
 If `PlatformType != 'Enhanced'` (i.e. Standard/SCRT1), only Flow routing is writable. These skills only create Enhanced channels, so a Standard channel here is unexpected — emit `{ok:false, kind:"standard-channel", ...}` and stop rather than guessing.
 
-Then ask the user (via a prompt — do NOT auto-pick):
+If `{QUEUE}` was supplied, the routing type is `queue` — skip the prompt and go to Stage 3-Queue. Otherwise ask the user (via a prompt — do NOT auto-pick):
 
 ```text
 The MessagingChannel '{developerName}' ({CHANNEL_ID}) has no routing configured.
@@ -216,6 +218,8 @@ sf data query --target-org '{ORG_ALIAS}' \
 ```
 
 Each row's `Id` is the `00G` `Group.Id` — that is what gets written to `SessionHandlerId`. (If the semi-join subquery errors on an org, fall back to two queries: list `QueueSobject WHERE SobjectType='MessagingSession'`, then filter to those whose `Group.QueueRoutingConfigId != null`.)
+
+**If `{QUEUE}` was supplied**, validate it against this list instead of prompting — **load `references/named-queue.md` and follow it.**
 
 Present the user with a numbered list plus a final "create new" option:
 

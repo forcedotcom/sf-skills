@@ -168,6 +168,8 @@ Outline:
 3. Deploy it back (`sf project deploy start -m MessagingChannel:{DeveloperName}`).
 4. On deploy failure: `{ok:false, kind:"metadata-deploy-failed", message: <componentFailures>}`.
 
+> **Facebook:** real metadata changes currently fail with an opaque numeric error (e.g. `(-462367322)`). It's a known platform issue, not bad input. Don't retry; return `metadata-deploy-failed` with the Setup-UI fallback hint (see `references/gotchas.md` #16).
+
 **Never emit `<actionParameterMappings>`** (0 occurrences across a 191-channel scan — it's a Tooling-only mapping done in the UI post-deploy).
 
 ---
@@ -176,7 +178,7 @@ Outline:
 
 Run only when requested **and** applicable to this `MessageType`:
 
-- **Facet 4 (inactivity):** the four timeout fields (`endUserIdleTimeOut` 5–30, `endUserIdleAction` = `Inactivate`|`End`|`InactivateAndEnd`, `endInactiveSessionTimeOut`, `isAgentMessageResetInactivityEnabled`) are **top-level siblings of `<embeddedConfig>`**, not inside it. Full four fields → **MIAW only**; `isAgentMessageResetInactivityEnabled` also valid on Apple/Facebook; **not applicable on SMS/WhatsApp/LINE** → emit `facet-not-applicable`. (On 262-line pods only `endUserIdleTimeOut` deploys — see `references/gotchas.md`.)
+- **Facet 4 (inactivity):** the four timeout fields (`endUserIdleTimeOut` 5–30, `endUserIdleAction` = `Inactivate`|`End`|`InactivateAndEnd`, `endInactiveSessionTimeOut`, `isAgentMessageResetInactivityEnabled`) are **top-level siblings of `<embeddedConfig>`**, not inside it. Full four fields → **MIAW only**; `isAgentMessageResetInactivityEnabled` also valid on Apple/Facebook; **not applicable on SMS/WhatsApp/LINE** → emit `facet-not-applicable`. (Release-gated: on 262 pods only `endUserIdleTimeOut` deploys and the reset flag is silently dropped; all four work on 264+ — see `references/gotchas.md` #15.)
 - **Facet 5 (parameters):** `<customParameters>` (`name`, `masterLabel`, `externalParameterName`, `parameterDataType=String`, optional `maxLength`) and `<standardParameters>` — **MIAW pre-chat only**, rare. Skip unless the caller explicitly configures pre-chat.
 
 Both use the same retrieve→edit→deploy flow as Stage 3 (`references/channel-settings-facets.md`).

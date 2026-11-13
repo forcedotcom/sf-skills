@@ -1,269 +1,199 @@
-# Data Cloud Code Extension - Quick Reference
+# Data 360 Code Extension: Quick Reference
 
-## Command Cheat Sheet
+Every block assumes it starts with the `<PY_ENV>` line from SKILL.md Phase 0b, in the same shell command:
 
-### Initialize Project
+- system mode: `export PATH="<user-base>/bin:$PATH"`, with the literal folder printed by `check_env.sh` (for example `/home/codebuilder/.local/bin`)
+- venv mode: `source <PROJECT_DIR>/.venv/bin/activate`
+
+Replace `<ORG_ALIAS>` and `<PROJECT_DIR>` with the real values.
+
+## Commands
+
+### Initialize
 ```bash
-# Create script project
-sf data-code-extension script init --package-dir <directory>
-
-# Create function project
-sf data-code-extension function init --package-dir <directory>
-
-# Examples
-sf data-code-extension script init --package-dir .
-sf data-code-extension script init --package-dir my-transform
+sf data-code-extension script init --package-dir my_transform
+sf data-code-extension function init --package-dir my_chunker --use-in-feature SearchIndexChunking
 ```
 
-### Scan for Permissions
+### Scan (run from the package root)
 ```bash
-# Basic scan
 sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
-
-# Preview without saving
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --dry-run
-
-# Custom config location
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --config ./custom-config.json
-
-# Skip requirements.txt
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --no-requirements
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --dry-run           # preview only
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --no-requirements   # keep requirements.txt (only when asked; never to get past PipreqsScanError)
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py --config-file ./alt-config.json
 ```
 
-### Run Locally
+### Run locally
 ```bash
-# Basic run
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org <org_alias>
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org <ORG_ALIAS>
+sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org <ORG_ALIAS> --config-file ./alt-config.json
 
-# With custom config
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o <org_alias> -c custom-config.json
-
-# Examples
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o afvibe
+sf data-code-extension function run --entrypoint ./payload/entrypoint.py --test-with ./payload/tests/test.json
 ```
 
-### Deploy
+### Deploy (Docker running, Code Extension enabled, user confirmed)
 ```bash
-# Minimal deployment (MUST include --package-dir ./payload)
 sf data-code-extension script deploy \
-  --target-org <org_alias> \
-  --name <name> \
-  --package-version <version> \
-  --description "<description>" \
-  --package-dir ./payload
-
-# Full options
-sf data-code-extension script deploy \
-  --target-org <org_alias> \
-  --name <name> \
-  --package-version <version> \
-  --description "<description>" \
-  --cpu-size <CPU_L|CPU_XL|CPU_2XL|CPU_4XL> \
-  --package-dir ./payload
-
-# Examples (CRITICAL: Always include --package-dir ./payload)
-sf data-code-extension script deploy \
-  --target-org afvibe \
-  --name Employee_Upper \
-  --package-version 1.0.0 \
-  --description "Uppercase employee positions" \
-  --package-dir ./payload
-```
-
-## Common Workflows
-
-### New Project from Scratch
-```bash
-# 1. Create directory
-mkdir my-transform && cd my-transform
-
-# 2. Initialize
-sf data-code-extension script init --package-dir .
-
-# 3. Edit payload/entrypoint.py with your transformation
-
-# 4. Scan
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
-
-# 5. Test
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py --target-org afvibe
-
-# 6. Deploy (MUST include --package-dir ./payload)
-sf data-code-extension script deploy \
-  --target-org afvibe \
-  --name MyTransform \
-  --package-version 1.0.0 \
+  --target-org <ORG_ALIAS> \
+  --name my_transform \
+  --package-dir ./payload \
+  --package-version 0.0.1 \
   --description "My transformation" \
-  --package-dir ./payload
+  --cpu-size CPU_2XL
 ```
 
-### Update Existing Code Extension
-```bash
-# 1. Edit payload/entrypoint.py
+`function deploy` takes the same flags. `script zip --package-dir ./payload` only builds the archive; `deploy` packages it for you.
 
-# 2. Re-scan
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
-
-# 3. Test
-sf data-code-extension script run --entrypoint ./payload/entrypoint.py -o afvibe
-
-# 4. Deploy with new version (include --package-dir ./payload)
-sf data-code-extension script deploy \
-  -o afvibe \
-  -n MyTransform \
-  --package-version 1.1.0 \
-  --description "Updated transformation" \
-  --package-dir ./payload
-```
-
-## Python Code Patterns
-
-### Read/Write DLO
-```python
-from datacustomcode import Client
-
-client = Client()
-
-# Read
-df = client.read_dlo('Employee__dll')
-
-# Transform
-df['new_field'] = df['old_field'].str.upper()
-
-# Write (modes: 'overwrite', 'append')
-client.write_to_dlo('Output__dll', df, 'overwrite')
-```
-
-### Read/Write DMO
-```python
-# Read
-df = client.read_dmo('EmployeeDMO')
-
-# Write (modes: 'upsert', 'insert')
-client.write_to_dmo('EmployeeDMO', df, 'upsert')
-```
-
-### Multiple DLO Operations
-```python
-# Read multiple
-employees = client.read_dlo('Employee__dll')
-departments = client.read_dlo('Department__dll')
-
-# Join
-merged = employees.merge(departments, on='dept_id')
-
-# Write multiple
-client.write_to_dlo('Enriched__dll', merged, 'overwrite')
-client.write_to_dmo('EmployeeDMO', merged, 'upsert')
-```
-
-### Data Transformations
-```python
-import pandas as pd
-
-# Filter
-active = df[df['status'] == 'Active']
-
-# Computed column
-df['full_name'] = df['first'] + ' ' + df['last']
-
-# Aggregate
-summary = df.groupby('dept')['salary'].mean()
-
-# Conditional
-df['grade'] = df['position'].apply(
-    lambda x: 'Senior' if 'VP' in x else 'Junior'
-)
-```
-
-## Option Reference
-
-### --cpu-size
-- `CPU_L` - Small datasets (< 1M records)
-- `CPU_XL` - Medium datasets (1M-5M)
-- `CPU_2XL` - Large datasets (5M-10M) **[default]**
-- `CPU_4XL` - Very large (> 10M records)
-
-### Write Modes
-- `overwrite` - Replace all data
-- `append` - Add to existing data
-- `upsert` - Update or insert (DMO only)
-- `insert` - Insert only (DMO only)
-
-## Troubleshooting Quick Fixes
-
-```bash
-# Plugin not found
-sf plugins install @salesforce/plugin-data-codeextension
-
-# Python SDK missing
-pip install salesforce-data-customcode
-
-# Verify Python version (must be 3.11.x)
-python --version
-
-# Org not connected
-sf org login web --alias <org_alias>
-
-# Config missing
-sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
-
-# Docker not running (for deploy)
-# Start Docker Desktop
-```
-
-## File Structure
+## Package Layout
 
 ```text
-my-project/
-├── payload/
-│   ├── entrypoint.py      # Main code
-│   └── config.json        # Auto-generated permissions
-├── requirements.txt       # Auto-generated dependencies
+<package_name>/             # package root: run scan, run, deploy from here
+├── payload/                # what --package-dir points to on deploy
+│   ├── entrypoint.py       # your transformation
+│   └── config.json         # generated and updated by scan
+├── examples/               # SDK sample (employee_hierarchy)
+├── requirements.txt        # updated by scan
+├── requirements-dev.txt
+├── Dockerfile, Dockerfile.dependencies, build_native_dependencies.sh
+├── account.ipynb, jupyterlab.sh
 └── README.md
 ```
 
-## config.json Format
+A function package has `payload/entrypoint.py`, `payload/utility.py`, `payload/config.json`, plus `example/` folders with `tests/test.json` inputs.
+
+## Workflows
+
+### New project
+```bash
+<PY_ENV>
+cd <PROJECT_DIR>
+sf data-code-extension script init --package-dir my_transform
+cd my_transform
+# edit payload/entrypoint.py with real DLO names (the stock Account_std__dll usually doesn't exist)
+sf data-code-extension script scan --entrypoint ./payload/entrypoint.py
+sf data-code-extension script run  --entrypoint ./payload/entrypoint.py --target-org <ORG_ALIAS>
+# confirm with the user, then deploy (see above)
+```
+
+### Change code that's already deployed
+A second `deploy` with the same `--name` fails with `DeploymentExists`, even with a new `--package-version`.
+
+1. Edit, `scan`, and `run` locally.
+2. With the user's confirmation, delete the **data transform**, then the **code extension**. Use the UI or the Data 360 MCP delete tools.
+3. Deploy again. You can keep the same name.
+
+## PySpark Patterns
+
+These patterns use made-up DLO and field names to show PySpark shapes. Never copy the names: use the source and target fields fetched in SKILL.md Phase 2.
+
+`read_dlo` / `read_dmo` return **PySpark** DataFrames.
+
+```python
+from pyspark.sql.functions import col, concat_ws, upper, when, avg
+
+from datacustomcode.client import Client
+from datacustomcode.io.writer.base import WriteMode
+
+client = Client()
+```
+
+### Select, rename, computed column
+```python
+df = client.read_dlo("Employee__dll")
+out = (
+    df.select("id__c", "first_name__c", "last_name__c", "position__c")
+      .withColumn("full_name__c", concat_ws(" ", col("first_name__c"), col("last_name__c")))
+      .withColumn("position_upper__c", upper(col("position__c")))
+)
+client.write_to_dlo("Employee_Enriched__dll", out, WriteMode.OVERWRITE)
+```
+
+### Filter and conditional
+```python
+active = df.filter(col("status__c") == "Active")
+graded = active.withColumn(
+    "grade__c", when(col("position__c").contains("VP"), "Senior").otherwise("Junior")
+)
+```
+
+### Join two DLOs
+```python
+employees = client.read_dlo("Employee__dll")
+departments = client.read_dlo("Department__dll").select(
+    col("id__c").alias("dept_id"), col("name__c").alias("department_name__c")
+)
+merged = employees.join(departments, employees["dept_id__c"] == col("dept_id"), "left").drop("dept_id")
+client.write_to_dlo("Employee_With_Dept__dll", merged, WriteMode.OVERWRITE)
+```
+
+### Aggregate
+```python
+summary = df.groupBy("department__c").agg(avg("salary__c").alias("avg_salary__c"))
+```
+
+### DMO to DMO
+```python
+ind = client.read_dmo("ssot__Individual__dlm")
+client.write_to_dmo("Custom_Individual_Out__dlm", ind.select("ssot__Id__c", "ssot__FirstName__c"), WriteMode.MERGE)
+```
+
+### Layer rules (enforced by `scan`)
+- Read DLOs **or** DMOs in one entry point, never both.
+- DLO→DLO or DMO→DMO only. **Never read DLOs and write a DMO**, or the reverse.
+- Pass object names as string literals so `scan` can detect them.
+
+## Write Modes (`WriteMode`)
+
+| Mode | Use |
+|---|---|
+| `APPEND` | Add rows |
+| `OVERWRITE` | Replace all rows (full recompute) |
+| `MERGE` | Merge on the primary key |
+| `MERGE_UPSERT_DELETE` | Row-level `UPSERT`/`DELETE` via a `_merge_record_type` column |
+| `OVERWRITE_PARTITIONS` | Deprecated, raises an error |
+
+## Optional SDK Helpers
+
+See the template docstring in `payload/entrypoint.py`.
+
+- `llm_gateway_generate_text_col(...)` generates column values with a configured model.
+- `einstein_predict_col(...)` scores rows with an Einstein Studio model.
+- `client.find_file_path("name")` resolves files bundled under `payload/files/`.
+
+## `--cpu-size`
+
+| Size | Guidance |
+|---|---|
+| `CPU_L` | Small datasets (< 1M records) |
+| `CPU_XL` | Medium (1M–5M) |
+| `CPU_2XL` | Large (5M–10M), **default** |
+| `CPU_4XL` | Very large (> 10M) |
+
+Higher sizes may use more quota or credits.
+
+## `config.json` (generated by scan)
 
 ```json
 {
-  "version": "1.0",
+  "sdkVersion": "6.1.0",
+  "entryPoint": "entrypoint.py",
+  "dataspace": "default",
   "permissions": {
-    "read": ["Employee__dll", "Department__dll"],
-    "write": ["Enriched__dll"]
-  },
-  "resources": {
-    "cpu_size": "CPU_2XL"
+    "read":  { "dlo": ["Employee__dll", "Department__dll"] },
+    "write": { "dlo": ["Employee_With_Dept__dll"] }
   }
 }
 ```
 
-## Common Errors
-
-| Error | Quick Fix |
-|-------|-----------|
-| Plugin not found | `sf plugins install @salesforce/plugin-data-codeextension` |
-| Python SDK missing | `pip install salesforce-data-customcode` |
-| Wrong Python version | Use pyenv to install 3.11.0 |
-| Org not connected | `sf org login web --alias <alias>` |
-| Config missing | Run scan command |
-| DLO not found | Check DLO name, use data360-schema-get skill |
-| Docker error | Start Docker Desktop |
+Don't hand-edit `permissions`; rerun `scan`. Edit `dataspace` only if you use a non-default data space.
 
 ## Deployment Checklist
 
-- [ ] Code written in entrypoint.py
-- [ ] Scanned for permissions
-- [ ] Tested locally
-- [ ] Version number decided
-- [ ] Description added
-- [ ] CPU size chosen
-- [ ] Docker running
-- [ ] Org authenticated
-
-## Resources
-
-- Plugin: https://github.com/salesforcecli/plugin-data-code-extension
-- Python SDK: https://github.com/forcedotcom/datacloud-customcode-python-sdk
-- Data Cloud Docs: https://help.salesforce.com/s/articleView?id=sf.c360_a_intro.htm
+- [ ] `check_env.sh` all ✅ (Docker running)
+- [ ] **Code Extension** enabled in Data Cloud Setup → Feature Manager (manual)
+- [ ] Source and target schemas fetched and field mapping printed before the code was written (Phase 2)
+- [ ] `scan` rerun after the last code change
+- [ ] Local `run` succeeds
+- [ ] Output DLO not used by another data transform
+- [ ] No existing code extension with the same `--name` (or it was deleted)
+- [ ] User confirmed the deploy

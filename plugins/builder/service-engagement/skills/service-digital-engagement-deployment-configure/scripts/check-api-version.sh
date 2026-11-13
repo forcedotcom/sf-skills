@@ -24,6 +24,6 @@ if python3 -c "import sys; sys.exit(0 if float(sys.argv[1]) >= float(sys.argv[2]
   echo "OK: Org API version $API_VERSION meets minimum $MIN_VERSION."
   exit 0
 else
-  echo "ERROR: Org API version $API_VERSION is below minimum $MIN_VERSION. Generate a sfdx-project.json with \"sourceApiVersion\": \"$MIN_VERSION\" in the metadata output folder."
+  echo "ERROR: Org API version $API_VERSION is below minimum $MIN_VERSION. Cannot proceed; the org does not meet the minimum API version prerequisite."
   exit 1
 fi

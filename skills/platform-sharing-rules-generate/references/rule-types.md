@@ -153,6 +153,7 @@ The `<sharedTo>` (and `<sharedFrom>` for owner rules) element specifies the targ
 | `<portalRoleAndSubordinates>PortalRoleName</portalRoleAndSubordinates>` | Portal role + subordinates |
 | `<allInternalUsers>AllInternalUsers</allInternalUsers>` | All internal users |
 | `<allCustomerPortalUsers>AllCustomerPortalUsers</allCustomerPortalUsers>` | All customer portal users |
+| `<queue>QueueDeveloperName</queue>` | Records owned by a queue (`sharedFrom` of owner rules only; never valid in `sharedTo`) |
 
 ---
 

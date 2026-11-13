@@ -213,7 +213,7 @@ All steps are sequential. Do not skip or reorder. If blocked, stop and ask for m
     GET /services/data/vXX.X/sobjects/LearningCourse/<id>
     ```
 
-    > **Headless-360 note**: SOQL `/query` is routable via the headless-360 dispatch tool (confirmed by live test) — a `CreatedDate = TODAY` query works as an alternative to iterating captured Ids with direct record GETs.
+    > **Headless-360 note**: SOQL `/query` is routable via the headless-360 dispatch tool (confirmed by live test). Always verify by the Ids captured from create responses; do not query by CreatedDate.
 
     Run the completeness helper **separately per sObject** — `CourseType` exists only on `LearningCourse`, `Description` only on `Learning`; combining both shapes into one call false-positives every parent as missing `CourseType`:
     ```bash

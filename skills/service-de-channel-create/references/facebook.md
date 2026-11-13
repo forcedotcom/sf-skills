@@ -34,7 +34,7 @@ sf data query --target-org '{ORG_ALIAS}' \
 ```
 Record `{AUTH_PROVIDER_ID}` = `records[0].Id` and `{OAUTH_KICKOFF_URL}` = `records[0].OauthKickoffUrl`
 (e.g. `https://<myDomain>/services/auth/oauth/LiveMessageSetup`). If no record →
-`{ok:false, kind:"missing-authprovider", hint:"LiveMessageSetup AuthProvider not found — org may not have Facebook Messenger enabled"}`.
+`{ok:false, kind:"missing-authprovider", hint:"LiveMessageSetup AuthProvider not found — run the Messaging Setup wizard once in Setup → Messaging Settings (enabling messaging alone doesn't create it), then re-run"}`.
 
 > **Use `OauthKickoffUrl`, NOT the generic `/services/auth/sso/<orgId>/LiveMessageSetup` SSO URL.**
 > That SSO door runs the AuthProvider's Apex *registration handler* to log a user in; `LiveMessageSetup`

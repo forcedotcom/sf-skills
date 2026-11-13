@@ -9,7 +9,7 @@ onboarding module. The sibling `service-digital-engagement-deployment-configure`
 |---|---|---|
 | Detected by | `context.calledFrom == "service-onboarding"` | no `context` object |
 | Values come from | `values` in the payload — already approved in the plan table | you ask for the Inputs in SKILL.md; defaults are in `references/channel_settings.md` |
-| Questions | none. A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
+| Questions | none, except one confirmation of the target org and change summary before the first write when the authorization context is absent. A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
 | Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Inputs as written) |
 | Ends with | the structured result in section 5 | a plain-language summary of the same outcome |
 
@@ -77,7 +77,7 @@ Run before any write, both modes. `GET` `MessagingChannel` by `fullName` = the n
 | No such channel | not set up → create (`POST`) |
 | Exists, and every targeted setting equals the target (routing type and target, fallback queue, `authMode`, plus each supplied key) **and** `IsActive = true` | **already configured** — no write, return `already-configured` |
 | Exists, matches, but `IsActive = false` | only activate; do not rewrite the metadata |
-| Exists, some targeted setting differs | **drift** — announce each change ("routing: Queue A → Queue B"), then write the full document. Standalone: ask for a yes first. Delegated: the plan approval covers it |
+| Exists, some targeted setting differs | **drift** — announce each change ("routing: Queue A → Queue B"), then write the full document. Standalone: ask for a yes first. Delegated: confirm the specific drift change with the user before writing. Plan approval does not cover drift correction without explicit re-confirmation naming the changed settings and target org. |
 | Exists but was created by Connect `channel/setup` (defaults populated: opt-out/help keywords, `embeddedConfig`) | you now own the whole document: GET, modify only targeted fields, PUT the full result |
 
 Standalone, channel exists: offer exactly three choices — no change (stop) / override (replace the targeted settings, keep the rest) / add to existing (keep current settings, add only what the user lists).

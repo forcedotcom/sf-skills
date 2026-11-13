@@ -1,6 +1,6 @@
 # Worked examples: `service-de-headless-channel-configure`
 
-Four reference traces: a fresh WhatsApp run (the most common path), a resume after a mid-flow failure, an Apple Business Chat dispatch (to show type-agnostic flow), and an unsupported-type rejection. Read these when you need to see the exact envelope shapes the orchestrator emits at each outcome.
+Six reference traces: a fresh WhatsApp run (the most common path), a resume after a mid-flow failure, an Apple Business Chat dispatch (to show type-agnostic flow), an unsupported-type rejection, a Facebook run with requested settings, and a settings-only run on an already-active channel. Read these when you need to see the exact envelope shapes the orchestrator emits at each outcome.
 
 ---
 
@@ -106,3 +106,37 @@ User invokes without specifying a type, gets the prompt, then types `wechat`.
 Alternatively, if the orchestrator forwards `WeChat` directly to the dispatcher without validating upfront, the dispatcher (`service-de-channel-create`) emits the same `unsupported-type` envelope and the orchestrator passes it through with `failedStep: "insert"`.
 
 Either way the user gets a clear "this type isn't supported" message rather than a confusing mid-flow error.
+
+---
+
+## Worked example: Facebook with auto-responses and an idle timeout
+
+Prompt: *"Set up my Facebook Messenger channel for page 103663378691289, route it to Default_Queue. Also add auto-responses: 'Thanks for reaching out!' initially, 'You're now connected with an agent.' when an agent engages, and 'Are you still there?' when the customer goes idle after 10 minutes — and set the session idle timeout to 15 minutes."*
+
+**Stage 0**: `MESSAGE_TYPE=Facebook`, `PAGE_ID=103663378691289`, `QUEUE=Default_Queue`. `{REQUESTED_SETTINGS}` = `auto-response:InitialResponse`, `auto-response:AgentEngagedResponse`, `auto-response:EndUserIdleResponse` (`responseTimeoutInMins=10`), `inactivity:endUserIdleTimeOut` (15).
+
+**Stages 0.5–4**: T&C accepted; preflight `fresh`; AuthProvider present; insert, route (to the named queue, no prompt), consent no-op, activate. `STEPS_RUN=["insert","route","activate"]`, `STEPS_SKIPPED=["consent"]`.
+
+**Stage 4.5**: one `service-de-channel-settings-configure` call with `FACETS=[auto-responses, inactivity]`. The leaf returns `facet-not-applicable` for `endUserIdleTimeOut` (MIAW-only), and attempts the three auto-responses in one metadata deploy. If the deploy hits the known Facebook metadata-update defect, all three land in `failed` with the leaf's `metadata-deploy-failed` message.
+
+**Stage 5**:
+```text
+Warning: channel is live, but 3 requested setting(s) were not applied.
+   Channel ID: 0Mj...   Routed to: Default_Queue (00G...)
+   Steps: ran insert, route, activate, skipped consent
+
+   Requested settings:
+   - Not applicable to Facebook: session idle timeout (15 min) — endUserIdleTimeOut is MIAW-only
+   - Failed: initial / agent-engaged / idle auto-responses — metadata-deploy-failed: <server message>.
+     Configure them in Setup → Messaging Settings → this channel for now.
+```
+
+Every requested item shows up — nothing is silently dropped.
+
+---
+
+## Worked example: settings on an already-active channel
+
+Prompt: *"Fully configure my existing Facebook channel for page 103663378691289, including the initial auto-response."*
+
+**Stage 1**: preflight finds the channel with `IsActive=true` → `already-active`. `{REQUESTED_SETTINGS}` is non-empty, so instead of returning a no-op, skip Stages 2–4 (`STEPS_SKIPPED=["insert","route","consent","activate"]`) and run **Stage 4.5** for the auto-response. Stage 5 reports the item as configured / not applicable / failed. With an empty `{REQUESTED_SETTINGS}`, the same preflight result returns the plain no-op success envelope.

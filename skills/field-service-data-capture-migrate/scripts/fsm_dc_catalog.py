@@ -6,7 +6,7 @@ This module is the single source of truth for the migration skill's decisions
 about which Field Service Mobile (FSM) Flow screen components have a Data
 Capture (DC) equivalent, which do not, and which DC components have no FSM
 source at all. It is consumed by analyze_flow.py (gap reporting) and is the
-data behind reference/fsm-dc-capability-catalog.md. WI-7/WI-10 import it too.
+data behind references/fsm-dc-capability-catalog.md. WI-7/WI-10 import it too.
 
 KEYED ON THE REAL FSM VOCABULARY
 --------------------------------
@@ -282,7 +282,7 @@ def capability_gaps() -> List[Dict[str, str]]:
             "detail": "Fault connectors are unsupported. FSM fault handling is "
                       "stripped and cannot be preserved.",
             "evidence": "navigateToFault() is an empty stub; $Flow.FaultMessage "
-                        "global blocked (see dc-conditional-logic-sources.md).",
+                        "global blocked (see references/dc-platform-rules.md).",
         },
         {
             "gap": "Subflows: DC-type only, no CUD",

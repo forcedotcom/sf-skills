@@ -7,10 +7,10 @@ metadata:
   minApiVersion: "60.0"
   relatedSkills:
     - "platform-custom-report-type-generate"
-  mcpTools:
-    salesforce-api-context:
-      tools: ["get_metadata_type_context", "get_metadata_type_sections", "get_metadata_type_shape"]
-      semver: ">=1.0.0"
+    - "platform-metadata-api-context-get"
+  cliTools:
+    - tool: ["sf"]
+      semver: ">=2.0.0"
 ---
 
 ## Overview
@@ -19,9 +19,11 @@ Lightning Reports define how Salesforce data is queried, grouped, filtered, and 
 
 ## Critical Rules (Read First)
 
+**REQUIRED before authoring XML:** Invoke `platform-metadata-api-context-get` and consume only the required sections of its `Report` entry (`fields`, relevant `sub_types`, and targeted schema/examples as needed). These assets describe XML structure, not the target org's report-type columns; use `references/column-names.md` or its report-type lookup for column names.
+
 **TOP DEPLOYMENT KILLERS — check these BEFORE generating any report:**
 1. **Grouping fields in columns** — Fields in `<groupingsDown>` or `<groupingsAcross>` must NEVER also appear in `<columns>`
-2. **Wrong column names (REQUIRED lookup)** — Before writing any `<columns>`, `<groupingsDown>`, `<groupingsAcross>`, filter `<column>`, or chart `<groupingColumn>`, take every name from the table for the chosen `<reportType>` in `references/column-names.md`, or confirm it with `get_metadata_type_sections`. NEVER derive a column name from the field's API name: `CASENUMBER`, `ISCLOSED`, `PHONE`, `MAILING_CITY` all fail (use `CASE_NUMBER`, a `STATUS` filter, `PHONE1`, `ADDRESS2_CITY`)
+2. **Wrong column names (REQUIRED lookup)** — Before writing any `<columns>`, `<groupingsDown>`, `<groupingsAcross>`, filter `<column>`, or chart `<groupingColumn>`, take every name from the table for the chosen `<reportType>` in `references/column-names.md`, or confirm it with the report-type lookup documented there. NEVER derive a column name from the field's API name: `CASENUMBER`, `ISCLOSED`, `PHONE`, `MAILING_CITY` all fail (use `CASE_NUMBER`, a `STATUS` filter, `PHONE1`, `ADDRESS2_CITY`)
 3. **Wrong scope** — LeadList uses `org`, not `organization`
 4. **Filter column dot notation** — Filter `<column>` values use FLAT names (`INDUSTRY`, `TYPE`) NOT dot notation (`ACCOUNT.INDUSTRY` is INVALID)
 5. **Multi-value picklist filters** — Use ONE `<criteriaItems>` with comma-separated `<value>` (e.g., `Technology,Financial Services`). Do NOT split into multiple criteriaItems with booleanFilter
@@ -41,7 +43,7 @@ Lightning Reports define how Salesforce data is queried, grouped, filtered, and 
 
 ### Rule 2: Use Platform Column Names
 
-Report metadata uses **platform report column names**, NOT raw API field names. **ALWAYS call `get_metadata_type_sections` or `get_metadata_type_context` to confirm valid column names.** See `references/column-names.md` for common mappings per report type.
+Report metadata uses **platform report column names**, NOT raw API field names. **ALWAYS confirm valid column names** using `references/column-names.md` or its report-type lookup. The required schema-context invocation above verifies XML structure, not report-type columns.
 
 ### Rule 3: Valid Report Type Required
 
@@ -162,7 +164,7 @@ Common operators: `equals`, `notEqual`, `lessThan`, `greaterThan`, `contains`, `
 
 1. **Gather Requirements** — object, fields, groupings, filters, chart needs
 2. **Determine Format** — no groupings → Tabular; row groupings → Summary; row + column → Matrix; multiple objects → Joined
-3. **Look Up Every Column Name (required)** — list every field the report needs, then take each name from the `references/column-names.md` table for the chosen `<reportType>` or confirm it with `get_metadata_type_sections`. Do not write XML until every column, grouping, filter column, and chart grouping column is looked up
+3. **Look Up Every Column Name (required)** — list every field the report needs, then take each name from the `references/column-names.md` table for the chosen `<reportType>` or confirm it with the report-type lookup documented there. Do not write XML until every column, grouping, filter column, and chart grouping column is looked up
 4. **Author Metadata** — start from closest example in `examples/` and adapt
 5. **Create Folder** — generate folder directory + `<FolderName>-meta.xml` with `<folderShares>`
 6. **Validate** — run through `references/verification-checklist.md`

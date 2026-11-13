@@ -1,6 +1,6 @@
 ---
 name: platform-dsar-policy-manage
-description: "Configure, run, and audit DsarPolicy Right-to-Portability exports end to end: author the data map over a subject's related records, resolve a request's subject (email/name/id) to a root-entity record, run an export against an ACTIVE policy (poll a couple of times, then ask before continuing; download once terminal), and read run history. Use when the user needs to set up, edit, execute, or inspect a DsarPolicy or Right-to-Portability (RTP) export, or audit which personal data a policy does not cover yet. TRIGGER when: the user configures a DsarPolicy or RTP data map, authors DsarPolicyPath or DsarPolicyField metadata, runs or exports a subject's portable data, downloads an RTP export file, reviews DsarPolicy run history, or asks what personal data the policy does not cover yet (coverage gap analysis). DO NOT TRIGGER when: the user wants to erase, delete, or remove a subject's records (RTP is portability export, not erasure — this skill deletes nothing), mask sandbox PII, or deploy unrelated metadata."
+description: "Set up, edit, run, and audit a customer's personal-data portability map (DsarPolicy / Right-to-Portability export). Use for choosing subject roots, follow/stop relationships and fields, including requests to figure out what counts as personal data: elicit the admin's classification decisions, never guess. Covers inactive policy authoring/review, subject resolution, ACTIVE-policy export with bounded polling and terminal-only download, history and coverage gaps. This end-to-end workflow can dispatch the DsarPolicyManager setup SOR; loading its generated configuration skill alone does not replace this workflow. Not subject erasure/deletion, sandbox masking or unrelated metadata deployment."
 metadata:
   version: "1.7"
   domains: ["Platform"]
@@ -44,7 +44,7 @@ literal first action of every task — before you pick a workflow, before any `s
    "looks like a quick lookup" is the top recurring miss, and it is wrong even when it would work.
    `sf` is the fallback **only** when no routing tool is in reach (checking `sf org list` to see which
    orgs are authenticated locally is fine — that is a client-side auth check, not a SOR call). Every
-   `sf`/`salesforce-api-context` command shown in the workflows below is the *no-routing-tool*
+   `sf` command shown in the workflows below is the *no-routing-tool*
    spelling; when the routing tool is present, dispatch the equivalent operation through it instead.
    Detail: `references/headless-sor.md`.
 2. **Export, never erasure.** A run produces an **export file**; it does not erase/redact/delete the
@@ -108,7 +108,8 @@ Each entity is reached a **different** way — guessing the surface is the top t
 | Execute an export | — | **Connect DSR endpoint** (`POST`) |
 | Status / getfile | — | **Connect DSR endpoint** on the handle; getfile segment `dsr` |
 
-Resolve the exact Connect route/version at run time via `salesforce-api-context` (or `sf`). Don't
+Resolve the exact Connect route through the routing tool's `describe`; only when no router is available,
+use the verified-contract/`sf` fallback in `references/export-and-history.md`. Don't
 `sf sobject describe DsarPolicy*` — the tree is metadata; only `DsarPolicyLog` answers standard
 SOQL. On an MCP surface, each row is one `DsarPolicyManager` operation.
 
@@ -124,7 +125,7 @@ SOQL. On an MCP surface, each row is one `DsarPolicyManager` operation.
 Mixed request → do the one asked; don't add an export to a configure, or a run to a history.
 
 **Every workflow below assumes call #1 is already done** — you have routed through the discover/
-describe/dispatch SOR tool (or confirmed none is in reach). The `sf`/`salesforce-api-context`
+describe/dispatch SOR tool (or confirmed none is in reach). The `sf`
 commands in each workflow are the *no-routing-tool* spelling; with the routing tool present, dispatch
 the equivalent operation through it.
 
@@ -169,8 +170,8 @@ Endpoints, sample envelopes, poll/download sequence: `references/export-and-hist
   Individual / Lead / User) — e.g. SOQL `Lead`/`Contact` by `Email`. Confirm the type **is a policy
   root** (execute matches only the root subtree of the subject's type — a non-root subject exports
   nothing). On **0 / many / non-root** matches, stop and report; never execute a guessed Id.
-- **B1. Preconditions.** Policy must be **ACTIVE** (else route to A). Resolve DSR routes via
-  `salesforce-api-context`.
+- **B1. Preconditions.** Policy must be **ACTIVE** (else route to A). Resolve DSR routes through
+  the router's `describe`, or the verified-contract fallback in `references/export-and-history.md` when no router is available.
   - **Pick the policy deliberately:** named → use it; else the in-context policy; if none is
     established or **multiple ACTIVE could match**, **ask to confirm** (e.g. *"Run `<policy>` for
     `<subject>` — confirm?"*). Never pick silently.

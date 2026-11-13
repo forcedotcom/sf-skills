@@ -45,7 +45,7 @@ Core evidence:
 > *allows only* the `Component*` field types and blocks the native ones. That
 > asymmetry is why migration is a type **conversion** (`DropdownBox` →
 > `ComponentChoice`+`dcPicklist`), not a pass-through.
-| DC deploy-time ceilings (CUD-at-end, blocked globals, fault stub) | `reference/dc-conditional-logic-sources.md` (spike W-23363833) |
+| DC deploy-time ceilings (CUD-at-end, blocked globals, fault stub) | the [Data Capture platform rules](dc-platform-rules.md) |
 
 ---
 
@@ -211,4 +211,4 @@ difference is UX (checkbox vs. toggle switch), not correctness. This is an
   and emits a **Data Capture Gap Report** per flow (feeds WI-7 / WI-10).
 - **`scripts/transform_flow.py`** — the shipping transformer; its `FIELD_TYPE_MAP`
   is the same vocabulary and must stay in sync with this catalog.
-- **`reference/component-mapping.md`** — points here as the source of truth.
+- **[component-mapping.md](component-mapping.md)** — points here as the source of truth.

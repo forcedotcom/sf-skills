@@ -18,6 +18,7 @@ Error: Step {N} of 4 ({stepName}) failed: {leafEnvelope.kind} — {leafEnvelope.
    - Routing configured: {sessionHandlerId ? "yes — " + queueName : "no"}
    - Consent configured: {(stepsRun.includes("consent") || (stepsSkipped || []).includes("consent")) ? "yes" : "no"}
    - Activation: {isActive ? "yes" : "no"}
+   - Requested settings: not attempted — {each REQUESTED_SETTINGS item}   (only when any were requested)
 
    To retry: fix the issue above, then re-run this skill with the same
    inputs. The orchestrator will skip completed steps.

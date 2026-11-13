@@ -51,7 +51,7 @@ After deploy, `FlowDefinitionView.ActiveVersionId` for the flow must be non-null
 
 The escalation target is a queue whose `QueueSobject` includes the routed context object
 (`MessagingSession` by default, for Enhanced Chat / MIAW), plus a `QueueRoutingConfig`. See
-[queue-resolution.md](../../service-agentforce-channel-configure/references/queue-resolution.md)
+[queue-resolution.md](_vendored/queue-resolution.md)
 for the create-or-adopt recipe. Provision any broader routing infrastructure through an
 approved Omni setup workflow before running this skill.
 

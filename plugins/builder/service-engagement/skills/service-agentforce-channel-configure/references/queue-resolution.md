@@ -15,7 +15,7 @@ sf data query --target-org $ORG --json \
 
 ## Step 2 — Present to user via AskUserQuestion
 
-- **One or more found** → present each as an option: `{Queue.Name} ({Queue.DeveloperName})`, plus a final option *"Create a new queue"*. If the user picks an existing queue, capture its `DeveloperName` and `Id` and skip queue creation.
+- **One or more found** → present each as an option: `{Queue.Name} ({Queue.DeveloperName})`, plus a final option *"Create a new queue"*. If the user picks an existing queue, capture its `Name`, `DeveloperName`, and `Id` as `QUEUE_NAME`, `QUEUE_DEVELOPER_NAME`, and `QUEUE_ID`, validate all three per [input-validation.md](input-validation.md), and skip queue creation. If one fails its grammar, don't use that queue; offer to create a new one.
 - **Zero found** → inform the user no compatible queue exists; proceed directly to create one.
 
 ## Step 3 — Create a new queue (if needed)
@@ -46,6 +46,8 @@ sf data create record --target-org $ORG \
 ```bash
 ORG_USERNAME=$(sf org display --target-org $ORG --json \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['username'])")
+UNAME_RE='^[A-Za-z0-9][A-Za-z0-9._@+-]*$'
+[[ "$ORG_USERNAME" =~ $UNAME_RE ]] || { echo "Org username '$ORG_USERNAME' fails the ORG_USERNAME grammar. Stopping."; exit 1; }
 RUNNING_USER_ID=$(sf data query --target-org $ORG --json \
   --query "SELECT Id FROM User WHERE Username='$ORG_USERNAME'" \
   | python3 -c "import sys,json; print(json.load(sys.stdin)['result']['records'][0]['Id'])")

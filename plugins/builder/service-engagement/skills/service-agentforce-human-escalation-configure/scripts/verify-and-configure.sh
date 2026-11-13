@@ -75,6 +75,12 @@ if ! [[ "$FLOW_DEV_NAME" =~ $DN_RE ]]; then
   echo "{\"error\":\"Invalid flow_developer_name '$FLOW_DEV_NAME'. Must match the DeveloperName grammar.\"}" >&2
   exit 1
 fi
+# SERVICE_CHANNEL_DEV_NAME is substituted unescaped into the flow XML via sed; the grammar excludes
+# the sed (| & \) and XML (< > & " ') metacharacters that could rewrite the deployed RoutingFlow.
+if ! [[ "$SERVICE_CHANNEL_DEV_NAME" =~ $DN_RE ]]; then
+  echo "{\"error\":\"Invalid service_channel_developer_name '$SERVICE_CHANNEL_DEV_NAME'. Must match the DeveloperName grammar.\"}" >&2
+  exit 1
+fi
 # DEFAULT_FAILURE_THRESHOLD must be a small positive integer (1-99).
 if ! [[ "$DEFAULT_FAILURE_THRESHOLD" =~ ^[1-9][0-9]?$ ]]; then
   echo "{\"error\":\"Invalid DEFAULT_FAILURE_THRESHOLD '$DEFAULT_FAILURE_THRESHOLD'. Must be a positive integer between 1 and 99.\"}" >&2
@@ -128,6 +134,18 @@ emit_plan() {
     '{skill:$skill, status:"PLAN", plan_mode:true, plan_detail:$detail,
       agent:{developer_name:$agent}, queue:{developer_name:$queue}, manual_actions:[], blocking_issue:null}'
   exit 0
+}
+
+# Rollback after the agent was deactivated for authoring: try to reactivate, then block with the
+# original failure AND the recovery outcome, so a failed reactivation never hides an inactive agent.
+block_after_recovery() {
+  local msg="$1" rec_out
+  if rec_out=$(echo "Y" | sf agent activate --api-name "$AGENT_DN" --target-org "$ORG" --json 2>&1); then
+    emit_blocked "$msg Recovery: agent '$AGENT_DN' was reactivated."
+  else
+    emit_blocked "$msg Recovery FAILED: agent '$AGENT_DN' is left INACTIVE. Raw: $(echo "$rec_out" | head -c 400)" \
+      "Setup → Agentforce → Agents → '$AGENT_DN' → activate the latest version"
+  fi
 }
 
 # Step 1 - Organization + safe_to_write guard
@@ -509,25 +527,21 @@ if [ "${AUTHOR_SURFACES:-0}" = "1" ] && [ "$QUEUE_HAS_ACTIVE_DIRECT_USER_MEMBER"
   fi
   AGENT_ACTIVE=false
 
-  # 4) Patch (XSD-ordered) + deploy (--metadata-dir); on failure, best-effort reactivate then block.
+  # 4) Patch (XSD-ordered) + deploy (--metadata-dir); on failure, reactivate and report both outcomes.
   if [ -n "$APLUGIN" ]; then
     if ! node "$SCRIPT_DIR/patch-escalation-surfaces.mjs" canEscalate "$APLUGIN" >/dev/null 2>&1; then
-      echo "Y" | sf agent activate --api-name "$AGENT_DN" --target-org "$ORG" --json >/dev/null 2>&1 || true
-      emit_blocked "AUTHOR_SURFACES: could not safely set canEscalate=true on GenAiPlugin '$ESCALATION_TOPIC' (no safe XSD-ordered insertion point)."
+      block_after_recovery "AUTHOR_SURFACES: could not safely set canEscalate=true on GenAiPlugin '$ESCALATION_TOPIC' (no safe XSD-ordered insertion point)."
     fi
     if ! DEPLOY_OUT=$(sf project deploy start --target-org "$ORG" --metadata-dir "$AROOT_PLUGIN" --json 2>/dev/null); then
-      echo "Y" | sf agent activate --api-name "$AGENT_DN" --target-org "$ORG" --json >/dev/null 2>&1 || true
-      emit_blocked "AUTHOR_SURFACES: failed to deploy canEscalate patch for '$ESCALATION_TOPIC'. Raw: $(echo "$DEPLOY_OUT" | head -c 400)"
+      block_after_recovery "AUTHOR_SURFACES: failed to deploy canEscalate patch for '$ESCALATION_TOPIC'. Raw: $(echo "$DEPLOY_OUT" | head -c 400)"
     fi
   fi
   if [ -n "$ABUNDLE" ]; then
     if ! node "$SCRIPT_DIR/patch-escalation-surfaces.mjs" outboundRoute "$ABUNDLE" "$FLOW_DEV_NAME" >/dev/null 2>&1; then
-      echo "Y" | sf agent activate --api-name "$AGENT_DN" --target-org "$ORG" --json >/dev/null 2>&1 || true
-      emit_blocked "AUTHOR_SURFACES: could not safely wire outboundRouteConfigs on a Messaging surface of '$PLANNER_BUNDLE' (no Messaging-class planner surface / <surface> anchor found)."
+      block_after_recovery "AUTHOR_SURFACES: could not safely wire outboundRouteConfigs on a Messaging surface of '$PLANNER_BUNDLE' (no Messaging-class planner surface / <surface> anchor found)."
     fi
     if ! DEPLOY_OUT=$(sf project deploy start --target-org "$ORG" --metadata-dir "$AROOT_BUNDLE" --json 2>/dev/null); then
-      echo "Y" | sf agent activate --api-name "$AGENT_DN" --target-org "$ORG" --json >/dev/null 2>&1 || true
-      emit_blocked "AUTHOR_SURFACES: failed to deploy outboundRouteConfigs patch for '$PLANNER_BUNDLE'. Raw: $(echo "$DEPLOY_OUT" | head -c 400)"
+      block_after_recovery "AUTHOR_SURFACES: failed to deploy outboundRouteConfigs patch for '$PLANNER_BUNDLE'. Raw: $(echo "$DEPLOY_OUT" | head -c 400)"
     fi
   fi
 

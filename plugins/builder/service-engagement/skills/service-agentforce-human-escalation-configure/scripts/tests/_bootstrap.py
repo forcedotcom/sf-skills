@@ -12,16 +12,25 @@ from pathlib import Path
 SKILLS_ROOT = Path(__file__).resolve().parents[3]
 
 
-def _find_flat_skills_root(start: Path) -> Path:
-    """Walk up from this file to the repo's flat skills/ root, which bundles every skill
-    exactly once. Cross-skill references that aren't part of this skill's own plugin roster
-    (like the ITSM coordinator's verdict script below) must resolve here, not under
-    SKILLS_ROOT, since a plugin mirror's SKILLS_ROOT only contains its own bundled skills."""
+_COORDINATOR = "service-itsm-agentic-setup-agentforce-coordinate"
+
+
+def _find_flat_skills_root(start: Path) -> Path | None:
+    """Walk up from this file to the directory holding the ITSM coordinator skill: the repo's
+    flat skills/ root, or its team directory under contributed-skills/. Cross-skill references
+    that aren't part of this skill's own plugin roster (like the coordinator's verdict script
+    below) must resolve here, not under SKILLS_ROOT, since a plugin mirror's SKILLS_ROOT only
+    contains its own bundled skills. The walk stops at the repo root so a stray skills/ tree in
+    a parent directory is never executed; None means the coordinator isn't in this checkout."""
     for parent in start.parents:
-        candidate = parent / "skills" / "service-itsm-agentic-setup-agentforce-coordinate"
-        if candidate.is_dir():
+        if (parent / "skills" / _COORDINATOR).is_dir():
             return parent / "skills"
-    raise RuntimeError("could not locate the repo's flat skills/ root")
+        for team_copy in sorted((parent / "contributed-skills").glob(f"*/{_COORDINATOR}")):
+            if team_copy.is_dir():
+                return team_copy.parent
+        if (parent / ".git").exists():
+            break
+    return None
 
 
 FLAT_SKILLS_ROOT = _find_flat_skills_root(Path(__file__).resolve())
@@ -196,7 +205,15 @@ start_agent support_agent:
 AGENT
       fi
     elif printf '%s' "$args" | grep -q "GenAiPlugin:"; then
-      echo '<canEscalate>true</canEscalate>' > "$dir/plugin.xml"
+      if [ "${FAKE_AUTHORING_FIXTURE:-0}" = "1" ]; then
+        # Metadata-format bundle whose GenAiPlugin has no XSD anchor, so the canEscalate patcher
+        # refuses after the deactivate and the rollback path runs.
+        mkdir -p "$dir/genAiPlugins"
+        echo '<?xml version="1.0"?><Package xmlns="x"></Package>' > "$dir/package.xml"
+        printf '<?xml version="1.0"?>\n<GenAiPlugin xmlns="x"></GenAiPlugin>\n' > "$dir/genAiPlugins/Escalate_Topic.genAiPlugin"
+      else
+        echo '<canEscalate>true</canEscalate>' > "$dir/plugin.xml"
+      fi
     elif printf '%s' "$args" | grep -q "GenAiPlannerBundle:"; then
       [ "$TARGET_MODEL" = "classic" ] || [ "$TARGET_MODEL" = "both" ] || exit 1
       cat > "$dir/bundle.xml" <<BXML
@@ -215,14 +232,28 @@ BXML
     echo '{"status":0,"result":{"success":true}}'; exit 0;;
   "project deploy")
     echo '{"status":0,"result":{"success":true,"files":[{"fullName":"Human_Escalation_Outbound_Flow","type":"Flow","state":"Created"}]}}'; exit 0;;
+  "agent activate")
+    # FAKE_ACTIVATE_FAIL=1 → reactivation fails, so a rollback must report the agent left inactive.
+    if [ "${FAKE_ACTIVATE_FAIL:-0}" = "1" ]; then
+      echo '{"status":1,"message":"FAKE_ACTIVATE_FAILED"}'; exit 1
+    fi
+    echo '{"status":0,"result":{}}'; exit 0;;
   *) echo '{"status":0,"result":{}}'; exit 0;;
 esac
 """
 
+# Only what bash, node, and version-manager shims need, so tokens, SF_* overrides, and
+# NODE_OPTIONS from the developer's shell never reach the scripts under test.
+_ENV_PASSTHROUGH = ("PATH", "HOME", "TERM", "TMPDIR", "LANG", "LC_ALL", "USER", "SHELL")
+
+
+def _base_env():
+    return {k: os.environ[k] for k in _ENV_PASSTHROUGH if k in os.environ}
+
 
 def run(args, path_prefix=None, scrub_sf=False, extra_env=None):
     """Run the orchestrator; return (returncode, merged stdout+stderr)."""
-    env = dict(os.environ)
+    env = _base_env()
     if scrub_sf:
         kept = [d for d in env.get("PATH", "").split(os.pathsep)
                 if d and not os.path.exists(os.path.join(d, "sf"))]
@@ -244,7 +275,7 @@ def run_node(script_rel, args, root=None):
     base = root if root is not None else SKILLS_ROOT
     proc = subprocess.run(
         ["node", str(base / script_rel), *args],
-        capture_output=True, text=True, cwd=str(base),
+        capture_output=True, text=True, cwd=str(base), env=_base_env(),
     )
     return proc.returncode, (proc.stdout or "")
 

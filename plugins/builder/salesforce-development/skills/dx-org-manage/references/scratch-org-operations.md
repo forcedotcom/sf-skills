@@ -7,14 +7,15 @@ definition-file authoring), see `scratch-org-create.md`.
 
 ---
 
-## Security posture — pure pass-through (read first)
+## Security posture — credential filtering (read first)
 
 The skill relays every input to `sf` **unchanged** and surfaces the CLI's `--json` result —
-success or error — **as-is**. It does not pre-validate fields, does not normalize or translate
-field names, and does not add or strip error text; the CLI already frames its own output. The one
-place the skill actively protects the user is a live credential: it never runs `sf org display
---verbose` (which returns a refresh token) and it never un-redacts a token the CLI already
-redacted.
+success or error — for reporting. It does not pre-validate fields, does not normalize or translate
+field names, and does not add or strip error text; the CLI already frames its own output. The skill
+actively protects against credential leaks: it filters `accessToken` and `sfdxAuthUrl` from
+written artifacts and agent context using `jq` before writing any output file. It never runs
+`sf org display --verbose` (which returns a refresh token) and it never un-redacts a token the CLI
+already redacted.
 
 The skill's own docs/examples never claim a feature is "not enabled" or that a permission is
 missing — that framing is the platform's job, delivered through the CLI's own error output.
@@ -43,7 +44,7 @@ sf org list --json
 Show details of one org.
 
 ```bash
-sf org display --target-org <alias> --json
+sf org display --target-org <alias> --json | jq 'if .status == 0 then {status, result: {alias: .result.alias, username: .result.username, id: .result.id, instanceUrl: .result.instanceUrl, status: .result.status, expirationDate: .result.expirationDate}} else . end'
 ```
 
 - Plain output only — always the non-verbose form above. **Never add `--verbose`, and never run
@@ -51,13 +52,7 @@ sf org display --target-org <alias> --json
   would pull a live credential into agent context. If the user needs the auth URL, direct them to
   run `sf org display --verbose` themselves in their own terminal — do not run it from this skill.
 - **Report:** alias, username, orgId, instanceUrl, status, expiration.
-- **Artifact:** write the **wrapped** `{status, result}` JSON to `org-display-result.json`.
-
-> **Sanitize committed artifacts.** In any example/gold committed to the skill, the
-> `accessToken` and `sfdxAuthUrl` values must be redacted — begin them with `[REDACTED]`
-> regardless of CLI version (older supported CLIs do not auto-redact). Current CLIs emit
-> `"[REDACTED] Use 'sf org auth show-access-token' to view"`; either the bare marker or that
-> full string is acceptable. `instanceUrl` is a normal public field; keep it.
+- **Artifact:** write the filtered output from the command above to `org-display-result.json`. Never pass accessToken, sfdxAuthUrl, or other credential fields to agent context.
 
 ---
 
@@ -67,16 +62,16 @@ Continue a create that ran with `--async` or timed out (exit code 69).
 
 ```bash
 # With an explicit job/request id
-sf org resume scratch --job-id <id> --json
+sf org resume scratch --job-id <id> --json | jq 'del(.result.accessToken, .result.sfdxAuthUrl, .result.authFields.accessToken, .result.authFields.sfdxAuthUrl)'
 
 # Otherwise, the most recent job
-sf org resume scratch --use-most-recent --json
+sf org resume scratch --use-most-recent --json | jq 'del(.result.accessToken, .result.sfdxAuthUrl, .result.authFields.accessToken, .result.authFields.sfdxAuthUrl)'
 ```
 
 Behavior: if the user gives an explicit `--job-id`, use it; otherwise default to
 `--use-most-recent`; if there is no recent job, surface the CLI's not-found result unchanged and
-point the user to `sf org list`. Do not invent a job id. **Artifact:** write the command's JSON
-as-is to `scratch-org-resume-result.json`.
+point the user to `sf org list`. Do not invent a job id. **Artifact:** write the filtered output
+from the command above to `scratch-org-resume-result.json`.
 
 ---
 
@@ -85,7 +80,7 @@ as-is to `scratch-org-resume-result.json`.
 Delete a scratch org. **Destructive — no undo.**
 
 ```bash
-sf org delete scratch --target-org <alias> --no-prompt --json
+sf org delete scratch --target-org <alias> --no-prompt --json | jq 'del(.result.accessToken, .result.sfdxAuthUrl, .result.authFields.accessToken, .result.authFields.sfdxAuthUrl)'
 ```
 
 - **Always confirm first** ("Delete scratch org `X`?") before running — UNLESS the user already
@@ -94,7 +89,7 @@ sf org delete scratch --target-org <alias> --no-prompt --json
   confirmation.
 - `--no-prompt` is passed on the CLI *after* the skill's own confirmation, so the agent isn't
   left waiting on an interactive prompt.
-- **Artifact:** write the command's JSON as-is to `scratch-org-delete-result.json`.
+- **Artifact:** write the filtered output from the command above to `scratch-org-delete-result.json`.
 
 ---
 

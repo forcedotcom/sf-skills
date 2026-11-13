@@ -1,6 +1,6 @@
 ---
 name: service-de-headless-channel-configure
-description: "Top-level orchestrator: given a messaging channel type and its inputs, produces an activated Enhanced `MessagingChannel` in the target org — without the Meta/LINE/Apple setup popups. Prompts for `{MESSAGE_TYPE}` if not supplied, then sequences insert → route → consent → activate via the type-agnostic dispatcher (`service-de-channel-create`) plus the shared routing/consent/activation leaves. Resumes from partial state on re-run. Use to set up an Enhanced channel (WhatsApp, Facebook, LINE, Apple, SMS) end-to-end, bypassing in-org setup popups. Do not use for a single stage of an already-inserted channel — use the matching leaf skill (`service-de-channel-activate`, `service-de-channel-settings-configure`, `service-de-channel-routing-configure`) instead."
+description: "Top-level orchestrator: given a messaging channel type and its inputs, produces an activated Enhanced `MessagingChannel` in the target org — without the Meta/LINE/Apple setup popups. Prompts for `{MESSAGE_TYPE}` if not supplied, then sequences insert → route → consent → activate → requested settings (auto-responses, keywords, session inactivity) via the type-agnostic dispatcher (`service-de-channel-create`) plus the shared routing/settings/activation leaves, and reports every requested setting as configured, not applicable, or failed. Resumes from partial state on re-run. Use to set up an Enhanced channel (WhatsApp, Facebook, LINE, Apple, SMS) end-to-end, bypassing in-org setup popups. Do not use for a single stage of an already-inserted channel — use the matching leaf skill (`service-de-channel-activate`, `service-de-channel-settings-configure`, `service-de-channel-routing-configure`) instead."
 metadata:
   version: "1.0"
   minApiVersion: "67.0"
@@ -20,17 +20,18 @@ metadata:
 
 ## What this skill does
 
-Takes a channel type (`WhatsApp` | `Line` | `AppleBusinessChat` | `Facebook` | `Text`) plus its type-specific inputs and drives it to an activated `MessagingChannel`. It first gates on the Enhanced Messaging Terms and Conditions, then runs four steps:
+Takes a channel type (`WhatsApp` | `Line` | `AppleBusinessChat` | `Facebook` | `Text`) plus its type-specific inputs and drives it to an activated `MessagingChannel`. It first gates on the Enhanced Messaging Terms and Conditions, then runs four core steps plus an optional settings step:
 
 0. **Accept Terms and Conditions** — renders the Enhanced Messaging disclaimer and requires the user to certify they have authority to bind their org, mirroring the in-org "Add a Channel" wizard. Blocking — a decline ends the run before any org work. *(Stage 0.5, in this skill)*
-1. **Insert the channel** — invokes `service-de-channel-create`, which handles the per-type third-party prereq internally (e.g. WhatsApp's `service-de-waba-integrate` runs inside `service-de-channel-create`). *(skill: `service-de-channel-create`)*
+1. **Insert the channel** — invokes `service-de-channel-create`, which handles each type's third-party prereq (e.g. WhatsApp's `service-de-waba-integrate`). *(skill: `service-de-channel-create`)*
 2. **Configure routing** — sets `SessionHandlerId` to an Omni-Channel Queue (pick existing or create new). Message-type-agnostic. *(skill: `service-de-channel-routing-configure`)*
-3. **Configure consent** — ensures a valid `ConsentType` + matching `MsgChannelLanguageKeyword` record. The Connect insert auto-seeds a default `ConsentType=ImplicitOptIn` + opt-out keyword, so on a fresh channel this step is frequently a **no-op** — or an *upgrade* if the caller wants ExplicitOptIn/DoubleOptIn. Activation's readiness check requires both routing AND consent, so this runs before activation. *(skill: `service-de-channel-settings-configure`)*
-4. **Activate** — PATCHes `MessagingChannelUsage.DeploymentStatus` to `Provisioning` via REST; the server-side save-hook drives the full observer chain synchronously and returns 204 once the MCU reaches `Active` and `MessagingChannel.IsActive=true`. Message-type-agnostic. *(skill: `service-de-channel-activate`)*
+3. **Configure consent** — ensures a valid `ConsentType` + matching `MsgChannelLanguageKeyword` record (often a **no-op**: the insert auto-seeds `ImplicitOptIn`). Activation's readiness check needs routing AND consent, so this runs before activation. *(skill: `service-de-channel-settings-configure`)*
+4. **Activate** — PATCHes `MessagingChannelUsage.DeploymentStatus` to `Provisioning`; the save-hook runs synchronously and returns 204 once the channel is `IsActive=true`. Message-type-agnostic. *(skill: `service-de-channel-activate`)*
+5. **Configure requested settings** — only if the request asked for auto-responses, keywords, or session inactivity. Runs **after** activation and is **non-blocking**: a failure is a warning, never a failed run, and every requested setting is reported as configured, not applicable, or failed. *(skill: `service-de-channel-settings-configure`, Stage 4.5)*
 
-**Resume-by-default.** Each step is idempotent — if you re-run after a failure, the orchestrator detects existing state and skips steps that already succeeded.
+**Resume-by-default.** Each step is idempotent: a re-run detects existing state and skips steps that already succeeded.
 
-**Prompt mid-flow.** If `{MESSAGE_TYPE}` isn't in the initial request, the orchestrator asks upfront. Routing choices (pick queue / create new) are prompted when step 2 runs, not upfront — keeps leaf skills self-contained.
+**Prompt mid-flow.** A missing `{MESSAGE_TYPE}` is asked upfront; routing choices are prompted when step 2 runs.
 
 ## Reference File Index
 
@@ -40,8 +41,9 @@ Takes a channel type (`WhatsApp` | `Line` | `AppleBusinessChat` | `Facebook` | `
 | `references/terms-and-conditions.md` | Rendering the Stage 0.5 disclaimer and certification prompt — verbatim text and per-type label/third-party mappings. |
 | `references/output-envelopes.md` | Wiring error handling or parsing the canonical success/failure/terms-declined JSON envelope shapes. |
 | `references/partial-success.md` | The orchestrator fails mid-way and you need to render the partial-success/resume report. |
-| `references/gotchas.md` | Debugging unexpected behavior — duplicate-key errors, resume/idempotency questions, preflight SOQL shape, unattended/CI usage. |
-| `references/worked-examples.md` | You need a reference trace (fresh WhatsApp run, resume after failure, Apple dispatch, unsupported-type rejection) for exact envelope shapes. |
+| `references/gotchas.md` | Debugging unexpected behavior — duplicate-key errors, resume/idempotency questions, preflight SOQL shape, unattended/CI usage, dropped settings, missing AuthProvider. |
+| `references/requested-settings.md` | Running Stage 4.5 (auto-responses, keywords, inactivity) or rendering requested settings in the Stage 5 report. |
+| `references/worked-examples.md` | You need a reference trace (fresh run, resume, Apple dispatch, unsupported type, requested settings) for exact envelope shapes. |
 
 ---
 
@@ -51,32 +53,28 @@ Takes a channel type (`WhatsApp` | `Line` | `AppleBusinessChat` | `Facebook` | `
 
 When you invoke a leaf skill (service-de-channel-create, service-de-channel-routing-configure, service-de-channel-settings-configure, service-de-channel-activate) and it returns via function_results:
 
-- **DO:** Immediately parse the function_results return value and continue to the next stage
-- **DO:** Run Stage 0.5 → Stage 1 → Stage 2 → Stage 3 → Stage 3.5 → Stage 4 → Stage 5 consecutively in ONE response
-- **DO NOT:** Stop and report back to the user between stages
-- **DO NOT:** Wait for user confirmation between stages
-- **DO NOT:** Treat each stage as a separate turn in the conversation
+- **DO:** Parse the return value immediately and run Stages 0.5 → 1 → 2 → 3 → 3.5 → 4 → 4.5 → 5 consecutively in ONE response
+- **DO NOT:** Stop, report back, or wait for confirmation between stages, or treat each stage as a separate turn
 
-**Why this matters:** The user invoked THIS orchestrator skill to get an end-to-end activated channel. They did NOT invoke the individual leaf skills. Your job is to run the entire pipeline autonomously and report the final result. Stopping mid-flow breaks the orchestrator pattern and forces the user to manually resume each stage.
+**Why:** the user asked for an end-to-end activated channel; stopping mid-flow forces them to resume each stage by hand.
 
-**Exception:** Only stop mid-flow if a leaf skill returns `ok: false` with a terminal error (not a recoverable prompt), or if the user declines the Stage 0.5 Terms and Conditions gate (emit `terms-not-accepted` and halt). Then report the failure immediately with context about which stage failed and what state was reached.
+**Exception:** Only stop mid-flow if a leaf skill returns `ok: false` with a terminal error (not a recoverable prompt), or if the user declines the Stage 0.5 Terms and Conditions gate (emit `terms-not-accepted` and halt). The WhatsApp OTP prompts in `service-de-channel-activate` are also an allowed pause — wait for the user's input, then continue. Then report the failure immediately with context about which stage failed and what state was reached.
 
-**Stage 0.5 is a required blocking prompt.** The Terms and Conditions gate is the one prompt that must be answered affirmatively before any org work. It is not optional and must not be auto-accepted. A `no`/decline ends the run per the exception above; a `yes` continues to Stage 1 in the same response.
+**Stage 0.5 is a required blocking prompt** — never auto-accepted. A decline ends the run; a `yes` continues to Stage 1 in the same response.
 
-**Leaf skill prompts:** Some leaf skills (like `service-de-waba-integrate` or `service-de-channel-routing-configure`) may prompt the user for input mid-execution. That's fine — answer those prompts as they come up, but then CONTINUE to the next stage immediately after the prompt is answered. Don't stop just because a prompt was involved.
+**Leaf skill prompts:** leaves like `service-de-waba-integrate` or `service-de-channel-routing-configure` may prompt mid-execution. Once a prompt is answered, CONTINUE to the next stage immediately.
 
 ---
 
 ## When NOT to use this skill
 
-- **You only want one step.** Invoke the leaf skill directly (`service-de-channel-create`, `service-de-channel-routing-configure`, `service-de-channel-activate`). This orchestrator is for the full automated path from nothing → activated channel.
-- **You want to run stages independently in separate conversation turns.** This orchestrator runs all stages consecutively in one response. If you need manual control between stages, invoke the leaf skills individually.
-- **You want a message type outside `WhatsApp` / `Line` / `AppleBusinessChat` / `Facebook` / `Text`.** The dispatcher will return `unsupported-type`. WeChat / MsCopilot / Alexa would need their own leaves + a dispatcher update.
-- **The prereq hasn't been met (WABA not shared, LINE channel not created, Apple account not registered, SMS number not provisioned).** The per-type insert skill's Stage 2-equivalent surfaces this clearly and returns; no orchestration fixes it. (For SMS/Text the number-provisioning prereq isn't checked at insert — an unprovisioned number surfaces later as an activation-time `provisioning-error`.)
+- **You only want one step, or manual control between stages.** Invoke the leaf skill directly (`service-de-channel-create`, `service-de-channel-routing-configure`, `service-de-channel-settings-configure`, `service-de-channel-activate`).
+- **You want a message type outside `WhatsApp` / `Line` / `AppleBusinessChat` / `Facebook` / `Text`.** The dispatcher returns `unsupported-type`.
+- **The prereq hasn't been met (WABA not shared, LINE channel not created, Apple account not registered, SMS number not provisioned).** The per-type insert skill surfaces this and returns. (SMS number provisioning isn't checked at insert — it surfaces later as an activation `provisioning-error`.)
 
 ## Inputs (from user)
 
-`{MESSAGE_TYPE}` (prompted if omitted) and `{ORG_ALIAS}` (optional), plus type-specific fields for WhatsApp, LINE, AppleBusinessChat, Facebook, and Text (SMS) forwarded to the dispatcher. **Load `references/inputs.md` and follow it** for the full field list and the omitted-type prompt text.
+`{MESSAGE_TYPE}` (prompted if omitted) and `{ORG_ALIAS}` (optional), plus type-specific fields for WhatsApp, LINE, AppleBusinessChat, Facebook, and Text (SMS) forwarded to the dispatcher. Optional: `{QUEUE}` (a queue the user named for routing) and `{REQUESTED_SETTINGS}` (auto-responses, keywords, inactivity, consent upgrade — extracted from the request). **Load `references/inputs.md` and follow it** for the full field list, the omitted-type prompt text, and how to extract `{REQUESTED_SETTINGS}`.
 
 ## Output (to user)
 
@@ -88,7 +86,7 @@ Three top-level outcomes: success, step-annotated failure, and terms-declined. *
 
 If `{MESSAGE_TYPE}` is omitted, prompt the user (see "Inputs" above). Refuse to proceed without one — there's no sensible default.
 
-Once known, determine the **preflight key** — the field we'll filter the `MessagingChannel` SOQL on to detect existing state. It's always `MessagingPlatformKey`, but what that value *is* varies by type:
+Once known, determine the **preflight key** used to detect existing state. It's always `MessagingPlatformKey`, but its value varies by type:
 
 | `{MESSAGE_TYPE}` | Preflight key value `{PLATFORM_KEY}` | Notes |
 | --- | --- | --- |
@@ -98,15 +96,15 @@ Once known, determine the **preflight key** — the field we'll filter the `Mess
 | `Facebook` | `{PAGE_ID}` | Optional - OAuth → fetch pages → prompt if not provided |
 | `Text` | `{SMS_NUMBER}` | Required upfront (the phone number / short code itself) |
 
-**Facebook is unique:** If `{PAGE_ID}` is not provided, the orchestrator cannot run its own Stage 1 preflight. Instead, skip Stage 1 and let `service-de-channel-create` handle the full OAuth → page selection → preflight → creation flow. The insertion skill has its own Stage 1 preflight that runs after page selection.
+For non-Facebook types, validate the required type-specific inputs now; if missing, prompt or halt rather than letting the dispatcher return `missing-input`.
 
-For non-Facebook types, validate that the caller provided the required type-specific inputs for `{MESSAGE_TYPE}` (see Inputs above). If missing, prompt or halt — don't call the dispatcher, it will re-validate and return `missing-input`, wasting a round trip.
+**Capture `{REQUESTED_SETTINGS}` now:** each auto-response, keyword group, inactivity timeout, or consent upgrade in the request is a separate item (mapping in `references/inputs.md`). Also record `{QUEUE}` if the user named one. Every item must be accounted for in the Stage 5 report — none may be silently dropped.
 
 ---
 
 ## Stage 0.5: Enhanced Messaging Terms and Conditions (blocking gate)
 
-**Run this before any org query or channel work.** The in-org "Add a Channel" wizard requires the admin to accept the Enhanced Messaging Terms and Conditions before it will let them proceed to channel setup. The headless flow must enforce the same gate — do not skip it, do not accept on the user's behalf. This runs once per orchestrator invocation, after `{MESSAGE_TYPE}` is known (the disclaimer names the channel) and before Stage 1.
+**Run this before any org query or channel work.** Do not skip it or accept on the user's behalf. It runs once per invocation, after `{MESSAGE_TYPE}` is known (the disclaimer names the channel).
 
 **Render the disclaimer and certification prompt from `references/terms-and-conditions.md` (verbatim, substituting the channel label) — load it and follow it for the exact wording and per-type label/third-party mappings.**
 
@@ -118,15 +116,15 @@ For non-Facebook types, validate that the caller provided the required type-spec
   {"ok": false, "kind": "terms-not-accepted",
    "hint": "user did not accept the Enhanced Messaging Terms and Conditions — channel setup cannot proceed. Re-run when ready to accept."}
   ```
-- Acceptance is required on **every** orchestrator invocation, including resume runs. It is a per-session gate, not persisted — we don't have a place to durably record it, and the cost of re-confirming is one prompt.
+- Acceptance is required on **every** invocation, including resume runs — it isn't persisted.
 
 ---
 
 ## Stage 1: Pre-flight state detection (resume support)
 
-**Skip this stage entirely if `MESSAGE_TYPE=Facebook` and `{PAGE_ID}` was not provided.** The Facebook insertion skill needs to run OAuth first before we know which PAGE_ID to check for. Let the insertion skill handle its own preflight in Stage 1 after page selection.
+**Skip this stage entirely if `MESSAGE_TYPE=Facebook` and `{PAGE_ID}` was not provided** — the page isn't known until OAuth, and `service-de-channel-create` runs its own preflight after page selection.
 
-For all other cases, query the org to see how far a prior run got. This enables skip-ahead on resume. **Two queries, not a subquery** — the `(SELECT ... FROM MessagingChannelUsages)` subquery fails on some orgs where the child relationship is unnameable. Use FK-keyed second query instead (see gotcha #9).
+For all other cases, query the org to see how far a prior run got. This enables skip-ahead on resume. **Two queries, not a subquery** — the `MessagingChannelUsages` child relationship is unnameable on some orgs (gotcha #9).
 
 ```bash
 sf data query --target-org '{ORG_ALIAS}' \
@@ -149,11 +147,19 @@ Parse the combined result to figure out `{CURRENT_STATE}`:
 | No records | `fresh` | Step 1 (insert) |
 | Record exists, `IsActive=false`, `SessionHandlerId=null` and `FallbackQueueId=null` | `inserted-no-routing` | Step 2 (configure routing) |
 | Record exists, `IsActive=false`, routing set | `routed-not-active` | Step 3 (configure consent), then Step 4 (activate) |
-| Record exists, `IsActive=true` | `already-active` | Emit no-op success envelope; return. |
+| Record exists, `IsActive=true` | `already-active` | If `{REQUESTED_SETTINGS}` is empty: emit the no-op success envelope and return. Otherwise skip insert, route, and activate (add them to `STEPS_SKIPPED`). Run Stage 3.5 if a consent upgrade is requested, else add `consent` to `STEPS_SKIPPED`. Then run Stage 4.5. **Never return a no-op success while requested settings are outstanding.** |
 
-Record the existing `{CHANNEL_ID}` and `{MCU_ID}` if present — downstream steps need them.
+Record the existing `{CHANNEL_ID}` and `{MCU_ID}` if present. Initialize `{STEPS_RUN} = []`, `{STEPS_SKIPPED} = []`, `{T0} = Date.now()` before applying the row above.
 
-Initialize `{STEPS_RUN} = []`, `{STEPS_SKIPPED} = []`, `{T0} = Date.now()`.
+**AuthProvider preflight (fresh channels, every type except `Text`).** When `CURRENT_STATE=fresh` (or Stage 1 was skipped for Facebook), confirm the org-global `LiveMessageSetup` AuthProvider exists before starting the insert — every non-Text insert needs it, and so does WhatsApp's WABA-manage call:
+
+```bash
+sf data query --target-org '{ORG_ALIAS}' \
+  --query "SELECT Id FROM AuthProvider WHERE DeveloperName = 'LiveMessageSetup'" \
+  --json > /tmp/hcs-authprovider.json
+```
+
+Zero rows → halt with `failedStep: "insert"`, `failedStepIndex: 1`, `kind: "missing-authprovider"`, and render the missing-AuthProvider message from `references/output-envelopes.md`. It's a known manual prerequisite (gotcha #11); catching it here avoids a wasted OAuth round trip or WABA prompt.
 
 ---
 
@@ -167,7 +173,7 @@ Otherwise invoke `service-de-channel-create` with:
 - All type-specific inputs (forwarded verbatim — dispatcher routes to the right leaf)
 - `{ORG_ALIAS}`
 
-The insertion skill handles per-type prereqs internally (e.g., for WhatsApp, `service-de-channel-create` invokes `service-de-waba-integrate` as its Stage 2). This orchestrator doesn't need to know about WABA linking, LINE token verification, or Apple registration — `service-de-channel-create` owns the prereq semantics for whichever type it's running.
+`service-de-channel-create` owns the per-type prereqs (WABA linking, LINE token verification, Apple registration).
 
 Handle the envelope:
 
@@ -175,10 +181,9 @@ Handle the envelope:
 | --- | --- |
 | `{ok: true, channelId, mcuId, ...}` | Record `{CHANNEL_ID}` and `{MCU_ID}`. Append `"insert"` to `STEPS_RUN`. Continue. |
 | `{ok: false, kind: "partnership-blocked" \| "user-declined" \| "apple-registration-pending" \| "line-prereq-missing"}` | These come from the per-type prereq stage. Pass through as `failedStep: "insert"`, `failedStepIndex: 1`. Return. |
+| `{ok: false, kind: "unified-messaging-required"}` | WhatsApp on a DE Unlimited Access org, which only allows Unified Messaging WhatsApp. Pass through the leaf's `hint` as `failedStep: "insert"` (re-running won't fix it). Return. |
 | `{ok: false, kind: "missing-input" \| "unsupported-type"}` | Should have been caught in Stage 0 — emit failure with `failedStep: "insert"` and a note that the caller's inputs were incomplete. |
 | `{ok: false, kind: <anything else>}` | Emit failure envelope with `failedStep: "insert"`, `failedStepIndex: 1`. Return. |
-
-At this point we have `{CHANNEL_ID}` and `{MCU_ID}` regardless of whether step 1 ran or was skipped.
 
 **→ Continue immediately to Stage 3 in this same response. DO NOT STOP.**
 
@@ -191,9 +196,10 @@ Skip this stage if `CURRENT_STATE === "routed-not-active"` — routing is alread
 Otherwise invoke `service-de-channel-routing-configure`:
 
 - `{CHANNEL_ID}` = recorded above
+- `{QUEUE}` = the queue the user named, if any (the leaf validates it and only prompts if it's ineligible)
 - `{ORG_ALIAS}`
 
-This is the step that **prompts the user** for queue choice (pick existing / create new / escape hatch). Don't try to pre-empt the prompts — forward the user's answers as-is.
+Without a `{QUEUE}`, this step **prompts the user** for queue choice. Don't pre-empt the prompts — forward the answers as-is.
 
 Handle the envelope:
 
@@ -209,22 +215,24 @@ Handle the envelope:
 
 ## Stage 3.5: Configure consent (before activation)
 
+Skip if `already-active` with no consent upgrade requested (Stage 1 logged it skipped). A requested upgrade on a live channel runs here — Stage 4.5 never applies consent.
+
 Activation's readiness check requires **consent AND routing** — a fully-routed channel still fails to activate if consent isn't configured. Invoke `service-de-channel-settings-configure`:
 
 - `{CHANNEL_ID}` = recorded above
 - `{CONSENT_TYPE}`, `{LANGUAGE}`, and the keyword/prompt values — forward whatever the user supplied; omit what they didn't
 - `{ORG_ALIAS}`
 
-This stage **ensures consent is activation-ready** — it doesn't always write. The Connect insert **auto-seeds** `ConsentType=ImplicitOptIn` plus a default opt-out `MsgChannelLanguageKeyword`, which already satisfies the readiness check. So the leaf's Stage 1 will frequently find the channel *already* ready and return `noop: true` — the expected outcome on a fresh `ImplicitOptIn` channel, not a bug. It performs a **real write only** to upgrade (ExplicitOptIn/DoubleOptIn) or override the seeded keywords/prompts. When the user pre-supplied inputs asking for an upgrade, expect a write and let the leaf prompt for missing values — don't suppress those prompts.
+Pass **only the `consent` facet** here — consent upgrades and keywords given with a consent type are resolved in this stage; the metadata facets (auto-responses, keywords, inactivity) wait for Stage 4.5 so a metadata-deploy failure can't block activation.
+
+The insert auto-seeds `ImplicitOptIn` plus a default opt-out keyword, so `noop: true` is normal on a fresh channel. The leaf writes only to upgrade (ExplicitOptIn/DoubleOptIn) or override the seeded keywords/prompts, and prompts for missing values.
 
 Handle the envelope:
 
 | Leaf envelope | Orchestrator action |
 | --- | --- |
 | `{ok: true, ...}` (including `noop: true`) | Append `"consent"` to `STEPS_RUN` (or `STEPS_SKIPPED` if `noop`). Continue. |
-| `{ok: false, kind: "not-enhanced"}` | Shouldn't happen — these skills only create Enhanced channels. Emit failure with `failedStep: "consent"`. Return. |
-| `{ok: false, kind: "missing-consent-input", hint}` | The user didn't supply a required keyword/prompt for the chosen ConsentType. Emit failure with `failedStep: "consent"` and pass through the `hint`. Return. |
-| `{ok: false, ...}` (any other kind — `channel-patch-failed`, `keyword-record-failed`, `verify-failed`, or an unrecognized envelope) | Emit failure with `failedStep: "consent"` and pass through the leaf's `kind` and message verbatim. Return. |
+| `{ok: false, ...}` (`missing-consent-input`, `not-enhanced`, `channel-patch-failed`, `keyword-record-failed`, `verify-failed`, or anything else) | Emit failure with `failedStep: "consent"`, passing through the leaf's `kind`, message, and `hint` verbatim. Return. |
 
 **→ Continue immediately to Stage 4 in this same response. DO NOT STOP.**
 
@@ -232,49 +240,41 @@ Handle the envelope:
 
 ## Stage 4: Activate (step 4 of 4)
 
-Always run (unless `CURRENT_STATE === "already-active"`, in which case Stage 1 returned early).
+Skip if `CURRENT_STATE === "already-active"` (Stage 1 already added `"activate"` to `STEPS_SKIPPED`).
 
 Invoke `service-de-channel-activate`:
 
 - `{CHANNEL_ID}` = recorded above
 - `{ORG_ALIAS}`
 
-No timeout knobs — activation is a single synchronous PATCH. The leaf does a defensive poll if the server ever returns mid-transition, but the expected path is one round-trip.
-
 Handle the envelope:
 
 | Leaf envelope | Orchestrator action |
 | --- | --- |
-| `{ok: true, isActive: true, ...}` (including `noop: true`) | Record results. Append `"activate"` to `STEPS_RUN`. Continue to Stage 5. |
-| `{ok: false, kind: "no-routing"}` | Unusual (we just set it) — probably a race or permission issue. Emit failure with a hint about the permissions check. Return. |
-| `{ok: false, kind: "no-mcu" \| "channel-missing"}` | Shouldn't happen after successful insert. Emit failure with the leaf's envelope. Return. |
-| `{ok: false, kind: "readiness-failed", errorMessage}` | `validateChannelReadinessOnProvisioning` rejected the PATCH — missing consent (STOP/HELP keyword record). Stage 3.5 should have caught this; if it re-appears, re-run `service-de-channel-settings-configure` for the channel. Emit failure and pass through the resume hint. Return. |
+| `{ok: true, isActive: true, ...}` (including `noop: true`) | Record results. Append `"activate"` to `STEPS_RUN`. Continue to Stage 4.5. |
+| `{ok: false, kind: "no-routing" \| "no-mcu" \| "channel-missing"}` | Unexpected after Stages 2–3 (race or permissions). Emit failure with the leaf's envelope. Return. |
+| `{ok: false, kind: "readiness-failed", errorMessage}` | Missing consent (STOP/HELP keyword record) — Stage 3.5 should have caught it. Emit failure; resume hint: re-run `service-de-channel-settings-configure`. Return. |
 | `{ok: false, kind: "provisioning-error", errorReason, errorDetails}` | Third-party side rejected (Meta `/register` failed, etc.). MCU is now in `Error`. Emit failure and pass through `errorReason`/`errorDetails`. Return. |
+| `{ok: false, kind: "verification-declined" \| "verification-request-failed" \| "verification-failed"}` | WhatsApp OTP verification didn't complete. Emit failure, pass through `errorDetails`/`message`; resume hint: re-run to retry verification. Return. |
 | `{ok: false, kind: "auth" \| "transport"}` | REST call failed at the HTTP layer (401 from `sf` auth, 5xx from the instance). Pass through. Return. |
+
+**→ Continue immediately to Stage 4.5 in this same response. DO NOT STOP.**
+
+---
+
+## Stage 4.5: Configure requested settings (non-blocking)
+
+Skip if `{REQUESTED_SETTINGS}` has no auto-response, keyword, or inactivity items. Otherwise invoke `service-de-channel-settings-configure` once with the requested facets and the user's values, then classify each item as `configured`, `notApplicable`, or `failed`. **Never fail the run here** — the channel is already live, so failures become Stage 5 warnings. **Load `references/requested-settings.md` and follow it** for what to forward, per-type applicability, the classification table, and the Facebook metadata defect.
+
+**→ Continue immediately to Stage 5 in this same response. DO NOT STOP.**
 
 ---
 
 ## Stage 5: Final report
 
-Build the success envelope:
+Build the success envelope (`ok`, `messageType`, `channelId`, `mcuId`, `channelName`, `sessionHandlerId`, `queueName`, `isActive`, `stepsRun`, `stepsSkipped`, `settings`, `totalDurationMs = Date.now() - T0`; exact shape in `references/output-envelopes.md`).
 
-```json
-{
-  "ok": true,
-  "messageType": "{MESSAGE_TYPE}",
-  "channelId": "{CHANNEL_ID}",
-  "mcuId": "{MCU_ID}",
-  "channelName": "{CHANNEL_NAME or inferred}",
-  "sessionHandlerId": "{SESSION_HANDLER_ID}",
-  "queueName": "{QUEUE_NAME}",
-  "isActive": true,
-  "stepsRun": [...],
-  "stepsSkipped": [...],
-  "totalDurationMs": Date.now() - T0
-}
-```
-
-Render to the user as:
+Include `settings` only when `{REQUESTED_SETTINGS}` was non-empty. Render to the user as:
 
 ```text
 Success — {MESSAGE_TYPE} channel '{CHANNEL_NAME}' is live on {ORG_ALIAS}.
@@ -284,7 +284,7 @@ Success — {MESSAGE_TYPE} channel '{CHANNEL_NAME}' is live on {ORG_ALIAS}.
    Total time: {formatted from durationMs}
 ```
 
-If any step was skipped due to resume, the report should make that visible.
+If any step was skipped due to resume, the report should make that visible. With requested settings, add the "Requested settings" block and the failure warning from `references/requested-settings.md` — every Stage 0 item must land in exactly one bucket.
 
 ---
 
@@ -294,12 +294,6 @@ If the orchestrator fails mid-way, the envelope always includes `stateSoFar` des
 
 ---
 
-## Worked examples
-
-For reference traces (fresh WhatsApp run, resume after routing failure, Apple dispatch, unsupported-type rejection), see `references/worked-examples.md`.
-
----
-
 ## Gotchas
 
-Nine known gotchas covering prereq ownership, `MessagingPlatformKey` uniqueness, resume semantics, CSOT-only support, error-classification boundaries, prompt placement, platform-key mapping, wall-clock duration, and the two-query preflight workaround. **When debugging unexpected behavior, load `references/gotchas.md` and follow it.**
+Eleven known gotchas (resume semantics, preflight shape, error classification, dropped settings, the `LiveMessageSetup` prerequisite, and more). **When debugging unexpected behavior, load `references/gotchas.md` and follow it.** For reference traces, see `references/worked-examples.md`.

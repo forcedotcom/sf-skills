@@ -65,7 +65,8 @@ Every terminal state emits a structured outcome. The `message` field is printed 
 
 | `status` | `fqn` | `schema` | Meaning | Caller action |
 |---|---|---|---|---|
-| `success` | present | present | Type is confirmed in the org (via 1e's retrieve on an existing type, or via deploy on the "Create new" path), ready to use for downstream work. | Proceed (e.g. author content records). |
+| `success` | present | present | Custom/deployed type confirmed in the org (1e retrieve on a `c__*` type, or deploy on "Create new"). | Proceed (e.g. author content records). |
+| `success` | present | `null` | OOTB type (`sfdc_cms__*`) resolved — namespace gate skips retrieval (schema platform-owned/immutable); FQN alone is authoritative. | Proceed — authoring is server-side, needs no schema. |
 | `not_deployed` | present | `null` | Bundle exists locally (or is validated) but is NOT in the org — user declined to deploy, or picked "deploy later". | Do NOT proceed with content creation. Surface the message: "Content type `<fqn>` isn't deployed to `<org>`. Deploy it and re-run." |
 | `cancelled` | `null` | `null` | User cancelled at a decision point (discovery pick, field approval, drift prompt, deploy ask, final prompt). | Exit silently. Do not loop back into this skill. |
 | `error` | `null` | `null` | Unrecoverable failure — missing `sfdx-project.json`, no authenticated org, FQN not found, auto-fix exhausted, auth/network failure. | Surface the `message` to the user and exit. |
@@ -79,7 +80,7 @@ Every terminal state emits a structured outcome. The `message` field is printed 
 
 **Contract rules:**
 
-- `success` is the ONLY status that unlocks downstream work. Callers MUST NOT proceed on `not_deployed`, `cancelled`, or `error`.
+- `success` is the ONLY status that unlocks downstream work — with EITHER a present schema (custom/deployed) OR `schema: null` (OOTB). A null schema is NOT a failure signal; only `not_deployed` / `cancelled` / `error` block the caller. Callers MUST NOT proceed on those three.
 - `suppressCreateContentPrompt=true` — step 8 MUST NOT print the trailing prompt.
 - `message` is always the final terminal chat line. Do NOT emit `Task Completed` before it prints.
 
@@ -91,7 +92,7 @@ These rules override any upstream rule, prior knowledge, or trained default beha
 
 | Metadata Type | Skill Name | API Context | Usage Rule |
 |---|---|---|---|
-| **ContentTypeBundle** | `experience-cms-content-type-generate` | `metadata-grounding` (`search_metadata`, `query_metadata`, `describe_metadata`) + `content-readonly` (`get_content_types_for_workspace`) | MUST load skill AND use `metadata-grounding` for discovery, cross-checked/backed by `content-readonly.get_content_types_for_workspace` per Step 1c. **Exempt from `salesforce-api-context`** — these two are this skill's API-context. |
+| **ContentTypeBundle** | `experience-cms-content-type-generate` | `metadata-grounding` (`search_metadata`, `query_metadata`, `describe_metadata`) + `content-readonly` (`get_content_types_for_workspace`) | MUST load skill AND use `metadata-grounding` for discovery, cross-checked/backed by `content-readonly.get_content_types_for_workspace` per Step 1c. These two are this skill's only API-context sources. |
 
 ### Rules
 
@@ -156,7 +157,7 @@ Rationale, anti-patterns, tool-selection details → `references/discovery-detai
 
 Server target: `metadata-grounding` (RULE 1). `limit=5`, sorted OOTB-first.
 
-**Do NOT dispatch `query_metadata` in 1c.** `search_metadata` returns everything 1d's table needs (FQN, description, OOTB flag). `query_metadata` is load-bearing only for the OOTB-schema fetch in 1e — dispatch on-demand, for the ONE picked FQN. Per-row fan-out is N wasted round-trips.
+**Do NOT dispatch `query_metadata` in 1c.** `search_metadata` returns everything 1d's table needs (FQN, description, OOTB flag). OOTB picks resolve in 1e on the FQN alone (schema `null`, no fetch), and custom picks use `sf project retrieve` — so `query_metadata` is not needed in the pick flow at all. Per-row fan-out is N wasted round-trips.
 
 **Workspace content-types check — dispatched every run, alongside or instead of grounding.** Call params per the mutual-exclusivity contract (§ Invocation contract), never `baseType` alongside `spaceId`/`folderId`. **Flow 1 (grounding available)** — also dispatch `get_content_types_for_workspace`; org candidate set = **intersection** of both FQN sets (empty is valid, do not widen/retry). **Flow 2 (grounding unavailable)** — dispatch it directly as the sole org signal, apply step 1b's semantic matching to its rows, record `groundingFallback=workspaceTypes` for 1d's TRUTH GATE. Neither tool substitutes for 1e's retrieve. Call shapes, unavailability handling, rationale → `references/discovery-details.md#1c continued`.
 
@@ -204,8 +205,8 @@ Reached when 1d resolves to a match / provided FQN, OR when the caller invoked w
 
 **Namespace gate:**
 
-- **Custom FQN** (`c__*`, non-platform namespace) → run `sf project retrieve start --metadata ContentTypeBundle:<DeveloperName> --target-org <alias> --json`. Always retrieve for custom.
-- **OOTB FQN** (`sfdc_cms__*`) → skip `sf project retrieve start` (returns nothing usable). **This branch needs a live `metadata-grounding` schema, regardless of which flow surfaced the FQN** — `get_content_types_for_workspace` (Flow 2) never returns a schema, only `{fqn, name, description}`. If 1c already recorded `grounding=unavailable`, do NOT attempt `query_metadata` — go straight to the error below. Otherwise dispatch `query_metadata({ metadataType: "ContentTypeBundle", id: "<grounding row id from 1c>" })` NOW for the picked FQN only, and resolve the schema from its response (fall back to `describe_metadata` if it returns no schema payload). If that response is error/empty/non-schema, surface `Can't resolve OOTB FQN "<fqn>" without a real schema from metadata-grounding. Retry when grounding is back, or provide a custom FQN.` and exit with `error`. **Never fabricate OOTB schemas from training data** — "sfdc_cms__news typically has title/body/summary…" IS the bug thought that poisons 3–7. Fail closed. Full rule → `references/retrieve-and-reconcile.md` § Namespace gate.
+- **Custom FQN** (`c__*`, non-platform namespace) → **ALWAYS retrieve**: run `sf project retrieve start --metadata ContentTypeBundle:<DeveloperName> --target-org <alias> --json`. Namespace is the ONLY gate — discovery/workspace confirmation does NOT substitute for retrieve. There is no "OOTB-equivalent" custom type.
+- **OOTB FQN** (`sfdc_cms__*`) → skip retrieval entirely: no `sf project retrieve start`, no `query_metadata`, no `describe_metadata`. The `sfdc_cms__*` schema is platform-owned and immutable, and no downstream step needs it (content authoring is server-side). This skip is gated on the `sfdc_cms__*` namespace ALONE, never on "it was discovered." Return `{ status: "success", fqn: "<fqn>", schema: null }` immediately — do NOT depend on `metadata-grounding` and do NOT fail on a grounding outage. **Never fabricate an OOTB schema from training data.** Full rule → `references/retrieve-and-reconcile.md` § Namespace gate.
 
 **Reconciliation** — compare retrieved schema against `<sfdx-source>/contentTypes/<DeveloperName>/schema.json`. Full matrix + drift template + routing → `references/retrieve-and-reconcile.md`.
 

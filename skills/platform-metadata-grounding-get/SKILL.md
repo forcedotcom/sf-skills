@@ -6,7 +6,7 @@ metadata:
   - data360-code-extension-generate
   - platform-metadata-discovery-get
   - platform-metadata-retrieve
-  version: "2.2"
+  version: "2.3"
   accessCheck: "CDP.orgHasUnifiedCatalogProvisioned"
   domains:
   - "Platform"
@@ -56,7 +56,7 @@ The Salesforce MCP is shown in Setup today as the Headless360 (H360) MCP Server.
 | Order | Server | How to call |
 |---|---|---|
 | 1 | Metadata Grounding MCP | Call `search_metadata`, `query_metadata`, or `describe_metadata` with the inputs below. |
-| 2 | Salesforce MCP, when the Metadata Grounding MCP is not connected or keeps failing | Call `describe` on the operation id `searchMetadata`, `queryMetadata`, or `describeMetadata`. Do not use `discover`, and do not describe the grounding recipe, which is too large to read. Then call the path `describe` returns with the same inputs. Use `dispatch_readonly` for `searchMetadata` and pass the inputs as query parameters. Use `dispatch` for `queryMetadata` and `describeMetadata`, which are POST calls but only read, and pass the inputs as the JSON body. Do not use other metadata search operations. |
+| 2 | Salesforce MCP, when the Metadata Grounding MCP is not connected or keeps failing | Call `describe` on the operation id `searchMetadata`, `queryMetadata`, or `describeMetadata`. Do not use `discover`, and do not describe the grounding recipe, which is too large to read. Then call the path `describe` returns with the same inputs. Use `dispatch_readonly` for `searchMetadata` and pass `query` and the required `metadataType` as query parameters. Use `dispatch` for `queryMetadata` and `describeMetadata`, which are POST calls but only read, and pass the inputs as the JSON body. Do not use other metadata search operations. |
 | Neither connected | | Grounding is not available. Use the name and label fallback in `platform-metadata-discovery-get`. |
 
 ## When a Call Fails
@@ -73,7 +73,7 @@ A missing tool, an access error, or a 404 is not proof that the metadata does no
 
 | Call | Metadata Grounding MCP | Salesforce MCP |
 |---|---|---|
-| Search | `{results, totalCount}` | Same payload in the response body |
+| Search | Wrapped as `{defaultExc: "<json string>", responseCode}`. Parse `defaultExc` to read `{results, totalCount}`. | Payload in the response body, not wrapped |
 | Describe and query | Wrapped as `{defaultExc: "<json string>", responseCode}`. Parse the `defaultExc` string to read `types`, `typeDetails`, or `records`. | Payload in the response body, not wrapped |
 | Error | An array of `{errorCode, message}` | Same array in the response body |
 
@@ -97,19 +97,19 @@ Type names are case-sensitive, and some differ from Metadata API names.
 
 Most other types use the Metadata API name, for example `ApexClass`, `ApexTrigger`, `Flow`, `PermissionSet`, `PermissionSetGroup`, `Profile`, `ValidationRule`, `RecordType`, `SharingRule`, `FieldPermissions`, `PicklistValue`, and `CustomPermission`.
 
-Call describe with no `requests` only when a type you need is in neither list, and read only the type names. The full response is about 29K characters. Call describe with a `metadataType` only when you need that type's properties.
+Always call `describe_metadata` before searching. If you do not know the relevant catalog type, call it without a `metadataType` and read only the returned type names; the full response is about 29K characters. If you have a likely type, call describe with that `metadataType` to validate it and learn its properties and subtypes.
 
 ## Search
 
 Inputs:
 - `query`: required plain-language phrase. An empty query returns `ILLEGAL_QUERY_PARAMETER_VALUE`.
-- `metadataType`: optional catalog type name.
-- `metadataSubType`: optional single value. It requires `metadataType`.
+- `metadataType`: required catalog type name returned by `describe_metadata`. Search does not support an unfiltered cross-type call.
+- `metadataSubTypes` (Metadata Grounding MCP): array of subtype names returned by describe. Required and nonempty when the type defines subtypes; omit it for types without subtypes. Include all relevant subtypes in one call.
 - `parentIdentifier`: optional, to search inside one object or permission container.
 - `limit`: 1 to 100, default 50. Use 10 to 20.
 
 How to search well:
-1. **Filter by type when you can.** For broad questions, run a few searches on likely types, such as `SObject`, `SObjectField`, and `Flow`, instead of one unfiltered search.
+1. **Start with describe, then search with a type.** Call `describe_metadata` first, then pass a returned `metadataType` on every search. For broad questions, run a few typed searches on likely types, such as `SObject`, `SObjectField`, and `Flow`; include the relevant returned subtypes when the type defines them. Never make an unfiltered search.
 2. **Search inside an object** by passing its returned identifier as `parentIdentifier`. First search `SObject` for the exact object API name, or reuse a field result's `parentIdentifier`, then copy the identifier unchanged. Never pass the raw object API name. This finds fields related to a topic. It is not a full field list.
 3. **Try one more phrasing** with synonyms or likely labels before you report "no match found in the org catalog."
 4. **Trust the service's exposure policy.** Do not infer visibility or support from API-name suffixes. Keep results relevant to the user's requested domain; intentionally exposed Data Cloud metadata must remain available when it is relevant.

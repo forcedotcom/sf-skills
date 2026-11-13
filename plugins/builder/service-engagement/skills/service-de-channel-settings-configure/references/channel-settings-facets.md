@@ -117,7 +117,7 @@ Four fields, **siblings of `<embeddedConfig>`** (top-level, NOT nested inside it
 <endUserIdleTimeOut>5</endUserIdleTimeOut>
 ```
 
-**Per-type scope (verified live):** all four → **MIAW (EmbeddedMessaging) only**. `isAgentMessageResetInactivityEnabled` alone also appears on **Apple** and **Facebook**. **SMS/WhatsApp/LINE carry no inactivity fields** — emit `facet-not-applicable`. On 262-line pods only `endUserIdleTimeOut` deploys (`endInactiveSessionTimeOut`/`endUserIdleAction` land at 264+) — see `gotchas.md`.
+**Per-type scope (verified live):** all four → **MIAW (EmbeddedMessaging) only**. `isAgentMessageResetInactivityEnabled` alone also appears on **Apple** and **Facebook**. **SMS/WhatsApp/LINE carry no inactivity fields** — emit `facet-not-applicable`. Release-gated: on 262-line pods only `endUserIdleTimeOut` deploys (`endInactiveSessionTimeOut`/`endUserIdleAction` are rejected, and `isAgentMessageResetInactivityEnabled` reports `Succeeded` but is silently dropped); all four deploy and persist on 264+ — see `gotchas.md` #15.
 
 ---
 
@@ -149,4 +149,4 @@ Four fields, **siblings of `<embeddedConfig>`** (top-level, NOT nested inside it
 | Inactivity — reset flag (4) | yes | yes | yes | no | no | no |
 | Pre-chat parameters (5) | pre-chat only | no | no | no | no | no |
 
-Derived from a Metadata-API retrieve of real channels of each type. Don't deploy a facet a type doesn't support — the deploy will either fail or silently drop the element.
+Derived from a Metadata-API retrieve of real channels of each type. **Facebook caveat:** the facets are supported, but real metadata updates to Facebook channels currently fail with an opaque error — see `gotchas.md` #16. Don't deploy a facet a type doesn't support — the deploy will either fail or silently drop the element.

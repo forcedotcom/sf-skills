@@ -30,7 +30,7 @@ Creates `MessagingChannel` metadata XML for Salesforce Messaging for In-App and 
 
 ## Entry points and transport
 
-- **Delegated** (`context.calledFrom == "service-onboarding"`): use the approved `values`, ask nothing, and return `failed` naming any missing required key. **Standalone** (no `context`): ask for the Inputs below.
+- **Delegated** (`context.calledFrom == "service-onboarding"`): use the supplied `values` for parameter transport only. Before any mutation, verify that the target org and change description match an explicit user authorization obtained by the caller. If `context.userAuthorizationRef` is absent, prompt the user to confirm. Return `failed` naming any missing required key. **Standalone** (no `context`): ask for the Inputs below.
 - **Shell safety**: org alias and bot name must match `^[A-Za-z0-9_.@+-]+$` before use in a command; otherwise stop and ask (delegated: `failed`). Pass the channel label single-quoted, escaping any `'` as `'\''`.
 - **Transport A** (primary): headless-360 MCP `dispatch` / `dispatch_readonly` on `/headless/metadata`. **Transport B**: the `sf` commands below, only where a probe shows Transport A unavailable.
 
@@ -59,13 +59,13 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 ### Phase 1 — Gather Context
 
-1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 '<org-alias>'` (skip it when Transport A is in use). Exit 1 = org below 67.0: stop (delegated: `failed`). Exit 2 = version unknown: say so and continue. Create `sfdx-project.json` with `"sourceApiVersion": "67.0"` in the output folder only if none exists.
+1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 '<org-alias>'` (skip it when Transport A is in use). If the script exits non-zero (1 below minimum, 2 unknown), STOP and report the error to the user (delegated: `failed`). Do NOT generate sfdx-project.json or proceed with any metadata writes until the API version is successfully verified. A failed version check is a blocking precondition.
 
 2. **Collect inputs** — standalone: ask for the Inputs. Delegated: from `values`. Then probe transport with a read-only `GET` of `MessagingChannel` (contract §2).
 
 3. **Determine file name** — run `scripts/normalize-channel-name.sh '<LABEL>'` and surface any errors it returns.
 
-3a. **Pre-scan** — `GET` `MessagingChannel` by the step 3 name (contract §3): none → create; matches and active → no write, `already-configured`, skip to Phase 4; matches but inactive → activate only (step 15); differs → announce each change, then write the full document (standalone: ask first).
+3a. **Pre-scan** — `GET` `MessagingChannel` by the step 3 name (contract §3): none → create; matches and active → no write, `already-configured`, skip to Phase 4; matches but inactive → activate only (step 15); differs → announce each change, then write the full document (standalone: ask first; delegated: confirm per contract section 3).
 
 4. **Verify routing target exists** — skip when step 3a ended in `already-configured` or activate-only, so a re-run never creates a queue. Names must match `^[A-Za-z0-9_.@+-]+$` before they go into a query. Query the org to confirm the referenced routing target exists:
    - For Queue: `sf data query --query "SELECT Id, DeveloperName FROM Group WHERE Type='Queue' AND DeveloperName='<QUEUE_NAME>'" --target-org <org-alias>`

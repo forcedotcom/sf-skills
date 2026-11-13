@@ -51,6 +51,8 @@ This skill is generic — it works for any Agentforce agent, not just the Help A
 - **Channel identifier** — MessagingChannel `DeveloperName` (Branch A), or the channel name/context (Branches B/C)
 - **Target org alias**
 
+Validate AGENT_DEVELOPER_NAME matches `^[A-Za-z][A-Za-z0-9_]{0,79}$`, and every other input per `references/input-validation.md`, before the first command. On a mismatch, stop and ask; never escape and continue.
+
 ---
 
 ## Workflow
@@ -98,9 +100,9 @@ Never bypass this gate — a mistaken production write here reroutes live custom
 
 ### Phase 2 — Wire inbound routing
 
-#### Live-traffic warning gate (runs before any branch)
+#### Live-traffic warning gate (before any routing change)
 
-Before making any routing change, detect whether the channel already has active inbound routing (Branch A: non-empty `SessionHandlerType`; Branches B/C: any active RoutingFlow assigned to the service channel). If it does, first check whether the user's prompt already answered the timing choice ("do not cut over" / "wire manually" / "review first" → defer silently; "cut over now" / "activate immediately" → proceed silently). Only if the prompt is silent, warn via `AskUserQuestion` and let the user choose **"Re-route now"** or **"Set up, then wire manually"** — and on any ambiguous or no-selection response, default to the deferred path (never to a live re-route). When deferred, set `DEFER_INBOUND_ROUTING=true`, skip the channel-activation step in the chosen branch, and print the manual wiring instructions at the end of Phase 2.
+Before any routing change (Branches A/B: at Phase 2 start; Branch C: after its Step 1 address choice), detect whether the channel already has active inbound routing. If it does, first check whether the user's prompt already answered the timing choice ("do not cut over" / "wire manually" / "review first" → defer silently; "cut over now" / "activate immediately" → proceed silently). Only if the prompt is silent, warn via `AskUserQuestion` and let the user choose **"Re-route now"** or **"Set up, then wire manually"** — and on any ambiguous or no-selection response, default to the deferred path (never to a live re-route). When deferred, set `DEFER_INBOUND_ROUTING=true`, skip every step that binds the channel or routing address to the agent, and print the manual wiring instructions at the end of Phase 2.
 
 If the channel has no existing routing, skip this gate entirely and proceed directly.
 
@@ -217,7 +219,7 @@ write or verification steps here.
 | If the channel already has active inbound routing, honor an explicit defer/cutover intent in the prompt without asking; otherwise warn via `AskUserQuestion` and default to defer on ambiguity | Re-routing takes effect immediately and affects live traffic — queue and RoutingFlow creation always proceed; only the activation step is gated, and the safe default is non-destructive |
 | When deferred, print exact manual wiring instructions before Phase 3 | The operator needs to know precisely what to run when they're ready to cut over |
 | Never modify the MessagingChannel without retrieving the current metadata first | Overwriting without retrieval discards existing settings |
-| Branch A: no RoutingFlow, no agent republish; deploy `sessionHandlerType` + `sessionHandlerQueue` via metadata, then bind `SessionHandlerId` via Data API PATCH | `sessionHandlerAsa` is not accepted by the Metadata API at v67 — the deploy silently drops it, so bot binding must happen via the Data API PATCH after deploy. Bot must be Active before the PATCH |
+| Branch A: no RoutingFlow, no agent republish; deploy `sessionHandlerType` + `sessionHandlerQueue` via metadata, then bind `SessionHandlerId` via Data API PATCH | The Metadata API silently drops `sessionHandlerAsa` at v67, so the bot binds via the PATCH and must be Active first |
 | Branches B/C: always create a new RoutingFlow — never reuse existing org flows | OOB platform flows commonly have `ActiveVersionId: null` and cannot be referenced |
 | Branches B/C: use `routingType: Copilot` and `copilotLabel` — not `QueueBased` | `QueueBased` routes to the queue directly; `Copilot` routes to the agent first with the queue as fallback |
 | Queue `Id` must be queried and embedded in the RoutingFlow XML | The `queueId` parameter requires a hardcoded 18-char record Id — do not leave it empty |
@@ -268,6 +270,7 @@ write or verification steps here.
 
 | File | When to read |
 |---|---|
+| `references/input-validation.md` | Before any command — input grammars, free text |
 | `references/channel-types.md` | Phase 1 — determine SobjectType and routing branch |
 | `references/queue-resolution.md` | Phase 1 — queue lookup, creation, and Id capture |
 | `references/live-traffic-gate.md` | Phase 2 — detection queries, deferred-flow rules, and manual wiring copy for the live-traffic warning gate |

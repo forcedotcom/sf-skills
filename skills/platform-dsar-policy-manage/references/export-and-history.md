@@ -5,18 +5,20 @@ consent, poll-before-download) lives in `SKILL.md`; this file is the mechanics.
 
 ## Resolve the DSR routes at run time
 
-The execute / status / getfile routes are Connect DSR endpoints. Resolve them against the running
-org — do not hardcode a version segment.
-
-```text
-salesforce-api-context   # MCP: resolve the current DSR execute/status/getfile routes + API version
-```
-
-Or discover via `sf`:
+Resolve execute / status / getfile through the routing tool's `describe` and `dispatch` first.
+Only when no routing tool is available, obtain the endpoint paths, methods, inputs, and handle
+contract from the target release's Connect API documentation or a verified contract supplied by
+the user, then discover the org's available API versions via `sf`:
 
 ```bash
 sf api request rest '/services/data' --target-org <alias>        # available API versions
 ```
+
+Select a returned version supported by that contract; keep route placeholders below until verified.
+`/services/data` lists versions, **not DSR routes**. Metadata XML schema assets do not discover
+Connect endpoints either. If a route/handle contract cannot be verified, report the missing
+capability and stop that operation — do not guess paths, probe by executing exports, or fall back
+from an available router. The `DsarPolicyLog` SOQL status/history reads below remain available.
 
 ## Resolve the subject (B0) — before anything else
 

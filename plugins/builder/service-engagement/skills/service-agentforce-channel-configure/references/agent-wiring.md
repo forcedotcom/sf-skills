@@ -87,10 +87,12 @@ If a block for the relevant connection type already exists in the file, **add th
 ## Republish and activate the agent
 
 ```bash
-sf agent validate authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --json
-sf agent publish  authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --json
-echo "Y" | sf agent activate       --api-name {AGENT_DEVELOPER_NAME} --json
+sf agent validate authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
+sf agent publish  authoring-bundle --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
+echo "Y" | sf agent activate       --api-name {AGENT_DEVELOPER_NAME} --target-org "$ORG" --json
 ```
+
+Always pass `--target-org` — without it the CLI acts on the default org, which may not be the org cleared by the Phase 0 write-guard.
 
 ## Verify the wiring round-tripped
 

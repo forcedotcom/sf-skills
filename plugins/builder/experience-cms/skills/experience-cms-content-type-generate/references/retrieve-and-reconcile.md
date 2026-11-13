@@ -4,20 +4,16 @@ Reached when the user picks a match OR provides an FQN in step 1d, OR when the c
 
 ## Namespace gate
 
-- **Custom FQN** (`c__*`, or any non-platform namespace) → run retrieve.
-- **OOTB / platform FQN** (`sfdc_cms__*`) → **skip retrieve**. `sf project retrieve` returns nothing usable for OOTB ContentTypeBundles. Resolve the schema via grounding's `describe_metadata` / `query_metadata` response (i.e. 1c dispatched successfully AND the follow-up describe/query call returned a real schema payload). **This applies even when the FQN was proposed via Flow 2's `get_content_types_for_workspace` match** — that tool confirms a type is supported and returns `{fqn, name, description}`, never a schema, so an OOTB pick still needs a live `metadata-grounding` call here regardless of which flow surfaced it.
-
-  **If ANY of the following is true — grounding was unavailable in 1c, OR `describe_metadata` / `query_metadata` returned an error, empty response, or a payload without a concrete schema — you MUST exit with error. Do NOT proceed.**
+- **Custom FQN** (`c__*`, or any non-platform namespace) → **ALWAYS run retrieve.** Namespace is the ONLY gate. Discovery, workspace confirmation, or "the org already has it" do NOT substitute for retrieve, and there is **no** "OOTB-equivalent" custom category — a `c__*` type is never treated like OOTB. Skipping retrieve for a custom type drops drift detection and is a regression.
+- **OOTB / platform FQN** (`sfdc_cms__*`) → **skip retrieval entirely**: no `sf project retrieve start`, no `query_metadata`, no `describe_metadata`. `sf project retrieve` returns nothing usable for OOTB ContentTypeBundles, and the `sfdc_cms__*` schema is platform-owned and immutable — a caller cannot change it, and no downstream step needs it (content authoring is server-side; the delegated caller ignores `schema`). This skip is gated on the `sfdc_cms__*` namespace ALONE — NEVER because the FQN "was confirmed by discovery" (discovery confirms custom FQNs too; that is not a reason to skip). Return success on the FQN alone, independent of `metadata-grounding` availability:
 
   ```text
-  Can't resolve OOTB FQN "<fqn>" without a real schema from metadata-grounding. Retry when grounding is back, or provide a custom FQN.
+  { status: "success", fqn: "<fqn>", schema: null }
   ```
 
-  Emit `error` outcome per SKILL.md § Invocation contract: `{ status: "error", fqn: null, schema: null, message: "<the line above>" }`. Print the message and stop.
+  This is the pre-existing behavior for OOTB picks — never retrieved, never grounding-dependent. Do NOT fail on a grounding outage, and do NOT dispatch a schema fetch just to populate the 7.5 summary (7.5 auto-skips when `schema` is null).
 
-  **STRICTLY DO NOT fabricate a schema for the OOTB FQN from training data or prior conversations.** You may "know" that `sfdc_cms__news` typically has `title / body / summary / bannerImage / publishedDate`. That knowledge is UNRELIABLE for this org (fields vary by release, by org customizations, by API version) and using it silently poisons every downstream step: Step 3 workspace resolution, Step 4 dry-run, Step 5 `create_content` will fail with `unknown key` or `missing required field` errors that look like backend bugs when they're actually schema hallucinations.
-
-  The correct behavior when `describe_metadata` / `query_metadata` fails is a hard stop with the error message above. NOT "the query call failed, so I'll use the OOTB schema I remember." That IS the bug thought — if you catch it, stop and emit the error outcome.
+  **STRICTLY DO NOT fabricate a schema for the OOTB FQN from training data or prior conversations.** You may "know" that `sfdc_cms__news` typically has `title / body / summary / bannerImage / publishedDate`. That knowledge is UNRELIABLE for this org (fields vary by release, by org customizations, by API version) and emitting it as a real schema silently poisons downstream steps. Return `schema: null` — never a remembered schema.
 
 ## Retrieve (custom only, silent)
 

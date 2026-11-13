@@ -15,7 +15,7 @@ Outputs a JSON report with:
 
 Classification is keyed on the REAL FSM Flow vocabulary (fieldType first,
 extensionName only for ComponentInstance) via scripts/fsm_dc_catalog.py — NOT
-Lightning component names. See reference/fsm-dc-capability-catalog.md.
+Lightning component names. See references/fsm-dc-capability-catalog.md.
 """
 
 import sys

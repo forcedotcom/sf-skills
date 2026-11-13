@@ -58,7 +58,7 @@ Send `false` to allow automatic sharing again.
 1. From Setup → Set Up Education Cloud → Recruitment & Admissions.
 2. Find **Application Materials Protection** and turn it on.
 
-**Before changing — confirm with customer.** UPDATE operation on org metadata. Present for approve / reject / modify before executing.
+**Before changing — confirm with customer.** UPDATE operation on org metadata. Present for approve / reject / modify before executing. Enabling is a standard change; this skill does not disable the protection — see below.
 
 **API call (technical)** — metadata element `enableAppMaterialsProtection` (flat read `IsAppMaterialsProtectionEnabled`):
 ```http
@@ -71,7 +71,7 @@ PUT /services/data/v68.0/headless/metadata
   "xmlRep": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><IndustriesSettings xmlns=\"http://soap.sforce.com/2006/04/metadata\"><enableAppMaterialsProtection>true</enableAppMaterialsProtection></IndustriesSettings>"
 }
 ```
-Send `false` to remove post-submission edit protection.
+Disabling post-submission edit protection weakens a security control. Do NOT send `false` for `enableAppMaterialsProtection` through this skill, and do not accept ordinary customer confirmation as sufficient. If the customer wants it off, stop and tell them to change it themselves in Setup → Set Up Education Cloud → Recruitment & Admissions only after written approval from their organization's security owner, and quote that approval in the run summary.
 
 #### Cold verification (mandatory — both sub-features)
 
@@ -231,15 +231,16 @@ Only report a setting as changed after both the metadata element and its flat `I
 
 #### Step 9 — Set Up Application Permissions and Sharing
 
-**What it does**: Configures OWD (Org-Wide Defaults) for Application object and sets up sharing rules.
+**What it does**: Configures separate Internal and External OWD (Org-Wide Defaults) for the Application object.
 
 **Setup path**:
 1. Navigate to Setup → Sharing Settings → Application
-2. Set OWD to Private or Public Read Only
-3. Create sharing rules to ensure applicants can only see their own records
-4. Assign permission sets to admissions staff with broader access
+2. Set External OWD for the Application object to Private.
+3. Set Internal OWD to the level required by admissions staff (Private or Public Read Only).
+4. Do NOT create sharing rules to restrict access already granted by OWD — sharing rules can only widen access. Verify that the External OWD alone prevents cross-applicant visibility.
+5. Assign permission sets to admissions staff with broader access
 
-**Verification**: Test with applicant user profile to confirm they see only their own application.
+**Verification**: Test with an external applicant user to confirm they see only their own application, then test with an internal admissions user to confirm appropriate staff visibility.
 
 ---
 

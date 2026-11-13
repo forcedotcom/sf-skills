@@ -47,7 +47,7 @@ Retry successful — all 23 BusinessProfiles created
 
 1. **Check if existing record is part of this hierarchy**: Look it up in `existingTree` (loaded in Step 5 via the `ChildAccounts` GET, or a SOQL `/query` — both are routable) — match on name under the intended parent.
 2. **If yes (reused / leftover from previous run)**: Reuse the existing Account ID instead of creating new — this is the normal update-mode path
-3. **If no (different hierarchy)**: Append disambiguating suffix to name (e.g., campus name in parentheses)
+3. **If no (different hierarchy)**: Append disambiguating suffix to name (e.g., campus name in parentheses). **Present the revised name to the user and obtain explicit confirmation before retrying the create.** The Step 6 preview authorization was bound to the original name; the renamed record requires fresh approval.
 
 **Example**:
 ```text
@@ -56,7 +56,8 @@ Retry successful — all 23 BusinessProfiles created
 Found existing record under: North Campus
 Creating under: Main Campus
 
-Resolution: Renaming to "School of Arts & Sciences (Main Campus)"
+Proposed resolution (not applied until the user confirms): rename to "School of Arts & Sciences (Main Campus)"
+→ Present to user: "The name 'School of Arts & Sciences' conflicts with an existing record. Proceed with 'School of Arts & Sciences (Main Campus)' instead? (Yes/No)"
 ```text
 
 ---
@@ -175,11 +176,11 @@ Main Campus has no colleges — is this correct, or should I look for college in
 
 For any unexpected API error:
 
-1. **Capture full error message**: Log complete error text from API response
-2. **Identify which record failed**: Include record Name and hierarchy level in error report
+1. **Capture error category and status code only**: Log the HTTP status code and Salesforce error code (e.g., DUPLICATE_VALUE, FIELD_CUSTOM_VALIDATION_EXCEPTION). Do NOT log the full error body -- it may contain credentials, tokens, or PII echoed in error details.
+2. **Identify which record failed**: Include the record Name and hierarchy level. Do NOT include field values, request bodies, or raw API response text.
 3. **Report status to user**: Show what succeeded so far vs. what failed
 4. **Offer retry or manual fix**: Ask user if they want to retry, skip failed record, or provide corrected info
-5. **Do not fail silently**: Every error must be reported to user with context
+5. **Do not fail silently**: Every error must be reported to the user with the error code, record name, and hierarchy level. Redact any credential-like values, tokens, or full API response bodies before reporting.
 
 **Example error report**:
 ```text
@@ -187,7 +188,7 @@ For any unexpected API error:
 
 Record: Computer Science Department
 Parent: Technical Education (College)
-Error: FIELD_CUSTOM_VALIDATION_EXCEPTION: Name must be unique within College
+Error code: FIELD_CUSTOM_VALIDATION_EXCEPTION (HTTP 400)
 
 Status: 11 of 12 Department Accounts created successfully
 

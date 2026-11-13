@@ -18,6 +18,8 @@ metadata:
   cliTools:
     - tool: ["sf"]
       semver: ">=2.0.0"
+    - tool: ["jq"]
+      semver: ">=1.7.0"
   accessCheck: "(OrgPermissions.EinsteinForEducationCloud) && (OrgPermissions.EinsteinAgentPlatform)"
 ---
 

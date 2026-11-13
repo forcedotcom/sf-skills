@@ -124,7 +124,7 @@ Type-specific inputs:
 {"ok": false, "kind": "verify-failed", "hint": "Connect returned 201 but follow-up SOQL shows no matching channel"}
 ```
 Type-specific failure kinds (`partnership-blocked`, `user-declined`, `waba-manage-failed`,
-`meta-precondition` for WhatsApp; `line-token-invalid` for LINE; `apple-precondition` for Apple;
+`unified-messaging-required`, `meta-precondition` for WhatsApp; `line-token-invalid` for LINE; `apple-precondition` for Apple;
 `oauth-not-complete`, `oauth-failed` for Facebook) are documented in the per-type reference files.
 
 ---

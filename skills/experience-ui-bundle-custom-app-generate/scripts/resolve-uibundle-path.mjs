@@ -25,6 +25,16 @@ if (!APP) {
   process.exit(1);
 }
 
+// appName is interpolated into filesystem paths, so restrict it to a plain
+// bundle name. Rejecting separators and "." blocks traversal (e.g. "../x")
+// out of uiBundles/ and keeps the printed path inside it.
+if (!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(APP)) {
+  console.error(
+    "ERROR: invalid appName (allowed: letters, digits, '_' and '-'; must start with a letter or digit)"
+  );
+  process.exit(1);
+}
+
 const NESTED = path.join("uiBundles", APP, `${APP}.uibundle-meta.xml`);
 const FLAT = path.join("uiBundles", `${APP}.uibundle-meta.xml`);
 

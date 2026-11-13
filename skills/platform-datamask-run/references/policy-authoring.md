@@ -92,14 +92,20 @@ Each `DataMaskPolicyField` carries a `MaskingCategory` plus a `MaskValue` — th
 were wrong; that column does not exist).
 
 - `MaskingCategory` — `library` (pick a value from the built-in library, the common case),
-  `characters` (random characters), or `replaceRandom` (random replacement).
+  `characters` (random characters), `replaceRandom` (random replacement), or `numberRange`.
 - `MaskValue` depends on the category:
-  - `library` — a snake_case library token identifying the value set. Verified tokens include:
-    `first_name`, `last_name`, `email`, `phone`, `street`, `city`, `state`, `postal_code`,
-    `country`, `account_name`, `URL`.
-  - `characters` and `replaceRandom` — the field's Salesforce type (for example `Text`, `Date`).
-    Left empty, the run fails with `UNKNOWN_EXCEPTION` ("Mask Value is required for Replace Random
-    field").
+  - `library` — a snake_case library token identifying the value set. Verified tokens:
+    `first_name`, `last_name`, `full_name`, `name`, `email`, `phone`, `street`, `city`, `state`,
+    `postal_code`, `postal_code_ca`, `country`, `country_abbr`, `ssn`, `account_name`, `URL`.
+    Use the token exactly as written here (the frontend name, not an internal name).
+  - `characters` and `replaceRandom` — the field's **type group**, not its raw type: `Text` for
+    Text, Text Area, Long Text Area, Rich Text Area, Encrypted and Address; `Date` for Date and
+    Date/Time; `Number` for Number, Percent and Currency; Time, Checkbox, Phone, Email and URL are
+    their own groups. A raw type such as `Long Text Area` fails the run with `UNKNOWN_EXCEPTION`
+    ("Mask With Random is not supported for field type Long Text Area"). Left empty, the run fails
+    with `UNKNOWN_EXCEPTION` ("Mask Value is required for Replace Random field").
+  - `numberRange` — no `MaskValue`; set `MinMaskValue` and `MaxMaskValue` instead (the UI defaults
+    are `0` and `100`; Geolocation latitude `-90`/`90`, longitude `-180`/`180`).
 
 ## Choosing the fields from Core's classification
 
@@ -118,22 +124,39 @@ this once per target object, before inserting any `DataMaskPolicyField` row.
 2. **Read the response.** The result is `{status_code, body}`, where `body` is an array with one entry
    per field. Each entry carries `apiName`, `label`, `type`, and `recommendedPiiType` (`null` when Core
    has no recommendation). Any other shape counts as a failed call (step 4).
-3. **Map each recommendation to a treatment.** Core returns tokens such as `last_name`, `street`,
-   `phone`, `characters`, and `replaceRandom`. Compare `recommendedPiiType` case-insensitively with the
-   verified `MaskValue` tokens in "Field treatment columns" above. `characters` and `text` are the same
-   category.
-   - A verified token → `MaskingCategory=library`, `MaskValue=<that token>`.
-   - `characters`/`text` → `MaskingCategory=characters`. `replaceRandom` → `MaskingCategory=replaceRandom`.
-     Both also require `MaskValue` = the field's Salesforce type as Core reports it in `type` (for example
-     `Text`, `Date`). The UI's "Mask With" menu offers `Random Characters` for `characters`.
-   - Any other recommendation (for example `title`, `full_name`, `full_address`, `credit_card`, `ssn`,
-     `password`, `date`, `numberRange`) has no `MaskingCategory` or verified token here. **Report it as
-     unmapped. Do not guess a `MaskValue`.**
+3. **Map each recommendation to a treatment**, the way the UI does. Compare `recommendedPiiType`
+   case-insensitively. Core has already applied the sensitivity feature flag and the field's
+   compliance categories, so do not re-derive the decision from `sensitivity` or `categories`.
+   - A verified library token (see "Field treatment columns") → `MaskingCategory=library`,
+     `MaskValue=<that token>`. This also holds for a Long Text Area or Rich Text Area field (for
+     example a `street` field): the UI hides library values for those types, the backend accepts
+     them.
+   - `characters` → `MaskingCategory=characters`; `replaceRandom` → `MaskingCategory=replaceRandom`.
+     Both need `MaskValue` = the field's **type group** (`Text`, `Date`, ...), never the raw `type`.
+   - `numberRange` → `MaskingCategory=numberRange` with the `MinMaskValue`/`MaxMaskValue` defaults.
+   - Any other recommendation (`title`, `middle_name`, `salutation`, `suffix`, `country_code`,
+     `state_code`, `credit_card`, `sin`, `nino`, `password`, `full_address`, `date`, `datetime`,
+     `picklist`) is one the UI does not apply either. **Leave the field unmasked and report it
+     as unmapped, with its sensitivity, so the user can add it by choice. Do not guess a `MaskValue`.**
    - A field with no `recommendedPiiType` is not masked. List it in the report.
+   - If the object has a subset filter and a recommended field is also the filter field (for example
+     `LastName`), masking it changes the value the filter matches on, so a second run of the same
+     policy matches nothing. Mention this in the report.
+   - If the policy object already exists (its Id starts with `8po`), the UI does not auto-apply
+     recommendations to it. Add only the fields the user asked for and list the other
+     recommendations as suggestions.
 4. **Fall back only when the call fails** (refused, errored, the `project-codey` server is unavailable,
    or the response shape is unrecognized). Then use the static table below and state in the report that
    the field list came from the static table, not from Core. When the call succeeds, Core's answer is
    authoritative. Do not add fields from the static table.
+
+### Custom fields: check access for the masking service
+
+The masking service runs as the org's Platform Integration User. On a test sandbox, custom
+(`__c`) fields were silently left unchanged when that user had no field-level access to them; the
+job still ended `completed` and wrote no per-field detail rows. Standard fields were unaffected.
+After a run that includes custom fields, sample a few records. If a custom field did not change,
+check field access for the integration user before re-running.
 
 ## Fallback treatments (static table)
 

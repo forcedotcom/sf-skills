@@ -35,7 +35,7 @@ Before proceeding, confirm with the user if not already clear:
 ### For Create operations:
 - Which object should the sharing rule apply to? (standard or custom object API name)
 - What type of rule? (criteria-based, role/group-based owner rule, or guest user rule)
-- Who should records be shared with? (role name, group, portal role, or guest user nickname)
+- Who should records be shared with? (role name, public group, portal role, or guest user nickname; a queue can't be shared with)
 - What access level? (Read or Read/Write)
 - For criteria-based rules: what field conditions should match?
 
@@ -55,7 +55,7 @@ Gather or infer before proceeding:
 
 - **Object API name**: The sObject the rule targets (e.g., `Account`, `Property__c`)
 - **Rule type**: One of `sharingCriteriaRules`, `sharingOwnerRules`, or `sharingGuestRules`
-- **Shared-to target**: Role, group, portal role, or guest user community nickname
+- **Shared-to target**: Role, public group, portal role, or guest user community nickname. A queue can't be a shared-to target
 - **Access level**: `Read` or `Edit` (maps to Read-Only or Read/Write)
 - **Criteria** (for criteria/guest rules): Field name, operation, and value for each filter item
 
@@ -92,6 +92,12 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 6. **For Account sharing rules**: the `accountSettings` element is required. Default sub-access levels to `None` unless the user specifies otherwise.
 
 7. **For Guest rules**: the `sharedTo` must use `<guestUser>` with the site guest user's community nickname. Never use `<role>` or `<group>` for guest rules.
+
+**A queue can't be the shared-to target.** A queue is valid only as the `<sharedFrom>` of an owner rule (records owned by the queue). If the user asks to share records with a queue, or the shared-with name doesn't resolve as a role or public group, check whether it is a queue:
+```bash
+sf data query --query "SELECT Id, DeveloperName, Name FROM Group WHERE Type = 'Queue' AND (DeveloperName = '<name>' OR Name = '<name>')" --target-org <org>
+```
+If it is a queue, stop before writing any file: tell the user a sharing rule can't share records with a queue, and offer a public group with the same members or a role instead. Never put a queue in `<sharedTo>`, as `<queue>` or `<group>`: the deploy fails with "field integrity exception: unknown (invalid user or group)".
 
 ### Phase 3 — Execute Operation
 
@@ -159,6 +165,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 - [ ] Does `<fullName>` use PascalCase with no spaces?
 - [ ] Is `<label>` present and human-readable?
 - [ ] Is `<accessLevel>` one of `Read` or `Edit`?
+- [ ] Is `<sharedTo>` free of queues (no `<queue>`, and no queue name in `<group>`)?
 
 ### Criteria Rule Checks
 - [ ] Is `<includeRecordsOwnedByAll>` present (required boolean)?
@@ -172,7 +179,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 
 ### Owner Rule Checks
 - [ ] Does the rule have both `<sharedFrom>` and `<sharedTo>` elements?
-- [ ] Do both use valid `<role>`, `<roleAndSubordinates>`, or `<group>` targets?
+- [ ] Do both use valid `<role>`, `<roleAndSubordinates>`, or `<group>` targets? (`<sharedFrom>` may also use `<queue>`; `<sharedTo>` never can)
 
 ### Edit Operation Checks
 - [ ] Was the edit against a freshly retrieved file (not a stale local copy)?
@@ -203,6 +210,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 |-----------|-----------|
 | One `.sharingRules-meta.xml` file per object | Platform requirement — multiple files cause deployment errors |
 | Guest rules must use `<guestUser>` in `sharedTo` | Using `<role>` or `<group>` causes: "Specify a guest user's nickname for the guestUser field" |
+| A queue can't be a `sharedTo` target | Queues are valid only in `sharedFrom` of owner rules. A queue in `sharedTo` (as `<queue>` or `<group>`) fails at deploy with: "field integrity exception: unknown (invalid user or group)" |
 | Account rules require `<accountSettings>` | Without it: "AccountSettings is required for account sharing rules" |
 | `includeRecordsOwnedByAll` is required on criteria rules | Missing it causes: "Required field is missing: sharingCriteriaRules" |
 | `includeHVUOwnedRecords` is required on guest rules | Missing it causes deployment failure |
@@ -224,6 +232,7 @@ Steps are sequential within each phase. Phase 3 branches by operation type — e
 | Issue | Resolution |
 |-------|------------|
 | Guest rule uses `<role>` instead of `<guestUser>` | Replace with `<guestUser>CommunityNickname</guestUser>` |
+| User asks to share records with a queue | Not supported — don't write the rule. Explain that a queue can only be the owned-by side of an owner rule, and offer a public group with the same members or a role |
 | Account rule missing `accountSettings` | Add `<accountSettings>` with all three access level sub-elements set to `None` |
 | Criteria rule missing `includeRecordsOwnedByAll` | Add `<includeRecordsOwnedByAll>true</includeRecordsOwnedByAll>` |
 | Picklist value mismatch | Query the org for valid values before generating criteria |

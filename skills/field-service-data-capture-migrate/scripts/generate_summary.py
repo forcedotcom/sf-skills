@@ -20,7 +20,7 @@ AGX_NOTE = (
     "buttons; the only action a DC flow can invoke is an `AGX_FLOW` action. "
     "Button-driven FSM logic (`PlainButtons`) has no DC equivalent and is "
     "dropped — redesign it in Flow Builder. "
-    "See `reference/fsm-dc-capability-catalog.md`.")
+    "See `references/fsm-dc-capability-catalog.md`.")
 
 LDS_WARNING = (
     "DataCaptureFlow forms are offline-first and rely on Lightning Data Service "
@@ -28,7 +28,7 @@ LDS_WARNING = (
     "writes must be added to the Briefcase and have correct FLS/sharing, or it "
     "will be unavailable on-device. Verify Briefcase, FLS, and OWD before "
     "activating. See `configure-field-service-mobile` and "
-    "`reference/migration-checklist.md`.")
+    "`references/migration-checklist.md`.")
 
 
 def load_spec(path: str) -> Dict[str, Any]:
