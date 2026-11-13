@@ -120,7 +120,7 @@ All operations use `sf devops project` CLI commands with `--json` output for str
 
 | Issue | Resolution |
 |-------|------------|
-| **No default org set** | Run `sf org display --json` first; if it fails, instruct the user to run `sf org login web --set-default` |
+| **No default org set** | Run `sf org display --json` first; if it fails, instruct the user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command |
 | **User provides project by name, not ID (update)** | Resolve via `scripts/list-projects.sh --resolve "<name>" [target-org]`, or pass `--project name:<name>` to `scripts/update-project.sh` (it resolves internally) |
 | **Tempted to use an MCP listing tool** | A `salesforce_dx` MCP tool (e.g. `list_devops_center_projects`) may be available, but using it bypasses this skill and the `sf devops project list` CLI — always list via `scripts/list-projects.sh` |
 | **DevOps Center not enabled** | If `sf devops project list` errors, the org lacks DevOps Center; instruct the user to provision it in Setup → DevOps Center |
@@ -129,7 +129,7 @@ All operations use `sf devops project` CLI commands with `--json` output for str
 | **Duplicate project name** | Idempotent create check should catch this; return the existing project ID instead of creating a duplicate |
 | **Empty project list** | No projects exist yet; guide the user to create one before setting up work items or pipelines |
 | **Missing update field** | Update fails if none of `--name`, `--description`, or `--is-active` is provided; ensure at least one is passed |
-| **No default org and no `--target-org`** | Commands fail with a NoOrgFound / missing target-org error; set `--target-org <alias>` or `sf config set target-org <alias>` |
+| **No default org and no `--target-org`** | Commands fail with a NoOrgFound / missing target-org error; pass `--target-org <alias>` on every command |
 | **Activate/deactivate passes a value** | `--is-active` is a boolean flag — use `--is-active` or `--no-is-active`, never `--is-active true` |
 
 ---

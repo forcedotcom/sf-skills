@@ -292,4 +292,4 @@ fi
 
 ## Authentication Requirements
 
-All `sf devops project` commands require an authenticated org (`sf org login web` or JWT), DevOps Center enabled (DOCe provisioned), and permission to manage projects. Verify with `sf org display --target-org <alias> --json`; if auth fails, run `sf org login web --set-default --alias <alias>`.
+All `sf devops project` commands require an authenticated org (`sf org login web` or JWT), DevOps Center enabled (DOCe provisioned), and permission to manage projects. Verify with `sf org display --target-org <alias> --json`; if auth fails, run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command.

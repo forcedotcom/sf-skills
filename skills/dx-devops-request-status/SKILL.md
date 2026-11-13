@@ -52,7 +52,7 @@ All operations use `sf devops request status` with `--json` output. This skill i
    ```bash
    sf org display --json
    ```
-   - If it fails, instruct the user to run `sf org login web --set-default --alias <alias>`
+   - If it fails, instruct the user to run `sf org login web --alias <alias>`
    - Pass `-o/--target-org <alias>` on every subsequent command (required unless the `target-org` config variable is set)
 
 2. **Confirm you have a request token.** If the user initiated a promotion in the same session, reuse the request token captured from the `dx-devops-promote` promote response. If no token is available, STOP and ask for it — do NOT guess or fabricate a token.
@@ -119,7 +119,7 @@ All operations use `sf devops request status` with `--json` output. This skill i
 | **`errorDetails` is a string, not an object** | It is escaped JSON (e.g. `"{\"errorType\":\"DEPLOYMENT_FAILURE\",...}"`); pipe through `fromjson` before reading `.errorType`/`.errorMessage` |
 | **Status is operation-prefixed (`PROMOTE_SUCCESS`, `DEPLOY_FAILED`)** | Match on the suffix with globs (`*SUCCESS*`, `*FAILED*`); exact-matching bare `SUCCESS`/`FAILED` misclassifies a prefixed value — a poller would treat `PROMOTE_IN_PROGRESS` as unknown and hang until timeout |
 | **Reporting a still-processing request as complete** | Terminal suffixes are `*SUCCESS*`/`*FAILED*`/`*ERROR*`/`*CANCELED*`; treat `*_IN_PROGRESS`/`*_PENDING`/`*_QUEUED`/`*_NEW`/`*_STARTED` as not done — keep polling or report in-progress |
-| **No default org set** | Run `sf org display --json`; if it fails, instruct the user to run `sf org login web --set-default` |
+| **No default org set** | Run `sf org display --json`; if it fails, instruct the user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command |
 | **Rate-limit / throttle errors while polling** | Increase the interval (back off); never poll below the 5-second floor |
 | **Infinite wait** | Always pass a timeout to `scripts/poll-status.sh`; on timeout, report the last status rather than blocking |
 | **Confusing request failure with skill failure** | A `Failed` request status is a valid result — report it clearly; do not treat it as a skill error or retry blindly |

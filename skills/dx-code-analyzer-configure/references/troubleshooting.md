@@ -254,8 +254,7 @@ engines:
 # Login to org
 sf org login web --alias my-org
 
-# Set as default
-sf config set target-org my-org
+# Pass --target-org on each command instead of setting a global default
 
 # Configure in code-analyzer.yml
 engines:

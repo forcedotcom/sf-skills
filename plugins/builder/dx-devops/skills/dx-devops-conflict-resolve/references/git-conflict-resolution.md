@@ -17,7 +17,7 @@ Resolution direction: **merge the target stage branch INTO the feature branch**.
 If the user supplies a work item ID or subject rather than a branch name, resolve it first. Verify org auth, then look up the work item — the branch field name varies by CLI version, so inspect the record:
 
 ```bash
-# Verify auth (fix with: sf org login web --set-default --alias <alias>)
+# Verify auth (fix with: sf org login web --alias <alias>)
 sf org display --json
 
 # Inspect a work item record to find its branch/source-branch field.

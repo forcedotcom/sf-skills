@@ -245,7 +245,7 @@ sf org display --target-org my-org
 
 | Issue | Solution |
 |-------|----------|
-| `No default org` | Set default: `sf config set target-org my-org` |
+| `No default org` | Pass `--target-org my-org` on each command, or re-authenticate: `sf org login web --alias my-org` |
 | `Session expired` | Re-login: `sf org login web --alias my-org` |
 | `Insufficient permissions` | Org needs API access enabled |
 

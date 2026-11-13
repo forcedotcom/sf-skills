@@ -67,7 +67,7 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
    ```
    - If no default org is set or authentication has expired, instruct the user to run:
      ```bash
-     sf org login web --set-default --alias <alias>
+     sf org login web --alias <alias>
      ```
    - Verify the authenticated org has DevOps Center enabled by attempting to list projects
    - If the user wants to target a specific org, use `--target-org <alias>` on all subsequent commands
@@ -212,7 +212,7 @@ Operations use `sf devops work-item` CLI commands with `--json` output; the API 
 
 | Issue | Resolution |
 |-------|------------|
-| **No default org set** | Run `sf org display --json` first; if it fails, instruct user to run `sf org login web --set-default` |
+| **No default org set** | Run `sf org display --json` first; if it fails, instruct user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command |
 | **User provides work item by subject, not name** | Resolve via: `sf devops work-item list --project-id <id> --json \| jq -r '.result[] \| select(.subject == "<subject>") \| .name'`; then pass the returned name to the update/create-review command |
 | **User provides project by name, not ID** | First run `sf devops project list --json` and filter `.result[]` by `.name` field to find the project ID, then use that ID in the list/create command |
 | **Status update response missing status field** | The CLI doesn't always return the status field in the update response; re-run `sf devops work-item list` filtered to this work item and check `.result[0].status` to verify the transition persisted |
