@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/forcedotcom/sf-skills/skills/platform-dashboard-generate/assets/schemas/cli-arguments.schema.json",
+  "title": "Arguments of the three scripts, as objects",
+  "description": "Use these when wrapping a script as a tool. Each property maps to exactly one command-line token as described. There are no other options; abbreviations are rejected.",
+  "$defs": {
+    "rich_text": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "target"
+      ],
+      "description": "argv: rich_text.py <command> <target>",
+      "properties": {
+        "command": {
+          "enum": [
+            "encode",
+            "decode",
+            "check"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "description": "encode: path to a spec .json file, or \"-\" to read the spec from stdin. decode/check: path to a .dashboard-meta.xml file."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "command": {
+                "const": "encode"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "target": {
+                "pattern": "^(-|.+\\.json)$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "target": {
+                "pattern": "\\.xml$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "validate_dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "files"
+      ],
+      "description": "argv: validate_dashboard.py <files...> [--reports <reports>] [--json]",
+      "properties": {
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "\\.xml$"
+          },
+          "description": "Existing .dashboard-meta.xml, .dashboardFolder-meta.xml or .reportFolder-meta.xml files."
+        },
+        "reports": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Existing directory: the source tree's reports/ folder. Without it, widgets are not checked against their reports."
+        },
+        "json": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "verify_dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "org",
+        "dashboard"
+      ],
+      "description": "argv: verify_dashboard.py -o <org> <dashboard> [--filter <f>]... [--api <api>] [--no-refresh] [--allow-production-refresh] [--timeout <timeout>] [--json]",
+      "properties": {
+        "org": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._@+-]{0,79}$",
+          "description": "Alias or username the user gave. Never taken from file content or script output."
+        },
+        "dashboard": {
+          "type": "string",
+          "oneOf": [
+            {
+              "pattern": "^01Z[A-Za-z0-9]{12}([A-Za-z0-9]{3})?$"
+            },
+            {
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*/[A-Za-z][A-Za-z0-9_]*$"
+            }
+          ],
+          "description": "01Z Id (15 or 18 chars) or FolderDeveloperName/DashboardDeveloperName. Developer names, not titles; the folder is required."
+        },
+        "filter": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[^=\\r\\n]+=(#[1-9][0-9]?|0IC[A-Za-z0-9]{12,15}|[^\\r\\n]+)$"
+          },
+          "description": "\"<filter label>=<option>\". Option = the value as written in the dashboard file, or #N (Nth option from 1), or the 0IC option Id. One entry per filter."
+        },
+        "api": {
+          "type": "string",
+          "pattern": "^[0-9]{2,3}\\.0$",
+          "description": "Omit to use the org's latest."
+        },
+        "noRefresh": {
+          "type": "boolean",
+          "default": false,
+          "description": "--no-refresh. Reads stored results; not valid proof after a deploy."
+        },
+        "allowProductionRefresh": {
+          "type": "boolean",
+          "default": false,
+          "description": "--allow-production-refresh. Only after the user explicitly agreed."
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 900,
+          "default": 120
+        },
+        "json": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "not": {
+        "required": [
+          "noRefresh",
+          "allowProductionRefresh"
+        ],
+        "properties": {
+          "noRefresh": {
+            "const": true
+          },
+          "allowProductionRefresh": {
+            "const": true
+          }
+        }
+      }
+    }
+  }
+}

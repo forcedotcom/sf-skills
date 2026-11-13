@@ -1,6 +1,6 @@
 ---
 name: platform-report-generate
-description: "Use when users create, generate, or validate Salesforce Lightning Report metadata (.report-meta.xml) — tabular, summary, matrix, or joined reports with columns, groupings, filters, charts, cross-filters, buckets, formulas, or time-frame filters. Triggers on \"create a report\", \"build a report\", \"add a chart\", or .report-meta.xml deploy errors. Do NOT trigger for Custom Report Type metadata (use platform-custom-report-type-generate), dashboards, list views, running reports in the UI, or SOQL."
+description: "Use when users create, generate, or validate Salesforce Lightning Report metadata (.report-meta.xml) — tabular, summary, matrix, or joined reports with columns, groupings, filters, charts, cross-filters, buckets, formulas, or time-frame filters. Triggers on \"create a report\", \"build a report\", \"add a chart\", or .report-meta.xml deploy errors. Do NOT trigger for Custom Report Type metadata (use platform-custom-report-type-generate), dashboards (use platform-dashboard-generate), list views, running reports in the UI, or SOQL."
 metadata:
   version: "1.0"
   domains: ["Platform"]
