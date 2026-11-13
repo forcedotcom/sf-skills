@@ -132,4 +132,4 @@ sf org delete scratch --target-org <alias> --no-prompt --json
   AUTO MODE, STATE A/B, batch create, and definition-file authoring
 - `definition_file_options.md` — features, settings, and definition-file schema
 - `edition_types.md` — edition selection and the CLI-flag-vs-definition-file format distinction
-- `snapshot_usage.md` — using snapshots in definition files and post-snapshot workflow
+- `dx-org-snapshot-manage` skill — create/check/list/delete a snapshot before referencing it here; this file only covers consuming an existing, `Active` snapshot via `--snapshot`/the `snapshot` definition-file field
