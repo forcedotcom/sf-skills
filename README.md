@@ -69,6 +69,26 @@ sf-skills/
 | **Codex — Salesforce Development plugin** | Follow [Codex setup and requirements](plugins/builder/salesforce-development/README.md#codex-lifecycle-support); use a release containing the Codex manifests and Codex CLI 0.145.0 or later |
 | **OpenCode, Claude Code, Codex, Cursor, [more](https://agentskills.io/) — standalone skills** | `npx skills add forcedotcom/sf-skills` |
 
+### Standalone skills: install footprint
+
+`npx skills add forcedotcom/sf-skills` installs into your **current project** by default — every selected skill lands in the project's agent folders (for example `.agents/skills/` and `.claude/skills/`). Installing all skills can add more than 100 MB of untracked files, and a routine `git add -A` will commit them to your repository.
+
+To keep them out of your repository, do one of the following:
+
+- Install at the user level instead: `npx skills add forcedotcom/sf-skills -g`
+- Install only the skills you need: `npx skills add forcedotcom/sf-skills --skill <name>` (run with `--list` to see names)
+- Ignore the install folders in your project's `.gitignore`:
+
+  ```gitignore
+  # Skills installed by `npx skills add`
+  .agents/skills/
+  .claude/skills/
+  ```
+
+  Adjust the paths to the agent folders the installer created in your project.
+
+**Prerequisites for script-backed skills.** Many skills, including the `dx-devops-*`, `dx-org-*`, and `service-omni-*` skills, run Bash scripts or use `jq`. Install `jq` and make sure a Bash shell is available to your agent. On Windows, use Git Bash or WSL and install `jq` there.
+
 ## 🔌 Plugins
 
 Plugins bundle skills with other components that the coding client installs and loads together. The Salesforce Development plugin provides shared workflows for building, testing, and deploying on the Salesforce Platform, with client-specific commands, hooks, and MCP configuration. Claude Code agents and hooks aren't automatically available in other clients. Specialized builder plugins add capabilities for areas such as Agentforce, code quality, LWC, and React development.
