@@ -2,6 +2,7 @@
 name: platform-environment-validate
 description: "Validate and configure the local Salesforce development environment. Runs a prerequisite scan across required tools with per-tool status and offers to install or update missing items. Use when the user asks to 'check my setup', 'validate tools', 'verify prerequisites', 'am I set up correctly', or reports a tool is missing or not working. DO NOT TRIGGER for org auth (/salesforce-development:login), deployment problems (platform-metadata-deploy), or status checks (/salesforce-development:status)."
 metadata:
+  internal: true
   domains: ["Platform"]
   relatedSkills: ["platform-metadata-deploy"]
   cliTools:
@@ -21,6 +22,8 @@ allowed-tools:
 # Validating: Salesforce Development Environment
 
 Validate all required prerequisites and surface a clear, actionable status report. This skill is on-demand — it does not run automatically on session start. Run it explicitly to check or repair your local setup.
+
+**Plugin required.** This skill runs commands that ship with its plugin, and a standalone `npx skills add` install doesn't include them. If one of those commands isn't found, or `CLAUDE_PLUGIN_ROOT` is empty, tell the user this skill needs its plugin installed. Don't improvise a replacement for the command. Where a step says what to do when its command fails, do that.
 
 ## Phase 1: Prerequisite Scan
 

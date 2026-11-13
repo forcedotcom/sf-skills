@@ -3,6 +3,8 @@ name: platform-lsp-integrate
 description: "Reference/contract for the Salesforce LSP MCP tools and unavailability handling. Use when asking how to use the LSP, which tools exist, what apex.diagnostics / validate_soql / complete_soql do, why a tool errors with lsp_disabled, no_apex_workspace, or no_org_connected, or how to debug/disable it. DO NOT TRIGGER for editing Apex/LWC/metadata (platform-apex-generate), deploys (platform-metadata-deploy), or SOQL authoring (platform-soql-query); scoped to LSP-layer/MCP-tool questions only."
 allowed-tools: Bash Read mcp__plugin_salesforce-development_salesforce-lsp__lsp_health
 metadata:
+  internal: true
+  domains: ["Platform"]
   mcpTools:
     # Native salesforce-lsp server tool ID (the bundled LSP host registers it
     # dotted as lsp.health). In allowed-tools it appears in Claude Code's
@@ -27,6 +29,8 @@ exposes their semantic capabilities as MCP tools. This skill is the **contract**
 other skills follow when they call those tools, and the answer to "how do I use
 the Salesforce LSP?" — what each tool does, how to read its result, what every
 error code means, and how to fall back when the host is absent.
+
+**Plugin required.** This skill runs commands that ship with its plugin, and a standalone `npx skills add` install doesn't include them. If one of those commands isn't found, or `CLAUDE_PLUGIN_ROOT` is empty, tell the user this skill needs its plugin installed. Don't improvise a replacement for the command. Where a step says what to do when its command fails, do that.
 
 This is a documentation/reference skill. It does not author or deploy code; it
 tells you (and other skills) how to drive the LSP tools correctly.

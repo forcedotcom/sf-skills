@@ -116,8 +116,9 @@ Two properties are load-bearing and easy to erode by accident during future edit
   command or file path as the task; terms such as `project`, `source`, or `app` otherwise create
   plausible but false cross-product matches.
 - **Only the user's own words are matched.** `UserPromptSubmit` strips host-injected context before
-  any decision or score: IDE open-file/selection/diagnostic notices, `<task-notification>` and
-  `<system-reminder>` blocks. The surfaces then read three views of that text:
+  any decision or score: IDE open-file/selection/diagnostic notices, `<task-notification>`,
+  `<system-reminder>`, subagent hand-back (`<agent-message>`) and Claude in Chrome guide
+  (`<browser_instruction>`) blocks. The surfaces then read three views of that text:
   - *Decisions* (confirm, install, decline) read the whole host-stripped prompt, unbounded, so
     selected README text or a task notification that says "install X" can never confirm an install,
     while a typed "yes install it" next to an IDE notice still does. A prompt that is empty after
@@ -285,7 +286,9 @@ first-occurrence high match → `emit(..., decision="deny")`. Medium/repeated ma
 Other catalog consumers (SessionStart hints, UserPromptSubmit, flow promotion, explicit
 `cmd_plugin_match`) render/open proposals, never deny a tool call. The shared matcher guard and
 the pre-truncation marker close both direct and ledger-mediated multilingual paths. Installed
-skill ownership, dispatch suppression, and enforced installed-skill gates are unchanged.
+skill ownership and dispatch suppression are unchanged. Enforced installed-skill gates keep their
+default; the `skills_first` mode can downgrade them, but never this tier-2 deny or the
+install-control checks.
 Abstention may miss useful suggestions, including mixed English/product requests or an English
 request with a non-ASCII filename/URL (eligibility precedes incidental-token removal); it does not
 assert that no plugin can help. Translation and multilingual catalog expansion remain out of scope.

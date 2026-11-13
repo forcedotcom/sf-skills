@@ -7,6 +7,23 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.8.0] — 2026-11-13
+
+### Added
+
+- Skills-first enforcement can now be downgraded. Set `SF_PLUGIN_SKILLS_FIRST` (or the **Skills-first enforcement** plugin option) to `advisory` to warn instead of blocking raw `sf data query`, `sf project retrieve`, `sf apex run test` and `sf project generate manifest`, or to `off` to silence skills-first advice. The default stays `enforce`. Session start shows a one-line notice naming its source (the environment variable or the plugin option) when the mode is not `enforce` (not in `off` UI mode), and the Codex startup banner shows it for the environment variable. The block message now says a skill dispatch resets after `/clear` or compaction. ([sf-skills#417](https://github.com/forcedotcom/sf-skills/issues/417), reported by [@raufeisen](https://github.com/raufeisen))
+
+### Changed
+
+- Resuming a session with `claude --resume` now keeps the skills-first skills Claude already loaded in that session, so their raw `sf` commands are no longer blocked again right after the resume. Starting a new session, `/clear` and compaction still reset it, and only skills loaded by their `salesforce-development:`-qualified name count. ([sf-skills#417](https://github.com/forcedotcom/sf-skills/issues/417), reported by [@raufeisen](https://github.com/raufeisen))
+
+### Fixed
+
+- Standalone `npx skills add forcedotcom/sf-skills` installs no longer include `platform-destructive-deploy`, `platform-environment-validate`, `platform-capability-search` and `platform-lsp-integrate`, which run commands that ship only with the plugin. Name one with `-s` to install it anyway. ([sf-skills#370](https://github.com/forcedotcom/sf-skills/issues/370), reported by [@dmgerow](https://github.com/dmgerow))
+- `platform-destructive-deploy` now asks for production confirmation when the deploy gate is missing or can't confirm the org type (`unknown`, including when Python 3 isn't found), instead of continuing as if the org weren't production. ([sf-skills#370](https://github.com/forcedotcom/sf-skills/issues/370), reported by [@dmgerow](https://github.com/dmgerow))
+- On Windows, hooks no longer open visible `cmd.exe` console windows when a session starts or ends (or on `/clear`). Salesforce CLI calls made by the hooks and by the detached telemetry sender now start without a console window. ([sf-skills#412](https://github.com/forcedotcom/sf-skills/issues/412), reported by [@nvuillam](https://github.com/nvuillam), fix contributed in [sf-skills#413](https://github.com/forcedotcom/sf-skills/pull/413))
+- Plugin recommendations no longer read subagent hand-backs or the Claude in Chrome guide as your words. These host messages could trigger a recommendation you did not ask for, or a denied Write, and the guide could push your own request out of what was matched. ([sf-skills#363](https://github.com/forcedotcom/sf-skills/issues/363), reported by [@Z-kondokazuhiro](https://github.com/Z-kondokazuhiro))
+
 ## [2.7.0] — 2026-11-06
 
 ### Added

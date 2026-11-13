@@ -25,6 +25,28 @@ saved `compact` preference keeps reduced output rather than reverting to the ful
 commands (such as `/salesforce-development:status` and `/salesforce-development:discover`), safety
 advisories/gates, failures, and install guidance remain available in every mode.
 
+## Skills-first enforcement
+
+Four raw `sf` operations (`sf data query`, `sf project retrieve`, `sf apex run test`,
+`sf project generate manifest`) are blocked until their owning skill runs. Set
+`SF_PLUGIN_SKILLS_FIRST` or the **Skills-first enforcement** plugin option to change that.
+
+| Mode | Effect |
+|---|---|
+| `enforce` (default) | Blocks the four raw operations until the owning skill is dispatched; other raw edits get an advisory. |
+| `advisory` | Warns instead of blocking; the raw call runs. Other advisories are unchanged. |
+| `off` | Silent: no block and no advisory for installed-skill matches. |
+
+Precedence: the environment variable, then the plugin option, then `enforce`. An invalid
+value resolves to `enforce`, and an invalid environment value does not fall through to the
+option. A skill dispatch is forgotten at every session start, including `/clear`, compaction
+and resume, so the next raw call is checked again. `advisory` is the recommended downgrade.
+`off` gives up the nudges. The standalone plugin install guard, the tier-2 catalog deny and the
+deploy/delete gates are unchanged in every mode.
+When the mode is not `enforce`, session start shows a one-line notice naming what set it
+(`set by SF_PLUGIN_SKILLS_FIRST` or `set by plugin option`; hidden when the presentation
+mode is `off`).
+
 ## Codex configuration and activation
 
 Codex uses the packaged `hooks/codex-hooks.json` and fourteen command projections.
@@ -38,6 +60,11 @@ Turning presentation off does not disable primary-session routing instructions o
 gates. Existing runtime environment controls, including `SFDX_LSP_DEPLOY_GATE` and telemetry
 opt-outs (`DO_NOT_TRACK=true` or `SF_DISABLE_TELEMETRY=true`), remain available. Do not assume
 that a setting accepted by Claude’s configuration UI is transported by Codex.
+Codex never blocks on skills-first; `SF_PLUGIN_SKILLS_FIRST=off` in the launch environment
+silences its skills-first advice, including the unverifiable-patch-path advisory, and the
+Codex startup banner shows the same notice. Codex does not read the Claude `skills_first` option.
+Codex runs plugin hooks in its app-server daemon, which keeps the environment it started with:
+after changing `SF_PLUGIN_SKILLS_FIRST`, quit every Codex session so the daemon restarts.
 
 ### Plugin recommendation sensitivity in Codex
 

@@ -32,7 +32,8 @@ def startup_surface(root: Path) -> str:
     return sf_context.render_degraded_banner(
         org_group, project=project, stats=stats, git_line='git status unprobed',
         state=state, notice_lines=[], candidate=candidate,
-        sensitivity_lines=sf_context._plugin_match_sensitivity_notice_lines())
+        sensitivity_lines=(sf_context._plugin_match_sensitivity_notice_lines()
+                           + sf_context._skills_first_notice_lines(include_option=False)))
 
 
 def main():

@@ -100,6 +100,8 @@ def contained_path(root: Path, name: str) -> Path:
 
 
 def advice(matches: list[tuple[str, str]]) -> dict:
+    if context._skills_first_mode(include_option=False) == 'off':
+        return {'continue': True}
     hints = []
     for skill, reason in matches:
         if skill == 'the matching platform metadata skill':
@@ -146,6 +148,11 @@ def pre_edit(payload: dict) -> dict:
                     matches.append(original_match)
         return advice(matches)
     except (KeyError, OSError, TypeError, ValueError):
+        try:
+            if context._skills_first_mode(include_option=False) == 'off':
+                return {'continue': True}
+        except Exception:
+            pass
         return {'continue': True, 'hookSpecificOutput': {
             'hookEventName': 'PreToolUse', 'additionalContext':
             'Salesforce edit advice unavailable: the patch paths or project cwd could not '

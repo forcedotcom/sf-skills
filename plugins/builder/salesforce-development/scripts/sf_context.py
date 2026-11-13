@@ -226,6 +226,7 @@ def run_result(cmd: list, timeout: Optional[int] = None) -> RunResult:
             timeout=timeout,
             shell=False,
             env=_shim.no_color_env(),
+            **_shim.no_window_kwargs(),
         )
     except subprocess.TimeoutExpired as exc:
         return RunResult(False, "", None, "timeout", exc.stderr or "")
@@ -1428,6 +1429,45 @@ def _ui_mode() -> str:
     return raw if raw in _UI_MODES else "full"
 
 
+_SKILLS_FIRST_MODES = frozenset({"enforce", "advisory", "off"})
+
+
+def _skills_first_mode_with_source(include_option: bool = True) -> tuple:
+    """Resolved skills-first mode and its source ("env" | "option" | "default").
+
+    SF_PLUGIN_SKILLS_FIRST wins; CLAUDE_PLUGIN_OPTION_SKILLS_FIRST is read only when
+    the env var is unset or blank. Any invalid value resolves to "enforce", so a
+    typo never drops the guard. An invalid env value does not fall through."""
+    raw = os.environ.get("SF_PLUGIN_SKILLS_FIRST", "").strip()
+    source = "env"
+    if not raw and include_option:
+        raw = os.environ.get("CLAUDE_PLUGIN_OPTION_SKILLS_FIRST", "").strip()
+        source = "option"
+    mode = raw.lower()
+    if not raw or mode not in _SKILLS_FIRST_MODES:
+        return "enforce", "default" if not raw else source
+    return mode, source
+
+
+def _skills_first_mode(include_option: bool = True) -> str:
+    return _skills_first_mode_with_source(include_option)[0]
+
+
+def _skills_first_notice_lines(include_option: bool = True) -> list:
+    """One visible line when the mode is not enforce, else []. Never raises.
+
+    Names the source that set the mode. Codex passes include_option=False: it
+    reads the environment only."""
+    try:
+        mode, source = _skills_first_mode_with_source(include_option)
+        if mode == "enforce":
+            return []
+        by = "SF_PLUGIN_SKILLS_FIRST" if source == "env" else "plugin option"
+        return [_clip_cells(f"Skills-first: {mode} (default enforce) — set by {by}", 78)]
+    except Exception:
+        return []
+
+
 # --- Uninstalled-plugin recommendation sensitivity (W-23856691 follow-up) ----
 # "off" is just the most conservative point on one sensitivity scale, not a
 # separate switch -- so disable and tune share this single resolved value.
@@ -2081,7 +2121,8 @@ def render_session_banner(
          owns logo-once, so it passes show_logo=False on a repaint.
       2. plugin summary (`render_plugin_summary`) — installed & available counts,
          the one printing of those facts. Followed, when given, by `sensitivity_lines`
-         (the non-default plugin-recommendation sensitivity notice), muted.
+         (the non-default plugin-match sensitivity notice and the skills-first mode
+         line, shown only when the mode is not enforce), muted.
       3+4. org band + project band (`org_group`/`project_group`) — the telemetry
          notice, when due, leads this rule-region; the three share single dividers.
       5. journey nudge (`_render_nudge_inline`, include_context=False) — one
@@ -2213,8 +2254,9 @@ def render_degraded_banner(org_group: list, project: Optional[dict] = None,
 
     `notice_lines` (optional) is the one-time telemetry notice's plain text; when given
     it leads the rule-region, above the org line. Passed on the visible channel only.
-    `sensitivity_lines` (optional) is the non-default plugin-match sensitivity notice; it
-    rides under the plugin summary, muted."""
+    `sensitivity_lines` (optional) holds the non-default plugin-match sensitivity notice and
+    the skills-first mode line (shown only when the mode is not enforce); they ride under
+    the plugin summary, muted."""
     # The splash (SessionStart + scaffold) shows the project header only — the
     # code-inventory rows and git line are dropped mid-dev-flow (owner direction);
     # /status keeps the full inventory via its own show_stats=True call.
@@ -2389,7 +2431,8 @@ def _detect_update_notice() -> Optional[dict]:
         return None
     try:
         result = subprocess.run(
-            argv, capture_output=True, text=True, timeout=timeout, shell=False
+            argv, capture_output=True, text=True, timeout=timeout, shell=False,
+            **_shim.no_window_kwargs(),
         )
     except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
         return None
@@ -2865,10 +2908,16 @@ _PROMPT_TEXT_MAX_BYTES = 2048
 _PROMPT_TEXT_CONTROL_PATTERN = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 # Context the host wraps around (or sends instead of) the user's words: the IDE
 # extension's open-file/selection notices, background task notifications, system
-# reminders. An unclosed block runs to the end of the prompt. The attribute run is
+# reminders, subagent hand-backs (agent-message), the Claude in Chrome guide
+# (browser_instruction). An unclosed block runs to the end of the prompt. A block
+# ends at its first closer. Claude Code escapes a closer quoted inside a hand-back
+# report (the `<` becomes `<\`, so it arrives as `<\/agent-message>`), so a quoted
+# tag does not end the frame early. Matching the last closer instead would drop
+# words typed between two hand-backs. The attribute run is
 # bounded so many unterminated openings in a pasted log stay linear.
 _PROMPT_HOST_BLOCK_PATTERN = re.compile(
-    r"<(ide_opened_file|ide_selection|ide_diagnostics|system-reminder|task-notification)(?=[\s/>])[^>]{0,256}>"
+    r"<(ide_opened_file|ide_selection|ide_diagnostics|system-reminder|task-notification"
+    r"|agent-message|browser_instruction)(?=[\s/>])[^>]{0,256}>"
     r"(?:.*?</\1\s*>|.*\Z)",
     re.DOTALL,
 )
@@ -3514,9 +3563,11 @@ def _dispatched_skills(context: Optional[PromptContext]) -> set[str]:
 # resolvable; absent host prompt context in a healthy runtime gets an advisory.
 #
 # Compaction may truncate or drop re-attached skill content while keeping the same
-# session_id, so every SessionStart (compact/clear/resume/fork/...) discards this
-# session's ledger. `/rewind` fires no hook, so a rewind to before the Skill call
-# keeps the ledger until the next SessionStart. The reader is strict: any missing,
+# session_id, so every SessionStart except resume (startup/clear/compact/fork, or an
+# empty or unknown source) discards this session's ledger. resume restores the
+# transcript, skill content included, under the same session_id, so it keeps the
+# ledger. `/rewind` fires no hook, so a rewind to before the Skill call keeps the
+# ledger until the next clearing SessionStart. The reader is strict: any missing,
 # linked, foreign-owned, or unexpected entry reads as "nothing dispatched", which is
 # today's deny.
 _PLUGIN_SKILL_PREFIX = "salesforce-development"
@@ -4571,10 +4622,13 @@ def cmd_detect() -> int:
     payload = _read_hook_payload()
     source = payload.get("source") or payload.get("matcher") or ""
     session_id = payload.get("session_id") or payload.get("sessionId") or ""
-    # Any SessionStart is a context boundary the session-scoped skills-first ledger
+    # A SessionStart is a context boundary the session-scoped skills-first ledger
     # cannot vouch for (compaction keeps session_id but may drop skill content), so
-    # the next enforced raw call re-requires its skill. Before every early return.
-    _clear_session_dispatched_skills(session_id)
+    # the next enforced raw call re-requires its skill. resume is the exception: it
+    # restores the transcript, skill content included, under the same session_id.
+    # Clear before every early return below.
+    if source != "resume":
+        _clear_session_dispatched_skills(session_id)
 
     # After a context compaction the SessionStart hook re-fires with
     # source="compact" (PreCompact cannot inject context — it's block-only — so
@@ -4650,6 +4704,7 @@ def cmd_detect() -> int:
     # show on the next full-banner session instead.
     notice_lines = _telemetry_notice_lines() if stats is not None else []
     sensitivity_lines = _plugin_match_sensitivity_notice_lines() if ui_mode != "off" else []
+    skills_first_lines = _skills_first_notice_lines() if ui_mode != "off" else []
 
     if not target:
         state = _derive_journey_state(root, has_project=True, target="",
@@ -4670,7 +4725,7 @@ def cmd_detect() -> int:
         msg = render_degraded_banner(
             org_group, project=project, stats=stats, git_line=git_line, state=state,
             notice_lines=notice_lines, candidate=candidate,
-            sensitivity_lines=sensitivity_lines) if stats is not None else ""
+            sensitivity_lines=sensitivity_lines + skills_first_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org="", displayed_org="",
             project_present=True, candidate=candidate,
@@ -4695,7 +4750,7 @@ def cmd_detect() -> int:
         msg = render_degraded_banner(
             org_group, project=project, stats=stats, git_line=git_line, state=state,
             notice_lines=notice_lines, candidate=candidate,
-            sensitivity_lines=sensitivity_lines) if stats is not None else ""
+            sensitivity_lines=sensitivity_lines + skills_first_lines) if stats is not None else ""
         context = _session_model_context(
             project=project, state=state, configured_org=target,
             displayed_org=target, project_present=True, candidate=candidate,
@@ -4707,6 +4762,8 @@ def cmd_detect() -> int:
     )
     if ui_mode == "plain" and visible is not None and sensitivity_lines:
         visible = f"{visible}\n{_clip_cells(sensitivity_lines[0], 80)}"
+    if ui_mode == "plain" and visible is not None and skills_first_lines:
+        visible = f"{visible}\n{_clip_cells(skills_first_lines[0], 80)}"
     # Slot 7 — the 🧩 plugin recommendation — folds into this single emit, collapsing
     # what used to be a second SessionStart hook (session_plugin_hint.py) with its own
     # "SessionStart:… says:" wrapper. It rides ONLY the full banner: plain/off
@@ -6866,9 +6923,10 @@ def cmd_post_bash() -> int:
 # effectiveness reviews (complex-object-superbadge, apex-callouts-superbadge)
 # showed a fluent agent routes straight to raw `sf`/metadata edits and the
 # directive has ~0 behavioral effect. This PreToolUse advisory re-surfaces the
-# owning skill at the point of bypass. It is WARN-ONLY by design — it NEVER
-# blocks (hooks observe-and-advise, per CLAUDE.md); it emits `additionalContext`
-# nudging a skills-first check, then lets the tool run.
+# owning skill at the point of bypass. Most matches are
+# warn-only (`additionalContext`, then the tool runs). The four
+# `_ENFORCEABLE_SKILLS` owners deny by default; `SF_PLUGIN_SKILLS_FIRST` /
+# userConfig `skills_first` downgrade that to `advisory` or silence it (`off`).
 
 # Ordered (pattern, skill, why) rules. First match wins: Edit/Write file paths are
 # matched against the metadata-XML patterns, Bash commands against the `sf`
@@ -6901,12 +6959,13 @@ def _has_no_owning_skill(path: str) -> bool:
     return any(path.endswith(suffix) for suffix in _OWNERLESS_META_SUFFIXES)
 
 
-# Enforcement allow-list: only these skills are BLOCKED (deny + redirect). Each
-# owns a 1:1 bypass-prone `sf` op, so a deny is satisfiable by dispatching it (a
-# subagent with no resolvable prompt context gets the advisory instead, since no
-# dispatch could be recorded to clear it). Everything else `_skills_first_match`
-# returns stays warn-only, so a hard deny can never name a nonexistent skill or
-# block a step with no single owner.
+# Enforcement allow-list: only these skills are BLOCKED under the default
+# `enforce` mode (deny + redirect). Each owns a 1:1 bypass-prone `sf` op, so a
+# deny is satisfiable by dispatching it (a subagent with no resolvable prompt
+# context gets the advisory instead, since no dispatch could be recorded to
+# clear it). Everything else `_skills_first_match` returns stays warn-only, so a
+# hard deny can never name a nonexistent skill or block a step with no single
+# owner.
 _ENFORCEABLE_SKILLS = frozenset({
     "platform-soql-query",
     "platform-metadata-retrieve",
@@ -7151,6 +7210,10 @@ def cmd_skills_first_advisory() -> int:
     match — the generic metadata fallback and Apex/declarative authoring nudges —
     is WARN-ONLY (emits `continue: true`), so a deny can never point at a skill
     that does not exist or block a step with no single owning skill.
+    This applies under the default `enforce` mode only; `advisory` turns the
+    deny into the warn-only advisory and `off` returns `continue` for every
+    installed-owner match. The install-control and tier-2 catalog paths ignore
+    the mode.
     """
     try:
         payload = json.loads(sys.stdin.read() or "{}")
@@ -7304,6 +7367,11 @@ def cmd_skills_first_advisory() -> int:
         emit("PreToolUse", advice)
         return 0
 
+    mode = _skills_first_mode()
+    if mode == "off":
+        print(json.dumps({"continue": True}))
+        return 0
+
     skill, why = match
     # Dispatch-aware suppression (#415): if the owning skill has already dispatched in
     # this prompt, the developer/model is already in the validated workflow — don't
@@ -7316,7 +7384,7 @@ def cmd_skills_first_advisory() -> int:
     # Enforced denies also honor a dispatch from an earlier prompt of this session
     # (sf-skills#355). The ledger only ever holds qualified enforced owners and
     # delegates, so warn-only nudges and bare-name dispatches stay prompt-scoped;
-    # subagents never read it. Lasts until the next SessionStart.
+    # subagents never read it. Lasts until the next SessionStart other than a resume.
     if not _hook_from_subagent(payload):
         dispatched |= _session_dispatched_skills(session_id)
     # The deny is satisfied by the owning skill OR any delegate it hands the call
@@ -7332,14 +7400,15 @@ def cmd_skills_first_advisory() -> int:
     # ids or fallback in an otherwise healthy runtime (sf-skills#362). Its dispatch
     # records nowhere and it cannot use the parent's session ledger. Runtime/owner
     # failures and invalid or corrupt ids still deny; they must not disable the gate.
-    if skill in _ENFORCEABLE_SKILLS and not (
+    if mode == "enforce" and skill in _ENFORCEABLE_SKILLS and not (
             prompt_context is None and _subagent_missing_prompt_context(payload)):
         reason = (
             f"Skills-first enforcement: this looks like {why}. Dispatch the "
             f"`{_qualified_skill(skill)}` skill instead — it owns this operation and encodes the "
             f"validated workflow, governor-limit/FLS guardrails, and error "
             f"recovery a raw call skips. Once that skill runs, its own underlying "
-            f"calls are allowed through."
+            f"calls are allowed through. A skill dispatch resets after /clear "
+            f"or compaction."
         )
         emit("PreToolUse", "", decision="deny", reason=reason)
         return 0
@@ -12133,6 +12202,7 @@ def _enabled_plugin_names(
                 text=True,
                 timeout=timeout,
                 check=False,
+                **_shim.no_window_kwargs(),
             )
             if result.returncode != 0:
                 return None
@@ -13874,7 +13944,8 @@ def cmd_orientation_paint(payload: Optional[dict] = None,
             payload.get("session_id") or payload.get("sessionId") or "", client
         )
         _record_prompt_text(prompt_context, prompt)
-        # Host-injected blocks (IDE notices, task notifications) are never the
+        # Host-injected blocks (IDE notices, task notifications, subagent hand-backs,
+        # the Claude in Chrome guide) are never the
         # user's words: every decision check below reads the stripped prompt, and
         # capability matching reads the narrower intent text. A prompt that is
         # only host context leaves both empty and decides nothing.
