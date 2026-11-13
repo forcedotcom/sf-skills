@@ -131,12 +131,19 @@ REQUIRED_TOP = ["backgroundEndColor", "backgroundFadeDirection", "backgroundStar
 
 
 def safe_parse(path):
-    """Parse a metadata file, refusing DOCTYPE/ENTITY declarations (entity-expansion attacks)."""
+    """Parse a metadata file safely without third-party packages. Salesforce metadata is UTF-8 and never
+    has a DOCTYPE, so anything else is refused before the parser sees it. That blocks external-entity
+    (XXE) and entity-expansion attacks, including ones hidden in another encoding such as UTF-16."""
     with open(path, "rb") as fh:
         data = fh.read()
-    if b"<!DOCTYPE" in data or b"<!ENTITY" in data:
+    try:
+        text = data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        raise ET.ParseError("metadata files must be UTF-8") from None
+    upper = text.upper()
+    if "<!DOCTYPE" in upper or "<!ENTITY" in upper:
         raise ET.ParseError("DOCTYPE/ENTITY declarations are not allowed in metadata files")
-    return ET.fromstring(data)
+    return ET.fromstring(text)  # checked above: UTF-8, no DOCTYPE, no ENTITY
 
 
 def clean(text, limit=30):

@@ -162,6 +162,29 @@ class CrashTests(unittest.TestCase):
                 self.assertIn("INTERNAL ERROR", p.stderr)
 
 
+class XmlSafetyTests(unittest.TestCase):
+    BOMB = ('<?xml version="1.0" encoding="{enc}"?>\n<!DOCTYPE d [<!ENTITY a "aaaaaaaaaa">'
+            '<!ENTITY b "&a;&a;&a;&a;&a;&a;&a;&a;&a;&a;">]>\n'
+            '<Dashboard xmlns="http://soap.sforce.com/2006/04/metadata"><title>&b;</title></Dashboard>\n')
+
+    def write(self, text, encoding):
+        d = tempfile.mkdtemp()
+        path = os.path.join(d, "Bomb.dashboard-meta.xml")
+        with open(path, "w", encoding=encoding) as f:
+            f.write(text)
+        return path
+
+    def test_entity_declarations_are_refused_in_utf8_and_utf16(self):
+        for enc in ("UTF-8", "UTF-16"):
+            path = self.write(self.BOMB.format(enc=enc), enc.lower())
+            for script, args in (("validate_dashboard.py", [path]), ("rich_text.py", ["check", path])):
+                with self.subTest(encoding=enc, script=script):
+                    code, out, err = run(script, args)
+                    self.assertIn(code, (1, 2), out + err)
+                    self.assertRegex(out + err, "DOCTYPE|UTF-8")
+                    self.assertNotIn("aaaaaaaaaa", out + err)
+
+
 class NoLeftoversTest(unittest.TestCase):
     def test_no_bytecode_in_the_skill_folder(self):
         run("validate_dashboard.py", [EXAMPLE])
