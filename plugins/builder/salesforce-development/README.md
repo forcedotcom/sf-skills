@@ -74,7 +74,7 @@ Once you're all set up, use natural language to describe what you want to do; th
 | **Metadata discovery** | `platform-metadata-discovery-get` — Find what already exists in the org and pick the right tool (metadata grounding, scoped SOQL, `sf sobject`, `sf org list metadata`, source retrieval); `platform-metadata-grounding-get` — Find metadata by meaning when the API name is unknown, via the Metadata Grounding MCP (requires Salesforce Catalog in the org) |
 | **Deploy and retrieve** | `platform-metadata-deploy` (incl. the production validate → quick-deploy path), `platform-metadata-retrieve`, `platform-manifest-generate` (build `package.xml` / `destructiveChanges.xml`), `platform-metadata-api-context-get`, `platform-destructive-deploy` |
 | **Security** | `platform-permission-set-generate`, `platform-sharing-owd-configure`, `platform-sharing-rules-generate` |
-| **Reporting** | `platform-report-generate` |
+| **Reporting** | `platform-report-generate`, `platform-dashboard-generate` — Lightning dashboards (grid layout, charts, metrics, gauges, Lightning tables, text, image and LWC widgets, filters, dynamic dashboards) with pre-deploy validation and a post-deploy render check |
 | **LSP** | `platform-lsp-integrate` — Contract and fallbacks for the bundled language-server tools |
 | **Headless 360 MCP** | `platform-headless-360-integrate` — Setup, call contract, and errors for the Salesforce-hosted Headless 360 MCP server (`discover`, `describe`, `dispatch`), with confirm-before-write. Task-specific Setup workflows, including Field History Tracking, are discovered and described from H360 at runtime. |
 

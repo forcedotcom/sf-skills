@@ -7,6 +7,17 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- Add the `platform-dashboard-generate` skill for Lightning dashboard metadata (`.dashboard-meta.xml`,
+  `.dashboardFolder-meta.xml`): grid layout, every chart type, metrics, gauges, Lightning and classic
+  tables, rich-text, image and custom LWC widgets, dashboard filters, running user and dynamic
+  dashboards, themes and palettes. It ships `rich_text.py` (encodes text widgets byte-for-byte as the
+  editor does — hand-written HTML or JSON deploys but blanks the whole dashboard),
+  `validate_dashboard.py` (static checks, including against the source reports) and
+  `verify_dashboard.py` (post-deploy render check through the Analytics REST API). Editing a
+  `*.dashboard-meta.xml` file now routes to this skill instead of being treated as ownerless.
+
 ## [2.7.0] — 2026-11-06
 
 ### Added

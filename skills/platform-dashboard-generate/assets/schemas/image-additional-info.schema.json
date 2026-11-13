@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/forcedotcom/sf-skills/skills/platform-dashboard-generate/assets/schemas/image-additional-info.schema.json",
+  "title": "Value of <additionalInfo> on an Image widget",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fileAssetName",
+    "inlineWidgetStyle",
+    "namespacePrefix"
+  ],
+  "properties": {
+    "fileAssetName": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*$",
+      "description": "DeveloperName of the ContentAsset. This is what locates the image."
+    },
+    "inlineWidgetStyle": {
+      "type": "object",
+      "description": "Write {}."
+    },
+    "namespacePrefix": {
+      "type": "string",
+      "description": "Write \"\" for unpackaged assets."
+    },
+    "contentDocumentId": {
+      "type": "string",
+      "pattern": "^069[A-Za-z0-9]{12}([A-Za-z0-9]{3})?$",
+      "description": "Org-specific. Omit in files meant for more than one org."
+    }
+  }
+}

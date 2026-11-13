@@ -6882,8 +6882,6 @@ def cmd_post_bash() -> int:
 # nudge (the conservative default, since a real owning skill usually exists).
 _OWNERLESS_META_SUFFIXES = (
     "reportfolder-meta.xml",       # report folders (the report itself → platform-report-generate)
-    "dashboard-meta.xml",
-    "dashboardfolder-meta.xml",
     "labels-meta.xml",             # custom labels
     "settings-meta.xml",           # org/feature settings
     "layout-meta.xml",             # page layouts (classic)
@@ -7019,6 +7017,8 @@ def _skills_first_match(tool_name: str, tool_input: dict) -> Optional[tuple[str,
                 return ("platform-custom-tab-generate", "editing a custom tab directly")
             if "report-meta.xml" in path:
                 return ("platform-report-generate", "editing a report directly")
+            if "dashboard-meta.xml" in path or "dashboardfolder-meta.xml" in path:
+                return ("platform-dashboard-generate", "editing a dashboard directly")
             # NOTE: *.app-meta.xml is intentionally NOT mapped — it's ambiguous
             # between CustomApplication (platform-custom-application-generate) and an
             # Aura app bundle (platform-lightning-app-coordinate); a wrong name is

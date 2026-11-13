@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/forcedotcom/sf-skills/skills/platform-dashboard-generate/assets/schemas/lwc-component-parameters.schema.json",
+  "title": "Value of <componentParameters> on a LightningWebComponent widget",
+  "description": "A JSON object written as the element's text. `properties` is itself a JSON object serialised to a STRING (double-encoded). Build it with json.dumps({'componentApiName': 'c:name', 'properties': json.dumps({...})}).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "componentApiName",
+    "properties"
+  ],
+  "properties": {
+    "componentApiName": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*:[a-z][A-Za-z0-9_]*$",
+      "description": "namespace:componentName, e.g. c:pipelineWidget. The component must declare the analytics__Dashboard target."
+    },
+    "properties": {
+      "type": "string",
+      "contentMediaType": "application/json",
+      "pattern": "^\\{[\\s\\S]*\\}$",
+      "description": "Serialised JSON object of the component's targetConfig property values; \"{}\" when there are none. Tested with string values only."
+    }
+  }
+}

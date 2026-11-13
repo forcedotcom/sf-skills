@@ -1,0 +1,172 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/forcedotcom/sf-skills/skills/platform-dashboard-generate/assets/schemas/text-widget-spec.schema.json",
+  "title": "Input of `rich_text.py encode`",
+  "description": "Either the simple form (one object per line of text) or a Quill delta. Never mix the two. No null values anywhere. Unknown keys are errors.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/simpleForm"
+    },
+    {
+      "$ref": "#/$defs/delta"
+    }
+  ],
+  "$defs": {
+    "simpleForm": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "pattern": "^[^\\r\\n]*$",
+            "description": "One line. \"\" makes a blank line. No line breaks: use another object."
+          },
+          "bold": {
+            "type": "boolean"
+          },
+          "italic": {
+            "type": "boolean"
+          },
+          "underline": {
+            "type": "boolean"
+          },
+          "strike": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]{0,2}px$",
+            "description": "Digits then px, as a string: \"20px\". Never a number."
+          },
+          "color": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "background": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "link": {
+            "type": "string",
+            "pattern": "^([Hh][Tt][Tt][Pp][Ss]://|[Mm][Aa][Ii][Ll][Tt][Oo]:|[Tt][Ee][Ll]:|/(?!/))",
+            "description": "https://, mailto:, tel: or a relative /path. Nothing else."
+          },
+          "align": {
+            "enum": [
+              "left",
+              "center",
+              "right"
+            ]
+          },
+          "list": {
+            "enum": [
+              "bullet",
+              "ordered"
+            ]
+          }
+        }
+      }
+    },
+    "delta": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Extra rule the script enforces: the last op's insert ends with \\n.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "insert"
+            ],
+            "description": "Text run with optional inline formats.",
+            "properties": {
+              "insert": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "[^\\n]"
+              },
+              "attributes": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "properties": {
+                  "bold": {
+                    "const": true
+                  },
+                  "italic": {
+                    "const": true
+                  },
+                  "underline": {
+                    "const": true
+                  },
+                  "strike": {
+                    "const": true
+                  },
+                  "size": {
+                    "type": "string",
+                    "pattern": "^[1-9][0-9]{0,2}px$",
+                    "description": "Digits then px, as a string: \"20px\". Never a number."
+                  },
+                  "color": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                  },
+                  "background": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$"
+                  },
+                  "link": {
+                    "type": "string",
+                    "pattern": "^([Hh][Tt][Tt][Pp][Ss]://|[Mm][Aa][Ii][Ll][Tt][Oo]:|[Tt][Ee][Ll]:|/(?!/))",
+                    "description": "https://, mailto:, tel: or a relative /path. Nothing else."
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "insert"
+            ],
+            "description": "Line end (newlines only) with optional line formats.",
+            "properties": {
+              "insert": {
+                "type": "string",
+                "pattern": "^\\n+$"
+              },
+              "attributes": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "properties": {
+                  "align": {
+                    "enum": [
+                      "left",
+                      "center",
+                      "right"
+                    ]
+                  },
+                  "list": {
+                    "enum": [
+                      "bullet",
+                      "ordered"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
