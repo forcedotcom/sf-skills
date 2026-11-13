@@ -182,6 +182,8 @@ SELECT Id, Status__c FROM Account WHERE Id = :accountId FOR UPDATE
 
 -- Note: Only use FOR UPDATE when you need to prevent race conditions
 -- Adds overhead and can cause lock contention
+-- ORDER BY is not allowed with FOR UPDATE (Id order is implied);
+-- sort the locked rows in Apex instead
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SECURITY ENFORCEMENT

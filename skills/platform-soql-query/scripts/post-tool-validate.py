@@ -254,6 +254,14 @@ def validate_soql_static(content: str) -> dict:
             'message': 'Invalid operator "==" - use "=" in SOQL'
         })
 
+    # Check for ORDER BY in a locking query (compile error in Apex)
+    if re.search(r'\bORDER\s+BY\b(?:(?!\bSELECT\b).)*?\bFOR\s+UPDATE\b', clean, re.IGNORECASE | re.DOTALL):
+        result['issues'].append({
+            'severity': 'HIGH',
+            'message': 'ORDER BY is not allowed with FOR UPDATE - lock without ORDER BY and sort in Apex'
+        })
+        result['is_valid'] = False
+
     # Check for unbalanced parentheses
     if clean.count('(') != clean.count(')'):
         result['issues'].append({

@@ -306,6 +306,49 @@ WHERE Days_Open__c > 30
 
 ---
 
+## Anti-Pattern #11: ORDER BY with FOR UPDATE
+
+**The Problem**: A locking query can't have an explicit `ORDER BY`. Apex fails to compile it with `Explicit ORDER BY not allowed when locking rows (Id order is implied)`.
+
+```apex
+// ❌ ANTI-PATTERN: ORDER BY in a locking query (compile error)
+List<Account> accts = [
+    SELECT Id, Name FROM Account
+    WHERE Id IN :ids
+    ORDER BY Name
+    FOR UPDATE
+];
+```
+
+**The Solution**: Lock without `ORDER BY` (rows come back in Id order), then sort in Apex if you need another order.
+
+```apex
+// ✅ CORRECT: Lock first, sort in Apex
+List<Account> accts = [
+    SELECT Id, Name FROM Account
+    WHERE Id IN :ids
+    FOR UPDATE
+];
+
+List<AccountByName> sorted = new List<AccountByName>();
+for (Account a : accts) {
+    sorted.add(new AccountByName(a));
+}
+sorted.sort();
+
+public class AccountByName implements Comparable {
+    public Account record;
+    public AccountByName(Account record) { this.record = record; }
+    public Integer compareTo(Object other) {
+        String a = record.Name == null ? '' : record.Name;
+        String b = ((AccountByName) other).record.Name;
+        return a.compareTo(b == null ? '' : b);
+    }
+}
+```
+
+---
+
 ## Quick Reference: Selectivity Rules
 
 ```text
