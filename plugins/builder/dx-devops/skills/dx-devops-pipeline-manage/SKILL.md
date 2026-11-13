@@ -70,7 +70,7 @@ All operations use `sf devops pipeline` and `sf devops stage` CLI commands with 
    ```bash
    sf org display --json
    ```
-   - If no default org is set or auth has expired, instruct the user to run `sf org login web --set-default --alias <alias>`
+   - If auth has expired, instruct the user to run `sf org login web --alias <alias>`
    - Confirm the org has DevOps Center enabled by running `sf devops pipeline list --json`
    - Add `--target-org <alias>` to every command when targeting a specific org
 
@@ -209,7 +209,7 @@ Confirm the items for the operation you performed. Do **not** report success unt
 
 | Issue | Resolution |
 |-------|------------|
-| **No default org set** | Run `sf org display --json` first; if it fails, instruct user to run `sf org login web --set-default` |
+| **No default org set** | Run `sf org display --json` first; if it fails, instruct user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command |
 | **Create fails — missing repo** | `--repo` is required; pass an existing repo URL, or `--create-repo` + `--repo-type` for a new repo |
 | **New-repo create fails — missing provider flag** | GitHub new repo needs `--repo-owner`; Bitbucket new repo needs `--bitbucket-workspace`. Don't mix providers' flags (`--repo-owner` with `bitbucket`, or `--bitbucket-workspace` with `github`) |
 | **`stage add` fails — no next-stage-id** | `--next-stage-id` is required; run `sf devops pipeline get --pipeline-id <id> --json` to find the stage IDs and pick the one the new stage should precede |

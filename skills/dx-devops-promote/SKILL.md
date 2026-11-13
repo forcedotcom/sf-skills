@@ -54,7 +54,7 @@ All operations use `sf devops` CLI commands with `--json` output. Validate ALWAY
    ```bash
    sf org display --json
    ```
-   - If it fails, instruct the user to run `sf org login web --set-default --alias <alias>`
+   - If it fails, instruct the user to run `sf org login web --alias <alias>`
    - Pass `--target-org <alias>` on every subsequent command (required unless the `target-org` config variable is set)
 
 2. **Run the mandatory validate step** — this is non-negotiable and always runs before prepare/combine/promote. `sf devops promotion validate` requires the target stage (`-t/--target-stage-id`) and one or more `-i/--work-item-id`:
@@ -169,7 +169,7 @@ All operations use `sf devops` CLI commands with `--json` output. Validate ALWAY
 | Issue | Resolution |
 |-------|------------|
 | **Validation fails** | STOP — do not prepare/combine/promote. Report the non-zero status / error message; if metadata overlap, resolve the conflict before retrying |
-| **No default org set** | Run `sf org display --json`; if it fails, instruct user to run `sf org login web --set-default` |
+| **No default org set** | Run `sf org display --json`; if it fails, instruct user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command |
 | **Passing a work item name instead of an ID** | Promotion commands need record IDs; resolve names via `sf devops work-item list --project-id <id> --json \| jq -r '.result.workItems[] \| select(.subject == "<WI-subject>") \| .id'` |
 | **Both `--work-item-id` and `--stage-id` supplied** | They are mutually exclusive; pick specific work items OR a source stage, not both |
 | **Missing `--target-stage-id`** | Required on every promotion command (validate, prepare, combine, promote, complete); obtain the target stage ID from the pipeline configuration |

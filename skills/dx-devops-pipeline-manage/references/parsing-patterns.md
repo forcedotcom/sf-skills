@@ -131,4 +131,4 @@ All `sf devops pipeline` / `sf devops stage` commands require:
 sf org display --target-org <alias> --json
 ```
 
-If auth fails: `sf org login web --set-default --alias <alias>`.
+If auth fails: `sf org login web --alias <alias>`, then pass `--target-org <alias>` on every command.
