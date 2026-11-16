@@ -173,6 +173,29 @@ To maintain "Clean XML," only include optional tags when deviating from the Sale
 - Trigger: The object exists for technical associations or background data
 - Action: Omit these tags to keep the UI clean and the XML lean
 
+### E. Tab Visibility (App Launcher)
+
+A deployed custom object is **not visible** in the App Launcher until a `CustomTab` is also deployed and the tab is visible to the user's profile or permission set.
+
+**Always create a CustomTab** for user-facing objects (Scenario A above). Place the file at `force-app/main/default/tabs/{ObjectApiName}.tab-meta.xml`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <motif>Custom57: Wrench</motif>
+</CustomTab>
+```
+
+Pick a `<motif>` that suits the object (e.g., `Custom62: Truck` for vehicles, `Custom51: Handsaw` for tools). The filename must match the object API name (e.g., `Vehicle__c.tab-meta.xml`).
+
+After the tab is deployed, the user must **also** ensure tab visibility:
+- **Profile:** set the tab to `DefaultOn` in the profile's `tabVisibilities`
+- **Permission Set:** add a `tabSettings` entry with `visibility` set to `Visible`
+- **Lightning App:** add the tab to the app's `<tabs>` list so it appears in the navigation bar
+
+Omit the tab for system-facing objects (Scenario B above) that should not appear in the App Launcher.
+
 ---
 
 ## 4. Critical Constraints & Common Failures
@@ -285,6 +308,10 @@ Before generating the Custom Object XML, verify:
 - [ ] Includes common use cases ("Commonly used for...") and is **under 50 words**
 - [ ] Folded any current description's business context into the proposed one (didn't discard it)
 - [ ] For an existing description (update/delete/re-enrich), STOPPED and waited for the user's reply before writing — did not treat showing the diff as approval
+
+### Tab Visibility Check (user-facing objects)
+- [ ] Is a `CustomTab` file present at `tabs/{ObjectApiName}.tab-meta.xml`?
+- [ ] Does the relevant permission set include a `tabSettings` entry with `visibility` set to `Visible` for this tab? (A tab deployed without `tabSettings` does not appear in the App Launcher.)
 
 ### Architectural Checks
 - [ ] Is `<description>` present? (Enriched per Section B — proposed and confirmed with the user before writing.)
