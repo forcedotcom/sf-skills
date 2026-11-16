@@ -262,6 +262,15 @@ subagent order_support:
   # expectedActions: ["get_order_status"]  # WRONG (Level 1)
 ```
 
+### Observed exception: an agent with only `start_agent`
+
+One measured case did not follow the rule above. It was a published Agent Script service agent whose single `start_agent` block held its actions and reasoning, with no `subagent` blocks, on Salesforce CLI 2.140.6. For that agent:
+
+- Testing Center reported the **Level 1** definition name (`consultar_protocolo`). The Level 2 alias (`consultar: @actions.consultar_protocolo`) failed `actions_assertion` on every case, and the Level 1 name passed.
+- It reported the topic as **`topic_selector`**, not the `start_agent` block name. With `expectedTopic: topic_selector`, `topic_assertion` passed on every case, guardrail cases included, so no topic failure needed filtering.
+
+Before you write a whole suite, run one case and read the actual names in the results (`generatedData.actionsSequence` and `generatedData.topic`). Use those names.
+
 ## Known Bugs and Workarounds
 
 | Bug | Severity | Workaround |
