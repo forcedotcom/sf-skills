@@ -55,10 +55,13 @@ import re
 import sys
 from pathlib import Path
 
+# An indented body: indented lines, plus blank lines that sit between them.
+_BODY = r"(?:[ \t]+\S.*\n?|[ \t]*\n(?=[ \t]+\S))*"
+
 
 def parse_agent_file(path: Path) -> dict:
     """Parse an .agent file and return normalized structure. Read-only."""
-    text = path.read_text()
+    text = path.read_text(encoding="utf-8")
 
     return {
         "system": _extract_system(text),
@@ -106,7 +109,8 @@ def _extract_field(block: str | None, key: str) -> str | None:
         return None
 
     # Try literal block scalar first: key: |\n    text...
-    pattern_literal = rf"^{re.escape(key)}:\s*\|\s*\n((?:[ \t]+.*\n?)*)"
+    # or a procedural block, as in Agent Script reasoning: key: ->\n    | text
+    pattern_literal = rf"^{re.escape(key)}:\s*(?:\||->)\s*\n({_BODY})"
     m = re.search(pattern_literal, block, flags=re.MULTILINE)
     if m:
         return _dedent(m.group(1)).rstrip()
@@ -156,14 +160,17 @@ def _extract_config(text: str) -> dict:
         "agent_label": _extract_field(block, "agent_label"),
         "description": _extract_field(block, "description"),
         "agent_type": _extract_field(block, "agent_type"),
-        "default_agent_user": _extract_field(block, "default_agent_user"),
+        # default_agent_user belongs under `access:`; older files had it under `config:`.
+        "default_agent_user": _extract_field(_extract_block(text, "access"), "default_agent_user")
+        or _extract_field(block, "default_agent_user"),
     }
 
 
 def _extract_subagents(text: str) -> list[dict]:
-    """Find each `subagent NAME:` block and extract its persona-bearing fields."""
-    # Match subagent declarations and capture name + body
-    pattern = r"^subagent\s+(\w+):\s*\n((?:[ \t]+.*\n?)*)"
+    """Find each `start_agent NAME:` and `subagent NAME:` block and extract its
+    persona-bearing fields. A focused agent has only a `start_agent` block."""
+    # Match block declarations and capture name + body (blank lines inside stay in it)
+    pattern = rf"^(?:start_agent|subagent)\s+(\w+):\s*\n({_BODY})"
     subagents: list[dict] = []
 
     for match in re.finditer(pattern, text, flags=re.MULTILINE):
@@ -192,7 +199,7 @@ def _extract_subagent_actions(subagent_body: str) -> list[dict]:
 
     actions: list[dict] = []
     # Action declarations are like: `action_name:` followed by indented properties
-    pattern = r"^(\w+):\s*\n((?:[ \t]+.*\n?)*)"
+    pattern = rf"^(\w+):\s*\n({_BODY})"
     for match in re.finditer(pattern, actions_block, flags=re.MULTILINE):
         name = match.group(1)
         body = _dedent(match.group(2))
