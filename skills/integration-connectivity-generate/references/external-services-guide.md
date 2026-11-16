@@ -46,6 +46,8 @@ External Services in Salesforce automatically generate Apex classes from OpenAPI
 **Template**: `assets/external-services/openapi-registration.externalServiceRegistration-meta.xml`
 **Reference**: `assets/external-services/external-service-operations.md`
 
+> **Naming constraint — fullName / API name:** The registration's fullName (the file basename, e.g. `StripeAPI` in `StripeAPI.externalServiceRegistration-meta.xml`) must start with a letter and contain **only alphanumeric characters** — no underscores, hyphens, spaces, or special characters. The `<label>` may contain spaces and special characters, but the fullName may not. Violating this causes the deploy-time error: *"Enter a name that starts with a letter and contains only alphanumeric characters."*
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <ExternalServiceRegistration xmlns="http://soap.sforce.com/2006/04/metadata">
