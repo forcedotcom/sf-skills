@@ -127,6 +127,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 - Apply `LIMIT` clauses to bound result sets; use `ORDER BY` for deterministic results
 - When querying Custom Metadata Types (objects ending with `__mdt`), do NOT use SOQL — use the built-in methods (`{CustomMdt__mdt}.getAll().values()`, `getInstance()`, etc.)
 - Queries executed in `without sharing` keyword classes with API versions 67.0 and up will throw when the running user does not have the proper field or object-level security. If API versions are being updated, ensure queries are safeguarded properly, and that tests are updated accordingly. Only explicitly justified usages of `SYSTEM_MODE` variants within queries should be allowed by default.
+- When DML runs with `AccessLevel.SYSTEM_MODE` (e.g., guest self-registration inserting via `Site.createExternalUser` or explicit `as system` DML), pair the follow-up SOQL with `WITH SYSTEM_MODE` — the guest user lacks object/FLS access, so `USER_MODE` (the API 67.0+ default) returns zero rows even in a `without sharing` class. Sharing keywords control record visibility; the access-mode clause controls CRUD/FLS enforcement — the two are independent
 
 ### Caching
 

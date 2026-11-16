@@ -45,6 +45,7 @@ Always wrap the code under test in `Test.startTest()` / `Test.stopTest()`:
 | God test class (>500 lines) | Split into multiple test classes by behavior area |
 | Long test methods (>30 lines) | Extract Given/When/Then into helper methods |
 | Generic `Exception` catch | Catch the specific expected type (e.g., `DmlException`) |
+| Setup + data object DML in same context | `UserRole`, `User`, `Group`, `GroupMember`, `QueueSobject`, `PermissionSet`, `PermissionSetAssignment`, `ObjectPermissions`, and `FieldPermissions` are setup objects — inserting them in the same execution context as standard/custom object DML throws `MIXED_DML_OPERATION`. Insert setup objects first, then wrap data object DML in `System.runAs(thatUser)`. Give each test method's `UserRole` a unique `DeveloperName` |
 
 ## Workflow
 
