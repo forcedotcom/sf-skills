@@ -38,7 +38,7 @@ A single ruleset XML can contain any number of rules. This is the recommended ap
         <properties>
             <property name="xpath">
                 <value><![CDATA[
-//ForEachStatement//SoqlExpression | //ForLoopStatement//SoqlExpression | //WhileLoopStatement//SoqlExpression
+//ForEachStatement/BlockStatement//SoqlExpression | //ForLoopStatement//SoqlExpression | //WhileLoopStatement//SoqlExpression
 ]]></value>
             </property>
         </properties>
