@@ -20,10 +20,10 @@
 
 **XPath (PMD 7):**
 ```xpath
-//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(@Text)]]
+//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(.//*[@Text])]]
 ```
 
-**How it works:** Matches `CustomField` elements that either lack a `<description>` child entirely, or have one with no text content (`@Text` absent means empty).
+**How it works:** Matches `CustomField` elements that either lack a `<description>` child entirely, or have one with no text content. `@Text` exists only on the child text node, so `.//*[@Text]` looks for a text node inside `<description>`; putting `[not(@Text)]` on the `<description>` element itself is always true and reports every field.
 
 **PMD ruleset:**
 ```xml
@@ -36,7 +36,7 @@
     <properties>
         <property name="xpath">
             <value><![CDATA[
-//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(@Text)]]
+//*[local-name()='CustomField'][not(*[local-name()='description']) or *[local-name()='description'][not(.//*[@Text])]]
 ]]></value>
         </property>
     </properties>
