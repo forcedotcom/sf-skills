@@ -627,6 +627,8 @@ Boundary test: "If you removed all emoji, would information be lost?" Functional
 | **Standard** | Normal punctuation with occasional expressiveness. Exclamation points for genuine emphasis. Em dashes for asides. *(Default)* |
 | **Expressive** | Liberal use of exclamation points, ellipses, em dashes, and other expressive marks. Punctuation conveys energy and personality. |
 
+> **Voice and telephony channels:** punctuation that signals rhythm on screen reads differently through text-to-speech. Em dashes, ellipses, and semicolons are spoken by TTS as awkward pauses or dropped silences rather than asides, so the **Standard** default ("Em dashes for asides") and **Expressive** guidance do not carry over to audio. For a telephony or voice channel, treat Punctuation as **Conservative** regardless of Formality -- short sentences, periods and commas only -- and reserve em dashes, ellipses, and exclamation-heavy copy for text channels.
+
 ### Capitalization
 
 | Position | Description |
