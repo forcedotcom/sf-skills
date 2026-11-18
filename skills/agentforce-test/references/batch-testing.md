@@ -72,6 +72,7 @@ testCases:
 
 - `expectedActions` is a **flat string array**, NOT objects: `["action_a", "action_b"]`
 - Action assertion uses **superset matching**: test PASSES if actual actions include all expected actions
+- `action_assertion` confirms an action was **invoked, not that it succeeded**. It matches against `generatedData.actionsSequence` (the names of the actions the agent called) -- the results carry no per-action runtime success/error field. A test case can therefore return `PASS` while a called action errored at runtime. When an action's *outcome* matters (not just that it ran), assert on it with `expectedOutcome`, or verify the action's own execution result out of band (for example the Flow/Apex invocation response).
 - **Transition actions** (`go_home_search`, `go_escalation`) appear in `actionsSequence` alongside real actions. The superset matching handles this correctly -- you don't need to list transition actions.
 - `expectedOutcome` uses LLM-as-judge evaluation -- describe the desired behavior in natural language
 - Missing `expectedOutcome` causes a harmless ERROR in `output_validation` but topic/action assertions still pass
