@@ -63,7 +63,7 @@ DevOps Center promotion blockers are Git-level. Detection and diagnosis are dete
    git rev-parse --is-inside-work-tree && git status --porcelain
    ```
    - If `git status --porcelain` prints anything, the tree is dirty — instruct the user to commit or stash first. A trial merge on a dirty tree is unsafe.
-2. **Resolve a work item to its branch (only if the user gave a work item, not a branch).** Verify org auth with `sf org display --json`; if it fails, tell the user to run `sf org login web --set-default --alias <alias>`. Then look up the branch — see `references/git-conflict-resolution.md`.
+2. **Resolve a work item to its branch (only if the user gave a work item, not a branch).** Verify org auth with `sf org display --json`; if it fails, tell the user to run `sf org login web --alias <alias>` and pass `--target-org <alias>` on every command. Then look up the branch — see `references/git-conflict-resolution.md`.
 
 ### Phase 2 — Detect (non-destructive)
 
