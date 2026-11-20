@@ -16,6 +16,8 @@ FROM object
 [FOR UPDATE]
 ```
 
+> **Constraint:** `FOR UPDATE` cannot be combined with `ORDER BY`. A locking query must omit `ORDER BY`; sort results in Apex instead.
+
 ---
 
 ## Operators

@@ -90,6 +90,7 @@ If the user wants runtime verification, hand off execution to:
 - use aggregates for counts and grouped summaries instead of loading unnecessary records
 - evaluate wildcard usage carefully; leading wildcards often defeat indexes
 - account for security mode / field access requirements when queries move into Apex
+- never combine `FOR UPDATE` with `ORDER BY`; Salesforce rejects locking queries that sort — omit `ORDER BY` and sort in Apex
 
 ---
 

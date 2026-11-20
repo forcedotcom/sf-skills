@@ -306,6 +306,32 @@ WHERE Days_Open__c > 30
 
 ---
 
+## Anti-Pattern #11: FOR UPDATE Combined with ORDER BY
+
+**The Problem**: Salesforce does not allow `ORDER BY` in any SOQL query that uses locking (`FOR UPDATE`). The query fails to compile in Apex (deploy error) or fails at runtime for dynamic SOQL.
+
+```apex
+// ❌ ANTI-PATTERN: Locking query with ORDER BY
+SELECT Id, Status__c FROM Account
+WHERE Id IN :accountIds
+ORDER BY CreatedDate
+FOR UPDATE
+```
+
+**The Solution**: Remove `ORDER BY` from the locking query. If order matters, sort the returned records in Apex, or re-query without `FOR UPDATE` for display.
+
+```apex
+// ✅ CORRECT: Lock without ORDER BY
+List<Account> accts = [
+    SELECT Id, Status__c, CreatedDate FROM Account
+    WHERE Id IN :accountIds
+    FOR UPDATE
+];
+// Sort in Apex if needed (e.g., implement Comparable or use a Comparator)
+```
+
+---
+
 ## Quick Reference: Selectivity Rules
 
 ```text
