@@ -7,6 +7,12 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `experience-lwc-accessibility-jest-run`.
+
 ## [0.3.0] — 2026-10-16
 
 ### Added

@@ -105,8 +105,14 @@ def no_color_env() -> dict:
     """Child env with color forced off. Claude Code exports FORCE_COLOR=3 to hook
     processes, and `sf ... --json` then emits ANSI-colorized JSON even when piped, so
     the JSON parse silently fails (forcedotcom/sf-skills#349). The bash deploy gate
-    sets the same two variables in sf_cli()."""
-    return {**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1"}
+    sets the same two variables in sf_cli().
+
+    Also sets SF_DISABLE_LOG_FILE=true: every caller is a read-only probe, and the sf
+    core logger otherwise writes ~/.sf/sf-<date>.log, which fails EPERM/EACCES under
+    a Codex workspace-write sandbox or a root-owned ~/.sf and makes the probe report
+    the CLI, Code Analyzer, or default org as missing. Never use this env for
+    commands that write (auth, config set, deploy); they keep the caller's env."""
+    return {**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1", "SF_DISABLE_LOG_FILE": "true"}
 
 
 # subprocess.CREATE_NO_WINDOW, spelled out because the subprocess constant only

@@ -4,11 +4,11 @@
 
 Build apps and agents on the Salesforce Platform with shared skills, Salesforce CLI, and configured MCP tools. The plugin uses your Salesforce DX project and selected org to guide development. Describe your task in natural language.
 
-Choose your coding agent: [Claude Code quick start](#quick-start) or [Use with Codex](#use-with-codex). Each coding agent loads its supported commands and hooks; see the setup and behavior below.
+Choose your coding agent: [Claude Code quick start](#quick-start) or [Use with Codex (beta)](#use-with-codex). Each coding agent loads its supported commands and hooks; see the setup and behavior below.
 
 ## Quick Start
 
-This quick start covers Claude Code. For Codex CLI 0.145.0 or later on a POSIX host with Bash and Python 3.8 or later, see [Use with Codex](#use-with-codex).
+This quick start covers Claude Code. Codex support is in beta. For Codex CLI 0.145.0 or later on a POSIX host with Bash and Python 3.8 or later, see [Use with Codex (beta)](#use-with-codex).
 
 1. **Install prerequisites:**
    - [Claude Code](https://claude.ai/code) — requires Claude Code 2.1.222 or later
@@ -84,9 +84,9 @@ Once you're all set up, use natural language to describe what you want to do; th
 
 - **Claude Code agents** — `salesforce-dev`, the primary Salesforce development agent (activates automatically in Salesforce projects — `sfdx-project.json` present — and routes requests skills-first, then SF CLI, then direct API as a last resort). Code-analysis and Well-Architected review — the `dx-code-analyzer-*` skills, `platform-architecture-analyze`, and the read-only `architecture-review` agent — now live in the separate **salesforce-code-quality** plugin.
 - **Claude Code slash commands** — `/salesforce-development:discover` (computed public-channel capability overview/drilldown, `plugins <text>` for on-demand uninstalled-plugin matching, and optional on-demand `features [--target-org <alias>] [--refresh] [--json]`), `:plugin-install` (one-confirmation install for a trusted same-session marketplace recommendation; source confirmation for anything else), `:plugin-recommendations` (view or change how readily uninstalled plugins get proposed; add `--project` to change it for the current project only), `:telemetry`, `:setup`, `:status`, `:org`, `:login`, `:logout`, `:set-default`, `:project`, `:reset-source-tracking`, `:welcome`, `:feedback` (manual-only — see [Feedback](#-feedback) below).
-- **Headless 360 opt-in** — H360 defaults off. In disabled mode its launcher completes an empty MCP handshake without starting the proxy, minting auth, or making network requests. Claude Code users enable the **Headless 360 MCP server** plugin setting. Codex CLI and desktop users ask **“Enable Headless 360 in Codex”** to save a local preference, then start a new session normally. No special environment variable or terminal launch is required for that saved opt-in. Enable it only after H360 has been activated in the target org. See `platform-headless-360-integrate` for setup and validation scope, and the [integration design](docs/design/headless-360-mcp-server.md) for startup, authentication, and agent flows.
+- **Headless 360 opt-in** — H360 defaults off. In disabled mode its launcher completes an empty MCP handshake without starting the proxy, minting auth, or making network requests. Claude Code users enable the **Headless 360 MCP server** plugin setting. In Codex (beta), CLI and desktop users ask **“Enable Headless 360 in Codex”** to save a local preference, then start a new session normally. No special environment variable or terminal launch is required for that saved opt-in. Enable it only after H360 has been activated in the target org. See `platform-headless-360-integrate` for setup and validation scope, and the [integration design](docs/design/headless-360-mcp-server.md) for startup, authentication, and agent flows.
 
-  Codex saves this user-wide preference and the installed launcher's location in `~/.sf/salesforce-development/headless-360.json`, outside the plugin cache, so the preference survives plugin updates and applies to both CLI and desktop. H360 inherits the selected chat's project directory, rather than the plugin cache or the desktop app's launch directory. If a plugin version update reports that setup is required, ask to enable H360 again to refresh the launcher registration. Ask to disable it to save `false`; neither action changes an org. After registering the launcher, advanced users can still override the opt-in with `SF_HEADLESS_360_ENABLED=enabled|disabled`. Existing environment-only setups must run the local enable command once to register the launcher. If an override is present, it takes precedence over the saved setting. The launcher honors Node on PATH first, then checks `~/.local/bin`, `~/.volta/bin`, `~/.asdf/shims`, `~/.local/share/mise/shims`, `/opt/homebrew/bin`, and `/usr/local/bin`. Node must be installed; it does not download a runtime or source shell profiles. Arbitrary version-manager locations may still require PATH configuration.
+  Codex saves this user-wide preference in `~/.sf/salesforce-development/headless-360.json`, outside the plugin cache, so it survives plugin updates and applies to both CLI and desktop. All four Codex MCP servers start in the selected chat's project directory, rather than the plugin cache or the desktop app's launch directory. The installed plugin's location is found from the active Codex plugin cache, with a copy recorded in `~/.sf/salesforce-development/codex-plugin-root.json` as a fallback, so a plugin update needs no setup again. If the plugin cannot be located, start a new Codex session in your project; if that repeats, reinstall the plugin. Ask to disable H360 to save `false`; neither action changes an org. Advanced users can still override the opt-in with `SF_HEADLESS_360_ENABLED=enabled|disabled`, which takes precedence over the saved setting. The launcher filters empty and relative PATH entries before locating Node and starting child processes. It honors Node on the remaining PATH first. On Windows it then checks `%NVM_SYMLINK%`, `%LOCALAPPDATA%\Volta\bin`, and `%ProgramFiles%\nodejs` when the corresponding environment variable is an absolute path. On Unix it then checks `~/.local/bin`, `~/.volta/bin`, `~/.asdf/shims`, `~/.local/share/mise/shims`, nvm (`$NVM_BIN`, else the highest `~/.nvm/versions/node/*/bin` that contains a `node` executable), `/opt/homebrew/bin`, and `/usr/local/bin`. Node must be installed; it does not download a runtime or source shell profiles. Other version-manager locations may still require PATH configuration.
 - **MCP servers** — `salesforce-metadata-experts` (metadata guidance), `salesforce-metadata-grounding` (finds metadata by meaning through Salesforce Catalog; available in orgs where Catalog is provisioned. `status` and setup report it as an optional row that warns when it is not connected, without blocking), `salesforce-headless-360` (the optional Salesforce-hosted Headless 360 server: org state, Setup settings, and feature access that no CLI command reads; disabled by default. `status` and setup report H360 separately, recommend enabling it for live Setup answers, and probe only when local opt-in is known enabled. Cached health is labeled; endpoint reachability does not prove host tool exposure. See `platform-headless-360-integrate`), and `salesforce-lsp`, a local host that lazily spawns the **Apex** and **SOQL** language servers and exposes their semantic capabilities as MCP tools. See the `platform-lsp-integrate` skill for the tool contract.
 - **Hooks** — org-context detection on session start; a production deploy-safety gate and an Apex pre-deploy diagnostics gate on `sf project deploy`; and skills-first checks that block four raw `sf` operations until their owning skill runs (downgrade with `SF_PLUGIN_SKILLS_FIRST` or the Skills-first enforcement plugin option) and advise on other raw edits; when no installed skill matches, they also propose an uninstalled plugin whose curated description does.
 
@@ -99,7 +99,7 @@ command (it never shows up in the model's own suggestions) that asks a single 1-
 question right in chat and records it as a local telemetry event — the only thing that leaves your
 machine is that numeric rating, tagged the same coarse way as every other telemetry event.
 
-The manual feedback command doesn't collect ratings in Codex. Its optional end-of-turn numeric prompt requires `SFDX_FEEDBACK=1`, enabled telemetry, and eligible activity.
+The manual feedback command doesn't collect ratings in Codex (beta). Its optional end-of-turn numeric prompt requires `SFDX_FEEDBACK=1`, enabled telemetry, and eligible activity.
 
 ## More Information
 
@@ -110,8 +110,11 @@ The manual feedback command doesn't collect ratings in Codex. Its optional end-o
 - Third-party code bundled with this plugin (such as the vendored Apex language server and a few esbuild-bundled MCP dependencies) is attributed in [`NOTICE`](./NOTICE).
 
 <a id="codex-lifecycle-support"></a>
+<a id="use-with-codex"></a>
 
-## Use with Codex
+## Use with Codex (beta)
+
+> **Beta:** Codex support is in beta.
 
 ### Install, enable and uninstall
 
@@ -146,6 +149,51 @@ commands are migrated to skills when the plugin is installed or updated. Ask for
 plain language (for example, "run the Salesforce Development status workflow") or choose it from
 the `$` skill list. Messages generated on Codex use this wording instead of
 `/salesforce-development:<name>`.
+
+### Codex sandbox and launch requirements
+
+- Read-only `sf` probes (version, plugin list, org list and display, target-org lookup) run with
+  `SF_DISABLE_LOG_FILE=true`, so a sandbox that blocks writes to `~/.sf` no longer makes the CLI,
+  Code Analyzer or the default org look missing.
+- The Codex shell sandbox blocks writes to `~/.sf` and `~/.sfdx`. Commands that write there, such as
+  `sf org login` and `sf config set`, need those absolute paths (for example `/Users/you/.sf`) in the
+  `sandbox_workspace_write` `writable_roots` setting, or an approved escalation.
+- Start `codex` inside the Salesforce DX project (the directory with `sfdx-project.json`), with a
+  local `target-org` set for that project.
+- If the `source-command-*` skills are missing, the plugin cache is stale or Codex is older than
+  0.145. Upgrade to Codex 0.145 or later and reinstall the plugin
+  (`codex plugin add salesforce-development@salesforce --json`), then start a new session.
+
+### Offline Codex MCP diagnostics
+
+From the selected Salesforce DX session folder, run the installed package's
+`python3 -I /path/to/salesforce-development/scripts/codex_mcp_launcher.py salesforce-metadata-experts --dry-run`.
+Replace the server with `salesforce-metadata-grounding`, `salesforce-lsp`, or
+`salesforce-headless-360` to check the other entries. Use the packaged launcher for this probe. Running the native manifest command starts
+the server, even if you append `--dry-run`. The packaged launcher resolves the same
+selected install as native startup.
+
+The single JSON result has `schema_version: 1`, a `status` of `ready`, `off`, or
+`error`, a fixed `reason`, actionable `guidance`, sanitized/bounded cwd, `PWD` and
+`INIT_CWD` context, and selected/invoking roots. Org configuration **source**, not
+org values or credentials, is reported. Exit 0 means local prerequisites ready or
+H360 off; exit 2 means a diagnostic failure. The invoking package verifies the selected launcher's SHA-256 after normalizing
+line endings. A different launcher revision returns `diagnostics_unavailable`.
+For mixed developer and marketplace installs, use matching reviewed builds for
+diagnostics. The JSON identifies the invoking and selected package paths.
+No Node/proxy execution, auth, network, cwd/environment changes, or preference/root
+registration writes occur. Disabled H360 returns Off/no tools before installation,
+project, org, or Node checks and does not enter its handshake loop.
+
+Codex `check-tools` and explicit `status` label these as **Current shell/local launch
+preflight**. They do not prove that the host launched a native MCP process or exposed
+tools, even if endpoint health is green. Confirm those separately in the host MCP UI.
+Missing project: select the DX session folder. Missing org: set local
+`sf config set target-org <alias>`. Conflicting `SF_TARGET_ORG`/`SFDX_TARGET_ORG`:
+align or remove the variables; local config cannot override that conflict. Unresolved
+installation: start a new session, then reinstall if it persists. `PWD`/`INIT_CWD`
+are context facts, not evidence that the background service caused the failure.
+No default `--no-daemon` workaround or H360 re-enable is needed after an update.
 
 ### Environment variables
 

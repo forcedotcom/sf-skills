@@ -7,6 +7,12 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `platform-custom-lightning-type-generate`.
+
 ## [0.3.0] — 2026-10-30
 
 ### Changed

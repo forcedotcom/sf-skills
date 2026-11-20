@@ -7,6 +7,12 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `service-agentforce-channel-configure`, `service-agentforce-human-escalation-configure`, `service-de-channel-activate`, `service-de-channel-create`, `service-de-channel-routing-configure`, `service-de-channel-settings-configure`, `service-de-headless-channel-configure`, `service-digital-engagement-channel-configure`, `service-digital-engagement-deployment-configure`, `service-helpagent-coordinate`.
+
 ## [0.4.0] — 2026-11-06
 
 ### Changed

@@ -47,7 +47,11 @@ When the mode is not `enforce`, session start shows a one-line notice naming wha
 (`set by SF_PLUGIN_SKILLS_FIRST` or `set by plugin option`; hidden when the presentation
 mode is `off`).
 
-## Codex configuration and activation
+<a id="codex-configuration-and-activation"></a>
+
+## Codex configuration and activation (beta)
+
+> **Beta:** Codex support is in beta.
 
 Codex uses the packaged `hooks/codex-hooks.json` and fourteen command projections.
 Review installed hooks through `/hooks`; an installed package alone does not establish

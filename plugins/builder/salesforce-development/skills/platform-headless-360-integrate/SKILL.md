@@ -241,21 +241,22 @@ python3 "<plugin-root>/scripts/codex_mcp_launcher.py" --headless-360 status
 ```
 
 Run only the action the user requested. Enable/disable saves a user-wide boolean
-and the installed plugin root in `~/.sf/salesforce-development/headless-360.json`.
+in `~/.sf/salesforce-development/headless-360.json` and records the installed plugin
+root in `~/.sf/salesforce-development/codex-plugin-root.json`.
 The preference is shared by Codex CLI and desktop and retained across updates.
-The registered launcher inherits the selected chat's Salesforce project directory.
-After a plugin version update, rerun enable if the server reports setup required;
-this refreshes the registered package location without guessing a cache path.
-Status is read-only and also reports whether this package's launcher is registered. No org call or
+The launcher inherits the selected chat's Salesforce project directory.
+After a plugin version update, no re-enable is needed: the server finds the new
+install itself. If it reports it could not locate the installed plugin, start a new
+Codex session in the project; if that repeats, reinstall the plugin.
+Status is read-only and also reports whether this package is the installed plugin the Codex servers will run. No org call or
 org configuration change occurs. The user's request authorizes this local
 preference change; it does not authorize activating H360 or changing an org.
 After a change, ask the user to start a new session so the MCP server restarts.
 This setting does not change Claude's plugin option.
 
 Report the command's effective and saved values and `launcher_registered`.
-If it is false, run enable only when the user requested setup; otherwise explain
-that local setup is required. Legacy environment-only setups also need this
-registration once. An explicit
+If it is false, start a new Codex session in the project, then reinstall the plugin if
+it stays false. Enable only when the user requested setup. An explicit
 `SF_HEADLESS_360_ENABLED` environment value overrides the saved preference;
 if they differ, explain that the user must remove or change that override and
 restart the host. Do not silently change their shell or global environment.

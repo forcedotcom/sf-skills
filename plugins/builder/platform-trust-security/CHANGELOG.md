@@ -7,6 +7,12 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `platform-trust-archive-manage`.
+
 ## [0.1.0] — 2026-08-24
 
 ### Added

@@ -18,16 +18,39 @@ without starting the proxy, authenticating, or making network requests.
 3. Start a new session in the Salesforce DX project with its target org configured.
    Check endpoint readiness and host tool exposure separately.
 
-Codex saves the boolean and installed package location in
-`~/.sf/salesforce-development/headless-360.json`. No shell export or special desktop
-launch is needed. An explicit `SF_HEADLESS_360_ENABLED` environment override takes
-precedence on Codex. Missing or malformed preferences default off. After an upgrade,
-a stale launcher registration produces guidance to enable again and restart.
+Codex saves the boolean in `~/.sf/salesforce-development/headless-360.json`. The
+installed package location is a separate fact, kept in
+`~/.sf/salesforce-development/codex-plugin-root.json` (written by the Codex
+SessionStart hook and by setup). No shell export or special desktop launch is needed.
+An explicit `SF_HEADLESS_360_ENABLED` environment override takes precedence on Codex.
+Missing or malformed preferences default off. After an upgrade, no re-enable is
+needed: the bootstrap finds the new install itself (see the resolution order below).
 
-The native Codex manifest embeds the readable `codex_h360_bootstrap.py` source and
-uses isolated Python startup. The bootstrap checks matching names and versions in
-the registered package's Claude and Codex manifests and preserves the selected chat's working directory; it never scans caches or guesses
-a package. The launcher resolves a bounded Salesforce project and one explicit or
+The native Codex manifest embeds the readable `codex_mcp_bootstrap.py` source, byte
+for byte, in all four MCP entries (`python3 -I -c <source> <server>`), with no `cwd`,
+so Codex starts each server in the selected chat's working directory. A native
+manifest expands no plugin-root placeholder, so the bootstrap locates the plugin in
+this order:
+
+1. **Server gate.** For `salesforce-headless-360` only, a disabled setting serves the
+   empty MCP handshake with no root lookup, auth, or network call.
+2. **Active cache install.** It finds `$CODEX_HOME` the way Codex does (an empty,
+   relative, `~`-prefixed, missing, or non-directory value is ignored in favor of
+   `~/.codex`), then reads `plugins/cache/*/salesforce-development/` one level per
+   segment. Per marketplace it picks the active version by Codex's own rule
+   (`local` wins; otherwise the per-pair maximum, semver when both names parse, else
+   plain string order). One marketplace gives the candidate. Several defer to step 3.
+3. **Recorded root.** `codex-plugin-root.json` is used when it matches one of several
+   candidates, or when the cache has none (dev and `--plugin-dir` installs). A recorded
+   root that is not an active candidate is stale and ignored.
+4. **Validation.** Both manifests must name `salesforce-development` with equal,
+   non-empty versions, and the launcher must be a regular file inside the root.
+5. **No valid root.** The bootstrap exits 2 with one "could not locate the installed
+   plugin" message that tells the user to start a new Codex session.
+
+This reads the Codex cache directory but never guesses: a candidate must pass the
+manifest checks, and a root recorded by something other than our own hook and setup
+is never consulted when the cache offers an active install. The launcher resolves a bounded Salesforce project and one explicit or
 project-local target org, rather than a global default. It finds Node on PATH or in
 supported common installation directories without installing it or loading shell
 profiles. Unusual Node installations may require PATH configuration.

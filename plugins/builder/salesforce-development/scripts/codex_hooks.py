@@ -252,6 +252,15 @@ _RECOVERY_SCAN_LIMIT = 256
 _RECOVERY_SEND_LIMIT = 16
 
 
+def record_plugin_root() -> None:
+    """Record this install for the MCP bootstrap; never fail or change the hook output."""
+    try:
+        import codex_mcp_launcher
+        codex_mcp_launcher.record_plugin_root(ROOT)
+    except Exception:
+        pass
+
+
 def recover_stale_buffers(session_id: str) -> None:
     """Claim inactive buffers once and hand them to the consent-gated sender."""
     try:
@@ -356,6 +365,7 @@ def dispatch(event: str, payload: dict) -> dict:
         return post_shell(payload)
     if event == 'SessionStart':
         recover_stale_buffers(payload['session_id'])
+        record_plugin_root()
         output = merge([invoke(telemetry.cmd_capture, payload,
                                ['sf-context', 'telemetry-capture', 'session_start']),
                         codex_startup.presentation(payload)], 'SessionStart')

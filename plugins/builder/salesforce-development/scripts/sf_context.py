@@ -200,6 +200,13 @@ def _check_tools_workers() -> int:
 RunResult = namedtuple("RunResult", ["ok", "stdout", "returncode", "reason", "stderr"], defaults=[""])
 
 
+def _text(value) -> str:
+    """TimeoutExpired.stderr is bytes even with text=True; normalize to str."""
+    if isinstance(value, bytes):
+        return value.decode("utf-8", errors="replace")
+    return value or ""
+
+
 def run_result(cmd: list, timeout: Optional[int] = None) -> RunResult:
     """Run a command and return a structured RunResult.
 
@@ -229,7 +236,7 @@ def run_result(cmd: list, timeout: Optional[int] = None) -> RunResult:
             **_shim.no_window_kwargs(),
         )
     except subprocess.TimeoutExpired as exc:
-        return RunResult(False, "", None, "timeout", exc.stderr or "")
+        return RunResult(False, "", None, "timeout", _text(exc.stderr))
     except (FileNotFoundError, OSError):
         return RunResult(False, "", None, "error")
     if result.returncode == 0:
@@ -258,6 +265,73 @@ def run(cmd: list, timeout: Optional[int] = None) -> str:
 _DIAGNOSTIC_TOOLS = ("sf", "npm", "node", "git")
 
 
+_STDERR_NOISE_RE = re.compile(r"^\s*(node:\w+:\d+|throw \w+;.*|at\s.*|\^+)\s*$|^\s+at\s")
+_STDERR_SIGNATURE_RE = re.compile(
+    r"^\s*(\w+)?Error:|EPERM|EACCES|ENOENT|Operation not permitted")
+
+
+def _best_stderr_line(stderr: str) -> str:
+    """Most informative stderr line: first error-signature line, else the first
+    non-blank line. Node stack-header noise is skipped."""
+    lines = [ln.strip() for ln in stderr.splitlines() if ln.strip()]
+    for ln in lines:
+        if _STDERR_SIGNATURE_RE.search(ln) and not _STDERR_NOISE_RE.match(ln):
+            return ln
+    for ln in lines:
+        if not _STDERR_NOISE_RE.match(ln):
+            return ln
+    return lines[0] if lines else ""
+
+
+def _cmd_failure_text(cmd_label: str, res) -> str:
+    """Describe why an installed tool's command failed (never "Not found")."""
+    reason = res.reason
+    if reason == "nonzero":
+        line = _best_stderr_line(res.stderr or "")
+        text = f"Installed, but `{cmd_label}` failed (exit {res.returncode})"
+        if line:
+            text += ": " + _clip(_sanitize_dynamic_text(line), 160)
+        return text
+    if reason == "timeout":
+        return f"Installed, but `{cmd_label}` timed out"
+    if reason == "error":
+        return f"Installed, but `{cmd_label}` could not be launched (OS error)"
+    if reason == "unresolved":
+        return f"`{cmd_label.split()[0]}` not found on PATH"
+    if res.ok and not (res.stdout or "").strip():
+        return f"Installed, but `{cmd_label}` printed no output"
+    return f"Installed, but `{cmd_label}` failed ({reason or 'unknown'})"
+
+
+def _codex_sandbox() -> dict:
+    kind = os.environ.get("CODEX_SANDBOX", "")
+    net = os.environ.get("CODEX_SANDBOX_NETWORK_DISABLED") == "1"
+    return {"active": bool(kind) or net or bool(os.environ.get("CODEX_SANDBOX_NETWORK_DISABLED")),
+            "kind": kind, "network_disabled": net}
+
+
+_CODEX_PROXY_MARKERS = ("CODEX_NETWORK_PROXY_ACTIVE", "HTTP_PROXY", "HTTPS_PROXY",
+                        "http_proxy", "https_proxy")
+
+
+def _codex_network_probe_skipped() -> bool:
+    """True when the Codex sandbox disables the network and no managed proxy is
+    active. With a proxy marker present, Codex routes traffic through loopback
+    proxy ports that stay open, so probes still run (ok or policy-blocked)."""
+    if not _codex_sandbox()["network_disabled"]:
+        return False
+    return not any(os.environ.get(k) for k in _CODEX_PROXY_MARKERS)
+
+
+def _sandbox_write_hint(res) -> str:
+    if res is None or not _codex_sandbox()["active"]:
+        return ""
+    if re.search(r"EPERM|Operation not permitted", res.stderr or "", re.IGNORECASE):
+        return (' The Codex sandbox blocked a write under ~/.sf. Rerun check-tools with '
+                'escalation (sandbox_permissions="require_escalated").')
+    return ""
+
+
 def _active_shell() -> str:
     """Best-effort active shell: COMSPEC on Windows, SHELL on POSIX. Neither is a
     secret. Empty string when unset."""
@@ -280,13 +354,17 @@ def diagnostic_context(tools: Optional[list] = None) -> dict:
     PATH"). Never includes tokens/secrets — it only locates executables."""
     names = list(tools) if tools else list(_DIAGNOSTIC_TOOLS)
     resolved = {name: (resolve_executable(name) or "not found on PATH") for name in names}
-    return {
+    ctx = {
         "platform": sys.platform,
         "shell": _active_shell(),
         "cwd": os.getcwd(),
         "pluginRoot": _plugin_root(),
         "resolvedExecutables": resolved,
     }
+    sb = _codex_sandbox()
+    if sb["active"]:
+        ctx["codexSandbox"] = {"kind": sb["kind"], "networkDisabled": sb["network_disabled"]}
+    return ctx
 
 
 def render_diagnostic_lines(ctx: dict) -> str:
@@ -348,6 +426,31 @@ def emit(
     print(json.dumps(output))
 
 
+def _target_org_lookup() -> tuple:
+    """Like get_target_org_detailed() but also returns the RunResult (None for the
+    env-var path) so callers can report why the CLI query failed."""
+    env_org = os.environ.get("SF_TARGET_ORG") or os.environ.get("SFDX_TARGET_ORG")
+    if env_org:
+        return env_org, "", None
+    res = run_result(["sf", "config", "get", "target-org", "--json"])
+    if not res.ok:
+        return "", (res.reason or "failed"), res
+    # Exit 0 is necessary but not sufficient: validate the expected shape before
+    # concluding "no org", so malformed/unexpected output isn't misread as an
+    # empty config (and never raises on a non-dict root or non-dict entries).
+    data = parse_json(res.stdout)
+    if not isinstance(data, dict):
+        return "", "invalid-output", res
+    result = data.get("result")
+    if not isinstance(result, list):
+        return "", "invalid-output", res
+    for r in result:
+        if isinstance(r, dict) and r.get("name") == "target-org":
+            return (r.get("value", "") or ""), "", res
+    # Well-formed response with no target-org entry → genuinely no default org.
+    return "", "", res
+
+
 def get_target_org_detailed() -> tuple:
     """Resolve the default org, distinguishing "no org set" from "the CLI query
     failed" (W-23466800 / WIN-027).
@@ -369,26 +472,8 @@ def get_target_org_detailed() -> tuple:
     "no org", and the MCP-health filter would reject sidecars the proxy stamped
     with the env org. Env-first keeps the consumer aligned with the producer.
     """
-    env_org = os.environ.get("SF_TARGET_ORG") or os.environ.get("SFDX_TARGET_ORG")
-    if env_org:
-        return env_org, ""
-    res = run_result(["sf", "config", "get", "target-org", "--json"])
-    if not res.ok:
-        return "", (res.reason or "failed")
-    # Exit 0 is necessary but not sufficient: validate the expected shape before
-    # concluding "no org", so malformed/unexpected output isn't misread as an
-    # empty config (and never raises on a non-dict root or non-dict entries).
-    data = parse_json(res.stdout)
-    if not isinstance(data, dict):
-        return "", "invalid-output"
-    result = data.get("result")
-    if not isinstance(result, list):
-        return "", "invalid-output"
-    for r in result:
-        if isinstance(r, dict) and r.get("name") == "target-org":
-            return (r.get("value", "") or ""), ""
-    # Well-formed response with no target-org entry → genuinely no default org.
-    return "", ""
+    alias, reason, _res = _target_org_lookup()
+    return alias, reason
 
 
 def get_target_org() -> str:
@@ -1799,6 +1884,8 @@ def _mcp_indicator(mcp_status: str) -> tuple[str, str]:
     # half-working feature reads differently from both healthy and a full outage.
     if "blocked by codex network policy" in low:
         return "⚠ check blocked", "warn"
+    if "codex sandbox blocks network" in low:
+        return "⚠ not checked", "warn"
     if "partial" in low:
         return "⚠ partial", "warn"
     if "connected" in low or "active" in low:
@@ -5498,11 +5585,27 @@ def _parse_semver(version_str: str) -> tuple[int, ...]:
     return tuple(int(n) for n in nums[:3]) if nums else (0,)
 
 
+def _tool_version_or_failure(name: str, argv: list, not_found: str) -> tuple:
+    """Run a `<tool> --version` probe. Returns (raw, None) on success, or
+    (None, failure_row) where the row says "Not found" only for an unresolved
+    executable and otherwise reports the real failure (no install hint)."""
+    res = run_result(argv)
+    if res.ok and (res.stdout or "").strip():
+        return res.stdout, None
+    if res.reason == "unresolved":
+        return None, {"name": name, "status": "critical", "version": None, "message": not_found}
+    label = " ".join(argv)
+    return None, {"name": name, "status": "critical", "version": None,
+                  "message": _cmd_failure_text(label, res) + _sandbox_write_hint(res),
+                  "failure": {"reason": res.reason or "empty-output", "exitCode": res.returncode}}
+
+
 def _check_sf_cli() -> dict:
-    raw = run(["sf", "--version"])
-    if not raw:
-        return {"name": "Salesforce CLI", "status": "critical", "version": None,
-                "message": "Not found — install with: npm install --global @salesforce/cli"}
+    raw, fail = _tool_version_or_failure(
+        "Salesforce CLI", ["sf", "--version"],
+        "Not found — install with: npm install --global @salesforce/cli")
+    if fail:
+        return fail
     version_match = __import__("re").search(r"@salesforce/cli/(\S+)", raw)
     version = version_match.group(1) if version_match else raw.strip().splitlines()[0]
 
@@ -5526,8 +5629,11 @@ def _check_sf_cli() -> dict:
 _CODE_ANALYZER_PLUGIN = "@salesforce/plugin-code-analyzer"
 
 
-def _jit_registered_plugins() -> dict:
-    """Return the CLI's `oclif.jitPlugins` map (plugin name → pinned version), or {}.
+def _jit_registry() -> tuple:
+    """Return ("ok", {plugin name: pinned version}) or ("unknown", RunResult-or-None).
+
+    "unknown" means `sf plugins --json` failed or printed unexpected output (None),
+    so nothing was checked. Registry is the CLI's `oclif.jitPlugins` map.
 
     A JIT ("just-in-time") plugin is declared by the Salesforce CLI but only
     physically installed the first time one of its commands runs. `sf plugins
@@ -5536,9 +5642,12 @@ def _jit_registered_plugins() -> dict:
     inspect. The root CLI entry in `sf plugins --json` carries the CLI's own
     package.json under `pjson`, whose `oclif.jitPlugins` map is the authoritative
     registry of these deferred plugins."""
-    data = parse_json(run(["sf", "plugins", "--json"]))
+    res = run_result(["sf", "plugins", "--json"])
+    if not res.ok:
+        return ("unknown", res)
+    data = parse_json(res.stdout)
     if not isinstance(data, list):
-        return {}
+        return ("unknown", None)
     for entry in data:
         if not isinstance(entry, dict):
             continue
@@ -5547,13 +5656,14 @@ def _jit_registered_plugins() -> dict:
             continue
         oclif = (entry.get("pjson") or {}).get("oclif") or {}
         jit = oclif.get("jitPlugins")
-        return jit if isinstance(jit, dict) else {}
-    return {}
+        return ("ok", jit if isinstance(jit, dict) else {})
+    return ("ok", {})
 
 
 def _check_code_analyzer() -> dict:
     # Fast path: physically installed → `sf plugins inspect` returns its version.
-    data = parse_json(run(["sf", "plugins", "inspect", _CODE_ANALYZER_PLUGIN, "--json"]))
+    inspect_res = run_result(["sf", "plugins", "inspect", _CODE_ANALYZER_PLUGIN, "--json"])
+    data = parse_json(inspect_res.stdout) if inspect_res.ok else None
     # inspect returns a list; take the first entry. A not-installed JIT plugin can
     # yield {"error": {}} (or nothing), so require a real version before calling it
     # installed — otherwise fall through to the JIT check below.
@@ -5565,7 +5675,14 @@ def _check_code_analyzer() -> dict:
     # Not physically installed — but if the CLI registers it as a JIT plugin, it
     # will auto-install on first `sf code-analyzer` run. That's available, not
     # missing, so do NOT report it critical.
-    jit = _jit_registered_plugins()
+    kind, jit = _jit_registry()
+    if kind == "unknown":
+        if jit is None:
+            why = "unexpected output from sf plugins --json"
+        else:
+            why = _cmd_failure_text("sf plugins --json", jit) + _sandbox_write_hint(jit)
+        return {"name": "Code Analyzer plugin", "status": "warn", "version": None,
+                "message": "Could not check: " + why}
     if _CODE_ANALYZER_PLUGIN in jit:
         return {"name": "Code Analyzer plugin", "status": "ok",
                 "version": jit.get(_CODE_ANALYZER_PLUGIN) or "unknown",
@@ -5576,10 +5693,11 @@ def _check_code_analyzer() -> dict:
 
 
 def _check_node() -> dict:
-    raw = run(["node", "--version"])
-    if not raw:
-        return {"name": "Node.js", "status": "critical", "version": None,
-                "message": "Not found — install Node.js >= 18 from https://nodejs.org"}
+    raw, fail = _tool_version_or_failure(
+        "Node.js", ["node", "--version"],
+        "Not found — install Node.js >= 18 from https://nodejs.org")
+    if fail:
+        return fail
     version = raw.strip()
     parsed = _parse_semver(version)
     if parsed < _NODE_MIN:
@@ -5594,10 +5712,11 @@ def _check_node() -> dict:
 
 
 def _check_npm() -> dict:
-    raw = run(["npm", "--version"])
-    if not raw:
-        return {"name": "NPM", "status": "critical", "version": None,
-                "message": "Not found — NPM is usually bundled with Node.js"}
+    raw, fail = _tool_version_or_failure(
+        "NPM", ["npm", "--version"],
+        "Not found — NPM is usually bundled with Node.js")
+    if fail:
+        return fail
     version = raw.strip()
     parsed = _parse_semver(version)
     if parsed < _NPM_MIN:
@@ -5607,10 +5726,11 @@ def _check_npm() -> dict:
 
 
 def _check_git() -> dict:
-    raw = run(["git", "--version"])
-    if not raw:
-        return {"name": "Git", "status": "critical", "version": None,
-                "message": "Not found — install Git from https://git-scm.com"}
+    raw, fail = _tool_version_or_failure(
+        "Git", ["git", "--version"],
+        "Not found — install Git from https://git-scm.com")
+    if fail:
+        return fail
     version = raw.strip()
     return {"name": "Git", "status": "ok", "version": version, "message": "Installed"}
 
@@ -5644,7 +5764,15 @@ def _source_tracking_org_record(target: str) -> Optional[dict]:
 
 
 def _check_source_tracking() -> dict:
-    target = get_target_org()
+    target, reason, lookup_res = _target_org_lookup()
+    if not target and reason:
+        if lookup_res is None or lookup_res.ok:
+            why = "unexpected output from sf config get target-org"
+        else:
+            why = (_cmd_failure_text("sf config get target-org", lookup_res)
+                   + _sandbox_write_hint(lookup_res))
+        return {"name": "Source Tracking", "status": "warn", "version": None,
+                "message": "Could not read the default org: " + why}
     if not target:
         return {"name": "Source Tracking", "status": "warn", "version": None,
                 "message": "No default org configured — connect an org first, then re-run setup"}
@@ -5753,10 +5881,15 @@ def _codex_network_policy_evidence(*outputs) -> str:
     return ""
 
 
+_MCP_SANDBOX_UNCHECKED_MESSAGE = (
+    "Not checked (Codex sandbox blocks network) — rerun check-tools with escalation"
+)
+
 # state -> (row status, message). "inactive" is the headline case both WIN-033/WIN-040
 # exist for: the server is not activated/provisioned for this tenant.
 _MCP_STATE_TABLE = {
     "policy-blocked": ("warn", _MCP_POLICY_BLOCKED_MESSAGE),
+    "sandbox-unchecked": ("warn", _MCP_SANDBOX_UNCHECKED_MESSAGE),
     "ok": ("ok", "Server active and reachable"),
     "inactive": ("critical",
                  "Server not activated in this org — enable it in Setup -> Integrations -> "
@@ -5837,6 +5970,12 @@ def _summarize_mcp_states(observed: dict) -> str:
     observed = {slug: state for slug, state in observed.items() if slug in required}
     if "policy-blocked" in observed.values():
         return "sf-mcp-proxy: " + _MCP_POLICY_BLOCKED_MESSAGE
+    if "sandbox-unchecked" in observed.values() and not any(
+            st in ("inactive", "unreachable", "auth", "env-not-ready") for st in observed.values()
+    ):
+        names = ", ".join(sorted(s for s, st in observed.items() if st == "sandbox-unchecked"))
+        return (f"sf-mcp-proxy: {names} not checked (Codex sandbox blocks network) — "
+                "rerun check-tools with escalation")
     total = len(required)
     if not observed:
         return f"sf-mcp-proxy: not yet observed — run check-tools to probe ({', '.join(sorted(required))})"
@@ -5947,12 +6086,15 @@ def _live_mcp_summary(active_org=None) -> str:
     observed = {}
     for slug in slugs:
         data = results.get(slug)
-        if isinstance(data, dict) and data.get("state"):
+        if (isinstance(data, dict) and data.get("state")
+                and data.get("authoritative") is not False):
             observed[slug] = data.get("state")  # live probe: authoritative
             continue
         state = _sidecar_state_for_org(slug, active_org)  # fall back to last-known
         if state is not None:
             observed[slug] = state
+        elif isinstance(data, dict) and data.get("state") == "sandbox-unchecked":
+            observed[slug] = "sandbox-unchecked"
     return _summarize_mcp_states(observed)
 
 
@@ -5980,6 +6122,10 @@ def _probe_server_raw(slug: str, timeout: Optional[int] = None) -> Optional[dict
     proxy = Path(__file__).resolve().parent / "sf-mcp-proxy.bundled.js"
     if not proxy.exists():
         return None
+    if _codex_network_probe_skipped():
+        # Spawn nothing: the sandbox blocks the network and no proxy is active. Non-authoritative so
+        # callers keep a good sidecar instead of discarding it.
+        return {"slug": slug, "state": "sandbox-unchecked", "detail": "", "authoritative": False}
     res = run_result(["node", str(proxy), "--probe", slug], timeout=timeout)
     stdout = (res.stdout or "").strip()
     # Contract: --probe prints one JSON line. Live success is authoritative even
@@ -6054,11 +6200,13 @@ def _h360_status_row(*, active_org=None, probe: bool = False, detailed: bool = F
         module = _codex_h360_launcher()
         if module is None or not module._headless_360_launcher_registered():
             row["status"] = "warn"
-            row["message"] = ("Local opt-in enabled; launcher registration missing or stale; "
-                              "ask to enable Headless 360 again, then start a new session")
+            row["message"] = ("Local opt-in enabled; could not locate the installed plugin for this "
+                              "Codex session; start a new Codex session in your Salesforce DX project")
             return row
     data = _probe_server_raw("headless-360") if probe and _HOOK_DEADLINE is None and active_org else None
-    live = isinstance(data, dict) and bool(data.get("state"))
+    unchecked = isinstance(data, dict) and data.get("state") == "sandbox-unchecked"
+    live = (isinstance(data, dict) and bool(data.get("state"))
+            and data.get("authoritative") is not False)
     if not live:
         data = _read_health_sidecar("headless-360")
         identities = _org_identity_candidates(active_org)
@@ -6067,6 +6215,10 @@ def _h360_status_row(*, active_org=None, probe: bool = False, detailed: bool = F
             data = None
     state = data.get("state") if isinstance(data, dict) else None
     row["health_state"] = state
+    if state is None and unchecked:
+        row.update(_render_mcp_state_row("headless-360", "sandbox-unchecked"))
+        row["message"] = "Local opt-in enabled; " + row["message"]
+        return row
     if state == "policy-blocked":
         row.update(_render_mcp_state_row("headless-360", state, str(data.get("detail") or "")))
         row["message"] = "Local opt-in enabled; " + row["message"]
@@ -6105,7 +6257,9 @@ def _grounding_status_row(*, active_org=None, probe: bool = False) -> dict:
     row = {"name": _mcp_row_name(_GROUNDING_SLUG), "status": "info", "version": None,
            "optional": True}
     data = _probe_server_raw(_GROUNDING_SLUG) if probe and _HOOK_DEADLINE is None else None
-    live = isinstance(data, dict) and bool(data.get("state"))
+    unchecked = isinstance(data, dict) and data.get("state") == "sandbox-unchecked"
+    live = (isinstance(data, dict) and bool(data.get("state"))
+            and data.get("authoritative") is not False)
     if not live:
         data = _read_health_sidecar(_GROUNDING_SLUG)
         identities = _org_identity_candidates(active_org)
@@ -6114,6 +6268,10 @@ def _grounding_status_row(*, active_org=None, probe: bool = False) -> dict:
             data = None
     state = data.get("state") if isinstance(data, dict) else None
     row["health_state"] = state
+    if state is None and unchecked:
+        row.update(_render_mcp_state_row(_GROUNDING_SLUG, "sandbox-unchecked"))
+        row["message"] = "Optional; " + row["message"]
+        return row
     if state == "policy-blocked":
         row.update(_render_mcp_state_row(_GROUNDING_SLUG, state, str(data.get("detail") or "")))
         row["message"] = "Optional; " + row["message"]
@@ -6154,6 +6312,26 @@ def _mcp_artifact_rows(proxy: Path, launcher: Path, servers: list) -> list:
     return [config, optional]
 
 
+def _codex_launch_preflight_rows() -> list:
+    """Local prerequisites are not endpoint health, host startup, or exposed tools."""
+    launcher = _codex_h360_launcher()
+    rows = []
+    for server in ("salesforce-metadata-experts", "salesforce-metadata-grounding",
+                   "salesforce-lsp", "salesforce-headless-360"):
+        diagnostic = launcher.native_preflight(server) if launcher else None
+        row_status = {"ready": "ok", "error": "warn", "off": "info"}.get(
+            diagnostic.get("status") if diagnostic else None)
+        if row_status is None:
+            diagnostic = {"status": "error", "reason": "diagnostics_unavailable",
+                          "guidance": "Local launcher diagnostics unavailable; reinstall if a new session does not restore them."}
+            row_status = "warn"
+        rows.append({"name": server + " (local launch preflight)", "status": row_status,
+                     "version": None, "diagnostic": diagnostic,
+                     "message": "Current shell/local launch preflight: " + diagnostic["reason"]
+                                + ". " + diagnostic["guidance"]})
+    return rows
+
+
 def _check_mcp() -> list:
     """MCP readiness, split into THREE deterministic, independently-reported
     concerns (W-23466800 / WIN-027): (a) config-file presence, (b) platform endpoint
@@ -6165,11 +6343,13 @@ def _check_mcp() -> list:
     rows = []
 
     # (a) Config-file presence — deterministic, offline (file + proxy binary).
-    mcp_file = here / ".mcp.json"
+    codex = _plugin_client() == "codex"
+    config_name = ".codex-plugin/plugin.json" if codex else ".mcp.json"
+    mcp_file = here / config_name
     servers = []
     if not mcp_file.exists():
         rows.append({"name": "Salesforce MCP (config)", "status": "critical", "version": None,
-                     "message": f".mcp.json not found at {mcp_file}. Try /reload-plugins."})
+                     "message": f"{config_name} not found at {mcp_file}. Reload the plugin."})
     else:
         parsed = True
         try:
@@ -6179,10 +6359,10 @@ def _check_mcp() -> list:
             parsed = False
         if not parsed:
             rows.append({"name": "Salesforce MCP (config)", "status": "warn", "version": None,
-                         "message": ".mcp.json found but could not be parsed"})
+                          "message": config_name + " found but could not be parsed"})
         elif not servers:
             rows.append({"name": "Salesforce MCP (config)", "status": "warn", "version": None,
-                         "message": ".mcp.json has no mcpServers configured"})
+                          "message": config_name + " has no mcpServers configured"})
         else:
             # PR #5 (W-23466798 / WIN-010) replaced the extensionless `sf-mcp-proxy` Bash
             # wrapper with an exec-form Node launch of the bundled JS, so the
@@ -6217,14 +6397,17 @@ def _check_mcp() -> list:
             optional = h360_future.result()
     if optional is not None:
         rows.append(optional)
+    if codex:
+        rows.extend(_codex_launch_preflight_rows())
     # (c) Actual MCP process health — NOT knowable from this script (Claude Code
     # owns the MCP subprocess lifecycle). Report it as INFORMATIONAL (not a
     # warning) so a healthy setup can read fully green, while still refusing to
     # infer "healthy" from (a)/(b) — the W-23466800 (WIN-027) anti-pattern (config presence
     # must not become an inaccurate green).
     rows.append({"name": "Salesforce MCP (process)", "status": "info", "version": None,
-                 "message": "Process health not verified here — confirm with /mcp or /doctor. "
-                            "A green config/endpoint does NOT prove the MCP process launched."})
+                 "message": ("Process health not verified here; confirm startup and tools in the host MCP UI. " if codex else
+                             "Process health not verified here — confirm with /mcp or /doctor. ") +
+                             "A green config/endpoint does NOT prove the MCP process launched."})
     return rows
 
 
@@ -6235,6 +6418,13 @@ def cmd_check_tools() -> int:
     flattened. On ANY hard failure a secret-free `diagnostic` block is attached
     (W-23466800 / WIN-027) so the failure is understandable — and so it is not quietly flipped
     green by a model-run shell fallback that finds the tool a different way."""
+    try:
+        Path.cwd()
+    except OSError:
+        row = {"name": "Working directory", "version": None, "status": "critical",
+               "message": "The working directory is unavailable. Reopen the Salesforce DX project."}
+        print(json.dumps({"tools": [row], "diagnostic": {"reason": "cwd_unavailable", "cwd": None}}))
+        return 0
     with ThreadPoolExecutor(max_workers=_check_tools_workers()) as pool:
         futures = [
             pool.submit(_check_sf_cli),
@@ -15192,6 +15382,8 @@ _PLUGIN_INSTALL_SUBPROCESS_ENV_KEYS = {
     "CLAUDE_CONFIG_DIR", "CODEX_HOME",
 }
 _PLUGIN_INSTALL_TIMEOUT_SECONDS = 120
+# How long to wait for the pipes to close after a timed-out step's process tree is killed.
+_PLUGIN_INSTALL_REAP_SECONDS = 5
 _PLUGIN_INSTALL_MAX_STREAM_BYTES = 4000
 
 # Every catalog entry is local (`./plugins/builder/<name>` or, per the
@@ -15236,16 +15428,89 @@ def _plugin_install_execution(returncode: Optional[int], stdout: object, stderr:
     }
 
 
+def _kill_windows_process_tree(pid: int) -> None:
+    """Best-effort `taskkill /F /T` of `pid` and everything it spawned.
+
+    /T finds children by parent PID, so call this while the root process is still
+    alive: once cmd.exe is dead its children are orphans and /T no longer reaches
+    them. Never raises."""
+    system_root = os.environ.get("SystemRoot") or os.environ.get("SYSTEMROOT") or r"C:\Windows"
+    try:
+        subprocess.run(
+            [os.path.join(system_root, "System32", "taskkill.exe"), "/F", "/T", "/PID", str(pid)],
+            capture_output=True, shell=False, timeout=10, check=False,
+            **_shim.no_window_kwargs(),
+        )
+    except (OSError, subprocess.SubprocessError):
+        pass
+
+
+def _run_install_subprocess(command: list, *, timeout: float, capture_output: bool = False, **popen_kwargs):
+    """`subprocess.run` that cannot be held open past its timeout by a grandchild.
+
+    A Windows `.cmd` shim runs as `cmd.exe /c claude.cmd ...`, so the Node CLI is a
+    grandchild that inherits the captured stdout/stderr pipes. `subprocess.run`
+    kills only cmd.exe on timeout and then calls `communicate()` with no timeout,
+    which blocks for as long as the hung CLI keeps the pipes open and so never
+    reports the timeout. On Windows this kills the whole tree first and bounds the
+    pipe drain; elsewhere it is plain `subprocess.run` (no shim wrapper, and POSIX
+    `communicate` does not block after the kill)."""
+    if os.name != "nt":
+        return subprocess.run(command, timeout=timeout, capture_output=capture_output, **popen_kwargs)
+    pipe = subprocess.PIPE if capture_output else None
+    process = subprocess.Popen(command, stdout=pipe, stderr=pipe, **popen_kwargs)
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+    except BaseException as exc:
+        _kill_windows_process_tree(process.pid)
+        try:
+            process.kill()
+        except OSError:
+            pass
+        if not isinstance(exc, subprocess.TimeoutExpired):
+            # Like `subprocess.run`: kill and re-raise without draining.
+            raise
+        try:
+            stdout, stderr = process.communicate(timeout=_PLUGIN_INSTALL_REAP_SECONDS)
+        except subprocess.TimeoutExpired as drain:
+            # On Windows this carries no output, so nothing is reported. The pipes stay
+            # open on purpose: the daemon reader threads are still inside read(), and
+            # closing a pipe (or leaving a `with Popen` block) waits on that lock until
+            # the stray process exits. The reader threads close the pipes themselves then.
+            stdout, stderr = drain.stdout, drain.stderr
+        raise subprocess.TimeoutExpired(command, timeout, output=stdout, stderr=stderr) from None
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+
+
 def _run_plugin_install_step(
-    argv: list, *, env, runner=subprocess.run, timeout_seconds: int = _PLUGIN_INSTALL_TIMEOUT_SECONDS,
+    argv: list, *, env, runner=_run_install_subprocess,
+    timeout_seconds: int = _PLUGIN_INSTALL_TIMEOUT_SECONDS,
 ) -> tuple[bool, dict]:
     """Run one `claude plugin ...` step: argv list, shell=False, bounded timeout,
     minimal env allowlist. Returns (ok, execution-metadata-only) -- never the
-    raw stdout/stderr text."""
+    raw stdout/stderr text.
+
+    argv[0] is a tool name resolved through `build_command` (so an npm `.cmd`
+    shim works on Windows) against the parent `os.environ` PATH/COMSPEC, not
+    the `env` argument. The spawn hides the console window on Windows.
+
+    When nothing is spawned because `build_command` returned None, the metadata
+    also carries `launchError`: "not_found" (empty argv, or argv[0] is not on
+    PATH) or "refused" (a character cmd.exe cannot pass safely to a `.cmd`
+    shim). Other result shapes have no `launchError` key."""
+    command = build_command(argv[0], argv[1:]) if argv else None
+    if command is None:
+        # Not on PATH, or refused (cmd metacharacter on a shim path): same
+        # metadata shape as a launch error, and nothing is spawned.
+        execution = _plugin_install_execution(None, None, None, timed_out=False)
+        not_found = not argv or resolve_executable(argv[0]) is None
+        execution["launchError"] = "not_found" if not_found else "refused"
+        return False, execution
     try:
         completed = runner(
-            argv, capture_output=True, shell=False, timeout=timeout_seconds,
-            check=False, env=_plugin_install_subprocess_env(env),
+            command, capture_output=True, shell=False, timeout=timeout_seconds,
+            env=_plugin_install_subprocess_env(env),
+            **_shim.no_window_kwargs(),
         )
     except subprocess.TimeoutExpired as exc:
         return False, _plugin_install_execution(None, exc.output, exc.stderr, timed_out=True)
@@ -15298,23 +15563,28 @@ def _ensure_salesforce_marketplace_registered(env, client: str = "claude") -> No
     Every step is best-effort: return values are discarded and failure here is
     never fatal on its own -- the subsequent install call surfaces its own
     exit/timeout metadata regardless of whether this step ran or why it
-    failed."""
+    failed. The one exception to silence: a step the Windows shim check refuses
+    to spawn prints a single stderr line naming it, so the install that follows
+    failing is explainable."""
+    def step(argv: list) -> None:
+        _ok, execution = _run_plugin_install_step(argv, env=env)
+        if execution.get("launchError") == "refused":
+            print(
+                f"Skipped `{' '.join(argv)}`: its path or an argument contains a "
+                "character cmd.exe cannot pass safely, so the install that follows may fail.",
+                file=sys.stderr,
+            )
+
     root = _plugin_install_local_marketplace_root()
     if client == "codex":
         source = str(root) if root is not None else _SALESFORCE_MARKETPLACE_REPO
-        _run_plugin_install_step(
-            ["codex", "plugin", "marketplace", "add", source, "--json"], env=env
-        )
+        step(["codex", "plugin", "marketplace", "add", source, "--json"])
         return
     if root is not None:
-        _run_plugin_install_step(["claude", "plugin", "marketplace", "add", str(root)], env=env)
+        step(["claude", "plugin", "marketplace", "add", str(root)])
         return
-    _run_plugin_install_step(
-        ["claude", "plugin", "marketplace", "add", _SALESFORCE_MARKETPLACE_REPO], env=env
-    )
-    _run_plugin_install_step(
-        ["claude", "plugin", "marketplace", "update", _SALESFORCE_MARKETPLACE_NAME], env=env
-    )
+    step(["claude", "plugin", "marketplace", "add", _SALESFORCE_MARKETPLACE_REPO])
+    step(["claude", "plugin", "marketplace", "update", _SALESFORCE_MARKETPLACE_NAME])
 
 
 PluginInstallLookupResult = namedtuple("PluginInstallLookupResult", ("entry", "reason"))
@@ -15773,7 +16043,18 @@ def _perform_plugin_install(
         )
         # `marketplace update` only works once the marketplace exists, so name
         # `add` for the unregistered case and `update` for the stale case.
-        if client == "codex":
+        launch_error = execution.get("launchError")
+        if launch_error == "not_found":
+            message = (
+                f"Plugin install failed for {name}@{marketplace}: `{command[0]}` was "
+                "not found on PATH."
+            )
+        elif launch_error == "refused":
+            message += (
+                f"\nThe `{command[0]}` shim's path or an argument contains a "
+                "character cmd.exe cannot pass safely, so nothing was run."
+            )
+        elif client == "codex":
             message += (
                 "\nVerify the marketplace is registered with `codex plugin marketplace list` "
                 "and retry the guarded install."

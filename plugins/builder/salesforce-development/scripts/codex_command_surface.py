@@ -41,13 +41,22 @@ def main():
     parser.add_argument('command', choices=('org', 'project', 'startup', 'status', 'welcome'))
     args = parser.parse_args()
     os.environ['SF_AGENT_CLIENT'] = 'codex'
-    cwd = Path.cwd().resolve()
-    root = next((p for p in (cwd, *cwd.parents) if (p / 'sfdx-project.json').is_file()), cwd)
-    os.chdir(root)
+    try:
+        cwd = Path.cwd().resolve()
+        root = next((p for p in (cwd, *cwd.parents) if (p / 'sfdx-project.json').is_file()), cwd)
+        os.chdir(root)
+    except OSError:
+        print("The working directory is unavailable. Reopen the Salesforce DX project.")
+        return
     if args.command == 'startup':
         surface = startup_surface(root)
     else:
         _, surface = sf_context._STATUS_FAMILY_PAINTERS['salesforce-development:' + args.command](root)
+        if args.command == 'status':
+            rows = sf_context._codex_launch_preflight_rows()
+            surface += '\n\nCurrent shell/local launch preflight (offline)\n'
+            surface += '\n'.join(row['name'] + ': ' + row['message'] for row in rows)
+            surface += '\nLocal readiness and endpoint health do not prove native startup or exposed tools; check the host MCP UI.'
     surface = surface.replace('/salesforce-development:setup to scaffold one',
                               'ask to create an SFDX project')
     surface = re.sub(r'/salesforce-development:([a-z][a-z-]*)',

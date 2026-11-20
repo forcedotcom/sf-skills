@@ -14,7 +14,8 @@ REQUIRED_FILES = frozenset({
     ".codex-plugin/plugin.json",
     ".mcp.json",
     "scripts/codex_mcp_launcher.py",
-    "scripts/codex_h360_bootstrap.py",
+    "scripts/codex_mcp_bootstrap.py",
+    "scripts/codex_mcp_diagnostics.py",
     "scripts/codex_hooks.py",
     "scripts/codex_edit_advisory.py",
     "scripts/codex_startup.py",
@@ -110,11 +111,14 @@ def verify(plugin_root: Path, require_command_projection: bool = False) -> dict[
     if not isinstance(servers, dict) or set(servers) != EXPECTED_SERVERS:
         failures.append("Codex MCP server set differs from the supported server set")
     else:
-        h360 = servers["salesforce-headless-360"]
-        bootstrap = root / "scripts/codex_h360_bootstrap.py"
-        if bootstrap.is_file() and h360.get("args") != [
-                "-I", "-c", bootstrap.read_text(encoding="utf-8"), "salesforce-headless-360"]:
-            failures.append("Codex H360 bootstrap differs from its source")
+        bootstrap = root / "scripts/codex_mcp_bootstrap.py"
+        if bootstrap.is_file():
+            source = bootstrap.read_text(encoding="utf-8")
+            for name, server in sorted(servers.items()):
+                if server.get("args") != ["-I", "-c", source, name]:
+                    failures.append(f"Codex MCP bootstrap differs from its source: {name}")
+                if "cwd" in server:
+                    failures.append(f"Codex MCP entry must not set cwd: {name}")
 
     file_count = 0
     for directory, directory_names, file_names in os.walk(root, followlinks=False):

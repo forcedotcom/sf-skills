@@ -7,6 +7,12 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `education-cloud-academic-calendar-generate`, `education-cloud-course-catalog-migrate`, `education-cloud-domain-configure`, `education-cloud-multi-campus-configure`, `education-cloud-student-recruitment-agent-configure`.
+
 ## [0.2.0] — 2026-10-30
 
 ### Changed

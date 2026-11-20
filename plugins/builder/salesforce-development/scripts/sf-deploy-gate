@@ -608,11 +608,15 @@ case "$COMMAND" in
     BUCKET=$(get_org_bucket "$TARGET_ORG")
     IS_DESTRUCTIVE=$(is_destructive_deploy)
 
-    # A destructive-changes deploy to Production is gated exactly like
-    # `sf project delete` — no CONFIRM_PROD override, route to the skill that
-    # validates first and requires confirmation (#407).
+    # A destructive-changes deploy to Production is denied like
+    # `sf project delete`, with no CONFIRM_PROD override. The confirmed route is
+    # a quick deploy of a validated destructive job, which reaches the
+    # confirmation check below as an ordinary deploy.
     if [ "$BUCKET" = "production" ] && [ "$IS_DESTRUCTIVE" = "true" ]; then
-      deny "BLOCKED: destructive deploy (destructiveChanges manifest) against Production org '${TARGET_ORG}'. This DELETES metadata and has the same blast radius as 'sf project delete'. Use 'platform-destructive-deploy' skill which validates first and requires explicit confirmation."
+      if [ "$CLIENT" = "codex" ]; then
+        deny "BLOCKED: destructive deploy (destructiveChanges manifest) against Production org '${TARGET_ORG}'. This DELETES metadata, and 'sf project deploy start' with destructive changes is never allowed on Production, even after confirmation. Follow the 'platform-destructive-deploy' skill: validate with 'sf project deploy validate' (it returns a job ID), confirm the deletion with the user, ask the user to reply with exactly: confirm production deploy to ${TARGET_ORG} — then run 'sf project deploy quick --job-id <id>'. If the validation ran 0 Apex tests, Salesforce won't quick-deploy it; give the user the command to run themselves."
+      fi
+      deny "BLOCKED: destructive deploy (destructiveChanges manifest) against Production org '${TARGET_ORG}'. This DELETES metadata, and 'sf project deploy start' with destructive changes is never allowed on Production, even with CONFIRM_PROD=1. Follow the 'platform-destructive-deploy' skill: validate with 'sf project deploy validate' (it returns a job ID), confirm the deletion with the user, then promote it with 'CONFIRM_PROD=1 sf project deploy quick --job-id <id>'. Add the marker only AFTER the user has confirmed, never to pre-empt the check. If the validation ran 0 Apex tests, Salesforce won't quick-deploy it; give the user the command to run themselves."
     fi
 
     if [ "$CLIENT" = "codex" ]; then
@@ -659,7 +663,7 @@ The 'CONFIRM_PROD=1' marker relays that already-obtained confirmation to this ho
     BUCKET=$(get_org_bucket "$TARGET_ORG")
 
     if [ "$BUCKET" = "production" ]; then
-      deny "BLOCKED: destructive operation against Production org '${TARGET_ORG}'. Use 'platform-destructive-deploy' skill which validates first and requires confirmation."
+      deny "BLOCKED: destructive operation against Production org '${TARGET_ORG}'. 'sf project delete' is never allowed on Production. Use the 'platform-destructive-deploy' skill: it validates the deletion as a destructiveChanges manifest and, after the user confirms, promotes it with 'sf project deploy quick'."
     fi
 
     allow "Deploy gate: target org '${TARGET_ORG}' classified as ${BUCKET} — non-production, allowing destructive op."

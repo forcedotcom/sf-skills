@@ -7,6 +7,20 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.9.0] — 2026-11-20
+
+### Changed
+
+- Updated skills: `dx-org-manage`, `platform-apex-test-generate`, `platform-custom-application-generate`, `platform-data-and-tooling-api-context-get`, `platform-lightning-app-coordinate`, `platform-metadata-grounding-get`, `platform-report-generate`, `platform-sharing-rules-generate`.
+
+### Fixed
+
+- Codex `status` and `check-tools` report missing MCP launch prerequisites. Run the packaged launcher with `--dry-run` for offline JSON diagnostics.
+- `check-tools` now reports why a tool command failed (exit code and first error line) instead of saying it is not installed, not found, or that no default org is configured. Inside the Codex sandbox, network checks show as not checked unless the Codex network proxy is active and a blocked write under `~/.sf` gets an escalation hint.
+- Read-only `sf` checks no longer report the CLI, Code Analyzer or the default org as missing when `~/.sf` is not writable, such as under the Codex workspace-write sandbox. The README now lists the Codex writable-roots, launch-directory and reinstall requirements.
+- Codex MCP servers now honor Salesforce CLI keychain settings so they can connect to orgs authenticated with a file-backed key.
+- On Codex, `salesforce-lsp`, `salesforce-metadata-experts` and `salesforce-metadata-grounding` now start in your Salesforce DX project even when Codex's shared background service was started from another folder, so they no longer exit with "no Salesforce project". All four Codex MCP servers start in the session folder and find the installed plugin themselves, so they connect in the first session after install and after each plugin update. Headless 360 no longer needs to be enabled again after an update, and setup and `status` stop asking for that. If the plugin cannot be located, the server says so and asks you to start a new Codex session. Node installed only through nvm is now found.
+
 ## [2.8.0] — 2026-11-13
 
 ### Added
@@ -19,10 +33,13 @@ and this plugin adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+- `platform-destructive-deploy` can now finish a confirmed deletion in production. After validation it shows how many Apex tests ran. If any ran, it promotes the validated job with a confirmed quick deploy, which the deploy gate allows, instead of `sf project deploy start` with destructive changes, which the gate always blocks in production. If none ran, Salesforce won't quick-deploy the validation, so before asking you to confirm, the skill tells you and gives you the exact command to run yourself. The deploy gate's message for a blocked production deletion now points to the quick-deploy route. ([sf-skills#398](https://github.com/forcedotcom/sf-skills/issues/398), reported by [@seb-schi](https://github.com/seb-schi))
 - Standalone `npx skills add forcedotcom/sf-skills` installs no longer include `platform-destructive-deploy`, `platform-environment-validate`, `platform-capability-search` and `platform-lsp-integrate`, which run commands that ship only with the plugin. Name one with `-s` to install it anyway. ([sf-skills#370](https://github.com/forcedotcom/sf-skills/issues/370), reported by [@dmgerow](https://github.com/dmgerow))
 - `platform-destructive-deploy` now asks for production confirmation when the deploy gate is missing or can't confirm the org type (`unknown`, including when Python 3 isn't found), instead of continuing as if the org weren't production. ([sf-skills#370](https://github.com/forcedotcom/sf-skills/issues/370), reported by [@dmgerow](https://github.com/dmgerow))
 - On Windows, hooks no longer open visible `cmd.exe` console windows when a session starts or ends (or on `/clear`). Salesforce CLI calls made by the hooks and by the detached telemetry sender now start without a console window. ([sf-skills#412](https://github.com/forcedotcom/sf-skills/issues/412), reported by [@nvuillam](https://github.com/nvuillam), fix contributed in [sf-skills#413](https://github.com/forcedotcom/sf-skills/pull/413))
 - Plugin recommendations no longer read subagent hand-backs or the Claude in Chrome guide as your words. These host messages could trigger a recommendation you did not ask for, or a denied Write, and the guide could push your own request out of what was matched. ([sf-skills#363](https://github.com/forcedotcom/sf-skills/issues/363), reported by [@Z-kondokazuhiro](https://github.com/Z-kondokazuhiro))
+- On Windows, installing a recommended plugin no longer opens a console window, and works when `claude` or `codex` is installed as an npm `.cmd` shim. If the install hangs, it stops at the timeout instead of hanging the session, and the CLI process behind the shim is also stopped where possible.
+- Installing a recommended plugin now reports a missing `claude` or `codex` as not found on PATH.
 
 ## [2.7.0] — 2026-11-06
 
