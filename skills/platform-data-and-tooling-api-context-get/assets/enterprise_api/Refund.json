@@ -136,6 +136,20 @@
       "properties": "Filter, Nillable, Sort",
       "description": "The timestamp for when the current user last viewed this record. If this value is null, this record can have been referenced (LastReferencedDate) but not viewed."
     },
+    "LegalEntityAccountingPeriodId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The accounting period record that’s related to the legal entity. Available in API version 65.0 and later. This field is a relationship field. This field is available only in orgs where Billing is enabled.",
+      "relationship_name": "LegalEntityAccountingPeriod",
+      "refers_to": "LegalEntyAccountingPeriod"
+    },
+    "LegalEntityId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The legal entity this refund is associated with. Available in API version 65.0 and later. This field is a relationship field. This field is available only in orgs where Billing is enabled.",
+      "relationship_name": "LegalEntity",
+      "refers_to": "LegalEntity"
+    },
     "MacAddress": {
       "type": "string",
       "properties": "Create, Filter, Group, Nillable, Sort, Update",
@@ -230,6 +244,18 @@
       "type": "picklist",
       "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
       "description": "Defines how this refund is used. Possible values are: NonReferenced: Standalone refund not linked to any payment. Referenced: Refund made against a payment."
+    },
+    "ReasonCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Specifies a unique code that identifies the primary reason for a refund. This field is available in API version 68.0 and later."
+    },
+    "ReferenceRecordId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The ID of the record that this refund was issued against. For example, an invoice, credit memo, or payment. This field is available in API version 68.0 and later. This field is a polymorphic relationship field.",
+      "relationship_name": "ReferenceRecord",
+      "refers_to": "CreditMemo"
     }
   },
   "special_access_rules": "To access Salesforce Payments objects with the API, your org must have one or more of these licenses: Salesforce Payments, Salesforce Order Management, B2B Commerce, or D2C Commerce. Salesforce Payments objects are available only in Lightning Experience.",
@@ -474,6 +500,16 @@
       "field_label": "Processing Mode",
       "type": "picklist",
       "length": "255"
+    },
+    "ReasonCode": {
+      "field_label": "Reason Code",
+      "type": "picklist",
+      "length": "40"
+    },
+    "ReferenceRecordId": {
+      "field_label": "Reference Record ID",
+      "type": "reference",
+      "length": "18"
     },
     "RefundNumber": {
       "field_label": "Refund Number",

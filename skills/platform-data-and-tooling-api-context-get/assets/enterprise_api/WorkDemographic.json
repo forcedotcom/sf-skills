@@ -3,7 +3,9 @@
     "title",
     "description",
     "fields",
-    "special_access_rules"
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
   ],
   "title": "WorkDemographic - Data API",
   "description": "Represents the field values used to specify slices in the workload forecasting and capacity planning. This object is available in API version 49.0 and later.",
@@ -66,5 +68,89 @@
       "description": "The skill value."
     }
   },
-  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user must have the Workforce\n         Engagement Analyst permission set."
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkDemographic\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"Channel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomWorkType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"GroupIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"HistoricalWorkload\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Workload\"/>\n        <element name=\"HistoricalWorkloadId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"JobProfile\" nillable=\"true\" minOccurs=\"0\" type=\"ens:JobProfile\"/>\n        <element name=\"JobProfileId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Region\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ServiceTerritory\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ServiceTerritory\"/>\n        <element name=\"ServiceTerritoryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SkillSet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SkillSetIdentifier\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"SkillSetIdentifierId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "Channel": {
+      "field_label": "Channel",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomWorkType": {
+      "field_label": "Custom Work Type",
+      "type": "string",
+      "length": "255"
+    },
+    "GroupIdentifier": {
+      "field_label": "Group Id",
+      "type": "string",
+      "length": "255"
+    },
+    "HistoricalWorkloadId": {
+      "field_label": "Workload ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Work Demographic ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "JobProfileId": {
+      "field_label": "Job Profile ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Region": {
+      "field_label": "Region",
+      "type": "string",
+      "length": "255"
+    },
+    "ServiceTerritoryId": {
+      "field_label": "Territory ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SkillSet": {
+      "field_label": "Skill Set",
+      "type": "string",
+      "length": "255"
+    },
+    "SkillSetIdentifierId": {
+      "field_label": "Skill Set Identifier ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
 }

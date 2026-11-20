@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AgentQltyEvalFormCondition - Data API",
+  "description": "Defines a single condition in a quality evaluation criterion. Each condition evaluates an interaction attribute such as the assigned queue, agent skill, or contact reason against expected values. This object is available in API version 68.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AgentQltyEvalFormCriteriaId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated agent quality evaluation form criteria. This field is a relationship field.",
+      "relationship_name": "AgentQltyEvalFormCriteria",
+      "relationship_type": "Master-detail",
+      "refers_to": "AgentQltyEvalFormCriteria (the master object)"
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Name of the agent quality evaluation form condition."
+    },
+    "Operator": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Operator used for the evaluation form condition to compare interaction attributes against expected values. Possible values are: Equals EqualsAll"
+    },
+    "SequenceNumber": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Order position in the evaluation form criteria. Referenced when the CriteriaType field is set to CustomLogic."
+    },
+    "SourceField": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Interaction attribute to evaluate. For example, specify Queue to evaluate the routing queue."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The expected value or set of values used to evaluate the interaction attribute, based on ConditionType. Single-Value Operators: Accepts a single string Multi-Value Operators: Accepts a semicolon-delimited string of values"
+    }
+  },
+  "special_access_rules": "To access this object, you must be assigned QualityManagementEnabled org perm."
+}

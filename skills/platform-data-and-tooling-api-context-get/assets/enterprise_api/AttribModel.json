@@ -4,7 +4,8 @@
     "description",
     "fields",
     "usage",
-    "associated_objects"
+    "associated_objects",
+    "field_reference"
   ],
   "title": "AttribModel - Data API",
   "description": "Represents an attribution model used with Personalization, Attribution, and Campaign Influence, including model weights and touch type. This object is available in API version 62.0 and later.",
@@ -136,6 +137,169 @@
       "description": "User-generated strings that can be used to organize attribution models."
     }
   },
-  "usage": "Use this object to get information about attribution models that are in use with personalization and influence features. For example, you can:",
-  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AttribModelChangeEvent**: Change events are available for the object.\n- **AttribModelFeed**: Feed tracking is available for the object.\n- **AttribModelHistory**: History is available for tracked fields of the object.\n- **AttribModelOwnerSharingRule**: Sharing rules are available for the object.\n- **AttribModelShare**: Sharing is available for the object."
+  "usage": "Use this object to get information about attribution models that are in use with personalization and influence features. For example, you can:\n\n- Retrieve status and error details.\n- Identify model settings such as type (first-touch, last-touch).\n- Find out when the model was last used, refreshed, or synced.",
+  "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **AttribModelChangeEvent**: Change events are available for the object.\n- **AttribModelFeed**: Feed tracking is available for the object.\n- **AttribModelHistory**: History is available for tracked fields of the object.\n- **AttribModelOwnerSharingRule**: Sharing rules are available for the object.\n- **AttribModelShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AttribModelStatus": {
+      "field_label": "Attribution Model Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AttribRecordOutputObjectApiName": {
+      "field_label": "Attrib Record Output Object API Name",
+      "type": "string",
+      "length": "40"
+    },
+    "AttributionModelType": {
+      "field_label": "Attribution Model Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AttributionType": {
+      "field_label": "Attribution Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Attribution API Name",
+      "type": "string",
+      "length": "80"
+    },
+    "ErrorCode": {
+      "field_label": "Fault Code",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GlobalAttributionWindowDays": {
+      "field_label": "Global Attribution Window Days",
+      "type": "int",
+      "digits": "9"
+    },
+    "Id": {
+      "field_label": "Attribution ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IdentityResolutionMode": {
+      "field_label": "Identity Resolution Mode",
+      "type": "picklist",
+      "length": "255"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRemote": {
+      "field_label": "Is Remote",
+      "type": "boolean"
+    },
+    "IsZeroDayLoadRequired": {
+      "field_label": "Requires Zero Day Load",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastRefresh": {
+      "field_label": "Last Refreshed On",
+      "type": "datetime"
+    },
+    "LastSuccessfulRefresh": {
+      "field_label": "Last Successful Refresh",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LatestRefreshedStatus": {
+      "field_label": "Last Refresh Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ModelContext": {
+      "field_label": "Model Context",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ModelRevision": {
+      "field_label": "Model Revision",
+      "type": "int",
+      "digits": "9"
+    },
+    "ModelVersion": {
+      "field_label": "Model Version",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Attribution Name",
+      "type": "string",
+      "length": "255"
+    },
+    "Partner": {
+      "field_label": "Partner",
+      "type": "string",
+      "length": "80"
+    },
+    "ProfileDataGraphId": {
+      "field_label": "Data Graph ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ScheduledFrequencyMins": {
+      "field_label": "Scheduled Frequency in Mins",
+      "type": "int",
+      "digits": "9"
+    },
+    "SyncStatus": {
+      "field_label": "Sync Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "Tags": {
+      "field_label": "Tags",
+      "type": "string",
+      "length": "1333"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
 }

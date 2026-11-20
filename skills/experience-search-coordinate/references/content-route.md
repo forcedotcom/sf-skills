@@ -1,5 +1,41 @@
 # Content Route — Full Reference
 
+## Step 3: Content Route
+
+Follow this sequence for each intent Step 2 routed here. The content type FQN(s) are already known from Step 2.
+
+1. **Present search sources via `ask_followup_question` before any tool call** — only sources whose tools you have, plus "Other"; wait for the choice. → Read `references/content-route.md` § "Presenting available search sources".
+2. **Build the query, then confirm with the user before searching — required two-message pattern**, in the same turn:
+   - **Search using keywords** (`search_content_cms_channels`):
+     - **Extract keywords** — concrete nouns and named subjects likely in the title or body, plus domain synonyms; max 10, joined with ` OR `. E.g. "blog posts about sustainable business practices" → `sustainable OR sustainability OR business OR environmental`.
+     - **Extract taxonomies** — descriptive qualities, categories, or topical tags only (not concrete nouns), stringified as `{"OR": ["term1", "term2"]}`, or `"{}"` if none.
+     - Payload: `assets/search-payload-template.json`, `contentTypeFqn` = the comma-separated FQN list from Step 2. `contentAccessScope` and `channelIds` are **mutually exclusive** — never both in one call — so they're set per call in point 3.
+   - **Search using Data 360 hybrid search** (`search_digital_content`): verbatim `searchQuery`; bare ISO `searchLanguage` only if the schema lists it; confirm first. On zero results or a language error, ask the user before one retry without it → `references/content-route.md`.
+   - **Other** — ask for a direct URL, asset library path, or specific system to check (no confirmation step, since no tool is called).
+
+   → Read `references/content-route.md` § "Confirming the query before searching" for the confirmation message templates (labeled-parameters chat message, then `ask_followup_question` with `Yes - search now` / `Edit search` / `Cancel`).
+3. **Execute the search call(s)** — keyword search: one call for public-only scope, two (public + channel-scoped) when a `channelId` is in scope. Hybrid: one call, no channel scope. → Read `references/content-route.md` § "Executing the search call(s)" (keyword) or the hybrid section (field mapping) before parsing results.
+4. **Present up to 5 unique results total** (de-duplicated by `managedContentKey` for display only — an item found under more than one channel still appears once here), grouped by content type, with a `Load More` option if more remain (keyword search only). Each item shows its **Channel** as a per-item field — never the grouping key:
+
+   ```text
+   I found 3 content items:
+
+   Editorial (c__Editorial):
+   1. <title> — Channel: Public
+   2. <title> — Channel: <uiBundle>
+
+   Blog (sfdc_cms__blog):
+   3. <title> — Channel: Public
+   ```
+
+   Only one content type FQN in scope → the heading may be omitted (still one group); the per-item Channel field is always shown. If an item exists under multiple channels, show its first/primary channel here — the choice between channels happens after selection (point 5), not at presentation time.
+
+5. **User selects** one, several, or all items. **For each selected item whose delivery-details array has more than one entry**, ask which channel's copy to use — one `ask_followup_question` option per entry, named from `managedContentChannelDetails.name` — before displaying its details; items with zero or one entry go straight to display. Show `managedContentId`, `managedContentKey`, `language`, channel, and — only for a `PUBLIC_UNAUTHENTICATED`/`COMMUNITY` entry with a `contentUrl`, never a `WEB_APP` one — the full **Unauthenticated URL** (all query parameters). → Read `references/content-route.md` § "Disambiguating channel at selection" before asking — pass the channel names as `ask_followup_question`'s `options` array, never inline them in the question text.
+6. **If the channelId in scope came from uiBundle discovery** (skip entirely for public-only scope or a user-supplied `channelId` with no uiBundle), offer the `experience-cms-content-render` hand-off using the same two-message pattern, passing each item's `title`, content type FQN, its chosen entry's `managedContentChannelDetails.id` (channel ID) **only when it has a delivery entry — omit for a zero-entry item, never a placeholder**, and either its Unauthenticated URL or, if absent, its `managedContentKey` **as `contentKey`** (the receiving skill's field name). → Read `references/content-route.md` § "Offering the render hand-off" for the full procedure.
+
+→ Read `references/content-route.md` for the complete end-to-end worked example.
+
+
 ## Presenting available search sources
 
 Before any tool call, dispatch `ask_followup_question` offering only the sources whose tools you actually have (via introspection), plus "Other". Each is its own option — never numbered lines inside the question text:
@@ -19,9 +55,9 @@ Wait for the user's selection. Do not call any tool before this point. Then foll
 
 ## Confirming the query before searching
 
-Required two-message pattern, same turn:
+Required two-message pattern, same turn — regardless of which source the user picked. The Message 1 template depends on the source: keyword search lists the full parameter set, Data 360 hybrid search lists only the verbatim query and detected language.
 
-**Message 1 (chat-visible plain text — NOT inside `ask_followup_question`):** print the parameters as a labeled list, one field per line:
+**Message 1 — keyword search (chat-visible plain text — NOT inside `ask_followup_question`):** print the parameters as a labeled list, one field per line:
 
 ```text
 I'll search for content with these parameters:
@@ -32,6 +68,18 @@ I'll search for content with these parameters:
   Language: <en_US>
   Channels: Public[, plus <uiBundle> channel]
 ```
+
+**Message 1 — Data 360 hybrid search variant** (surface the detected language so the user can catch a mis-detection before the search runs — language detection is the most error-prone step of this route):
+
+```text
+I'll search Data 360 hybrid search with:
+
+  Query: trouve-moi un article sur les pinceaux depuis le CMS
+  Content Type: Blog (sfdc_cms__blog)
+  Language: fr   (auto-detected — tell me if this is wrong)
+```
+
+Show `Query` exactly as the user wrote it (verbatim), `Content Type` as the FQN(s) you'll send as `contentTypeFqn` (omit the line when you won't send it), and `Language` as the bare code you'll send. When the code came from a language the user named (step 2 of "Search using Data 360 hybrid search") rather than from the query's wording, label it `(requested)` instead of `(auto-detected — tell me if this is wrong)`, so the user sees the query and language differ on purpose. This route has no `Keywords` / `Taxonomies` / `Channels` lines — it ignores channel scope and does its own semantic matching.
 
 **Message 2 (immediately after, same turn):** dispatch `ask_followup_question` with a short question and options — `Yes - search now` / `Edit search` / `Cancel`.
 
@@ -53,12 +101,12 @@ From each response, parse `outputValues.searchResults[]`, extracting `title`, `c
 {
   "title": "Apple Inc.",
   "contentType": "c__StockMarket",
-  "managedContentId": "20YVW000001miuD",
+  "managedContentId": "20Yxx0000000001",
   "managedContentKey": "MCICPC4X5KE5ATHMTN4EYK5DOCYM",
   "managedContentChannelDeliveryDetails": [
     {
-      "contentUrl": "https://.../channels/0apVW000000Z25NYAS/contents/20YVW000001miuD?language=en_US",
-      "managedContentChannelDetails": { "id": "0apVW000000Z25N", "name": "testinternalapp", "type": "WEB_APP" }
+      "contentUrl": "https://.../channels/0apxx0000000001AAA/contents/20Yxx0000000001?language=en_US",
+      "managedContentChannelDetails": { "id": "0apxx0000000001", "name": "testinternalapp", "type": "WEB_APP" }
     }
   ]
 }
@@ -74,12 +122,12 @@ Even though `contentUrl` is present, this item's only entry is `WEB_APP` — the
   "contentType": "sfdc_cms__news",
   "managedContentKey": "MCVL5CJAB4NBBBRPTMY2N3DALBB4",
   "managedContentChannelDeliveryDetails": [
-    { "contentUrl": "https://.../0apVW000000TsHxYAK/...", "managedContentChannelDetails": { "id": "0apVW000000TsHx", "name": "Test CMS Channel", "type": "PUBLIC_UNAUTHENTICATED" } },
-    { "contentUrl": "https://.../0apVW000000VUt3YAG/...", "managedContentChannelDetails": { "id": "0apVW000000VUt3", "name": "testLWR", "type": "COMMUNITY" } },
-    { "contentUrl": "https://.../0apVW000000ZYoPYAW/...", "managedContentChannelDetails": { "id": "0apVW000000ZYoP", "name": "Test Channel 2", "type": "PUBLIC_UNAUTHENTICATED" } },
-    { "contentUrl": "https://.../0apVW000000ZYq1YAG/...", "managedContentChannelDetails": { "id": "0apVW000000ZYq1", "name": "Test Channel 3", "type": "PUBLIC_UNAUTHENTICATED" } },
-    { "contentUrl": "https://.../0apVW000000ZYrdYAG/...", "managedContentChannelDetails": { "id": "0apVW000000ZYrd", "name": "Test Channel 4", "type": "PUBLIC_UNAUTHENTICATED" } },
-    { "contentUrl": "https://.../0apVW000000ZYtFYAW/...", "managedContentChannelDetails": { "id": "0apVW000000ZYtF", "name": "Test Channel 5", "type": "PUBLIC_UNAUTHENTICATED" } }
+    { "contentUrl": "https://.../0apxx0000000002AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000002", "name": "Test CMS Channel", "type": "PUBLIC_UNAUTHENTICATED" } },
+    { "contentUrl": "https://.../0apxx0000000003AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000003", "name": "testLWR", "type": "COMMUNITY" } },
+    { "contentUrl": "https://.../0apxx0000000004AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000004", "name": "Test Channel 2", "type": "PUBLIC_UNAUTHENTICATED" } },
+    { "contentUrl": "https://.../0apxx0000000005AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000005", "name": "Test Channel 3", "type": "PUBLIC_UNAUTHENTICATED" } },
+    { "contentUrl": "https://.../0apxx0000000006AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000006", "name": "Test Channel 4", "type": "PUBLIC_UNAUTHENTICATED" } },
+    { "contentUrl": "https://.../0apxx0000000007AAA/...", "managedContentChannelDetails": { "id": "0apxx0000000007", "name": "Test Channel 5", "type": "PUBLIC_UNAUTHENTICATED" } }
   ]
 }
 ```
@@ -90,9 +138,15 @@ The multi-channel case is not "one entry from the public call, one from the chan
 
 Chosen when the user picked "Search using Data 360 hybrid search" at the source step. Data 360 hybrid search (vector + keyword) runs across Salesforce CMS and any connected third-party CMS/DAM.
 
-1. Pass `searchQuery` **verbatim** — same language, same script as the user wrote it. No translation, no keyword extraction, no ` OR `-joining, no `taxonomyExpression`, no `contentTypeFqn`/`contentAccessScope`/`channelIds`, no pagination. Translating first only makes step 2 harder, since you'd be detecting the language of your own translation instead of the user's actual words.
-2. **Determine language** — a short ISO code read directly off the user's literal wording, before any translation happens in your reasoning. Bare 2-letter codes (`en`, `fr`, `de`, `es`, `ja`, ...) cover most languages and are the validated, simpler form; a few regional splits need a country suffix instead (`pt_BR`, `zh_CN`, `zh_TW`, ...). Default to `en` only when the message is genuinely ambiguous (e.g. a bare product name) — never because translating felt natural. Use the bare 2-letter form whenever one exists — the backend accepts only the platform's own language codes, so `fr` works but `fr_FR` is rejected as invalid (`en` and `en_US` both work because `en_US` is itself a platform code).
-3. **Data 360 hybrid search ignores channel scope entirely** — there is no public vs. channel-scoped split. Make a **single call** regardless of whether a `channelId` is in scope from Step 1: `search_digital_content(searchQuery="<verbatim query>", searchLanguage="<language code>")`. **Only send `searchLanguage` if the tool's input schema actually lists it** — orgs without language-variant search enabled don't declare the input at all. When it's absent, call with `searchQuery` alone, skip the language line in the confirmation message, and skip steps 4–5 (the backend searches primary-language content only).
+1. Pass `searchQuery` **verbatim** — same language, same script as the user wrote it. No translation, no keyword extraction, no ` OR `-joining, no `taxonomyExpression`, no `channelIds`, no pagination (the backend returns at most 5 results). Translating first only makes step 2 harder, since you'd be detecting the language of your own translation instead of the user's actual words. When the request has more than one search intent (`SKILL.md` Step 2 point 1), this intent's query is only the user's own words for this intent, cut out as written — never the whole message, and never reworded or translated.
+2. **Determine language** — once per intent, as a short ISO code, in this order:
+   - **The user names the language of the content they want** ("the French article about X", "images labeled in Japanese", "en español") → use that language, even when the request itself is written in another language. `searchQuery` stays verbatim; only `searchLanguage` follows the named language.
+   - **Otherwise** → the language of this intent's own `searchQuery` text (point 1), read directly off the user's literal wording before any translation happens in your reasoning. In a request that mixes languages across intents, each intent gets its own code — never one code for the whole message. E.g. "trouve-moi un article sur les pinceaux, and also a hero image of a beach" → `fr` for the article (Content Route), `en` for the image (Media Route).
+
+   Bare 2-letter codes (`en`, `fr`, `de`, `es`, `ja`, ...) cover most languages and are the validated, simpler form; a few regional splits need a country suffix instead (`pt_BR`, `zh_CN`, `zh_TW`, ...). Default to `en` only when the message is genuinely ambiguous (e.g. a bare product name) — never because translating felt natural. Use the bare 2-letter form whenever one exists — the backend accepts only the platform's own language codes, so `fr` works but `fr_FR` is rejected as invalid (`en` and `en_US` both work because `en_US` is itself a platform code).
+3. **Data 360 hybrid search ignores channel scope entirely** — there is no public vs. channel-scoped split. Make a **single call** regardless of whether a `channelId` is in scope from Step 1: `search_digital_content(searchQuery="<verbatim query>", contentTypeFqn="<Step 2 FQN(s)>", searchLanguage="<language code>")`. Don't send `contentAccessScope`: the tool accepts only `Public`, and it would widen results to guest-accessible community sites.
+   - **`contentTypeFqn`** — the same comma-separated FQN list Step 2 produced for keyword search (e.g. `sfdc_cms__blog,sfdc_cms__news`). The backend filters to those types before searching, so both sources answer the same question. An FQN that doesn't exist in the org fails the whole call with `INVALID_API_INPUT`, so send only FQNs Step 2 actually discovered — if Step 2 found none, omit the field and the backend searches all content types.
+   - **`searchLanguage`** — **only send it if the tool's input schema actually lists it** — orgs without language-variant search enabled don't declare the input at all. When it's absent, call without it, skip the language line in the confirmation message, and skip steps 4–5 (the backend searches primary-language content only).
 4. **Offer one retry with `searchLanguage` omitted entirely — ask the user first, never retry silently — but only when the first call either:**
    - returns **zero results**, **or**
    - fails with an **input-validation error about the language value itself** — an unrecognized language code errors the whole call (for example, `INVALID_API_INPUT` / "Specify a valid language code, such as en_US, fr, or de.") rather than returning an empty list.
@@ -106,20 +160,11 @@ Chosen when the user picked "Search using Data 360 hybrid search" at the source 
 
 This is a **strict** filter, not soft ranking like the keyword route: the backend only returns items carrying that exact language variant, and it does **not** fall back to English (or any other language) per item on its own — that's why step 4's retry exists as an explicit, user-approved second call, not something the backend does silently.
 
-Example — French input "trouve-moi un article sur les pinceaux depuis le CMS" → `search_digital_content(searchQuery="trouve-moi un article sur les pinceaux depuis le CMS", searchLanguage="fr")`.
+Example — French input "trouve-moi un article sur les pinceaux depuis le CMS" (Step 2 discovered `sfdc_cms__blog`) → `search_digital_content(searchQuery="trouve-moi un article sur les pinceaux depuis le CMS", contentTypeFqn="sfdc_cms__blog", searchLanguage="fr")`.
 
-Example of the retry — English input "give me a blog post about a snowboard from the CMS" → first call `search_digital_content(searchQuery="give me a blog post about a snowboard from the CMS", searchLanguage="en")` returns zero results (the only snowboard article in the org has a French variant, not English) → tell the user "No results found in English." and ask whether to search without the language filter → user picks `Yes - search without language filter` → retry `search_digital_content(searchQuery="give me a blog post about a snowboard from the CMS")` with `searchLanguage` omitted → the item surfaces with `language: "fr"` → tell the user: "No English version exists for this item — here's the original in French."
+Example of the retry — English input "give me a blog post about a snowboard from the CMS" → first call `search_digital_content(searchQuery="give me a blog post about a snowboard from the CMS", contentTypeFqn="sfdc_cms__blog", searchLanguage="en")` returns zero results (the only snowboard article in the org has a French variant, not English) → tell the user "No results found in English." and ask whether to search without the language filter → user picks `Yes - search without language filter` → retry `search_digital_content(searchQuery="give me a blog post about a snowboard from the CMS", contentTypeFqn="sfdc_cms__blog")` with `searchLanguage` omitted → the item surfaces with `language: "fr"` → tell the user: "No English version exists for this item — here's the original in French."
 
-Still confirm first via the two-message pattern — Message 1 surfaces the detected language so the user can catch a mis-detection before the search runs (language detection is the most error-prone step of this route):
-
-```text
-I'll search Data 360 hybrid search with:
-
-  Query: trouve-moi un article sur les pinceaux depuis le CMS
-  Language: fr   (auto-detected — tell me if this is wrong)
-```
-
-Show `Query` exactly as the user wrote it (verbatim) and `Language` as the bare code you'll send. This route has no `Content Type` / `Keywords` / `Taxonomies` / `Channels` lines — it ignores channel scope and does its own semantic matching. Then `ask_followup_question` with `Yes - search now` / `Edit search` / `Cancel`, exactly as for keyword search.
+Still confirm first via the two-message pattern before this single call — use the **Data 360 hybrid search variant** of Message 1 (`Query` / `Content Type` / `Language`, no `Keywords` / `Taxonomies` / `Channels`) shown under § "Confirming the query before searching" above, then `ask_followup_question` with `Yes - search now` / `Edit search` / `Cancel`, exactly as for keyword search.
 
 ### Parsing the `search_digital_content` response
 
@@ -132,18 +177,17 @@ The response shape differs from `search_content_cms_channels`. Map each result t
 | `contentKey` | `managedContentKey` |
 | `contentTypeFqn` | `contentType` |
 | `contentUrls[]` → each `{ channelName, channelId, url }` | `managedContentChannelDeliveryDetails[]` → each `{ contentUrl: url, managedContentChannelDetails: { id: channelId, name: channelName } }` |
+| `contentUrl` (a single string, sent instead of `contentUrls[]` on orgs without all-channel URLs) | one `managedContentChannelDeliveryDetails[]` entry `{ contentUrl }` — no channel ID or name comes with it, so skip channel disambiguation and leave the Channel line out |
 | `language` | `language` — present when language-variant search applied; use it per step 5 above |
 | `searchScore` | _(extra — hybrid-only relevance score; optional to surface)_ |
 
-**Omissions to account for:** if `language` is absent, omit the Language line for that item (and, if the call sent `searchLanguage`, tell the user the search couldn't be restricted to the requested language — see step 5).
+Results are under `outputValues.searchResults[]`. Only `contentId` and `contentKey` are always present; any other field is left out when it has no value — never sent as `null` or `[]`.
 
-**Classifying channel type.** The hybrid response carries **no channel `type`** on its delivery entries, and because hybrid search ignores channel scope it can return an item delivered to a uiBundle channel. Fill in `managedContentChannelDetails.type` yourself so the public-channel-only URL rule in "Executing the search call(s)" above still holds:
-- An entry whose `channelId` matches any uiBundle `channelId` found in Step 1 (any `uiBundles/*/public/content-metadata.json` channel, or the named uiBundle's resolved channel) → `WEB_APP`. Its `url` is **never** surfaced as the Unauthenticated URL, and the render hand-off passes `contentKey` instead of a URL for it. Compare on the first 15 characters — Salesforce IDs appear in both 15- and 18-character forms.
-- Every other entry → treat as a public channel (`PUBLIC_UNAUTHENTICATED`), so its `url` is the Unauthenticated URL.
+**Omissions to account for:** if neither `contentUrls` nor `contentUrl` is present, the item has no public delivery — map it to an empty `managedContentChannelDeliveryDetails` and omit the Unauthenticated URL line. A `contentUrls[]` entry's `channelName` can be missing when the name couldn't be resolved — label that channel by its `channelId`. If `language` is absent, omit the Language line for that item (and, if the call sent `searchLanguage`, tell the user the search couldn't be restricted to the requested language — see step 5).
 
-A `WEB_APP`-classified entry is still a selectable channel option at disambiguation, exactly as in the keyword case — it just never produces a displayed URL.
+**Channel type.** The hybrid response carries no channel `type`, and doesn't need one: the backend only builds `contentUrls[]` entries for public channels, so treat every mapped entry as `PUBLIC_UNAUTHENTICATED` — its `url` is the Unauthenticated URL. uiBundle (`WEB_APP`) channels never appear in hybrid results.
 
-**Filter to the Step 2 content types.** The hybrid call takes no `contentTypeFqn`, so results can include types outside what Step 2 discovered. Keep only results whose `contentTypeFqn` is one of Step 2's FQN(s), so both sources answer the same question. If that filter removes every result from a non-empty response, don't report "no results" — tell the user which other content types came back and ask whether to show them.
+**Content types.** When the call sent `contentTypeFqn`, every result is already one of Step 2's types — no client-side filtering. When it was omitted (Step 2 found no FQN), results can be any content type; group them by their own `contentTypeFqn`.
 
 After mapping, the `managedContentChannelDeliveryDetails` array behaves identically to the keyword case (zero / one / many entries), so everything downstream — channel disambiguation, display, and the render hand-off — is reused as-is.
 
@@ -189,7 +233,7 @@ I can render the following in the <uiBundle> app:
 
 ## Building the search query
 
-Keyword/taxonomy extraction rule: see `SKILL.md` Step 3 point 2 (the Media Route uses the same split — see `media-route.md` for media-specific examples). Additional worked examples for content:
+Keyword/taxonomy extraction rule: see Step 3 point 2 at the top of this file (the Media Route uses the same split — see `media-route.md` for media-specific examples). Additional worked examples for content:
 - "press release about our product launch" → keywords: launch, announcement, release, product launch; taxonomies: Launch, Announcement, News
 - "FAQs about password resets" → keywords: password, reset, login, account; taxonomies: _(empty — no descriptive/categorical terms)_
 
@@ -223,13 +267,13 @@ Call `search_metadata` — this tool has no `filters` array; `metadataType` is t
 }
 ```
 
-This returns candidate matches only — no `jsonAttributes`, so routing and delivery-API filtering aren't possible yet. Each candidate already includes a full composite identifier, e.g. `00DVW00000CfBQP2A3::0T1VW000008sow60AA::ContentTypeBundle` (name `sfdc_cms__blog`) among others — use it as returned.
+This returns candidate matches only — no `jsonAttributes`, so routing and delivery-API filtering aren't possible yet. Each candidate already includes a full composite identifier, e.g. `00Dxx0000000000AAA::0T1xx0000000001AAA::ContentTypeBundle` (name `sfdc_cms__blog`) among others — use it as returned.
 
 Call `query_metadata` with each candidate's identifier from above, as-is, batched into one `metadataIdentifiers` array:
 ```json
 {
   "metadataIdentifiers": [
-    "00DVW00000CfBQP2A3::0T1VW000008sow60AA::ContentTypeBundle"
+    "00Dxx0000000000AAA::0T1xx0000000001AAA::ContentTypeBundle"
   ]
 }
 ```
@@ -388,4 +432,163 @@ I can render the following in the landing-page app:
 
 **Message 2 (immediately after):** `ask_followup_question` with the question `"Render this content in the landing-page app?"` and options `Yes` / `No`. Note the question stays generic — it does NOT restate "these two items" or the count; that's exactly the kind of detail Message 1's list already carries, and stuffing it into the question text is the failure mode this pattern avoids (same reasoning as Step 4's search-confirmation message, which strips line breaks/formatting from anything placed inside `ask_followup_question`).
 
-On `Yes`, dispatch delegation via `mcp__skill_bridge__load_skill("experience-cms-content-render")` — never the built-in Skill tool, which doesn't know about MCP-bridge skills and returns `Unknown skill`. Pass each selected item's `title`, content type FQN (e.g. `sfdc_cms__blog`), and its chosen entry's channel ID (`managedContentChannelDetails.id`, e.g. `0apVW000000TsHx`) **when it has one** — items 1 and 2 above each have exactly one entry, so their channel ID is included; item 5 has zero entries (empty `managedContentChannelDeliveryDetails`), so its channel ID is omitted entirely rather than read off a nonexistent entry. Also pass either its Unauthenticated URL (item 1/2 above) or, when absent, its `managedContentKey` renamed to `contentKey` (item 5 above) — the receiving skill's `SKILL.md` names this field `contentKey`. If the load call fails, tell the user the hand-off failed and stop — do not attempt the render yourself.
+On `Yes`, dispatch delegation via `mcp__skill_bridge__load_skill("experience-cms-content-render")` — never the built-in Skill tool, which doesn't know about MCP-bridge skills and returns `Unknown skill`. Pass each selected item's `title`, content type FQN (e.g. `sfdc_cms__blog`), and its chosen entry's channel ID (`managedContentChannelDetails.id`, e.g. `0apxx0000000002`) **when it has one** — items 1 and 2 above each have exactly one entry, so their channel ID is included; item 5 has zero entries (empty `managedContentChannelDeliveryDetails`), so its channel ID is omitted entirely rather than read off a nonexistent entry. Also pass either its Unauthenticated URL (item 1/2 above) or, when absent, its `managedContentKey` renamed to `contentKey` (item 5 above) — the receiving skill's `SKILL.md` names this field `contentKey`. If the load call fails, tell the user the hand-off failed and stop — do not attempt the render yourself.
+
+---
+
+## Complete End-to-End Example — Data 360 hybrid search
+
+Same skill and request domain as the keyword example above, but the user picked **Search using Data 360 hybrid search** at Step 3 point 1, and asked in French. **Steps 1–2 (intent + content-type discovery) are identical to the keyword example** — `search_metadata` + `query_metadata` discover `sfdc_cms__blog` — with one scope difference carried in from `SKILL.md` Step 1: a `landing-page` uiBundle was discovered, so its `channelId` is in scope. The hybrid call itself ignores it; it only makes the render offer fire at Step 8. Only the hybrid-specific steps are shown below.
+
+**User Request (French):**
+> "trouve-moi des articles de blog sur les pratiques commerciales durables pour notre site"
+
+---
+
+**Step 3: Build Search Query (hybrid — no keyword/taxonomy extraction)**
+
+Pass the query verbatim; read the language off the user's literal words; reuse Step 2's FQN (see "Search using Data 360 hybrid search" above):
+- Query (verbatim): `trouve-moi des articles de blog sur les pratiques commerciales durables pour notre site`
+- Content type: `sfdc_cms__blog`
+- Language: `fr`
+
+---
+
+**Step 4: Confirm Query (hybrid variant)**
+
+```text
+I'll search Data 360 hybrid search with:
+
+  Query: trouve-moi des articles de blog sur les pratiques commerciales durables pour notre site
+  Content Type: Blog (sfdc_cms__blog)
+  Language: fr   (auto-detected — tell me if this is wrong)
+```
+
+Then `ask_followup_question` with options `Yes - search now` / `Edit search` / `Cancel`. User: "Yes - search now". (Note: no `Keywords` / `Taxonomies` / `Channels` lines — hybrid ignores channel scope and does its own semantic matching.)
+
+---
+
+**Step 5: Execute Search — with language retry**
+
+First call:
+```text
+search_digital_content(searchQuery="trouve-moi des articles de blog sur les pratiques commerciales durables pour notre site", contentTypeFqn="sfdc_cms__blog", searchLanguage="fr")
+```
+→ **zero results** (no French variants exist). Per "Search using Data 360 hybrid search" step 4, don't conclude "nothing exists" yet — tell the user in plain text and offer exactly one retry:
+
+```text
+No results found in French.
+```
+Then `ask_followup_question` with options `Yes - search without language filter` / `No - stop here`. User picks `Yes`. Retry with `searchLanguage` **omitted entirely** — `contentTypeFqn` stays:
+```text
+search_digital_content(searchQuery="trouve-moi des articles de blog sur les pratiques commerciales durables pour notre site", contentTypeFqn="sfdc_cms__blog")
+```
+→ returns three blog results, each in its own primary-language variant.
+
+---
+
+**Step 6: Map the response**
+
+The hybrid shape differs from the keyword call — each result carries `contentUrls[]` (when it has a public delivery), a `searchScore`, and a per-item `language` (see "Parsing the `search_digital_content` response" above):
+```json
+{
+  "outputValues": {
+    "searchResults": [
+      {
+        "contentId": "20Yxx0000000010AAA",
+        "contentKey": "MCBT7N9K5WX2QPFR4VHD8JLZ6MGY",
+        "contentName": "Our Journey to Carbon Neutrality",
+        "searchScore": 0.91,
+        "contentUrls": [
+          { "channelId": "0apxx0000000004", "channelName": "Public",         "url": "https://example.my.site.com/cms/delivery/v66.0/0apxx0000000004AAA/contents/20Yxx0000000010AAA?oid=00Dxx0000000000AAA&language=en_US" },
+          { "channelId": "0apxx0000000005", "channelName": "Test Channel 3", "url": "https://example.my.site.com/cms/delivery/v66.0/0apxx0000000005AAA/contents/20Yxx0000000010AAA?oid=00Dxx0000000000AAA&language=en_US" }
+        ],
+        "contentTypeFqn": "sfdc_cms__blog",
+        "language": "en_US"
+      },
+      {
+        "contentId": "20Yxx0000000011AAA",
+        "contentKey": "MCQJ3P8TK6DWL9XN5VHR2FZ4GBY7",
+        "contentName": "Building a Sustainable Supply Chain",
+        "searchScore": 0.86,
+        "contentUrls": [
+          { "channelId": "0apxx0000000004", "channelName": "Public", "url": "https://example.my.site.com/cms/delivery/v66.0/0apxx0000000004AAA/contents/20Yxx0000000011AAA?oid=00Dxx0000000000AAA&language=en_US" }
+        ],
+        "contentTypeFqn": "sfdc_cms__blog",
+        "language": "en_US"
+      },
+      {
+        "contentId": "20Yxx0000000012AAA",
+        "contentKey": "MCX4R8TQ2NWL7ZK5VHD3JPF6GBY9",
+        "contentName": "Green Packaging Draft",
+        "searchScore": 0.72,
+        "contentTypeFqn": "sfdc_cms__blog",
+        "language": "en_US"
+      }
+    ]
+  }
+}
+```
+
+The third result has no `contentUrls` key at all — it isn't delivered to any public channel.
+
+Map each result to the content-route fields the rest of this reference uses:
+
+| hybrid field | → content-route field |
+|---|---|
+| `contentName` | `title` |
+| `contentId` | `managedContentId` |
+| `contentKey` | `managedContentKey` |
+| `contentTypeFqn` | `contentType` |
+| `language` | `language` |
+| each `contentUrls[]` `{ channelId, channelName, url }` | one `managedContentChannelDeliveryDetails[]` entry `{ contentUrl: url, managedContentChannelDetails: { id: channelId, name: channelName, type: "PUBLIC_UNAUTHENTICATED" } }` |
+| no `contentUrls` / `contentUrl` key | empty `managedContentChannelDeliveryDetails` |
+
+Every entry is public (see "Channel type" above), so each `url` is that entry's Unauthenticated URL. The `landing-page` uiBundle channel doesn't appear in any result — hybrid never returns `WEB_APP` channels. No content-type filtering is needed: the call sent `contentTypeFqn`, so every result is already a blog.
+
+---
+
+**Step 6b & 7: Present results, then display**
+
+The results came back in `en_US` even though the user asked in French (the retry fell back per-item), so flag the substitution when presenting. Group by content type (one blog group here), channel as a per-item hint, no URL at presentation:
+
+```text
+I found 3 content items (no French version exists — these are the English originals):
+
+1. Our Journey to Carbon Neutrality
+   Content Type: Blog (sfdc_cms__blog) — Channel: Public
+
+2. Building a Sustainable Supply Chain
+   Content Type: Blog (sfdc_cms__blog) — Channel: Public
+
+3. Green Packaging Draft
+   Content Type: Blog (sfdc_cms__blog)
+```
+
+User: "1, 2". Item 1's mapped array has two entries → ask which channel (`Public` / `Test Channel 3`); user picks `Public`. Item 2 has one → use it directly. Display details, with the chosen entry's `url` as the Unauthenticated URL:
+
+```text
+Selected content:
+
+1. Our Journey to Carbon Neutrality
+   Content Type: Blog (sfdc_cms__blog)
+   Channel: Public
+   Content ID: 20Yxx0000000010AAA
+   Content Key: MCBT7N9K5WX2QPFR4VHD8JLZ6MGY
+   Language: en_US
+   Unauthenticated URL: https://example.my.site.com/cms/delivery/v66.0/0apxx0000000004AAA/contents/20Yxx0000000010AAA?oid=00Dxx0000000000AAA&language=en_US
+
+2. Building a Sustainable Supply Chain
+   Content Type: Blog (sfdc_cms__blog)
+   Channel: Public
+   Content ID: 20Yxx0000000011AAA
+   Content Key: MCQJ3P8TK6DWL9XN5VHR2FZ4GBY7
+   Language: en_US
+   Unauthenticated URL: https://example.my.site.com/cms/delivery/v66.0/0apxx0000000004AAA/contents/20Yxx0000000011AAA?oid=00Dxx0000000000AAA&language=en_US
+```
+
+---
+
+**Step 8: Offer to Render**
+
+A `landing-page` uiBundle channel was in scope, so the render offer fires (same two-message pattern as the keyword example). On `Yes`, dispatch `mcp__skill_bridge__load_skill("experience-cms-content-render")`, passing each item's `title`, content type FQN (`sfdc_cms__blog`), the chosen entry's channel ID, and its Unauthenticated URL — exactly as in the keyword example. Had the user also picked item 3 (no `contentUrls` key, so no entry), you'd omit its channel ID and pass its `managedContentKey` as `contentKey` instead.

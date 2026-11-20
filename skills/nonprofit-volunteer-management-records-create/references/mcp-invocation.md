@@ -48,10 +48,13 @@ Every query uses the same call:
 
 ```text
 headless-360:  dispatch_readonly({"path": "/services/data/v67.0/query", "method": "GET", "query_params": {"q": "<SOQL>"}})
-Salesforce CLI: sf data query -q "<SOQL>" --api-version 67.0 --target-org <alias> --json
+Salesforce CLI: write the SOQL to a file, then
+                sf data query --file <soql-file> --api-version 67.0 --target-org <alias> --json
 ```
 
-**Apostrophes:** escape an apostrophe inside a SOQL string literal with a backslash — `'Driver\'s License'`, `'O\'Brien Hall'`. Doubling it (`''`) fails with `MALFORMED_QUERY`. Inside a headless-360 JSON argument the backslash itself must be escaped, so write `O\\'Brien` in the JSON string. In the CLI's double-quoted `-q` argument, write `O\'Brien` as is. This applies to every name below.
+**Never put names in a shell command line.** Names come from the user, so on the CLI path write the SOQL to a file (a quoted heredoc, `<<'EOF'`, or a file-write tool) and pass `--file`. Do not use `-q "<SOQL>"` with a name interpolated into it: a `"`, `$(…)` or backtick in a name would run in the shell.
+
+**Apostrophes:** escape an apostrophe inside a SOQL string literal with a backslash — `'Driver\'s License'`, `'O\'Brien Hall'`. Doubling it (`''`) fails with `MALFORMED_QUERY`. Inside a headless-360 JSON argument the backslash itself must be escaped, so write `O\\'Brien` in the JSON string. In the SOQL file, write `O\'Brien` as is. This applies to every name below.
 
 ### Reuse checks (step 4)
 
@@ -132,8 +135,11 @@ Salesforce CLI: save the same {"records": [...]} body to a file, then
 
 ```text
 headless-360:  dispatch({"path": "/services/data/v67.0/sobjects/<Object>", "method": "POST", "body": {"Name": "...", ...}})
-Salesforce CLI: sf data create record --sobject <Object> --values "Name='...' ..." --api-version 67.0 --target-org <alias> --json
+Salesforce CLI: save the same body to a file, then
+                sf api request rest "/services/data/v67.0/sobjects/<Object>" --method POST --body @<body>.json --target-org <alias>
 ```
+
+The CLI form reads the body from a file; never build a `--values "Name='...'"` string from user-supplied text.
 
 201 with `{"id": "...", "success": true}` → created. 400 → not created; read `errorCode` and `message`.
 
@@ -143,7 +149,8 @@ After the Address exists, point its Location at it:
 
 ```text
 headless-360:  dispatch({"path": "/services/data/v67.0/sobjects/Location/<Location Id>", "method": "PATCH", "body": {"VisitorAddressId": "<Address Id>"}})
-Salesforce CLI: sf data update record --sobject Location --record-id <Location Id> --values "VisitorAddressId=<Address Id>" --api-version 67.0 --target-org <alias> --json
+Salesforce CLI: save {"VisitorAddressId": "<Address Id>"} to a file, then
+                sf api request rest "/services/data/v67.0/sobjects/Location/<Location Id>" --method PATCH --body @<body>.json --target-org <alias>
 ```
 
 204 → updated.

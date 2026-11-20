@@ -9,7 +9,6 @@ metadata:
   relatedSkills:
     - "agentforce-generate"
     - "dx-org-permission-set-assign"
-    - "experience-lwr-site-generate"
     - "integration-connectivity-connected-app-configure"
     - "platform-metadata-deploy"
     - "service-agentforce-channel-configure"
@@ -29,11 +28,11 @@ metadata:
 
 # service-helpagent-coordinate: Service Cloud Help Agent, guided setup
 
-Use this skill to stand up a **Service Cloud Help Agent** (an Agentforce Service Agent) on a Salesforce org from Claude Code, following the same guided flow as the Help Agent Quick Setup wizard. This is a **coordinate** skill: it orchestrates existing skills against a canonical spec — it does **not** author a new agent primitive.
+Coordinate existing skills to set up a **Service Cloud Help Agent** (Agentforce Service Agent) on a Salesforce org using the Help Agent Quick Setup flow and canonical spec; do **not** author a new agent primitive.
 
 ## Why this skill exists
 
-Salesforce's official Help Agent template-creation API is not yet shipped. Without it, Claude has no built-in concept of "Help Agent" and would otherwise generate a generic agent. `assets/help-agent-spec.md` substitutes for the missing API: its agent script is the canonical template the eventual Quick Start UI will produce. Treat the spec as source of truth for the agent's lineage (topics, actions, instructions).
+Until the official Help Agent template-creation API ships, `assets/help-agent-spec.md` supplies the canonical Quick Start template. Treat it as the source of truth for Help Agent lineage (topics, actions, instructions), not a generic agent.
 
 ## Scope
 
@@ -51,7 +50,7 @@ Salesforce's official Help Agent template-creation API is not yet shipped. Witho
 ## Prerequisites
 
 - Claude Code + Salesforce CLI installed and an authenticated org (see repo `README.md`)
-- MCP servers registered: `salesforce-api-context`, `metadata-experts`, `sobject-reads`
+- MCP servers registered: `metadata-experts`, `sobject-reads`
 - Salesforce Skills installed into `.agents/skills/` (or `.claude/skills/`)
 - **A Salesforce org with the required features enabled (or enable-able via metadata):** Agentforce, Einstein Generative AI, Knowledge, Experience Cloud, and Data Cloud. Any org shape that meets this bar works — production, sandbox, scratch, or Developer Edition. The readiness check in `assets/help-agent-spec.md` §4.0 detects each feature and enables what can be enabled; it stops with a clear message if a required capability is missing and cannot be turned on.
 
@@ -65,22 +64,22 @@ The spec feeds these existing skills — do **not** author a new Help Agent skil
 | `dx-org-permission-set-assign` | Data Cloud permission-set assignment |
 | `service-digital-engagement-channel-configure` + `service-agentforce-channel-configure` | Deploy channel (Queue routing), then PATCH `SessionHandlerId` to bind agent (see `references/channel-web-chat.md`) |
 | `service-digital-engagement-deployment-configure` | Embedded Service Deployment — supports both LWR (`ChatterNetworkPicasso`) and Aura (`ChatterNetwork`) sites |
-| `experience-lwr-site-generate` | Experience Cloud (LWR) site — used when the org has no Live LWR site yet |
+| Self Service Connect API `POST /connect/self-service/site` (not a skill) | Experience Cloud (LWR) site — used when the org has none |
 | `service-digital-engagement-messaging-site-integrate` | Widget placement + embed (Checkpoint 4) |
 
 ## Skills inventory pre-flight (advisory — never a hard stop)
 
-This skill delegates to several sibling skills. Depending on the runtime, those dependencies resolve one of two ways: as directories under `.claude/skills/`, **or** through a runtime skill catalog that the harness resolves on demand (no local directory). An absent `.claude/skills/<name>` directory therefore does **not** prove a dependency is unavailable — it is normal when the catalog resolves skills at invocation time.
+Sibling skills resolve from `.claude/skills/` directories **or** an on-demand runtime catalog. An absent `.claude/skills/<name>` directory does **not** prove a dependency is unavailable.
 
 Run this check **once, silently, for your own awareness** — never as the run's first user-facing output:
 
 ```bash
-for skill in agentforce-generate dx-org-permission-set-assign service-digital-engagement-channel-configure service-digital-engagement-deployment-configure experience-lwr-site-generate service-digital-engagement-messaging-site-integrate service-concierge-portal-generate service-agentforce-channel-configure; do
+for skill in agentforce-generate dx-org-permission-set-assign service-digital-engagement-channel-configure service-digital-engagement-deployment-configure service-digital-engagement-messaging-site-integrate service-concierge-portal-generate service-agentforce-channel-configure; do
   [ -d ".claude/skills/$skill" ] && echo "OK: $skill" || echo "resolve-at-runtime: $skill"
 done
 ```
 
-**Do not stop, and do not open the run with a missing-dependency roll call.** Proceed with the checkpoints; delegate to each sibling skill only when the flow actually reaches it. If — and only if — a delegation step is actually reached and that specific skill cannot be resolved at that moment, surface *that one skill* by name at that point. Never front-load the full eight-skill inventory as the deliverable; it is not a decision the user owns and it is not the report.
+**Do not stop, and do not open the run with a missing-dependency roll call.** Proceed with the checkpoints; delegate to each sibling skill only when the flow actually reaches it. If — and only if — a delegation step is actually reached and that specific skill cannot be resolved at that moment, surface *that one skill* by name at that point. Never front-load the full seven-skill inventory as the deliverable; it is not a decision the user owns and it is not the report.
 
 ---
 
@@ -186,8 +185,8 @@ Deploy new channels with Queue routing (`service-digital-engagement-channel-conf
   ```
 
   Both LWR (`ChatterNetworkPicasso`) and Aura (`ChatterNetwork`) sites support the `experience_messaging:embeddedMessaging` widget. Filter out `ESW_`-prefixed sites (internal ESD scaffolding, not real Experience Cloud sites). Resolve the site **in the same turn**, do not defer:
-  - **Zero real sites** → create one via `experience-lwr-site-generate` (recommend the Help Center template), or fall back to "Deploy on my own website (get snippet)".
-  - **Exactly one** → confirm it with the user before using (an existing site may serve a different audience); do not silently adopt it.
+  - **Zero real sites** → offer to create one via `POST /connect/self-service/site` (rule: `references/channel-web-chat.md`), or fall back to "Deploy on my own website (get snippet)".
+  - **Exactly one** → in the SAME turn, ask: use it, create a new LWR site, or deploy on own website; never silently adopt it.
   - **Multiple** → in the SAME turn, show the executed SOQL, list results as a table (`Name | Type | UrlPathPrefix`), state "no site is created or modified until you choose," then ask which to target (offer "Create a new LWR site" and "Deploy on my own website"). Don't defer with "I'll get back to you" — present results now.
 
   Do not filter by hardcoded name or URL path prefix — the correct site depends on the customer's org.
@@ -245,6 +244,8 @@ Once the channel loop exits ("Done"), run two phases (Phase A below is what used
 | Web Chat, Help Portal, and Voice have dedicated branches; any other existing channel type (WhatsApp, SMS, Facebook, Apple Business Chat, Line, Email-to-Case, Custom) is wired generically via `service-agentforce-channel-configure` | Discovery (§4.3 Step 1) must surface every channel type present — offering only the three dedicated branches when others exist is the bug this checkpoint guards against. For Web Chat, always run the post-deploy assertion (re-fetch the MessagingChannel, assert `embeddedConfig.authMode`; default `UnAuth`) — a wrong choice silently ships a widget that won't render for guests. Report `authMode` as a bare value (`authMode: UnAuth`); don't narrate the assertion. Never emit a legacy `esw.min.js` / Live Agent V1 snippet |
 
 ## Output Expectations
+
+At a required user-owned confirmation stop, write the guided-decision `report.md` before ending the turn; chat alone is not the deliverable. Preserve the checkpoint, distinguish offered defaults from confirmed choices, and do not claim unperformed org work. See **Confirmation stops still produce the artifact** and **Defaults are not consent or execution evidence** in `references/output-report-format.md`.
 
 The one deliverable is a single `report.md`: a **status report of what was decided and done**, not a design doc. Two shapes exist — a **settled-facts report** when the flow executed a step (concrete decided values in tables), and a **guided-decision report** when the flow is at a decision the user owns (present the choices, do not fabricate). Never hedge inside decision cells ("to be captured", "pending", "will create"); never fabricate opaque IDs; never manufacture blockers on checkpoints the request did not target. Full templates, per-shape rules, one-decision reasoning callouts (readiness ordering, `authMode`), and the "never include" scored-failure list live in **`references/output-report-format.md`** — read it before writing the report.
 

@@ -6,12 +6,16 @@
 
 A single `report.md`: a **status report of what was decided and done**, not a design doc, plan, or architecture write-up. Two rules govern quality:
 
-1. **Report concrete outcomes, never intentions.** Write what *is* — the decided value, the created resource, the resolved ID — not what you *would* or *plan to* do. If a step could not run to completion because this is a non-interactive run, **decide the sensible default, state it as the decision, and report it as such** — do not stall on "awaiting confirmation," "to be resolved," "pending user input," or "please provide…". Hedging language ("will create", "to be executed", "once confirmed") reads as an unfinished plan and is scored as incomplete. Name the agent, the locale, the grounding source, `authMode`, the ADL name, the `rag_feature_config_id`, the site `UrlPathPrefix`, the ESD publish state — as settled facts.
+1. **Report concrete outcomes, never intentions as completed work.** Report resource state and resolved IDs only when verified in this run; distinguish existing/reused resources from newly created ones. Mechanical defaults within authorized scope can be decided; non-interactive execution does not authorize user-owned choices or unperformed setup. At a required confirmation, use the guided-decision report: identify the stop, distinguish offered defaults from accepted decisions, and report no unperformed work as complete.
 2. **No padding, no scaffolding prose.** No preamble, no design-doc sections, no restating the prompt. Dense, declarative lines only.
 
 **Density bar (web-chat / portal flows are the usual offenders).** The whole report is the two tables plus the two short sections — target well under ~40 lines total. A table cell is a **value or a short clause, never a sentence with a subject and verb**: `UnAuth` not "The authMode was set to UnAuth"; `Help_Agent_Knowledge (indexing COMPLETED)` not "A dedicated Agentforce Data Library named Help_Agent_Knowledge was created and its indexing completed". Do not restate a decided value across multiple cells, do not narrate the mechanics of how a resource was created (which API, which CLI call, which retrieve/deploy sequence) — that belongs in the skill, not the report — and do not append explanatory prose after a table. State the reasoning callout (readiness ordering, `authMode`) only when the request centers on that one decision; otherwise the value alone suffices.
 
 ## Choosing a report shape
+
+**Confirmation stops still produce the artifact.** Before ending a turn at a required user-owned confirmation, write a non-empty `report.md` using the guided-decision format and exact H1. Record the current checkpoint, choices and offered defaults, explicitly supplied channel preference, next required confirmation, and that no unperformed work is complete. A final chat response does not replace `report.md`. Writing the report does not authorize advancing the checkpoint or changing the org.
+
+**Defaults are not consent or execution evidence.** Settled-facts/default instructions apply only to skill-owned mechanical choices within an authorized execution scope. They do not override required identity, channel, provisioning, deployment, or go-live confirmation. Report readiness, discovery, resource creation, and verification only when actually performed; never reproduce template success values as observed results.
 
 **Before writing, choose the report shape by what the run actually did. There are two:**
 
@@ -60,7 +64,7 @@ The `‹…›` slots below mark where **this run's** real values go — replace
 One line — the single next step for the user.
 ```
 
-Non-slot values above (Data Cloud, perm-set names, `HelpChat WebV2`, delegation targets) are the skill's canonical defaults — reproduce them as-is. Fill the `‹…›` slots from this run (including `authMode`, which is decided per run from the Step B choice — do not default it in the report). **Any checkpoint the run did not reach gets a bare `Not started` — not a plan, forecast, or "pending" note.** For a request scoped to one checkpoint (e.g. Checkpoint 2 grounding), only that row carries settled facts; rows 3 and 4 read `Not started`, `Blocking Issues` is `None`, and `Next Action` names the next checkpoint (e.g. "Checkpoint 3 (channel) when you're ready").
+Non-slot values above illustrate canonical defaults, not observed state. Readiness, assignment, indexing, deployment and publish claims require evidence from this run; replace unverified success values with the actual status. Fill the `‹…›` slots from verified results (including `authMode`, decided per run from Step B). **Any checkpoint the run did not reach gets a bare `Not started`.** For a scoped Checkpoint-2 request, only that row carries verified facts; later rows read `Not started`. If it completed, `Blocking Issues` is `None` and `Next Action` names Checkpoint 3; otherwise report the actual blocker.
 
 **Blocked run?** `Blocking Issues` is the one sanctioned place to state a real blocker — one honest line there (e.g. "multiple Live LWR sites — asked user to choose"; "Knowledge data category not specified — chose the org's default group") is **required and is not hedging**. It records what stopped a checkpoint the run *actually entered* — never a checkpoint the request never targeted (a scoped Checkpoint-2 run is not "blocked" on Checkpoint 3). Keep the checkpoint cells decisive for what *was* settled; put the single unresolved thing here. What is scored as incomplete is hedging *inside the decision cells* ("to be captured", "not yet", "pending") — not a clear one-line blocker in this section.
 
@@ -110,6 +114,8 @@ Reply with your choices (or accept the defaults) and I'll proceed to the next ch
 ```
 
 Fill every `‹…›` from this run's context. Keep to these five sections — the Roadmap names what later checkpoints will do (it is not a settled-fact table and must not claim any of it is done); no provisioning tables, no settled-fact cells for steps not yet reached.
+
+**Voice preference at an earlier checkpoint:** keep the confirmation stop. In the Channel roadmap, name the later read-only discovery (`MessagingChannel` where `MessageType='PstnVoice'`), existing-channel selection versus no-channel procurement/manual Setup choices, and the actual delegates: `service-agentforce-contact-center-coordinate` owns number procurement; `service-agentforce-channel-configure` Branch B owns wiring and the `VoiceCall` fallback queue. State that discovery and delegation have not run if they have not. Do not claim this coordinator provisions numbers or wires queues itself. This roadmap does not authorize entering Checkpoint 3 early.
 
 ## Never include
 

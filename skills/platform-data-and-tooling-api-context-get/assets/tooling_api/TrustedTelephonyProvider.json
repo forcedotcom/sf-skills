@@ -1,0 +1,49 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "TrustedTelephonyProvider - Tooling API",
+  "description": "Represents the mapping between an organization and its trusted telephony carrier configuration for Agentforce Contact Center BYOC. This object is available in API version 68.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique name of the object in the API."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the MasterLabel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "User interface label for the trusted telephony provider. This internal label doesn’t get translated."
+    },
+    "ProviderCarrier": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Carrier aggregator type associated with the trusted telephony provider. Possible value: Bandwidth"
+    },
+    "TelephonyProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated telephony provider. This field is a relationship field.",
+      "relationship_name": "TelephonyProvider",
+      "refers_to": "TelephonyProvider"
+    }
+  },
+  "special_access_rules": "To access TrustedTelephonyProvider, you must have the Agentforce Contact Center Admin (Salesforce Voice) permission set assigned."
+}

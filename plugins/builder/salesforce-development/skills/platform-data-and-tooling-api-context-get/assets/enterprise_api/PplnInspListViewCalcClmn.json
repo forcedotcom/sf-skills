@@ -4,7 +4,8 @@
     "description",
     "fields",
     "special_access_rules",
-    "usage"
+    "usage",
+    "field_reference"
   ],
   "title": "PplnInspListViewCalcClmn - Data API",
   "description": "Represents a column configuration for a pipeline inspection list view. Determines which calculated columns appear in a pipeline or intelligence view and their display order. This object is available in API version 66.0 and later.",
@@ -42,5 +43,64 @@
     }
   },
   "special_access_rules": "To access this object, enable the Pipeline Inspection user permission and the Pipeline Inspection setting.",
-  "usage": "Use this object to configure which calculated columns appear in a pipeline inspection list view and in what order. Each record represents one column in a specific view. Query this object to retrieve the column configuration for a given PipelineInspectionListView record."
+  "usage": "Use this object to configure which calculated columns appear in a pipeline inspection list view and in what order. Each record represents one column in a specific view. Query this object to retrieve the column configuration for a given PipelineInspectionListView record.",
+  "field_reference": {
+    "ColumnName": {
+      "field_label": "Column Name",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ColumnWidth": {
+      "field_label": "Column Width",
+      "type": "int",
+      "digits": "9"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Pipeline Inspection List View Calculated Column ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "PipelineInspectionListViewId": {
+      "field_label": "Pipeline Inspection List View ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SortOrder": {
+      "field_label": "Sort Order",
+      "type": "int",
+      "digits": "9"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
 }

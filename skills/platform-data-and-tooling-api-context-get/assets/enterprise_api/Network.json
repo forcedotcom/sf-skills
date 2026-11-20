@@ -140,6 +140,11 @@
       "properties": "Filter, Update",
       "description": "Controls the availability of direct messages in an Experience Builder site.This field is available in API version 39.0 and later."
     },
+    "OptionsEmailDomainSubstitutionEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether the site uses its verified EmailSenderAddress to send email on behalf of a user with an unverified email domain (true), instead of the org-wide substitute email address set on the Deliverability Setup page (false). The default value is false. If OptionsEmailDomainSubstitutionEnabled is true and EmailSenderAddress isn't verified or doesn't use a verified email domain, Salesforce doesn't send the email. In the UI, this setting is available in the Administration Workspace, under Administration | Emails, as Enable Email Domain Substitution.This field is available in API version 68.0 and later."
+    },
     "OptionsEmbeddedLoginEnabled": {
       "type": "boolean",
       "properties": "Filter, Update",
@@ -255,6 +260,11 @@
       "properties": "Filter, Update",
       "description": "Disables the feed on reputation records."
     },
+    "OptionsSecondaryEmailSenderEnabled": {
+      "type": "boolean",
+      "properties": "Filter, Update",
+      "description": "Determines whether email messages that contain sensitive data are sent from a secondary sender email address (true), instead of via email relay (false). The default value is false. This field is available in API version 67.0 and later."
+    },
     "OptionsSelfRegistrationEnabled": {
       "type": "boolean",
       "properties": "Filter, Update",
@@ -295,6 +305,11 @@
       "properties": "Filter, Update",
       "description": "Determines whether up and down voting is enabled for the site.This field is available in API version 41.0 and later."
     },
+    "PendingSecondaryEmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort, Update",
+      "description": "The secondary sender email address that’s pending verification. Salesforce doesn’t send emails from this address until it’s verified. This field is available in API version 67.0 and later."
+    },
     "PwdlessRegEmailTemplateId": {
       "type": "reference",
       "properties": "Filter, Group, Nillable, Sort, Update",
@@ -324,6 +339,11 @@
       "type": "reference",
       "properties": "Filter, Group, Nillable, Sort, Update",
       "description": "ID of the email template used when users must verify their identity, for example, when they log in without a password. This field is available in API version 44.0 and later."
+    },
+    "VerifiedSecondaryEmailAddress": {
+      "type": "email",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The verified secondary sender email address. This email address is used to send sensitive emails when OptionsSecondaryEmailSenderEnabled is true. This field is available in API version 67.0 and later."
     },
     "WelcomeEmailTemplateId": {
       "type": "reference",
@@ -501,6 +521,10 @@
     },
     "OptionsEinsteinAnswersSnippetEnabled": {
       "field_label": "EinsteinAnswersSnippetEnabled",
+      "type": "boolean"
+    },
+    "OptionsEmailDomainSubstitutionEnabled": {
+      "field_label": "EmailDomainSubstitutionEnabled",
       "type": "boolean"
     },
     "OptionsEmbeddedLoginEnabled": {

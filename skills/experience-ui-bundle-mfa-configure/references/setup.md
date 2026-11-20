@@ -9,7 +9,9 @@ Deploy from the skill's `assets/` directory or from your project's
 `force-app/main/default/permissionsets/`:
 
 ```bash
-sf project deploy start --source-dir force-app/main/default/permissionsets \
+sf project deploy start \
+  --source-dir force-app/main/default/permissionsets/MFA_Required_For_Community.permissionset-meta.xml \
+  --source-dir force-app/main/default/permissionsets/API_Enabled_For_Community.permissionset-meta.xml \
   --target-org <org-alias> --test-level NoTestRun
 ```
 

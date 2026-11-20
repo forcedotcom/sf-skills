@@ -48,13 +48,13 @@ Operations grouped by purpose. Use these as the building blocks for the workflow
 
 | Operation | Purpose | Status | Call | Depends on |
 |-----------|---------|--------|------|------------|
-| `discover-data-space` | read | implemented | `getDataSpaces` | — |
-| `verify-stdm-availability` | validate | implemented | `queryCdpAnsiSqlV2` | `discover-data-space` |
-| `discover-agents` | read | implemented | `queryCdpAnsiSqlV2` | `verify-stdm-availability` |
+| `discover-data-space` | read | implemented | `getAllDataSpaces` | — |
+| `verify-stdm-availability` | validate | implemented | `querySql` | `discover-data-space` |
+| `discover-agents` | read | implemented | `querySql` | `verify-stdm-availability` |
 | `list-available-models` | read | implemented | `queryAiModel` | — |
-| `find-sessions` | read | implemented | `queryCdpAnsiSqlV2` | `verify-stdm-availability`, `discover-agents` |
-| `get-conversation-details` | read | proposed | `queryCdpAnsiSqlV2` | `find-sessions` |
-| `get-llm-step-details` | read | proposed | `queryCdpAnsiSqlV2` | `get-conversation-details` |
+| `find-sessions` | read | implemented | `querySql` | `verify-stdm-availability`, `discover-agents` |
+| `get-conversation-details` | read | proposed | `querySql` | `find-sessions` |
+| `get-llm-step-details` | read | proposed | `querySql` | `get-conversation-details` |
 | `obtain-sfap-token` | validate | proposed | — | — |
 | `replay-turn-prompts` | read | proposed | — | `get-llm-step-details`, `obtain-sfap-token` |
 | `score-exact-matches` | read | proposed | — | `replay-turn-prompts` |
@@ -106,13 +106,13 @@ graph TD
 
 Discover active Data Cloud data spaces in the org
 
-**Call:** `getDataSpaces`   — status: `implemented`
+**Call:** `getAllDataSpaces`   — status: `implemented`
 
 #### `discover-agents`
 
 Query STDM for distinct agent + version combinations that have session traces
 
-**Call:** `queryCdpAnsiSqlV2`   — status: `implemented`
+**Call:** `querySql`   — status: `implemented`
 
 **Depends on:** `verify-stdm-availability`
 
@@ -126,7 +126,7 @@ List Einstein LLM models configured in the org to help the user choose a target 
 
 Find recent Agentforce sessions in STDM filtered by agent API name, version, and date range
 
-**Call:** `queryCdpAnsiSqlV2`   — status: `implemented`
+**Call:** `querySql`   — status: `implemented`
 
 **Inputs:**
 
@@ -142,7 +142,7 @@ Find recent Agentforce sessions in STDM filtered by agent API name, version, and
 
 Fetch interactions (turns) for each session from the STDM Interaction DMO
 
-**Call:** `queryCdpAnsiSqlV2`   — status: `proposed`
+**Call:** `querySql`   — status: `proposed`
 
 **Depends on:** `find-sessions`
 
@@ -150,7 +150,7 @@ Fetch interactions (turns) for each session from the STDM Interaction DMO
 
 Fetch interaction steps including LLM inputs and outputs for each interaction
 
-**Call:** `queryCdpAnsiSqlV2`   — status: `proposed`
+**Call:** `querySql`   — status: `proposed`
 
 **Depends on:** `get-conversation-details`
 
@@ -216,7 +216,7 @@ Build a self-contained HTML analysis report with scorecards and failure breakdow
 
 Verify STDM (Session Trace Data Model) is queryable in Data Cloud
 
-**Call:** `queryCdpAnsiSqlV2`   — status: `implemented`
+**Call:** `querySql`   — status: `implemented`
 
 **Depends on:** `discover-data-space`
 

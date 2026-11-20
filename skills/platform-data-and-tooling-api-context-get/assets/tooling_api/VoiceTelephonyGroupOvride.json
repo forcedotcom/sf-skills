@@ -1,0 +1,38 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceTelephonyGroupOvride - Tooling API",
+  "description": "Represents group-level telephony settings that override the default org-level configuration. This object is available in API version 68.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "UserGroupId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Unique ID of the group to which the telephony configuration override applies. Each group can have only one override assignment. This field is a relationship field.",
+      "relationship_name": "UserGroup",
+      "refers_to": "Group"
+    },
+    "VoiceTelephonyDefinitionId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the voice telephony configuration associated with the override. This field is a relationship field.",
+      "relationship_name": "VoiceTelephonyDefinition",
+      "relationship_type": "Master-detail",
+      "refers_to": "VoiceTelephonyDefinition (the master object)"
+    }
+  },
+  "special_access_rules": "To access this object, you must enable Salesforce Voice Contact Center Admin for Amazon Connect and Salesforce Voice Contact Center Admin (Partner Telephony) for partner telephony providers."
+}

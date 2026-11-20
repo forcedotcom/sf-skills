@@ -1,5 +1,24 @@
 # Media Route — Full Reference
 
+## Step 4: Media Route
+
+Follow this sequence for each intent Step 2 routed here. The media content type FQN (e.g. `sfdc_cms__image`, `sfdc_cms__audio`, `sfdc_cms__video`, `sfdc_cms__document`) is already known from Step 2 — never assume it's an image; use whatever FQN Step 2 discovered for this intent.
+
+1. **Present available search sources via `ask_followup_question` — no other tool calls yet.** Only the sources whose tools you actually have (via introspection), plus "Other", each as its own option. Wait for the user's selection before any tool call. → Read `references/media-route.md` § "Presenting available search sources" for the full template.
+2. **Build the query, then confirm with the user before searching — required two-message pattern**, in the same turn:
+   - **Search using keywords** (`search_media_cms_channels`): extract keywords (concrete nouns, max 10 terms) and taxonomies (descriptive/style/mood/category terms — extract every one the query actually contains; don't default to empty just because keywords were found). E.g. "luxury apartment with river view" → keywords `apartment OR villa OR penthouse OR residence`, taxonomies `{"OR": ["Luxury", "Premium", "Waterfront", "Riverside"]}`; "car" → taxonomies `"{}"` (no descriptive terms). Build the payload with `contentTypeFqn` set to the FQN(s) from Step 2, `searchLanguage` set to a locale (`en_US`, `es_MX`, ... — default `en_US`; **required, never null/omitted**), `searchLimit: 5`. → Read `references/media-route.md` for full worked examples.
+   - **Search using Data 360 hybrid search** (`search_electronic_media`): verbatim `searchQuery`; bare ISO `searchLanguage` only if the schema lists it; confirm first. On zero results or a language error, ask the user before one retry without it; never retry after a server error → `references/media-route.md`.
+   - **Other** — ask for a direct URL, asset library path, or specific system to check (no confirmation step, since no tool is called).
+
+   → Read `references/media-route.md` § "Confirming the query before searching" for the confirmation message templates (labeled-parameters chat message, then `ask_followup_question` with `Yes - search now` / `Edit search` / `Cancel`).
+3. **Execute the search call(s)** per the scope from Step 1 — one call for public-only scope, two (public + channel-scoped) when a `channelId` is in scope; Data 360 hybrid search ignores channel scope entirely. → Read `references/media-route.md` § "Executing the search call(s)" before parsing results — array/merge rules.
+4. **Present all unique results via `ask_followup_question`, grouped by content type** — one option per result (de-duplicated by unique identifier for display only — an item found under more than one channel still appears once here), labeled with title, content type, and channel (e.g. `Product Launch Hero Banner (sfdc_cms__image) — Public`). Mirrors the Content Route: content type is the grouping key, channel is a per-item field. Never auto-select.
+5. **User selects** an item. **If its delivery-details array has more than one entry**, ask which channel's copy to use — one option per entry, named from `managedContentChannelDetails.name` — before displaying details. Show Content Name, Content Type, channel, and — only for a `PUBLIC_UNAUTHENTICATED`/`COMMUNITY` entry with a `contentUrl`, never a `WEB_APP` one — the full **Unauthenticated URL** (all query parameters). → Read `references/media-route.md` § "Disambiguating channel at selection" before asking — pass the channel names as `ask_followup_question`'s `options` array, never inline them in the question text.
+6. **Offer the render hand-off** — always, with no uiBundle gating (unlike the Content Route's offer, which only appears when a uiBundle channel was in scope). Same two-message pattern: plain-text mention of the item, then `ask_followup_question` with `Yes` / `No`. On `Yes`, dispatch via `mcp__skill_bridge__load_skill("experience-cms-content-render")` — never the built-in Skill tool (separate registry, returns `Unknown skill`) — passing the selected item's `title`, content type FQN, the chosen entry's `managedContentChannelDetails.id` (channel ID) **only when it has a delivery entry — this route explicitly supports zero-entry items, so omit the channel ID for those rather than reading `.id` off nothing**, and either its Unauthenticated URL or, if absent, its `managedContentKey` **as `contentKey`** (the receiving skill's field name). If the load call fails, tell the user the hand-off failed and stop. On `No`, stop — the search is complete; do not apply the URL yourself as a fallback.
+
+→ Read `references/media-route.md` for the complete worked example.
+
+
 Worked payload examples for the media route (Step 4 of SKILL.md).
 
 **Media is not limited to images.** Step 2's `search_metadata` + `query_metadata` calls discover the actual FQN for the intent — it may be `sfdc_cms__image`, `sfdc_cms__audio`, `sfdc_cms__video`, `sfdc_cms__document`, or another `sfdc_cms__media`-typed FQN. Use whatever FQN was discovered; never default to `sfdc_cms__image`.
@@ -26,7 +45,7 @@ Per the scope from Step 1. `contentAccessScope` and `channelIds` are **mutually 
 
 ## Search using keywords (`search_media_cms_channels`)
 
-Keyword/taxonomy extraction rule: see `SKILL.md` Step 4 point 2. Extract taxonomy whenever the query contains a genuine descriptive/style/mood/category term — do not default to an empty taxonomy just because keywords were already found. Additional worked examples for media:
+Keyword/taxonomy extraction rule: see Step 4 point 2 at the top of this file. Extract taxonomy whenever the query contains a genuine descriptive/style/mood/category term — do not default to an empty taxonomy just because keywords were already found. Additional worked examples for media:
 - "modern minimalist company logo" → keywords: logo, emblem, corporate logo; taxonomies: Modern, Minimalist, Clean
 - "customer testimonial clips" → keywords: testimonial, customer, feedback, review; taxonomies: _(empty — no descriptive terms)_
 - "bright spacious room" → keywords: _(empty — no concrete nouns)_; taxonomies: Bright, Spacious, Open, Airy, Light
@@ -109,8 +128,12 @@ Keyword/taxonomy extraction rule: see `SKILL.md` Step 4 point 2. Extract taxonom
 
 ## Search using Data 360 hybrid search (`search_electronic_media`)
 
-1. Pass `searchQuery` **verbatim** — same language, same script as the user wrote it. No translation, no keyword extraction: translating first only makes step 2 harder, since you'd be detecting the language of your own translation instead of the user's actual words.
-2. **Determine language** — a short ISO code read directly off the user's literal wording, before any translation happens in your reasoning. Bare 2-letter codes (`en`, `fr`, `de`, `es`, `ja`, ...) cover most languages and are the validated, simpler form; a few regional splits need a country suffix instead (`pt_BR`, `zh_CN`, `zh_TW`, ...). Default to `en` only when the message is genuinely ambiguous (e.g. a bare product name) — never because translating felt natural. Use the bare 2-letter form whenever one exists — the backend accepts only the platform's own language codes, so `fr` works but `fr_FR` is rejected as invalid (`en` and `en_US` both work because `en_US` is itself a platform code).
+1. Pass `searchQuery` **verbatim** — same language, same script as the user wrote it. No translation, no keyword extraction: translating first only makes step 2 harder, since you'd be detecting the language of your own translation instead of the user's actual words. When the request has more than one search intent (`SKILL.md` Step 2 point 1), this intent's query is only the user's own words for this intent, cut out as written — never the whole message, and never reworded or translated.
+2. **Determine language** — once per intent, as a short ISO code, in this order:
+   - **The user names the language of the content they want** ("the French article about X", "images labeled in Japanese", "en español") → use that language, even when the request itself is written in another language. `searchQuery` stays verbatim; only `searchLanguage` follows the named language.
+   - **Otherwise** → the language of this intent's own `searchQuery` text (point 1), read directly off the user's literal wording before any translation happens in your reasoning. In a request that mixes languages across intents, each intent gets its own code — never one code for the whole message. E.g. "trouve-moi un article sur les pinceaux, and also a hero image of a beach" → `fr` for the article (Content Route), `en` for the image (Media Route).
+
+   Bare 2-letter codes (`en`, `fr`, `de`, `es`, `ja`, ...) cover most languages and are the validated, simpler form; a few regional splits need a country suffix instead (`pt_BR`, `zh_CN`, `zh_TW`, ...). Default to `en` only when the message is genuinely ambiguous (e.g. a bare product name) — never because translating felt natural. Use the bare 2-letter form whenever one exists — the backend accepts only the platform's own language codes, so `fr` works but `fr_FR` is rejected as invalid (`en` and `en_US` both work because `en_US` is itself a platform code).
 3. Call `search_electronic_media(searchQuery="<verbatim query>", searchLanguage="<language code>")`. **Only send `searchLanguage` if the tool's input schema actually lists it** — orgs without language-variant search enabled don't declare the input at all. When it's absent, call with `searchQuery` alone, skip the language line in the confirmation message, and skip steps 4–5 (the backend searches primary-language content only).
 4. **Offer one retry with `searchLanguage` omitted entirely — ask the user first, never retry silently — but only when the first call either:**
    - returns **zero results**, **or**
@@ -131,7 +154,7 @@ Example of the retry — English input "give me an image of a snowboard from the
 
 ## Confirming the query before searching
 
-Regardless of method, confirm the built query with the user before calling the search tool — this is the same required two-message pattern used by the Content Route (see `SKILL.md` Step 3, point 2). Never put the parameter list inside `ask_followup_question`'s `question` text; it strips line breaks and collapses everything into one paragraph.
+Regardless of method, confirm the built query with the user before calling the search tool — this is the same required two-message pattern used by the Content Route (see `content-route.md` Step 3, point 2). Never put the parameter list inside `ask_followup_question`'s `question` text; it strips line breaks and collapses everything into one paragraph.
 
 **Message 1 (plain chat text):**
 
@@ -154,7 +177,7 @@ I'll search Data 360 hybrid search with:
   Language: fr   (auto-detected — tell me if this is wrong)
 ```
 
-Show `Query` exactly as the user wrote it (verbatim) and `Language` as the bare code you'll send. This route has no `Content Type` / `Keywords` / `Taxonomies` / `Channels` lines — it ignores channel scope and does its own semantic matching.
+Show `Query` exactly as the user wrote it (verbatim) and `Language` as the bare code you'll send. When the code came from a language the user named (step 2 of "Search using Data 360 hybrid search") rather than from the query's wording, label it `(requested)` instead of `(auto-detected — tell me if this is wrong)`, so the user sees the query and language differ on purpose. This route has no `Content Type` / `Keywords` / `Taxonomies` / `Channels` lines — it ignores channel scope and does its own semantic matching.
 
 **Message 2 (immediately after):** `ask_followup_question` with options `Yes - search now` / `Edit search` / `Cancel`.
 

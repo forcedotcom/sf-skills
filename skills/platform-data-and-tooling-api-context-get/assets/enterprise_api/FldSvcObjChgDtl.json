@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "wsdl_segment",
     "field_reference"
   ],
@@ -36,6 +37,7 @@
       "refers_to": "FldSvcObjChg"
     }
   },
+  "special_access_rules": "- Field Service must be enabled.\n- The Field Service managed package must be installed.\n- The **Track the lifecycle of service appointments** setting in **Setup** | **Field Service Settings** must be enabled.\n- The Platform Integration User must have the Manage Service Appointment Lifecycle and the View Service Appointment Lifecycle permissions.\n- To view this object, users must have the View Service Appointment Lifecycle user permission.",
   "wsdl_segment": "```xml\n<complexType name=\"FldSvcObjChgDtl\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FieldChangedName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FieldChangedValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FldSvcObjChg\" nillable=\"true\" minOccurs=\"0\" type=\"ens:FldSvcObjChg\"/>\n        <element name=\"FldSvcObjChgId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {
     "CreatedById": {

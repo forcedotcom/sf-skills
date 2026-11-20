@@ -1,0 +1,56 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "associated_objects"
+  ],
+  "title": "ApprovalDelegation - Data API",
+  "description": "Represents an approval delegation that transfers a user's approval responsibilities to another user, group, or queue for a specified date range. This object is available in API version 68.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Comments": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The comments added by the user creating the delegation record."
+    },
+    "DelegatedFromUserId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user delegating their approval responsibilities to another user, group, or queue. This field is a relationship field.",
+      "relationship_name": "DelegatedFromUser",
+      "refers_to": "User"
+    },
+    "DelegatedToId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the user, group, or queue receiving the delegated approval responsibilities. This field is a polymorphic relationship field.",
+      "relationship_name": "DelegatedTo",
+      "refers_to": "Group (Type = Regular), Group (Type = Queue), User"
+    },
+    "EndDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The date and time when the delegation becomes inactive, adjusted according to the delegator's timezone. If left empty, the delegation remains active indefinitely."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated name of the approval delegation record, for example AD-000000001."
+    },
+    "StartDate": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Sort, Update",
+      "description": "The date and time when the delegation becomes active, adjusted according to the delegator's timezone."
+    }
+  },
+  "special_access_rules": "This object is available in Enterprise, Unlimited, and Developer Editions where Advanced Approvals is enabled.",
+  "associated_objects": "ApprovalDelegationHistory: History is available for tracked fields of the object."
+}

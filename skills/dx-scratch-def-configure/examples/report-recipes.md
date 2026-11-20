@@ -42,6 +42,24 @@ not a first generate that says write or skip preview — use Happy-path write.
 If `config/` is also missing, add the Missing-project question to this same
 report. Do not invent a path.
 
+## Underspecified refine stop
+
+- Need to know what to change on the existing scratch-def.
+- What would you like to change — features, edition, or settings?
+- Stopping here without inventing a delta. Not asking about agents.
+
+## Multi-def ask-which stop
+
+- More than one config scratch-def file is present.
+- List each config path that matches config/*scratch-def.json.
+- Which file should I patch?
+
+## Invalid existing JSON stop
+
+- The target scratch-def is not valid JSON.
+- Report the parse problem in plain prose.
+- Not patching garbage. Fix or regenerate the file first.
+
 ## Other-user / no path stop
 
 - Cannot read another user's machine or invent a seed file.
@@ -64,6 +82,11 @@ report. Do not invent a path.
 
 - Batch generation of multiple scratch-def files in one turn is not supported yet.
 - Want me to make the first one?
+
+## Batch refine stop
+
+- Batch refinement of multiple scratch-def files in one turn is not supported yet.
+- Want me to refine one file?
 
 ## Happy-path draft (preview)
 
@@ -98,3 +121,34 @@ Do not ask Write file?.
 
 Same helper-warnings rule as preview: include them only when the helper
 warned this turn.
+
+## Happy-path refine draft (preview)
+
+Keep the structured refine delta in chat/tool context. Pass it to preview on
+stdin with --base pointing at the existing file (delta only — never a full
+rewrite).
+
+In chat, show the schema-valid resulting document as a fenced JSON block and the
+diff card (features added/removed, featuresQuantityChanged for same-base
+quantity edits, edition/fields/objectSettings/settings changes, orphaned
+required settings) alongside this report. Optionally keep helper baseSha256
+for apply (race guard).
+
+- Paraphrase the refine intent (delta on the existing file).
+- Diff summary from the helper.
+- Output path after confirm: the same --base path (prior file kept as .bak on write).
+Write file?
+
+Do not name dx-org-manage. Do not apply yet. If orphaned required settings are
+present, ask whether to delete them before writing.
+
+## Happy-path refine write (after consent to this delta preview)
+
+In chat, show the final written scratch-def JSON as a fenced block alongside
+this report.
+
+- Applied the same delta (stdin quoted heredoc, --base, --out equal to --base)
+  to the same path; prior file at the matching .bak.
+- One-line summary of additions and removals.
+- Next: dx-org-manage with that path; dx-org-devhub-configure if Dev Hub is off.
+Do not ask Write file?.

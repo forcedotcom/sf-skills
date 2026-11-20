@@ -76,7 +76,7 @@
       "description": "The ID of the parent object record that relates to this action plan. For API version 63.0 and later, supported parent objects are Account, AccountPlanObjective, Applicant, ApplicationForm, ApplicationFormProduct, Asset, BusinessLicense, BusinessMilestone, Campaign, Case, ChangeRequest, Claim, Contact, Contract, FinancialGoal, Incident, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, Problem, ResidentialLoanApplication, WorkOrder, and WorkOrderLineItem. For API version 62.0 and later, supported parent objects are ApplicationFormEvaluation and VettingEvaluation. For API version 48.0 and later, supported parent objects are Account, AssetsAndLiabilities, BusinessMilestone, Campaign, Card, Case, Claim, Contact, Contract, Financial Account, Financial Goal, Financial Holding, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, ResidentialLoanApplication, and Visit as well as custom objects with activities enabled. For API version 47.0 and later, supported parent objects are Account, BusinessMilestone, Campaign, Case, Claim, Contact, Contract, InsurancePolicy, InsurancePolicyCoverage, Lead, Opportunity, PersonLifeEvent, and Visit as well as custom objects with activities enabled. For API version 46.0 and later, supported parent objects are Account, Campaign, Case, Contact, Contract, Lead, and Opportunity as well as custom objects with activities enabled. For API version 45.0 and earlier, the only supported parent object is Account."
     }
   },
-  "special_access_rules": "The user must have “Edit” permissions on ActionPlan records in order to create or update action plans line. The user must have “Edit” permissions on ActionPlan records to delete an action plan. Some of the fields are available when Subscription Management is enabled.\n\nThe user must have “Edit” permissions on ActionPlan records in order to create or update action plans line. The user must have “Edit” permissions on ActionPlan records to delete an action plan.\n\nSome of the fields are available when Subscription Management is enabled.",
+  "special_access_rules": "The user must have “Edit” permissions on ActionPlan records in order to create or update action plans line. The user must have “Edit” permissions on ActionPlan records to delete an action plan. Some of the fields are available when Subscription Management is enabled.",
   "associated_objects": "This object has the following associated objects. Unless noted, they are available in the same API version as this object.\n\n- **ActionPlanChangeEvent**: Change events are available for the object.\n- **ActionPlanFeed**: Feed tracking is available for the object.\n- **ActionPlanHistory**: History is available for tracked fields of the object.\n- **ActionPlanOwnerSharingRule**: Sharing rules are available for the object.\n- **ActionPlanShare**: Sharing is available for the object.",
   "field_reference": {
     "ActionPlanState": {
@@ -111,10 +111,10 @@
       "field_label": "Created Date",
       "type": "datetime"
     },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
+    "DisplayOrder": {
+      "field_label": "Display Order",
+      "type": "int",
+      "digits": "9"
     },
     "EndDate": {
       "field_label": "End Date",
@@ -160,6 +160,11 @@
       "type": "reference",
       "length": "18"
     },
+    "ProcessType": {
+      "field_label": "Process Type",
+      "type": "picklist",
+      "length": "40"
+    },
     "RecordCreationType": {
       "field_label": "Record Creation Type",
       "type": "picklist",
@@ -196,11 +201,17 @@
       "field_label": "Target Record ID",
       "type": "reference",
       "length": "18"
+    },
+    "Version": {
+      "field_label": "Version",
+      "type": "string",
+      "length": "255"
     }
   },
   "field_reference_columns": [
     "field_label",
     "type",
-    "length"
+    "length",
+    "digits"
   ]
 }

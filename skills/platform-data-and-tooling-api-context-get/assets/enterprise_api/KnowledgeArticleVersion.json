@@ -234,7 +234,7 @@
     }
   },
   "special_access_rules": "Knowledge must be enabled in your org. A user must have the View Articles permission enabled. Salesforce Knowledge users, unlike customer and partner users, must also be granted the Knowledge User feature license.",
-  "usage": "Use this object to query, retrieve, or search for articles across all types of articles depending on their version. You can update draft primary articles. Also, you can delete articles that aren’t drafts. Client applications can use KnowledgeArticleVersion with describeDataCategoryGroups() and describeDataCategoryGroupStructures() to return the category groups and the category structure associated with Salesforce Knowledge. To access an article independent of its version, use the KnowledgeArticle object. In Lightning Knowledge, the type of article is determined by the RecordType field on the concrete derived object (for example, Knowledge__kav). For Knowledge in Salesforce Classic, the type of article is determined by the ArticleType field and the concrete derived object uses the prefix of the article type name (for example, FAQ__kav for the FAQ article type).\n\nUse this object to query, retrieve, or search for articles across all types of articles depending on their version. You can update draft primary articles. Also, you can delete articles that aren’t drafts. Client applications can use KnowledgeArticleVersion with describeDataCategoryGroups() and describeDataCategoryGroupStructures() to return the category groups and the category structure associated with Salesforce Knowledge.\n\nTo access an article independent of its version, use the KnowledgeArticle object.\n\nIn Lightning Knowledge, the type of article is determined by the RecordType field on the concrete derived object (for example, Knowledge__kav). For Knowledge in Salesforce Classic, the type of article is determined by the ArticleType field and the concrete derived object uses the prefix of the article type name (for example, FAQ__kav for the FAQ article type).",
+  "usage": "Use this object to query, retrieve, or search for articles across all types of articles depending on their version. You can update draft primary articles. Also, you can delete articles that aren’t drafts. Client applications can use KnowledgeArticleVersion with describeDataCategoryGroups() and describeDataCategoryGroupStructures() to return the category groups and the category structure associated with Salesforce Knowledge. To access an article independent of its version, use the KnowledgeArticle object. In Lightning Knowledge, the type of article is determined by the RecordType field on the concrete derived object (for example, Knowledge__kav). For Knowledge in Salesforce Classic, the type of article is determined by the ArticleType field and the concrete derived object uses the prefix of the article type name (for example, FAQ__kav for the FAQ article type).",
   "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **KnowledgeArticleVersionHistory**: History is available for tracked fields of the object.",
   "field_reference": {
     "ArchivedById": {
@@ -283,6 +283,11 @@
       "field_label": "Article Total View Count",
       "type": "int",
       "digits": "9"
+    },
+    "ArticleType": {
+      "field_label": "Article Type",
+      "type": "picklist",
+      "length": "40"
     },
     "AssignedById": {
       "field_label": "User ID",
@@ -442,6 +447,11 @@
     "UrlName": {
       "field_label": "URL Name",
       "type": "string",
+      "length": "255"
+    },
+    "ValidationStatus": {
+      "field_label": "Validation Status",
+      "type": "picklist",
       "length": "255"
     },
     "VersionNumber": {

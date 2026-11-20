@@ -4,7 +4,8 @@
     "description",
     "fields",
     "special_access_rules",
-    "usage"
+    "usage",
+    "field_reference"
   ],
   "title": "ActionCadenceStepVariant - Data API",
   "description": "Represents an email template or call script variant associated with an action cadence step. Email and call steps can have up to 3 variants associated so sales teams can compare the engagement results. This object is available in API version 53.0 and later.",
@@ -44,6 +45,67 @@
       "description": "The type of the associated action cadence step. Possible values are: AutoSendAnEmail Branch Copilot CreateTask DaisyChain LinkedInConnection LinkedInMail ListenerBranch MakeACall PlatformScreenFlow—Available in version 55.0 and later. Root SendAMessage SendAnEmail Terminal Wait Only email and call steps can have an associated action cadence step variant."
     }
   },
-  "special_access_rules": "Sales Engagement and Allow Email Template and Call Script Variant Testing must be enabled.\n\nSales Engagement and Allow Email Template and\n         Call Script Variant Testing must be enabled.",
-  "usage": "Use ActionCadenceStepVariant to retrieve the email template or call script for an action cadence step: Use ActionCadenceStepVariant to retrieve the call scripts from all call steps:\n\nUse ActionCadenceStepVariant to retrieve the email template or call script for an action cadence step:\n\nSELECT SplitPercentage, TemplateId FROM ActionCadenceStepVariant WHERE ActionCadenceStepId=:[idValue]\n\nUse ActionCadenceStepVariant to retrieve the call scripts from all call\n            steps:\n\nSELECT SplitPercentage, TemplateId, ActionCadenceStepId FROM ActionCadenceStepVariant WHERE Type='MakeACall'"
+  "special_access_rules": "Sales Engagement and Allow Email Template and Call Script Variant Testing must be enabled.",
+  "usage": "Use ActionCadenceStepVariant to retrieve the email template or call script for an action cadence step: Use ActionCadenceStepVariant to retrieve the call scripts from all call steps:\n\nSELECT SplitPercentage, TemplateId FROM ActionCadenceStepVariant WHERE ActionCadenceStepId=:[idValue]\n\nSELECT SplitPercentage, TemplateId, ActionCadenceStepId FROM ActionCadenceStepVariant WHERE Type='MakeACall'",
+  "field_reference": {
+    "ActionCadenceStepId": {
+      "field_label": "Cadence Step ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Cadence Step Variant ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "SplitPercentage": {
+      "field_label": "Split Percentage",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TemplateId": {
+      "field_label": "Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale"
+  ]
 }

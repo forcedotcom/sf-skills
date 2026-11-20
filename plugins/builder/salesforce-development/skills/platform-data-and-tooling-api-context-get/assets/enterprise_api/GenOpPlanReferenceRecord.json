@@ -1,0 +1,54 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "usage",
+    "associated_objects"
+  ],
+  "title": "GenOpPlanReferenceRecord - Data API",
+  "description": "Represents a reference record, such as a similar case, associated with a generated operation plan. This object is available in API version 65.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DisplayName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The display name of the similar record only if it is configured in the Custom Retriever. If it isn’t configured, this field is blank. Available in API version 68.0 and later."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The autonumber name of the generated operation plan reference record."
+    },
+    "PlanId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID of the related GenOpPlan. This field is a relationship field. Relationship Name: Plan. Refers To: GenOpPlan. This field is a relationship field.",
+      "relationship_name": "Plan",
+      "refers_to": "GenOpPlan"
+    },
+    "Ranking": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The relevance order of this reference record relative to other references associated with the same plan, with lower numbers indicating higher relevance."
+    },
+    "ReferenceRecord": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The ID or identifier of the record being referenced, such as a similar case, that grounds the content of the generated operation plan."
+    },
+    "Url": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URL prefix of the similar record only if it is configured in the custom retriever. If it isn’t configured, this field is blank. Available in API version 68.0 and later."
+    }
+  },
+  "usage": "Use this object to store and retrieve the reference records, such as similar cases, associated with a generated operation plan. Each GenOpPlanReferenceRecord is linked to its parent plan through PlanId and provides the display label, ranking, and URL used to surface citations for the plan's generated content. The DisplayName and Url fields are populated only when a custom retriever is configured for the reference source. If no custom retriever is set up, these fields remain blank.",
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **GenOpPlanReferenceRecordChangeEvent.**: Change events are available for the object.\n- **GenOpPlanReferenceRecordFeed.**: Feed tracking is available for the object.\n- **GenOpPlanReferenceRecordHistory.**: History is available for tracked fields of the object.\n- **GenOpPlanReferenceRecordOwnerSharingRule.**: Sharing rules are available for the object.\n- **GenOpPlanReferenceRecordShare.**: Sharing is available for the object."
+}

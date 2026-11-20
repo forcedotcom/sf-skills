@@ -472,8 +472,8 @@
       "description": "Specifies how Salesforce shows a quote line item in the Transaction Line Editor and a quote document. Possible values are: Always—Quote line items are always displayed in the Transaction Line Editor. Never—Quote line items aren't displayed in the Transaction Line Editor or in the quote document. Quote Document Only—Quote line items are displayed only in the quote document, but not in the Transaction Line Editor. Transaction Line Editor Only—Quote line items are displayed only in the Transaction Line Editor, but not in the quote document. The default value is Always."
     }
   },
-  "special_access_rules": "The user must have “Edit” permissions on quote records to create or update quote line items on a quote. The user must have “Edit” permissions on quote records to delete a quote line item. Some of the fields are available when you turn on Subscription Management.\n\nThe user must have “Edit” permissions on quote records to create or update quote line items on a quote. The user must have “Edit” permissions on quote records to delete a quote line item.\n\nSome of the fields are available when you turn on Subscription Management.",
-  "usage": "A quote record can have QuoteLineItem records only if the quote has a Pricebook2. A QuoteLineItem must correspond to a Product2 that is listed in the quote's Pricebook2.\n\nIf the multicurrency option is enabled, the\n\nCurrencyIsoCode\n\nfield is\n    present. It can't be modified, it’s always set to the value of the\n\nCurrencyIsoCode\n\nof the parent quote.",
+  "special_access_rules": "The user must have “Edit” permissions on quote records to create or update quote line items on a quote. The user must have “Edit” permissions on quote records to delete a quote line item. Some of the fields are available when you turn on Subscription Management.",
+  "usage": "A quote record can have QuoteLineItem records only if the quote has a Pricebook2. A QuoteLineItem must correspond to a Product2 that is listed in the quote's Pricebook2.\n\nIf the multicurrency option is enabled, the CurrencyIsoCode field is present. It can't be modified, it’s always set to the value of the CurrencyIsoCode of the parent quote.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **QuoteLineItemChangeEvent (API version 44.0)**: Change events are available for the object.\n- **QuoteLineItemHistory (API version 57.0)**: History is available for tracked fields of the object.",
   "field_reference": {
     "AggregatedQuantity": {
@@ -497,10 +497,10 @@
       "type": "string",
       "length": "80"
     },
-    "BillingTreatmentId": {
-      "field_label": "Billing Treatment ID",
-      "type": "reference",
-      "length": "18"
+    "BillingTerm": {
+      "field_label": "Billing Term",
+      "type": "int",
+      "digits": "9"
     },
     "BindingInstanceTargetId": {
       "field_label": "BindingInstanceTarget ID",
@@ -712,6 +712,11 @@
       "field_label": "Contract ID",
       "type": "reference",
       "length": "18"
+    },
+    "PricingSource": {
+      "field_label": "Pricing Source",
+      "type": "picklist",
+      "length": "255"
     },
     "PricingTerm": {
       "field_label": "Pricing Term",

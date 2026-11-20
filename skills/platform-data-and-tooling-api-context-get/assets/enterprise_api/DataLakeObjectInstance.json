@@ -1,0 +1,327 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "field_reference"
+  ],
+  "title": "DataLakeObjectInstance - Data API",
+  "description": "Represents a data lake object (DLO). This object is available in API version 63.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "AccelerationEnabled": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates whether acceleration is turned on for external DLOs (YES) or not (NO). Acceleration increases how frequently DLO data is refreshed. Possible values are: NO YES"
+    },
+    "AccelerationSchedule": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Incremental refresh frequency for an external DLO. How often the system runs acceleration when AccelerationEnabled is YES. Possible values are: EVERY_12_HOURS EVERY_24_HOURS EVERY_4_HOURS EVERY_7_DAYS"
+    },
+    "Billable": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Indicates if this DLO is usage-metered (billable). Possible values are: YES"
+    },
+    "Category": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Type of DLO (for example: Engagement)."
+    },
+    "DataLakeObjectNamespacePrefix": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Namespace prefix of the related MktDataLakeObject developer name in a Developer Edition org. Used with the MktDataLakeObjectDeveloperName field to look up the single DLO that matches a namespaced DLO."
+    },
+    "DataLakeObjectRef": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Reference to the MktDataLakeObject that corresponds to this DLO when standard DLOs are enabled. Stores the standard DLO API reference (EnumOrId-style), for example Account_std__dll, in place of or in addition to the legacy MktDataLakeObject Id. Custom DLOs still use the ID in the other reference field. Possible values are: Account_std__dll ApiGrounding_std__dll BenefitType_std__dll Benefit_std__dll Case_std__dll CatalogEnrichment_std__dll CatalogMetadataRelationship_std__dll CatalogMetadata_std__dll ConsumptionResourceTags_std__dll Contact_std__dll ForecastingFact_std__dll ForecastingItem_std__dll FtestMain_std__dll FtestMetadataDlo_std__dll GameDefinition_std__dll GameParticipant_std__dll GameReward_std__dll JournalSubType_std__dll JournalType_std__dll KnowledgeLayoutAssignment_std__dll KnowledgeLayout_std__dll ListEmail_std__dll LoyaltyAggrPointExprLedger_std__dll LoyaltyMemberCurrency_std__dll LoyaltyMemberTier_std__dll LoyaltyPartnerProduct_std__dll LoyaltyPgmEngmtAttrLimit_std__dll LoyaltyPgmEngmtAttrProm_std__dll LoyaltyPgmEngmtAttribute_std__dll LoyaltyPgmGroupMbrRlnsp_std__dll LoyaltyPgmMbrAttributeVal_std__dll LoyaltyPgmPartnerCurrency_std__dll LoyaltyPgmPartnerPromotion_std__dll LoyaltyProgramBadge_std__dll LoyaltyProgramCurrency_std__dll LoyaltyProgramMbrPromotion_std__dll LoyaltyProgramMemberCase_std__dll LoyaltyProgramMemberMerge_std__dll LoyaltyProgramPartner_std__dll LoyaltyProgram_std__dll LoyaltyTierBenefit_std__dll LoyaltyTierGroup_std__dll LoyaltyTier_std__dll ManagedContentVariant_std__dll ManagedContent_std__dll MemberBenefit_std__dll OpportunityContactRole_std__dll ProductCatalog_std__dll ProductCategoryProduct_std__dll ProductCategory_std__dll PromotionLoyaltyPtnrProdt_std__dll PromotionMarketSegment_std__dll PromotionPartyUsage_std__dll Promotion_std__dll VoucherDefinition_std__dll Voucher_std__dll"
+    },
+    "DataLakeObjectStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Status of this DLO. You can’t change a DLO when it’s in the PROCESSING state. If you make any changes to a DLO, this field will be in the PROCESSING state, and later ACTIVE when the update is complete. Possible values are: ACTIVE DELETING ERROR INACTIVE NONE PROCESSING The default value is PROCESSING."
+    },
+    "DeletionRecordsDataLakeObject": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "API name of the DLO that stores deletion records associated with this DLO."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Description of the DLO."
+    },
+    "ExternalName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Name of the DLO in the external data source."
+    },
+    "ExternalObjectErrorCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Provider-specific or internal error code when the external DLO reports an error (pairs with ExternalObjectErrorStatus)."
+    },
+    "ExternalObjectErrorStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Activity status of an external DLO. Possible values are: ACTIVE ERROR"
+    },
+    "HydrationStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "How fully this DLO has been hydrated in storage (all data available vs. partial vs. not yet loaded). Possible values are: Hydrated PartiallyHydrated Unhydrated"
+    },
+    "LastDataChangeStatusDateTime": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Date and time of the most recent data change or ingestion status transition relevant to this DLO."
+    },
+    "LastDataChangeStatusErrorCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Error code explaining the last data change failure."
+    },
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Last date when a user referenced this record."
+    },
+    "LastRefreshDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Last date when ingested or synced data for this DLO was refreshed."
+    },
+    "LastSyncedFingerprint": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "Content or schema fingerprint from the last successful sync, used to detect when upstream data or layout changes."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Last date when a user viewed this record in the UI."
+    },
+    "MktDataLakeObjectDeveloperName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Developer name of the related MktDataLakeObject. For a namespaced DLO, this is paired with DataLakeObjectNamespacePrefix. For a standard DLO, this may be the standard DLO’s API name."
+    },
+    "MktDataLakeObjectLabel": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "User-defined label of the DLO."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the DLO."
+    },
+    "ProblemRecordsDataLakeObject": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "API name of the DLO that stores failed records for this DLO."
+    },
+    "Storage": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Where the DLO’s physical data resides. For standard DLOs, the query path can default this to LOCAL when not set. Possible values are: EXTERNAL—External LOCAL—Local"
+    },
+    "SyncStatus": {
+      "type": "picklist",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Synchronization status of the DLO. For external DLOs, this field exposes connection issues. With standard DLOs, this field is read and written at the same time as DataLakeObjectStatus to reflect ingestion state. Possible values are: ACTIVE DELETING ERROR INACTIVE NONE PROCESSING The default value is PROCESSING."
+    },
+    "TotalNumberOfFields": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of fields in the DLO."
+    },
+    "TotalRecords": {
+      "type": "long",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Total number of records stored in the DLO."
+    }
+  },
+  "field_reference": {
+    "AccelerationEnabled": {
+      "field_label": "Accelerated",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AccelerationSchedule": {
+      "field_label": "Acceleration Schedule",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Billable": {
+      "field_label": "Billable",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Category": {
+      "field_label": "Category",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DataLakeObjectNamespacePrefix": {
+      "field_label": "Data Lake Object Namespace Prefix",
+      "type": "string",
+      "length": "255"
+    },
+    "DataLakeObjectRef": {
+      "field_label": "Data Lake Object Definition ID",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DataLakeObjectStatus": {
+      "field_label": "Data Lake Object Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "DeletionRecordsDataLakeObject": {
+      "field_label": "Deletion Records Data Lake Object Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalName": {
+      "field_label": "External Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalObjectErrorCode": {
+      "field_label": "External Object Error Code",
+      "type": "string",
+      "length": "255"
+    },
+    "ExternalObjectErrorStatus": {
+      "field_label": "External Object Error Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "HydrationStatus": {
+      "field_label": "Hydration Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Data Lake Object Instance ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastDataChangeStatusDateTime": {
+      "field_label": "Last Data Change Status Date Time",
+      "type": "datetime"
+    },
+    "LastDataChangeStatusErrorCode": {
+      "field_label": "Last Data Change Status Error Code",
+      "type": "string",
+      "length": "255"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastRefreshDate": {
+      "field_label": "Last Updated On",
+      "type": "datetime"
+    },
+    "LastSyncedFingerprint": {
+      "field_label": "Last Synced Fingerprint",
+      "type": "textarea",
+      "length": "32000"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MktDataLakeObjectDeveloperName": {
+      "field_label": "Mkt Data Lake Object Developer Name",
+      "type": "string",
+      "length": "40"
+    },
+    "MktDataLakeObjectLabel": {
+      "field_label": "Mkt Data Lake Object Label",
+      "type": "string",
+      "length": "40"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ProblemRecordsDataLakeObject": {
+      "field_label": "Problem Records Data Lake Object Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Storage": {
+      "field_label": "Storage",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SyncStatus": {
+      "field_label": "Sync Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalNumberOfFields": {
+      "field_label": "Total # Of Fields",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalRecords": {
+      "field_label": "Total Records",
+      "type": "long",
+      "digits": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
+}

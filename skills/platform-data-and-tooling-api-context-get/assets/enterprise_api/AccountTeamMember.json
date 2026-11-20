@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "associated_objects"
   ],
@@ -72,6 +73,7 @@
       "required": true
     }
   },
-  "usage": "Use this object to manage the team members of a particular Account and to specify team member roles for those users on that account. If team members are added by a user with group-based access, those members are removed after an account’s owner is changed. This applies even if the Keep account team option is selected. A Salesforce admin, the account owner, or someone higher in the role hierarchy should add team members to keep team members related to the account. If you use SOQL statements to query all records in an organization, the ALL ROWS keywords don’t query deleted account team member records.\n\nUse this object to manage the team members of a particular Account and to specify team member roles for those users on that account.\n\nIf team members are added by a user with group-based access, those members are removed after an account’s owner is changed. This applies even if the Keep account team** option is selected. A Salesforce admin, the account owner, or someone higher in the role hierarchy should add team members to keep team members related to the account.\n\nIf you use SOQL statements to query all records in an organization, the ALL ROWS keywords don’t query deleted account team member records.",
+  "special_access_rules": "- This object is available only for Enterprise, Unlimited, and Performance Edition users who have enabled the account team functionality.\n- Customer Portal users can't access this object.",
+  "usage": "Use this object to manage the team members of a particular Account and to specify team member roles for those users on that account. If team members are added by a user with group-based access, those members are removed after an account’s owner is changed. This applies even if the Keep account team option is selected. A Salesforce admin, the account owner, or someone higher in the role hierarchy should add team members to keep team members related to the account. Sharing rules grant access to individuals or to groups (public groups, queues, roles). That distinction matters for team member retention during ownership changes. If team members are added by a user with group-based access, those team members are removed when the account owner changes. This applies even if the Keep account team. To keep team members when ownership changes, one of these types of users must add the team members. If you use SOQL statements to query all records in an organization, the ALL ROWS keywords don’t query deleted account team member records.\n\n- A user with Modify All Data permission\n- The account owner\n- A user higher than the account owner in the owner’s direct role hierarchy chain (not a parallel branch)",
   "associated_objects": "This object has the following associated objects. If the API version isn't specified, they're available in the same API versions as this object.\n\n- **AccountTeamMemberChangeEvent (API version 66.0)**: Change events are available for the object."
 }

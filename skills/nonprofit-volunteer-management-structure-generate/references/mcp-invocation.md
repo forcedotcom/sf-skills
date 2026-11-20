@@ -48,10 +48,13 @@ All reuse checks use the same query call. Put only the planned names in the `WHE
 
 ```text
 headless-360:  dispatch_readonly({"path": "/services/data/v67.0/query", "method": "GET", "query_params": {"q": "<SOQL>"}})
-Salesforce CLI: sf data query -q "<SOQL>" --api-version 67.0 --target-org <alias> --json
+Salesforce CLI: write the SOQL to a file, then
+                sf data query --file <soql-file> --api-version 67.0 --target-org <alias> --json
 ```
 
-**Apostrophes.** Escape an apostrophe in a name with a backslash: `O\'Brien`. Doubling it (`''`) fails with 400 `MALFORMED_QUERY`. Inside a headless-360 JSON argument the backslash itself must be escaped, so write `O\\'Brien` in the JSON string. In the CLI's double-quoted `-q` argument, write `O\'Brien` as is.
+Prefer headless-360 when it is connected: the name travels inside a JSON value and never reaches a shell. **Never put names in a shell command line.** Names come from the user, so on the CLI path write the SOQL to a file (a quoted heredoc, `<<'EOF'`, or a file-write tool) and pass `--file`. Do not use `-q "<SOQL>"` with a name interpolated into it: a `"`, `$(…)` or backtick in a name would run in the shell.
+
+**Apostrophes.** Escape an apostrophe in a name with a backslash: `O\'Brien`. Doubling it (`''`) fails with 400 `MALFORMED_QUERY`. Inside a headless-360 JSON argument the backslash itself must be escaped, so write `O\\'Brien` in the JSON string. In the SOQL file, write `O\'Brien` as is.
 
 | Check | SOQL |
 |---|---|

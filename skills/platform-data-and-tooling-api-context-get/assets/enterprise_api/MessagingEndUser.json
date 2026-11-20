@@ -26,6 +26,14 @@
       "relationship_type": "Lookup",
       "refers_to": "Account"
     },
+    "AuthenticatedEndUserId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "ID of the authenticated user associated with this messaging end user. This field is a relationship field.",
+      "relationship_name": "AuthenticatedEndUser",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
+    },
     "ContactId": {
       "type": "reference",
       "properties": "Create, Filter, Group, Nillable, Sort, Update",
@@ -80,7 +88,7 @@
     "MessageType": {
       "type": "picklist",
       "properties": "Create, Filter, Group, Restricted picklist, Sort",
-      "description": "Type of message. Possible values are: AppleBusinessChat—Represents Apple Messages for Business. Custom—Represents Bring Your Own Channel. Available in API version 58.0 and later. EmbeddedMessaging—Represents Messaging for In-App and Web. Available in API version 50.0 and later. Facebook Phone Text Voice WhatsApp"
+      "description": "Type of message. Possible values are: AppleBusinessChat—Represents Apple Messages for Business. Custom—Represents Bring Your Own Channel. Available in API version 58.0 and later. EmbeddedMessaging—Represents Enhanced Chat. Available in API version 50.0 and later. Email—Available in API version 66.0 and later. Facebook MsCopilot—Available in API version 67.0 and later. Phone Rcs—Available in API version 67.0 and later. Text Voice WhatsApp"
     },
     "MessagingChannelId": {
       "type": "reference",
@@ -90,6 +98,11 @@
       "type": "picklist",
       "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
       "description": "The consent status of the messaging user. This field is available in API version 48.0 and later. Possible values are: DoublyOptedIn ExplicitlyOptedIn ImplicitlyOptedIn OptedOut"
+    },
+    "MessagingExternalUserKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable",
+      "description": "The business-scoped user identifier provided by external messaging platforms such as Meta. This opaque, stable identifier uniquely represents the end user within the context of your business relationship on that platform. Available in API version 63.0 and later."
     },
     "MessagingPlatformKey": {
       "type": "string",
@@ -134,11 +147,6 @@
     "CreatedDate": {
       "field_label": "Created Date",
       "type": "datetime"
-    },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
     },
     "HasInitialResponseSent": {
       "field_label": "Has Initial Response Been Sent",

@@ -28,6 +28,11 @@
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The authentication method used by a third-party identification provider for an OpenID Connect single sign-on protocol."
     },
+    "AuthenticationServiceIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The authentication service used for single sign-on."
+    },
     "BrowserType": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
@@ -42,6 +47,11 @@
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The IP address of the client that’s using Salesforce services. A Salesforce internal IP (such as a login from AppExchange) is shown as “Salesforce.com IP”. For example: 96.43.144.26."
+    },
+    "CountryCode": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "A regional identifier for the login event."
     },
     "CpuTime": {
       "type": "double",
@@ -58,14 +68,18 @@
       "properties": "Filter, Group, Nillable, Sort",
       "description": "Reserved for future use."
     },
+    "HttpReferer": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
     "LoginKey": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring. For example: GeJCsym5eyvtEK2I."
     },
     "LoginStatus": {
-      "type": "double",
-      "properties": "Filter, Nillable, Sort",
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The status of the login attempt. For successful logins, the value is LOGIN_NO_ERROR. All other values indicate errors or authentication issues. For details, see Login Event Type — LOGIN_STATUS Values."
     },
     "LoginSubType": {
@@ -118,12 +132,16 @@
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The URI of the page that’s receiving the request. For example: /home/home.jsp."
     },
+    "UseApiToken": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
     "UserIdentifier": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API. For example: 00530000009M943."
     },
-    "UserName": {
+    "Username": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The username that’s used for login."
@@ -132,11 +150,6 @@
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses, and admins for this org."
-    },
-    "Username": {
-      "type": "string",
-      "properties": "Filter, Group, Nillable, Sort",
-      "description": "The username that’s used for login."
     }
   },
   "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."

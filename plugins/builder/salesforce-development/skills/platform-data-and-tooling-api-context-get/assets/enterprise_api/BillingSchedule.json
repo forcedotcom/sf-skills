@@ -171,23 +171,55 @@
       "description": "The price for an individual unit of the billing schedule's parent order item, including charges, adjustments, and discounts. Inherited from the order item's UnitPrice field."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "field_reference": {
+    "BillDayOfMonth": {
+      "field_label": "Bill Day Of Month",
+      "type": "int",
+      "digits": "9"
+    },
     "BilledAmount": {
       "field_label": "Billed Amount",
       "type": "currency",
       "precision": "18",
       "scale": "2"
     },
+    "BilledAmountDerived": {
+      "field_label": "Billed Amount Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
     "BilledThroughPeriod": {
       "field_label": "Last billing period that includes this date",
       "type": "date"
+    },
+    "BillingAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "BillingMethod": {
+      "field_label": "Billing Method",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BillingMilestonePlanId": {
+      "field_label": "Billing Milestone Plan ID",
+      "type": "reference",
+      "length": "18"
     },
     "BillingPeriodAmount": {
       "field_label": "Billing Period Amount",
       "type": "currency",
       "precision": "18",
       "scale": "2"
+    },
+    "BillingPeriodAmountDerived": {
+      "field_label": "Billing Period Amount Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
     },
     "BillingScheduleEndDate": {
       "field_label": "Billing Schedule End Date",
@@ -207,10 +239,30 @@
       "field_label": "Billing Schedule Start Date",
       "type": "date"
     },
+    "BillingTerm": {
+      "field_label": "Billing Term",
+      "type": "int",
+      "digits": "9"
+    },
+    "BillingTermUnit": {
+      "field_label": "Billing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
     "BillingTreatmentItemId": {
       "field_label": "Billing Treatment Item ID",
       "type": "reference",
       "length": "18"
+    },
+    "BillingType": {
+      "field_label": "Billing Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "BpiGenerationStatus": {
+      "field_label": "BPI Generation Status",
+      "type": "picklist",
+      "length": "255"
     },
     "CancellationDate": {
       "field_label": "Cancellation Date",
@@ -230,20 +282,55 @@
       "field_label": "Created Date",
       "type": "datetime"
     },
-    "ExternalReference": {
-      "field_label": "External Reference Id",
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "CustomInvoiceGroupKey": {
+      "field_label": "Custom Invoice Group Key",
       "type": "string",
+      "length": "100"
+    },
+    "ForecastBatchRunId": {
+      "field_label": "Invoice Batch Run ID",
+      "type": "reference",
       "length": "18"
     },
-    "ExternalReferenceItem": {
-      "field_label": "External Reference Item Id",
+    "ForecastStatus": {
+      "field_label": "Forecast Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "GroupingKey": {
+      "field_label": "Grouping Key",
       "type": "string",
-      "length": "18"
+      "length": "255"
+    },
+    "GroupingKeyVersion": {
+      "field_label": "Version of the grouping key",
+      "type": "int",
+      "digits": "9"
     },
     "Id": {
       "field_label": "Billing Schedule ID",
       "type": "id",
       "length": "18"
+    },
+    "InvBatchDraftToPostedRunId": {
+      "field_label": "Invoice Batch Draft to Posted Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceBatchRunId": {
+      "field_label": "Invoice Batch Run ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "InvoiceGroupType": {
+      "field_label": "Invoice Group Type",
+      "type": "picklist",
+      "length": "255"
     },
     "InvoiceRunMatchingValue": {
       "field_label": "Invoice Run Matching Value",
@@ -258,6 +345,10 @@
       "field_label": "Deleted",
       "type": "boolean"
     },
+    "LastForecastRunTargetDate": {
+      "field_label": "Last Forecast Run Target Date",
+      "type": "date"
+    },
     "LastModifiedById": {
       "field_label": "Last Modified By ID",
       "type": "reference",
@@ -266,6 +357,18 @@
     "LastModifiedDate": {
       "field_label": "Last Modified Date",
       "type": "datetime"
+    },
+    "LineAmount": {
+      "field_label": "Line Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "LineAmountDerived": {
+      "field_label": "Line Amount Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
     },
     "NetUnitPrice": {
       "field_label": "Net Unit Price",
@@ -292,11 +395,38 @@
       "precision": "18",
       "scale": "2"
     },
+    "PendingAmountDerived": {
+      "field_label": "Pending Amount Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "PricingTermUnit": {
+      "field_label": "Pricing Term Unit",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ProcessingOrder": {
+      "field_label": "Processing Order",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
     "Quantity": {
       "field_label": "Quantity",
       "type": "double",
       "precision": "18",
       "scale": "2"
+    },
+    "RampIdentifier": {
+      "field_label": "Ramp Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "Reference": {
+      "field_label": "Reference",
+      "type": "string",
+      "length": "80"
     },
     "ReferenceEntityId": {
       "field_label": "ReferenceEntity ID",
@@ -308,8 +438,33 @@
       "type": "reference",
       "length": "18"
     },
+    "ReferenceItem": {
+      "field_label": "Reference Item",
+      "type": "string",
+      "length": "80"
+    },
+    "SegmentIdentifier": {
+      "field_label": "Segment Identifier",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentName": {
+      "field_label": "Segment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "SegmentType": {
+      "field_label": "Segment Type",
+      "type": "string",
+      "length": "255"
+    },
     "Status": {
       "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubCategory": {
+      "field_label": "Subcategory",
       "type": "picklist",
       "length": "255"
     },
@@ -328,16 +483,44 @@
       "precision": "18",
       "scale": "2"
     },
+    "TotalAmountDerived": {
+      "field_label": "Total Amount Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UnitOfMeasureId": {
+      "field_label": "Unit of Measure ID",
+      "type": "reference",
+      "length": "18"
+    },
     "UnitPrice": {
       "field_label": "Unit Price",
       "type": "currency",
       "precision": "18",
       "scale": "2"
+    },
+    "UnitPriceDerived": {
+      "field_label": "Unit Price Derived",
+      "type": "double",
+      "precision": "18",
+      "scale": "6"
+    },
+    "UsageResourceId": {
+      "field_label": "Usage Resource ID",
+      "type": "reference",
+      "length": "18"
     }
   },
   "field_reference_columns": [
     "field_label",
     "type",
+    "digits",
     "precision",
     "scale",
     "length"

@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "wsdl_segment",
     "field_reference"
@@ -52,6 +53,7 @@
       "description": "The latest value of the field before it was changed."
     }
   },
+  "special_access_rules": "- Customer and Partner Portal users must have the “View Content in Portal” permission to query content in libraries where they have access.\n- A user can query all versions of a document from their personal library and any version that is part of or shared with a library where they are a member, regardless of library permissions.",
   "usage": "Use this read-only object to query the history of a document version.",
   "wsdl_segment": "```xml\n<complexType name=\"ContentVersionHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentVersion\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentVersion\"/>\n        <element name=\"ContentVersionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NewValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"OldValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {

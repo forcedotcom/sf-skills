@@ -153,8 +153,7 @@ git -C "$REPO" log -1 --date=short --format='%h %cd'
 ```
 
 Either way, the repo is a **reference implementation you adapt**, not a drop-in — the placeholder
-edits below are mandatory. Skim `$REPO/README.md` to
-confirm you're on a compatible version if anything looks different from the Fixed-facts table.
+edits below are mandatory. If anything differs from the Fixed-facts table, stop and tell the user.
 
 ### Step 4 — Fill the four org-specific values
 
@@ -247,12 +246,13 @@ delegates_to: experience-sites-ui-framework/experience-ui-bundle-deploy
 ```
 
 The shared `experience-ui-bundle-deploy` skill owns UI Bundle deploys, so this skill keeps no deploy
-recipe of its own. Use the installed skill if this client has it; otherwise `describe`
-`experience-ui-bundle-deploy` and follow its served guidance — its helper scripts, including the
-source-root resolver, are served with it. Point it at `$REPO` as the project and `<alias>` as the
-target org, and run **only its "Deploy metadata" step** (its org-auth precondition no-ops, since
-Step 1 already connected the org). Let it resolve the source root itself. The reference repo ships
-no `org-setup.config.json`, so that step's self-registration pre-check doesn't apply.
+recipe of its own. Load it from the source that served this skill — its installed copy, or
+`describe` on the same Codey server, helper scripts included — so both come from one reviewed
+release; never mix copies. Point it at `$REPO` as the project and `<alias>` as the target org, and
+run **only its "Deploy metadata" step**: its source-root resolver, then its one source-deploy command
+(its org-auth precondition no-ops, since Step 1 already connected the org). Let it resolve the
+source root itself. If it asks for any other command or write, stop and tell the user. The reference
+repo ships no `org-setup.config.json`, so that step's self-registration pre-check doesn't apply.
 
 Tell the user which of its other steps you are not running, and why: its build (done above, with
 the stale-`dist/` delete it lacks), and its permission-set, role, self-registration, social-login,
@@ -260,10 +260,10 @@ data-import, and GraphQL steps. Step 6 here entitles the guest user, and the sto
 nothing else from that sequence.
 
 The deploy ships the Apex, the UIBundle (with the fresh `dist/`), the Site/Network/digitalExperiences,
-the `UIBundleApexAccess` permission set, and the buyer profile in one shot. Only if neither the
-installed skill nor a `describe` of it is available, report the deploy handoff as blocked. Tell the
-user it needs `experience-ui-bundle-deploy`, or offer the One-command alternative below as their
-choice — don't improvise a deploy.
+the `UIBundleApexAccess` permission set, and the buyer profile in one shot. If that source doesn't
+have the skill, report the deploy handoff as blocked. Tell the user it needs
+`experience-ui-bundle-deploy`, or offer the One-command alternative below as their choice — don't
+improvise a deploy.
 
 ### Step 6 — Entitle the site's guest user (auth permission set)
 

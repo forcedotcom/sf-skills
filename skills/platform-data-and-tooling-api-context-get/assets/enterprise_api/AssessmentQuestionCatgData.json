@@ -1,0 +1,47 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields"
+  ],
+  "title": "AssessmentQuestionCatgData - Data API",
+  "description": "Stores category-level aggregated scores for an assessment. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AssessedScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Score assigned to the category for the evaluation."
+    },
+    "AssessmentId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the submitted assessment. This field is a relationship field.",
+      "relationship_name": "Assessment",
+      "relationship_type": "Master-detail",
+      "refers_to": "Assessment (the master object)"
+    },
+    "MaximumScore": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Maximum score derived from all applicable response choices for a question in the category, used as the denominator in percentage calculations."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of this assessment question category data."
+    },
+    "QuestionCategory": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Question category for which the aggregate score is calculated. Possible values are: Demographic Financial"
+    }
+  }
+}

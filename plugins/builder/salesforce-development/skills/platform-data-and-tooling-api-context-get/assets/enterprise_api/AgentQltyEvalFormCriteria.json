@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "AgentQltyEvalFormCriteria - Data API",
+  "description": "Defines a named rule with evaluation criteria and priority settings to map incoming interactions to the appropriate evaluation form. This object is available in API version 68.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CriteriaType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Logic to evaluate the conditions in the criterion. Possible values are: And: Default combination logic CustomLogic: Evaluates conditions defined in the LogicalExpression field Or"
+    },
+    "Description": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Brief, human-readable summary to describe the purpose or scope of this criteria."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Unique API name of the agent quality evaluation form criteria."
+    },
+    "LogicalExpression": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Custom boolean expression that combines conditions by their SequenceNumber. Required only if the criteria type is set to CustomLogic."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "Name of the agent quality evaluation form criteria."
+    },
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Determines the evaluation sequence if an interaction matches multiple criteria. Lower numerical values indicate higher priority. For example, priority 1 takes precedence over priority 5."
+    },
+    "RelatedFormId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "OmniProcess evaluation form automatically assigned to the interaction when the criterion matches. This field is a relationship field.",
+      "relationship_name": "RelatedForm",
+      "refers_to": "OmniProcess"
+    }
+  },
+  "special_access_rules": "To access this object, you must be assigned QualityManagementEnabled org perm.",
+  "usage": "Each named rule includes criteria specifying the interaction channel, the evaluation form to use, and the conditions required for the criteria to apply. When an interaction matches multiple criteria, the Priority field determines which evaluation form is applied. You can define exactly one criterion as the default fallback for interactions that don't match any defined criteria."
+}

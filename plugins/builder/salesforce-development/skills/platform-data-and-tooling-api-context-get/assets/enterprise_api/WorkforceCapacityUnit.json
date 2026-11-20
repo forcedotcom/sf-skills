@@ -3,7 +3,9 @@
     "title",
     "description",
     "fields",
-    "special_access_rules"
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
   ],
   "title": "WorkforceCapacityUnit - Data API",
   "description": "Represents the number of resources allocated or needed for a specific set of work items at a timestamp within a specific duration. This object is available in API version 51.0 and later.",
@@ -131,5 +133,169 @@
       "refers_to": "WorkforceCapacity"
     }
   },
-  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have the Workforce Engagement\n         license. To view, create, edit, or delete records, the user must have the Workforce\n         Engagement Analyst permission set."
+  "special_access_rules": "The org must have the Workforce Engagement license. To view, create, edit, or delete records, the user must have the Workforce Engagement Analyst permission set.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkforceCapacityUnit\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AssignedMaxCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AssignedTotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AvailableMaxCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"AvailableTotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Capacity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeatureType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOmni\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsShiftTemplateNonStandard\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"JobProfileName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MaxCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"MeasureUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OriginalTotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ResourceGap\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ServiceTerritoryName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShiftTemplate\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ShiftTemplate\"/>\n        <element name=\"ShiftTemplateDuration\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ShiftTemplateDurationType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShiftTemplateId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ShiftTemplateJobProfile\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShiftTemplateName\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ShiftTemplateStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:time\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"WorkDemographic\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkDemographic\"/>\n        <element name=\"WorkDemographicId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"WorkforceCapacity\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkforceCapacity\"/>\n        <element name=\"WorkforceCapacityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AssignedMaxCount": {
+      "field_label": "Assigned Max Count",
+      "type": "double",
+      "precision": "9",
+      "scale": "1"
+    },
+    "AssignedTotalCount": {
+      "field_label": "Assigned Total Count",
+      "type": "double",
+      "precision": "9",
+      "scale": "1"
+    },
+    "AvailableMaxCount": {
+      "field_label": "Available Max Count",
+      "type": "double",
+      "precision": "9",
+      "scale": "1"
+    },
+    "AvailableTotalCount": {
+      "field_label": "Available Total Count",
+      "type": "double",
+      "precision": "9",
+      "scale": "1"
+    },
+    "Capacity": {
+      "field_label": "Capacity",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DateTime": {
+      "field_label": "Date Time",
+      "type": "datetime"
+    },
+    "FeatureType": {
+      "field_label": "Feature Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Work Capacity Unit ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOmni": {
+      "field_label": "Is Omni",
+      "type": "boolean"
+    },
+    "IsShiftTemplateNonStandard": {
+      "field_label": "Shift Template Is Non-Standard",
+      "type": "boolean"
+    },
+    "JobProfileName": {
+      "field_label": "Name of the Job Profile",
+      "type": "string",
+      "length": "200"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MaxCount": {
+      "field_label": "Max Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "MeasureUnit": {
+      "field_label": "Time Interval",
+      "type": "picklist",
+      "length": "255"
+    },
+    "OriginalTotalCount": {
+      "field_label": "Original Total Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "ResourceGap": {
+      "field_label": "Resource Gap",
+      "type": "int",
+      "digits": "9"
+    },
+    "ServiceTerritoryName": {
+      "field_label": "Name of the Service Territory",
+      "type": "string",
+      "length": "200"
+    },
+    "ShiftTemplateDuration": {
+      "field_label": "Shift Template Duration",
+      "type": "double",
+      "precision": "18",
+      "scale": "0"
+    },
+    "ShiftTemplateDurationType": {
+      "field_label": "Shift Template Duration Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ShiftTemplateId": {
+      "field_label": "Shift Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ShiftTemplateJobProfile": {
+      "field_label": "Shift Template Job Profile",
+      "type": "string",
+      "length": "50"
+    },
+    "ShiftTemplateName": {
+      "field_label": "Shift Template Name",
+      "type": "string",
+      "length": "50"
+    },
+    "ShiftTemplateStartTime": {
+      "field_label": "Shift Template Start Time",
+      "type": "time"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalCount": {
+      "field_label": "Total Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "WorkDemographicId": {
+      "field_label": "Work Demographic ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkforceCapacityId": {
+      "field_label": "Workforce Capacity ID",
+      "type": "reference",
+      "length": "18"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
 }

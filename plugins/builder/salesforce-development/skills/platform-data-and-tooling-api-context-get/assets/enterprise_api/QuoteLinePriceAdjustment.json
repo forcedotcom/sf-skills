@@ -3,7 +3,8 @@
     "title",
     "description",
     "fields",
-    "special_access_rules"
+    "special_access_rules",
+    "field_reference"
   ],
   "title": "QuoteLinePriceAdjustment - Data API",
   "description": "Indicates the calculated price adjustment that is applied to the quote line, for example, a calculated volume discount or the prorated value of a manual discount. Use the quote line price adjustment to inform potential customers about the type, value, and total amount of their discounts. This object is available in API version 56.0 and later.",
@@ -69,6 +70,11 @@
       "properties": "Filter, Group, Nillable, Sort",
       "description": "Reserved for future use."
     },
+    "ProratedAmount": {
+      "type": "currency",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "The prorated portion of the fee amount based on the quote line item's effective dates. This field is available with Digital Insurance in API version 67.0 and later."
+    },
     "QuoteAdjustmentGroupId": {
       "type": "reference (int)",
       "properties": "Filter, Group, Nillable, Sort",
@@ -91,5 +97,114 @@
       "description": "The total amount of the adjustment that applies to the quote line item, inclusive of quantity, prorated for the duration of the subscription."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management.\n\nThis object is available with Subscription\n         Management."
+  "special_access_rules": "This object is available with Subscription Management.",
+  "field_reference": {
+    "AdjustmentAction": {
+      "field_label": "Adjustment Action",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentAmountScope": {
+      "field_label": "Adjustment Amount Scope",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentSource": {
+      "field_label": "Adjustment Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentType": {
+      "field_label": "Adjustment Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "AdjustmentValue": {
+      "field_label": "Adjustment Value",
+      "type": "double",
+      "precision": "18",
+      "scale": "2"
+    },
+    "AppliedAdjustmentAmount": {
+      "field_label": "Applied Adjustment Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "256"
+    },
+    "Id": {
+      "field_label": "Quote Line Price Adjustment ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Quote Line Price Adjustment Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PriceAdjustmentCauseId": {
+      "field_label": "Price Adjustment Cause ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Priority": {
+      "field_label": "Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "QuoteLineItemId": {
+      "field_label": "Quote Line Item ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalAmount": {
+      "field_label": "Total Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "precision",
+    "scale",
+    "digits"
+  ]
 }

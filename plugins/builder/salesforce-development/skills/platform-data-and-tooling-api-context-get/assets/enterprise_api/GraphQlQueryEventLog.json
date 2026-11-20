@@ -1,0 +1,123 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "GraphQlQueryEventLog - Data API",
+  "description": "GraphQL Query events contain information about executed queries, including total execution time, the number of invocations, and any reported errors.. This object is available in API version 69.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description"
+  ],
+  "fields": {
+    "ActualCost": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The actual cost of the GraphQL query execution."
+    },
+    "AppType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The invocation application of the GraphQL request."
+    },
+    "ClientIp": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "IP address of the client employing salesforce.com services."
+    },
+    "CpuTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Amount of cpu cycles used by the request"
+    },
+    "ElapsedTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total time taken to execute the query."
+    },
+    "EstimatedCost": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The estimated upper-bound cost of the GraphQL query."
+    },
+    "Exception": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The exception, if one is thrown."
+    },
+    "LoginKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The string that ties together all events in a given user’s login session. It starts with a login event and ends with either a logout event or the user session expiring."
+    },
+    "OperationName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The operation name for the GraphQL query."
+    },
+    "QueryLength": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The total number of characters in a query."
+    },
+    "QueryString": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The full GraphQL query."
+    },
+    "RawSoqlRecordsSize": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The response size, in bytes, from raw SOQL records."
+    },
+    "RequestIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same REQUEST_ID."
+    },
+    "RunTime": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The amount of time that the request took in milliseconds."
+    },
+    "SessionKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The user’s unique session ID. You can use this value to identify all user events within a session. When a user logs out and logs in again, a new session is started."
+    },
+    "Timestamp": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The access time of Salesforce services in GMT."
+    },
+    "TrackedExpensiveFetcherSize": {
+      "type": "double",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The response size, in bytes, from tracked expensive data fetchers."
+    },
+    "Uri": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The URI of the page that’s receiving the request."
+    },
+    "UserIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The 15-character ID of the user who’s using Salesforce services through the UI or the API."
+    },
+    "UserType": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The category of user license. Possible values are: CsnOnly—Users whose access to the application is limited to Chatter. This user type includes Chatter Free and Chatter moderator users. CspLitePortal—CSP Lite Portal license. Users whose access is limited because they’re organization customers and access the application through a customer portal or an Experience Cloud site. CustomerSuccess—Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Guest—Users whose access is limited so that your customers can view and interact with your site without logging in. PowerCustomerSuccess—Power Customer Success license. Users whose access is limited because they’re organization customers and access the application through a customer portal. Users with this license type can view and edit data they directly own or data owned by or shared with users below them in the customer portal role hierarchy. PowerPartner—Power Partner license. Users whose access is limited because they’re partners and typically access the application through a partner portal or site. SelfService—Users whose access is limited because they’re organization customers and access the application through a self-service portal. Standard—Standard user license. This user type also includes Salesforce Platform and Salesforce Platform One user licenses, and admins for this org."
+    },
+    "Variables": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The variables supplied to the GraphQL query."
+    }
+  },
+  "special_access_rules": "This object is read-only and requires access to Event Monitoring. The org must have access to event log objects (EventMonitoring.orgCanAccessEventLogObjects) and a user must have read access to event log objects (EventMonitoring.userCanReadEventLogObjects)."
+}

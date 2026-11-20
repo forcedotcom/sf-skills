@@ -99,10 +99,10 @@ site name must come from the org (the deploy target), not the local project.
 
 ```bash
 sf data query --target-org <org-alias> \
-  --query "SELECT Id, Name FROM Network" --json
+  --query "SELECT Id, Name, UrlPathPrefix FROM Network" --json
 ```
 
-- One site → use its `Name` as `<site-name>` and `Id` as `<NETWORK_ID>`.
+- One site → use its `Name` as `<site-name>`, `Id` as `<NETWORK_ID>`, and `UrlPathPrefix` as `<url-path-prefix>` (may be null).
 - Multiple sites → ask the user which one (show the names).
 - Zero sites → the site isn't deployed yet; stop and tell the user (see Prerequisites).
 
@@ -127,9 +127,12 @@ Write **both** permission sets (React Experience Sites always need both):
 
 ```bash
 sf project deploy start \
-  --source-dir <source-dir>/permissionsets \
+  --source-dir <source-dir>/permissionsets/MFA_Required_For_Community.permissionset-meta.xml \
+  --source-dir <source-dir>/permissionsets/API_Enabled_For_Community.permissionset-meta.xml \
   --target-org <org-alias> --test-level NoTestRun
 ```
+
+> Deploy only the files this skill wrote, never the whole `permissionsets/` or `networks/` directory — a directory deploy also pushes any unrelated local metadata in it to the org.
 
 ### Step 3b: Validate community profile is a network member
 
@@ -149,7 +152,15 @@ sf data query --target-org <org-alias> \
   --query "SELECT Id, Name FROM Profile WHERE UserType IN ('CspLitePortal', 'PowerCustomerSuccess') AND Name LIKE '%Community%'" --json
 ```
 
-3. **If the profile is NOT a member**, add it to the `.network-meta.xml`:
+3. **Locate the site's network file** in the project. This is `<network-file>`, used here and in Step 5:
+
+```bash
+find . -name "*.network-meta.xml" -not -path "*/node_modules/*"
+```
+
+If several files come back, pick the one for `<site-name>` (the file name or its `<urlPathPrefix>` matches the site from Step 1). If none clearly matches, ask the user which file to edit.
+
+4. **If the profile is NOT a member**, read `<network-file>` and add it to the existing `<networkMemberGroups>` section:
 
 ```xml
 <networkMemberGroups>
@@ -159,11 +170,11 @@ sf data query --target-org <org-alias> \
 </networkMemberGroups>
 ```
 
-4. **Deploy the updated network metadata:**
+5. **Deploy the updated network metadata** (only `<network-file>`, never the whole `networks/` directory):
 
 ```bash
 sf project deploy start \
-  --source-dir <source-dir>/networks \
+  --source-dir <network-file> \
   --target-org <org-alias> --test-level NoTestRun
 ```
 
@@ -173,11 +184,32 @@ sf project deploy start \
 
 The site login page runs as the **guest user** (unauthenticated). If the guest profile doesn't have access to login Apex classes, users will get `FORBIDDEN: You do not have access to the Apex class named: UIBundleLogin` and can never reach the MFA challenge.
 
-1. **Find the site guest user profile:**
+1. **Find the guest user profile of the target site only** (never query every guest user in the org — other sites' guest profiles must not be modified):
+
+Match the site's `Site` record by the `<url-path-prefix>` from Step 1. Run exactly one of these two queries:
+
+- If `<url-path-prefix>` has a value, quote it:
 
 ```bash
 sf data query --target-org <org-alias> \
-  --query "SELECT Id, Username, Profile.Name, Profile.Id FROM User WHERE UserType = 'Guest' AND IsActive = true" --json
+  --query "SELECT Id, Name, SiteType, GuestUserId FROM Site WHERE UrlPathPrefix = '<url-path-prefix>'" --json
+```
+
+- If `<url-path-prefix>` was null, use the bare keyword `null` with no quotes (`= 'null'` matches the text "null" and returns nothing):
+
+```bash
+sf data query --target-org <org-alias> \
+  --query "SELECT Id, Name, SiteType, GuestUserId FROM Site WHERE UrlPathPrefix = null" --json
+```
+
+- Exactly one distinct `GuestUserId` across the returned rows → use it as `<GUEST_USER_ID>`.
+- Zero rows, or rows with different `GuestUserId` values → stop, show the rows, and ask the user which site (or guest user) is the target. Do **not** fall back to an org-wide guest-user query.
+
+Then read that one guest user and its profile:
+
+```bash
+sf data query --target-org <org-alias> \
+  --query "SELECT Id, Username, Profile.Name, Profile.Id FROM User WHERE Id = '<GUEST_USER_ID>' AND UserType = 'Guest'" --json
 ```
 
 2. **Grant access to any missing UIBundle login classes.** The six classes are `UIBundleLogin`, `UIBundleAuthUtils`, `UIBundleForgotPassword`, `UIBundleChangePassword`, `UIBundleRegistration`, and `UIBundleSocialLoginConfig`. Run the anonymous Apex in `references/setup.md` ("Grant Guest Profile Apex Class Access") — it diffs existing access and inserts only what's missing — or deploy `<classAccess>` entries for the same classes to the guest profile metadata XML.
@@ -250,7 +282,7 @@ sf data create record --target-org <org-alias> --sobject User \
   --values "FirstName='MFA' LastName='Test User' Email='mfa.testuser@<site-name>.test' Username='mfa.testuser@<site-name>.test' Alias='mfatest' ProfileId='<PROFILE_ID>' ContactId='<CONTACT_ID>' EmailEncodingKey='UTF-8' LanguageLocaleKey='en_US' LocaleSidKey='en_US' TimeZoneSidKey='America/Los_Angeles'" --json
 ```
 
-5. **Set a password** for the test user:
+5. **Activate** the test user:
 
 ```bash
 sf data update record --target-org <org-alias> --sobject User \
@@ -258,9 +290,7 @@ sf data update record --target-org <org-alias> --sobject User \
   --values "IsActive=true" --json
 ```
 
-```bash
-sf org generate password --target-org <org-alias> --on-behalf-of mfa.testuser@<site-name>.test --json
-```
+> **Do not generate or set a password yourself.** A generated password would land in the agent conversation. The user generates it in their own terminal (see the message below), so it is printed only to them.
 
 6. **Assign both permission sets** to the new user:
 
@@ -269,8 +299,8 @@ sf org assign permset --name MFA_Required_For_Community --target-org <org-alias>
 sf org assign permset --name API_Enabled_For_Community --target-org <org-alias> --on-behalf-of mfa.testuser@<site-name>.test --json
 ```
 
-Report the credentials to the user so they can test:
-> "Created test user: `mfa.testuser@<site-name>.test` with password: `<generated-password>`. You can use these credentials to verify MFA on your site."
+Tell the user the username, and how to generate the password themselves in their own terminal:
+> "Created test user: `mfa.testuser@<site-name>.test`. To get a password, run `sf org generate password --target-org <org-alias> --on-behalf-of mfa.testuser@<site-name>.test` in your own terminal — it prints the password only to you. Then use it to verify MFA on your site."
 
 > **IMPORTANT:** Community users require Account → Contact → User hierarchy. Creating a User without a linked Contact on a community profile will fail.
 
@@ -281,11 +311,7 @@ Report the credentials to the user so they can test:
 > assign MFA to users. Assignment happens in Step 4 (per user); register the sets
 > here so assigned users still count as site members.
 
-1. Find the existing `.network-meta.xml` in the project:
-
-```bash
-find . -name "*.network-meta.xml" -not -path "*/node_modules/*"
-```
+1. Use the `<network-file>` located in Step 3b, item 3 (if you skipped that step, locate it now the same way).
 
 2. Read the file and locate the `<networkMemberGroups>` section.
 
@@ -303,11 +329,11 @@ find . -name "*.network-meta.xml" -not -path "*/node_modules/*"
 
 > **IMPORTANT:** Network metadata deploys are declarative — whatever you deploy becomes the full state. Do NOT create a new `.network-meta.xml` from scratch. Always read the existing file and add entries to it.
 
-4. Deploy the updated network metadata:
+4. Deploy the updated network metadata (only `<network-file>`, the one file you edited):
 
 ```bash
 sf project deploy start \
-  --source-dir <source-dir>/networks \
+  --source-dir <network-file> \
   --target-org <org-alias> --test-level NoTestRun
 ```
 

@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "wsdl_segment",
     "field_reference"
@@ -42,6 +43,7 @@
       "description": "ID of this instance of accessing the shared document."
     }
   },
+  "special_access_rules": "- Content deliveries must be enabled to query content deliveries.\n- Users (including users with the “View All Data” permission) can query only the files that they have access to. If the file is managed by a Content Library, the user must have “Deliver Content” enabled in the library permission definition and be a member of the library. If the file isn’t managed by a Content Library, the user must have the “Enable Creation of Content Deliveries for Salesforce Files” permission.\n- ContentDistributionView can be deleted by an admin.\n- If the shared document is deleted, the delete cascades to any associated ContentDistributionView. The ContentDistributionView is still queryable by using the QueryAll verb.\n- Customer Portal users can’t access this object.\n- Chatter Free users can’t access this object.",
   "usage": "Use this read-only object to query information about users who are accessing shared documents.",
   "wsdl_segment": "```xml\n<complexType name=\"ContentDistributionView\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Distribution\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDistribution\"/>\n        <element name=\"DistributionId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDownload\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsInternal\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ParentViewId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {

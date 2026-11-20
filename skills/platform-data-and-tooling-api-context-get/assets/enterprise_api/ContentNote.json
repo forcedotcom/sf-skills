@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "field_reference"
   ],
@@ -91,7 +92,8 @@
       "description": "Title of the note."
     }
   },
-  "usage": "For example, the following Apex code creates a note and escapes any special characters so they’re converted to their HTML equivalents. In this example, the following code creates a note using text that is already formatted as HTML, so it doesn’t need to be escaped.\n\nFor example, the following Apex code creates a note and escapes any special characters so they’re converted to their HTML equivalents.\n\nIn this example, the following code creates a note using text that is already formatted as HTML, so it doesn’t need to be escaped.",
+  "special_access_rules": "- Notes must be enabled.",
+  "usage": "For example, the following Apex code creates a note and escapes any special characters so they’re converted to their HTML equivalents. In this example, the following code creates a note using text that is already formatted as HTML, so it doesn’t need to be escaped.\n\n- Use ContentNote to create, query, retrieve, search, edit, and update notes.\n- ContentNote is built on ContentVersion, and so it has many of the same usages.\n- Not all fields can be set for notes. Only the Content and Title fields can be updated.\n- The maximum file size that you can upload via the SOAP API is 50 MB. When a document is uploaded or downloaded via the API, it’s converted to base64. This conversion increases the document size by approximately 37%. Account for the base64 conversion increase so that the file you plan to upload is less than 50 MB after conversion.\n- You can convert old Note records to Lightning Experience, so users can view and edit notes from the Notes & Attachments related list in Lightning Experience. Users can edit their converted notes, which are accessible from the Notes related list and Notes tab. Copy old Note records to newly created ContentNote records. Users assigned the Set Audit Fields Upon Creation permission can set the owner, created date, and last modified date on ContentNote records.\n- SOQL and SOSL queries on the ContentNote return only the most recent version of the note.\n- To relate a note to a record, use ContentDocumentLink. Review the LinkedEntityID field in ContentDocumentLink for a list of objects that notes can relate to.\n\nApex code doesn’t need to be encoded to base64 before it’s uploaded and downloaded.\n\nContentNote cn = new ContentNote();\n\ncn.Title = 'test1';\n\nString body = 'Hello World. Before insert/update, escape special characters such as \", ', &, and other standard escape characters.';\n\ncn.Content = Blob.valueOf(body.escapeHTML4());\n\ninsert(cn);\n\nContentNote cn = new ContentNote();\n\ncn.Title = 'test2';\n\nString body = '<b>Hello World. Because this text is already formatted as HTML, it does not need to be escaped.\n\nSpecial characters such as &quot;, etc. must already use their HTML equivalents.</b>';\n\ncn.Content = body;\n\ninsert(cn);",
   "field_reference": {
     "Content": {
       "field_label": "Content",

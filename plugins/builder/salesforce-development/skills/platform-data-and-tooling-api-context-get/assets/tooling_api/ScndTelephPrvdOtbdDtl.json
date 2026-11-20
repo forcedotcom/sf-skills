@@ -1,0 +1,59 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ScndTelephPrvdOtbdDtl - Tooling API",
+  "description": "Represents the outbound SIP routing configuration for a secondary telephony provider in Agentforce Contact Center BYOC. This object is available in API version 68.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "CustomHeader": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Custom SIP headers for outbound calls."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique name of the object in the API."
+    },
+    "HostConfig": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Key-value pair of IP address and port. You can specify a maximum of 5 entries."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the MasterLabel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "User interface label for the outbound details for the secondary telephony provider. This internal label doesn’t get translated."
+    },
+    "OutboundAuthEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether outbound authentication is enabled (true) or not (false). The default value is false."
+    },
+    "SecondaryTelephonyProviderId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "ID of the associated secondary telephony provider. This field is a relationship field.",
+      "relationship_name": "SecondaryTelephonyProvider",
+      "refers_to": "SecondaryTelephonyProvider"
+    }
+  },
+  "special_access_rules": "To access ScndTelephPrvdOtbdDtl, you must have the Agentforce Contact Center Admin (Salesforce Voice) permission set assigned."
+}

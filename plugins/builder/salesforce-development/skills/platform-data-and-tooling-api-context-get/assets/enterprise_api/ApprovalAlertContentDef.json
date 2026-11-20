@@ -3,7 +3,8 @@
     "title",
     "description",
     "fields",
-    "associated_objects"
+    "associated_objects",
+    "field_reference"
   ],
   "title": "ApprovalAlertContentDef - Data API",
   "description": "Represents the mapping that links specific user-created email templates to different notification events such as initial assignment or reassignment within an Advanced Approvals flow. This object is available in API version 66.0 and later.",
@@ -43,5 +44,73 @@
       "description": "The reason within an approval step's lifecycle that triggers the notification for which an email is sent. For example, when an approval work item is moved from one user to another, a reassignment notification email is sent to the user. Possible values are: ApprovalCreationSuccess ApprovalStepAssignment ApprovalStepAssignmentToDelegate ApprovalStepReassignment ApprovalStepReassignmentToDelegate ApprovalSubmissionApprovedOrRejectedStatusUpdate ApprovalWorkItemStatusUpdate AutoApprovalConfirmation"
     }
   },
-  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object.\n\n- **ApprovalAlertContentDefHistory**: History is available for tracked fields of the object."
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object.\n\n- **ApprovalAlertContentDefHistory**: History is available for tracked fields of the object.",
+  "field_reference": {
+    "ApprovalFlowApiName": {
+      "field_label": "Approval Flow API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ApprovalStepApiName": {
+      "field_label": "Approval Step API Name",
+      "type": "string",
+      "length": "255"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "EmailTemplateId": {
+      "field_label": "Email Template ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Id": {
+      "field_label": "Approval Alert Content Definition ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "NotificationReason": {
+      "field_label": "Notification Reason",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
 }

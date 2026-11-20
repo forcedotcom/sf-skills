@@ -1,6 +1,6 @@
 ---
 name: platform-lightning-app-coordinate
-description: "Build complete Salesforce Lightning Experience applications from natural language descriptions. Use this skill when a user requests a \"complete app\", \"Lightning app\", \"business solution\", \"management system\", or describes a scenario requiring multiple interconnected Salesforce components (objects, fields, pages, tabs, security). Orchestrates all required metadata types in proper dependency order to produce a deployable application."
+description: "Build complete, tab-based Salesforce Lightning Experience applications from natural language descriptions. Load this coordinator before individual metadata generators when a request combines a CustomApplication with supporting custom objects, fields, relationships, tabs, Lightning record pages (FlexiPages), list views, or permission sets—for example an employee directory or project-management app in the App Launcher. Load platform-metadata-api-context-get alongside the per-type generators before writing metadata. Do not use for a single component, an app container grouping existing tabs, or a React/UI bundle application."
 metadata:
   version: "1.0"
   domains: ["Platform"]
@@ -15,12 +15,10 @@ metadata:
     - "platform-list-view-generate"
     - "platform-permission-set-generate"
     - "platform-validation-rule-generate"
+    - "platform-metadata-api-context-get"
   mcpTools:
     metadata-experts:
       tools: ["execute_metadata_action"]
-      semver: ">=1.0.0"
-    salesforce-api-context:
-      tools: ["get_metadata_type_context", "get_metadata_type_fields", "get_metadata_type_fields_properties", "get_metadata_type_sections", "search_metadata_types"]
       semver: ">=1.0.0"
 ---
 
@@ -59,25 +57,25 @@ This table shows which metadata types are commonly needed for Lightning Experien
 
 | Metadata Type | Skill Name | API Context | Usage Rule |
 |---------------|------------|-------------|------------|
-| **Custom Object** | `platform-custom-object-generate` | `salesforce-api-context` | MUST load skill AND call API context |
-| **Custom Field** | `platform-custom-field-generate` | `salesforce-api-context` | MUST load skill AND call API context |
-| **Custom Tab** | `platform-custom-tab-generate` | `salesforce-api-context` | MUST load skill AND call API context |
-| **FlexiPage** | `platform-flexipage-generate` | `salesforce-api-context` | MUST load skill AND call API context |
-| **Custom Application** | `platform-custom-application-generate` | `salesforce-api-context` | MUST load skill AND call API context |
-| **List View** | `platform-list-view-generate` | `salesforce-api-context` | MUST load skill AND call API context (if requested) |
-| **Validation Rule** | `platform-validation-rule-generate` | `salesforce-api-context` | MUST load skill AND call API context (if requested) |
-| **Flow** | `automation-flow-generate` | `metadata-experts` pipeline | MUST load skill AND run pipeline. **Exempt from `salesforce-api-context`**. |
-| **Permission Set** | `platform-permission-set-generate` | `salesforce-api-context` | MUST load skill AND call API context |
+| **Custom Object** | `platform-custom-object-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
+| **Custom Field** | `platform-custom-field-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
+| **Custom Tab** | `platform-custom-tab-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
+| **FlexiPage** | `platform-flexipage-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
+| **Custom Application** | `platform-custom-application-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
+| **List View** | `platform-list-view-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context (if requested) |
+| **Validation Rule** | `platform-validation-rule-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context (if requested) |
+| **Flow** | `automation-flow-generate` | `metadata-experts` pipeline | MUST load skill AND run pipeline. **Exempt from the non-Flow schema-context step**. |
+| **Permission Set** | `platform-permission-set-generate` | `platform-metadata-api-context-get` | MUST load skill AND consume schema context |
 
 ### Usage Rules
 
 **SKILL RULE**: When a skill exists for a metadata type, you **MUST** load that skill. Do NOT generate metadata directly without loading the skill first.
 
-**API CONTEXT RULE**: For every metadata type (except Flow), you **MUST** call `salesforce-api-context` tools before generating. Do NOT generate metadata without calling API context first. The skill provides structure and rules; API context confirms what is valid for the current API version. Both are essential.
+**API CONTEXT RULE**: For every metadata type (except Flow), you **MUST** load `platform-metadata-api-context-get` alongside the generator and consume the type's required schema sections before generating. Do NOT generate metadata without attempting schema context first. The generator provides patterns and rules; schema context provides fields, enums, and child types. Bundled assets are not live-org/version discovery; check compatibility with the project's API version. Both are essential.
 
 **FALLBACK RULE**: When no skill exists for a metadata type you need, generate the metadata directly using your knowledge of Salesforce Metadata API and best practices. API context is still required.
 
-**RATIONALE**: Skills contain validated patterns and constraints. API context provides version-specific accuracy. Together they prevent deployment failures.
+**RATIONALE**: Generator skills contain validated patterns and constraints. Schema context provides authoritative XML definitions; target-version compatibility still needs validation. Together they prevent deployment failures.
 
 ---
 
@@ -193,18 +191,18 @@ SECURITY:
 - Permission Sets: [list with purpose]
 
 PER-TYPE EXECUTION (skill + API context for each):
-- CustomObject: load platform-custom-object-generate + call salesforce-api-context
-- CustomField: load platform-custom-field-generate + call salesforce-api-context
-- ValidationRule: load platform-validation-rule-generate + call salesforce-api-context (if requested)
+- CustomObject: load platform-custom-object-generate + consume platform-metadata-api-context-get for CustomObject
+- CustomField: load platform-custom-field-generate + consume platform-metadata-api-context-get for CustomField
+- ValidationRule: load platform-validation-rule-generate + consume platform-metadata-api-context-get for ValidationRule (if requested)
 - Flow: load automation-flow-generate + run metadata-experts pipeline (if requested)
-- ListView: load platform-list-view-generate + call salesforce-api-context (if requested)
-- CustomTab: load platform-custom-tab-generate + call salesforce-api-context
-- FlexiPage: load platform-flexipage-generate + call salesforce-api-context
-- CustomApplication: load platform-custom-application-generate + call salesforce-api-context
-- PermissionSet: load platform-permission-set-generate + call salesforce-api-context
+- ListView: load platform-list-view-generate + consume platform-metadata-api-context-get for ListView (if requested)
+- CustomTab: load platform-custom-tab-generate + consume platform-metadata-api-context-get for CustomTab
+- FlexiPage: load platform-flexipage-generate + consume platform-metadata-api-context-get for FlexiPage
+- CustomApplication: load platform-custom-application-generate + consume platform-metadata-api-context-get for CustomApplication
+- PermissionSet: load platform-permission-set-generate + consume platform-metadata-api-context-get for PermissionSet
 
 STATUS LINES TO EMIT BEFORE FILE WRITES:
-- `type=<Type> skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- `type=<Type> skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - Flow exception: `type=Flow skill=complete pipeline=complete`
 
 DEPENDENCY ORDER:
@@ -221,69 +219,69 @@ Execute these four steps for each metadata type, one type at a time. Complete al
 
 | Step | What to do | Why |
 |------|-----------|-----|
-| **① Load skill** | Search for and read the per-type SKILL.md | Gives you the XML structure, required elements, naming rules, and validation constraints |
-| **② Call API context** | Call `salesforce-api-context` tools for this metadata type using one or more of: `get_metadata_type_sections`, `get_metadata_type_context`, `get_metadata_type_fields`, `get_metadata_type_fields_properties`, `search_metadata_types` | Gives you the current valid values — allowed enum values, required vs. optional fields, child types for this API version. The skill provides structure; API context provides version-specific accuracy. |
-| **③ Record status** | Emit: `type=<Type> skill=complete mcp=complete\|unavailable mcp_tools=<tool-list\|none>` | Confirms both steps were attempted before any files are written and records which API context tools were used |
+| **① Load skill** | Search for and read the per-type SKILL.md and load `platform-metadata-api-context-get` alongside it | Gives you the XML structure, required elements, naming rules, and validation constraints |
+| **② Consume API context** | Resolve this type's asset using the context skill's documented lookup; extract only `fields` and the needed `sub_types`, enums, or child-type sections with `jq`/programmatic parsing. Use targeted `wsdl_segment` or examples only when needed; never read whole schema files. | Confirms allowed values and required vs. optional fields without loading unrelated schema. Check target-version compatibility separately. |
+| **③ Record status** | Emit: `type=<Type> skill=complete context=complete\|unavailable context_sections=<section-list\|none>` | Confirms both steps were attempted before any files are written and records which schema sections were consumed |
 | **④ Generate files** | Generate all files for this type, then checkpoint | Only after ①②③ are done. Verify, then move to the next type. |
 
 **Do NOT combine ① and ② into a single action or skip ② after completing ①.** They are separate steps that serve different purposes. After loading the skill you may feel ready to generate — stop and do ② first.
 
-If `salesforce-api-context` is unavailable after a real attempt, record `mcp=unavailable` and generate using skill knowledge alone. Not attempting ② at all is a bug.
+If the context skill or required type/section is unavailable after a real lookup attempt (including its index recovery), record `context=unavailable`, name the missing context, and generate using skill knowledge alone. Do not claim schema confirmation or invent unsupported fields/enums. Not attempting ② at all is a bug.
 
 ---
 
 **1. Custom Objects**
 - ① Load skill: Read `platform-custom-object-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for CustomObject
-- ③ Status: `type=CustomObject skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for CustomObject
+- ③ Status: `type=CustomObject skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all Custom Object files, then proceed to #2
 
 **2. Custom Fields**
 - ① Load skill: Read `platform-custom-field-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for CustomField
-- ③ Status: `type=CustomField skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for CustomField
+- ③ Status: `type=CustomField skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all Custom Field files, then proceed to #3
 
 **3. Validation Rules** (only if requested)
 - ① Load skill: Read `platform-validation-rule-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for ValidationRule
-- ③ Status: `type=ValidationRule skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for ValidationRule
+- ③ Status: `type=ValidationRule skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all Validation Rule files, then proceed to #4
 
 **4. Flows** (only if requested)
 - ① Load skill: Read `automation-flow-generate` SKILL.md
-- ② Pipeline: Run `metadata-experts/execute_metadata_action` 3-step pipeline (exempt from `salesforce-api-context`)
+- ② Pipeline: Run `metadata-experts/execute_metadata_action` 3-step pipeline (exempt from the non-Flow schema-context step)
 - ③ Status: `type=Flow skill=complete pipeline=complete`
 - ④ Generate + Checkpoint: Generate all Flow files via the pipeline, then proceed to #5
 
 **5. List Views** (only if requested)
 - ① Load skill: Read `platform-list-view-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for ListView
-- ③ Status: `type=ListView skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for ListView
+- ③ Status: `type=ListView skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all List View files, then proceed to #6
 
 **6. Custom Tabs**
 - ① Load skill: Read `platform-custom-tab-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for CustomTab
-- ③ Status: `type=CustomTab skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for CustomTab
+- ③ Status: `type=CustomTab skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all Custom Tab files, then proceed to #7
 
 **7. FlexiPages**
 - ① Load skill: Read `platform-flexipage-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for FlexiPage
-- ③ Status: `type=FlexiPage skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for FlexiPage
+- ③ Status: `type=FlexiPage skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all FlexiPage files, then proceed to #8
 
 **8. Custom Application**
 - ① Load skill: Read `platform-custom-application-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for CustomApplication
-- ③ Status: `type=CustomApplication skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for CustomApplication
+- ③ Status: `type=CustomApplication skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate the Custom Application file, then proceed to #9
 
 **9. Permission Sets**
 - ① Load skill: Read `platform-permission-set-generate` SKILL.md
-- ② API context: Call `salesforce-api-context` for PermissionSet
-- ③ Status: `type=PermissionSet skill=complete mcp=complete|unavailable mcp_tools=<tool-list|none>`
+- ② API context: Consume `platform-metadata-api-context-get` for PermissionSet
+- ③ Status: `type=PermissionSet skill=complete context=complete|unavailable context_sections=<section-list|none>`
 - ④ Generate + Checkpoint: Generate all Permission Set files — all types complete
 
 ### STEP 3: Final Artifact Assembly

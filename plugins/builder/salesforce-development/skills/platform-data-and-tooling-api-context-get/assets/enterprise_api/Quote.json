@@ -197,6 +197,11 @@
       "properties": "Defaulted on create, Filter",
       "description": "Indicates whether the quote is syncing with an opportunity."
     },
+    "InsuranceQuoteType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The type of insurance quote. Possible values are: New Business Renewal Endorsement Reinstatement New Group Business Group Endorsement Group Renewal"
+    },
     "LastReferencedDate": {
       "type": "date",
       "properties": "Filter, Nillable, Sort, Update",
@@ -396,7 +401,7 @@
       "description": "The total amount of all taxes. This field is available in API version 55.0 and later. This field is available if Subscription Management is enabled in your org. This field is a calculated field."
     }
   },
-  "usage": "Use Quote to manage proposed product prices for customers. To update a Quote, your client application needs “Edit” permission.",
+  "usage": "Use Quote to manage proposed product prices for customers. To update a Quote, your client application needs “Edit” permission.\n\n- Client applications can create, update, delete, and query Attachment records associated with a quote via the API.\n- You can sync a quote and its parent Opportunity.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **QuoteChangeEvent (API version 44.0)**: Change events are available for the object.\n- **QuoteFeed (API version 39.0)**: Feed tracking is available for the object.\n- **QuoteHistory (API version 57.0)**: History is available for tracked fields of the object.\n- **QuoteOwnerSharingRule (API version 41.0)**: Sharing rules are available for the object.\n- **QuoteShare (API version 41.0)**: Sharing is available for the object.",
   "field_reference": {
     "AccountId": {
@@ -599,6 +604,10 @@
     },
     "IsDeleted": {
       "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsLargeDeal": {
+      "field_label": "Large Deal",
       "type": "boolean"
     },
     "IsSyncing": {

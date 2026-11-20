@@ -44,20 +44,37 @@ for (let i = 1; i < args.length; i++) {
   else if (a === "--file") opts.file = args[++i];
 }
 
+// Refuse absurdly large inputs before reading them into memory (API caps the
+// zip at 200MB; a legitimate report is far smaller than this size limit).
+const MAX_RAW_BYTES = 100 * 1024 * 1024;
+
 let raw;
 try {
+  const size = fs.statSync(rawPath).size;
+  if (size > MAX_RAW_BYTES) {
+    fail(`Raw result file is ${size} bytes, over the ${MAX_RAW_BYTES}-byte size limit — refusing to parse.`);
+  }
   raw = JSON.parse(fs.readFileSync(rawPath, "utf8"));
 } catch (e) {
   fail(`Could not read/parse raw result file: ${e.message}`);
 }
 
-if (raw.status && raw.status !== "SUCCEEDED") {
+if (!raw || typeof raw !== "object") fail("Raw result is not a JSON object.");
+if (!raw.status) fail("Missing 'status' field in raw result — cannot determine scan outcome.");
+if (raw.status !== "SUCCEEDED") {
   fail(`Scan status is ${raw.status}, not SUCCEEDED — nothing to decode. Message: ${raw.message || "(none)"}`);
 }
 
 // --- decode the base64 report into a violations array ---
+// Fail closed: a SUCCEEDED scan with a missing/invalid report must never read as
+// "clean". The one legitimate empty case is what the API returns for a clean scan:
+// `report: null` together with `violationCount: 0` (confirmed against the live API).
+const hasReport = typeof raw.report === "string" && raw.report.length > 0;
+if (!hasReport && !(raw.report == null && raw.violationCount === 0)) {
+  fail("Scan SUCCEEDED but 'report' field is missing and violationCount is not 0 — cannot produce results.");
+}
 let violations = [];
-if (raw.report) {
+if (hasReport) {
   let decoded;
   try {
     decoded = Buffer.from(raw.report, "base64").toString("utf8");
@@ -70,8 +87,11 @@ if (raw.report) {
   } catch (e) {
     fail(`decoded report is not valid JSON: ${e.message}`);
   }
-  // API contract: report is a JSON array of violations. Tolerate a wrapper obj.
-  violations = Array.isArray(parsed) ? parsed : parsed.violations || [];
+  // API contract: report is a JSON array of violations. Tolerate a wrapper obj
+  // that carries a violations array; anything else is a malformed report.
+  if (Array.isArray(parsed)) violations = parsed;
+  else if (parsed && Array.isArray(parsed.violations)) violations = parsed.violations;
+  else fail("Decoded report is neither a violations array nor an object with a 'violations' array.");
 }
 
 // --- normalize each violation to a stable shape (tolerate field-name drift) ---
@@ -107,6 +127,40 @@ function methodOf(comment) {
 function stripLinePrefixes(code) {
   return code.replace(/^Line \d+:\s?/gm, "").replace(/\n+$/, "");
 }
+// --- Markdown safety: report fields come from the server and are untrusted. ---
+// Escape Markdown/HTML metacharacters in prose so a message cannot inject links,
+// images, headings or raw HTML into the presented report.
+function escapeMarkdown(s) {
+  return String(s ?? "").replace(/[\\`*_{}[\]()#+\-.!|<>~]/g, "\\$&").replace(/\r?\n/g, " ");
+}
+// Value for use inside an inline `code` span: just drop backticks and newlines.
+function inlineCode(s) {
+  return String(s ?? "").replace(/[`\r\n]/g, "");
+}
+// Fenced block whose fence is longer than any backtick run in the content, so the
+// content can never close the fence early (CommonMark). Content is kept verbatim.
+function fence(code, lang) {
+  const text = String(code ?? "");
+  const longest = (text.match(/`+/g) || []).reduce((m, r) => Math.max(m, r.length), 0);
+  const ticks = "`".repeat(Math.max(3, longest + 1));
+  return `${ticks}${lang || ""}\n${text}\n${ticks}`;
+}
+const ALLOWED_RESOURCE_HOSTS = new Set(["help.salesforce.com", "developer.salesforce.com", "trailhead.salesforce.com"]);
+// Render a link only for https URLs on known Salesforce doc hosts; show anything
+// else as inert text.
+function renderResource(url) {
+  const s = String(url ?? "");
+  try {
+    const u = new URL(s);
+    if (u.protocol === "https:" && ALLOWED_RESOURCE_HOSTS.has(u.hostname) && !/[\s()<>]/.test(s)) {
+      return `[Learn more](${s})`;
+    }
+  } catch {
+    // fall through to inert rendering
+  }
+  return `Resource: \`${inlineCode(s)}\``;
+}
+
 function norm(v) {
   const { file, line, comment } = loc(v);
   const metadata = v.metadata || {};
@@ -202,7 +256,7 @@ const SEVERITY_MAP = {
   5: { icon: "\u{1F7E1}", label: "Minor" }, // yellow
 };
 function sevInfo(sev) {
-  return SEVERITY_MAP[parseInt(sev, 10)] || { icon: "⚪", label: `Severity ${sev}` };
+  return SEVERITY_MAP[parseInt(sev, 10)] || { icon: "⚪", label: `Severity ${escapeMarkdown(sev)}` };
 }
 
 // Human-friendly rule names mapping (for violation.rule field)
@@ -260,7 +314,7 @@ const BREAKDOWN_DISPLAY_NAMES = {
   "REDUNDANT_SOQL": "Redundant SOQL",
 };
 function displayRuleName(rule) {
-  return RULE_DISPLAY_NAMES[rule] || rule;
+  return RULE_DISPLAY_NAMES[rule] || escapeMarkdown(rule);
 }
 
 // Three ApexGuru states, distinguished per the SFAP contract (hasRuntimeMetrics
@@ -276,7 +330,7 @@ const isOnboardedNoData = isFull && !hasRuntimeMetrics;
 const violationWord = summary.violationCount === 1 ? "violation" : "violations";
 // attribution already reflects runtime presence ("Production insights" only when enriched).
 let out = `# ApexGuru Scan Results — ${summary.attribution}\n\n`;
-out += `Found **${summary.violationCount} performance ${violationWord}** across ${summary.filesScanned ?? "?"} file(s). `;
+out += `Found **${summary.violationCount} performance ${violationWord}** across ${Number.isFinite(summary.filesScanned) ? summary.filesScanned : "?"} file(s). `;
 if (isEnriched) {
   out += "Findings enriched with production runtime metrics.\n";
 } else if (isOnboardedNoData) {
@@ -318,7 +372,7 @@ if (hotspots.length) {
     .sort((a, b) => (b.cpuTimePercentage || 0) - (a.cpuTimePercentage || 0))
     .forEach((v) => {
       const pct = v.cpuTimePercentage != null ? Math.round(v.cpuTimePercentage * 10) / 10 : "?";
-      out += `| \`${v.method || v.file}\` | ${pct}% |\n`;
+      out += `| \`${inlineCode(v.method || v.file)}\` | ${pct}% |\n`;
     });
   out += "\n";
 }
@@ -333,18 +387,19 @@ if (cards.length) {
   out += `## Issues${otherViolations.length > cardLimit ? ` (top ${cardLimit} of ${otherViolations.length}, most critical first)` : ""}\n\n`;
   cards.forEach((v, i) => {
     const sev = sevInfo(v.severity);
-    const where = v.method ? ` in \`${v.method}\`` : "";
+    const where = v.method ? ` in \`${inlineCode(v.method)}\`` : "";
     const ruleName = displayRuleName(v.rule);
-    out += `### Issue ${i + 1} — ${isEnriched ? "\u{1F4A1}" : ""}${sev.icon} ${sev.label}: ${ruleName}${where} (Line ${v.line})\n\n`;
-    out += `${v.message}\n\n`;
+    out += `### Issue ${i + 1} — ${isEnriched ? "\u{1F4A1}" : ""}${sev.icon} ${sev.label}: ${ruleName}${where} (Line ${escapeMarkdown(v.line)})\n\n`;
+    out += `${escapeMarkdown(v.message)}\n\n`;
     if (v.originalCode) {
-      out += `**Current code** (\`${v.file}\`, line ${v.line}):\n\n\`\`\`apex\n${v.originalCode}\n\`\`\`\n\n`;
+      out += `**Current code** (\`${inlineCode(v.file)}\`, line ${escapeMarkdown(v.line)}):\n\n${fence(v.originalCode, "apex")}\n\n`;
     }
     if (v.fixes.length) {
-      out += `**Suggested fix:**\n\n\`\`\`apex\n${v.fixes[0]}\n\`\`\`\n\n`;
+      out += `**Suggested fix:**\n\n${fence(v.fixes[0], "apex")}\n\n`;
     }
     if (v.resources.length) {
-      out += `[Learn more](${v.resources[0]})\n\n`;
+      const resource = v.resources[0];
+      out += `${renderResource(resource)}\n\n`;
     }
   });
 }
@@ -358,7 +413,7 @@ summaryViolations.forEach((v, i) => {
   const sev = sevInfo(v.severity);
   const lineCell = v.rule === "ExpensiveMethods" ? "-" : v.line;
   const ruleName = displayRuleName(v.rule);
-  out += `| ${i + 1} | ${sev.icon} ${sev.label} | ${ruleName} | ${v.method || "-"} | ${lineCell} |\n`;
+  out += `| ${i + 1} | ${sev.icon} ${sev.label} | ${ruleName} | ${v.method ? escapeMarkdown(v.method) : "-"} | ${escapeMarkdown(lineCell)} |\n`;
 });
 
 // Add Anti-pattern breakdown section with summary (always show the full breakdown)
@@ -374,8 +429,8 @@ if (summary.serverViolationBreakdown && Object.keys(summary.serverViolationBreak
   out += `**Anti-pattern breakdown:**\n\n`;
   const sortedBreakdown = Object.entries(breakdown).sort((a, b) => b[1] - a[1]);
   sortedBreakdown.forEach(([key, count]) => {
-    const displayName = BREAKDOWN_DISPLAY_NAMES[key] || key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-    out += `- ${displayName} (${count})\n`;
+    const displayName = BREAKDOWN_DISPLAY_NAMES[key] || escapeMarkdown(key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()));
+    out += `- ${displayName} (${escapeMarkdown(count)})\n`;
   });
 
   // Footer message if more than 10 violations

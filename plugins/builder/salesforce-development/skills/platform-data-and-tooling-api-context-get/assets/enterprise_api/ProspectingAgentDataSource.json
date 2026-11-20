@@ -1,8 +1,46 @@
 {
   "sections": [
     "title",
-    "description"
+    "description",
+    "fields",
+    "special_access_rules"
   ],
   "title": "ProspectingAgentDataSource - Data API",
-  "description": "For internal use only."
+  "description": "Represents a Prospecting Agent data source.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "Priority": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The priority value for the source. A lower number indicates a higher priority."
+    },
+    "ProspectingAgentSpecId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A reference to the parent ProspectingAgentSpecification.",
+      "relationship_name": "ProspectingAgentSpec",
+      "relationship_type": "Master-detail",
+      "refers_to": "ProspectingAgentSpec (the master object)"
+    },
+    "SourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The ID associated with the Salesforce report this agent is using to generate prospects. If the agent is not using a Salesforce report, this value is null.",
+      "relationship_name": "Source",
+      "refers_to": "Report"
+    },
+    "SourceType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The category of the source the agent is referencing. Possible values are: Report ZoomInfo"
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission."
 }

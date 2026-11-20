@@ -9,7 +9,7 @@ onboarding module. The sibling `service-digital-engagement-deployment-configure`
 |---|---|---|
 | Detected by | `context.calledFrom == "service-onboarding"` | no `context` object |
 | Values come from | `values` in the payload — already approved in the plan table | you ask for the Inputs in SKILL.md; defaults are in `references/channel_settings.md` |
-| Questions | none, except one confirmation of the target org and change summary before the first write when the authorization context is absent. A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
+| Questions | none, except confirming drift on an existing channel (§3). A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
 | Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Inputs as written) |
 | Ends with | the structured result in section 5 | a plain-language summary of the same outcome |
 
@@ -29,11 +29,12 @@ Delegated payload:
 ```
 
 Required `values`: `channelLabel`, `routingType`, `routingTarget`; `fallbackQueue` is required when `routingType` is
-`Flow`, `User` or `AgentforceServiceAgent`. `userVerification` defaults to `false` (`UnAuth`); when `true`, `verificationKeyset` (an existing
+`Flow` or `AgentforceServiceAgent` and must be absent for `Queue` and `User`; `queueRoutingConfig` is required when
+`routingType` is `User`. `userVerification` defaults to `false` (`UnAuth`); when `true`, `verificationKeyset` (an existing
 keyset name) and `authIdentifier` are optional. Every other channel setting uses the defaults in
 `references/channel_settings.md` unless a key is supplied.
 
-Missing routing target, delegated: return `failed`, `errorMessage` = "<Flow|User|Bot|Queue> <name> not found". Never
+Missing routing target, delegated: return `failed`, `errorMessage` = "<Flow|User|Bot|Queue|RoutingConfig> <name> not found". Never
 create one — queues come from the `queues` feature this one depends on.
 
 ## 2. Transport — `/headless/metadata` first, `sf` CLI as fallback
@@ -77,7 +78,7 @@ Run before any write, both modes. `GET` `MessagingChannel` by `fullName` = the n
 | No such channel | not set up → create (`POST`) |
 | Exists, and every targeted setting equals the target (routing type and target, fallback queue, `authMode`, plus each supplied key) **and** `IsActive = true` | **already configured** — no write, return `already-configured` |
 | Exists, matches, but `IsActive = false` | only activate; do not rewrite the metadata |
-| Exists, some targeted setting differs | **drift** — announce each change ("routing: Queue A → Queue B"), then write the full document. Standalone: ask for a yes first. Delegated: confirm the specific drift change with the user before writing. Plan approval does not cover drift correction without explicit re-confirmation naming the changed settings and target org. |
+| Exists, some targeted setting differs | **drift** — announce each change ("routing: Queue A → Queue B"), then write the full document. Standalone: ask for a yes first. Delegated: confirm the changed settings and target org with the user before writing; the plan did not name the change. A `sessionHandlerType` change is the exception: return `failed` (`references/routing_transitions.md`) |
 | Exists but was created by Connect `channel/setup` (defaults populated: opt-out/help keywords, `embeddedConfig`) | you now own the whole document: GET, modify only targeted fields, PUT the full result |
 
 Standalone, channel exists: offer exactly three choices — no change (stop) / override (replace the targeted settings, keep the rest) / add to existing (keep current settings, add only what the user lists).
@@ -89,7 +90,7 @@ Ask about the outcome; state the default with each; keep it to a handful.
 | Instead of | Ask |
 |---|---|
 | "Routing type: Queue, Flow, User or Agentforce Service Agent?" | "When a customer starts a chat, who should get it first: a team (queue), a specific person, or your AI agent? (Default: a team.)" |
-| "Fallback queue developer name?" | "If that person or agent isn't available, which team should the chat go to?" |
+| "Fallback queue developer name?" | "If the chat goes to your AI agent or an automated flow and it can't take it, which team should get it?" (Not asked for a team or a person.) |
 | "Enable User Verification (JWT)?" | "Will customers be signed in to your site when they chat, so you know who they are? (Default: no.)" Yes → Auth mode; an existing signing keyset name is optional, and setting up the keys is a separate step |
 | "Pre-chat form / custom parameters" | "What should we ask customers before the chat starts? (Default: name and email.)" |
 | "`isAbandonedChatsEnabled`, `chatAbandonmentTimeout`…" | Not asked; use the defaults in `references/channel_settings.md` |
@@ -125,6 +126,7 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
     routingType:      { from: signal.messagingRouting,     default: "Queue" }
     routingTarget:    { from: signal.messagingRoutingTarget }
     fallbackQueue:    { from: signal.messagingFallbackQueue }
+    queueRoutingConfig: { from: signal.messagingRoutingConfig }
     userVerification: { from: signal.messagingSignedIn,    default: false }
     verificationKeyset: { from: signal.messagingKeyset }
     authIdentifier:   { from: signal.messagingAuthIdentifier }

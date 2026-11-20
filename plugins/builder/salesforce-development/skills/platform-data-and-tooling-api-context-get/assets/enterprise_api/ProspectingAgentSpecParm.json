@@ -1,8 +1,56 @@
 {
   "sections": [
     "title",
-    "description"
+    "description",
+    "fields",
+    "special_access_rules"
   ],
   "title": "ProspectingAgentSpecParm - Data API",
-  "description": "For internal use only."
+  "description": "Stores runtime configuration parameters for a ProspectingAgentSpec. Each row represents one parameter keyed by type namespace and parameter name.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "ProspectingAgentSpecId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "A reference to the parent ProspectingAgentSpec.",
+      "relationship_name": "ProspectingAgentSpec",
+      "relationship_type": "Master-detail",
+      "refers_to": "ProspectingAgentSpec (the master object)"
+    },
+    "ProspectingAgentDataSourceId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "A reference to the parent ProspectingAgentDataSource. The parent field can determine available categories for the config parameter. When the value is null, the config applies to all sources.",
+      "relationship_name": "ProspectingAgentDataSource",
+      "refers_to": "ProspectingAgentDataSource"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "The category for this config parameter. Possible values are: Automation Governance Ownership Prompt"
+    },
+    "ParameterName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The unique name for this config parameter."
+    },
+    "Value": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The config value. Can be in JSON or text format."
+    },
+    "DataType": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Possible values are: Boolean Datetime Dict List Number String"
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission."
 }

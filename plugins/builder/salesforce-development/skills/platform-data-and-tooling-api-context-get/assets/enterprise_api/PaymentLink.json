@@ -51,6 +51,11 @@
       "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
       "description": "3-digit ISO code for the payment currency that is shown on the Pay Now page. Possible values are: EUR – Euro GBP – British Pound USD – US Dollar The default value is USD."
     },
+    "CustomMetadata": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "The metadata that merchants specify when creating a payment link. This metadata is sent to payment gateways so merchants can use this data to reconcile transactions against their own invoices or internal IDs."
+    },
     "Description": {
       "type": "textarea",
       "properties": "Create, Nillable, Update",
@@ -148,7 +153,7 @@
       "description": "Determines whether the payment link is used one time or multiple times before the configured expiration date and time. Possible values are: MultiUse SingleUse The default value is MultiUse."
     }
   },
-  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.\n\nTo access Salesforce Payments objects, you must\n         have a Salesforce Payments license with the Payments permission enabled for your org.\n         Salesforce Payments entities are available only in Lightning Experience.",
+  "special_access_rules": "To access Salesforce Payments objects, you must have a Salesforce Payments license with the Payments permission enabled for your org. Salesforce Payments entities are available only in Lightning Experience.",
   "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PaymentLinkOwnerSharingRule**: Sharing rules are available for the object.\n- **PaymentLinkShare**: Sharing is available for the object.",
   "field_reference": {
     "AccountId": {
@@ -180,6 +185,11 @@
       "field_label": "Currency ISO Code",
       "type": "picklist",
       "length": "3"
+    },
+    "CustomMetadata": {
+      "field_label": "Custom Metadata",
+      "type": "textarea",
+      "length": "1000"
     },
     "Description": {
       "field_label": "Description",

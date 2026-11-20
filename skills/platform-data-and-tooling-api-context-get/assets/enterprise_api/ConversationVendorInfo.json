@@ -168,6 +168,11 @@
       "properties": "Create, Filter, Group, Update",
       "description": "If set to true, allows Salesforce to fetch contact center queues so that Salesforce and contact center queues can be mapped. The default value is false. Available in API version 53.0 and later. Applies to the following implementations: Salesforce Voice with Partner Telephony Salesforce Voice with Partner Telephony from Amazon Connect Bring Your Own Channel for CCaaS"
     },
+    "phoneNumberProcurementSupported": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Update",
+      "description": "If set to true, reps can procure and claim phone numbers from your telephony system's inventory when setting up a contact center. The default value is false. To turn on phone number procurement, set this value to true and configure the service_cloud_voice.VFSProvider interface in your Apex integration class. Available in API version 66.0 and later. Applies to the following implementation: Salesforce Voice with Partner Telephony"
+    },
     "ServerAuthMode": {
       "type": "picklist",
       "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
@@ -187,9 +192,14 @@
       "type": "picklist",
       "properties": "Create, Filter, Group, Update",
       "description": "The Service Cloud feature the partner vendor supports.Possible values are: Amazon_Connect — For Salesforce Voice with Amazon Connect. BringYourOwnChannelPartner — For Bring Your Own Channel for Messaging. Available in API version 60.0 and later. BringYourOwnContactCenter — For Bring Your Own Channel for Contact Center as a Service (CCaaS). Available in API version 60.0 and later. ServiceCloudVoicePartner — For Salesforce Voice with Partner Telephony or Salesforce Voice with Partner Telephony from Amazon Connect. If you're inserting or updating the record, this field must be set. Available in API version 53.0 and later."
+    },
+    "voicemailPersonalizationSupported": {
+      "type": "boolean",
+      "properties": "Create, Filter, Group, Update",
+      "description": "If set to true, reps can personalize voicemail greetings that are stored in your telephony system. The default value is false. To turn on voicemail personalization, set this value to true and configure the service_cloud_voice.VFSProvider interface in your Apex integration class. Available in API version 66.0 and later. Applies to the following implementation: Salesforce Voice with Partner Telephony"
     }
   },
-  "special_access_rules": "This object requires an add-on license for Salesforce Voice for Partner Telephony or Digital Engagement.\n\nThis object requires an add-on license for\n         Salesforce Voice for Partner Telephony or Digital Engagement.",
+  "special_access_rules": "This object requires an add-on license for Salesforce Voice for Partner Telephony or Digital Engagement.",
   "field_reference": {
     "AwsAccountKey": {
       "field_label": "AWS Account Key",
@@ -253,6 +263,10 @@
       "field_label": "Supports Partner Transfer Destinations",
       "type": "boolean"
     },
+    "CapabilitiesSupportsPhoneNumberProcurement": {
+      "field_label": "SupportsPhoneNumberProcurement",
+      "type": "boolean"
+    },
     "CapabilitiesSupportsQueueManagement": {
       "field_label": "SupportsQueueManagement",
       "type": "boolean"
@@ -267,6 +281,10 @@
     },
     "CapabilitiesSupportsUserSyncing": {
       "field_label": "Supports User Syncing",
+      "type": "boolean"
+    },
+    "CapabilitiesSupportsVoicemailPersonalization": {
+      "field_label": "SupportsVoicemailPersonalization",
       "type": "boolean"
     },
     "ConnectorUrl": {

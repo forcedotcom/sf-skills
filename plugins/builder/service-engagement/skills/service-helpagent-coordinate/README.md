@@ -40,7 +40,7 @@ Claude Code and the Salesforce CLI must both be installed.
 ### Activate MCP servers
 
 Setup → Quick Find → **MCP Servers** (Integrations → API Catalog) → **Salesforce Servers** tab.
-Activate all three: `metadata-experts`, `salesforce-api-context`, `sobject-reads`.
+Activate both: `metadata-experts`, `sobject-reads`.
 
 ### Create an External Client App
 
@@ -66,12 +66,11 @@ sf project generate --name help-agent --template standard
 cd help-agent
 ```
 
-Confirm the URL format on the `salesforce-api-context` server detail page — if it contains
+Confirm the URL format on each server's detail page — if it contains
 `/sandbox/platform/`, substitute that for `/platform/` below. Replace `<CONSUMER_KEY>` with the
 key from the ECA:
 
 ```bash
-claude mcp add salesforce-api-context --transport http "https://api.salesforce.com/platform/mcp/v1/platform/salesforce-api-context" --callback-port 8080 --client-id <CONSUMER_KEY>
 claude mcp add salesforce-metadata-experts --transport http "https://api.salesforce.com/platform/mcp/v1/platform/metadata-experts" --callback-port 8080 --client-id <CONSUMER_KEY>
 claude mcp add sobject-reads --transport http "https://api.salesforce.com/platform/mcp/v1/platform/sobject-reads" --callback-port 8080 --client-id <CONSUMER_KEY>
 claude mcp list

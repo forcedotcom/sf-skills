@@ -67,30 +67,33 @@ const warnings = [];
 // segment — the trailing <orgId> (00D...) is an opaque id that must NOT be
 // scanned for substrings, or a prod org whose id happens to contain "dev"/"stg"
 // would be wrongly rejected. So we match markers against the instance segment
-// and the iss host only, never the whole claim string. The detected env is
+// only, never the whole claim string or the iss host. The detected env is
 // reported (not rejected) so the caller can route to the matching endpoint. ---
 const tnk = header.tnk || body.tnk || null;
-const iss = body.iss || "";
 // tnk instance segment = the middle of core/<instance>/<orgId>; fall back to the
 // whole tnk only if it isn't in that 3-part shape.
 const tnkParts = tnk ? String(tnk).split("/") : [];
 const tnkInstance = tnkParts.length >= 3 ? tnkParts[1] : tnk || "";
-// iss host (strip scheme/path) so we match the host label, not a full URL.
-const issHost = String(iss).replace(/^https?:\/\//, "").split(/[/?#]/)[0];
-const envHay = `${tnkInstance} ${issHost}`.toLowerCase();
+// The tnk instance segment is the authoritative environment signal. The iss host is
+// NOT used: it is the customer org's own hostname, which can contain "dev" or "stage"
+// even for a production-hosted org. Matching it routed such production tokens to the
+// dev API host, which rejects them with HTTP 401.
+const envHay = String(tnkInstance).toLowerCase();
 const looksDev = /falcondeva|falcondev|falcontest|deva|(^|[^a-z])dev([^a-z]|$)/.test(envHay);
 const looksStage = /stg|stage/.test(envHay);
-// Env inferred from the token's own claims (null when we can't tell). Production
+// Env inferred from the token's tnk claim (null when we can't tell). Production
 // instances carry no stg/dev marker, so a readable tnk with neither signal is prod.
-const detectedEnv = looksStage && !looksDev
+const detectedEnv = !tnk
+  ? null
+  : looksStage && !looksDev
   ? "stage"
   : looksDev && !looksStage
   ? "dev"
-  : tnk && !looksStage && !looksDev
+  : !looksStage && !looksDev
   ? "prod"
   : null;
 
-if (!tnk) warnings.push("no tnk claim found — could not detect the token's environment; defaulting to prod endpoint");
+if (!tnk) warnings.push("no tnk claim found: could not detect the token's environment; set APEXGURU_ENV=prod|stage|dev explicitly");
 
 // --- 2. scope must include sfap_api. Scope may be a space-delimited string
 // (scp/scope) or an array. Only fail if we can read it AND sfap_api is absent. ---

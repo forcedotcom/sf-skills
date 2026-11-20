@@ -162,7 +162,7 @@ for r in real:
 
 **Branch by what's found:**
 
-- **Zero real sites found** → ask: deploy on own website (give snippet), or create a new LWR Experience Cloud site via `experience-lwr-site-generate` (recommend *Help Center* template).
+- **Zero real sites found** → ask: deploy on own website (give snippet), or create a new LWR Experience Cloud site via the Self Service Connect API (`POST /connect/self-service/site`, status via `GET /connect/self-service/site/status/{jobId}`, called through the API-catalog MCP `discover`/`describe`/`dispatch` tools when connected). Follow **Creating a new LWR site** below (directly under this step's Site query). This is the preferred site-creation route; `POST /connect/communities`, `sf community create`, or hand-built site metadata are last-resort alternatives only (see the Site creation rule in SKILL.md). When the MCP tools are unavailable, use the `sf api request rest` fallback below.
 
 - **Real sites found** → present using the **long-list presentation rules** from SKILL.md. Do not label sites as LWR/Aura — show each as `{MasterLabel} (/{UrlPathPrefix})`. Always include "Create a new Experience Cloud site" and "Deploy on my own website (get snippet)" as fixed options on the final page.
 
@@ -172,6 +172,38 @@ for r in real:
 - **Own website selected** → proceed to Step D.8 snippet instructions.
 
 Do not filter by any hardcoded site name or `UrlPathPrefix` value — the correct site depends on the customer's org and is not knowable up front.
+
+### Site creation rule and creating a new LWR site
+
+**Site creation rule (applies to every path, read before anything else).**
+
+Whenever a site must be created — the user asks for it directly, Web Chat finds no site, or a Help Portal / any other branch needs one — create it with the Self Service Connect API `POST /connect/self-service/site`, and track it with `GET /connect/self-service/site/status/{jobId}`. Use the API-catalog MCP tools (`discover` / `describe` / `dispatch`) if they are connected; otherwise, call the same endpoints with `sf api request rest`. Treat `POST /connect/communities`, `sf community create`, a site-generation skill, and hand-built CustomSite / Network / ExperienceBundle metadata as a **last resort only**: never reach for them first, and never because they appear to work. If the endpoint is unavailable (404, or API version below 67.0) or the job ends in `Error`, say so and offer the own-website snippet or a retry first; use one of the alternatives only if the user declines those and explicitly approves it. **Before calling it, always ask the user for two inputs, in the current conversation, even when the request is a direct "create a site":** (1) the **site name** (`siteName`), and (2) **whether the site must be publicly accessible** (`enableForGuest`: yes → `true`, no → `false`). Never invent a site name, never default `enableForGuest`, and never reuse values from an earlier session or a summary; if the user already stated one in this conversation, confirm it rather than re-asking. Do not send the request until both are answered. The exact steps follow.
+
+**Creating a new LWR site (Zero-sites branch, or the user picks "Create a new LWR site").** Follow the **Site creation rule** above. The endpoints are exposed to the API catalog and MCP (min-version 264), so resolve them with `discover` / `describe` (e.g. query "create experience cloud site self service") and call them with `dispatch`.
+1. **Ask the user for the site name** (`siteName`, free text) and **whether the site must be publicly accessible** (guest access; `AskUserQuestion` with Yes / No). Both are required inputs: do not assume either, do not call the API until both are answered, and do not ask about one without the other.
+2. **POST `/connect/self-service/site`** with `siteType: "LWR"` and `publish: false` (the site is created unpublished and stays that way until the user publishes it in Setup; tell them so). `siteName` and `enableForGuest` come **only** from the user's answers in step 1 (`enableForGuest` is `true` if they want public access, otherwise `false`); only `siteType` and `publish` are fixed:
+
+   ```json
+   { "siteName": "<user's site name>", "siteType": "LWR", "publish": false, "enableForGuest": <true|false from the user's answer> }
+   ```
+
+   The call is asynchronous. The response carries `jobId` and `status: Queued`. Requires Self-Service Concierge to be enabled in the org.
+3. **Poll `GET /connect/self-service/site/status/{jobId}`** until `status` is `Complete` (other values: `Queued`, `InProgress`, `Error`). On `Complete`, capture `siteName`, `urlPathPrefix`, and `siteUrl` from the response. On `Error`, surface the `error` text verbatim, stop, and offer the own-website fallback or a retry with the user's go-ahead.
+4. **Re-run the Site SOQL** above to pick up the new site record (use `urlPathPrefix` to match it), then continue as for any selected site — ESD creation and widget placement (`service-digital-engagement-messaging-site-integrate`) follow in `references/channel-web-chat.md`.
+
+**Direct REST fallback (only when the API-catalog MCP tools are unavailable)** — same endpoints, same body, using the org's API version (`$API_VERSION`, 67.0 or later). Write the body to a scratch file outside the skill directory:
+
+```bash
+cat > /tmp/site-create-body.json <<'EOF'
+{ "siteName": "<user's site name>", "siteType": "LWR", "publish": false, "enableForGuest": <true|false from the user's answer> }
+EOF
+sf api request rest "/services/data/v${API_VERSION}/connect/self-service/site" \
+  --method POST --body @/tmp/site-create-body.json --target-org $ORG
+
+# poll until status is Complete (or Error)
+sf api request rest "/services/data/v${API_VERSION}/connect/self-service/site/status/${JOB_ID}" \
+  --method GET --target-org $ORG
+```
 
 ### C.6 — Wire up knowledge citations The script's `knowledge:` block ships with `citations_enabled: True` and `citations_url: ""` (the URL isn't knowable until a site exists). Once the target site's public URL is resolved here, set `citations_url` to that URL so knowledge answers cite working links. If no customer-facing site URL can be resolved, set `citations_enabled: False` instead — do not leave citations enabled with an empty URL, or answers render broken/empty citation links.
 

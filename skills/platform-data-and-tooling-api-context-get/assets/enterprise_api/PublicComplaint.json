@@ -211,7 +211,7 @@
       "description": "Subject of the complaint. This field is available in API version 51.0 and later."
     }
   },
-  "special_access_rules": "Fields added in API version 58.0 are available if the add-on license for Financial Services Cloud is enabled.\n\nFields added in API version 58.0 are available if\n         the add-on license for Financial Services Cloud is enabled.",
+  "special_access_rules": "Fields added in API version 58.0 are available if the add-on license for Financial Services Cloud is enabled.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PublicComplaintFeed**: Feed tracking is available for the object.\n- **PublicComplaintHistory**: History is available for tracked fields of the object.\n- **PublicComplaintOwnerSharingRule**: Sharing rules are available for the object.\n- **PublicComplaintShare**: Sharing is available for the object.",
   "field_reference": {
     "AccountId": {
@@ -248,7 +248,7 @@
       "field_label": "Compensation Amount",
       "type": "currency",
       "precision": "18",
-      "scale": "0"
+      "scale": "2"
     },
     "ComplaintCaseId": {
       "field_label": "Case ID",
@@ -260,10 +260,20 @@
       "type": "picklist",
       "length": "40"
     },
+    "ComplaintKeyWords": {
+      "field_label": "Complaint Key Words",
+      "type": "textarea",
+      "length": "65000"
+    },
     "ComplaintSubType": {
       "field_label": "Subtype",
       "type": "picklist",
       "length": "40"
+    },
+    "ComplaintSummary": {
+      "field_label": "Complaint Summary",
+      "type": "textarea",
+      "length": "65000"
     },
     "ComplaintType": {
       "field_label": "Type",
@@ -278,11 +288,6 @@
     "CreatedDate": {
       "field_label": "Created Date",
       "type": "datetime"
-    },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
     },
     "Description": {
       "field_label": "Description",
@@ -391,6 +396,16 @@
       "type": "string",
       "length": "255"
     },
+    "ResolutionPriority": {
+      "field_label": "Resolution Priority",
+      "type": "int",
+      "digits": "9"
+    },
+    "ResolutionSummary": {
+      "field_label": "Resolution Summary",
+      "type": "textarea",
+      "length": "20000"
+    },
     "ShouldInclInRegulatoryRpt": {
       "field_label": "Include In Regulatory Report",
       "type": "boolean"
@@ -420,6 +435,7 @@
     "type",
     "length",
     "precision",
-    "scale"
+    "scale",
+    "digits"
   ]
 }

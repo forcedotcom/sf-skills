@@ -1,0 +1,133 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "associated_objects",
+    "field_reference"
+  ],
+  "title": "ComplaintParticipant - Data API",
+  "description": "Represents a participant in an HR complaint case, linking individuals or groups to complaint records with their role and status. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to",
+    "relationship_type"
+  ],
+  "fields": {
+    "LastReferencedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the complaint participant record was last referenced."
+    },
+    "LastViewedDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time when the complaint participant record was last viewed."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "The auto-generated unique identifier for the complaint participant record."
+    },
+    "ParticipantId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the individual or group participating in the complaint. References an Account, Contact, Group, or User record. This field is a polymorphic relationship field.",
+      "relationship_name": "Participant",
+      "refers_to": "Account, Contact, Group, User"
+    },
+    "PublicComplaintId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "The ID of the PublicComplaint record to which this participant is linked. This is a master-detail relationship. This field is a relationship field.",
+      "relationship_name": "PublicComplaint",
+      "relationship_type": "Master-detail",
+      "refers_to": "PublicComplaint (the master object)"
+    },
+    "Role": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The role of the participant in the complaint, such as complainant, respondent, or witness."
+    },
+    "Status": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The current status of the participant's involvement in the complaint case."
+    }
+  },
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **ComplaintParticipantChangeEvent**: Change events are available for the object.\n- **ComplaintParticipantFeed**: Feed tracking is available for the object.\n- **ComplaintParticipantHistory**: History is available for tracked fields of the object.\n- **ComplaintParticipantOwnerSharingRule**: Sharing rules are available for the object.\n- **ComplaintParticipantShare**: Sharing is available for the object.",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "Id": {
+      "field_label": "Complaint Participant ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "ParticipantId": {
+      "field_label": "Participant ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PublicComplaintId": {
+      "field_label": "Public Complaint ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Role": {
+      "field_label": "Role",
+      "type": "picklist",
+      "length": "40"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "40"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
+}

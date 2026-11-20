@@ -2,7 +2,9 @@
   "sections": [
     "title",
     "description",
-    "fields"
+    "fields",
+    "wsdl_segment",
+    "field_reference"
   ],
   "title": "DevopsTestSuiteExecution - Data API",
   "description": "Records the individual execution lifecycle, results, and metrics of a specific test suite within a DevOps pipeline stage. It tracks granular outcomes like code coverage, pass/fail rates, and links directly back to the overarching test suite group. This object is available in API version 67.0 and later.",
@@ -122,5 +124,151 @@
       "properties": "Create, Filter, Nillable, Sort, Update",
       "description": "The calculated percentage of passing tests relative to the total number of tests run in this suite."
     }
-  }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"DevopsTestSuiteExecution\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Coverage\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DevopsTestSuite\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsTestSuite\"/>\n        <element name=\"DevopsTestSuiteGroupExec\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsTestSuiteGroupExec\"/>\n        <element name=\"DevopsTestSuiteGroupExecId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DevopsTestSuiteId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DevopsTestSuiteStage\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsTestSuiteStage\"/>\n        <element name=\"DevopsTestSuiteStageId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExecutionEndTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExecutionStartTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ExternalIdRef\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FailureCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"FailureRate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LearnMore\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"QualityGateStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ReportUrl\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"ResultDetails\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Status\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SuccessCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SuccessRate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TestSuiteExec_QualityGateResult\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"TestSuiteExec_TestExecution\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "Coverage": {
+      "field_label": "Coverage",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DevopsTestSuiteGroupExecId": {
+      "field_label": "DevopsTestSuiteGroupExec ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DevopsTestSuiteId": {
+      "field_label": "DevopsTestSuite ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DevopsTestSuiteStageId": {
+      "field_label": "DevopsTestSuiteStage ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExecutionEndTime": {
+      "field_label": "Execution End Time",
+      "type": "datetime"
+    },
+    "ExecutionStartTime": {
+      "field_label": "Execution Start Time",
+      "type": "datetime"
+    },
+    "ExternalIdRef": {
+      "field_label": "External Id Ref",
+      "type": "string",
+      "length": "18"
+    },
+    "FailureCount": {
+      "field_label": "Failure Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "FailureRate": {
+      "field_label": "Failure Rate",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "Id": {
+      "field_label": "Test Suite Execution ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "LearnMore": {
+      "field_label": "Learn More",
+      "type": "url",
+      "length": "255"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "QualityGateStatus": {
+      "field_label": "Quality Gate Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ReportUrl": {
+      "field_label": "Report Url",
+      "type": "url",
+      "length": "255"
+    },
+    "ResultDetails": {
+      "field_label": "Result Details",
+      "type": "textarea",
+      "length": "5000"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SuccessCount": {
+      "field_label": "Success Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "SuccessRate": {
+      "field_label": "Success Rate",
+      "type": "percent",
+      "precision": "3",
+      "scale": "0"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
 }

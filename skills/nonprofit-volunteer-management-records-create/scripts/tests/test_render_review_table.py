@@ -153,6 +153,27 @@ class Headers(unittest.TestCase):
         self.assertIn("Parent Volunteer Initiative", cols)
         self.assertNotIn("ParentVolunteerInitiativeId", cols)
 
+    def test_label_with_pipe_or_newline_keeps_the_table_shape(self):
+        spec = {"entity": "JobPosition",
+                "labels": {"VolunteerInitiativeId": "Related | Initiative\nName"},
+                "records": [{"fields": {"Name": f("A"), "Title": f("A"),
+                                        "VolunteerInitiativeId": f("P", "new")}}]}
+        table = render(spec)
+        self.assertIn("Related \\| Initiative Name", header_row(table))
+        for line in table.splitlines():
+            if line.startswith("| "):
+                self.assertEqual(len(line.replace("\\|", "").split("|")),
+                                 len(header_row(table).replace("\\|", "").split("|")))
+
+    def test_shared_column_label_is_escaped(self):
+        spec = {"entity": "JobPosition",
+                "labels": {"VolunteerInitiativeId": "A | B"},
+                "records": [{"fields": {"Name": f("A"), "Title": f("T"),
+                                        "VolunteerInitiativeId": f("P", "new")}},
+                            {"fields": {"Name": f("B"), "Title": f("U"),
+                                        "VolunteerInitiativeId": f("P", "new")}}]}
+        self.assertIn("A \\| B", render(spec))
+
     def test_describe_label_overrides(self):
         spec = {"entity": "JobPosition",
                 "labels": {"VolunteerInitiativeId": "Related Volunteer Initiative"},

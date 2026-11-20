@@ -1,0 +1,94 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules",
+    "usage"
+  ],
+  "title": "VoiceCallSessionData - Data API",
+  "description": "Represents a record that stores SIP session metadata for a voice call. Use this object to access SIP header values from inbound calls in flows for Agentforce Voice and to configure disconnect behavior for escalations and call terminations. This object is available in API version 67.0 and later.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AssertedIdentityInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP P-Asserted-Identity header from the inbound SIP INVITE. A trusted SIP network node uses this header to assert the authenticated identity of the caller, such as a phone number or SIP URI. Use this field in your inbound Omni-Channel flow to make routing decisions. When DisconnectMethod is set to SIP_REFER, Salesforce includes this value in the SIP REFER signal sent to the telephony partner."
+    },
+    "DisconnectMethod": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "The SIP method used to disconnect the call. Set this field in your inbound Omni-Channel flow, escalation flow, or fallback flow to control how Salesforce signals the end of the call to the telephony partner. If this field is null when a failure or unsupported event occurs, Salesforce defaults to SIP_BYE. Possible values are: SIP_BYE: Standard call termination per RFC 3261. One party ends the call. SIP_REFER: Call transfer per RFC 3515. The call is transferred to the destination specified in ReferToUri. If ReferToUri isn’t set, the disconnect defaults to SIP BYE."
+    },
+    "DisconnectReason": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The reason the Agentforce Voice session ended, populated by Salesforce. Use this value in a fallback flow to determine the appropriate disconnect method and response headers for the specific failure scenario. Values include: Bot Terminated: The AI agent terminated the session. Expiration Error: The bot session expired. Missing Flow Id: The escalation flow isn’t configured for the AI agent. Session Initiation Failure: The bot session couldn’t be established."
+    },
+    "FallbackFlowApiName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the autolaunched flow to execute when an Agentforce Voice session ends in a failure or unsupported state. The fallback flow can set DisconnectMethod, ReferToUri, and response headers before Salesforce sends the disconnect signal. If this field is null when a failure occurs, Salesforce sends SIP_BYE as the default disconnect method."
+    },
+    "Name": {
+      "type": "string",
+      "properties": "Autonumber, Defaulted on create, Filter, idLookup, Sort",
+      "description": "Auto-generated name for the VoiceCallSessionData record."
+    },
+    "PreferredIdentityInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP P-Preferred-Identity header from the inbound SIP INVITE. Indicates the caller's preferred identity for the network to assert on their behalf. Use this field in your inbound Omni-Channel flow for routing decisions. When DisconnectMethod is set to SIP_REFER, Salesforce can include this value in the SIP REFER signal sent to the telephony partner."
+    },
+    "PriorityInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP Priority header from the inbound SIP INVITE. Indicates the urgency or priority level of the call request. Use this field for priority-based routing, such as routing emergency calls in enterprise contact center environments."
+    },
+    "PrivacyInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP Privacy header from the inbound SIP INVITE. Specifies the privacy services requested by the caller, such as identity masking or caller ID blocking. Use this field to apply appropriate caller privacy handling in your Omni-Channel flow."
+    },
+    "ReasonInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP Reason header from the inbound SIP INVITE. Provides context for why the request was issued, such as a call forwarding reason or rejection cause. Use this field for troubleshooting call flows."
+    },
+    "ReferToUri": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The target URI for a SIP REFER transfer operation. This value must conform to the SIP URI syntax specified in RFC 3261. Set this field in your flow when DisconnectMethod is SIP_REFER to specify the destination to which the call is transferred. Required when DisconnectMethod is SIP_REFER."
+    },
+    "ReferredByInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP Referred-By header from the inbound SIP INVITE. Identifies the user or entity that initiated the call transfer. Use this field for audit trails and transfer tracking. When DisconnectMethod is SIP_REFER, Salesforce can include this value in the SIP REFER signal sent to the telephony partner. If not set, defaults to Salesforce."
+    },
+    "RequestUri": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP Request-URI from the inbound SIP INVITE. Identifies the target resource of the SIP request such as the destination user or number and host. Salesforce writes this to the VoiceCallSessionData record for the call so it can be read in your inbound Omni-Channel flow and echoes it back on the corresponding SIP BYE or SIP REFER response headers."
+    },
+    "UserToUserInfo": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The value of the SIP User-to-User (UUI) header from the inbound SIP INVITE. Carries caller context passed between SIP endpoints, such as caller intent, account details, or transaction identifiers. This is the existing authentication and context mechanism; the x-header–based fields in this object provide an alternative for SBCs with character-limit constraints on UUI headers."
+    },
+    "VoiceCallId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "The ID of the associated VoiceCall record. This field is unique within your org. To retrieve a VoiceCallSessionData record from an Omni-Channel flow, query by this field: SELECT Id FROM VoiceCallSessionData WHERE VoiceCallId = :callId. This field is a relationship field.",
+      "relationship_name": "VoiceCall",
+      "refers_to": "VoiceCall"
+    }
+  },
+  "special_access_rules": "Available with Agentforce Voice.",
+  "usage": "The Telephony service creates one VoiceCallSessionData record per call when an inbound SIP INVITE arrives. Each record has a one-to-one relationship with its parent VoiceCall. Access SIP headers in an inbound flow The Telephony service populates the standard SIP header fields (such as AssertedIdentityInfo and UserToUserInfo) before the inbound Omni-Channel flow executes. Query the record using VoiceCallId to retrieve header values for routing and context decisions. To store additional SIP headers not covered by the standard fields, add custom fields to this object using the convention-based naming approach: replace hyphens in the SIP header name with underscores and append the __c suffix. For example, the X-Account-ID header maps to a custom field named X_Account_ID__c. The Telephony service maps incoming header values to matching custom fields automatically. Configure the disconnect method Set DisconnectMethod in your escalation flow or fallback flow to control whether Salesforce sends SIP_BYE or SIP_REFER to the telephony partner when the call ends. When using SIP_REFER, also set ReferToUri to specify the transfer destination. Configure a fallback flow Set FallbackFlowApiName to the API name of an autolaunched flow that should execute when an Agentforce Voice session ends in a failure or unsupported state. The fallback flow has access to DisconnectReason and other fields on this record, allowing you to set the appropriate disconnect method per scenario. If FallbackFlowApiName is null when a failure occurs, Salesforce defaults to SIP_BYE."
+}

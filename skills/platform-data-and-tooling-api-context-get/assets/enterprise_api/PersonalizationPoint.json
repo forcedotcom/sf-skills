@@ -4,7 +4,8 @@
     "description",
     "fields",
     "usage",
-    "associated_objects"
+    "associated_objects",
+    "field_reference"
   ],
   "title": "PersonalizationPoint - Data API",
   "description": "Represents a specific touch point in an experience where a personalization decision can be made. It connects a data space, profile data graph, personalization type, and response template to deliver personalized content at that time in a customer journey. Available in API version 62.0 and later.",
@@ -113,5 +114,121 @@
     }
   },
   "usage": "Use this object to define a specific touch point in an experience where personalization decisions can be made. For example, a personalization point can be an banner on a webpage. After setting up data space, profile data graph, personalization type, and schema, you can add decisions and targeting rules to the personalization point to tailor the user experience.",
-  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PersonalizationPointChangeEvent**: Change events are available for the object.\n- **PersonalizationPointFeed**: Feed tracking is available for the object.\n- **PersonalizationPointHistory**: History is available for tracked fields of the object.\n- **PersonalizationPointOwnerSharingRule**: Sharing rules are available for the object.\n- **PersonalizationPointShare**: Sharing is available for the object."
+  "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **PersonalizationPointChangeEvent**: Change events are available for the object.\n- **PersonalizationPointFeed**: Feed tracking is available for the object.\n- **PersonalizationPointHistory**: History is available for tracked fields of the object.\n- **PersonalizationPointOwnerSharingRule**: Sharing rules are available for the object.\n- **PersonalizationPointShare**: Sharing is available for the object.",
+  "field_reference": {
+    "AbnExperimentId": {
+      "field_label": "Experiment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "DataSpaceId": {
+      "field_label": "Data Space ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "string",
+      "length": "255"
+    },
+    "DeveloperName": {
+      "field_label": "Personalization Point API Name",
+      "type": "string",
+      "length": "40"
+    },
+    "Id": {
+      "field_label": "Personalization Point ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsAuthenticationRequired": {
+      "field_label": "Authentication Required",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "MaxItemsCount": {
+      "field_label": "Max Items Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Name": {
+      "field_label": "Personalization Point Name",
+      "type": "string",
+      "length": "255"
+    },
+    "PersonalizationSchemaEnum": {
+      "field_label": "Standard Personalization Enum",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PersonalizationSchemaId": {
+      "field_label": "Content Schema ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ProfileDataGraphId": {
+      "field_label": "Data Graph ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "RootPersonalizationPoint": {
+      "field_label": "Root Personalization Point ID",
+      "type": "string",
+      "length": "18"
+    },
+    "Source": {
+      "field_label": "Source",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SourceRecordId": {
+      "field_label": "Source Record ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Status": {
+      "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length",
+    "digits"
+  ]
 }

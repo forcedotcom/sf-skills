@@ -1,6 +1,6 @@
 ---
 name: platform-trust-archive-manage
-description: "ALWAYS USE THIS SKILL for anything involving Salesforce Archive (also called Trusted Services Archive) — search, view, unarchive, analyze, mask, and erase (RTBF) archived records via the Archive Connect API, and reading archive job status from the ArchiveActivity object. TRIGGER when: user mentions Salesforce Archive, Trusted Services Archive, archive/unarchive records, ArchiveActivity, archive jobs, archive policy, archive analyzer, archived record search, archive storage, archive failure logs, right to be forgotten / RTBF on archived data, or masking archived PII — including phrasings like 'find records that were archived', 'restore archived data', 'why did the archive job fail', 'download the archive failure log', or 'monitor my archive jobs', AND even when they ask you to explain, give guidance, or write a runbook/doc about these topics rather than run code. SKIP when: the user wants generic data-export/backup unrelated to the Archive add-on, or wants to build the archive policy UI metadata."
+description: "ALWAYS USE THIS SKILL for anything involving Salesforce Archive (also called Trusted Services Archive) — search, view, unarchive, analyze, mask, and erase (RTBF) archived records via the Archive Connect API, and reading archive job status from the ArchiveActivity object. TRIGGER when: user mentions Salesforce Archive, Trusted Services Archive, archive/unarchive records, ArchiveActivity, archive jobs, archive policy, archive analyzer, archived record search, archive storage, archive failure logs, right to be forgotten / RTBF on archived data, or masking archived PII — including phrasings like 'find records that were archived', 'restore archived data', 'why did the archive job fail', 'check whether the archive failure log exists', or 'monitor my archive jobs', AND even when they ask you to explain, give guidance, or write a runbook/doc about these topics rather than run code. SKIP when: the user wants generic data-export/backup unrelated to the Archive add-on, or wants to build the archive policy UI metadata."
 metadata:
   version: "1.0"
   domains: ["Platform"]
@@ -11,11 +11,11 @@ metadata:
 
 # Salesforce Archive
 
-Operate Salesforce Archive (also called Trusted Services Archive) through its Connect API and the `ArchiveActivity` job-metadata object. This skill covers how to search and restore archived records, run the analyzer, handle RTBF erasure and PII masking, check storage, and — the part most often missed — how to read archive job status from `ArchiveActivity` and use a job's Id + Type to download its logs.
+Operate Salesforce Archive (also called Trusted Services Archive) through its Connect API and the `ArchiveActivity` job-metadata object. This skill covers how to search and restore archived records, run the analyzer, handle RTBF erasure and PII masking, check storage, and — the part most often missed — how to read archive job status from `ArchiveActivity` and use a job's Id + Type to check whether its logs exist.
 
 ## Scope
 
-- **In scope**: Calling the Archive Connect API operations under `/platform/data-resilience/archive/`; querying the `ArchiveActivity` object via SOQL/Connect; correlating a job's `ArchiveActivity` record with its log-download endpoints; the verify-after-write pattern for each async operation.
+- **In scope**: Calling the Archive Connect API operations under `/platform/data-resilience/archive/`; querying the `ArchiveActivity` object via SOQL/Connect; correlating a job's `ArchiveActivity` record with its log-availability endpoints; the verify-after-write pattern for each async operation.
 - **Out of scope**: Defining archive policies / `ArchivePolicyDefinition` metadata; building UI; generating Flows over archive data (`ArchiveActivity` is **not** Flow-queryable — see Gotchas); generic backup/export tooling unrelated to the add-on.
 
 ---
@@ -27,7 +27,7 @@ Gather or infer before acting:
 - **Operation intent**: search (this is also how you view archived records), unarchive, analyze, mask, RTBF, storage check, or job-status/log lookup.
 - **Target sObject** (`sobjectName`): required for search and unarchive.
 - **Filters**: search and unarchive require `sobjectName` + at least one filter.
-- **For log downloads**: the `requestId` (an `ArchiveActivity` Id, `8qv…` prefix) of a completed, log-producing job, and `reportType` = that activity's `Type`.
+- **For log-availability checks**: the `requestId` (an `ArchiveActivity` Id, `8qv…` prefix) of a completed, log-producing job, and `reportType` = that activity's `Type`.
 
 Preconditions (confirm or surface to the user if a call returns a not-permitted error):
 - The **org** must have Salesforce Archive enabled. Every operation is gated on this first.
@@ -103,7 +103,7 @@ All steps are sequential within a task. Read the referenced file the first time 
 | Date filters must be full ISO-8601 datetimes (`2020-01-01T00:00:00Z`) | A date-only value (`2020-01-01`) returns `400 JSON_PARSER_ERROR` because the field is typed `xsd:dateTime`. |
 | Search uses `dateRanges` (plural array); unarchive uses `dateRange` (singular) | They are genuinely different fields on the two endpoints; using the wrong shape silently drops the filter or 400s. |
 | Stop pagination when `scroll_id == "-1"` | Calling `get-search-archived-records-next-page` with `"-1"` returns 500. |
-| Log downloads need a real `ArchiveActivity` Id as `requestId` + that activity's `Type` as `reportType` | The backend resolves the log by the activity record; a mismatched `reportType` returns no log. |
+| Log-availability checks need a real `ArchiveActivity` Id as `requestId` + that activity's `Type` as `reportType` | The backend resolves the log by the activity record; a mismatched `reportType` returns no log. |
 | Excluded objects are not retrievable | `Feed`, `History`, `Relation`, `Share` are not searchable; Files/Attachments are not retrievable via this API — do not promise them. |
 | Query `ArchiveActivity` via SOQL/Connect, never Flow | `ArchiveActivity` has `isProcessEnabled=false`, so a Flow "Get Records" element on it fails with "You can't get ArchiveActivity records in a flow." |
 
@@ -135,5 +135,5 @@ This is a knowledge/API skill — it produces API calls and their interpreted re
 | File | When to read |
 |------|-------------|
 | `references/connect-api-operations.md` | Before constructing any Archive Connect API call — full per-operation contracts, success signals, and limits |
-| `references/archive-activity-entity.md` | For any job-status / failure / progress / log task — `ArchiveActivity` field reference and its link to the log-download endpoints |
-| `examples/monitor-failed-jobs.md` | To follow an end-to-end monitoring flow: find failed/in-progress jobs, then download their logs |
+| `references/archive-activity-entity.md` | For any job-status / failure / progress / log task — `ArchiveActivity` field reference and its link to the log-availability endpoints |
+| `examples/monitor-failed-jobs.md` | To follow an end-to-end monitoring flow: find failed/in-progress jobs, then check whether their logs exist |

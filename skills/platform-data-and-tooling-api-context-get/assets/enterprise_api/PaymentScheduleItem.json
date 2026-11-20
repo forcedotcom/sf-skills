@@ -136,10 +136,10 @@
       "description": "Specifies the usage type for the record. Possible value is: CollectionPlan Available in API version 62.0 and later with Financial Services and Automotive Cloud."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "field_reference": {
     "AppliedAmount": {
-      "field_label": "Credited Amount",
+      "field_label": "Applied Amount",
       "type": "currency",
       "precision": "18",
       "scale": "2"
@@ -158,11 +158,6 @@
       "field_label": "Created Date",
       "type": "datetime"
     },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
-    },
     "Id": {
       "field_label": "Payment Schedule Item ID",
       "type": "id",
@@ -170,6 +165,10 @@
     },
     "IsDeleted": {
       "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsRetriableAsSameRequest": {
+      "field_label": "Is Retriable",
       "type": "boolean"
     },
     "LastModifiedById": {
@@ -194,6 +193,15 @@
       "field_label": "Last Viewed Date",
       "type": "datetime"
     },
+    "MaximumRetryCount": {
+      "field_label": "Maximum Retry Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "NextPaymentRetryTime": {
+      "field_label": "Next Payment Retry Time",
+      "type": "datetime"
+    },
     "PaymentAccountId": {
       "field_label": "Payment Account ID",
       "type": "reference",
@@ -204,6 +212,16 @@
       "type": "reference",
       "length": "18"
     },
+    "PaymentGatewayErrorCategory": {
+      "field_label": "Payment Gateway Error Category",
+      "type": "picklist",
+      "length": "255"
+    },
+    "PaymentGatewayErrorCode": {
+      "field_label": "Payment Gateway Error Code",
+      "type": "string",
+      "length": "40"
+    },
     "PaymentGatewayRespStatus": {
       "field_label": "Payment Gateway Response Status",
       "type": "picklist",
@@ -211,6 +229,11 @@
     },
     "PaymentId": {
       "field_label": "Payment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "PaymentInitiationSourceId": {
+      "field_label": "Payment Initiation Source ID",
       "type": "reference",
       "length": "18"
     },
@@ -223,6 +246,11 @@
       "field_label": "Payment Processing Message",
       "type": "string",
       "length": "1000"
+    },
+    "PaymentRetryCount": {
+      "field_label": "Payment Retry Count",
+      "type": "int",
+      "digits": "9"
     },
     "PaymentRunMatchingValue": {
       "field_label": "Payment Run Matching Value",
@@ -286,6 +314,7 @@
     "type",
     "precision",
     "scale",
-    "length"
+    "length",
+    "digits"
   ]
 }

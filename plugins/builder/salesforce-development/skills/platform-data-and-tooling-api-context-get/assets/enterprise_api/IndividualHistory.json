@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "wsdl_segment",
     "field_reference"
@@ -47,7 +48,8 @@
       "description": "The previous value of the changed field."
     }
   },
-  "usage": "Use this object to identify changes to data privacy records. This object respects field-level security on the parent object.\n\nUse this object to identify changes to data privacy records.\n\nThis object respects field-level security on the parent object.",
+  "special_access_rules": "- This object is available if Data Protection and Privacy is enabled.\n- The Individual object isn’t available to Customer Community, Partner Community, and Customer Portal users.",
+  "usage": "Use this object to identify changes to data privacy records. This object respects field-level security on the parent object.",
   "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"IndividualHistory\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DataType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Field\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Individual\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Individual\"/>\n        <element name=\"IndividualId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"NewValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n        <element name=\"OldValue\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:anyType\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
   "field_reference": {
     "CreatedById": {

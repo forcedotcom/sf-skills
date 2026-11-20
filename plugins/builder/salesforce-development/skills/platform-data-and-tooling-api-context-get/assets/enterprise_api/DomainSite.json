@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage",
     "wsdl_segment",
     "field_reference"
@@ -31,6 +32,7 @@
       "description": "The ID of the associated Site. This is a relationship field. Relationship Name Site Relationship Type Lookup Refers To Site"
     }
   },
+  "special_access_rules": "- Customer Portal users can’t access this object.\n- To view this object, you must have either the View Setup and Configuration or Manage Custom Domains permission.\n- Site.com Publisher users have read-only API access to the Domain and DomainSite objects.",
   "usage": "Use this read-only object to query or retrieve information about your sites.",
   "wsdl_segment": "```xml\n<complexType name=\"DomainSite\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Domain\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Domain\"/>\n        <element name=\"DomainId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"PathPrefix\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Site\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Site\"/>\n        <element name=\"SiteId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {

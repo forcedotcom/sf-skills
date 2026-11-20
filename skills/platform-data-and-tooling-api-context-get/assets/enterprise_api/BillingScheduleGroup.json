@@ -264,10 +264,15 @@
       "description": "The amount that hasn't yet been invoiced for all billing schedules within the billing schedule group. This field is a calculated field."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has both Subscription Management and Commerce Subscriptions, then Subscription Management takes precedence. For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has both Subscription Management and Commerce Subscriptions, then Subscription Management takes precedence.\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Subscription Management, Commerce Subscriptions, and Billing (Revenue Cloud). If your org has both Subscription Management and Commerce Subscriptions, then Subscription Management takes precedence. For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "field_reference": {
+    "AnchorProdtBillingSchdGrpId": {
+      "field_label": "Billing Schedule Group ID",
+      "type": "reference",
+      "length": "18"
+    },
     "BillDayOfMonth": {
-      "field_label": "Bill Day Of Month",
+      "field_label": "Period Boundary Day",
       "type": "int",
       "digits": "9"
     },
@@ -284,6 +289,11 @@
     "BillingAddress": {
       "field_label": "Billing Address",
       "type": "address"
+    },
+    "BillingArrangementId": {
+      "field_label": "Billing Arrangement ID",
+      "type": "reference",
+      "length": "18"
     },
     "BillingCity": {
       "field_label": "Billing City",
@@ -332,7 +342,7 @@
       "length": "255"
     },
     "BillingStartMonth": {
-      "field_label": "Billing Start Month",
+      "field_label": "Period Boundary Start Month",
       "type": "picklist",
       "length": "255"
     },
@@ -370,6 +380,11 @@
       "type": "picklist",
       "length": "255"
     },
+    "BindingInstanceId": {
+      "field_label": "BindingInstance ID",
+      "type": "reference",
+      "length": "18"
+    },
     "CancellationDate": {
       "field_label": "Cancellation Date",
       "type": "date"
@@ -388,6 +403,11 @@
       "field_label": "Created Date",
       "type": "datetime"
     },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
     "EffectiveNextBillingDate": {
       "field_label": "Effective Next Billing Date",
       "type": "date"
@@ -395,6 +415,11 @@
     "EndDate": {
       "field_label": "End Date",
       "type": "date"
+    },
+    "ExternalBindingInstance": {
+      "field_label": "External Binding Instance",
+      "type": "string",
+      "length": "40"
     },
     "ExternalRefRecordIdentifier": {
       "field_label": "External Reference Record Identifier",
@@ -441,6 +466,11 @@
       "type": "reference",
       "length": "18"
     },
+    "PaymentTermId": {
+      "field_label": "Payment Term ID",
+      "type": "reference",
+      "length": "18"
+    },
     "PeriodBoundary": {
       "field_label": "Period Boundary",
       "type": "picklist",
@@ -456,6 +486,11 @@
       "type": "string",
       "length": "255"
     },
+    "ProrationPolicyId": {
+      "field_label": "Proration Policy ID",
+      "type": "reference",
+      "length": "18"
+    },
     "ReferenceEntityId": {
       "field_label": "Asset ID",
       "type": "reference",
@@ -463,6 +498,11 @@
     },
     "ReferenceRecordId": {
       "field_label": "ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SavedPaymentMethodId": {
+      "field_label": "Saved Payment Method ID",
       "type": "reference",
       "length": "18"
     },
@@ -587,8 +627,8 @@
   "field_reference_columns": [
     "field_label",
     "type",
-    "digits",
     "length",
+    "digits",
     "precision",
     "scale"
   ]

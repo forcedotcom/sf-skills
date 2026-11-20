@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "wsdl_segment",
     "field_reference"
   ],
@@ -36,6 +37,7 @@
       "description": "Name of the entity the folder hierarchy is linked to."
     }
   },
+  "special_access_rules": "- Salesforce CRM Content must be enabled to access ContentFolderLink.\n- ContentFolderLink is read-only in the context of a library.",
   "wsdl_segment": "```xml\n<complexType name=\"ContentFolderLink\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentFolder\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentFolder\"/>\n        <element name=\"ContentFolderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"EnableFolderStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"ParentEntityId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {
     "ContentFolderId": {

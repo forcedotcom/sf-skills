@@ -3,7 +3,9 @@
     "title",
     "description",
     "fields",
-    "special_access_rules"
+    "special_access_rules",
+    "wsdl_segment",
+    "field_reference"
   ],
   "title": "WorkloadUnit - Data API",
   "description": "Represents the number of work items and average handle time in a specific time interval. This object is available in API version 49.0 and later.",
@@ -83,5 +85,111 @@
       "description": "The derived field from Workload.WorkloadType to indicate the type of workload, for example, a history or forecast workload. Possible values are: F—Forecasted H—Historical The default value is 'H'."
     }
   },
-  "special_access_rules": "The org must have a Workforce Engagement license. To view, create, edit, and delete records, the user must have the Workforce Engagement Analyst permission set.\n\nThe org must have a Workforce Engagement license.\n         To view, create, edit, and delete records, the user must have the Workforce Engagement\n         Analyst permission set."
+  "special_access_rules": "The org must have a Workforce Engagement license. To view, create, edit, and delete records, the user must have the Workforce Engagement Analyst permission set.",
+  "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"WorkloadUnit\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"AverageHandleTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Channel\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"CustomWorkType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DateTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"FeatureType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOmni\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"MeasureUnit\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Region\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SkillSet\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"WorkDemographic\" nillable=\"true\" minOccurs=\"0\" type=\"ens:WorkDemographic\"/>\n        <element name=\"WorkDemographicId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Workload\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Workload\"/>\n        <element name=\"WorkloadId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"WorkloadType\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
+  "field_reference": {
+    "AverageHandleTime": {
+      "field_label": "Average Handle Time",
+      "type": "double",
+      "precision": "9",
+      "scale": "1"
+    },
+    "Channel": {
+      "field_label": "Channel",
+      "type": "string",
+      "length": "200"
+    },
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CustomWorkType": {
+      "field_label": "Custom Work Type",
+      "type": "string",
+      "length": "200"
+    },
+    "DateTime": {
+      "field_label": "Date Time",
+      "type": "datetime"
+    },
+    "FeatureType": {
+      "field_label": "Feature Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Workload Unit ID",
+      "type": "id",
+      "length": "18"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsOmni": {
+      "field_label": "Is Omni",
+      "type": "boolean"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "MeasureUnit": {
+      "field_label": "Time Interval",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Region": {
+      "field_label": "Region",
+      "type": "string",
+      "length": "200"
+    },
+    "SkillSet": {
+      "field_label": "Skill Set",
+      "type": "string",
+      "length": "200"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TotalCount": {
+      "field_label": "Total Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "WorkDemographicId": {
+      "field_label": "Work Demographic ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkloadId": {
+      "field_label": "Workload ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "WorkloadType": {
+      "field_label": "Workload Type",
+      "type": "picklist",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "precision",
+    "scale",
+    "length",
+    "digits"
+  ]
 }

@@ -20,7 +20,7 @@
     },
     "BucketCount": {
       "type": "double",
-      "properties": "Filter, Nillable, Sort",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The number of buckets that were used in the report."
     },
     "ClientIp": {
@@ -30,7 +30,7 @@
     },
     "ColumnCount": {
       "type": "int",
-      "properties": "Filter, Nillable, Sort",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The number of columns in the report."
     },
     "CpuTime": {
@@ -59,8 +59,8 @@
       "description": "The report display type, indicating the run mode of the report. Possible values are: D—Dashboard S—Show Details H—Hide Details"
     },
     "ExceptionFilterCount": {
-      "type": "double",
-      "properties": "Filter, Nillable, Sort",
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The number of exception filters that are used in the report."
     },
     "LoginKey": {
@@ -94,12 +94,13 @@
       "description": "The unique ID of a single transaction. A transaction can contain one or more events. Each event in a given transaction has the same RequestIdentifier. For example: 3nWgxWbDKWWDIk0FKfF5DV."
     },
     "RequestStatus": {
-      "type": "String",
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The status of the request for a page view or user interface action. For example: S—Success. Salesforce handled the request successfully. If an Apex controller throws an exception, this status is also returned. F—Failure. Typically 4xx or 5xx HTTP codes, such as no permission to view page, page took too long to render, page is read-only. U—Undefined A—Authorization Error R—Redirect. Typically a 3xx HTTP code, possibly initiated by an Apex controller in a Visualforce page. N—Not Found. 404 error. This field can have a blank value."
     },
     "RowCount": {
       "type": "int",
-      "properties": "Filter, Nillable, Sort",
+      "properties": "Filter, Group, Nillable, Sort",
       "description": "The number of rows that were processed in the Report event. High row counts, coupled with a highAverageRowSize, can indicate that a user is downloading information for fraudulent purposes. For example, a salesperson who downloads all sales leads before departing for a competitor. For example: 150."
     },
     "RunTime": {

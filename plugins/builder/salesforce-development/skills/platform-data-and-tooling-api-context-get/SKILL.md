@@ -1,12 +1,13 @@
 ---
 name: platform-data-and-tooling-api-context-get
-description: "Authoritative field/schema reference for 2130 STANDARD Salesforce objects — sObject and Tooling field API names, types, properties (filterable/sortable/groupable/updateable), and relationships for Account, Contact, Opportunity, Lead, Case, ApexClass, and more. Load alongside a SOQL/Apex skill when fields/types/capabilities are unverified — not for query syntax or optimization alone. TRIGGER when verifying/debugging fields in a SOQL/SOSL query or DML against a standard object. Custom __c objects/fields are NOT covered — describe the live org (sf sobject describe). DO NOT TRIGGER for authoring/deploying *-meta.xml or sfdx source (use the Metadata API skill)."
+description: "Authoritative field/schema reference for 2161 STANDARD Salesforce objects, including Tooling API records. Use to verify exact field names, types, relationships, Filter/Sort/Group/Create/Update properties, supported calls and query limitations before SOQL/SOSL or DML. Covers Account, Contact, Opportunity, TraceFlag/DebugLevel debug logging and MetadataComponentDependency dependency checks before deletion. Load alongside platform-soql-query for query authoring; use this reference even for offline templates or fictional Ids. Not query syntax/optimization alone. Custom __c objects/fields require live describe. Not authoring/deploying *-meta.xml (use platform-metadata-api-context-get)."
 metadata:
   version: "1.0"
   domains: ["Platform"]
-  minApiVersion: "67.0"
+  minApiVersion: "68.0"
   relatedSkills:
     - "platform-metadata-api-context-get"
+    - "platform-soql-query"
   cliTools:
     - tool: ["jq"]
       semver: ">=1.6"
@@ -20,7 +21,7 @@ metadata:
 
 # Salesforce Data + Tooling API Skill
 
-This skill provides field-level reference for **2130 standard Salesforce objects** across two runtime API surfaces: the **Enterprise/Data API** (standard sObjects you query with SOQL and modify with DML) and the **Tooling API** (developer/metadata-adjacent records like `ApexClass`, `ApexCodeCoverage`, `TraceFlag`, and `EntityDefinition`).
+This skill provides field-level reference for **2161 standard Salesforce objects** across two runtime API surfaces: the **Enterprise/Data API** (standard sObjects you query with SOQL and modify with DML) and the **Tooling API** (developer/metadata-adjacent records like `ApexClass`, `ApexCodeCoverage`, `TraceFlag`, and `EntityDefinition`).
 
 Use it to look up authoritative field names, types, and properties **before** writing SOQL/SOSL, building DML, or reading records at runtime — so queries and writes don't fail with `INVALID_FIELD` / "No such column" errors.
 
@@ -44,6 +45,10 @@ Each object is documented as a JSON file with:
 > (`platform-metadata-api-context-get`). The two are companions, not substitutes.
 
 ## How to Use This Skill
+
+### Query authoring and reference handoff
+
+Before authoring SOQL/SOSL, also invoke `platform-soql-query`; query syntax and object facts need both skills. For Tooling tasks, activate this reference and read supported calls/limitations, not the retired MCP or web docs. Object limitations override field flags. Offline templates need both skills too; never execute placeholder Ids.
 
 ### CRITICAL: Field-Existence Gate (do this BEFORE answering)
 
@@ -93,15 +98,10 @@ Each JSON file contains multiple sections. Most use cases only need 1-2:
 <details>
 <summary><b>Why the two catalogs differ (reference — optional reading)</b></summary>
 
-`fields` comes from Salesforce's SOAP "Fields" table (query/DML properties:
-Create/Filter/Sort/Group/Update/Nillable). `field_reference` comes from a
-different UI-facing "Field List" table (label/length/precision/scale) that some
-objects document separately from the SOAP table — and it can include many fields
-`fields` never lists at all (e.g. objects with very large boolean-flag catalogs, or
-assorted admin-facing fields the SOAP table omits). Across the corpus, thousands of
-fields exist ONLY in `field_reference`, and a smaller number exist only in `fields`.
-This is why a field-existence answer requires checking both, and why capability
-questions can only be answered from `fields`.
+`fields` comes from the SOAP Fields table and carries capability properties.
+`field_reference` comes from a separate UI-facing Field List with label/type/size
+information, not capability flags. Either catalog can contain fields absent from
+the other; check both for existence, but use only `fields` for capabilities.
 </details>
 
 ### Which folder?
@@ -311,14 +311,12 @@ statement actually runs.
 2. **Do not invent fields.** A guessed column produces
    `INVALID_FIELD: No such column 'X' on entity 'Y'`. If unsure, load the `fields`
    section and confirm.
-3. **Don't case-fold `fields` keys when matching.** At least one object
-   (`LoginEventLog`) has both `UserName` and `Username` as distinct real fields in
-   the same `fields` dict — a lowercase/case-insensitive lookup would silently
-   collide them. Match the exact key casing as given. These are **two different
-   columns holding potentially different data** — they are NOT the same field that
-   "resolves to whichever the platform picks." Select and filter each by its exact
-   casing; do not describe them as interchangeable or say a query "resolves
-   ambiguously," because the platform treats them as distinct fields.
+3. **Don't case-fold `fields` or `field_reference` keys when matching.**
+   Match the exact key casing in the current reference; do not merge differently
+   cased keys or assume a spelling exists because another release listed it.
+   Report a spelling absent from both catalogs as **not listed** in this reference,
+   not as proof that the live platform has no such field. Distinct reference keys
+   alone do not establish distinct runtime columns or different data semantics.
 
 ### Respect field properties
 
@@ -446,4 +444,3 @@ interpretation and disclose the assumption.
 - **ApexCodeCoverageAggregate**: Represents aggregate code coverage test results for an Apex class or trigger.
 - **TraceFlag**: Represents a trace flag that triggers an Apex debug log at the specified logging level.
 - **EntityDefinition**: Provides row-based access to metadata about standard and custom objects.
-

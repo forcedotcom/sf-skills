@@ -285,7 +285,7 @@
     }
   },
   "special_access_rules": "To access this object, Omni-Channel must be enabled.",
-  "usage": "AgentWork records can only be deleted if they have the status Closed, Declined, or Unavailable. They can’t be deleted if their status is Assigned or Opened because they’re active in Omni-Channel. When AgentWork records are created, they have the status Assigned. After a record is created, it’s automatically pushed to the assigned agent. While the metadata for AgentWork indicates support for upsert() and update(), these calls aren’t used with AgentWork because none of its fields can be updated. Apex triggers are supported with AgentWork.\n\nAgentWork records can only be deleted if they have the status Closed, Declined, or Unavailable. They can’t be deleted if their status is Assigned or Opened because they’re active in Omni-Channel.\n\nWhen AgentWork records are created, they have the status Assigned. After a record is created, it’s automatically pushed to the assigned agent.\n\nWhile the metadata for AgentWork indicates support for upsert() and update(), these calls aren’t used with AgentWork because none of its fields can be updated.\n\nApex triggers are supported with AgentWork.",
+  "usage": "AgentWork records can only be deleted if they have the status Closed, Declined, or Unavailable. They can’t be deleted if their status is Assigned or Opened because they’re active in Omni-Channel. When AgentWork records are created, they have the status Assigned. After a record is created, it’s automatically pushed to the assigned agent. While the metadata for AgentWork indicates support for upsert() and update(), these calls aren’t used with AgentWork because none of its fields can be updated. Apex triggers are supported with AgentWork.",
   "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- **AgentWorkChangeEvent (API version 63.0)**: Change events are available for the object.\n- **AgentWorkOwnerSharingRule**: Sharing rules are available for the object.\n- **AgentWorkShare**: Sharing is available for the object.",
   "field_reference": {
     "AbandonedDateTime": {
@@ -327,6 +327,11 @@
       "type": "double",
       "precision": "10",
       "scale": "2"
+    },
+    "AgenticWorkerReferenceObjId": {
+      "field_label": "Agentic Worker Reference Object ID",
+      "type": "reference",
+      "length": "18"
     },
     "AssignedDateTime": {
       "field_label": "Assign Date",
@@ -379,6 +384,10 @@
       "field_label": "Decline Reason",
       "type": "string",
       "length": "200"
+    },
+    "FinalStatusTime": {
+      "field_label": "Final Status Time",
+      "type": "datetime"
     },
     "HandleTime": {
       "field_label": "Handle Time",
@@ -503,6 +512,11 @@
       "field_label": "Status",
       "type": "picklist",
       "length": "255"
+    },
+    "StatusReason": {
+      "field_label": "Status Reason",
+      "type": "string",
+      "length": "200"
     },
     "SystemModstamp": {
       "field_label": "System Modstamp",

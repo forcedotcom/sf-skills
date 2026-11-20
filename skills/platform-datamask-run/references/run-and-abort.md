@@ -73,25 +73,20 @@ Steps 5–7 are the **abort** flow. Run them **only when the prompt explicitly a
 a run — a "create and run" or "edit and run" task is complete after step 4.
 
 Aborting is an **on-demand action against a job that is already in progress**: take that job's
-`jobRunId` (and note its policy Id — you need it to start a replacement run if the window is
-missed; `DataMaskPolicyJobRun` has no direct policy lookup field, so resolve it from the job's
-`PolicyName` via `SELECT Id FROM DataMaskPolicy WHERE MasterLabel = '<PolicyName>'` against the
-Tooling API), wait for `DataMaskPolicyJobRun.Status = running`, and go straight to the abort (step 6).
+`jobRunId`, wait for `DataMaskPolicyJobRun.Status = running`, and go straight to the abort (step 6).
 You can only abort a running job. Do **not** use the terminal poll from step 3 here — it waits until
 the job is *done*. Use the poller's `running` mode, which returns the instant the job is abortable:
 ```bash
 POLL_MODE=running bash scripts/poll-job.sh <alias> <jobRunId> 900 15
 ```
 - Exit `0` (prints `running`) → abort now (step 6).
-- Exit `3` → the job reached a terminal state before `running` was caught; the window is gone. Start
-  a fresh run (step 2, using the policy Id you noted) and poll the new `jobRunId`.
+- Exit `3` → the job reached a terminal state before `running` was caught; the window is gone. Stop
+  and report the job's final status. Do NOT start a replacement run automatically.
 - Exit `1` (timeout) → re-query the job. If still non-terminal, re-run the poller once more; if
-  `running`, abort; if terminal, treat as exit 3 (fresh run + poll).
+  `running`, abort; if terminal, treat as exit 3 (stop and report).
 
-**Only if no job is currently running** (the one you were watching already finished, or you're
-reproducing the run→abort flow end-to-end) start a fresh run (repeat step 2) to have a live job to
-cancel, poll (`POLL_MODE=running`) until `Status = running`, then abort — targeting that live run,
-never an older already-terminal one.
+If no job is currently running, report that and stop — never abort an older already-terminal job, and
+never start a run just to have something to cancel. Start a new run only if the user explicitly asks.
 
 ## 6. Abort (REST run API)
 ```bash
@@ -109,7 +104,10 @@ Cancellation is asynchronous. Re-query until the status settles:
 sf data query --target-org <alias> \
   --query "SELECT Id, Status FROM DataMaskPolicyJobRun WHERE Id = '<jobRunId>'"
 ```
-Only report the abort as successful once `Status = canceled`.
+Only report the abort as successful once `Status = canceled`. The abort response (`200`, `status:
+"CANCELED"`) only means the request was accepted; a job can stay `running` after it. If it still reads
+`running` after ~1 minute, re-send the abort (step 6) once and re-query. If it is still `running`,
+report "abort requested, still `running`" rather than success.
 
 ## Failure decision table
 

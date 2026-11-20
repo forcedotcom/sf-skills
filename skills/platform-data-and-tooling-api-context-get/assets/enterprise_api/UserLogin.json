@@ -31,7 +31,7 @@
       "description": "ID of the associated user account. This field can’t be updated."
     }
   },
-  "usage": "To freeze or unfreeze multiple users, use Data Loader.\n\nTo query for all frozen users in your\n        organization:\n\nSELECT Id, UserId\n\nFROM UserLogin\n\nWHERE IsFrozen = true",
+  "usage": "To freeze or unfreeze multiple users, use Data Loader.\n\nTo query for all frozen users in your organization:\n\nSELECT Id, UserId\n\nFROM UserLogin\n\nWHERE IsFrozen = true",
   "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"UserLogin\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"IsFrozen\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsPasswordLocked\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"UserId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n```",
   "field_reference": {
     "Id": {

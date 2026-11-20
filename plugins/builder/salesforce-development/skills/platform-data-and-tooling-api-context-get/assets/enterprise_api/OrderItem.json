@@ -396,7 +396,7 @@
     "TotalLineAmount": {
       "type": "currency",
       "properties": "Create, Filter, Nillable, Sort, Update",
-      "description": "The line amount of the order product, before price adjustments, inclusive of quantity, and pricing term count for subscription. The decimal places for this value must match the decimal places for the currency being used. For example, if the currency is the US dollar, the decimal place for TotalLineAmount must be 2. If the currency is the Japanese yen, the decimal place for TotalLineAmount must be 0. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
+      "description": "The line amount of the order product, before price adjustments, inclusive of quantity, and pricing term count for subscription. The decimal places for this value must match the decimal places for the currency being used. For example, if the currency is the US dollar, the decimal place for TotalLineAmount must be 2. If the currency is the Japanese yen, the decimal place for TotalLineAmount must be 0. TotalLineAmount may only be updated when the order product isn't associated with an active order. This field is available with Salesforce Order Management or Revenue Cloud. This field is available in API v48.0 and later."
     },
     "TotalLineTaxAmount": {
       "type": "currency",
@@ -437,7 +437,7 @@
     }
   },
   "special_access_rules": "The user must have Edit permission on Order records to create or update order products on an order. The user must have Edit permission on Order records to delete an order product.",
-  "usage": "An order can have associated order product records only if the order has a price book associated with it. An order product must correspond to a product that is listed in the order’s price book. Orders with associated OrderItem records are affected. When OrderItem records are directly deleted, they aren’t sent to the recycle bin and can’t be undeleted. The getDeleted() call shows deleted OrderItem records until they’re purged, which is usually within the same day or the next day.\n\nAn order can have associated order product records only if the order has a price book associated with it. An order product must correspond to a product that is listed in the order’s price book.\n\nOrders with associated OrderItem records are affected. When OrderItem records are directly deleted, they aren’t sent to the recycle bin and can’t be undeleted. The getDeleted() call shows deleted OrderItem records until they’re purged, which is usually within the same day or the next day.",
+  "usage": "An order can have associated order product records only if the order has a price book associated with it. An order product must correspond to a product that is listed in the order’s price book. Orders with associated OrderItem records are affected. When OrderItem records are directly deleted, they aren’t sent to the recycle bin and can’t be undeleted. The getDeleted() call shows deleted OrderItem records until they’re purged, which is usually within the same day or the next day.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **OrderItemChangeEvent (API version 44.0)**: Change events are available for the object.\n- **OrderItemFeed (API version 29.0)**: Feed tracking is available for the object.\n- **OrderItemHistory**: History is available for tracked fields of the object.",
   "wsdl_segment": "```xml\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<complexType name=\"OrderItem\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AssetActionSourceReferences\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AttachedContentDocuments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"AvailableQuantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ChildOrderItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CombinedAttachments\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ContentDocumentLinks\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"EndDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"FeedSubscriptionsForEntity\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Feeds\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Histories\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"ListPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"Order\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Order\"/>\n        <element name=\"OrderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"OrderItemNumber\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"OriginalOrderItem\" nillable=\"true\" minOccurs=\"0\" type=\"ens:OrderItem\"/>\n        <element name=\"OriginalOrderItemId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PricebookEntry\" nillable=\"true\" minOccurs=\"0\" type=\"ens:PricebookEntry\"/>\n        <element name=\"PricebookEntryId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessExceptions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Product2\" nillable=\"true\" minOccurs=\"0\" type=\"ens:Product2\"/>\n        <element name=\"Product2Id\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Quantity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"ReturnOrderLineItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ServiceDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:date\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TotalPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UnitPrice\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:double\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
   "field_reference": {
@@ -480,10 +480,10 @@
       "type": "string",
       "length": "80"
     },
-    "BillingTreatmentId": {
-      "field_label": "Billing Treatment ID",
-      "type": "reference",
-      "length": "18"
+    "BillingTerm": {
+      "field_label": "Billing Term",
+      "type": "int",
+      "digits": "9"
     },
     "BindingInstanceTargetId": {
       "field_label": "BindingInstanceTarget ID",
@@ -513,6 +513,11 @@
       "field_label": "Custom Product Name",
       "type": "string",
       "length": "80"
+    },
+    "DeliveryRecipientAccountId": {
+      "field_label": "Account ID",
+      "type": "reference",
+      "length": "18"
     },
     "Description": {
       "field_label": "Line Description",
@@ -711,6 +716,11 @@
       "type": "reference",
       "length": "18"
     },
+    "PricingSource": {
+      "field_label": "Pricing Source",
+      "type": "picklist",
+      "length": "40"
+    },
     "PricingTermCount": {
       "field_label": "Pricing Term Count",
       "type": "double",
@@ -758,11 +768,6 @@
       "type": "currency",
       "precision": "18",
       "scale": "2"
-    },
-    "RelatedChangeIdentifier": {
-      "field_label": "Related Change Identifier",
-      "type": "string",
-      "length": "255"
     },
     "RelatedOrderItemId": {
       "field_label": "Order Product ID",

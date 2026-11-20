@@ -43,7 +43,7 @@
     "ParentId": {
       "type": "reference",
       "properties": "Filter, Group, Nillable, Sort",
-      "description": "ID of the object type to which the ChatterActivity is related. In API version 66.0, the ParentId must be a UserId or SelfServiceUser ID."
+      "description": "ID of the object type to which the ChatterActivity is related. In API version 68.0, the ParentId must be a UserId or SelfServiceUser ID."
     },
     "PostCount": {
       "type": "int",
@@ -51,7 +51,7 @@
       "description": "The number of FeedItems made by the ParentId."
     }
   },
-  "usage": "SELECT Id, PostCount, LikeReceivedCount\n\nFROM ChatterActivity\n\nWHERE ParentId = UserId\n\nTo query ChatterActivity, you\n      must provide the\n\n. In API version\n\nor SelfServiceUser\n      ID.",
+  "usage": "- Use this object to reference the Chatter activity statistics, which include the number of posts and comments made by a user and the number of comments and likes on posts and comments received by the same user.\n- You can directly query for ChatterActivity.`SELECT Id, PostCount, LikeReceivedCount FROM ChatterActivity WHERE ParentId = UserId` To query ChatterActivity, you must provide the ParentId. In API version 68.0, the ParentId must be a UserId or SelfServiceUser ID.Note\n- A ChatterActivity record is created for users the first time they post or comment. Users who have never posted or commented don’t have ChatterActivity records. If users make only one post and then delete it, they do have ChatterActivity records. In both cases, the user interface displays zeros for their Chatter activity.\n- Use the InfluenceRawRank field to reference a user’s Chatter influence rank. This field is available in API version 26.0 and later.\n\nTo query ChatterActivity, you must provide the ParentId. In API version 68.0, the ParentId must be a UserId or SelfServiceUser ID.",
   "wsdl_segment": "```xml\n<complexType name=\"ChatterActivity\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"CommentCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"CommentReceivedCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"InfluenceRawRank\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"LikeReceivedCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"ParentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"PostCount\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:int\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {
     "CommentCount": {

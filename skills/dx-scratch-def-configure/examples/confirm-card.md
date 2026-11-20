@@ -38,6 +38,39 @@ in chat.
 
 Pass the user's product or cloud words in the features array as-is.
 
+## Refine diff card
+
+Show this when patching an existing file. Source the bullets from helper
+`diff` (preview --base with a structured delta). Do not put the JSON in
+report.md.
+
+Intent paraphrase: Add Communities to the existing Developer scratch-def.
+
+Delta sent (example): `{"addFeatures":["Communities"]}`
+
+- Base: config/project-scratch-def.json
+- baseSha256: (from helper — optional on apply as a race guard)
+- Features added: Communities
+- Features removed: (none)
+- Features quantity changed: (none) — or e.g. EducationCloud:3 → EducationCloud:5
+  from helper `featuresQuantityChanged` (same-base quantity edits)
+- Edition: unchanged (Developer)
+- Fields added/removed/changed: (none) — or list top-level keys from helper
+  `fieldsAdded` / `fieldsRemoved` / `fieldsChanged`
+- Settings added: communitiesSettings.enableNetworksEnabled = true
+- Settings removed: (none)
+- Settings changed: (none) — or list paths whose values changed
+  (helper `settingsChanged`)
+- Orphaned required settings: (none)
+
+**Required in the chat reply (not in report.md):** show the schema-valid
+resulting helper `document` as a fenced JSON block.
+
+Write file?
+
+If orphaned required settings are listed, ask whether to delete them before
+writing. Removing a feature does not silently delete unrelated settings.
+
 ## Shape + features variant
 
 User supplied sourceOrg (or snapshot id/name).

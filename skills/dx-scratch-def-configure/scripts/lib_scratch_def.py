@@ -16,9 +16,11 @@ no prior project cache is usable.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 from copy import deepcopy
 from datetime import date, timedelta
@@ -418,17 +420,74 @@ PURPOSE_OUT_RE = re.compile(r"^[a-z0-9][a-z0-9_-]*-scratch-def\.json$")
 VERSIONED_OUT_RE = re.compile(r"^v\d+-scratch-def\.json$")
 
 
-def assert_safe_output_path(dest: Path) -> list[str]:
-    """Require relative config/project-scratch-def.json (default) or purpose-named.
+def _resolve_under_cwd(path: Path) -> Path:
+    """Absolute resolve; relative paths are rooted at cwd."""
+    path = Path(path)
+    if path.expanduser().is_absolute():
+        return path.expanduser().resolve()
+    return (Path.cwd() / path).resolve()
 
-    Default path may overwrite on confirm (INT-7.1). Purpose-named alternates
-    must be new files (no clobber). The cwd must already be an SF DX project
-    with an existing config/ directory — never create config/ here.
+
+def _file_sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def backup_path_for(dest: Path) -> Path:
+    """Sibling ``*.json.bak`` next to a scratch-def (compare/rollback of prior)."""
+    dest = Path(dest)
+    return dest.with_name(dest.name + ".bak")
+
+
+def assert_no_symlinks_on_path(path: Path, *, label: str) -> list[str]:
+    """Refuse if any lexical path component under cwd is a symlink."""
+    path = Path(path)
+    if path.expanduser().is_absolute():
+        return []
+    cur = Path.cwd()
+    for part in path.parts:
+        cur = cur / part
+        if cur.is_symlink():
+            return [
+                f"{label} must not be a symlink (or pass through one): {cur.name}"
+            ]
+    return []
+
+
+def write_backup(src: Path, bak: Path) -> list[str]:
+    """Plain copy of ``src`` to sibling ``.bak`` (replace existing ``.bak``).
+
+    Symlinks are refused. ``shutil.copy2`` preserves mode. Refine risk is
+    covered by ``--out`` must equal ``--base`` plus optional ``baseSha256``.
+    """
+    src = Path(src)
+    bak = Path(bak)
+    if bak.is_symlink():
+        return [
+            f"backup path must not be a symlink — remove {bak.name} and retry"
+        ]
+    if src.is_symlink():
+        return ["scratch-def path must not be a symlink"]
+    try:
+        if bak.exists() or bak.is_symlink():
+            bak.unlink()
+        shutil.copy2(src, bak)
+    except OSError as e:
+        return [f"cannot write backup {bak.name}: {e}"]
+    return []
+
+
+def assert_safe_config_scratch_def_path(path: Path) -> list[str]:
+    """Shape-only: relative ``config/<default|purpose>-scratch-def.json`` under cwd.
+
+    Shared by ``--out`` and ``--base``. Never creates ``config/``. Symlinks are
+    refused on ``config/`` and on every path component.
     """
     errs: list[str] = []
-    dest = Path(dest)
-    name = dest.name
+    path = Path(path)
+    name = path.name
     config_dir = Path.cwd() / "config"
+    if config_dir.is_symlink():
+        errs.append("config/ must not be a symlink")
     if not config_dir.is_dir():
         errs.append(
             "config/ does not exist under the current working directory. "
@@ -436,37 +495,80 @@ def assert_safe_output_path(dest: Path) -> list[str]:
             "contains config/ (where they intend to create scratch orgs). "
             "Do not create config/."
         )
-    if dest.expanduser().is_absolute():
+    errs.extend(assert_no_symlinks_on_path(path, label="scratch-def path"))
+    if path.expanduser().is_absolute():
         errs.append(
-            "output must be a relative path under config/ as "
+            "path must be relative under config/ as "
             "config/project-scratch-def.json (got an absolute path)"
         )
-    else:
-        resolved = (Path.cwd() / dest).resolve()
+    elif config_dir.is_dir() and not config_dir.is_symlink():
+        resolved = (Path.cwd() / path).resolve()
         want_parent = config_dir.resolve()
         if resolved.parent != want_parent:
             errs.append(
-                "output must be under config/ as config/project-scratch-def.json "
-                f"(got parent '{dest.parent.name or dest.parent}')"
+                "path must be under config/ as config/project-scratch-def.json "
+                f"(got parent '{path.parent.name or path.parent}')"
             )
     is_default = name == DEFAULT_OUT_NAME
     if not is_default and (
         VERSIONED_OUT_RE.match(name) or not PURPOSE_OUT_RE.match(name)
     ):
         errs.append(
-            f"output name '{name}' must be {DEFAULT_OUT_NAME} or purpose-named "
-            "<purpose>-scratch-def.json (not v1/v2 or arbitrary filenames)"
+            f"name '{name}' must be {DEFAULT_OUT_NAME} or purpose-named "
+            "<purpose>-scratch-def.json (not v1/v2, *.bak, or arbitrary filenames)"
         )
-    check = dest if dest.expanduser().is_absolute() else Path.cwd() / dest
+    return errs
+
+
+def assert_safe_base_path(base: Path) -> list[str]:
+    """``--base`` must be a safe existing config scratch-def path."""
+    errs = assert_safe_config_scratch_def_path(base)
+    if errs:
+        return errs
     try:
-        exists = check.resolve().exists() if dest.expanduser().is_absolute() else dest.exists()
+        resolved = _resolve_under_cwd(base)
+    except OSError:
+        return ["base path could not be resolved"]
+    if not resolved.is_file():
+        return ["base scratch-def not found under config/"]
+    return []
+
+
+def assert_safe_output_path(
+    dest: Path, *, base: Path | None = None
+) -> list[str]:
+    """Require relative config/project-scratch-def.json (default) or purpose-named.
+
+    Generate (no ``base``): default path may overwrite on confirm; purpose-named
+    alternates must be new files (no clobber). Refine (``base`` set): ``--out``
+    must resolve to the same path as ``--base`` — never write a file the user
+    did not see diffed. Never create ``config/``.
+    """
+    errs = assert_safe_config_scratch_def_path(dest)
+    dest = Path(dest)
+    name = dest.name
+    is_default = name == DEFAULT_OUT_NAME
+    try:
+        exists = _resolve_under_cwd(dest).exists()
     except OSError:
         exists = dest.exists()
-    # Default path: overwrite allowed after user confirm. Alternates: no clobber.
+    if base is not None:
+        try:
+            same_as_base = _resolve_under_cwd(dest) == _resolve_under_cwd(base)
+        except OSError:
+            same_as_base = False
+        if not same_as_base:
+            errs.append(
+                "refine apply requires --out to equal --base "
+                f"(previewed {base}, refusing write to {dest})"
+            )
+        return errs
     if exists and not is_default:
         errs.append(
-            f"refusing to overwrite existing file '{dest}' — no revert. "
-            f"Use {DEFAULT_OUT_NAME} (overwrite on confirm) or a new purpose-named path."
+            f"refusing to overwrite existing file '{dest}'. "
+            f"Use {DEFAULT_OUT_NAME} (overwrite on confirm), a new purpose-named "
+            "path, or refine in place with --base equal to --out "
+            "(refine keeps a .bak of the prior file)."
         )
     return errs
 
@@ -532,14 +634,21 @@ def _index_features(features_doc: dict) -> dict[str, dict]:
     return out
 
 
-def _synonym_index(features_doc: dict) -> dict[str, str]:
-    """Lowercase synonym / phrase → canonical name."""
-    idx: dict[str, str] = {}
+def _synonym_index(features_doc: dict) -> dict[str, list[str]]:
+    """Lowercase synonym / name → sorted canonical names (collisions preserved).
+
+    Live catalogs often put the same derived phrase (e.g. ``sales cloud``) on
+    more than one feature. Callers must drop + warn when ``len(hits) > 1`` —
+    last-write-wins silently picked the wrong feature.
+    """
+    idx: dict[str, set[str]] = {}
     for name, entry in features_doc.get("features", {}).items():
-        idx[name.lower()] = name
+        if not isinstance(entry, dict):
+            continue
+        idx.setdefault(name.lower(), set()).add(name)
         for syn in entry.get("synonyms") or []:
-            idx[str(syn).lower()] = name
-    return idx
+            idx.setdefault(str(syn).lower(), set()).add(name)
+    return {k: sorted(v) for k, v in idx.items()}
 
 
 def closest_feature(token: str, features_doc: dict, cutoff: float = 0.85) -> str | None:
@@ -583,15 +692,29 @@ def map_feature_token(
 
     entry = by_name.get(base.lower())
     if entry is None:
-        canon = syn.get(base.lower())
-        if canon:
-            entry = by_name[canon.lower()]
+        syn_hits = syn.get(base.lower()) or []
+        if len(syn_hits) == 1:
+            entry = by_name[syn_hits[0].lower()]
+        elif len(syn_hits) > 1:
+            warnings.append(
+                f"ambiguous feature phrase '{raw}' — dropped "
+                f"(candidates: {', '.join(syn_hits)}). "
+                "Use an exact catalog name or listed synonym."
+            )
+            return None, warnings
         else:
-            from scrape_config_values import longest_phrase_match
+            from scrape_config_values import phrase_match_features
 
-            phrase_hit = longest_phrase_match(base, features_doc)
-            if phrase_hit:
-                entry = by_name[phrase_hit.lower()]
+            phrase_hits = phrase_match_features(base, features_doc)
+            if len(phrase_hits) == 1:
+                entry = by_name[phrase_hits[0].lower()]
+            elif len(phrase_hits) > 1:
+                warnings.append(
+                    f"ambiguous feature phrase '{raw}' — dropped "
+                    f"(candidates: {', '.join(phrase_hits)}). "
+                    "Use an exact catalog name or listed synonym."
+                )
+                return None, warnings
             else:
                 near = closest_feature(base, features_doc)
                 if near:
@@ -616,6 +739,11 @@ def map_feature_token(
             return None, warnings
         qmin = qmeta.get("min")
         qmax = qmeta.get("max")
+        if qmin is None and qmax is None:
+            warnings.append(
+                f"'{name}:{quantity}' accepted but quantity bounds are unknown "
+                "in the catalog — not bounds-checked"
+            )
         if qmin is not None and quantity < qmin:
             warnings.append(f"'{name}:{quantity}' below min {qmin} — dropped")
             return None, warnings
@@ -661,15 +789,153 @@ def rewrite_org_name(name: str | None) -> tuple[str | None, list[str]]:
     return s, warnings
 
 
-def set_by_path(root: dict, path: str, value: Any) -> None:
+def _match_settings_category_key(settings: dict, category: str) -> str | None:
+    """Return the on-disk category key matching ``category`` case-insensitively."""
+    if not isinstance(settings, dict) or not isinstance(category, str):
+        return None
+    if category in settings:
+        return category
+    lower = category.lower()
+    for key in settings:
+        if isinstance(key, str) and key.lower() == lower:
+            return key
+    return None
+
+
+def resolve_settings_path(
+    root: dict, path: str, *, create: bool = False
+) -> tuple[list[tuple[dict, str]], dict | None, str | None]:
+    """Walk a dotted settings path with case-insensitive category matching.
+
+    Returns ``(parents, leaf_parent, leaf_key)``. ``parents`` is the chain of
+    ``(dict, key)`` used to reach ``leaf_parent``. When ``create`` is True,
+    missing intermediate objects are created (reusing an existing category key
+    casing when present). When the path cannot be resolved and ``create`` is
+    False, returns ``([], None, None)``.
+    """
     path = normalize_settings_path(path)
     parts = path.split(".")
+    if not parts or not parts[-1]:
+        return [], None, None
+    parents: list[tuple[dict, str]] = []
     cur = root
-    for p in parts[:-1]:
-        if p not in cur or not isinstance(cur[p], dict):
-            cur[p] = {}
-        cur = cur[p]
-    cur[parts[-1]] = value
+    for i, part in enumerate(parts[:-1]):
+        if not isinstance(cur, dict):
+            return [], None, None
+        key = part
+        if i == 0:
+            matched = _match_settings_category_key(cur, part)
+            if matched is not None:
+                key = matched
+            elif not create:
+                return [], None, None
+        elif part not in cur:
+            if not create:
+                return [], None, None
+            key = part
+        if key not in cur or not isinstance(cur.get(key), dict):
+            if not create:
+                return [], None, None
+            cur[key] = {}
+        parents.append((cur, key))
+        cur = cur[key]
+    if not isinstance(cur, dict):
+        return [], None, None
+    return parents, cur, parts[-1]
+
+
+def set_by_path(
+    root: dict,
+    path: str,
+    value: Any,
+    *,
+    preserve_existing_category_case: bool = True,
+) -> None:
+    """Set a dotted settings leaf; reuse existing UpperCamel category keys by default."""
+    _ = preserve_existing_category_case  # always preserve via resolve_settings_path
+    _parents, leaf_parent, leaf_key = resolve_settings_path(
+        root, path, create=True
+    )
+    if leaf_parent is None or leaf_key is None:
+        return
+    leaf_parent[leaf_key] = value
+
+
+def delete_by_path(root: dict, path: str) -> bool:
+    """Delete a dotted settings leaf; prune empty parents. Category match is case-insensitive."""
+    parents, leaf_parent, leaf_key = resolve_settings_path(
+        root, path, create=False
+    )
+    if leaf_parent is None or leaf_key is None or leaf_key not in leaf_parent:
+        return False
+    del leaf_parent[leaf_key]
+    for parent, key in reversed(parents):
+        child = parent.get(key)
+        if isinstance(child, dict) and not child:
+            del parent[key]
+        else:
+            break
+    return True
+
+
+def on_disk_settings_path(root: dict, path: str) -> str | None:
+    """Return the dotted path using on-disk category casing, or None if missing."""
+    parents, leaf_parent, leaf_key = resolve_settings_path(
+        root, path, create=False
+    )
+    if leaf_parent is None or leaf_key is None or leaf_key not in leaf_parent:
+        return None
+    parts = [key for _parent, key in parents] + [leaf_key]
+    return ".".join(parts)
+
+
+def deep_merge_dict(dst: dict, src: dict) -> dict:
+    """In-place deep merge of ``src`` into ``dst``; returns ``dst``."""
+    for key, val in src.items():
+        if isinstance(val, dict) and isinstance(dst.get(key), dict):
+            deep_merge_dict(dst[key], val)
+        else:
+            dst[key] = deepcopy(val)
+    return dst
+
+
+def expand_settings_delta(set_settings: dict) -> tuple[dict, list[str]]:
+    """Expand dotted top-level keys into nested settings; lowerCamel categories.
+
+    Agents may send either nested objects or dotted leaves such as
+    ``{"lightningExperienceSettings.enableS1DesktopEnabled": true}``.
+    """
+    warnings: list[str] = []
+    expanded: dict = {}
+    for key, val in set_settings.items():
+        if isinstance(key, str) and "." in key:
+            set_by_path(expanded, key, deepcopy(val))
+            continue
+        nk = lower_camel_settings_key(key) if isinstance(key, str) else key
+        if nk != key and isinstance(key, str):
+            warnings.append(
+                f"settings key '{key}' rewritten to '{nk}' "
+                "(scratch-def uses lower camelCase, not Metadata API UpperCamel)"
+            )
+        if nk in expanded and isinstance(expanded[nk], dict) and isinstance(val, dict):
+            deep_merge_dict(expanded[nk], deepcopy(val))
+        else:
+            expanded[nk] = deepcopy(val)
+    return expanded, warnings
+
+
+def merge_settings_preserving_category_case(dst: dict, src: dict) -> None:
+    """Deep-merge ``src`` into ``dst``, writing into existing category casing when present."""
+    for cat, val in src.items():
+        if not isinstance(cat, str):
+            dst[cat] = deepcopy(val)
+            continue
+        matched = _match_settings_category_key(dst, cat)
+        key = matched if matched is not None else cat
+        if isinstance(val, dict) and isinstance(dst.get(key), dict):
+            deep_merge_dict(dst[key], val)
+        else:
+            dst[key] = deepcopy(val)
 
 
 def lower_camel_settings_key(key: str) -> str:
@@ -742,42 +1008,64 @@ def enrich_feature_dependencies(
     return out, warnings
 
 
+def _settings_path_present(settings: dict, path: str) -> tuple[bool, Any]:
+    """Return (found, value) for a dotted path, matching category keys case-insensitively."""
+    _parents, leaf_parent, leaf_key = resolve_settings_path(
+        settings, path, create=False
+    )
+    if leaf_parent is None or leaf_key is None or leaf_key not in leaf_parent:
+        return False, None
+    return True, leaf_parent[leaf_key]
+
+
 def enrich_settings(
-    features: list[str], settings: dict | None, settings_map: dict
+    features: list[str],
+    settings: dict | None,
+    settings_map: dict,
+    *,
+    rewrite_existing_keys: bool = True,
 ) -> tuple[dict, list[str]]:
-    """Deep-merge required settings for each kept feature."""
+    """Deep-merge required settings for each kept feature.
+
+    ``rewrite_existing_keys=False`` (refine): leave hand-written category casing
+    alone and only add missing required leaves for the given features.
+    """
     warnings: list[str] = []
-    out, nw = normalize_settings_tree(settings if isinstance(settings, dict) else {})
-    warnings.extend(nw)
+    if rewrite_existing_keys:
+        out, nw = normalize_settings_tree(
+            settings if isinstance(settings, dict) else {}
+        )
+        warnings.extend(nw)
+    else:
+        out = deepcopy(settings) if isinstance(settings, dict) else {}
     by_feature = settings_map.get("byFeature") or {}
     for feat in features:
         base = feat.split(":", 1)[0]
-        entry = by_feature.get(base)
+        entry = _by_feature_entry(by_feature, base)
         if not entry:
             continue
         for req in entry.get("required") or []:
             path = normalize_settings_path(req["path"])
             example = req.get("example", True)
-            parts = path.split(".")
-            cur = out
-            missing = False
-            conflict = False
-            for p in parts[:-1]:
-                if p not in cur or not isinstance(cur.get(p), dict):
-                    missing = True
-                    break
-                cur = cur[p]
-            else:
-                if parts[-1] not in cur:
-                    missing = True
-                elif cur[parts[-1]] != example:
-                    conflict = True
-            if missing:
-                set_by_path(out, path, example)
+            found, cur_val = _settings_path_present(out, path)
+            preserve = not rewrite_existing_keys
+            if not found:
+                set_by_path(
+                    out,
+                    path,
+                    example,
+                    preserve_existing_category_case=preserve,
+                )
                 warnings.append(f"enriched required setting {path} for {base}")
-            elif conflict:
+            elif cur_val != example:
                 # Required cache value wins — a false/wrong leaf would disable the feature.
-                set_by_path(out, path, example)
+                # Prefer writing the canonical path; leave a mistyped sibling alone.
+                set_by_path(
+                    out,
+                    path,
+                    example,
+                    preserve_existing_category_case=preserve,
+                )
                 warnings.append(
                     f"overrode conflicting setting {path} to required {example!r} for {base}"
                 )
@@ -985,8 +1273,14 @@ def _apply_orgname_and_namespace(
 
 
 def _schema_gate(
-    out: dict, errors: list[str], warnings: list[str]
+    out: dict,
+    errors: list[str],
+    warnings: list[str],
+    *,
+    baseline: dict | None = None,
 ) -> None:
+    """Schema-check ``out``. With ``baseline`` (refine), errors the base file
+    already had are warnings — only errors the delta introduced block."""
     skip = any(
         "template field refused" in e or "shape/snapshot-only def refused" in e
         for e in errors
@@ -997,7 +1291,13 @@ def _schema_gate(
         warnings.append(JSONSCHEMA_MISSING_WARNING)
         return
     try:
-        errors.extend(validate_against_schema(out, load_schema()))
+        schema = load_schema()
+        found = validate_against_schema(out, schema)
+        if baseline is not None:
+            known = set(validate_against_schema(baseline, schema))
+            warnings.extend(f"pre-existing in base: {e}" for e in found if e in known)
+            found = [e for e in found if e not in known]
+        errors.extend(found)
     except FileNotFoundError as e:
         errors.append(f"JSON Schema: {e}")
     except Exception as e:  # noqa: BLE001 — do not block write on validator crash
@@ -1179,22 +1479,659 @@ def _merge_catalog_warnings(result: dict, catalog_warnings: list[str]) -> dict:
     return result
 
 
+def _feature_base(token: str) -> str:
+    return str(token).split(":", 1)[0]
+
+
+def _feature_bases(features: Any) -> set[str]:
+    if not isinstance(features, list):
+        return set()
+    return {_feature_base(f) for f in features if isinstance(f, str) and f.strip()}
+
+
+def _by_feature_entry(by_feature: dict, base_name: str) -> dict | None:
+    """Look up settings-map byFeature with case-insensitive feature base."""
+    if not isinstance(by_feature, dict) or not base_name:
+        return None
+    entry = by_feature.get(base_name)
+    if isinstance(entry, dict):
+        return entry
+    lower = base_name.lower()
+    for key, val in by_feature.items():
+        if isinstance(key, str) and key.lower() == lower and isinstance(val, dict):
+            return val
+    return None
+
+
+def required_setting_paths_for_features(
+    features: list[str], settings_map: dict
+) -> set[str]:
+    """Normalized setting paths required by the given feature tokens."""
+    by_feature = settings_map.get("byFeature") or {}
+    paths: set[str] = set()
+    for feat in features:
+        if not isinstance(feat, str) or not feat.strip():
+            continue
+        entry = _by_feature_entry(by_feature, _feature_base(feat))
+        if not entry:
+            continue
+        for req in entry.get("required") or []:
+            path = req.get("path") if isinstance(req, dict) else None
+            if isinstance(path, str) and path.strip():
+                paths.add(normalize_settings_path(path))
+    return paths
+
+
+def _tokens_by_base(features: list[str]) -> dict[str, set[str]]:
+    """Group feature tokens by case-insensitive base name.
+
+    The dict key is a display base (first-seen casing). Values keep the
+    on-disk tokens so quantity diffs still show the real strings.
+    """
+    by_base: dict[str, set[str]] = {}
+    lower_to_key: dict[str, str] = {}
+    for feat in features:
+        base = _feature_base(feat)
+        key = lower_to_key.setdefault(base.lower(), base)
+        by_base.setdefault(key, set()).add(feat)
+    return by_base
+
+
+def _norm_feature_token(token: str) -> str:
+    """Case-fold the feature base; keep quantity suffix as-is."""
+    if ":" not in token:
+        return token.lower()
+    base, qty = token.split(":", 1)
+    return f"{base.lower()}:{qty}"
+
+
+# Top-level keys owned by dedicated delta ops (not delta.set / delta.unset).
+_DELTA_RESERVED_TOP = frozenset(
+    {"features", "settings", "objectSettings", "edition"}
+)
+DELTA_KEYS = frozenset(
+    {
+        "addFeatures",
+        "removeFeatures",
+        "setEdition",
+        "set",
+        "unset",
+        "setSettings",
+        "unsetSettings",
+        "setObjectSettings",
+        "unsetObjectSettings",
+    }
+)
+_DIFF_SPECIAL_TOP = frozenset(
+    {"features", "settings", "objectSettings", "edition"}
+)
+
+
+def diff_scratch_defs(
+    before: dict, after: dict, settings_map: dict | None = None
+) -> dict:
+    """Whole-file before→after delta for refine Preview cards.
+
+    Compares the base document as loaded (copy-through) to the post-delta
+    document. Feature add/remove use base names (``Feature:N`` → ``Feature``);
+    quantity-only edits surface in ``featuresQuantityChanged``. Top-level
+    scalars and ``objectSettings`` are included so unrelated fields never
+    silently disappear from the card.
+    """
+    before = before if isinstance(before, dict) else {}
+    after = after if isinstance(after, dict) else {}
+    before_feats = [
+        f for f in (before.get("features") or []) if isinstance(f, str) and f.strip()
+    ]
+    after_feats = [
+        f for f in (after.get("features") or []) if isinstance(f, str) and f.strip()
+    ]
+    # Case-insensitive bases: re-adding Communities over hand-written
+    # "communities" must not show as both added and removed.
+    before_by_base = _tokens_by_base(before_feats)
+    after_by_base = _tokens_by_base(after_feats)
+    before_lower = {b.lower(): b for b in before_by_base}
+    after_lower = {b.lower(): b for b in after_by_base}
+    features_added = sorted(
+        after_lower[k] for k in after_lower.keys() - before_lower.keys()
+    )
+    features_removed = sorted(
+        before_lower[k] for k in before_lower.keys() - after_lower.keys()
+    )
+
+    features_quantity_changed: list[dict[str, Any]] = []
+    for base_lower in sorted(before_lower.keys() & after_lower.keys()):
+        before_key = before_lower[base_lower]
+        after_key = after_lower[base_lower]
+        before_tokens = before_by_base.get(before_key) or set()
+        after_tokens = after_by_base.get(after_key) or set()
+        before_norm = {_norm_feature_token(t) for t in before_tokens}
+        after_norm = {_norm_feature_token(t) for t in after_tokens}
+        if before_norm != after_norm:
+            features_quantity_changed.append(
+                {
+                    "base": after_key,
+                    "before": sorted(before_tokens),
+                    "after": sorted(after_tokens),
+                }
+            )
+
+    before_settings = (
+        before.get("settings") if isinstance(before.get("settings"), dict) else {}
+    )
+    after_settings = (
+        after.get("settings") if isinstance(after.get("settings"), dict) else {}
+    )
+    before_flat = dict(_flatten(before_settings))
+    after_flat = dict(_flatten(after_settings))
+    settings_added = sorted(p for p in after_flat if p not in before_flat)
+    settings_removed = sorted(p for p in before_flat if p not in after_flat)
+    settings_changed = sorted(
+        p
+        for p in before_flat
+        if p in after_flat and before_flat[p] != after_flat[p]
+    )
+
+    orphaned: list[str] = []
+    if settings_map is not None and features_removed:
+        removed_required = required_setting_paths_for_features(
+            features_removed, settings_map
+        )
+        still_required = required_setting_paths_for_features(
+            after_feats, settings_map
+        )
+        # Report the on-disk path (UpperCamel preserved) so unsetSettings works.
+        orphaned = sorted(
+            {
+                disk
+                for p in removed_required
+                if p not in still_required
+                for disk in [on_disk_settings_path(before_settings, p)]
+                if disk is not None
+            }
+        )
+
+    before_keys = {k for k in before if k not in _DIFF_SPECIAL_TOP}
+    after_keys = {k for k in after if k not in _DIFF_SPECIAL_TOP}
+    fields_added = sorted(after_keys - before_keys)
+    fields_removed = sorted(before_keys - after_keys)
+    fields_changed = sorted(
+        k
+        for k in before_keys & after_keys
+        if before.get(k) != after.get(k)
+    )
+
+    before_obj = (
+        before.get("objectSettings")
+        if isinstance(before.get("objectSettings"), dict)
+        else {}
+    )
+    after_obj = (
+        after.get("objectSettings")
+        if isinstance(after.get("objectSettings"), dict)
+        else {}
+    )
+    before_obj_keys = set(before_obj)
+    after_obj_keys = set(after_obj)
+    object_settings_added = sorted(after_obj_keys - before_obj_keys)
+    object_settings_removed = sorted(before_obj_keys - after_obj_keys)
+    object_settings_changed = sorted(
+        k
+        for k in before_obj_keys & after_obj_keys
+        if before_obj.get(k) != after_obj.get(k)
+    )
+
+    edition_before = before.get("edition")
+    edition_after = after.get("edition")
+    return {
+        "featuresAdded": features_added,
+        "featuresRemoved": features_removed,
+        "featuresQuantityChanged": features_quantity_changed,
+        "editionBefore": edition_before,
+        "editionAfter": edition_after,
+        "editionChanged": edition_before != edition_after,
+        "settingsAdded": settings_added,
+        "settingsRemoved": settings_removed,
+        "settingsChanged": settings_changed,
+        "settingsOrphanedByRemovedFeatures": orphaned,
+        "fieldsAdded": fields_added,
+        "fieldsRemoved": fields_removed,
+        "fieldsChanged": fields_changed,
+        "objectSettingsAdded": object_settings_added,
+        "objectSettingsRemoved": object_settings_removed,
+        "objectSettingsChanged": object_settings_changed,
+    }
+
+
+def _has_refine_intent(delta: dict) -> bool:
+    if delta.get("addFeatures") or delta.get("removeFeatures"):
+        return True
+    if "setEdition" in delta:
+        return True
+    if delta.get("set") or delta.get("unset"):
+        return True
+    if delta.get("setSettings") or delta.get("unsetSettings"):
+        return True
+    if delta.get("setObjectSettings") or delta.get("unsetObjectSettings"):
+        return True
+    return False
+
+
+def _result_envelope(
+    *,
+    ok: bool,
+    document: dict,
+    errors: list[str],
+    warnings: list[str],
+    org_name_suggestions: list[str] | None = None,
+) -> dict:
+    suggested_path = suggest_purpose_path(document)
+    settings_for_card = (
+        document.get("settings") if isinstance(document.get("settings"), dict) else {}
+    )
+    return {
+        "ok": ok,
+        "document": document,
+        "errors": errors,
+        "warnings": warnings,
+        "suggestedPath": suggested_path,
+        "confirmCard": {
+            "edition": document.get("edition"),
+            "features": document.get("features") or [],
+            "settingsPaths": sorted(p for p, _ in _flatten(settings_for_card)),
+            "orgName": document.get("orgName"),
+            "orgNameSuggestions": org_name_suggestions or [],
+            "sourceOrg": document.get("sourceOrg"),
+            "snapshot": document.get("snapshot"),
+            "suggestedPath": suggested_path,
+            "warnings": warnings,
+            "errors": errors,
+        },
+    }
+
+
+def apply_refine_delta(
+    base_doc: dict, delta: dict, features_doc: dict, settings_map: dict
+) -> dict:
+    """Copy-through base, apply structured delta; catalog only newly added tokens.
+
+    Existing features/settings/objectSettings/top-level fields are preserved
+    verbatim unless the delta names them. Catalog mapping + required-settings
+    enrichment run only for ``addFeatures`` (and their dependsOn siblings).
+    """
+    errors: list[str] = []
+    warnings: list[str] = []
+    if not isinstance(base_doc, dict):
+        errors.append(
+            f"base scratch-def must be a JSON object (got {type(base_doc).__name__})"
+        )
+        return _result_envelope(
+            ok=False, document={}, errors=errors, warnings=warnings
+        )
+    if not isinstance(delta, dict):
+        errors.append(
+            f"refine delta must be a JSON object (got {type(delta).__name__})"
+        )
+        return _result_envelope(
+            ok=False, document=deepcopy(base_doc), errors=errors, warnings=warnings
+        )
+    unknown = sorted(set(delta) - DELTA_KEYS)
+    if unknown:
+        errors.append(f"unknown refine delta keys: {', '.join(unknown)}")
+    if not _has_refine_intent(delta):
+        errors.append(
+            "underspecified refine delta — provide addFeatures, removeFeatures, "
+            "setEdition, set/unset, setSettings/unsetSettings, or "
+            "setObjectSettings/unsetObjectSettings"
+        )
+
+    out = deepcopy(base_doc)
+
+    if "setEdition" in delta:
+        edition = delta["setEdition"]
+        if edition in (None, ""):
+            errors.append("setEdition must be a non-empty edition string")
+        elif edition not in EDITIONS:
+            errors.append(
+                f"illegal edition '{edition}' — must be one of {sorted(EDITIONS)}"
+            )
+        else:
+            out["edition"] = edition
+
+    set_block = delta.get("set")
+    if set_block is not None:
+        if not isinstance(set_block, dict):
+            errors.append(
+                f"delta.set must be a JSON object (got {type(set_block).__name__})"
+            )
+        else:
+            for key, val in set_block.items():
+                if key in _DELTA_RESERVED_TOP:
+                    errors.append(
+                        f"delta.set cannot include '{key}' — use dedicated delta keys"
+                    )
+                    continue
+                out[key] = deepcopy(val)
+
+    unset_block = delta.get("unset")
+    if unset_block is not None:
+        if not isinstance(unset_block, list):
+            errors.append(
+                f"delta.unset must be a list of keys (got {type(unset_block).__name__})"
+            )
+        else:
+            for key in unset_block:
+                if not isinstance(key, str) or not key.strip():
+                    warnings.append(f"delta.unset skipped non-string key {key!r}")
+                    continue
+                if key in _DELTA_RESERVED_TOP:
+                    errors.append(
+                        f"delta.unset cannot include '{key}' — use dedicated delta keys"
+                    )
+                    continue
+                out.pop(key, None)
+
+    feats: list[str] = []
+    for raw in out.get("features") or []:
+        if isinstance(raw, str) and raw.strip():
+            feats.append(raw)
+        else:
+            warnings.append(f"non-string feature {raw!r} in base — dropped")
+
+    remove_raw = delta.get("removeFeatures")
+    remove_bases_lower: set[str] = set()
+    if remove_raw is not None:
+        if not isinstance(remove_raw, list):
+            errors.append(
+                "delta.removeFeatures must be a list "
+                f"(got {type(remove_raw).__name__})"
+            )
+        else:
+            for raw in remove_raw:
+                if not isinstance(raw, str) or not raw.strip():
+                    warnings.append(
+                        f"non-string removeFeatures entry {raw!r} — skipped"
+                    )
+                    continue
+                remove_bases_lower.add(_feature_base(raw.strip()).lower())
+    present_bases = {_feature_base(f).lower() for f in feats}
+    for missing in sorted(remove_bases_lower - present_bases):
+        warnings.append(f"removeFeatures: '{missing}' not present in base — no change")
+    if remove_bases_lower:
+        feats = [
+            f for f in feats if _feature_base(f).lower() not in remove_bases_lower
+        ]
+
+    newly_added: list[str] = []
+    add_raw = delta.get("addFeatures")
+    if add_raw is not None:
+        if not isinstance(add_raw, list):
+            errors.append(
+                f"delta.addFeatures must be a list (got {type(add_raw).__name__})"
+            )
+        else:
+            for raw in add_raw:
+                if not isinstance(raw, str):
+                    warnings.append(f"non-string feature {raw!r} — dropped")
+                    continue
+                mapped, w = map_feature_token(raw, features_doc)
+                warnings.extend(w)
+                if not mapped:
+                    continue
+                base_lower = _feature_base(mapped).lower()
+                feats = [
+                    f for f in feats if _feature_base(f).lower() != base_lower
+                ]
+                feats.append(mapped)
+                newly_added.append(mapped)
+    if newly_added:
+        expanded, dep_w = enrich_feature_dependencies(newly_added, features_doc)
+        warnings.extend(dep_w)
+        present = {_feature_base(f).lower() for f in feats}
+        for dep in expanded:
+            dep_base = _feature_base(dep).lower()
+            if dep_base in present:
+                continue
+            feats.append(dep)
+            present.add(dep_base)
+            newly_added.append(dep)
+
+    if "features" in out or feats:
+        out["features"] = feats
+
+    _warn_edition_and_entitlement(feats, out, features_doc, warnings)
+
+    settings = (
+        deepcopy(out["settings"])
+        if isinstance(out.get("settings"), dict)
+        else {}
+    )
+    set_settings = delta.get("setSettings")
+    if set_settings is not None:
+        if not isinstance(set_settings, dict):
+            errors.append(
+                "delta.setSettings must be a JSON object "
+                f"(got {type(set_settings).__name__})"
+            )
+        else:
+            expanded, nw = expand_settings_delta(set_settings)
+            warnings.extend(nw)
+            merge_settings_preserving_category_case(settings, expanded)
+
+    unset_settings = delta.get("unsetSettings")
+    if unset_settings is not None:
+        if not isinstance(unset_settings, list):
+            errors.append(
+                "delta.unsetSettings must be a list of paths "
+                f"(got {type(unset_settings).__name__})"
+            )
+        else:
+            for path in unset_settings:
+                if not isinstance(path, str) or not path.strip():
+                    warnings.append(
+                        f"delta.unsetSettings skipped non-string path {path!r}"
+                    )
+                    continue
+                if not delete_by_path(settings, path):
+                    warnings.append(
+                        f"delta.unsetSettings path not present: {path}"
+                    )
+
+    if newly_added:
+        settings, ew = enrich_settings(
+            newly_added,
+            settings,
+            settings_map,
+            rewrite_existing_keys=False,
+        )
+        warnings.extend(ew)
+
+    if settings:
+        out["settings"] = settings
+    elif "settings" in out:
+        del out["settings"]
+
+    if "setObjectSettings" in delta or "unsetObjectSettings" in delta:
+        obj = (
+            deepcopy(out["objectSettings"])
+            if isinstance(out.get("objectSettings"), dict)
+            else {}
+        )
+        set_obj = delta.get("setObjectSettings")
+        if set_obj is not None:
+            if not isinstance(set_obj, dict):
+                errors.append(
+                    "delta.setObjectSettings must be a JSON object "
+                    f"(got {type(set_obj).__name__})"
+                )
+            else:
+                deep_merge_dict(obj, deepcopy(set_obj))
+        unset_obj = delta.get("unsetObjectSettings")
+        if unset_obj is not None:
+            if not isinstance(unset_obj, list):
+                errors.append(
+                    "delta.unsetObjectSettings must be a list "
+                    f"(got {type(unset_obj).__name__})"
+                )
+            else:
+                for key in unset_obj:
+                    if not isinstance(key, str) or not key.strip():
+                        warnings.append(
+                            f"delta.unsetObjectSettings skipped {key!r}"
+                        )
+                        continue
+                    obj.pop(key, None)
+        if obj:
+            out["objectSettings"] = obj
+        elif "objectSettings" in out:
+            del out["objectSettings"]
+
+    # Untouched objectSettings is copy-through: no key rewrite, no pruning.
+    if ("setObjectSettings" in delta or "unsetObjectSettings" in delta) and (
+        "objectSettings" in out
+    ):
+        cleaned = validate_object_settings(out.get("objectSettings"), errors, warnings)
+        if cleaned is None:
+            del out["objectSettings"]
+        else:
+            out["objectSettings"] = cleaned
+
+    # Coerce only when this delta set hasSampleData — leave base value as-is.
+    if isinstance(set_block, dict) and "hasSampleData" in set_block and "hasSampleData" in out:
+        coerced, w = coerce_has_sample_data(out["hasSampleData"])
+        out["hasSampleData"] = coerced
+        warnings.extend(w)
+
+    # orgName rewrite + My Domain suggestions only when this delta set orgName.
+    org_name_suggestions: list[str] = []
+    if isinstance(set_block, dict) and "orgName" in set_block:
+        org_name_suggestions = _apply_orgname_and_namespace(out, errors, warnings)
+
+    # Semantic gates that schema does not encode — check the post-delta document
+    # without rewriting unrelated base fields.
+    if out.get("sourceOrg") and out.get("snapshot"):
+        errors.append(
+            "sourceOrg and snapshot are mutually exclusive — keep only one base"
+        )
+    if out.get("template"):
+        errors.append(
+            "template field refused — for org shape use sourceOrg (after listing "
+            "via dx-org-shape-manage); for snapshot use snapshot (via "
+            "dx-org-snapshot-manage). Pure shape/snapshot create: hand off those skills."
+        )
+
+    _schema_gate(out, errors, warnings, baseline=base_doc)
+    return _result_envelope(
+        ok=not _is_hard_fail(errors),
+        document=out,
+        errors=errors,
+        warnings=warnings,
+        org_name_suggestions=org_name_suggestions,
+    )
+
+
+def _load_base_for_refine(
+    base: Path,
+) -> tuple[dict | None, Path | None, str | None, list[str]]:
+    """Return (base_doc, resolved_path, sha256, errors)."""
+    path_errs = assert_safe_base_path(base)
+    if path_errs:
+        return None, None, None, path_errs
+    base_resolved = _resolve_under_cwd(base)
+    base_doc, err = _load_draft(base_resolved)
+    if err:
+        return None, base_resolved, None, [
+            f"cannot refine invalid base {base}: not valid JSON"
+        ]
+    try:
+        sha = _file_sha256(base_resolved)
+    except OSError:
+        return None, base_resolved, None, [f"cannot read base {base}"]
+    return base_doc, base_resolved, sha, []
+
+
+def _attach_refine_meta(
+    result: dict,
+    *,
+    base: Path,
+    base_doc: dict,
+    base_sha: str,
+    settings_map: dict,
+) -> dict:
+    """Attach whole-file diff + baseSha256 for a refine preview/apply."""
+    after_doc = result.get("document") if isinstance(result.get("document"), dict) else {}
+    diff = diff_scratch_defs(base_doc, after_doc, settings_map)
+    result["basePath"] = str(base)
+    result["baseSha256"] = base_sha
+    result["diff"] = diff
+    card = result.get("confirmCard")
+    if isinstance(card, dict):
+        card["diff"] = diff
+        card["basePath"] = str(base)
+        card["baseSha256"] = base_sha
+    if diff.get("settingsOrphanedByRemovedFeatures"):
+        result["warnings"] = list(result.get("warnings") or []) + [
+            "removed features left required settings — ask before deleting "
+            + ", ".join(diff["settingsOrphanedByRemovedFeatures"])
+        ]
+        if isinstance(card, dict):
+            card["warnings"] = list(result["warnings"])
+    return result
+
+
+def _run_generate_or_refine(
+    *,
+    file: Path | None = None,
+    json_text: str | None = None,
+    allow_stdin: bool = True,
+    base: Path | None = None,
+) -> dict:
+    """Shared preview/validate body: generate (full draft) or refine (delta)."""
+    features_doc, settings_map, cat_w = load_runtime_catalog()
+    payload, err = _resolve_draft(
+        file=file, json_text=json_text, allow_stdin=allow_stdin
+    )
+    if err:
+        return {"ok": False, "errors": [err], "warnings": cat_w}
+
+    if base is None:
+        return _merge_catalog_warnings(
+            validate_and_enrich(payload, features_doc, settings_map), cat_w
+        )
+
+    base_doc, _resolved, base_sha, base_errs = _load_base_for_refine(base)
+    if base_errs:
+        return {
+            "ok": False,
+            "errors": base_errs,
+            "warnings": cat_w,
+            "basePath": str(base),
+        }
+    assert base_doc is not None and base_sha is not None
+    result = _merge_catalog_warnings(
+        apply_refine_delta(base_doc, payload, features_doc, settings_map), cat_w
+    )
+    return _attach_refine_meta(
+        result,
+        base=base,
+        base_doc=base_doc,
+        base_sha=base_sha,
+        settings_map=settings_map,
+    )
+
+
 def cmd_validate(
     file: Path | None = None,
     *,
     json_text: str | None = None,
     allow_stdin: bool = True,
+    base: Path | None = None,
 ) -> int:
-    features_doc, settings_map, cat_w = load_runtime_catalog()
-    doc, err = _resolve_draft(file=file, json_text=json_text, allow_stdin=allow_stdin)
-    if err:
-        print(json.dumps({"ok": False, "errors": [err], "warnings": cat_w}))
-        return 1
-    result = _merge_catalog_warnings(
-        validate_and_enrich(doc, features_doc, settings_map), cat_w
+    result = _run_generate_or_refine(
+        file=file, json_text=json_text, allow_stdin=allow_stdin, base=base
     )
     print(json.dumps(result, indent=2))
-    return 0 if result["ok"] else 1
+    return 0 if result.get("ok") else 1
 
 
 def cmd_preview(
@@ -1202,8 +2139,11 @@ def cmd_preview(
     *,
     json_text: str | None = None,
     allow_stdin: bool = True,
+    base: Path | None = None,
 ) -> int:
-    return cmd_validate(file, json_text=json_text, allow_stdin=allow_stdin)
+    return cmd_validate(
+        file, json_text=json_text, allow_stdin=allow_stdin, base=base
+    )
 
 
 def cmd_apply(
@@ -1212,17 +2152,20 @@ def cmd_apply(
     *,
     json_text: str | None = None,
     allow_stdin: bool = True,
+    base: Path | None = None,
+    base_sha256: str | None = None,
 ) -> int:
-    """Validate + write. Draft from --json / stdin / --file; only --out hits disk."""
-    features_doc, settings_map, cat_w = load_runtime_catalog()
-    doc, err = _resolve_draft(file=file, json_text=json_text, allow_stdin=allow_stdin)
-    if err:
-        print(json.dumps({"ok": False, "errors": [err], "warnings": cat_w}))
-        return 1
-    result = _merge_catalog_warnings(
-        validate_and_enrich(doc, features_doc, settings_map), cat_w
+    """Validate + write. Draft from --json / stdin / --file; only --out hits disk.
+
+    Refine (``--base``): stdin is a structured delta (not a full rewrite).
+    ``--out`` must equal ``--base``. Optional ``--base-sha256`` refuses when the
+    base file changed since preview; omit it on a single-turn consent write.
+    Copy the prior file to ``.bak`` before overwrite.
+    """
+    result = _run_generate_or_refine(
+        file=file, json_text=json_text, allow_stdin=allow_stdin, base=base
     )
-    path_errs = assert_safe_output_path(dest)
+    path_errs = assert_safe_output_path(dest, base=base)
     if path_errs:
         result["ok"] = False
         result["errors"] = list(result.get("errors") or []) + path_errs
@@ -1231,11 +2174,40 @@ def cmd_apply(
         )
         print(json.dumps(result, indent=2))
         return 1
-    if not result["ok"]:
+    if base is not None:
+        expected = (base_sha256 or "").strip().lower()
+        if expected:
+            actual = (result.get("baseSha256") or "").strip().lower()
+            if not actual or expected != actual:
+                result["ok"] = False
+                result["errors"] = list(result.get("errors") or []) + [
+                    "base changed since preview — re-run preview, then apply with "
+                    "the new baseSha256"
+                ]
+    if not result.get("ok"):
         print(json.dumps(result, indent=2))
         return 1
     # config/ must already exist (assert_safe_output_path); never mkdir it.
-    dest.write_text(json.dumps(result["document"], indent=2) + "\n", encoding="utf-8")
+    dest_resolved = _resolve_under_cwd(dest)
+    if base is not None and dest_resolved.is_file():
+        bak = backup_path_for(dest_resolved)
+        bak_errs = write_backup(dest_resolved, bak)
+        if bak_errs:
+            result["ok"] = False
+            result["errors"] = list(result.get("errors") or []) + bak_errs
+            print(json.dumps(result, indent=2))
+            return 1
+        result["backup"] = str(Path(dest).with_name(Path(dest).name + ".bak"))
+    if dest_resolved.is_symlink():
+        result["ok"] = False
+        result["errors"] = list(result.get("errors") or []) + [
+            "output path must not be a symlink"
+        ]
+        print(json.dumps(result, indent=2))
+        return 1
+    dest_resolved.write_text(
+        json.dumps(result["document"], indent=2) + "\n", encoding="utf-8"
+    )
     result["written"] = str(dest)
     print(json.dumps(result, indent=2))
     return 0
@@ -1255,18 +2227,32 @@ def cmd_map(tokens: list[str]) -> int:
 
 
 def _add_draft_source_args(sp: argparse.ArgumentParser) -> None:
-    """Draft stays in agent context: prefer --json or stdin; --file is optional."""
+    """Draft/delta stays in agent context: prefer --json or stdin; --file optional."""
     sp.add_argument(
         "--json",
         dest="json_text",
         default=None,
-        help="Draft scratch-def JSON object (keep in chat/tool context; no draft file)",
+        help=(
+            "Generate: full scratch-def JSON. Refine (--base): structured delta "
+            "JSON (addFeatures/removeFeatures/setEdition/set/…). Keep in chat."
+        ),
     )
     sp.add_argument(
         "--file",
         type=Path,
         default=None,
-        help="Optional path to a draft JSON file (tests / rare); prefer --json or stdin",
+        help="Optional path to a draft/delta JSON file (tests / rare); prefer --json or stdin",
+    )
+    sp.add_argument(
+        "--base",
+        type=Path,
+        default=None,
+        help=(
+            "Existing config/*scratch-def.json to patch (refine). Stdin/json is a "
+            "structured delta; helper copy-through applies it, catalogs new "
+            "features only, and attaches a whole-file diff + baseSha256. "
+            "Apply requires --out equal to --base."
+        ),
     )
 
 
@@ -1286,17 +2272,37 @@ def main(argv: list[str] | None = None) -> int:
     a = sub.add_parser("apply", help="Validate + write enriched document")
     _add_draft_source_args(a)
     a.add_argument("--out", type=Path, required=True)
+    a.add_argument(
+        "--base-sha256",
+        dest="base_sha256",
+        default=None,
+        help=(
+            "Optional with --base: sha256 of the base file from preview "
+            "baseSha256; when set, apply refuses if the base changed since "
+            "preview. Omit on a single-turn consent write."
+        ),
+    )
 
     m = sub.add_parser("map", help="Map raw feature tokens via cache")
     m.add_argument("tokens", nargs="+")
 
     args = p.parse_args(argv)
     if args.cmd == "validate":
-        return cmd_validate(file=args.file, json_text=args.json_text)
+        return cmd_validate(
+            file=args.file, json_text=args.json_text, base=args.base
+        )
     if args.cmd == "preview":
-        return cmd_preview(file=args.file, json_text=args.json_text)
+        return cmd_preview(
+            file=args.file, json_text=args.json_text, base=args.base
+        )
     if args.cmd == "apply":
-        return cmd_apply(args.out, file=args.file, json_text=args.json_text)
+        return cmd_apply(
+            args.out,
+            file=args.file,
+            json_text=args.json_text,
+            base=args.base,
+            base_sha256=args.base_sha256,
+        )
     if args.cmd == "map":
         return cmd_map(args.tokens)
     return 2

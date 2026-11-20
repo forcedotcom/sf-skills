@@ -27,7 +27,8 @@
 # floor delays the `running` window by minutes, poll with a modest interval (e.g. 15s). If the job
 # races past `running` straight to a terminal state before we catch it, that window is gone and the
 # abort would be pointless — the poller reports the terminal status and exits 3 so the caller can
-# start a fresh run rather than abort a job that already finished.
+# report the missed window instead of aborting a job that already finished. Exit 3 is NOT a cue to
+# start a replacement run; that needs an explicit user request.
 #
 # Exit codes:
 #   terminal mode: 0 = terminal parent status observed (printed on stdout);
@@ -53,6 +54,27 @@ case "$POLL_MODE" in
   *) echo "poll-job: POLL_MODE must be 'terminal' or 'running' (got '${POLL_MODE}')" >&2; exit 2 ;;
 esac
 
+# JOB_ID is interpolated into a SOQL string below, so it must be a bare Salesforce Id — never let
+# quotes or SOQL fragments through. ORG is passed to the CLI, so keep it to a plain alias/username.
+if [[ ! "$JOB_ID" =~ ^[a-zA-Z0-9]{15,18}$ ]]; then
+  echo "poll-job: Invalid Salesforce ID '${JOB_ID}' (expected 15 or 18 alphanumeric characters)" >&2
+  exit 2
+fi
+if [[ ! "$ORG" =~ ^[a-zA-Z0-9][a-zA-Z0-9._@+-]*$ ]]; then
+  echo "poll-job: Invalid org alias or username '${ORG}'" >&2
+  exit 2
+fi
+
+# Bound the loop: an unbounded or sub-5s poll hammers the org, and a non-numeric cap breaks (( )).
+if [[ ! "$MAX_SECONDS" =~ ^[0-9]+$ ]] || (( MAX_SECONDS < 10 || MAX_SECONDS > 3600 )); then
+  echo "poll-job: maxSeconds must be an integer between 10 and 3600 (got '${MAX_SECONDS}')" >&2
+  exit 2
+fi
+if [[ ! "$INTERVAL" =~ ^[0-9]+$ ]] || (( INTERVAL < 5 )); then
+  echo "poll-job: intervalSeconds must be an integer >= 5 (got '${INTERVAL}')" >&2
+  exit 2
+fi
+
 # Terminal statuses (incl. canceled after an abort). scheduled/running/pending are NOT terminal.
 is_terminal() {
   case "$1" in
@@ -61,6 +83,9 @@ is_terminal() {
   esac
 }
 
+# Wall-clock elapsed, not a sum of sleeps: each query itself takes seconds, so summing intervals
+# would let the real runtime overshoot the cap.
+start_ts=$(date +%s)
 elapsed=0
 while (( elapsed < MAX_SECONDS )); do
   # CSV is a header line then one value per row, so bash can read it with no pipe and no
@@ -94,7 +119,7 @@ while (( elapsed < MAX_SECONDS )); do
   fi
 
   sleep "$INTERVAL"
-  elapsed=$(( elapsed + INTERVAL ))
+  elapsed=$(( $(date +%s) - start_ts ))
 done
 
 if [[ "$POLL_MODE" == "running" ]]; then

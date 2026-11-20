@@ -68,7 +68,7 @@ What is not a transport choice:
   `dispatch` it always fails with an `INTERNAL_ERROR` server error while building the ESW site; the same body via the CLI
   succeeds. Do not try `dispatch` first.
 - **Publish is a Connect API call**, sent per SKILL.md step 17c (`dispatch`, `sf api request rest` on a route error).
-- **Tooling API** work (custom labels, branding, reCAPTCHA) is not verified through `dispatch`. Use `sf` CLI.
+- **Tooling API** work (custom labels, branding, reCAPTCHA) goes through the `sf` CLI, not `dispatch`.
 
 ## 3. Pre-scan (idempotency)
 
@@ -83,8 +83,7 @@ Run before any write, both modes. Read `EmbeddedServiceConfig` by `fullName` = t
 
 Standalone, deployment exists: offer exactly three choices — no change / override / add to existing.
 
-The metadata read does not say whether the latest edits are **published**. Web creation auto-publishes. If auto-publish succeeded
-(isPublishSuccess=true), return published: true. For updates, publishing is a separate step (SKILL.md step 17c); delegated returns `published: false` so the coordinator can ask the admin.
+The metadata read does not say whether the latest edits are **published**. A Web create auto-publishes: return `published: true` when `isPublishSuccess=true`. Updates stay draft, so return `published: false` and the coordinator asks the admin to publish (SKILL.md step 17c).
 
 ## 4. Questions in the admin's language (guided mode)
 
@@ -108,17 +107,17 @@ Ask about the outcome, not the Salesforce feature. Keep it to a handful; state t
   "outputs": {
     "deploymentName": "Acme_Support_Chat",
     "embeddedServiceConfigId": "<id or null>",
-    "published": false
+    "published": true
   }
 }
 ```
 
-`published` is `true` only when a Web create auto-published (`isPublishSuccess=true`).
+The example is a Web create that auto-published. `published` is `true` only when a Web create auto-published (`isPublishSuccess=true`).
 
 `status` and `errorMessage` are the contract. `outputs` is always returned; it is an addition to the documented shape.
 On `failed`: `errorMessage` names the failed step and the platform error; stop; do not retry.
 
-## 6. Registration entry (draft for the onboarding team to place in a module)
+## 6. Registration entry (for the onboarding team to place in a module)
 
 ```yaml
 - id: messagingDeployment
@@ -127,7 +126,6 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
   delegateSkill: service-digital-engagement-deployment-configure
   dependsOn: [messagingChannel]
   revisionOwner: service-digital-engagement-deployment-configure
-  # org perms: confirm exact names with Digital Engagement licensing (not yet confirmed)
   values:
     deploymentType:  { from: signal.messagingSurface,   default: "Web" }
     deploymentName:  { from: signal.messagingWidgetName, default: "<company> Support Chat" }
@@ -138,10 +136,10 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
     note: "Reversible by disabling the deployment (isEnabled=false). Pre-chat form fields can be deactivated but the form cannot be fully deleted."
   validate:
     check: check-messaging-deployment
-    passWhen: "GET EmbeddedServiceConfig fullName=<derived API name> returns isEnabled=true and the embeddedServiceMessagingChannel links values.channelName; for Web, publishing is left to the admin after review (published may be false)"
+    passWhen: "GET EmbeddedServiceConfig fullName=<derived API name> returns isEnabled=true and the embeddedServiceMessagingChannel links values.channelName; published is true after an auto-published Web create (isPublishSuccess=true) and false for updates, which stay draft until the admin publishes"
   alternative: "Setup > Embedded Service Deployments > New Deployment > Messaging for In-App and Web; choose the channel, set pre-chat, then Publish."
 ```
 
 Open items for the onboarding team: the `signal.*` keys do not exist in `onboarding-state.schema.json` yet
 (`channels` allows only email/web); the coordinator must accept `outputs` and pass `outputs.messagingChannel.channelName`
-to this skill; org perm names are not yet confirmed.
+to this skill.

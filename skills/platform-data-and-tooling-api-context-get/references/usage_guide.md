@@ -3,8 +3,8 @@
 Supplementary reference for `platform-data-and-tooling-api-context-get`. Load only when needed; the core rules
 live in `SKILL.md`.
 
-- **API version:** 67.0 (summer-26)
-- **Generated:** 2026-07-23 20:16:53
+- **API version:** 68.0 (winter-27)
+- **Generated:** 2026-09-24 14:57:46
 
 ## Worked Examples
 

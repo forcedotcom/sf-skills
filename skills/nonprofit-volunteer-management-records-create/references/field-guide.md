@@ -173,7 +173,7 @@ its existing TimeSlots instead of re-creating an identical set.
 | `Type` | Unrestricted picklist | No | T3 | The type of role. | Skip unless the org has values or the user asks to add one. |
 | `Code` | Text | No | T3 | A short code for the role. | — |
 
-Create a Position only when a role is shared across postings or programs.
+Create a Position when a role is shared across postings or programs, including the same role posted at several Locations. Put a qualification every posting of that role needs on the Position once, not on each Job Position.
 
 ### PositionQualification — a requirement on the template
 

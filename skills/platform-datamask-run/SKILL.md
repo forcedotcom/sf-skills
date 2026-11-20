@@ -69,29 +69,36 @@ Full command reference: `references/api-surface.md`.
 
 ## Pick the workflow that matches the request
 
-This skill has **two distinct workflows**. Select ONE up front from what the user asked for, then
-run **every** step of that workflow — neither has optional steps:
+This skill has **three paths**. Select ONE up front from what the user asked for, then run **every**
+step of that path — none has optional steps:
 
 | The user wants to… | Run | Ends when |
 |--------------------|-----|-----------|
 | Configure/edit a policy and **mask** records; report how many were masked | **Workflow A — Mask & report** (below) | The masked count is reported from the detail rows |
-| **Cancel / abort** a masking run | **Workflow B — Cancel a run** (further below) | The job's status is confirmed `canceled` |
+| Only **report how many records were masked** by a run that already exists | **Report only** — query the existing job and its detail rows (A5); start nothing | The masked count is reported from the detail rows |
+| **Cancel / abort / stop** a masking run | **Workflow B — Cancel a run** (further below) | The job's status is confirmed `canceled` |
 
-Choose by the verb in the request. "Create/edit a policy and run it", "mask the PII", "how many
-records were masked" → **Workflow A only**. "Abort", "cancel", "stop the run" → **Workflow B**. A
-mask-and-report request does **not** include an abort: do not start a second job to "demonstrate"
-cancelling — an unrequested run wastes a full ~5–10 min job (see the pool floor in A4) and is the top
-cause of this task running out of turn before it finishes the masked count it *was* asked for.
+Choose by the verb in the request. "Create/edit a policy and run it", "mask the PII" → **Workflow A**.
+"How many records were masked" about an existing run → **Report only**: never start a run to answer
+it. "Abort", "cancel", "stop the run" → **Workflow B only**, which targets an existing run and never
+starts one. A mask-and-report request does **not** include an abort, and a cancel request does **not**
+include a run: do not start a job to "demonstrate" cancelling or to replace one that finished — an
+unrequested run wastes a full ~5–10 min job (see the pool floor in A4) and masks real sandbox data
+nobody asked to mask.
 
 ---
 
 ## Workflow A — Mask & report
 
 ### A1. Confirm sandbox + capture org context
-Verify the org is a sandbox and grab the instance URL + a session token for the run-API calls:
+Verify the org is a sandbox and read its instance URL:
 ```bash
 sf org display --target-org <alias> --json
 ```
+Read only `result.instanceUrl` and `result.isSandbox` from the output. **Do NOT extract, print, or
+store `result.accessToken`** — every run-API call below goes through `sf api request rest`, which
+authenticates from the CLI's own stored login, so no token ever needs to appear in a command, file,
+or the report.
 
 ### A2. Identify or create the policy
 Prefer reusing an existing policy (fastest, no deploy):
@@ -209,28 +216,21 @@ just to cancel it. Steps B1–B4 are all required.
 
 ### B1. Confirm sandbox + identify the run to cancel
 Confirm the org is a sandbox (`sf org display`) and get the `jobRunId` of the run to abort — the one
-the user is asking to cancel. **Capture its policy Id too** — you need it to start a replacement run
-if the abort window is missed (B2 exit 3 / exit 1). If they just started it, use that policy id
-directly; otherwise query for the active run:
+the user is asking to cancel. If they just started it, use that job id directly; otherwise query for
+the active run:
 ```bash
 sf data query --target-org <alias> \
   --query "SELECT Id, Status, PolicyName FROM DataMaskPolicyJobRun ORDER BY CreatedDate DESC LIMIT 5"
 ```
-`DataMaskPolicyJobRun` has **no `DataMaskPolicyId` lookup field** — the only link back to the policy
-is the human-readable `PolicyName` (`MasterLabel`). Resolve the Id from it via the Tooling API:
-```bash
-sf data query --use-tooling-api --target-org <alias> \
-  --query "SELECT Id, DeveloperName FROM DataMaskPolicy WHERE MasterLabel = '<PolicyName>'"
-```
-That `Id` (`8dm` prefix) is the `<policyId>` A3 needs.
-
 ### B2. Wait for the job to be `running` (the only abortable state)
 Poll with `POLL_MODE=running` (cap 900s, 15s interval). Full command, exit-code handling (0 / 3 / 1),
 and the re-query-on-timeout steps are in `references/run-and-abort.md` section 5. A `pending` or
 `scheduled` job `409`s on abort, so do not abort until the poller exits `0`.
 
-If no run is in progress, start one with A3 and abort **that** live job. Never substitute an older,
-already-terminal job to "show" a cancel.
+If the poller exits `3` or `1`, or no run is in progress, **stop and report** that the run already
+reached a terminal state (or never started) and the abort window was missed, with its final status.
+Do NOT start a replacement run automatically, and never substitute an older, already-terminal job to
+"show" a cancel. Start a new run only if the user explicitly asks for one.
 
 ### B3. Abort via the run API
 Abort via the run API — **not** by DML/delete on the job record:
@@ -245,7 +245,10 @@ a `running` state (usually still `pending`/`scheduled`) — return to B2 and res
 
 ### B4. Confirm and report the cancellation
 Cancellation is asynchronous. **Re-query** `DataMaskPolicyJobRun` and confirm `Status = canceled`
-(lowercase, from SOQL) before reporting the abort succeeded. Verify:
+(lowercase, from SOQL) before reporting the abort succeeded. A `200` / `CANCELED` abort response only
+means the request was accepted: if the job still reads `running` after ~1 minute, re-send the abort
+(B3) once and re-query; if it is still `running`, report "abort requested, still `running`", not
+success. Verify:
 - [ ] Confirmed the abort targeted the live job while its queried status was `running`.
 - [ ] Re-queried `DataMaskPolicyJobRun` after the abort and saw `Status = canceled`.
 
@@ -265,7 +268,7 @@ Cancellation is asynchronous. **Re-query** `DataMaskPolicyJobRun` and confirm `S
 
 | Issue | Resolution |
 |-------|------------|
-| Small job finishes before you can abort it | The `running` window is seconds on a small sandbox — start a fresh run and poll tightly; never substitute a previously-aborted job to fake the flow |
+| Small job finishes before you can abort it | The `running` window can be seconds on a small sandbox. Stop and report the missed window with the job's final status; do NOT start a replacement run unless the user asks, and never substitute a previously-aborted job to fake the flow |
 | Run API says `CANCELED` but SOQL says `running` | Case + surface differ (run API UPPERCASE, SOQL lowercase). Trust the SOQL value for terminal state |
 | Run start returns `409` or abort `409` | Run start: a run is already active for that policy. Abort: the job is not `running` yet. Details in `references/run-and-abort.md` failure table |
 

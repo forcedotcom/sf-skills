@@ -34,7 +34,7 @@
     "CompletionReason": {
       "type": "picklist",
       "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
-      "description": "The reason that the target completed the cadence. This field contains a value if the target’s State is Complete. Possible values are: AutomaticallyExited — the target completed because a global exit condition occurred. This value is available in API version 49.0 and later. AutomaticallyExitedDeletedStep AutomaticallyExitedInvalidParentStep DaisyChained — the target completed because it’s connected to another action cadence. LeadConverted — the target completed because the lead converted. ManuallyRemoved — the target completed because the sales rep removed it from the cadence. ManuallyRemovedNoAccess— reserved for future use. NoMoreSteps — the target completed the action cadence because all the action cadence steps were completed."
+      "description": "The reason that the target completed the cadence. This field contains a value if the target’s State is Complete. Possible values are: AutomaticallyExited — the target completed the action cadence because a global exit condition occurred. Available in API version 49.0 and later. AutomaticallyExitedDeletedStep— the target completed the action cadence because a deleted step caused an exit condition. AutomaticallyExitedInvalidParentStep— the target completed the action cadence because an invalid parent step caused an exit condition. AutomaticallyExitedPreviouslyExecutedStep— — the target completed the action cadence because the step was already executed. Available in API version 60.0 and later. DaisyChained — the target completed the action cadence because it’s connected to another action cadence. LeadConverted — the target completed the action cadence because the lead converted. ManuallyRemoved — the target completed the action cadence because the sales rep removed it from the cadence. ManuallyRemovedNoAccess— reserved for future use. NoMoreSteps — the target completed the action cadence because all the action cadence steps were completed. ReviewExpired— the target completed the action cadence because the review expired. Available in API version 66.0 and later."
     },
     "CurrentStepId": {
       "type": "reference",
@@ -148,7 +148,7 @@
       "length": "18"
     },
     "DaisyChainIteration": {
-      "field_label": "DaisyChain IterationCadence Tracker",
+      "field_label": "Daisy Chain Iteration",
       "type": "int",
       "digits": "9"
     },
@@ -191,16 +191,6 @@
     },
     "OwnerId": {
       "field_label": "Owner ID",
-      "type": "reference",
-      "length": "18"
-    },
-    "RelatedToAttributionType": {
-      "field_label": "Opportunity Attribution Type",
-      "type": "picklist",
-      "length": "255"
-    },
-    "RelatedToId": {
-      "field_label": "Related Opportunity ID",
       "type": "reference",
       "length": "18"
     },

@@ -1,6 +1,6 @@
 # ArchiveActivity — Data Model Reference
 
-`ArchiveActivity` is the platform entity that records **job metadata for Salesforce Archive jobs** (archive, purge, analyze, unarchive, export). Every archive job produces one `ArchiveActivity` record; you read it to learn a job's status, progress, and outcome, and you use its `Id` + `Type` to download the job's logs.
+`ArchiveActivity` is the platform entity that records **job metadata for Salesforce Archive jobs** (archive, purge, analyze, unarchive, export). Every archive job produces one `ArchiveActivity` record; you read it to learn a job's status, progress, and outcome, and you use its `Id` + `Type` to check whether the job's logs exist.
 
 ## Entity facts
 
@@ -20,7 +20,7 @@
 |-------|------|---------|
 | `Name` | Auto-number | `ARCV-…` job identifier |
 | `Status` | enum `ArchiveActivityStatus` | Lifecycle: scheduled, running / **In Progress**, completed, **Failed**, canceled, **Ended With Errors** |
-| `Type` | enum `ArchiveActivityType` | The job mode: Archive, Purge, Analyze(r), Unarchive, Export-to-external-bucket, Export-and-download. **This is the `reportType` for log downloads.** |
+| `Type` | enum `ArchiveActivityType` | The job mode: Archive, Purge, Analyze(r), Unarchive, Export-to-external-bucket, Export-and-download. **This is the `reportType` for log-availability checks.** |
 | `StartTime` | DateTime | When execution began |
 | `EndTime` | DateTime | When execution finished/terminated (blank while running) |
 | `ArchivePolicyDefinition` | Lookup (FK) | Parent `ArchivePolicyDefinition`; child relationship `ArchiveActivities` |
@@ -38,7 +38,7 @@
 
 ## How ArchiveActivity links to the Connect API
 
-The log-download endpoints (`get-execution-details-stream-url`, `get-failed-records-stream-url`) take:
+The log-availability endpoints (`get-execution-details-stream-url`, `get-failed-records-stream-url`) take:
 
 - `requestId` = an `ArchiveActivity` **`Id`** (`8qv…`) of a completed, log-producing job, and
 - `reportType` = that same activity's **`Type`** value.

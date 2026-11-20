@@ -1,8 +1,54 @@
 {
   "sections": [
     "title",
-    "description"
+    "description",
+    "fields",
+    "special_access_rules"
   ],
   "title": "ProspectingAgentSpec - Data API",
-  "description": "For internal use only."
+  "description": "Represents a Prospecting Agent specification.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "AgentDeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, idLookup, Sort, Update",
+      "description": "The developer name associated with the agent."
+    },
+    "BotDefinitionId": {
+      "type": "reference",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "BotDefinition",
+      "refers_to": "BotDefinition"
+    },
+    "CurrentRunErrorCode": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: AgentConfigInvalid AgentInactive AgentTimeout GeneralException InvalidInputs ReportSelectionInvalid UnknownError ZoomInfoAuthFailure ZoomInfoLookupFailed ZoomInfoQuotaExhausted ZoomInfoRateLimited"
+    },
+    "CurrentRunStartDate": {
+      "type": "dateTime",
+      "properties": "Filter, Nillable, Sort",
+      "description": "The date and time the current run started."
+    },
+    "CurrentRunStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Possible values are: Completed Failed Interrupted NotAvailable Pending Queued Running Skipped"
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Create, Defaulted on Create, Filter, Group, Sort, Update",
+      "description": "This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission."
 }

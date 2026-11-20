@@ -21,9 +21,9 @@ Set `sessionHandlerType` and the corresponding handler field.
 
 | `sessionHandlerType` | Handler Fields | Description |
 |----------------------|----------------|-------------|
-| `Queue` | `sessionHandlerQueue` | Routes to an Omni-Channel Queue |
+| `Queue` | `sessionHandlerQueue` (no fallback queue) | Routes to an Omni-Channel Queue |
 | `Flow` | `sessionHandlerFlow` + `sessionHandlerQueue` | Routes via an Omni-Channel Flow with a fallback queue |
-| `User` | `sessionHandlerUser` + `sessionHandlerQueue` | Routes directly to a specific user with a fallback queue |
+| `User` | `sessionHandlerUser` + `queueRoutingConfig` (no fallback queue) | Routes directly to a specific user |
 | `AgentforceServiceAgent` | `sessionHandlerAsa` + `sessionHandlerQueue` | Routes to an ASA with a fallback queue |
 
 ### Routing Decision Matrix
@@ -47,10 +47,10 @@ When using `Flow` routing:
 ### User Routing Requirements
 
 When using `User` routing:
-- `sessionHandlerUser` — the user's ID
-- `sessionHandlerQueue` — **required** fallback queue when user is unavailable
-- Both fields must be populated
-
+- `sessionHandlerUser` — the user's username (not the Id)
+- `queueRoutingConfig` — **required** `QueueRoutingConfig` DeveloperName
+- Do **not** set `sessionHandlerQueue`; the platform rejects a fallback queue on User routing
+- Changing to or from User routing: see `routing_transitions.md`
 ### ASA Routing Requirements
 
 When using `AgentforceServiceAgent` routing:

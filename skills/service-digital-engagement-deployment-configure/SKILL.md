@@ -77,7 +77,7 @@ All steps are sequential. Do not skip or reorder. Branch based on the operation 
 
 ### Phase 1 — Gather Context
 
-1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 <org-alias>` and report any errors it returns. If the script fails (unknown or below-minimum version), STOP all org-write phases. Report the version failure. Only non-org-write operations (local template generation) may continue.
+1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 <org-alias>` and report any errors it returns. Exit 1 = org below 67.0: stop all org writes and relay the script's next step (delegated: `failed`); local template generation may continue. Exit 2 = version could not be read: warn that it is unverified and continue; the deploy confirms it. Create `sfdx-project.json` in the metadata output folder only if none exists, with `sourceApiVersion` set to the script's `ORG_API_VERSION` (67.0 if exit 2).
 
 2. **Determine operation** — standalone: ask whether the user wants to create a new deployment or update an existing one. Delegated: taken from `values.operation`, then confirmed by the pre-scan (step 4a).
 

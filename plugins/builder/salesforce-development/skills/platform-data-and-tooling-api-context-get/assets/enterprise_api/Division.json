@@ -3,6 +3,7 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
     "usage"
   ],
   "title": "Division - Data API",
@@ -34,5 +35,6 @@
       "description": "The order in which this division name appears in the Division picklist field when creating or editing users in the Salesforce user interface."
     }
   },
-  "usage": "The values available for that field are the global division ID for the organization, created when divisions are first enabled, and any other division IDs that have been created. The division ID associated with a user is populated in the objects owned or created by the user. You can use the division ID to make searches, reports, and list views run more quickly and return more relevant results if an organization has very large data sets. For more information, see the Salesforce online help, in the Fields description for the object. You can use WITH in SOSL to pre-filter results based on division. This is faster than specifying the division in a WHERE clause.\n\nThe values available for that field are the global division ID for the organization, created when divisions are first enabled, and any other division IDs that have been created. The division ID associated with a user is populated in the objects owned or created by the user.\n\nYou can use the division ID to make searches, reports, and list views run more quickly and return more relevant results if an organization has very large data sets. For more information, see the Salesforce online help, in the Fields description for the object.\n\nYou can use WITH in SOSL to pre-filter results based on division. This is faster than specifying the division in a WHERE clause."
+  "special_access_rules": "- Divisions must be enabled for your organization to access this object. To discover whether divisions have been enabled for an organization, inspect the User or Group object for the DefaultDivision field—if it is present, then divisions have been enabled, and this field (the field is named Division in objects other than User and Group) will be available in all relevant objects.\n- Customer Portal users can’t access this object.",
+  "usage": "The values available for that field are the global division ID for the organization, created when divisions are first enabled, and any other division IDs that have been created. The division ID associated with a user is populated in the objects owned or created by the user. You can use the division ID to make searches, reports, and list views run more quickly and return more relevant results if an organization has very large data sets. For more information, see the Salesforce online help, in the Fields description for the object. You can use WITH in SOSL to pre-filter results based on division. This is faster than specifying the division in a WHERE clause.\n\nThe User object has a Division field that is unrelated to this object. The Division field is a standard text field similar to Company or Department that has no special properties. Do not confuse it with the DefaultDivision field, which does relate to this object."
 }

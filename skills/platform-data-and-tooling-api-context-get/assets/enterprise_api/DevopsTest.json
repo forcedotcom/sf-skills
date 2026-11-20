@@ -2,7 +2,9 @@
   "sections": [
     "title",
     "description",
-    "fields"
+    "fields",
+    "wsdl_segment",
+    "field_reference"
   ],
   "title": "DevopsTest - Data API",
   "description": "Stores and manages individual test definitions within the DevOps testing framework. It maintains metadata about tests imported from external test providers, including test type, severity, execution status, configuration details, and associations with pipelines and environments. This object enables the organization, tracking, and execution of tests as part of automated quality assurance and deployment processes. This object is available in API version 67.0 and later.",
@@ -129,5 +131,149 @@
       "properties": "Create, Filter, Group, idLookup, Nillable, Sort, Update",
       "description": "Stores a unique identifier for the test within the organization to prevent duplicate records."
     }
-  }
+  },
+  "wsdl_segment": "```xml\n<complexType name=\"DevopsTest\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ApprovalSubmissions\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ApprovalWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"CreatedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"CreatedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"DefinitionInTestProvider\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Description\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"DevopsPipeline\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsPipeline\"/>\n        <element name=\"DevopsPipelineId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"DevopsTestProvider\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsTestProvider\"/>\n        <element name=\"DevopsTestProviderId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"Environment\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsEnvironment\"/>\n        <element name=\"EnvironmentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ExternalId\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"FlowOrchestrationWorkItems\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"IsActive\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsEssential\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"LastExecutionStatus\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"LastExecutionTime\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastModifiedBy\" nillable=\"true\" minOccurs=\"0\" type=\"ens:User\"/>\n        <element name=\"LastModifiedById\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"LastModifiedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastReferencedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"LastViewedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"Name\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Owner\" nillable=\"true\" minOccurs=\"0\" type=\"ens:sObject\"/>\n        <element name=\"OwnerId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ProcessInstances\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"ProcessSteps\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Severity\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Shares\" nillable=\"true\" minOccurs=\"0\" type=\"tns:QueryResult\"/>\n        <element name=\"Subtype\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"SyncLog\" nillable=\"true\" minOccurs=\"0\" type=\"ens:DevopsTestProviderSyncLog\"/>\n        <element name=\"SyncLogId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"TestClass\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"TestProviderSpecificConfig\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"Type\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UniqueKey\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:string\"/>\n        <element name=\"UserRecordAccess\" nillable=\"true\" minOccurs=\"0\" type=\"ens:UserRecordAccess\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n<simpleType name=\"QueryLocator\">\n  <restriction base=\"xsd:string\"/>\n</simpleType>\n<complexType name=\"QueryResult\">\n  <sequence>\n    <element name=\"done\" type=\"xsd:boolean\"/>\n    <element name=\"queryLocator\" type=\"tns:QueryLocator\" nillable=\"true\"/>\n    <element name=\"records\" type=\"ens:sObject\" nillable=\"true\" minOccurs=\"0\" maxOccurs=\"unbounded\"/>\n    <element name=\"size\" type=\"xsd:int\"/>\n  </sequence>\n</complexType>\n```",
+  "field_reference": {
+    "CreatedById": {
+      "field_label": "Created By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CreatedDate": {
+      "field_label": "Created Date",
+      "type": "datetime"
+    },
+    "CurrencyIsoCode": {
+      "field_label": "Currency ISO Code",
+      "type": "picklist",
+      "length": "3"
+    },
+    "DefinitionInTestProvider": {
+      "field_label": "Definition In Test Provider",
+      "type": "url",
+      "length": "255"
+    },
+    "Description": {
+      "field_label": "Description",
+      "type": "textarea",
+      "length": "5000"
+    },
+    "DevopsPipelineId": {
+      "field_label": "DevopsPipeline ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "DevopsTestProviderId": {
+      "field_label": "DevopsTestProvider ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "EnvironmentId": {
+      "field_label": "DevOps Environment ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "ExternalId": {
+      "field_label": "External Id",
+      "type": "string",
+      "length": "255"
+    },
+    "Id": {
+      "field_label": "Test Id",
+      "type": "id",
+      "length": "18"
+    },
+    "IsActive": {
+      "field_label": "Is Active",
+      "type": "boolean"
+    },
+    "IsDeleted": {
+      "field_label": "Deleted",
+      "type": "boolean"
+    },
+    "IsEssential": {
+      "field_label": "Is Essential",
+      "type": "boolean"
+    },
+    "LastExecutionStatus": {
+      "field_label": "Last Execution Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "LastExecutionTime": {
+      "field_label": "Last Execution Time",
+      "type": "datetime"
+    },
+    "LastModifiedById": {
+      "field_label": "Last Modified By ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "LastModifiedDate": {
+      "field_label": "Last Modified Date",
+      "type": "datetime"
+    },
+    "LastReferencedDate": {
+      "field_label": "Last Referenced Date",
+      "type": "datetime"
+    },
+    "LastViewedDate": {
+      "field_label": "Last Viewed Date",
+      "type": "datetime"
+    },
+    "Name": {
+      "field_label": "Name",
+      "type": "string",
+      "length": "255"
+    },
+    "OwnerId": {
+      "field_label": "Owner ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "Severity": {
+      "field_label": "Severity",
+      "type": "picklist",
+      "length": "255"
+    },
+    "Subtype": {
+      "field_label": "Subtype",
+      "type": "string",
+      "length": "40"
+    },
+    "SyncLogId": {
+      "field_label": "Test Provider Sync Log ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SystemModstamp": {
+      "field_label": "System Modstamp",
+      "type": "datetime"
+    },
+    "TestClass": {
+      "field_label": "Test Class",
+      "type": "string",
+      "length": "40"
+    },
+    "TestProviderSpecificConfig": {
+      "field_label": "Test Provider Specific Config",
+      "type": "textarea",
+      "length": "5000"
+    },
+    "Type": {
+      "field_label": "Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "UniqueKey": {
+      "field_label": "Unique Key",
+      "type": "textarea",
+      "length": "255"
+    }
+  },
+  "field_reference_columns": [
+    "field_label",
+    "type",
+    "length"
+  ]
 }

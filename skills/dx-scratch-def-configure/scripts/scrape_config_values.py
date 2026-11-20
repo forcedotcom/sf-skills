@@ -149,13 +149,18 @@ def _phrases_for_entry(name: str, entry: dict[str, Any]) -> list[str]:
     return out
 
 
-def longest_phrase_match(raw: str, features_doc: dict) -> str | None:
-    """Map a user phrase onto today's catalog (longest contained phrase wins)."""
+def phrase_match_features(raw: str, features_doc: dict) -> list[str]:
+    """Feature names tied at the longest matching phrase length (sorted).
+
+    Exact catalog name / listed synonym resolve earlier in map_feature_token.
+    This only covers description-derived Title-Case phrases. A length tie must
+    not silently pick the first dict insertion — callers drop + warn.
+    """
     hay = " ".join((raw or "").lower().split())
     if len(hay) < 4:
-        return None
-    best_name: str | None = None
+        return []
     best_len = 0
+    winners: set[str] = set()
     for name, entry in (features_doc.get("features") or {}).items():
         if not isinstance(entry, dict):
             continue
@@ -163,8 +168,19 @@ def longest_phrase_match(raw: str, features_doc: dict) -> str | None:
             if phrase == hay or phrase in hay:
                 if len(phrase) > best_len:
                     best_len = len(phrase)
-                    best_name = name
-    return best_name
+                    winners = {name}
+                elif len(phrase) == best_len:
+                    winners.add(name)
+    return sorted(winners)
+
+
+def longest_phrase_match(raw: str, features_doc: dict) -> str | None:
+    """Map a user phrase onto today's catalog (longest contained phrase wins).
+
+    Returns None when no match or when multiple features tie at the best length.
+    """
+    winners = phrase_match_features(raw, features_doc)
+    return winners[0] if len(winners) == 1 else None
 
 
 def _parse_int(s: str) -> int:

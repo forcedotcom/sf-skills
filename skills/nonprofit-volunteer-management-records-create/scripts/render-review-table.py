@@ -331,7 +331,7 @@ def build_table(spec, guide, expand=False):
         for i, col in enumerate(columns):
             first = body[0][2][i]
             if first != "`%s`" % NEEDS_INPUT and all(b[2][i] == first for b in body):
-                shared.append("%s %s" % (col[1], first))
+                shared.append("%s %s" % (cell_text(col[1]), first))
             else:
                 keep.append(i)
         if shared:
@@ -349,7 +349,7 @@ def build_table(spec, guide, expand=False):
     if shared:
         lines.append("Same on every row: " + " · ".join(shared))
         lines.append("")
-    headers = ["Record"] + [c[1] for c in columns]
+    headers = ["Record"] + [cell_text(c[1]) for c in columns]
     lines.append("| " + " | ".join(headers) + " |")
     lines.append("|" + "|".join("---" for _ in headers) + "|")
 

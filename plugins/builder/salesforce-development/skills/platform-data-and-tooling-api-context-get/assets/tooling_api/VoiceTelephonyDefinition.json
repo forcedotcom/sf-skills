@@ -1,0 +1,64 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "VoiceTelephonyDefinition - Tooling API",
+  "description": "Represents the org-level voice telephony configuration for Agentforce Contact Center, including the dialing prefix, dialing region, default caller ID, and pre-dial flow used when placing outbound calls. This object is available in API version 68.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "DefaultCallerIdentifier": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Caller ID displayed on outbound calls placed with this configuration."
+    },
+    "Description": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Purpose and scope of the voice telephony configuration."
+    },
+    "DeveloperName": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "Unique name of the object in the API."
+    },
+    "DialingPrefix": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Dialing prefix prepended to outbound phone numbers for the telephony configuration."
+    },
+    "DialingRegion": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Dialing region associated with the telephony configuration, used to determine routing and number formatting."
+    },
+    "Language": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Language of the MasterLabel."
+    },
+    "MasterLabel": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Sort, Update",
+      "description": "User interface name of the voice telephony configuration."
+    },
+    "PreDialFlowId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "ID of the flow executed before an outbound call is placed using the voice telephony configuration. This field is a relationship field.",
+      "relationship_name": "PreDialFlow",
+      "refers_to": "FlowDefinition"
+    }
+  },
+  "special_access_rules": "To access this object, enable Agentforce Contact Center Admin (Salesforce Voice) permission set."
+}

@@ -30,6 +30,16 @@
       "properties": "Filter, Nillable, Sort",
       "description": "If Sentiment Journey in Salesforce Voice is set up, this field represents the rep’s overall sentiment score post-call in a conversation event. The value must be between -5 (lowest negative sentiment score) and 5 (highest positive sentiment score), with 0 being a neutral sentiment score. Available in API version 59.0 and later.This field isn't available in Salesforce Voice (Native Telephony)."
     },
+    "AverageJitter": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Average inter-arrival jitter of RTP packets on the agent leg over the entire call duration, measured in milliseconds. Higher values indicate inconsistent packet timing, which can cause audio choppiness.This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
+    "AveragePacketLoss": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Average percentage of RTP packets lost on the agent leg over the entire call duration. Higher values indicate sustained network degradation, which can cause audio gaps.This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
     "CallAcceptDateTime": {
       "type": "dateTime",
       "properties": "Create, Filter, Nillable, Sort",
@@ -199,6 +209,16 @@
       "properties": "Create, Filter, Group, Nillable, Sort",
       "description": "If Salesforce Voice is enabled, this field represents the longest hold duration (in seconds) that occurred during the call. Available in API version 49.0 and later."
     },
+    "MaximumJitter": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort",
+      "description": "Maximum inter-arrival jitter of RTP packets on the agent leg, measured in milliseconds over rolling 5-second windows. Captures sudden, temporary timing spikes that cause brief audio choppiness, even if the overall call average appears stable.This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
+    "MaximumPacketLoss": {
+      "type": "percent",
+      "properties": "Create, Filter, Nillable, Sort",
+      "description": "Maximum percentage of RTP packets lost on the agent leg, measured over rolling 5-second windows. Captures sharp bursts of packet loss that call-wide averages can mask.This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
     "MediaProviderId": {
       "type": "reference",
       "properties": "Create, Filter, Group, Nillable, Sort",
@@ -293,7 +313,7 @@
     "TranscribedLanguage": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
-      "description": "The language that is transcribed for this voice call."
+      "description": "The language that is transcribed for this voice call. Don’t set or change this value. It’s automatically populated by the Conversation Intelligence platform."
     },
     "UserId": {
       "type": "reference",
@@ -327,7 +347,7 @@
       "refers_to": "VoiceVendorLine"
     }
   },
-  "special_access_rules": "Only users with the Modify All Data permission can delete call records. To edit voice call records, Sales Dialer or Salesforce Voice permissions are required. This includes the Dialer Outbound permission set for Sales Dialer, or the Salesforce Voice Contact Center Rep or Salesforce Voice Contact Center Admin permission sets for Salesforce Voice, or Agentforce Contact Center Admin (Salesforce Voice) permission set.\n\nOnly users with the Modify All Data permission can delete call records.\n\nTo edit voice call records, Sales Dialer or Salesforce Voice permissions are required. This includes the Dialer Outbound permission set for Sales Dialer, or the Salesforce Voice Contact Center Rep or Salesforce Voice Contact Center Admin permission sets for Salesforce Voice, or Agentforce Contact Center Admin (Salesforce Voice) permission set.",
+  "special_access_rules": "Only users with the Modify All Data permission can delete call records. To edit voice call records, Sales Dialer or Salesforce Voice permissions are required. This includes the Dialer Outbound permission set for Sales Dialer, or the Salesforce Voice Contact Center Rep or Salesforce Voice Contact Center Admin permission sets for Salesforce Voice, or Agentforce Contact Center Admin (Salesforce Voice) permission set.",
   "associated_objects": "This object has these associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **VoiceCallChangeEvent (Available in API version 48.0 and later)**: Change events are available for the object.\n- **VoiceCallFeed (Available in API version 50.0 and later.)**: Feed tracking is available for the object.\n- **VoiceCallOwnerSharingRule**: Sharing rules are available for the object.\n- **VoiceCallShare**: Sharing is available for the object.",
   "field_reference": {
     "ActivityId": {
@@ -605,11 +625,6 @@
       "field_label": "Vendor Type",
       "type": "picklist",
       "length": "40"
-    },
-    "VoiceVendorLineId": {
-      "field_label": "Voice Vendor Line ID",
-      "type": "reference",
-      "length": "18"
     }
   },
   "field_reference_columns": [

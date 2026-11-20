@@ -145,11 +145,16 @@
       "description": "The total billing schedules updated during the draft to posted run. This field is available when Billing (Revenue Cloud) is enabled. This field is available in API version 62.0 and later."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceBatchRunChangeEvent**: Change events are available for the object.\n- **InvoiceBatchRunFeed**: Feed tracking is available for the object.\n- **InvoiceBatchRunHistory**: History is available for tracked fields of the object.\n- **InvoiceBatchRunOwnerSharingRule**: Sharing rules are available for the object.\n- **InvoiceBatchRunShare**: Sharing is available for the object.",
   "field_reference": {
+    "BatchJobId": {
+      "field_label": "Run ID",
+      "type": "reference",
+      "length": "18"
+    },
     "BillingBatchSchedulerId": {
-      "field_label": "Billing Scheduler ID",
+      "field_label": "Billing Batch Scheduler ID",
       "type": "reference",
       "length": "18"
     },
@@ -176,23 +181,13 @@
       "type": "picklist",
       "length": "255"
     },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
+    "ForecastRunDate": {
+      "field_label": "Forecast Run Date",
+      "type": "date"
     },
-    "DocGenCompletionTime": {
-      "field_label": "Invoice Document Generation Completion Time",
-      "type": "datetime"
-    },
-    "DocGenStartTime": {
-      "field_label": "Invoice Document Generation Start Time",
-      "type": "datetime"
-    },
-    "DocGenStatus": {
-      "field_label": "Invoice Document Generation Status",
-      "type": "picklist",
-      "length": "255"
+    "ForecastTargetDate": {
+      "field_label": "Forecast Target Date",
+      "type": "date"
     },
     "Id": {
       "field_label": "Invoice Batch Run ID",
@@ -204,19 +199,14 @@
       "type": "string",
       "length": "255"
     },
-    "InvoiceDocsGenFailed": {
-      "field_label": "Invoice Document Generation Failures",
-      "type": "int",
-      "digits": "9"
-    },
-    "InvoiceDocsGenerated": {
-      "field_label": "Invoice Documents Generated",
-      "type": "int",
-      "digits": "9"
-    },
     "IsDeleted": {
       "field_label": "Deleted",
       "type": "boolean"
+    },
+    "JobType": {
+      "field_label": "Job Type",
+      "type": "picklist",
+      "length": "255"
     },
     "LastModifiedById": {
       "field_label": "Last Modified By ID",
@@ -303,6 +293,17 @@
       "field_label": "Total Matching Billing Schedules",
       "type": "int",
       "digits": "9"
+    },
+    "TotalForecastLines": {
+      "field_label": "Total Forecast Lines",
+      "type": "int",
+      "digits": "9"
+    },
+    "TotalForecastedAmount": {
+      "field_label": "Total Forecasted Amount",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
     },
     "TotalInvSuccessfullyProcessed": {
       "field_label": "Total Invoices Successfully Processed",

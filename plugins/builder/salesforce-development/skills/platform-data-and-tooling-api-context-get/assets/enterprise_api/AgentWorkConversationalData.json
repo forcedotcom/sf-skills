@@ -56,6 +56,16 @@
       "relationship_name": "AgentWork",
       "refers_to": "AgentWork"
     },
+    "AverageJitter": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Average inter-arrival jitter of RTP packets on the agent leg over the entire call duration, measured in milliseconds. Higher values indicate inconsistent packet timing, which can cause audio choppiness. This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
+    "AveragePacketLoss": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Average percentage of RTP packets lost on the agent leg over the entire call duration. Higher values indicate sustained network degradation, which can cause audio gaps. This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
     "ChannelSessionRecordId": {
       "type": "reference",
       "properties": "Filter, Group, Nillable, Sort",
@@ -67,6 +77,16 @@
       "type": "int",
       "properties": "Filter, Group, Nillable, Sort",
       "description": "Duration of the longest pause during the conversation, measured in seconds."
+    },
+    "MaximumJitter": {
+      "type": "int",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Maximum inter-arrival jitter of RTP packets on the agent leg, measured in milliseconds over rolling 5-second windows. Captures sudden, temporary timing spikes that cause brief audio choppiness, even if the overall call average appears stable. This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
+    },
+    "MaximumPacketLoss": {
+      "type": "percent",
+      "properties": "Filter, Nillable, Sort",
+      "description": "Maximum percentage of RTP packets lost on the agent leg, measured over rolling 5-second windows. Captures sharp bursts of packet loss that call-wide averages can mask. This field is available in API version 68.0 and later, and only in Salesforce Voice (Native Telephony)."
     },
     "Name": {
       "type": "string",

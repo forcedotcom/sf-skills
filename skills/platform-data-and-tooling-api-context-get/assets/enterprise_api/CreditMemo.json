@@ -186,7 +186,7 @@
       "description": "Sum of TotalAmount values for the credit memo’s tax lines. This field is a calculated field."
     }
   },
-  "special_access_rules": "This object is available with Order Management, Subscription Management, and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Order Management, Subscription Management, and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Order Management, Subscription Management, and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, the associated objects are available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **CreditMemoFeed**: Feed tracking is available for the object.\n- **CreditMemoHistory**: History is available for tracked fields of the object.\n- **CreditMemoOwnerSharingRule**: Sharing rules are available for the object.\n- **CreditMemoShare**: Sharing is available for the object.",
   "field_reference": {
     "Balance": {
@@ -254,6 +254,10 @@
       "field_label": "Credit Date",
       "type": "date"
     },
+    "CreditMemoLockedDateTime": {
+      "field_label": "Credit Memo Locked Date Time",
+      "type": "datetime"
+    },
     "CreditMemoNumber": {
       "field_label": "Credit Memo Number",
       "type": "string",
@@ -314,6 +318,10 @@
       "type": "id",
       "length": "18"
     },
+    "IsCreditMemoLocked": {
+      "field_label": "Is Credit Memo Locked",
+      "type": "boolean"
+    },
     "IsDeleted": {
       "field_label": "Deleted",
       "type": "boolean"
@@ -351,6 +359,12 @@
       "precision": "18",
       "scale": "2"
     },
+    "NetRefundsApplied": {
+      "field_label": "Net Refunds Applied",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
     "OwnerId": {
       "field_label": "Owner ID",
       "type": "reference",
@@ -363,6 +377,11 @@
     },
     "ReferenceEntityId": {
       "field_label": "ReferenceEntity ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "SavedPaymentMethodId": {
+      "field_label": "Saved Payment Method ID",
       "type": "reference",
       "length": "18"
     },

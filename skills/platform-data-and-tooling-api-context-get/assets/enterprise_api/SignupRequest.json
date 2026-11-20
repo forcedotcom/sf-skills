@@ -131,8 +131,8 @@
       "description": "The username of the admin user for the trial sign-up. It must follow the address convention specified in RFC822: www.w3.org/Protocols/rfc822/#z10."
     }
   },
-  "usage": "The Java class uses REST API to create a SignupRequest object. It authenticates to the Trialforce Management Organization (TMO) and then posts a request to the SignupRequest object. Here are the variables to specify in this example.\n\nThe Java class uses REST API to create a SignupRequest object. It authenticates to the Trialforce Management Organization (TMO) and then posts a request to the SignupRequest object.\n\nHere are the variables to specify in this example.",
-  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.",
+  "usage": "The Java class uses REST API to create a SignupRequest object. It authenticates to the Trialforce Management Organization (TMO) and then posts a request to the SignupRequest object. Here are the variables to specify in this example.\n\n- SERVER—The name of the host server for the TMO, for example, yourInstance.salesforce.com.\n- USERNAME—The admin username for the TMO.\n- PASSWORD—The concatenation of the admin password and the security token for the TMO. To get an email with the security token, from your personal settings in Salesforce, select **Reset My Security Token** and click **Reset Security Token**.\n- CLIENT_ID—From Setup in Salesforce, in the Quick Find box, enter Apps, and then select **Apps**. Under Connected Apps, click **New**. Enter values for the required fields (Callback URL is required, but you can initially set it to any valid URL because it’s not used). Grant full access for the OAuth scopes in the Selected OAuth Scopes selector, and click **Save**. Then copy the value of Consumer Key and use it for this variable.\n- CLIENT_SECRET—On the same page, click **Click to reveal**. Then copy the value of Consumer Secret and use it for this variable.\n\nIsvSignupDriver\n\n= server_name\n\n= tmo_username;\n\n= tmo_passwordsecurity_token;\n\n= consumer_key;\n\nCLIENT_SECRET\n\n= consumer_secret;\n\nSignupRequestInfo\n\nsignupRequest\n\ncreateSignupRequest\n\nSignupRequestInfo\n\nJSONException\n\nIOException\n\ncreateResponse\n\nsignupRequest = sr;\n\nloginResponse\n\nSERVER, USERNAME, PASSWORD\n\ninstanceUrl\n\nloginResponse\n\n\"instance_url\"\n\naccessToken\n\nloginResponse\n\n\"access_token\"\n\ncreateResponse =\n\ninstanceUrl, accessToken\n\n\"Created SignupRequest object: \"\n\n+ createResponse +\n\ncreateResponse\n\n/* Authenticates to the TMO using the required credentials */\n\nClientProtocolException\n\nIOException\n\nJSONException\n\nauthEndPoint\n\n\"/services/oauth2/token\"\n\nDefaultHttpClient\n\nauthEndPoint\n\nNameValuePair\n\nNameValuePair\n\nBasicNameValuePair\n\n\"grant_type\"\n\nBasicNameValuePair\n\n\"client_id\"\n\n, CLIENT_ID\n\nBasicNameValuePair\n\n\"client_secret\"\n\n, CLIENT_SECRET\n\nBasicNameValuePair\n\nBasicNameValuePair\n\nUrlEncodedFormEntity\n\nBasicResponseHandler\n\nBasicResponseHandler\n\npost, handler\n\ngetConnectionManager\n\n/* Posts a request to the SignupRequest object */\n\ninstanceUrl\n\naccessToken\n\nClientProtocolException\n\nIOException\n\nJSONException\n\nDefaultHttpClient\n\ninstanceUrl +\n\n\"/services/data/v27.0/sobjects/SignupRequest/\"\n\n\"Authorization\"\n\n+ accessToken\n\n\"Content-Type\"\n\n\"application/json\"\n\nrequestBody\n\nrequestBody\n\n\"TemplateId\"\n\nsignupRequest\n\ngetTemplateID\n\nrequestBody\n\n\"SignupEmail\"\n\nsignupRequest\n\nrequestBody\n\nsignupRequest\n\ngetUsername\n\nrequestBody\n\nrequestBody\n\nsignupRequest\n\ngetCompanyName\n\nrequestBody\n\nsignupRequest\n\ngetLastName\n\nStringEntity\n\nStringEntity\n\nrequestBody\n\nBasicResponseHandler\n\nBasicResponseHandler\n\npost, handler\n\ngetConnectionManager",
+  "associated_objects": "This object has the following associated objects. Unless noted, they’re available in the same API version as this object.\n\n- SignupRequestFeed–Feed tracking is available for the object.\n- SignupRequestHistory–History is available for tracked fields of the object.\n- SignupRequestOwnerSharingRule–Sharing rules are available for the object\n- SignupRequestShare–Sharing is available for the object.",
   "field_reference": {
     "AuthCode": {
       "field_label": "Connected App Authorization Code",
@@ -178,20 +178,10 @@
       "type": "string",
       "length": "10"
     },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
-    },
     "Edition": {
       "field_label": "Edition",
       "type": "picklist",
       "length": "255"
-    },
-    "EmailBrandId": {
-      "field_label": "Email Brand Id",
-      "type": "string",
-      "length": "15"
     },
     "ErrorCode": {
       "field_label": "Error Code",
@@ -216,10 +206,6 @@
       "field_label": "Suppress signup email",
       "type": "boolean"
     },
-    "IsTso": {
-      "field_label": "Apply TSO Licensing",
-      "type": "boolean"
-    },
     "LastModifiedById": {
       "field_label": "Last Modified By ID",
       "type": "reference",
@@ -233,11 +219,6 @@
       "field_label": "Last Name",
       "type": "string",
       "length": "80"
-    },
-    "LoginBrandId": {
-      "field_label": "Login Brand Id",
-      "type": "string",
-      "length": "15"
     },
     "Name": {
       "field_label": "Number",
@@ -258,10 +239,6 @@
       "field_label": "Resolved Template Id",
       "type": "string",
       "length": "15"
-    },
-    "ShouldConnectToEnvHub": {
-      "field_label": "Connect to Environment Hub",
-      "type": "boolean"
     },
     "SignupEmail": {
       "field_label": "Email",

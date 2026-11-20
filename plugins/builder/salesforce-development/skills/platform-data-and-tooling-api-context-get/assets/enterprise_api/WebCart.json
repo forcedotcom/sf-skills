@@ -71,10 +71,27 @@
       "properties": "Create, Filter, Group, Nillable, Sort, Update",
       "description": "The street of the billing address. Enter up to 255 characters."
     },
+    "CollaborationLockedAt": {
+      "type": "dateTime",
+      "properties": "Create, Filter, Nillable, Sort, Update",
+      "description": "If the advanced cart management feature is enabled, this field shows the ID of the user who locked the cart. This field is available in API version 67.0 and later."
+    },
+    "CollaborationLockedById": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "If the advanced cart management feature is enabled, this field shows the date and time when the user locked the cart. This field is a relationship field. This field is available in API version 67.0 and later.",
+      "relationship_name": "CollaborationLockedBy",
+      "refers_to": "User"
+    },
+    "CollaborationStatus": {
+      "type": "picklist",
+      "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "If the advanced cart management feature is enabled, this field indicates whether the cart is shared for collaboration. Possible values are: None Shared This field is available in API version 67.0 and later."
+    },
     "CurrencyIsoCode": {
       "type": "picklist",
       "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
-      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar Note: Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions with multi-currency enabled, this field is required."
+      "description": "The ISO code for the currency that’s specified on the buyer’s account. Default value is USD. Possible values are: EUR—Euro USD—U.S. Dollar Although this field is Nillable, if you want to use Commerce Webstore Cart Promotions with multi-currency enabled, this field is required."
     },
     "GrandTotalAmount": {
       "type": "currency",
@@ -124,7 +141,7 @@
     "IsRepricingNeeded": {
       "type": "boolean",
       "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
-      "description": "Whether the cart has changed since the last repricing. The default value is false."
+      "description": "Whether the cart has changed since the last repricing. The default value is False."
     },
     "IsSecondary": {
       "type": "boolean",
@@ -169,6 +186,11 @@
       "type": "string",
       "properties": "Create, Filter, Group, Nillable, Sort, Update",
       "description": "The purchase order number. Enter up to 80 characters."
+    },
+    "QuoteLineItemCount": {
+      "type": "int",
+      "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
+      "description": "Tracks the count of items added to the webcart from quotes. This field is a calculated field."
     },
     "Status": {
       "type": "picklist",
@@ -240,6 +262,11 @@
       "properties": "Defaulted on create, Filter, Nillable, Sort",
       "description": "Total item level discount amount for the cart. This field is available in API version 61.0 and later."
     },
+    "TotalProductItemAdjTaxAmount": {
+      "type": "currency",
+      "properties": "Defaulted on create, Filter, Nillable, Sort",
+      "description": "The total tax on itemized adjustments, including discounts and surcharges, across all product items in the cart. This field is available in API version 68.0 and later. For WebCart records created before the 68.0 version or before Winter ’27, this field value is Null."
+    },
     "TotalProductLineItemCount": {
       "type": "int",
       "properties": "Defaulted on create, Filter, Group, Nillable, Sort",
@@ -273,7 +300,7 @@
     "Type": {
       "type": "picklist",
       "properties": "Create, Defaulted on create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
-      "description": "The WebCart type. Default value is Cart. Possible values are: Cart PayNowReadOnly ReadOnly Template"
+      "description": "The WebCart type. Default value is Cart. Possible values are: Cart ConsumerSales PayNowReadOnly ReadOnly Template"
     },
     "UniqueProductCount": {
       "type": "int",
@@ -343,6 +370,20 @@
       "type": "textarea",
       "length": "255"
     },
+    "CollaborationLockedAt": {
+      "field_label": "Collaboration Locked At",
+      "type": "datetime"
+    },
+    "CollaborationLockedById": {
+      "field_label": "User ID",
+      "type": "reference",
+      "length": "18"
+    },
+    "CollaborationStatus": {
+      "field_label": "Collaboration Status",
+      "type": "picklist",
+      "length": "255"
+    },
     "CreatedById": {
       "field_label": "Created By ID",
       "type": "reference",
@@ -356,6 +397,11 @@
       "field_label": "Currency ISO Code",
       "type": "picklist",
       "length": "3"
+    },
+    "Description": {
+      "field_label": "Cart Description",
+      "type": "string",
+      "length": "250"
     },
     "GrandTotalAmount": {
       "field_label": "Grand Total Amount in Cart",
@@ -429,6 +475,11 @@
       "field_label": "Last Modified Date",
       "type": "datetime"
     },
+    "LastOperationJobId": {
+      "field_label": "Last Operation Job ID",
+      "type": "reference",
+      "length": "18"
+    },
     "LastRepricingDate": {
       "field_label": "Last Repricing Date",
       "type": "datetime"
@@ -463,8 +514,18 @@
       "type": "string",
       "length": "80"
     },
+    "QuoteLineItemCount": {
+      "field_label": "Quote Line Item Count",
+      "type": "int",
+      "digits": "9"
+    },
     "Status": {
       "field_label": "Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "SubStatus": {
+      "field_label": "Substatus",
       "type": "picklist",
       "length": "255"
     },
@@ -544,6 +605,12 @@
     },
     "TotalProductItemAdjAmount": {
       "field_label": "Total adjustment amount on a cart item. Includes discount and surcharge.",
+      "type": "currency",
+      "precision": "18",
+      "scale": "2"
+    },
+    "TotalProductItemAdjTaxAmount": {
+      "field_label": "The total tax on itemized adjustments, including discounts and surcharges, across all product items in the cart.",
       "type": "currency",
       "precision": "18",
       "scale": "2"

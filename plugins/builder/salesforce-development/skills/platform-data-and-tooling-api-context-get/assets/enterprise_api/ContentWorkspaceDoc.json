@@ -3,6 +3,8 @@
     "title",
     "description",
     "fields",
+    "special_access_rules",
+    "usage",
     "wsdl_segment",
     "field_reference"
   ],
@@ -39,6 +41,8 @@
       "description": "Read only. Indicates whether the library owns the document and determines permissions for that document (true) or not (false). Documents can belong to more than one library, but only one library owns the document and determines its permissions."
     }
   },
+  "special_access_rules": "- Customer and Partner Portal users must have the “View Content in Portal” permission in order to query and obtain content in libraries where they have access.\n- Customer and Partner Portal users can only edit documents if they have a Salesforce CRM Content feature license.\n- To create a ContentWorkspaceDoc, you must be a member of the library with one of these library privileges enabled: “Add Content” “Add Content On Behalf of Others” “Manage Library”\n- To query all library documents in a library, a user must be a member of that library, regardless of library permissions.\n\n- “Add Content”\n- “Add Content On Behalf of Others”\n- “Manage Library”",
+  "usage": "- Use this object to link a document to one or more libraries.\n- To share a document with additional libraries, create additional ContentWorkspaceDoc records which join the document to the additional libraries.\n- Inserting a ContentWorkspaceDoc triggers the publish process for public libraries.\n- A document can be published into many public libraries, but it will always be owned by one library which controls the security of the document.\n- A document can only be published into the document owner's personal library. You can't publish into another user's personal library. Personal libraries are not visible via the API.\n- To publish a document into a personal library, you must specify your user ID as the first publish location ID. If you leave the first publish location ID blank, it defaults to the current user's ID.\n- A document can be published from a personal library into a public library, but once it has been published into the public library, it can't be published into the personal library again.\n- You can't publish a document from a personal library into a public library that has restricted content types.\n- You can't update or delete a library document via the API.",
   "wsdl_segment": "```xml\n<complexType name=\"ContentWorkspaceDoc\">\n  <complexContent>\n    <extension base=\"ens:sObject\">\n      <sequence>\n        <element name=\"ContentDocument\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentDocument\"/>\n        <element name=\"ContentDocumentId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"ContentWorkspace\" nillable=\"true\" minOccurs=\"0\" type=\"ens:ContentWorkspace\"/>\n        <element name=\"ContentWorkspaceId\" nillable=\"true\" minOccurs=\"0\" type=\"tns:ID\"/>\n        <element name=\"CreatedDate\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n        <element name=\"IsDeleted\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"IsOwner\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:boolean\"/>\n        <element name=\"SystemModstamp\" nillable=\"true\" minOccurs=\"0\" type=\"xsd:dateTime\"/>\n      </sequence>\n    </extension>\n  </complexContent>\n</complexType>\n<simpleType name=\"ID\">\n  <restriction base=\"xsd:string\">\n    <length value=\"18\"/>\n    <pattern value=\"[a-zA-Z0-9]{18}\"/>\n  </restriction>\n</simpleType>\n```",
   "field_reference": {
     "ContentDocumentId": {

@@ -1,0 +1,42 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "supported_soap_calls",
+    "fields"
+  ],
+  "title": "SensitiveDataRuleElmnt - Tooling API",
+  "description": "Represents a predefined PII, PHI, and PCI named-entity type supported by the PII Redaction Model Service. This object is available in API version 68.0 and later.",
+  "supported_soap_calls": "`create()`, `delete()`, `describeSObjects()`, `query()`, `retrieve()`, `update()`, `upsert()`",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "Category": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "Category of the named-entity type. Possible values are: PCI: Payment Card Industry Data PHI: Protected Health Information PII: Personally Identifiable Information"
+    },
+    "IsEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the entity type is active for the parent rule (true) or not (false). The default value is false, which temporarily deactivates detection for the entity type without deleting the record."
+    },
+    "SensitiveDataRuleElmntGrpId": {
+      "type": "reference",
+      "properties": "Create, Filter, Group, Sort",
+      "description": "ID of the associated sensitive data rule element group. This field is a relationship field.",
+      "relationship_name": "SensitiveDataRuleElmntGrp",
+      "refers_to": "SensitiveDataRuleElmntGrp"
+    },
+    "Type": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
+      "description": "PII/PCI named-entity type to detect and redact. Possible values are: ADDRESS BANK_ACCOUNT CREDIT_CARD CREDIT_CARD_CVV CREDIT_CARD_EXPIRY EMAIL PERSON PHONE PIN_PASSWORD SSN"
+    }
+  }
+}

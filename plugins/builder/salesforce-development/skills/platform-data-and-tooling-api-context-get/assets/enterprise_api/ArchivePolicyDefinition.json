@@ -6,32 +6,67 @@
     "special_access_rules"
   ],
   "title": "ArchivePolicyDefinition - Data API",
-  "description": "Represents a data lifecycle policy. Each record defines the scope, frequency, and rules that govern automated archiving or purging of records from a root entity, such as Contact or Lead. This object is available in API version 65.0 and later.",
+  "description": "Represents a data lifecycle policy in Salesforce. Each record defines the scope, frequency, and rules that govern automated archiving or purging of records from a root entity, such as Contact or Lead. This object is available in API version 65.0 and later.",
   "fields_columns": [
     "type",
     "properties",
     "description"
   ],
   "fields": {
+    "ArchivePolicyRelObjSelection": {
+      "type": "picklist",
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Determines the policy object selection method. Available in API version 68.0 and later.Valid values are: CompleteHierarchy—Archives all related objects. CustomSelection—Specifies which related objects to include using the RelatedObjects field. SingleLevel—Archives only the root entity records without related objects."
+    },
+    "ContentDocumentObject": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The API name of the Salesforce content object to include when IsArchiveRelatedFiles is enabled. If the root object is ContentDocument, this field specifies the secondary object used to filter which content documents to archive. For example, archive only content documents attached to Cases or Accounts. Available in API version 68.0 and later."
+    },
     "DataProtectionThreshold": {
       "type": "int",
-      "properties": "Create, Filter, Sort, Update",
-      "description": "Specifies a retention buffer, in days, during which recently updated or sensitive records must not be archived or deleted. Enforces data protection compliance."
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies a retention buffer, in days, during which recently updated or sensitive records aren't archived or deleted."
     },
     "Description": {
       "type": "string",
-      "properties": "Create, Update",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
       "description": "The purpose or scope of the policy."
     },
     "DeveloperName": {
       "type": "string",
       "properties": "Create, Filter, Group, Sort, Update",
-      "description": "The unique name of the object in the API. In managed packages, this field prevents naming conflicts on package installations. With this field, a developer can change the object's name in a managed package and the changes are reflected in a subscriber's org."
+      "description": "The API name of the policy. This name must be unique in Salesforce, begin with a letter, and contain only underscores and alphanumeric characters."
+    },
+    "FilterConditions": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Additional Salesforce Object Query Language (SOQL) filter conditions that refine which records are eligible for archiving or purging. These conditions are appended to the Query field using AND logic. Available in API version 68.0 and later."
     },
     "IsActive": {
       "type": "boolean",
       "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
       "description": "Indicates whether the policy is active and eligible for execution. Only active policies can run through scheduled or manual processes. The default value is false."
+    },
+    "IsAnalyzed": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether the policy has been analyzed by the Archive Storage Analyzer. The default value is false. When set to true, the policy has undergone analysis to optimize storage and performance. Available in API version 68.0 and later."
+    },
+    "IsArchiveRelatedFiles": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether to archive related files along with the root entity records. When set to true, any attached files or attachments are archived when a root record or any of its child records are archived. When set to false, files aren't archived. The default value is false. Available in API version 68.0 and later."
+    },
+    "IsBoostEnabled": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Indicates whether performance boosting is enabled for this policy. When set to true, the policy runs eight parallel activities to improve execution speed. The default value is false. Available in API version 68.0 and later."
+    },
+    "IsLogFailuresAndContinue": {
+      "type": "boolean",
+      "properties": "Create, Defaulted on create, Filter, Group, Sort, Update",
+      "description": "Specifies whether to log individual record failures and continue processing or to roll back the entire transaction on error. When set to true, if a deletion fails, the archived record remains in production. A duplicate record then exists in both the archive and production environments. This option is recommended when archive jobs involve root records with more than 800 related objects. When set to false, any failure rolls back the entire transaction. The default value is false. Available in API version 68.0 and later."
     },
     "IsSoftDeleted": {
       "type": "boolean",
@@ -41,38 +76,68 @@
     "MasterLabel": {
       "type": "string",
       "properties": "Create, Filter, Group, Sort, Update",
-      "description": "The label for this policy. This display value is the internal label that doesn't get translated."
+      "description": "The label for this policy. This value is the policy name that you enter."
     },
-    "Name": {
+    "NamespacePrefix": {
       "type": "string",
-      "properties": "Create, Filter, Group, Sort, Update",
-      "description": "The unique name assigned to the policy."
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "Reserved for internal use. This field is null for Archive policies in core Salesforce. It's populated only if the policy is part of an installed managed package, enabling policy deployment and copying to other orgs. Available in API version 68.0 and later."
+    },
+    "PreviewFields": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "Semicolon-separated list of field API names displayed in the Preview Table. The Preview feature runs the policy's SOQL query and shows matching records with the fields specified here. For example, Id;Description;Name. Available in API version 68.0 and later."
     },
     "Query": {
       "type": "textarea",
-      "properties": "Create, Filter, Group, Sort, Update",
-      "description": "A complete SOQL or custom query that defines the set of records to archive or purge based on the policy rules. Determines which records are eligible for processing. The field type changed from string to textarea in API version 67.0."
+      "properties": "Create, Nillable, Update",
+      "description": "A complete SOQL query that defines the set of records to archive or purge based on the policy rules. Determines which records are eligible for processing."
     },
     "QueryLimit": {
       "type": "int",
       "properties": "Create, Filter, Group, Nillable, Sort, Update",
-      "description": "The maximum number of root records this policy can process in a single run. Use to throttle execution for scalability and control."
+      "description": "The maximum number of root records this policy can process in a single run."
+    },
+    "RelatedObjects": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "JSON object that specifies which related objects to include in archive operations when ArchivePolicyRelObjSelection is set to CustomSelection. The relationships array lists each parent-to-child relationship to archive. In each entry, childName is the child object to archive, parentObject is the object it's related to, and fieldName is the lookup or master-detail field on the child object that references the parent. For example: {\"relationships\":[{\"parentObject\":\"Account\",\"childName\":\"Case\",\"fieldName\":\"AccountId\"},{\"parentObject\":\"FeedItem\",\"childName\":\"FeedAttachment\",\"fieldName\":\"RecordId\"}]}. Leave empty when using the CompleteHierarchy selection method. To identify valid relationship fields, query the object metadata to find lookup or master-detail fields that reference the parent object. Available in API version 68.0 and later."
+    },
+    "RetentionMonths": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of months to retain archived records before they are eligible for permanent deletion. This value is added to RetentionYears to calculate the total retention period. For example, if RetentionYears is 3 and RetentionMonths is 6, records are retained for 3 years and 6 months (42 months total). Valid values are 0 through 11. Available in API version 68.0 and later."
+    },
+    "RetentionSource": {
+      "type": "string",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "Specifies the source date used to calculate the retention period for archived records. Available in API version 68.0 and later.Accepted values are: ArchivedDate—Retention period starts from when the record was archived. This value is the default. CreatedDate—Retention period starts from when the record was originally created. LastModifiedDate—Retention period starts from when the record was last modified."
+    },
+    "RetentionYears": {
+      "type": "int",
+      "properties": "Create, Filter, Group, Nillable, Sort, Update",
+      "description": "The number of years to retain archived records before they are eligible for permanent deletion. This value is added to RetentionMonths to calculate the total retention period. For example, if RetentionYears is 3 and RetentionMonths is 6, records are retained for 3 years and 6 months (42 months total). Valid values are 0 or greater. Available in API version 68.0 and later."
     },
     "RootEntityName": {
       "type": "string",
       "properties": "Create, Filter, Group, Sort, Update",
-      "description": "The API name of the Salesforce object targeted by the policy. Determines which object's records are queried and processed."
+      "description": "The API name of the Salesforce object targeted by the policy."
     },
     "RunFrequency": {
       "type": "picklist",
-      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
-      "description": "Specifies how often the policy is executed—manually or on a regular interval. Enables automation for recurring data lifecycle operations.Valid values are: None—This option is specifically for manual policy runs. Daily Monthly Weekly"
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Specifies how often the policy runs—manually or on a regular interval. Enables automation for recurring data lifecycle operations.Valid values are: Daily Monthly None—For manual policy runs. Weekly"
+    },
+    "Schedule": {
+      "type": "textarea",
+      "properties": "Create, Nillable, Update",
+      "description": "JSON object that represents when the policy runs, based on the RunFrequency setting. It specifies the frequency, the day of the week or month, and the time of day in UTC (Coordinated Universal Time). The Archive UI displays this time translated to the time zone of your Salesforce org. For example, this schedule represents a policy that runs on the second day of every month at 01:00 UTC: {\"frequency\":\"Monthly\",\"day_of_month\":2,\"time_to_schedule\":\"01:00\"}. For a weekly schedule, the day of the week is a number from 0 through 6, where 0 represents Sunday. This field is null when RunFrequency is set to None. Available in API version 68.0 and later."
     },
     "Type": {
       "type": "picklist",
-      "properties": "Create, Filter, Group, Restricted picklist, Sort, Update",
-      "description": "Process type that the policy executes.Valid values are: Archive Import Purge"
+      "properties": "Create, Filter, Group, Nillable, Restricted picklist, Sort, Update",
+      "description": "Process type that the policy executes.Valid values are: Archiving Import None Purge"
     }
   },
-  "special_access_rules": "Create, Update, and Delete operations are restricted to the Archive Admin profile. All other profiles have Read-Only access."
+  "special_access_rules": "Create, update, and delete operations are restricted to the Archive Admin profile. All other profiles have read-only access to this object.\n\nIn API version 68.0, changes to ArchivePolicyDefinition records through the API don't affect policy execution. This object provides a representation of each policy for auditing and reporting. Archiving and purging behavior is controlled solely through the policy setup flow on the Archive Policies tab.\n\nArchive policies created before API version 68.0 can show incomplete field values on the ArchivePolicyDefinition object. The Archive back end is the source of truth for these policies, and their field values aren't copied to this object in version 68.0. Policies created in version 68.0 or later show complete field values."
 }

@@ -1,0 +1,52 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "ProspectingAgentExternalPersonResearch - Data API",
+  "description": "Represents research done by a prospecting agent on an external person.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "refers_to"
+  ],
+  "fields": {
+    "ExternalIdentifier": {
+      "type": "string",
+      "properties": "Filter, Group, Sort",
+      "description": "The external ID associated with the lead or contact the AI agent researched."
+    },
+    "IsQualified": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The default value is false."
+    },
+    "OwnerId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "This field is a polymorphic relationship field.",
+      "relationship_name": "Owner",
+      "refers_to": "Group, User"
+    },
+    "Rationale": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The explanation of why the account was qualified or not. The rationale provides extra context to guide human users in their decision making."
+    },
+    "ResearchRunKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date and time the research was complete."
+    },
+    "Source": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The source of the external person."
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission."
+}

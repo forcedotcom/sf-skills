@@ -10,9 +10,16 @@
   "fields_columns": [
     "type",
     "properties",
-    "description"
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
   ],
   "fields": {
+    "ApexEntityName": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort"
+    },
     "ExceptionCategory": {
       "type": "string",
       "properties": "Filter, Group, Nillable, Sort",
@@ -42,6 +49,14 @@
       "type": "dateTime",
       "properties": "Filter, Nillable, Sort",
       "description": "The access time of Salesforce services in GMT. For example, 2020-01-20T19:12:26.965Z. Milliseconds are the most granular setting."
+    },
+    "UserId": {
+      "type": "reference",
+      "properties": "Nillable",
+      "description": "The origin user’s unique ID. For example, 005000000000123. A polymorphic relationship field.",
+      "relationship_name": "User",
+      "relationship_type": "Lookup",
+      "refers_to": "User"
     }
   },
   "special_access_rules": "To access this object, you must have the View Event Log Object Data user permission."

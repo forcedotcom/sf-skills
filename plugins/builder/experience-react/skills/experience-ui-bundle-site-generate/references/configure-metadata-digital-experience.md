@@ -11,7 +11,7 @@ The `appSpace` field **MUST be an empty string (`""`) at initial site creation**
 Populate `appSpace` with `"{appNamespace}__{appDevName}"` **only** in a later, follow-up update once you have confirmed (via `sf data query -q "SELECT DeveloperName FROM UIBundle WHERE DeveloperName = '{appDevName}'"`) that the UIBundle metadata record exists in the target org. This is a rare secondary operation, not part of initial scaffolding.
 
 ## File Location
-Each DigitalExperience content-type directory contains only `_meta.json` and `content.json`. Two content types are always emitted inside the bundle: `sfdc_cms__site` (required) and `sfdc_cms__languageSettings` (defaults to a single `en_US` declaration; extended when the user requests additional languages — see [configure-metadata-language-settings.md](references/configure-metadata-language-settings.md)). No other content types are permitted.
+Each DigitalExperience content-type directory contains only `_meta.json` and `content.json`. Two content types are always emitted inside the bundle: `sfdc_cms__site` (required) and `sfdc_cms__languageSettings` (defaults to a single `en_US` declaration; extended when the user requests additional languages — see [configure-metadata-language-settings.md](configure-metadata-language-settings.md)). No other content types are permitted.
 
 ```text
 digitalExperiences/site/{siteName}1/sfdc_cms__site/{siteName}1/_meta.json

@@ -58,7 +58,7 @@
     }
   },
   "special_access_rules": "This object is available when the B2B Commerce license is enabled or when Subscription Management is enabled.",
-  "usage": "When you create a PriceAdjustmentSchedule, you associate PriceAdjustmentTiers with it. A PriceAdjustmentSchedule is inactive until at least one PriceAdjustmentTier is added to it. A PriceAdjustmentSchedule comprises all related PriceAdjustmentTiers, with a maximum limit of 25 PriceAdjustmentTiers for Subscription Management. To use PriceAdjustmentSchedule, associate it with a PriceBookEntry. You can modify the PriceAdjustmentTier object, and the ScheduleType and AdjustmentMethod fields, only when a PriceAdjustmentSchedule is inactive.\n\nWhen you create a PriceAdjustmentSchedule, you associate PriceAdjustmentTiers with it. A PriceAdjustmentSchedule is inactive until at least one PriceAdjustmentTier is added to it. A PriceAdjustmentSchedule comprises all related PriceAdjustmentTiers, with a maximum limit of 25 PriceAdjustmentTiers for Subscription Management.\n\nTo use PriceAdjustmentSchedule, associate it with a PriceBookEntry.\n\nYou can modify the PriceAdjustmentTier object, and the ScheduleType and AdjustmentMethod fields, only when a PriceAdjustmentSchedule is inactive.",
+  "usage": "When you create a PriceAdjustmentSchedule, you associate PriceAdjustmentTiers with it. A PriceAdjustmentSchedule is inactive until at least one PriceAdjustmentTier is added to it. A PriceAdjustmentSchedule comprises all related PriceAdjustmentTiers, with a maximum limit of 25 PriceAdjustmentTiers for Subscription Management. To use PriceAdjustmentSchedule, associate it with a PriceBookEntry. You can modify the PriceAdjustmentTier object, and the ScheduleType and AdjustmentMethod fields, only when a PriceAdjustmentSchedule is inactive.\n\n- You can associate a PriceBookEntry with up to five PriceAdjustmentSchedules, but only one PriceAdjustmentSchedule can be associated with a PriceBookEntry.\n- When you activate or deactivate a PriceAdjustmentSchedule, its PriceBookEntry association is also activated or deactivated.\n- An adjustment to a PriceBookEntry is applied only if the associated PriceAdjustmentSchedule is active.\n- After a PriceAdjustmentSchedule is associated with a PriceBookEntry, if multicurrency is enabled, the currencyIsoCode field can’t be modified.\n- When you associate a PriceAdjustmentSchedule with a PricebookEntry, a junction object PricebookEntryAdjustment is created.",
   "field_reference": {
     "AdjustmentMethod": {
       "field_label": "Adjustment Method",
@@ -96,6 +96,11 @@
     "EffectiveTo": {
       "field_label": "Effective to",
       "type": "datetime"
+    },
+    "GlobalKey": {
+      "field_label": "Global Key",
+      "type": "string",
+      "length": "80"
     },
     "Id": {
       "field_label": "Price Adjustment Schedule ID",

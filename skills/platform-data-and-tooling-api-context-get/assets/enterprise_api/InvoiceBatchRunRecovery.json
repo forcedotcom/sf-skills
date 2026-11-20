@@ -62,9 +62,14 @@
       "description": "The final state of the invoice batch run recovery process. Possible values are: Completed—The recovery run successfully reset all billing schedules to Ready for Invoicing. CompletedWithErrors—Some, but not all, billing schedules included in the recovery run were reset to Ready for Invoicing. The billing schedules that were recovered are included in the next scheduled invoice batch run. The billing schedules that weren’t successfully recovered must be manually reset to Ready for Invoicing so they can be processed. Failed—The recovery run was unable to complete the reset process. Started—Indicates that the recovery run reset process began, is ongoing, and has not yet produced a result. The default value is Started."
     }
   },
-  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.\n\nThis object is available with Subscription Management and Billing (Revenue Cloud).\n\nFor information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
+  "special_access_rules": "This object is available with Subscription Management and Billing (Revenue Cloud). For information about this object that's available with Billing (Revenue Cloud), including its special access rules, see the Revenue Cloud Developer Guide.",
   "associated_objects": "This object has the following associated objects. If the API version isn’t specified, they’re available in the same API versions as this object. Otherwise, they’re available in the specified API version and later.\n\n- **InvoiceBatchRunRecoveryChangeEvent**: Change events are available for the object.\n- **InvoiceBatchRunRecoveryFeed**: Feed tracking is available for the object.\n- **InvoiceBatchRunRecoveryHistory**: History is available for tracked fields of the object.\n- **InvoiceBatchRunRecoveryOwnerSharingRule**: Sharing rules are available for the object.\n- **InvoiceBatchRunRecoveryShare**: Sharing is available for the object.",
   "field_reference": {
+    "BatchJobId": {
+      "field_label": "Run ID",
+      "type": "reference",
+      "length": "18"
+    },
     "Comments": {
       "field_label": "Comments",
       "type": "textarea",
@@ -82,11 +87,6 @@
     "CreatedDate": {
       "field_label": "Created Date",
       "type": "datetime"
-    },
-    "CurrencyIsoCode": {
-      "field_label": "Currency ISO Code",
-      "type": "picklist",
-      "length": "3"
     },
     "Id": {
       "field_label": "Invoice Batch Run Recovery ID",

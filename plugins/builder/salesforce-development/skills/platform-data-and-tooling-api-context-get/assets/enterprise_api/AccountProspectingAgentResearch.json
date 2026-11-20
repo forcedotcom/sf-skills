@@ -1,0 +1,44 @@
+{
+  "sections": [
+    "title",
+    "description",
+    "fields",
+    "special_access_rules"
+  ],
+  "title": "AccountProspectingAgentResearch - Data API",
+  "description": "Represents research done by a prospecting agent on an account record.",
+  "fields_columns": [
+    "type",
+    "properties",
+    "description",
+    "relationship_name",
+    "relationship_type",
+    "refers_to"
+  ],
+  "fields": {
+    "AccountId": {
+      "type": "reference",
+      "properties": "Filter, Group, Sort",
+      "description": "This field is a relationship field.",
+      "relationship_name": "Account",
+      "relationship_type": "Master-detail",
+      "refers_to": "Account (the master object)"
+    },
+    "IsQualified": {
+      "type": "boolean",
+      "properties": "Defaulted on create, Filter, Group, Sort",
+      "description": "The default value is false."
+    },
+    "Rationale": {
+      "type": "textarea",
+      "properties": "Nillable",
+      "description": "The explanation of why the account was qualified or not. The rationale provides extra context to guide human users in their decision making."
+    },
+    "ResearchRunKey": {
+      "type": "string",
+      "properties": "Filter, Group, Nillable, Sort",
+      "description": "The date and time the research was complete."
+    }
+  },
+  "special_access_rules": "This object is available if Agentforce Prospecting is enabled in your org and your org has an Agentforce for Sales or an Agentforce for an Industry add-on license. To access this object, you need the Sales Agentic Prospecting Manager user permission."
+}

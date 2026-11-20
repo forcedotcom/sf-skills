@@ -88,7 +88,7 @@
     "ErrorCode": {
       "type": "picklist",
       "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
-      "description": "Possible values are: AUTO_EMAIL_DAILY_LIMIT_REACHED AUTO_EMAIL_ORG_SETTING_OFF AUTO_LIST_MQ_MAX_RETRIES_FAILED BCC_NOT_ALLOWED_IF_BCC_COMPLIANCE_ENABLED EAC_GLOBAL_DATA_SOURCE_ERROR—EAC data source error EMAIL_ORG_SETTING_OFF EXCHANGE_MAX_MAILBOX_SIZE—Max Exchange mailbox size reached EXCHANGE_SEND_AS_DENIED FETCH_EMAIL_THREAD_FAILED FIX_WITH_RECONNECT—Data connection failed FROM_ADDRESS_FIELD_IS_ENCRYPTED—FromAddress field is encrypted GOOGLE_MAIL_SERVICE_NOT_ENABLED—Gmail service not enabled INVALID_DRAFT—Invalid email draft INVALID_FROM_ADDRESS INVALID_TARGET_EMAIL INVALID_TEMPLATE_ID INVALID_USER_EMAIL MAIL_PROVIDER_RATE_LIMIT_REACHED—Email provider rate limit reached MALFORMED_QUERY MAX_OUT_EMAIL_THREAD_RETRY MAX_OUT_LLMG_RETRY NON_EMAIL_UNKNOWN_ERROR—Unknown error NO_ACTIVE_ASDR_AGENT NO_ATTACHMENT_ACCESS NO_CONTENT_VERSION_ACCESS NO_LIST_EMAIL_PERMISSION NO_TARGET_ACCESS NO_TOS_SIQ ORG_WIDE_AUTO_EMAIL_LIMIT_REACHED ORG_WIDE_DAILY_EMAIL_LIMIT_REACHED OTHER_REQ_FIELD_MISSING—Other required field missing PARDOT_MERGE_FIELD_RENDERING_ERROR POST_SEND_EXCEPTION RETRIES_MAX_EXCEEDED—Maximum retries exceeded RETRY_LATER SCHEDULED_EMAIL_FAILED—Unknown error SENDER_MAILBOX_NOT_FOUND SHARE_LIMIT_EXCEEDED TARGET_DO_NOT_CONTACT_ON—Target has Do Not Contact on TARGET_EMAIL_BOUNCED TARGET_EMAIL_EMPTY TARGET_HAS_INVALID_ID TARGET_HAS_OPT_OUT_EMAIL TEMPLATE_DELETED TEMPLATE_EMPTY—Email subject or body missing TEMPLATE_HAS_INVALID_MERGE_FIELD TEMPLATE_IS_INACTIVE TEMPLATE_MERGE_FIELD_RENDERING_ERROR TEMPLATE_NOT_PUBLIC—No access to template TEMPLATE_TOO_LARGE UNKNOWN—Email unknown error USER_HAS_LOST_HVS_ACCESS USER_IS_INACTIVE"
+      "description": "Possible values are: AUTO_EMAIL_DAILY_LIMIT_REACHED AUTO_EMAIL_ORG_SETTING_OFF AUTO_LIST_MQ_MAX_RETRIES_FAILED BCC_NOT_ALLOWED_IF_BCC_COMPLIANCE_ENABLED EAC_CONFIG_EMAIL_CAPTURE_OFF—Available in API version 66.0 and later. EAC_CONFIG_IS_NOT_ACTIVE—Available in API version 66.0 and later. EAC_CONFIG_LIMITED_CAPTURE—Available in API version 66.0 and later. EAC_GLOBAL_DATA_SOURCE_ERROR—EAC data source error EMAIL_ORG_SETTING_OFF EXCHANGE_MAX_MAILBOX_SIZE—Max Exchange mailbox size reached EXCHANGE_SEND_AS_DENIED FETCH_EMAIL_THREAD_FAILED FIX_WITH_RECONNECT—Data connection failed FROM_ADDRESS_FIELD_IS_ENCRYPTED—FromAddress field is encrypted GOOGLE_MAIL_SERVICE_NOT_ENABLED—Gmail service not enabled INITIAL_OUTREACH_ACCOUNT_DEACTIVATED—Available in API version 66.0 and later. INSUFFICIENT_ACCESS_ON_TARGET—Available in API version 67.0 and later. INVALID_DRAFT—Invalid email draft INVALID_FROM_ADDRESS INVALID_TARGET_EMAIL INVALID_TEMPLATE_ID INVALID_USER_EMAIL MAIL_PROVIDER_RATE_LIMIT_REACHED—Email provider rate limit reached MALFORMED_QUERY MAX_OUT_EMAIL_THREAD_RETRY MAX_OUT_LLMG_RETRY NON_EMAIL_UNKNOWN_ERROR—Unknown error NO_ACTIVE_ASDR_AGENT NO_ATTACHMENT_ACCESS NO_CONTENT_VERSION_ACCESS NO_LIST_EMAIL_PERMISSION NO_TARGET_ACCESS NO_TOS_SIQ ORG_WIDE_AUTO_EMAIL_LIMIT_REACHED ORG_WIDE_DAILY_EMAIL_LIMIT_REACHED OTHER_REQ_FIELD_MISSING—Other required field missing PARDOT_MERGE_FIELD_RENDERING_ERROR POST_SEND_EXCEPTION RETRIES_MAX_EXCEEDED—Maximum retries exceeded REVIEW_CRITERIA_FLOW_EXECUTION_FAILED—Available in API version 67.0 and later. RETRY_LATER SCHEDULED_EMAIL_FAILED—Unknown error SENDER_MAILBOX_NOT_FOUND SHARE_LIMIT_EXCEEDED SOBO_MEETING_LINK_GENERATION_FAIL— Send as Seller (in Agentforce Lead Nurturing) can’t generate a meeting link. Available in API version 66.0 and later. SOBO_QNA_NO_ANSWER— Send as Seller (in Agentforce Lead Nurturing) can’t answer the prospect’s question. Available in API version 66.0 and later. STORAGE_LIMIT_EXCEEDED—Available in API version 66.0 and later. TARGET_DO_NOT_CONTACT_ON—Target has Do Not Contact on TARGET_EMAIL_BOUNCED TARGET_EMAIL_EMPTY TARGET_HAS_INVALID_ID TARGET_HAS_OPT_OUT_EMAIL TEMPLATE_DELETED TEMPLATE_EMPTY—Email subject or body missing TEMPLATE_HAS_INVALID_MERGE_FIELD TEMPLATE_IS_INACTIVE TEMPLATE_MERGE_FIELD_RENDERING_ERROR TEMPLATE_NOT_PUBLIC—No access to template TEMPLATE_TOO_LARGE UNAUTHORIZED_EMAIL_DOMAIN—Available in API version 66.0 and later. UNKNOWN—Email unknown error USER_HAS_LOST_HVS_ACCESS USER_IS_INACTIVE USER_NOT_IN_EAC_CONFIG—Available in API version 66.0 and later."
     },
     "GoToStepIterationCount": {
       "type": "int",
@@ -99,6 +99,21 @@
       "type": "boolean",
       "properties": "Defaulted on create, Filter, Group, Sort",
       "description": "true if the sales rep completed an action during this step, such as making a phone call, otherwise false. The default value is false. This field is a calculated field."
+    },
+    "MessageType": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The type of messaging channel for this step. Available in API version 67.0 and later. Possible values are: Text— SMS Message"
+    },
+    "ReviewCriteriaFlowStatus": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "The execution status of the flow run to evaluate if a review is required for an email. Available in API version 67.0 and later. Possible values are: Failed NotExecuted Success"
+    },
+    "ReviewDisposition": {
+      "type": "picklist",
+      "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
+      "description": "Determines what happens to an email when review before send is enabled and the review time duration has expired. Available in API version 67.0 and later. Possible values are: CancelOutreach SendAnyway"
     },
     "ScheduledStartDateTime": {
       "type": "dateTime",
@@ -113,7 +128,7 @@
     "State": {
       "type": "picklist",
       "properties": "Filter, Group, Nillable, Restricted picklist, Sort",
-      "description": "The current state of this step. Possible values are: Possible values are: Active — The current step that the sales rep is performing. There can only be one active step for a given target. Cancelled — The sales rep canceled the step. Salesforce doesn’t run any canceled steps. Completed — This step is finished. Either the work in the step completed, or the step was skipped. Error — An error occurred while executing this step. InProgress — The sales rep has started the step, but it isn’t yet completed. Paused —The sales rep paused the step. Queued — Used for automated email steps. The email step has started but the email is waiting in the queue to be sent. Scheduled — Used for email steps. An email can be scheduled to be sent later."
+      "description": "The current state of this step. Possible values are: Possible values are: Active— The current step that the sales rep is performing. There can only be one active step for a given target. Approved—The step is approved. Available in API version 66.0 and later. Cancelled—The sales rep canceled the step. Salesforce doesn’t run any canceled steps. Completed—This step is finished. Either the work in the step completed, or the step was skipped. Error—An error occurred while executing this step. ExpiredApproved—The approval for this step has expired. Available in API version 67.0 and later. InProgress—The sales rep has started the step, but it isn’t yet completed. NeedsReview—The step needs a review. Available in API version 66.0 and later. Paused—The sales rep paused the step. Queued—Used for automated email steps. The email step has started but the email is waiting in the queue to be sent. Scheduled—Used for email steps. An email can be scheduled to be sent later."
     },
     "StepTitle": {
       "type": "string",
@@ -165,6 +180,16 @@
     "ActionTakenDateTime": {
       "field_label": "Action Taken Date Time",
       "type": "datetime"
+    },
+    "BranchIterationCount": {
+      "field_label": "Track Iteration Count",
+      "type": "int",
+      "digits": "9"
+    },
+    "Channel": {
+      "field_label": "Channel",
+      "type": "picklist",
+      "length": "255"
     },
     "CompletedById": {
       "field_label": "User ID",
@@ -224,6 +249,26 @@
     "LastModifiedDate": {
       "field_label": "Last Modified Date",
       "type": "datetime"
+    },
+    "MessageType": {
+      "field_label": "Message Type",
+      "type": "picklist",
+      "length": "255"
+    },
+    "NumberOfManualRetries": {
+      "field_label": "Number of Manual Retries",
+      "type": "int",
+      "digits": "9"
+    },
+    "ReviewCriteriaFlowStatus": {
+      "field_label": "Review Criteria Flow Status",
+      "type": "picklist",
+      "length": "255"
+    },
+    "ReviewDisposition": {
+      "field_label": "Review Disposition",
+      "type": "picklist",
+      "length": "255"
     },
     "ScheduledStartDateTime": {
       "field_label": "Scheduled Start Date Time",

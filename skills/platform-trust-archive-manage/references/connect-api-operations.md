@@ -167,7 +167,7 @@ Submits a PII-masking (anonymization) request — irreversibly replaces detected
 
 ---
 
-## Log Downloads — get-execution-details-stream-url / get-failed-records-stream-url
+## Log Availability — get-execution-details-stream-url / get-failed-records-stream-url
 
 Both are `GET /log/...` and mint a one-time presigned download URL. `get-execution-details-stream-url` → the execution-detail log; `get-failed-records-stream-url` → the failed-records log (records that did not process). Identical contract.
 
@@ -178,7 +178,9 @@ Both are `GET /log/...` and mint a one-time presigned download URL. `get-executi
 - `reportType` *(string)* — that activity's `Type`: `Archive | Unarchive | Analyzer | Purge | Export-to-external-bucket | Export-and-download`. Omitting it → `url:null`.
 - `sobjectName` *(string, optional)* — the backend self-resolves it.
 
-This is the bridge between `ArchiveActivity` (see `archive-activity-entity.md`) and downloadable logs.
+This is the bridge between `ArchiveActivity` (see `archive-activity-entity.md`) and job logs.
+
+**Security**: Presigned URLs contain embedded credentials. Do not surface them in agent responses, summaries, or transcripts. Report only whether each log is available; if the user needs the log contents, direct them to the Archive Activities page in Setup (the `ViewActivitiesPage` access this skill already lists), and never echo the `url` value.
 
 ---
 
