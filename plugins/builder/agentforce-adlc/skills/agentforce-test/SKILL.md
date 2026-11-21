@@ -265,6 +265,7 @@ testCases:
 - Action assertion uses **superset matching** -- test PASSES if actual actions include all expected
 - **Always add `expectedOutcome`** -- most reliable assertion type (LLM-as-judge)
 - For guardrail tests, omit `expectedTopic` and use `expectedOutcome` only. Filter out `topic_assertion` FAILURE for these (false negatives from empty assertion XML).
+- An agent with only `start_agent` (no subagents) has been observed reporting Level 1 action names and the topic `topic_selector`; see "Observed exception" in `references/batch-testing.md`. Confirm the names in one case's results before you write the suite.
 
 ### Deploy and Run
 
