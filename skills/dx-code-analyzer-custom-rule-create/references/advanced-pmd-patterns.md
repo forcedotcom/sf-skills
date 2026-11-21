@@ -52,7 +52,7 @@ A single ruleset XML can contain any number of rules. This is the recommended ap
         <properties>
             <property name="xpath">
                 <value><![CDATA[
-//*[local-name()='apiVersion'][number(substring-before(text(), '.')) < 60]
+//*[local-name()='apiVersion']/*[number(@Text) < 60]
 ]]></value>
             </property>
         </properties>
