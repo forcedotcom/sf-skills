@@ -52,6 +52,33 @@ public static Account createAccountByRecordType(String recordTypeName, Boolean d
 }
 ```
 
+### Record type availability (API 67.0+)
+
+From API 67.0, Apex DML enforces record-type availability for the running user. Inserting a record with a record type the user isn't granted fails with `INVALID_CROSS_REFERENCE_KEY`, and a newly deployed record type isn't granted to the deploying admin either. Don't rely on the running user: grant the record type through a permission set (its `recordTypeVisibilities` metadata), assign it to a test user, and do the record DML inside `System.runAs`.
+
+```apex
+@IsTest
+static void insertsPartnerAccount() {
+    Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+    User u = new User(
+        Alias = 'rtuser', Email = 'rtuser@example.com', EmailEncodingKey = 'UTF-8',
+        LastName = 'RecordType', LanguageLocaleKey = 'en_US', LocaleSidKey = 'en_US',
+        ProfileId = p.Id, TimeZoneSidKey = 'America/Los_Angeles',
+        Username = 'rtuser' + DateTime.now().getTime() + '@example.com'
+    );
+    insert u;
+
+    // Setup DML outside runAs; the permission set grants the record type
+    PermissionSet ps = [SELECT Id FROM PermissionSet WHERE Name = 'Account_Partner_Access' LIMIT 1];
+    insert new PermissionSetAssignment(AssigneeId = u.Id, PermissionSetId = ps.Id);
+
+    System.runAs(u) {
+        Account acc = TestDataFactory.createAccountByRecordType('Partner', true);
+        Assert.isNotNull(acc.Id, 'Account with Partner record type should insert');
+    }
+}
+```
+
 ## Handling Duplicate Rules
 
 When unique field values alone are not sufficient, use `Database.insert()` with a `DuplicateRuleHeader`:

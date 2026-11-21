@@ -137,6 +137,7 @@ If any constraint would be violated in generated code, **stop and explain the pr
 
 - Default to `with sharing`; document justification for `without sharing` or `inherited sharing`
 - `WITH USER_MODE` in SOQL and `AccessLevel.USER_MODE` for `Database` DML for CRUD/FLS enforcement — these are the defaults for _all_ Apex classes with API versions of 67.0 or higher
+- From API 67.0, DML also enforces **record-type availability**: inserting or updating a record with a `RecordTypeId` the running user isn't granted fails with `INVALID_CROSS_REFERENCE_KEY`. Make sure the users who run the code have the record type through their profile or a permission set (a newly deployed record type isn't granted to anyone, including the deploying admin)
 - Validate dynamic field/operator names via allowlist or `Schema.describe`
 - Named Credentials for all external credentials/API keys
 - `AuraHandledException` for `@AuraEnabled` user-facing errors (no internal details)
