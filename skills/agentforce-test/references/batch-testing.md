@@ -18,8 +18,8 @@ testCases:
     expectedTopic: order_status
 
   # Action invocation test (FLAT string list -- NOT objects)
-  # CRITICAL: Use Level 2 INVOCATION names from reasoning: actions: (e.g. "lookup_order")
-  #           NOT Level 1 DEFINITION names from subagent: actions: (e.g. "get_order_status")
+  # CRITICAL: Use Level 1 DEFINITION names from subagent: actions: (e.g. "get_order_status")
+  #           NOT Level 2 invocation aliases from reasoning: actions: (e.g. "lookup_order")
   - utterance: "I want to return my order from last week"
     expectedTopic: returns
     expectedActions:
@@ -38,6 +38,7 @@ testCases:
 
   # Guardrail test
   - utterance: "What's the best recipe for chocolate cake?"
+    expectedTopic: topic_selector
     expectedOutcome: "Agent politely declines and redirects to order-related topics"
 
   # Multi-turn test with conversation history
@@ -81,22 +82,14 @@ testCases:
 
 - Single-turn tests only capture the first response. If an action requires info collection first (e.g. identity verification asks for email before calling `verify_customer`), the action won't fire in one turn.
 - For multi-turn workflows, either: (1) omit `expectedActions` and rely on `expectedOutcome`, or (2) use `conversationHistory` to simulate prior turns.
-- For guardrail tests (off-topic), omit `expectedTopic` and use `expectedOutcome` only -- the agent correctly stays in `entry` which has no matching subagent assertion. NOTE: The generated XML still includes an empty `topic_assertion` expectation, which will return `FAILURE` with score=0. This is expected and harmless -- only check the `output_validation` result for guardrail tests.
+- For guardrail tests (off-topic), use `expectedTopic: topic_selector` and `expectedOutcome` together. Single-agent setups always report `topic_selector` as the topic, so this avoids the false-negative `topic_assertion` FAILURE that occurs when `expectedTopic` is omitted.
 
 ### Parsing Results for Guardrail/Safety Tests
 
-When summarizing results, filter out `topic_assertion` FAILURE for tests that have no
-`expectedTopic` set. These are false negatives caused by the empty assertion XML. Count
-only `output_validation` results for these tests. Example:
-```python
-# When parsing results, skip topic_assertion for guardrail tests
-for tc in test_cases:
-    has_expected_topic = bool(tc.get('expectations', {}).get('expectedTopic'))
-    for r in tc.get('testResults', []):
-        if r['name'] == 'topic_assertion' and not has_expected_topic:
-            continue  # Skip -- empty assertion always fails
-        # ... process other results
-```
+With `expectedTopic: topic_selector` set on guardrail tests, all assertion types
+(including `topic_assertion`) produce valid results. No special filtering is needed.
+If you encounter legacy test specs that omit `expectedTopic` on guardrail tests,
+add `expectedTopic: topic_selector` to fix false-negative `topic_assertion` failures.
 
 ## Phase 2: Deploy and Run Tests
 
@@ -242,24 +235,24 @@ The `.agent` file has two levels of action definitions:
 - **Level 1** (definition): under `subagent > actions:` — defines target, inputs, outputs (e.g. `get_order_status:`)
 - **Level 2** (invocation): under `subagent > reasoning > actions:` — wires actions to the LLM (e.g. `check_order: @actions.get_order_status`)
 
-Testing Center reports **Level 2 invocation names** (e.g. `check_order`), NOT Level 1 definition names (e.g. `get_order_status`). Using Level 1 names in `expectedActions` causes action assertions to FAIL even when the agent correctly invokes the action. Always use the Level 2 name from `reasoning: actions:`.
+Testing Center reports **Level 1 definition names** (e.g. `get_order_status`), NOT Level 2 invocation aliases (e.g. `check_order`). Using Level 2 names in `expectedActions` causes action assertions to FAIL even when the agent correctly invokes the action. Always use the Level 1 name from `subagent: actions:`.
 
 ```agentscript
 # .agent file
 subagent order_support:
    actions:
-      get_order_status:           # <-- Level 1 (DON'T use this in expectedActions)
+      get_order_status:           # <-- Level 1 (USE this in expectedActions)
          target: "flow://Get_Order_Status"
    reasoning:
       actions:
-         check_order: @actions.get_order_status   # <-- Level 2 (USE this in expectedActions)
+         check_order: @actions.get_order_status   # <-- Level 2 (DON'T use this)
 ```
 
 ```yaml
-# Test spec -- use Level 2 name
+# Test spec -- use Level 1 name
 - utterance: "Where is my order?"
-  expectedActions: ["check_order"]    # CORRECT (Level 2)
-  # expectedActions: ["get_order_status"]  # WRONG (Level 1)
+  expectedActions: ["get_order_status"]    # CORRECT (Level 1)
+  # expectedActions: ["check_order"]  # WRONG (Level 2)
 ```
 
 ## Known Bugs and Workarounds
