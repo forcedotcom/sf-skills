@@ -218,6 +218,8 @@ Common optional flags:
 - `--duration-days <days>` — expiration (max 30; CLI default 7)
 - `--set-default` — make this the default org
 - `--no-track-source` — disable source tracking (CI/CD)
+- `--no-namespace` — no namespace, even if the Dev Hub has one linked (packaging/CI repos); confirm `namespace` is null in the result
+- `--no-ancestors` — exclude 2GP package ancestors
 - `--wait <minutes>` — number of minutes to wait for the org to be ready
 - `--async` — return immediately; resume later
 
