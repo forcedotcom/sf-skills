@@ -21,7 +21,7 @@ This skill takes an intermediate JSON spec and produces a deployed Salesforce Fl
 
 ## Input contract
 
-A JSON file matching the schema in [reference/field-types.md](reference/field-types.md) and (optionally) [reference/post-screen-automation.md](reference/post-screen-automation.md). Canonical examples:
+A JSON file matching the schema in [references/field-types.md](references/field-types.md) and (optionally) [references/post-screen-automation.md](references/post-screen-automation.md). Canonical examples:
 
 - [examples/sample-spec.json](examples/sample-spec.json) — minimal screens-only flow.
 - [examples/inventory-transfer-spec.json](examples/inventory-transfer-spec.json) — full example with Repeater, Radio, visibility, decision, lookups, loop, and record-create.
@@ -47,7 +47,7 @@ If the design skill already supplied `<FlowApiName>`, use it. Otherwise derive f
 
 ### 3. Build the Flow Metadata JSON
 
-Assemble the flow's `Metadata` object **inline** from the spec — the Tooling `Flow` sObject takes a JSON `Metadata` blob, so there is no XML to compile and no converter to run. Follow the JSON shape and field mappings in [reference/flow-metadata-json.md](reference/flow-metadata-json.md) and [reference/field-types.md](reference/field-types.md).
+Assemble the flow's `Metadata` object **inline** from the spec — the Tooling `Flow` sObject takes a JSON `Metadata` blob, so there is no XML to compile and no converter to run. Follow the JSON shape and field mappings in [references/flow-metadata-json.md](references/flow-metadata-json.md) and [references/field-types.md](references/field-types.md).
 
 Notes:
 - The JSON `Metadata` is the exact same shape the Tooling `Flow` GET returns (`GET /tooling/sobjects/Flow/{id}` → `Metadata`), so you can retrieve a known-good sibling flow as a live reference before composing.
@@ -82,7 +82,7 @@ On success:
 
 On failure (the `POST` returned a 400 — read the error from the response body's `message`):
 - If `Cannot find component 'runtime_service_fieldservice:dcXxx'` → org doesn't have Field Service enabled (or the component name is wrong). Surface the exact error and stop.
-- For Flow validation errors, the cause is usually a pattern listed in the prohibited-patterns table at [fs-data-capture-reference/SKILL.md](../fs-data-capture-reference/SKILL.md). Read that file before retrying. Common diagnoses: schema-grouping violations, `.AllItems` vs `.AddedItems` accessor mismatch, CUD ordering, missing `nextOrFinishButtonLabel`, `IsLlmTargetable` boolean-vs-string.
+- For Flow validation errors, the cause is usually a pattern listed in the prohibited-patterns table at [field-service-data-capture-reference-configure/SKILL.md](../field-service-data-capture-reference-configure/SKILL.md). Read that file before retrying. Common diagnoses: schema-grouping violations, `.AllItems` vs `.AddedItems` accessor mismatch, CUD ordering, missing `nextOrFinishButtonLabel`, `IsLlmTargetable` boolean-vs-string.
 - Don't loop more than twice without showing the user.
 - Common gotcha: if you emit an implicit `Sec_General` section for any screen whose first field appears before an explicit `{ "section": "..." }` header, two such screens collide with `Duplicate developer name: Sec_General`. Give each such screen an explicit leading section in the JSON, then re-assemble and re-POST.
 
@@ -157,7 +157,7 @@ Deploying the flow does NOT make it appear in the "Forms" related list on a Serv
 - `Lookup` *with no `lookupObject`* → `dcTextInput` with `[Lookup — set objectApiName in Flow Builder]` prefix.
 - `FileView` *with no `fileName`* → `dcTextInput` with `[FileView — set fileName in Flow Builder]` prefix.
 
-See [reference/field-types.md](reference/field-types.md) for the full mapping.
+See [references/field-types.md](references/field-types.md) for the full mapping.
 
 **Out of scope:**
 - Multiple decisions / multiple loops / nested loops in `postScreen`.

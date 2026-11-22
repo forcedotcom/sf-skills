@@ -669,7 +669,7 @@ handleLineItemChange(event) {
 | Integration | See Also |
 |-------------|----------|
 | Flow → Apex → LWC | [triangle-pattern.md](triangle-pattern.md) |
-| Apex @AuraEnabled | [sf-apex/references/best-practices.md](../../sf-apex/references/best-practices.md) |
-| Flow Templates | [sf-flow/assets/](../../sf-flow/assets/) |
+| Apex @AuraEnabled | [platform-apex-generate/SKILL.md#auraenabled-controller](../../platform-apex-generate/SKILL.md#auraenabled-controller) |
+| Flow Generation | [automation-flow-generate/SKILL.md](../../automation-flow-generate/SKILL.md) |
 | Async Notifications | [async-notification-patterns.md](async-notification-patterns.md) |
 | State Management | [state-management.md](state-management.md) |
