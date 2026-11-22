@@ -205,6 +205,27 @@ Before doing anything, you **MUST ALWAYS** load them first if they match user in
 
 - [ ] MUST read [configure-guest-sharing-rules.md](references/configure-guest-sharing-rules.md) and follow all steps there.
 
+### Configuring Guest Apex Self-Registration
+
+**Use when** the site uses a custom Apex controller (e.g. `@AuraEnabled` method) for self-registration that calls `Site.createExternalUser` or inserts records as the guest user.
+
+Two things must be in place beyond Apex class access on the guest profile:
+
+**1. Guest profile object permissions:**
+Guest Apex that performs DML (insert Account, Contact, Case, or any custom object) fails with *"Access to entity '...' denied"* unless the guest profile also has **Create** and **Read** on each object the Apex writes. Guest profiles cannot have Edit or Delete. Grant field-level security (FLS) for every field the Apex populates. Keep the object's OWD sharing model **Private** — guest sharing rules control read-back, not profile permissions.
+
+When the guest must read back inserted records in the same transaction, make the Apex class `without sharing` and use system-mode DML (`AccessLevel.SYSTEM_MODE`) — the guest user has no record ownership and USER_MODE SOQL returns zero rows even in a `without sharing` context (API 67.0+).
+
+**2. Network self-registration flags:**
+`Site.createExternalUser` throws *"The site is not enabled for registration"* unless the Network metadata has:
+
+```xml
+<selfRegistration>true</selfRegistration>
+<selfRegProfile>Customer Community Plus User</selfRegProfile>
+```
+
+The `selfRegProfile` value must be the name of a cloned Customer Community (Plus) or Partner Community (Plus) profile. The BYO LWR bootstrap ships with `selfRegistration: false` — update it before deploying self-registration Apex.
+
 ### Retrieving Site Preview and Builder URLs After Deployment
 
 **Use when** user requests to preview a site, access a builder site, or after successfully deploying a site.

@@ -42,8 +42,13 @@ Use the metadata MCP tool with metadataType "SharingRules" to retrieve schema.
 2. **includeHVUOwnedRecords**: Required field. Set to `false` unless records owned by high-volume site users should be included.
 3. **One XML file per object**: Put all rules for a given object in one file. Do not create additional.
 
+## Guest Sharing Rules vs. Guest Profile Object Permissions
+
+Guest sharing rules control which **existing records** the guest user can read. They do **not** grant the ability to create records. If guest Apex inserts objects (e.g. during self-registration), the guest profile must also have **Create** and **Read** object permissions plus FLS on the relevant fields — otherwise the insert fails with *"Access to entity '...' denied"*. See the "Configuring Guest Apex Self-Registration" workflow in SKILL.md for the full setup.
+
 ## Common Mistakes
 
 - Using `<role>` or `<group>` instead of `<guestUser>` in sharedTo
 - Omitting the required `includeHVUOwnedRecords` field
 - Using `includeRecordsOwnedByAll` (that's for `sharingCriteriaRules`, not guest rules)
+- Confusing sharing rules (read-back access) with profile object permissions (DML ability) — both are needed for guest Apex that creates records
