@@ -58,6 +58,8 @@ Modes B–D **must** confirm before any write:
 - **Mode C** — a **mandatory impact-preview table** (Suite / Stage / Event / Action) before the confirmation gate.
 - **Mode D** — re-present the final test list before confirming. **Rejected tests must be EXCLUDED from the payload.** If tests were modified during review, re-present the final list before requesting confirmation. Never call without explicit approval.
 
+**Default Suite warning.** The Apex Unit Tests provider's **Default Suite** contains every Apex test class in the org, managed packages included. One reported org had 768 classes (~6,800 methods), about 2.5 hours per run. Before assigning or running it, say so explicitly, recommend a targeted `ApexTestSuite` delivered through the pipeline instead, and proceed only if the user confirms they want the full run.
+
 Do not call the API until the user gives an affirmative response. If the user declines, stop without writing. Full wording for each gate is in `references/suite-assignment-modes.md`.
 
 Mode A (recommendation) makes no writes and needs no confirmation gate.

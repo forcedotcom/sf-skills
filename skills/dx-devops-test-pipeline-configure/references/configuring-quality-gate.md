@@ -17,6 +17,8 @@ Run Prerequisites 1–4 **and** Prerequisite 5 (stage). You need `doce-org-alias
 | `testSuiteName` | The suite the gate will gate (the gate links to a specific suite-on-stage) |
 | `testSuiteStageId` | Target `DevopsTestSuiteStage` record Id — **resolved in Step 0**, not from Prereq 5 |
 
+> **Pre-Promote and the CLI:** a Pre-Promote gate was reported not to run when the promotion was completed from the Salesforce CLI. Don't tell the user a Pre-Promote gate protects CLI-completed promotions; if they promote from the CLI, run the suite explicitly first with `dx-devops-test-suite-run`.
+
 ---
 
 ## Step 0 — Resolve the target `DevopsTestSuiteStage` record

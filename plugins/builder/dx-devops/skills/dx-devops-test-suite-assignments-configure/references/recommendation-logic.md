@@ -113,7 +113,7 @@ Coverage gaps (new methods — manual authoring required):
 
 ## v1 constraint
 
-Only recommend existing suites. Never suggest generating new tests. If gaps exist, direct the developer to author tests manually and explain exactly which methods need coverage.
+Only recommend existing suites. Never suggest generating new tests. Never recommend the Apex Unit Tests provider's **Default Suite** — it runs every test in the org (hours, not minutes); recommend a targeted `ApexTestSuite` instead. If gaps exist, direct the developer to author tests manually and explain exactly which methods need coverage.
 
 ## How recommendations feed assignment
 
