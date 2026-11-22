@@ -99,7 +99,22 @@ sf project deploy start --dry-run -d "<packageDirectory>/main/default" --test-le
 
 **Critical:** Fix any deployment errors before proceeding. The page must validate successfully.
 
-### Step 3: Add Components Dynamically (if requested)
+### Step 3: Verify Page Activation (RecordPage only)
+
+Deploying a RecordPage does **not** make it the page users see. The org default, an app default, or an app/record-type/profile assignment decides which page is active. After a successful deploy, check whether the page is assigned:
+
+```bash
+sf org display --json          # get the org URL
+# Then instruct the user to verify in Lightning App Builder:
+# Setup → Lightning App Builder → find the page → Activation
+```
+
+**Rules:**
+- **Never change page assignments without asking the user first** — assignments affect every user who matches the app/record-type/profile combination.
+- If the user wants to activate the page via metadata, the assignment goes in the `CustomApplication` metadata (`actionOverrides` / `profileActionOverrides`). Deploy the updated application metadata alongside the FlexiPage.
+- If the user declines or is unsure, report that the page is deployed but not yet active, and point them to **Setup → Lightning App Builder → [page name] → Activation** to assign it manually.
+
+### Step 4: Add Components Dynamically (if requested)
 
 After the base page deploys successfully, if the user wants additional components, follow the **Adding Components Dynamically** workflow below. All component additions MUST go through the discovery and inference pipeline — never write component XML from memory alone.
 
@@ -176,6 +191,9 @@ Identifier: `flexipage_richText` or `flexipage_richText_{N}`
 - [ ] All field references use `Record.{Field}` format
 - [ ] Each fieldInstance has `fieldInstanceProperties` with `uiBehavior`
 - [ ] Each fieldInstance in its own `<itemInstances>` wrapper
+
+### Activation (RecordPage)
+- [ ] Page is activated where the user will open it — or user informed that it is deployed but not yet active
 
 ### Types & Encoding
 - [ ] Template regions use `<type>Region</type>`; component facets use `<type>Facet</type>`
