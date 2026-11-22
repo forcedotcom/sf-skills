@@ -360,7 +360,7 @@ sf org display --target-org <alias> --json
 If authentication fails, the user must run:
 
 ```bash
-sf org login web --set-default --alias <alias>
+sf org login web --alias <alias>
 ```
 
 ---
