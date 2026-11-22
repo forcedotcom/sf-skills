@@ -41,7 +41,7 @@ sf data query --query "SELECT COUNT() FROM Account" --target-org myorg --json
 ### In Diagram
 
 **erDiagram format** (in entity description):
-```mermaid
+```text
 Account {
     Id Id PK "[STD] LDV[~4M]"
     Text Name "Required"
@@ -49,7 +49,7 @@ Account {
 ```
 
 **Flowchart format** (in node label):
-```mermaid
+```text
 Account["Account<br/>LDV[~4M]"]
 ```
 
@@ -187,7 +187,7 @@ erDiagram
 
 ### Style Declarations
 
-```mermaid
+```text
 %% Standard Object - Sky Blue
 style Account fill:#bae6fd,stroke:#0369a1,color:#1f2937
 

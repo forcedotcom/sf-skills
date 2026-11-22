@@ -83,7 +83,7 @@ Color coding for data model diagrams by object type:
 
 ### ERD Style Declarations
 
-```mermaid
+```text
 %% Standard Object - Sky Blue
 style Account fill:#bae6fd,stroke:#0369a1,color:#1f2937
 
@@ -162,7 +162,7 @@ flowchart LR
 
 Control diagram density with `%%{init}` configuration:
 
-```mermaid
+```text
 %%{init: {"flowchart": {"nodeSpacing": 80, "rankSpacing": 70}} }%%
 ```
 
