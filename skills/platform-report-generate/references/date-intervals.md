@@ -53,4 +53,8 @@ Only use values from this table. Do NOT invent interval names like `INTERVAL_CUR
 ## Custom
 | Interval | Description |
 |----------|-------------|
-| `INTERVAL_CUSTOM` | Custom date range — requires `<startDate>` and `<endDate>` |
+| `INTERVAL_CUSTOM` | Custom date range — `<startDate>` and `<endDate>` are optional; without them the report covers all time |
+
+- **All time:** use `INTERVAL_CUSTOM` with no `<startDate>`/`<endDate>`. Don't add hard-coded dates to get "all time" — new records fall outside the range later and silently drop out of the report.
+- **Fixed range:** add `<startDate>` and `<endDate>` in `YYYY-MM-DD` format.
+- **Rolling window** (e.g. "last 90 days", "this year"): use a relative interval such as `INTERVAL_LAST90` or `INTERVAL_CURY`, not `INTERVAL_CUSTOM` with dates.
