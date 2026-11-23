@@ -16,6 +16,8 @@ FROM object
 [FOR UPDATE]
 ```
 
+> **Note:** `FOR UPDATE` cannot be combined with `ORDER BY`. A query that uses both fails to compile. See [FOR UPDATE (Record Locking)](#for-update-record-locking).
+
 ---
 
 ## Operators
@@ -170,6 +172,23 @@ SELECT Id, (SELECT Id FROM Children__r) FROM Parent__c
 | `WITH SECURITY_ENFORCED` | Enforce FLS (throws exception if no access) |
 | `WITH USER_MODE` | Respect sharing and FLS |
 | `WITH SYSTEM_MODE` | Bypass sharing rules |
+
+---
+
+## FOR UPDATE (Record Locking)
+
+`FOR UPDATE` locks the returned records until the transaction ends.
+
+- **Cannot be combined with `ORDER BY`.** Remove `ORDER BY` from any query that uses `FOR UPDATE`.
+- If you need ordered results, lock first, then sort in Apex (for example, by sorting a `List` with a `Comparator`).
+
+```apex
+// ❌ Invalid: ORDER BY with FOR UPDATE
+List<Account> accts = [SELECT Id, Name FROM Account WHERE Id IN :ids ORDER BY Name FOR UPDATE];
+
+// ✅ Valid: lock without ORDER BY, sort in Apex if needed
+List<Account> accts = [SELECT Id, Name FROM Account WHERE Id IN :ids FOR UPDATE];
+```
 
 ---
 
