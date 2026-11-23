@@ -1,6 +1,6 @@
 ---
 name: platform-metadata-grounding-get
-description: "Find Salesforce metadata by meaning and read how an org's fields, picklists, objects, permissions, or automation are configured. Use for Catalog-backed discovery and configuration inspection, including known API names. Read before using search_metadata, query_metadata, describe_metadata, or Salesforce MCP grounding operations. To choose between grounding, CLI, and source retrieval, use platform-metadata-discovery-get."
+description: "Find Salesforce metadata by meaning and inspect org configuration, including known API names. Use to find objects, fields, flows, Apex classes, picklist values, permission sets, validation rules, record types, and sharing rules by what they store or do. Use before creating metadata to check whether something similar already exists, and before writing Apex, LWC, SOQL, or Flow logic to confirm the real names. Use to read how a field, object, or validation rule is configured, and which profiles and permission sets can read or edit a field. Read before using the Metadata Grounding MCP (search_metadata, query_metadata, describe_metadata) or the Salesforce MCP operations searchMetadata, queryMetadata, and describeMetadata. Needs Salesforce Catalog in the org. DO NOT TRIGGER for choosing between grounding, SOQL, and the CLI (use platform-metadata-discovery-get), retrieving source (platform-metadata-retrieve), or Data Cloud DLO and DMO schema (data360-code-extension-generate)."
 metadata:
   relatedSkills:
   - data360-code-extension-generate
