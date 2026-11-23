@@ -20,7 +20,7 @@
     "skills_first": {
       "type": "string",
       "title": "Skills-first enforcement",
-      "description": "How raw sf calls that an installed skill owns are handled: enforce (default) blocks the raw call until the owning skill runs, advisory warns and lets the call run, off stays silent. The SF_PLUGIN_SKILLS_FIRST environment variable overrides this. Deploy safety gates are not affected.",
+      "description": "How raw sf calls and grounding MCP calls are handled: enforce (default) requires the owning skill first, advisory warns and lets the call run, off stays silent. The SF_PLUGIN_SKILLS_FIRST environment variable overrides this. Deploy safety gates are not affected.",
       "options": ["enforce", "advisory", "off"],
       "default": "enforce"
     },
@@ -42,7 +42,29 @@
   "skills": "./skills/",
   "commands": "./commands/",
   "hooks": {
+    "PostCompact": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/metadata_grounding_guard.py\"",
+          "timeout": 5
+        }
+      ]
+    }
+    ],
     "SessionStart": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/metadata_grounding_guard.py\"",
+          "timeout": 5
+        }
+      ]
+    },
       {
         "matcher": "*",
         "hooks": [
@@ -59,6 +81,16 @@
       }
     ],
     "PreToolUse": [
+    {
+      "matcher": "mcp__.*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/metadata_grounding_guard.py\"",
+          "timeout": 5
+        }
+      ]
+    },
       {
         "matcher": "Bash",
         "hooks": [
@@ -202,6 +234,16 @@
       }
     ],
     "PostToolUse": [
+    {
+      "matcher": "Skill",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/metadata_grounding_guard.py\"",
+          "timeout": 5
+        }
+      ]
+    },
       {
         "matcher": "Bash",
         "hooks": [
@@ -301,6 +343,16 @@
       }
     ],
     "SessionEnd": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/metadata_grounding_guard.py\"",
+          "timeout": 5
+        }
+      ]
+    },
       {
         "matcher": "",
         "hooks": [
