@@ -2,11 +2,32 @@
 
 How to provision an Agentforce Data Library (ADL) and wire it into an Agent Script `.agent` file so the agent can answer questions grounded on uploaded documents, Knowledge articles, or a custom retriever.
 
-This reference is consumed by the **Create an Agent** and **Modify an Existing Agent** workflows in `SKILL.md`. The parent skill decides *whether* to provision an ADL (by asking the user); this file owns *how*.
+This reference is consumed by the **Create an Agent** and **Modify an Existing Agent** workflows in `SKILL.md`. The parent skill captures the grounding purpose and source; this file selects and provisions the appropriate library.
 
-## Use `sf agent adl` CLI Commands
+## Choose the library before provisioning
 
-All ADL operations use the `sf agent adl` CLI. The CLI handles authentication, API version negotiation, polling, and error formatting automatically.
+For a **new library of uploaded documents**, prefer **Data Library Express
+(Beta)** when the corpus is English text in TXT, Markdown, PDF, or HTML, with
+at most 1,000 files and 100 MB total. Read
+[Express Libraries](express-library-reference.md) and follow that workflow
+before running the traditional ADL prerequisites below. Express uses a generated
+retriever action, not the `ARFPC_` / `AnswerQuestionsWithKnowledge` wiring in
+this reference.
+
+Reuse a library the user explicitly selected; do not migrate it or create a
+duplicate. Keep Salesforce Knowledge articles and existing custom retrievers
+on their respective workflows below. For unsupported formats, non-English
+content, larger corpora, or questions requiring images, graphics, or complex
+tables, explain the Express limitation and agree on the appropriate source.
+Do not silently skip files or convert them to Knowledge articles. Agents that
+do not need document grounding do not need a library.
+
+## Traditional ADL: use `sf agent adl` CLI commands
+
+The remaining commands and prerequisites cover **SFDRIVE, KNOWLEDGE, and
+RETRIEVER** libraries. The CLI handles authentication, API version negotiation,
+polling, and error formatting for those library types. Do not invent
+`--source-type express`; use the separate Express workflow.
 
 Available commands:
 
@@ -178,7 +199,7 @@ FLAGS (required):
 
 ## Org setup prerequisite
 
-If the org is fresh (just licensed, not yet configured), read [Org Setup for ADL](org-setup-for-adl.md) FIRST. That reference handles:
+For a traditional ADL in a fresh org (just licensed, not yet configured), read [Org Setup for ADL](org-setup-for-adl.md) FIRST. That reference handles:
 - Enabling Einstein GPT Platform + Agentforce (settings deploy)
 - Admin user permsets (Data Cloud Architect, Prompt Template Manager, CopilotSalesforceAdmin)
 - Lightning Knowledge enablement
@@ -189,32 +210,40 @@ If Step 0 below fails, the org likely hasn't been set up yet — go to [Org Setu
 
 ## What this reference covers
 
-- **Step 0** — Verify Data Cloud is provisioned. ADL has a hard dependency on Data Cloud.
+- **Express** — Use [Express Libraries](express-library-reference.md); its service/readiness checks and retriever-action wiring are separate.
+- **Traditional ADL Step 0** — Verify Data Cloud is provisioned for the SFDRIVE, KNOWLEDGE, or RETRIEVER workflow below.
 - **Option A: SFDRIVE (File Library)** — Steps 1–7: Create library, upload file, trigger indexing, poll until ready. Step 8: Day-2 add more files.
 - **Option B: KNOWLEDGE (Knowledge Article Library)** — Create library with knowledgeConfig, trigger indexing, poll until ready. Day-2: update config fields.
 - **Option C: RETRIEVER (Custom Retriever Library)** — Create library with active retrieverId, immediately ready.
-- **Wiring the ADL into Agent Script** — the `knowledge:` block + `AnswerQuestionsWithKnowledge` action (same for all source types).
+- **Wiring a traditional ADL into Agent Script** — the `knowledge:` block + `AnswerQuestionsWithKnowledge` action (same for the three traditional source types, not Express).
 
 ## Source type decision guide
 
-Ask the user which grounding source they want:
+Preserve a source the user selected. Otherwise choose from their actual content:
 
 | Source Type | Use When | Provisioning |
 |-------------|----------|-------------|
-| **SFDRIVE** | User has PDF/TXT/HTML docs to upload | Upload → Index → READY (2-10 min) |
+| **EXPRESS (Beta)** | New library of supported English text documents within Express limits | [Express workflow](express-library-reference.md): create → upload → index → verify files → attach retriever action |
+| **SFDRIVE** | Uploaded documents need the traditional library's capabilities or the user explicitly requests it | Upload → Index → READY (2-10 min) |
 | **KNOWLEDGE** | Org has Salesforce Knowledge articles | Create → Auto-index from KAV → READY (2-10 min) |
 | **RETRIEVER** | User has an existing active Custom Retriever | Create → Immediately READY (no provisioning) |
 
-If the user says "knowledge base" or "FAQ articles" → KNOWLEDGE. If they say "upload files" or "documents" → SFDRIVE. If they say "I have a retriever" or "custom search" → RETRIEVER.
+If the user provides supported documents to ground a new agent, choose Express
+when available in the target org. Existing Salesforce Knowledge articles →
+KNOWLEDGE. An existing active custom retriever → RETRIEVER. A generic phrase
+such as "knowledge base" does not establish that Salesforce Knowledge articles
+exist.
 
 **When intent is ambiguous, ASK — do not guess.** Common ambiguous cases:
-- "knowledge-grounded agent from a PDF" — could be SFDRIVE (upload PDF directly) or KNOWLEDGE (extract content into articles, then ground on those). Ask which approach the user wants.
+- "create Knowledge articles from this PDF" — clarify whether the task is article creation, document grounding, or both; do not substitute one for the other.
 - "add knowledge to my agent" — generic word "knowledge" doesn't indicate source type. Ask.
-- File path + "knowledge" in the same request — the file could be the grounding source (SFDRIVE) or input for creating articles (KNOWLEDGE). Ask.
+- A request to create or publish Salesforce Knowledge articles from a file — confirm the intended article workflow instead of treating it as a document-library upload.
 
 ## Outputs the parent skill consumes
 
-After Step 7 succeeds, hand the parent skill these values:
+For Express, return the identities and verification results specified in
+[Express Libraries](express-library-reference.md#outputs). For a traditional
+ADL, after Step 7 succeeds, hand the parent skill these values:
 - `libraryId` — the raw library ID returned by the create call.
 - `retrieverId` — populated once indexing completes.
 - `rag_feature_config_id` — derived as `"ARFPC_" + libraryId`. This is the value that goes into the `.agent` file's `knowledge:` block. It is **not** the raw libraryId.
@@ -252,7 +281,7 @@ Substitute the user's real alias before continuing.
 
 ## Step 0 — Verify Data Cloud is provisioned and ADL is reachable
 
-ADL requires both (a) Data Cloud provisioning to be complete and (b) the ADL service routes to be healthy. The two are independent in practice — orgs can have DC provisioned but a broken ADL service. Run both checks; do not collapse them.
+The traditional ADL workflow requires both (a) Data Cloud provisioning to be complete and (b) the ADL service routes to be healthy. The two are independent in practice — orgs can have DC provisioned but a broken ADL service. Run both checks; do not collapse them. For Express, use its own service preflight instead.
 
 ### 0a. DC provisioning check — `DataKnowledgeSpace`
 

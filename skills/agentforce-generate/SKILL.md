@@ -211,7 +211,11 @@ Use for a new agent or authoring bundle.
    reuse implementations, generate them, or leave placeholders.
 2. Read the applicable sections of [CLI for Agents](references/salesforce-cli-for-agents.md)
    and validate the target-org prerequisites before org work. For document
-   grounding, read [Data Library](references/data-library-reference.md). For a
+   grounding, read [Data Library](references/data-library-reference.md). Prefer
+   Data Library Express for new libraries of supported English documents;
+   preserve explicitly selected existing libraries. Read
+   [Express Libraries](references/express-library-reference.md) for eligibility,
+   provisioning, retriever-action wiring, and live verification. For a
    voice agent, read [Voice Modality](references/voice-modality-reference.md)
    and [Voice Latency](references/voice-latency-heuristics.md).
 3. Generate the authoring bundle with Salesforce CLI. Edit the scaffolded
@@ -287,7 +291,9 @@ state flow, grounding source, or modality.
    affected use case without forcing a full spec rewrite.
 2. Read [Core Language](references/agent-script-core-language.md) and only the
    feature references needed for the change. Preserve unrelated metadata,
-   contracts, formatting, and behavior.
+   contracts, formatting, and behavior. For grounding changes, read
+   [Data Library](references/data-library-reference.md); preserve existing
+   library selections and use Express for eligible new document libraries.
 3. Edit the existing bundle in place. Generate action implementations only when
    explicitly requested.
 4. Compile locally and, when available, validate against the target org. Preview
