@@ -1,0 +1,19 @@
+// Eval fixture — minimal Android project on the LEGACY MarketingCloudSdk (7.4.2).
+// Represents the full legacy→unified migration case. Not a runnable build; just
+// enough real structure for scan_usage.py / target_options.py to detect against.
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        // SFMC SDK maven — resolve_versions.py scrapes this in Phase 3.
+        maven { url "https://salesforce-marketingcloud.github.io/MarketingCloudSDK-Android/repository" }
+    }
+}
+rootProject.name = "news-app"
+include ":app"

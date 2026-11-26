@@ -1,0 +1,42 @@
+{
+  "platform": "android",
+  "source": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/change-log.html#android",
+  "_note": "Scraped 2026-06-26. Re-scrape periodically to keep current. 'era' is the single most important field: legacy (MarketingCloudSdk) vs unified (SFMCSdk). The architecture-breaking boundary is major version 10 — crossing it triggers the full symbol migration in migration-matrix-android.json. Within an era, an upgrade is a version/config bump, not a code rewrite (subject to per-version breaking notes below).",
+  "eraBoundaryMajor": 10,
+  "latestStable": "11.0.1",
+  "migrationGuides": {
+    "to10": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/migrate-to-version-10.html",
+    "to11": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/migrate-to-version-11.html"
+  },
+  "versions": [
+    { "version": "11.0.1", "date": "2026-06-10", "major": 11, "era": "unified", "breaking": false, "notes": "Min API 26, compile API 36, Java 17, Kotlin 2.2.21. Perf + ART VerifyError hardening." },
+    { "version": "11.0.0", "date": "2026-03-30", "major": 11, "era": "unified", "breaking": true, "notes": "Major. In-App Messaging config changes + how InAppMessageManager is accessed; consolidated Push UrlHandlers. See Migrate to Version 11." },
+    { "version": "10.0.0", "date": "2025-11-06", "major": 10, "era": "unified", "breaking": true, "notes": "Major. Introduces the unified SDK architecture (SFMCSdk). First version off the legacy MarketingCloudSdk API. Kotlin 1.9.22. See Migrate to Version 10." },
+    { "version": "9.0.5", "date": "2026-04-22", "major": 9, "era": "legacy", "breaking": false, "notes": "DeviceStatistics bundle size fix." },
+    { "version": "9.0.4", "date": "2025-12-18", "major": 9, "era": "legacy", "breaking": false, "notes": "Carousel button UI; Android 11/12 broadcast receiver crash fix." },
+    { "version": "9.0.3", "date": "2025-08-05", "major": 9, "era": "legacy", "breaking": false, "notes": "Push text line limit fix." },
+    { "version": "9.0.2", "date": "2025-06-26", "major": 9, "era": "legacy", "breaking": false, "notes": "Android 16 support." },
+    { "version": "9.0.1", "date": "2025-05-27", "major": 9, "era": "legacy", "breaking": false, "notes": "ANR/NPE/customKeys fixes." },
+    { "version": "9.0.0", "date": "2025-03-14", "major": 9, "era": "legacy", "breaking": true, "notes": "Major (still legacy API). Carousel push, Push Delivery ENS event, Inbox 2.0. Min API drops to 21." },
+    { "version": "8.2.2", "date": "2025-02-27", "major": 8, "era": "legacy", "breaking": false, "notes": "HTTP header / NPE / batch-size fixes." },
+    { "version": "8.2.1", "date": "2024-11-11", "major": 8, "era": "legacy", "breaking": false, "notes": "Android 15 support; ClassCastException fix." },
+    { "version": "8.2.0", "date": "2024-07-30", "major": 8, "era": "legacy", "breaking": true, "notes": "Auto-switch to Android Keystore encryption; MD5 hashing moved to optional library; removed deprecated LocalBroadcastManager." },
+    { "version": "8.1.5", "date": "2024-02-27", "major": 8, "era": "legacy", "breaking": false, "notes": "NoClassDefFoundError fix." },
+    { "version": "8.1.4", "date": "2024-01-30", "major": 8, "era": "legacy", "breaking": false, "notes": "Android 14 trampolining fix." },
+    { "version": "8.1.3", "date": "2023-11-09", "major": 8, "era": "legacy", "breaking": false, "notes": "Proguard obfuscation fix." },
+    { "version": "8.1.2", "date": "2023-10-19", "major": 8, "era": "legacy", "breaking": false, "notes": "URI scheme NPE fix." },
+    { "version": "8.1.1", "date": "2023-10-10", "major": 8, "era": "legacy", "breaking": false, "notes": "requestId property fix." },
+    { "version": "8.1.0", "date": "2023-10-09", "major": 8, "era": "legacy", "breaking": false, "notes": "Android 14 support; Runtime Toggles introduced." },
+    { "version": "8.0.9", "date": "2023-05-09", "major": 8, "era": "legacy", "breaking": false, "notes": "Play Services Location 21+, Firebase Messaging 23+; foreground/background detection change." },
+    { "version": "8.0.7", "date": "2022-09-29", "major": 8, "era": "legacy", "breaking": false, "notes": "Android 13 + ENS support." },
+    { "version": "8.0.1", "date": "2021-10-11", "major": 8, "era": "legacy", "breaking": false, "notes": "Android 12 support. (8.0.0 is deprecated — use 8.0.1+.)" },
+    { "version": "7.4.4", "date": "2021-12-12", "major": 7, "era": "legacy", "breaking": false, "notes": "Backport of v8 RejectedExecutionException fix." },
+    { "version": "7.4.2", "date": "2021-09-02", "major": 7, "era": "legacy", "breaking": false, "notes": "Bug fixes." },
+    { "version": "7.3.0", "date": "2020-10-12", "major": 7, "era": "legacy", "breaking": false, "notes": "Android 21 crash fixes." },
+    { "version": "7.0.0", "date": "2020-02-24", "major": 7, "era": "legacy", "breaking": false, "notes": "Bug fixes." },
+    { "version": "6.4.0", "date": "2019-10-28", "major": 6, "era": "legacy", "breaking": false, "notes": "Min API 16." },
+    { "version": "6.3.3", "date": "2019-06-25", "major": 6, "era": "legacy", "breaking": false, "notes": "In-app messaging feature introduced." },
+    { "version": "6.2.1", "date": "2019-04-23", "major": 6, "era": "legacy", "breaking": true, "notes": "App endpoint now required; critical FCM update enforced." },
+    { "version": "6.0.2", "date": "2018-12-05", "major": 6, "era": "legacy", "breaking": true, "notes": "Replaced GCM with FCM; removed Attribute class and DefaultUrlPresenter; consolidated notification options; TSE support." }
+  ]
+}

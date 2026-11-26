@@ -1,0 +1,17 @@
+# Eval fixture — legacy Marketing Cloud SDK pinned via a Gradle VERSION CATALOG.
+# Represents the "update build.gradle, we use libs.versions.toml" case. The
+# migration must update this catalog entry (and the build.gradle.kts that
+# references it) and migrate the single init call site.
+[versions]
+kotlin = "1.9.22"
+androidxCore = "1.10.1"
+
+[libraries]
+# Full-coordinate string form (group:name:version) so the version is pinned in
+# one place. Migration bumps this to the unified core + push feature module.
+marketingcloud = "com.salesforce.marketingcloud:marketingcloudsdk:8.1.0"
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+
+[plugins]
+android-application = { id = "com.android.application", version = "8.1.0" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
