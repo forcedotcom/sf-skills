@@ -134,6 +134,11 @@ still needs an action in the correct subagent and instructions to call it.
 Do **not** derive an `ARFPC_` value or copy the traditional
 `AnswerQuestionsWithKnowledge` template for Express.
 
+Run metadata retrieval inside the Salesforce DX project that will hold the
+agent. If no project exists, create one with
+`sf project generate --name <project-name> --json` and enter its directory
+before retrieving metadata. Reuse an existing project without overwriting it.
+
 Retrieve the generated action to inspect its actual target and schemas:
 
 ```bash
@@ -204,8 +209,9 @@ Do not publish or activate it without the parent workflow's release approval.
    schema, reasoning-action exposure, and instructions.
 2. Ask a question whose answer is a distinctive fact in an uploaded document.
    Inspect the trace for the correct subagent, retriever invocation, returned
-   evidence, final answer, and returned citations. A plausible answer alone
-   does not prove the action ran.
+   evidence, final answer, and returned citations. In Salesforce Builder, select **Live Test Mode**;
+   simulated action results do not prove document retrieval. A plausible
+   answer alone does not prove the action ran.
 3. Start a fresh session and repeat with another distinctive fact. Ask a related
    question absent from the documents; the agent must acknowledge the gap.
 4. When reusing or extending a library, verify old and new document facts and
