@@ -136,8 +136,9 @@ Do **not** derive an `ARFPC_` value or copy the traditional
 
 Run metadata retrieval inside the Salesforce DX project that will hold the
 agent. If no project exists, create one with
-`sf project generate --name <project-name> --json` and enter its directory
-before retrieving metadata. Reuse an existing project without overwriting it.
+`sf template generate project --name <project-name> --json` and enter its
+directory before retrieving metadata. On CLI versions exposing the older
+command name, use `sf project generate` with the same flags. Reuse an existing project without overwriting it.
 
 Retrieve the generated action to inspect its actual target and schemas:
 
