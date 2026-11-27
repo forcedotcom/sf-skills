@@ -226,8 +226,7 @@ does.
 - **Generic Setup org-preference operation**: `enableGiftPlanning` → `GiftPlanningEnabled`;
   `enableGiftAgreement` → `GiftAgreementEnabled`; `enablePhilResearchAgent` →
   `PhilResearchAgentEnabled`; `enableInteractionSummaryPref` → `InteractionSummaryPref`. Write via
-  `platform.setup.setup-metadata.setOrgPreference` (`PATCH
-  /headless/invoke/platform/setup/setup-metadata/set-org-preference`, body `{"orgPreferences":
+  `platform.setup.setup-metadata.setOrgPreference` (`platform.setup.setup-metadata.setOrgPreference`, body `{"orgPreferences":
   {"<Name>": <bool>}}`). Do **not** use this operation's read side (`isOrgPreferenceEnabled`) for
   verification: it takes a list-valued parameter that the dispatch path cannot carry, so
   the call fails `400 REQUEST_ERROR "Invalid request"` however it is encoded — not a usage mistake. Verify instead with the best-effort Tooling read described under "Verifying a toggle" below.
@@ -383,7 +382,7 @@ below, directly by path, and nothing else. This is an allowlist, not a skip-list
 steps that SOR contains today, adds, or renames later, this skill is unaffected as long as these
 four paths keep working, because it never calls the SOR by id in the first place.
 
-1. `GET /headless/invoke/platform/person-account-settings/check-person-account-readiness` — returns
+1. `setup.platform.person-account-settings.checkPersonAccountReadiness_PersonAccountEnablementController` — returns
    `personAccountsEnabled`, `termsConditionsAccepted`, `accountRecordTypeCreated`, `profilePermsSet`,
    `orgWideSharingSet`, `allStepsComplete`. If `personAccountsEnabled` is already `true`, skip the
    rest of this chain. `accountRecordTypeCreated` and the profile-visibility gate are already
@@ -391,14 +390,13 @@ four paths keep working, because it never calls the SOR by id in the first place
    below — run those first if either gate is still false. If `profilePermsSet`/`orgWideSharingSet`
    are false for a reason not covered by those sub-checks, fall back to the manual Setup UI gate for
    just the unmet gate rather than blocking the whole chain on it.
-2. `PATCH /headless/invoke/platform/person-account-settings/accept-terms-and-conditions` once
+2. `setup.platform.person-account-settings.acceptTermsAndConditions` once
    `accountRecordTypeCreated` is true. Re-read step 1 and assert `termsConditionsAccepted = true`
    before continuing — never trust the `PATCH` response alone.
 3. **Explicit confirmation, then the irreversible write.** `enable-person-accounts` is documented
    IRREVERSIBLE by the operation itself ("Do NOT call without explicit user confirmation") — gate it
    exactly like Fundraising's own dedicated enablement confirmation below: warn that it's irreversible
-   and org-wide, get an explicit `AskUserQuestion` confirmation, then `PATCH
-   /headless/invoke/platform/person-account-settings/enable-person-accounts`. On decline, stop, zero
+   and org-wide, get an explicit `AskUserQuestion` confirmation, then `setup.platform.person-account-settings.enablePersonAccounts`. On decline, stop, zero
    further writes, `STOPPED_PERSON_ACCOUNTS_MISSING`.
 4. Re-verify via step 1's `GET` again (`personAccountsEnabled = true`) and the existing
    `FieldDefinition` check Layer 0 already runs (`IsPersonAccount` on `Account`, `totalSize > 0`) —

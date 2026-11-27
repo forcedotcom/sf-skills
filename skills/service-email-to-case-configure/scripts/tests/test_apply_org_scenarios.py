@@ -15,7 +15,7 @@ Plus the optional-toggle guarantees:
   * when the user opts OUT of a toggle (it is absent from the source file), it
     is NOT written and the org keeps its current value.
 
-All org I/O is mocked via FakeOrg — no live org required.
+The agent's dispatch loop runs against FakeOrg — no live org required.
 """
 from __future__ import annotations
 
@@ -54,7 +54,7 @@ AUTOMATED_USER_FIELDS = ("defaultCaseUser", "useSystemUserAsDefaultCaseUser",
 
 
 def automated_user_payload(org):
-    """The automated-user fields carried by the Phase A updateMetadata write."""
+    """The automated-user fields carried by the Phase A PUT write."""
     for w in org.writes:
         if any(f in w for f in AUTOMATED_USER_FIELDS):
             return {f: w[f] for f in AUTOMATED_USER_FIELDS if f in w}
@@ -74,7 +74,7 @@ class Scenario1_NoSupportNoToggles(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com",
                 "--owner-type", "User", "--owner-value", ADMIN,
                 "--automated-type", "User", "--automated-value", ADMIN,
@@ -107,7 +107,7 @@ class Scenario2_SupportSetNoToggles(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com",
             ])
         self.assertEqual(summary["supportSettings"]["action"],
@@ -132,7 +132,7 @@ class Scenario2b_PartialSupportSettings(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             return run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com", *extra])
 
     def test_owner_set_supply_only_automated_user(self):
@@ -303,7 +303,7 @@ class Scenario3_ToggleOnNoOnDemand(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com",
             ])
         self.assertTrue(org.state["emailToCase"]["enableOnDemandEmailToCase"])
@@ -322,7 +322,7 @@ class Scenario4_AllTogglesNoAddress(unittest.TestCase):
         src = Input().with_default_toggles().build()  # no .address()
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
-            summary = run_main(apply_mod, ["--target-org", "x", "--input", path])
+            summary = run_main(apply_mod, ["--input", path])
         self.assertEqual(summary["phaseB"], [])
         self.assertEqual(summary["verified"]["routingAddressCount"], 0)
         self.assertTrue(org.state["emailToCase"]["enableEmailToCase"])
@@ -362,7 +362,7 @@ class Scenario5_NewAddressNotEdit(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "billing@acme.com",
             ])
         self.assertEqual(summary["verified"]["routingAddressCount"], 2)
@@ -394,7 +394,7 @@ class Scenario5_NewAddressNotEdit(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com",
             ])
         self.assertEqual(summary["phaseB"][0]["status"], "already_exists")
@@ -449,7 +449,7 @@ class MultiAddressOrderingPreservation(unittest.TestCase):
                             caseOrigin="Email", casePriority="Medium")
             emails.append(email)
         src = builder.build()
-        args = ["--target-org", "x"]
+        args = []
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             args += ["--input", path]
@@ -512,7 +512,7 @@ class Scenario6_SupportSettingsTypes(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             return run_main(apply_mod,
-                            ["--target-org", "x", "--input", path, *extra])
+                            ["--input", path, *extra])
 
     def test_user_owner_and_user_automated(self):
         org = fresh_org(active_users=[ADMIN, AUTH])
@@ -559,7 +559,7 @@ class Scenario7_PerAddressCaseOwner(unittest.TestCase):
                         **addr_kw).build())
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
-            return run_main(apply_mod, ["--target-org", "x", "--input", path,
+            return run_main(apply_mod, ["--input", path,
                                         "--routing-email", email])
 
     def test_no_case_owner(self):
@@ -606,7 +606,7 @@ class OptionalToggleBehavior(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
             summary = run_main(apply_mod, [
-                "--target-org", "x", "--input", path,
+                "--input", path,
                 "--routing-email", "support@acme.com"])
         e2c = org.state["emailToCase"]
         for t in DEFAULT_E2C_TOGGLES:
@@ -638,7 +638,7 @@ class OptionalToggleBehavior(unittest.TestCase):
                         caseOrigin="Email", casePriority="Medium").build())
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
-            summary = run_main(apply_mod, ["--target-org", "x", "--input", path,
+            summary = run_main(apply_mod, ["--input", path,
                                            "--routing-email", "support@acme.com"])
         # (a) the skill did not claim to set the opted-out fields
         self.assertNotIn("emailToCase.showWordCountInComposer",

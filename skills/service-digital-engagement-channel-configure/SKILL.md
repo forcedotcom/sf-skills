@@ -16,24 +16,38 @@ metadata:
       semver: ">=2.0.0"
     - tool: ["python3"]
       semver: ">=3.8"
+    - tool: ["jq"]
+      semver: ">=1.7.0"
 ---
 
 # Configuring Enhanced Chat Channel
 
 Creates `MessagingChannel` metadata XML for Salesforce Messaging for In-App and Web (MIAW). This skill produces a fully configured enhanced chat channel with routing, user verification, pre-chat, and automated response settings ready for Metadata API deployment.
 
+## How delegation is handled
+
+### Service-Onboarding delegation
+
+When `delegationFrom` is set to service-onboarding, fetch and follow
+[the Service-Onboarding delegation guidelines](references/_vendored/service-onboarding-delegation-guidelines.md) before acting — it is the single
+source of truth, identical across every service-onboarding delegate. When it is absent, ignore this
+and run as a normal standalone conversation.
+
+---
+
 ## Scope
 
-- **In scope**: Creating `MessagingChannel` metadata with Omni-Channel Flow routing, Omni-Channel Queue routing, User routing, or Agentforce Service Agent (ASA) routing; enabling User Verification; configuring all channel settings (pre-chat forms, automated responses, consent keywords, file attachments, custom parameters)
+- **In scope**: Creating `MessagingChannel` metadata with Omni-Channel Flow routing, Omni-Channel Queue routing, User routing, or Agentforce Service Agent (ASA) routing; enabling User Verification, including creating its keyset (`references/keyset_setup.md`); configuring all channel settings (pre-chat forms, automated responses, consent keywords, file attachments, custom parameters)
 - **Out of scope**: Creating the referenced Omni-Channel Flow/Queue definitions (use `automation-flow-generate`), creating the Embedded Service Deployment (separate metadata type — use `service-digital-engagement-deployment-configure`), creating permission sets for messaging (use `platform-permission-set-generate`), configuring the Embedded Service Code Snippet
 
 ---
 
 ## Entry points and transport
 
-- **Delegated** (`context.calledFrom == "service-onboarding"`): use the approved `values` and ask nothing for changes the plan row describes; confirm drift on an existing channel with the user (step 3a). Return `failed` naming any missing required key. **Standalone** (no `context`): ask for the Inputs below.
-- **Shell safety**: org alias and bot name must match `^[A-Za-z0-9_.@+-]+$` before use in a command; otherwise stop and ask (delegated: `failed`). Pass the channel label single-quoted, escaping any `'` as `'\''`.
-- **Transport A** (primary): headless-360 MCP `dispatch` / `dispatch_readonly` on `/headless/metadata`. **Transport B**: the `sf` commands below, only where a probe shows Transport A unavailable.
+- **Delegated** (`delegationFrom` is set; alias `context.calledFrom == "service-onboarding"` until onboarding drops it): read the Inputs from `intent` and ask only for what it leaves open. Never fabricate a value; a missing routing target, or invalid shell input, is `failed`. Announce writes without re-confirming each; confirm the target org (contract §2), drift on an existing channel (step 3a), and, with verification on but no keyset in `intent`, the keyset question (step 8). **Standalone** (no `delegationFrom`): ask for the Inputs below.
+- **Shell safety**: org alias and bot name must match `^[A-Za-z0-9][A-Za-z0-9_.@+-]*$` before use in a command; otherwise stop and ask (delegated: `failed`). Pass the channel label single-quoted, escaping any `'` as `'\''`.
+- **Transport A** (primary): headless-360 MCP `dispatch` / `dispatch_readonly` on `/headless/metadata`. **Transport B**: the `sf` commands below, only where a probe shows Transport A unavailable. **Decide the transport before the first org command and say it in one line** (`Transport: A, probe returned xmlRep` or `Transport: B, <signal>`); no org write without that line. For B, quote the failed tool load or the probe's error text: "dispatch isn't available" with no load attempt or probe result is not a reason. If `dispatch` / `dispatch_readonly` is not in your tool list, load it (e.g. ToolSearch) and probe before choosing B; "not in my tool list" is not "unavailable". Use B only on one of these signals: `ROUTE_NOT_FOUND`, `UNSUPPORTED_OPERATION`, `METADATA_CRUD_ERROR`, or an auth/connection error. The choice resets at every step: an earlier `sf` step (e.g. the Web create) is never a reason to use `sf` for the next.
+- **Target org**: before the first write, confirm the target org and sandbox/production with the user (contract §2); a switch from Transport A to B is a new confirmation.
 
 Details: `references/onboarding_contract.md` (§1 entry points, §2 transport, §3 pre-scan, §5 result).
 
@@ -41,13 +55,13 @@ Details: `references/onboarding_contract.md` (§1 entry points, §2 transport, �
 
 ## Inputs
 
-Standalone: ask for anything not already clear. Delegated: take `values`.
+Standalone: ask for anything not already clear. Delegated: take them from `intent`.
 
 - **Channel name**: `masterLabel` and file name (`<Name>.messagingChannel-meta.xml`)
 - **Routing type**: `Queue`, `Flow`, `User`, or `AgentforceServiceAgent`
 - **Routing target**: developer name of the queue, flow, user, or ASA bot
 - **Fallback queue** (Flow and ASA): developer name for escalation. **Routing config** (User): `QueueRoutingConfig` DeveloperName
-- **User verification**: JWT-based identity verification (default `false`, so `authMode` `UnAuth`). `true` makes an `Auth` channel; a keyset name is optional (with one, also an `authIdentifier`, a free-form label defaulting to the file name). Creating keys is a separate setup
+- **User verification**: JWT-based identity verification (default `false`, so `authMode` `UnAuth`). `true` makes an `Auth` channel; a keyset name is optional (with one, also an `authIdentifier`, a free-form label defaulting to the file name). No keyset: creating one is `references/keyset_setup.md`
 - **Pre-chat fields** (optional): which fields and types
 
 Apply every other default from `references/channel_settings.md` unless the user specifies otherwise.
@@ -60,15 +74,15 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 ### Phase 1 — Gather Context
 
-1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 '<org-alias>'` (skip it when Transport A is in use). Exit 1 = org below 67.0: stop and relay the script's next step (delegated: `failed`). Exit 2 = version could not be read: warn that it is unverified and continue; the deploy confirms it. Create `sfdx-project.json` in the output folder only if none exists, with `sourceApiVersion` set to the script's `ORG_API_VERSION` (67.0 if exit 2).
+1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 '<org-alias>'` (skip it when Transport A is in use). Exit 1 = org below 67.0: stop and relay the script's next step (delegated: `failed`). Exit 3 = invalid org alias: stop and ask for the alias (delegated: `failed`). Exit 2 = version could not be read: warn that it is unverified and continue; the deploy confirms it. Create `sfdx-project.json` in the output folder only if none exists, with `sourceApiVersion` set to the script's `ORG_API_VERSION` (67.0 if exit 2).
 
-2. **Collect inputs** — standalone: ask for the Inputs. Delegated: from `values`. Then probe transport with a read-only `GET` of `MessagingChannel` (contract §2).
+2. **Collect inputs** — standalone: ask for the Inputs. Delegated: from `intent`. Then probe transport with a read-only `GET` of `MessagingChannel` (contract §2).
 
 3. **Determine file name** — run `scripts/normalize-channel-name.sh '<LABEL>'` and surface any errors it returns.
 
-3a. **Pre-scan** — `GET` `MessagingChannel` by the step 3 name (contract §3): none → create; matches and active → no write, `already-configured`, skip to Phase 4; matches but inactive → activate only (step 15); differs → announce each change, then write the full document. Standalone: ask first and end your turn; no record update or deploy until the user continues. Delegated: confirm the drift with the user first (contract §3). This applies to any change to an existing channel, however small, and naming the exact change in the request is not consent. If `sessionHandlerType` changes, also follow `references/routing_transitions.md`.
+3a. **Pre-scan** — `GET` `MessagingChannel` by the step 3 name (contract §3): none → create; matches and active → no write, `already-configured`, skip to Phase 4; matches but inactive → activate only (step 15); differs → announce each change, then write the full document. Standalone: ask first and end your turn; no record update or deploy until the user continues. Delegated: confirm the drift with the user first (contract §3). This applies to any change to an existing channel, however small, and naming the exact change in the request is not consent. The one exception is the step 8 keyset question, which covers the follow-up update of a channel this run just created. If `sessionHandlerType` changes, also follow `references/routing_transitions.md`.
 
-4. **Verify routing target exists** — skip when step 3a ended in `already-configured` or activate-only, so a re-run never creates a queue. Names must match `^[A-Za-z0-9_.@+-]+$` before they go into a query. Confirm the routing target exists with the lookup in `references/routing_transitions.md` → Target lookups (also the fallback queue for Flow and ASA, and the routing config for User).
+4. **Verify routing target exists** — skip when step 3a ended in `already-configured` or activate-only, so a re-run never creates a queue. Names must match `^[A-Za-z0-9][A-Za-z0-9_.@+-]*$` before they go into a query. Confirm the routing target exists with the lookup in `references/routing_transitions.md` → Target lookups (also the fallback queue for Flow and ASA, and the routing config for User). User routing: query the org for the username before writing any file (for "the active System Administrator", `SELECT Username FROM User WHERE Profile.Name='System Administrator' AND IsActive=true`); never write a placeholder or example username, and never assume no org is connected without running the query.
 
    If a target is not found, never write its metadata here. Delegated — return `failed` naming the missing target. Standalone — tell the user which target is missing and ask whether to create it. A queue or routing config: on yes, hand off to the owning skill in Cross-Skill Integration with an explicit name, then resume at step 4; on no, stop. If that skill is unavailable or returns `blocked`, stop and tell the user what to create — never write the queue or routing config yourself. A flow, user or bot has no owning skill here: stop and tell the user to create it. **A new queue needs a `QueueRoutingConfig`, or sessions fail with "Agents are not available. Try again later" even though the channel deploys and activates.**
 
@@ -76,7 +90,7 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 ### Phase 2 — Generate Metadata
 
-6. **Read the metadata template** — new channel: load `assets/messaging_channel_template.xml` as the starting structure. Existing channel (3a): start from its current document (Transport A `GET` `xmlRep`; Transport B `sf project retrieve start -m MessagingChannel:<Name>`) and change only the targeted elements, so pre-chat, responses, and authorizations survive.
+6. **Read the metadata template** — new channel: load `assets/messaging_channel_template.xml` as the starting structure and fill every unset value from `references/channel_settings.md` defaults, never from `examples/`. Existing channel (3a): start from its current document (Transport A `GET` `xmlRep`; Transport B `sf project retrieve start -m MessagingChannel:<Name>`) and change only the targeted elements, so pre-chat, responses, and authorizations survive.
 
 7. **Apply routing configuration** — set `sessionHandlerType` and the corresponding handler field:
 
@@ -85,11 +99,11 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
    | Omni-Channel Queue | `Queue` | `sessionHandlerQueue` |
    | Omni-Channel Flow | `Flow` | `sessionHandlerFlow` + `sessionHandlerQueue` (fallback) |
    | User | `User` | `sessionHandlerUser` (username) + `queueRoutingConfig`; no `sessionHandlerQueue` |
-   | Agentforce Service Agent | `AgentforceServiceAgent` | `sessionHandlerQueue` (fallback) + `sessionHandlerAsa` (bot dev name — required, see v67 note below) |
+   | Agentforce Service Agent | `AgentforceServiceAgent` | `sessionHandlerQueue` (fallback) + `sessionHandlerAsa` (bot dev name — required) |
 
    For ASA, `<sessionHandlerAsa>` is required and the bot must be Active; see `references/routing_transitions.md` → Agentforce Service Agent.
 
-8. **Apply user verification** — not enabled: set `embeddedConfig.authMode` to `UnAuth` and omit `<messagingAuthorizations>`. Enabled: follow `references/user_verification.md` (add `<messagingAuthorizations>` only for a keyset name the user gave; never invent one, and without one still write `Auth`).
+8. **Apply user verification** — not enabled: set `embeddedConfig.authMode` to `UnAuth` and omit `<messagingAuthorizations>`. Enabled: follow `references/user_verification.md` (add `<messagingAuthorizations>` only for a keyset name the user gave, or one just created or chosen; never invent one, and without one still write `Auth`). No keyset named (standalone, or delegated with verification on): do not block. Create and activate the channel as `Auth` without `<messagingAuthorizations>`, then ask right after step 15, before step 16: create a new keyset, use an existing one, or skip. Handle the answer per `references/keyset_setup.md` → After the channel exists. This is step 15b and is mandatory.
 
 9. **Configure embedded settings** — populate `<embeddedConfig>` per `references/channel_settings.md`: `anonymousUserJwtExpirationTime` for UnAuth, `verifiedUserJwtExpirationTime` for Auth.
 
@@ -111,18 +125,18 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 14. **Write the channel** — if 3a found a routing-type change, first run `references/routing_transitions.md` Procedure steps 1–3; if the write fails, run its step 4 restore. Transport A: `POST` to create, `PUT` the **full** document to update (a minimal PUT drops `embeddedConfig`); check `results[].success`, then re-`GET`. Transport B:
     ```bash
-    sf project deploy start --source-dir <path-to-messagingChannels-folder> --target-org <org-alias>
+    sf project deploy start --source-dir <path-to-messagingChannels-folder> --target-org '<org-alias>'
     ```
 
-15. **Activate the channel** — after a successful write, activate the messaging channel (`IsActive` is not part of the metadata). Transport A: sObject update `{"IsActive": true}` through `dispatch`. Transport B:
+15. **Activate the channel** — after a successful write, activate the messaging channel (`IsActive` is not part of the metadata). Transport A: sObject update `{"IsActive": true}` through `dispatch`, with the Id from `SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL_NAME>'` (keep it for step 18). Transport B:
     ```bash
-    sf data update record --sobject MessagingChannel --where "DeveloperName='<CHANNEL_NAME>'" --values "IsActive=true" --target-org <org-alias>
+    sf data update record --sobject MessagingChannel --where "DeveloperName='<CHANNEL_NAME>'" --values "IsActive=true" --target-org '<org-alias>'
     ```
 
-15a. **ASA routing only — verify the bind landed** (skip for Queue, Flow, User):
+15a. **ASA routing only — verify the bind landed** (skip for Queue, Flow, User). Transport A: run the query below through `dispatch_readonly`. Transport B:
 
     ```bash
-    sf data query -o <org> --json \
+    sf data query -o '<org>' --json \
       -q "SELECT SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'"
     ```
 
@@ -130,11 +144,18 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 ### Phase 4 — Validate
 
+15b. **Keyset question — REQUIRED for every `Auth` channel with no keyset** (verification on, no keyset in the input, none just created). Do not go to step 16 or report until this is asked and answered; a note in the final summary does not replace it. Ask one question with exactly these options, then handle the answer per `references/keyset_setup.md` → After the channel exists:
+    - **Create a new keyset** — from JWKS keys or an endpoint URL, then attach it to the channel.
+    - **Use an existing keyset** — list the org's `PublicKeyCertificateSet` records, user picks, then attach it.
+    - **Skip** — change nothing; tell the user verification is not active until a keyset is attached.
+
+    Delegated: ask it too (relay it to the user through the caller per the delegation guidelines), then set `keysetChoice` per the contract and report `verificationActive` accordingly in the §5 result. Skip this step when a keyset was supplied or this is an `UnAuth` channel.
+
 16. **Verify against checklist** — confirm all items in the Verification Checklist below pass before presenting output.
 
 17. **Report** — delegated: return the contract §5 result and stop. Standalone: continue.
 
-18. **Present output** (standalone) — in a few lines: confirm the channel is created and its activation status, and list each setting the user asked for with its final value, whatever field it is. Say everything else uses the defaults, without listing them. Give transport details, file paths and record Ids only after a failure or if asked. Then offer next steps:
+18. **Present output** (standalone) — for an `Auth` channel with no keyset, only after step 15b is answered; state the choice made (including "skipped: verification not active until a keyset is attached"). In a few lines: confirm the channel is created and its activation status, and list each setting the user asked for with its final value, whatever field it is. Say everything else uses the defaults, without listing them. Give transport details, file paths and record Ids only after a failure or if asked, except the channel's Setup review link, always given as built in `references/onboarding_contract.md` §2 (Id from step 15; path alone when `instanceUrl` is unknown). Never guess a Setup path. Then offer next steps:
     - **Automated responses** — ask which messages the user wants using the Setup labels per `references/channel_settings.md` → "Setup Prompts: Automated Responses", then redeploy.
     - **reCAPTCHA** — not settable by this skill; say this skill does not set or check it and offer the admin handoff in `references/recaptcha_handoff.md`.
 
@@ -146,14 +167,11 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 |-----------|-----------|
 | File name serves as the channel API name | No `channelPlatformKey` field in the XML body |
 | `sessionHandlerType` must match the handler fields present | Setting `Queue` but populating `sessionHandlerFlow` causes deployment error |
-| Flow routing requires both `sessionHandlerFlow` and `sessionHandlerQueue` | Queue is the mandatory fallback for human escalation |
-| User routing requires `sessionHandlerUser` and `queueRoutingConfig`, and no `sessionHandlerQueue` | The platform rejects a fallback queue on User routing |
 | `masterLabel` max 40 characters | Platform limit on channel labels |
 | File name must match `^[a-zA-Z][a-zA-Z0-9_]*$` | API name format enforced by Metadata API |
 | `allowedFileTypes` is a comma-separated string with no spaces | Not a nested list or array |
 | `keyword` elements are individual — one per trigger word | Not a comma-separated list |
 | `customParameters` need `name`, `masterLabel`, `parameterDataType`, and `externalParameterName` | Incomplete parameters fail silently |
-| File extension is `.messagingChannel-meta.xml` | Metadata API uses this specific extension |
 | Do not hardcode file paths — respect `sfdx-project.json` package directories | Customer orgs customize source paths |
 | Channel must be activated after deployment | Channels are inactive by default — messages won't route until activated |
 | `isSynchronousChatEnabled` defaults to `false`; can only be `true` for UnAuth channels upon user request | Platform rejects "You can't enable Session-Based Chat for verified users" for Auth channels |
@@ -165,19 +183,13 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 | Issue | Resolution |
 |-------|------------|
 | Routing-type change fails with a fallback-queue or "Only a Queue or Flow Routing Method…" error | The old type's fields are still set; see `references/routing_transitions.md` |
-| Channel name conflicts with existing channel | Check org for existing channels; file name must be unique |
-| Queue not found on deploy | Ensure the referenced queue exists and has `MessagingSession` as a `queueSobject` type |
 | Channel deploys and activates fine, but widget shows "Agents are not available. Try again later." at session start | The queue has no `QueueRoutingConfig` — this is silent at deploy time. Check `SELECT QueueRoutingConfigId FROM Group WHERE Id='<QUEUE_ID>'`; if null, create one with `service-omni-queue-routing-config-deploy` |
-| Omni-Channel Flow not found on deploy | Ensure the referenced flow exists and is active before deploying the channel |
-| ASA bot reference invalid | Bot must be published and active; use exact developer name from BotDefinition metadata |
-| ASA channel deployed but `SessionHandlerId` is null after deploy | Bot was not Active at deploy time — run `sf agent activate`, confirm `BotVersion.Status = Active`, then redeploy |
+| ASA bot reference invalid, or `SessionHandlerId` null after deploy | The bot must be published and Active (exact developer name from BotDefinition) before the deploy. Run `sf agent activate`, confirm `BotVersion.Status = Active`, then redeploy |
 | JWT verification not working | The keyset (`PublicKeyCertificateSet`) named in `messagingAuthorizations` must exist in the org and match the token's `kid` and issuer |
 | Custom parameters not collected | `name` must be unique per channel |
 | `<customParameters>` deploy fails: "bad value for restricted picklist field" | `parameterDataType` was set to something other than `String`. Channel custom parameters are always `String`; set the field's actual type (Number, Checkbox, dropdown) at the deployment level, not here |
 | Removing a custom parameter: "can't be deleted as it is referenced elsewhere" | **Check before deploying, not after.** Every deployment on this channel whose pre-chat form uses the param must first drop that field and be published (user-approved); remove the param's `actionParameterMappings` in a separate deploy first. See `references/channel_settings.md` §Removing a Custom Parameter |
 | Automated response / session-inactivity deploy fails | See `references/channel_settings.md` → "Automated Responses", "Session Settings" |
-| Channel deployed but messages not routing | Channel must be activated after deployment — it defaults to inactive |
-| "You can't enable Session-Based Chat for verified users" | Set `isSynchronousChatEnabled` to `false` for Auth channels — session-based chat is only valid for UnAuth |
 
 ---
 
@@ -191,14 +203,14 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 - [ ] Session inactivity / automated responses (only if requested) checked against `references/channel_settings.md`?
 
 ### Routing Checks
-- [ ] Exactly one `sessionHandlerType` value is set (`Queue`, `Flow`, `User`, or `AgentforceServiceAgent`)?
-- [ ] Queue: `sessionHandlerQueue` in the XML? Flow: `sessionHandlerFlow` plus `sessionHandlerQueue` as fallback? User: `sessionHandlerUser` plus `queueRoutingConfig`, no `sessionHandlerQueue`? ASA: both `sessionHandlerQueue` and `sessionHandlerAsa`?
+- [ ] Exactly one `sessionHandlerType` is set, with the handler fields from the step 7 table and no others?
 - [ ] ASA: step 15a run, with `SessionHandlerId` and `FallbackQueueId` non-null after the deploy?
 - [ ] The routing target references an existing entity in the org?
 
 ### Activation Checks
 - [ ] Was the channel deployed successfully?
 - [ ] Was the channel activated after deployment (`IsActive=true`)?
+- [ ] `Auth` channel with no keyset: was the step 15b keyset question (create / use existing / skip) asked and answered before this checklist, and is the answer reflected in the report?
 
 ---
 
@@ -219,11 +231,12 @@ Run in order; step 3a may jump to step 15 or Phase 4. All SOQL below: Transport 
 
 | File | When to read |
 |------|-------------|
-| `references/onboarding_contract.md` | Delegated mode (`context.calledFrom == "service-onboarding"`), org writes (transport), module registration |
+| `references/onboarding_contract.md` | Delegated mode (`delegationFrom` set), org writes (transport), module registration |
 | `assets/messaging_channel_template.xml` | Before generating — use as the starting structure |
 | `references/channel_settings.md` | When configuring channel options beyond defaults |
 | `references/routing_transitions.md` | Changing a channel's routing type, or looking up routing targets |
 | `references/user_verification.md` | The user turns user verification (Auth mode) on |
+| `references/keyset_setup.md` | The user needs to create a verification keyset (JWKS keys or endpoint URL); also `keyset_settings.md`, `user_verification_client.md` |
 | `references/prechat_params.md` | The user needs standard or custom pre-chat parameters |
 | `references/recaptcha_handoff.md` | The user asks about reCAPTCHA / captcha, or at the end of standalone output |
 | `scripts/check-api-version.sh` | Phase 1 — verify org API version meets the passed minimum (67.0) |

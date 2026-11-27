@@ -115,7 +115,7 @@ On completion, summarize what was deployed and surface the four return values ab
 | Never create MessagingChannel or EmbeddedServiceConfig inline — always delegate | `service-digital-engagement-channel-configure` and `service-digital-engagement-deployment-configure` own those objects; inlining them bypasses queue resolution, escalation wiring, and ESD validation |
 | Never skip the guest-access flags in §L.0 | `OptionsGuestChatterEnabled` + `OptionsGuestMemberVisibility` default to False — portal appears blank in Incognito without them |
 | Republish after every DEB flag change | `isRelaxedCSPLevel`, `authenticationType`, `headMarkup` only take effect after a publish |
-| One operator pause only: §F.4 Agentforce Orchestrator toggle | Every other step is headless — never pause for UI unless the headless path returns an unrecoverable error |
+| Operator pauses only at §F.4: choosing among existing orchestrators (§F.4.2a — reuse one if the org has any, create only when none exist), and the Agentforce Orchestrator toggle only on v67/unsupported orgs where the headless enable is unavailable (§F.4.1 manual-UI fallback) | Every other step is headless — never pause for UI unless the headless path returns an unrecoverable error |
 
 ## Reference file index
 

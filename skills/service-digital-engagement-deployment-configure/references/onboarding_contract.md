@@ -1,6 +1,6 @@
 # Onboarding contract — delegated mode, transport, pre-scan, registration
 
-Read this when the invocation carries a `context` object, when you are about to write to the org, or when the
+Read this when `delegationFrom` is set on the invocation, when you are about to write to the org, or when the
 skill is being registered in an onboarding module. It implements the Feature Setup Skill Guidelines (Conversational
 Onboarding, Service Cloud) for this skill.
 
@@ -8,33 +8,27 @@ Onboarding, Service Cloud) for this skill.
 
 | | Delegated | Standalone |
 |---|---|---|
-| Detected by | invocation has `context.calledFrom == "service-onboarding"` | no `context` object |
-| Values come from | `values` in the payload — already approved in the plan table | you ask, using the defaults in SKILL.md |
-| Questions | none. A missing required key is a caller bug: stop and report `failed` naming the key. Never default a value the admin did not approve | the Clarifying Questions in SKILL.md |
-| Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Clarifying Questions as written) |
-| Ends with | the structured result in section 5 | a plain-language summary of the same outcome |
+| Detected by | `delegationFrom == "service-onboarding"` (alias until onboarding drops it: `context.calledFrom == "service-onboarding"`) | `delegationFrom` absent |
+| Values come from | `intent` — prose citing the facts the admin already approved in the plan. Read every input from it first | you ask, using the defaults in SKILL.md |
+| Questions | ask only for an input the `intent` leaves open. Never fabricate or default a value the admin did not approve. Invalid shell input or an unknown channel is `failed` | the Clarifying Questions in SKILL.md |
+| Wording | `discoveryMode == "guided"` → plain business language (§4). Any other mode → Salesforce terminology | Salesforce terminology (the Clarifying Questions as written) |
+| Ends with | the structured result in section 5, then stop: no "what next?", no onward delegation | a plain-language summary of the same outcome |
 
 Both paths converge on the same pre-scan → write → validate procedure. The only difference is where values come from.
 
-Delegated payload:
+Delegated runtime values (shared rules: the Service-Onboarding delegation guidelines linked from SKILL.md):
 
 ```json
 {
-  "values": {
-    "operation": "create",
-    "deploymentType": "Web",
-    "deploymentName": "Acme Support Chat",
-    "channelName": "Acme_Support_Channel",
-    "siteName": "ESW_AcmeSupport_1700000000000"
-  },
-  "context": { "calledFrom": "service-onboarding", "discoveryMode": "guided" }
+  "intent": "Create a Web embedded messaging deployment 'Acme Support Chat' linked to channel Acme_Support_Channel.",
+  "delegationFrom": "service-onboarding",
+  "discoveryMode": "guided"
 }
 ```
 
-Required `values`: `deploymentName`, `deploymentType`, `channelName`. `deploymentName` is the label; the API name is
-derived from it (SKILL.md Required Inputs: `Acme Support Chat` → `Acme_Support_Chat`). `operation` defaults to `create` when the pre-scan
-finds nothing and `update` when it finds a deployment. `siteName` is required for Web updates. Optional feature keys
-(pre-chat fields, business hours, T&C, branding) are applied only when present — do not invent them.
+Inputs to read from `intent`: `deploymentName`, `deploymentType`, `channelName` (required). `deploymentName` is the label; the API name is
+derived from it (SKILL.md Required Inputs: `Acme Support Chat` → `Acme_Support_Chat`). The operation is `create` when the pre-scan
+finds nothing and `update` when it finds a deployment. A Web update needs the site name. Optional features (pre-chat fields, custom labels, business hours, T&C, branding) are applied only when `intent` states them — do not invent them.
 
 ## 2. Transport — `/headless/metadata` first, `sf` CLI as fallback
 
@@ -59,16 +53,19 @@ Metadata-CRUD route, fully-qualified: `/services/data/vXX.0/headless/metadata/<T
 | `xmlRep` returned, or "Metadata not found" style error | type is onboarded | Transport A |
 | `UNSUPPORTED_OPERATION` for the type or verb | not onboarded for that verb | Transport B for that call only |
 | auth / connection error | MCP unavailable | Transport B; say so |
+| `dispatch` not in your tool list | tool not loaded yet | try to load it (e.g. ToolSearch), then probe again. No tool-loading tool, or the load fails: Transport B for that call; quote the failure |
 
 **Transport B (fallback): `sf` CLI** — the retrieve/deploy commands already in SKILL.md. Use it only when the probe
 says Transport A is unavailable for that type/verb, never as a convenience.
 
 What is not a transport choice:
-- **Web deployment creation is a Connect API call — send it with `sf api request rest`, not `dispatch`.** Through
-  `dispatch` it always fails with an `INTERNAL_ERROR` server error while building the ESW site; the same body via the CLI
-  succeeds. Do not try `dispatch` first.
+- **Web deployment creation is a Connect API call — try `dispatch` first.** It can fail with an `INTERNAL_ERROR` server
+  error while the ESW site is built (MCP sessions have no session key). That error is the signal to re-run the pre-scan
+  and send the same body with `sf api request rest` (Transport B for that call only); any other error is not.
 - **Publish is a Connect API call**, sent per SKILL.md step 17c (`dispatch`, `sf api request rest` on a route error).
-- **Tooling API** work (custom labels, branding, reCAPTCHA) goes through the `sf` CLI, not `dispatch`.
+- **Tooling API** work: custom labels use `dispatch` on the raw `/tooling/` route (verified on the test gateway), `sf` CLI only on the signals above. Branding and reCAPTCHA go through the `sf` CLI.
+
+**Confirm the target org before the first write.** Read it with `SELECT Id, Name, IsSandbox, InstanceName FROM Organization` (Transport A `dispatch_readonly`; Transport B `sf data query -o '<alias>'`). State name, org Id and sandbox/production, and get a yes (standalone) or name it in the announced write (delegated). Treat production as a heightened case: restate that the change is live. Falling from Transport A to B changes the credential and possibly the org: run the same query on B and continue only if the org Id matches; otherwise stop and ask (delegated: `failed`, "transport B targets a different org").
 
 ## 3. Pre-scan (idempotency)
 
@@ -80,6 +77,8 @@ Run before any write, both modes. Read `EmbeddedServiceConfig` by `fullName` = t
 | Exists, and every targeted field already equals the target (channel link, `isEnabled`, type, and each optional feature supplied) | **already configured** — make no write, return `already-configured` |
 | Exists, some targeted field differs | **drift** — announce each change ("pre-chat form: on → off"), then write. Standalone: ask for a yes first. Delegated: the plan approval covers it |
 | Exists but links a different channel than `channelName` | Standalone: ask before repointing. Delegated: return `failed`, `errorMessage` = "deployment <name> already uses channel <other>" |
+
+**Custom labels are not in this XML**, so the comparison above cannot see them. When labels are requested, compare them separately (`references/custom_labels.md` §Create step 1: query the deployment's bindings and compare key and text). A deployment whose XML already matches still proceeds to the label writes; return `already-configured` only when the XML and every requested label match. A missing label prerequisite, an API deployment, or a Mobile key other than the T&C or Fallback key is `failed`, naming it.
 
 Standalone, deployment exists: offer exactly three choices — no change / override / add to existing.
 
@@ -130,13 +129,13 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
     deploymentType:  { from: signal.messagingSurface,   default: "Web" }
     deploymentName:  { from: signal.messagingWidgetName, default: "<company> Support Chat" }
     channelName:     { from: outputs.messagingChannel.channelName }
-  writes: "EmbeddedServiceConfig (Metadata CRUD); Web create via Connect API embeddedmessaging/deployment/setup (sf CLI); publish via Connect API; optional BrandingSet / custom labels via Tooling API"
+  writes: "EmbeddedServiceConfig (Metadata CRUD); Web create via Connect API embeddedmessaging/deployment/setup (dispatch, sf CLI on INTERNAL_ERROR); publish via Connect API; optional BrandingSet / custom labels via Tooling API"
   gating:
     irreversible: false
     note: "Reversible by disabling the deployment (isEnabled=false). Pre-chat form fields can be deactivated but the form cannot be fully deleted."
   validate:
     check: check-messaging-deployment
-    passWhen: "GET EmbeddedServiceConfig fullName=<derived API name> returns isEnabled=true and the embeddedServiceMessagingChannel links values.channelName; published is true after an auto-published Web create (isPublishSuccess=true) and false for updates, which stay draft until the admin publishes"
+    passWhen: "GET EmbeddedServiceConfig fullName=<derived API name> returns isEnabled=true and the embeddedServiceMessagingChannel links the channel named in the intent; published is true after an auto-published Web create (isPublishSuccess=true) and false for updates, which stay draft until the admin publishes"
   alternative: "Setup > Embedded Service Deployments > New Deployment > Messaging for In-App and Web; choose the channel, set pre-chat, then Publish."
 ```
 

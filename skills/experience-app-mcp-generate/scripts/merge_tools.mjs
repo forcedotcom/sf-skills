@@ -57,25 +57,43 @@ const ALLOWED_KEYS = new Set([
 
 // --- minimal XML parser/serializer, scoped to Salesforce metadata XML shape ---
 
+const MAX_XML_BYTES = 10 * 1024 * 1024;
+const MAX_XML_DEPTH = 256;
+const MAX_XML_ITEMS = 100_000;
+
 function decodeEntities(s) {
   return s.replace(/&(amp|lt|gt|quot|apos);/g, (_, e) => ({ amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" }[e]));
 }
 
 function parseXml(text) {
+  if (Buffer.byteLength(text, "utf8") > MAX_XML_BYTES) {
+    throw new Error("XML input exceeds the 10 MiB limit");
+  }
   let i = 0;
   const n = text.length;
+  let parsedItems = 0;
+
+  function consumeItem() {
+    parsedItems++;
+    if (parsedItems > MAX_XML_ITEMS) {
+      throw new Error(`XML structure exceeds ${MAX_XML_ITEMS} elements and attributes`);
+    }
+  }
 
   function skipWs() {
     while (i < n && /\s/.test(text[i])) i++;
   }
 
-  function parseElement() {
+  function parseElement(depth = 1) {
+    if (depth > MAX_XML_DEPTH) throw new Error(`XML nesting exceeds ${MAX_XML_DEPTH} elements`);
     skipWs();
     if (text[i] !== "<") throw new Error(`expected '<' at offset ${i}`);
     i++;
     const tagStart = i;
     while (i < n && !/[\s>/]/.test(text[i])) i++;
     const tag = text.slice(tagStart, i);
+    if (!/^[A-Za-z_][A-Za-z0-9_.:-]*$/.test(tag)) throw new Error(`invalid or missing element name at offset ${tagStart}`);
+    consumeItem();
     const attrs = {};
     while (true) {
       skipWs();
@@ -87,20 +105,24 @@ function parseXml(text) {
         i++;
         break;
       }
+      if (i >= n) throw new Error(`unterminated opening tag <${tag}>`);
       const nameStart = i;
-      while (i < n && text[i] !== "=" && !/\s/.test(text[i])) i++;
+      while (i < n && !/[\s=/>]/.test(text[i])) i++;
       const name = text.slice(nameStart, i);
+      if (!/^[A-Za-z_][A-Za-z0-9_.:-]*$/.test(name)) throw new Error(`invalid attribute name at offset ${nameStart}`);
+      consumeItem();
       skipWs();
-      if (text[i] === "=") {
-        i++;
-        skipWs();
-        const quote = text[i];
-        i++;
-        const valStart = i;
-        while (i < n && text[i] !== quote) i++;
-        attrs[name] = decodeEntities(text.slice(valStart, i));
-        i++;
-      }
+      if (text[i] !== "=") throw new Error(`expected '=' after attribute ${name}`);
+      i++;
+      skipWs();
+      const quote = text[i];
+      if (quote !== "'" && quote !== '"') throw new Error(`expected quoted value for attribute ${name}`);
+      i++;
+      const valStart = i;
+      while (i < n && text[i] !== quote) i++;
+      if (i >= n) throw new Error(`unterminated quoted value for attribute ${name}`);
+      attrs[name] = decodeEntities(text.slice(valStart, i));
+      i++;
     }
     const node = { tag, attrs, children: [], text: null };
     let textBuf = "";
@@ -108,8 +130,11 @@ function parseXml(text) {
       if (text.slice(i, i + 2) === "</") {
         i += 2;
         const closeStart = i;
-        while (i < n && text[i] !== ">") i++;
+        while (i < n && !/[\s>]/.test(text[i])) i++;
         const closeTag = text.slice(closeStart, i);
+        if (!/^[A-Za-z_][A-Za-z0-9_.:-]*$/.test(closeTag)) throw new Error(`invalid closing tag at offset ${closeStart}`);
+        skipWs();
+        if (text[i] !== ">") throw new Error(`unterminated closing tag </${closeTag}`);
         i++;
         if (closeTag !== tag) {
           throw new Error(`mismatched close tag: expected </${tag}>, got </${closeTag}>`);
@@ -117,12 +142,15 @@ function parseXml(text) {
         break;
       } else if (text.slice(i, i + 4) === "<!--") {
         const end = text.indexOf("-->", i);
-        i = end === -1 ? n : end + 3;
+        if (end === -1) throw new Error("unterminated XML comment");
+        i = end + 3;
       } else if (text[i] === "<") {
-        node.children.push(parseElement());
+        node.children.push(parseElement(depth + 1));
       } else {
-        textBuf += text[i];
-        i++;
+        const nextTag = text.indexOf("<", i);
+        if (nextTag === -1) throw new Error(`unterminated element <${tag}>`);
+        textBuf += text.slice(i, nextTag);
+        i = nextTag;
       }
     }
     if (node.children.length === 0) {
@@ -135,7 +163,8 @@ function parseXml(text) {
   skipWs();
   if (text.slice(i, i + 2) === "<?") {
     const end = text.indexOf("?>", i);
-    i = end === -1 ? i : end + 2;
+    if (end === -1) throw new Error("unterminated XML declaration");
+    i = end + 2;
   }
   return parseElement();
 }
@@ -315,6 +344,8 @@ function main() {
     promptSpecs = [];
   }
 
+  const xmlSize = fs.statSync(xmlPath).size;
+  if (xmlSize > MAX_XML_BYTES) throw new Error("XML input exceeds the 10 MiB limit");
   const xmlText = fs.readFileSync(xmlPath, "utf-8");
   const root = parseXml(xmlText);
 

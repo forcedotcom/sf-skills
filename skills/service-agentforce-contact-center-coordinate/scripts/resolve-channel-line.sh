@@ -14,6 +14,10 @@ if [[ "${1:-}" == "--help" || $# -lt 2 ]]; then
 fi
 
 ALIAS="$1"; NUMBER="$2"
+if [[ ! "$NUMBER" =~ ^\+?[0-9]{6,15}$ ]]; then
+  echo "error: invalid phone number" >&2
+  exit 2
+fi
 ENCODED_PHONE="${NUMBER//+/%2B}"
 QUERY="SELECT+Id,CodeStatus+FROM+CommunicationChannelLine+WHERE+Code='${ENCODED_PHONE}'+LIMIT+1"
 

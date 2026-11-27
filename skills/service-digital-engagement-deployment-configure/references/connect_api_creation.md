@@ -57,25 +57,31 @@ Always use the fully-qualified path (minimum `v67.0`). A bare `/connect/...` pat
 
 ### Using Salesforce CLI (Web)
 
+Validate `<NAME>`, `<CHANNEL_ID>`, `<DOMAIN>` and `<org-alias>` against the Shell safety patterns in SKILL.md first. Single-quote each placeholder, escaping any `'` as `'\''`; `jq` then handles the JSON escaping.
+
 Always create Web deployments with the CLI. The same call through the headless-360 MCP `dispatch` fails with an
 `INTERNAL_ERROR` server error during site creation.
 
 ```bash
+BODY=$(jq -n --arg name '<NAME>' --arg label '<LABEL>' --arg host '<DOMAIN>' --arg ch '<CHANNEL_ID>' \
+  '{name:$name,masterLabel:$label,deploymentType:"Web",clientVersion:"WebV2",hostDomain:$host,messagingChannelId:$ch}')
 sf api request rest \
   "/services/data/v67.0/connect/embeddedmessaging/deployment/setup" \
   --method POST \
-  --body '{"name":"<NAME>","masterLabel":"<LABEL>","deploymentType":"Web","clientVersion":"WebV2","hostDomain":"<DOMAIN>","messagingChannelId":"<CHANNEL_ID>"}' \
-  --target-org <org-alias>
+  --body "$BODY" \
+  --target-org '<org-alias>'
 ```
 
 ### Using Salesforce CLI (API / Mobile)
 
 ```bash
+BODY=$(jq -n --arg name '<NAME>' --arg label '<LABEL>' --arg ch '<CHANNEL_ID>' \
+  '{name:$name,masterLabel:$label,deploymentType:"API",messagingChannelId:$ch}')
 sf api request rest \
   "/services/data/v67.0/connect/embeddedmessaging/deployment/setup" \
   --method POST \
-  --body '{"name":"<NAME>","masterLabel":"<LABEL>","deploymentType":"API","messagingChannelId":"<CHANNEL_ID>"}' \
-  --target-org <org-alias>
+  --body "$BODY" \
+  --target-org '<org-alias>'
 ```
 
 ### Getting the Messaging Channel ID
@@ -85,7 +91,7 @@ Query the messaging channel ID by developer name:
 ```bash
 sf data query \
   --query "SELECT Id FROM MessagingChannel WHERE DeveloperName = '<CHANNEL_PLATFORM_KEY>'" \
-  --target-org <org-alias>
+  --target-org '<org-alias>'
 ```
 
 ---
@@ -136,7 +142,7 @@ sf api request rest \
   "/services/data/v67.0/connect/embeddedservice/embeddedserviceconfig/publish/<EMBEDDED_SERVICE_CONFIG_ID>" \
   --method POST \
   --body '{}' \
-  --target-org <org-alias>
+  --target-org '<org-alias>'
 ```
 
 The `--body '{}'` is required: a POST with no body (or `--body ""`) fails in the CLI with
@@ -149,7 +155,7 @@ To obtain the `EMBEDDED_SERVICE_CONFIG_ID` (a Tooling API object, so `--use-tool
 ```bash
 sf data query --use-tooling-api \
   --query "SELECT Id FROM EmbeddedServiceConfig WHERE DeveloperName = '<DEPLOYMENT_NAME>'" \
-  --target-org <org-alias>
+  --target-org '<org-alias>'
 ```
 
 ---

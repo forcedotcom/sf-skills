@@ -138,7 +138,7 @@ if (checkOnly) {
 } else {
   for (const { destDir, dest, expected } of plan) {
     fs.mkdirSync(destDir, { recursive: true });
-    fs.writeFileSync(dest, expected, "utf-8");
+    fs.writeFileSync(dest, expected, { encoding: "utf-8", flag: "wx" });
   }
   console.log(`Rendered ECA metadata in ${defaultDir}`);
 }

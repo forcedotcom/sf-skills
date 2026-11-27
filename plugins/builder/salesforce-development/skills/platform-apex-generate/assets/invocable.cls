@@ -2,6 +2,8 @@
  * Invocable Apex action for {describe the action}.
  * Callable from Flows, Process Builder, and Agentforce.
  * Accepts bulkified List<Request>, returns List<Response>.
+ * If execute() ALWAYS performs DML, also generate {ClassName}.invocableactionextension-meta.xml
+ * (assets/invocable-action-extension.invocableactionextension-meta.xml) declaring it; omit for conditional/no DML.
  */
 public with sharing class {ClassName} {
 

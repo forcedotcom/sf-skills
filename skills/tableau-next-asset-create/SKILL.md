@@ -18,6 +18,7 @@ metadata:
         - add_semantic_model_metric
         - add_semantic_model_parameter
         - add_semantic_model_relationship
+        - add_to_data_space
         - add_workspace_asset
         - analyze_data
         - browse_data_assets
@@ -59,6 +60,8 @@ metadata:
         - get_data_stream
         - get_data_transform
         - get_data_transform_run_history
+        - get_data_transform_schedule
+        - get_data_transform_setup_id
         - get_dlo_to_dmo_mapping_status
         - get_license_availability
         - get_promotion_reuse_request
@@ -80,6 +83,7 @@ metadata:
         - list_connections
         - list_dashboards
         - list_data_connection_objects
+        - list_data_spaces
         - list_promotion_reuse_requests
         - list_semantic_model_calculated_dimensions
         - list_semantic_model_calculated_measures
@@ -192,14 +196,14 @@ from existing Tableau Next data") is a query/analyze intent: route to
 |-------------|----------|
 | "analyze this CSV" / "build a dashboard from these files" / nothing modeled yet | `references/tasks/build-end-to-end.md` |
 | "ingest this CSV / Excel into a DLO/DMO" or ingest from an existing Snowflake / Databricks / BigQuery / Redshift connection (ingest only, no downstream ask) | `references/tasks/ingest-flat-file.md` |
-| "create / update a data transform" / derived DLO or DMO via Data Cloud SQL | `references/tasks/create-data-transform.md` |
+| create/update a data transform, or inspect an existing transform's definition, outputs, runs, status, or schedule | `references/tasks/create-data-transform.md` |
 | "profile / discover / check this data" (read-only) | `references/tasks/profile-dataset.md` |
 | add a **raw** object / dimension / measure / join / **logical view** / **parameter** to my model | `references/tasks/edit-sdm.md` |
 | add a **calculated** dimension / measure / **metric** to my model | `references/tasks/enrich-model.md` |
 | "is my model AI-ready" / "backfill readiness metadata" / validate a model | `references/tasks/ai-readiness-audit.md` |
 | count / total / scalar ("how many orders", "what is total revenue") or named-model structured `run_semantic_query` or raw DLO/DMO `run_query` | `references/tasks/query-model.md` |
 | interpreted breakdown / ranking / trend / comparison without asking to author | `references/tasks/analyze-data.md` |
-| delete a calc / metric / data object / logical view / relationship (component, not the whole SDM) | `references/sdm-tool-reference.md` |
+| delete a calc / metric / data object / logical view / relationship (component, not the whole SDM) | `references/sdm-tool-reference.md` — Read the whole "Deleting a semantic definition" section (incl. Preflight `rawEdges: true`); confirm with the user before any `delete_*` call |
 | "create a viz / chart" OR which-chart-type / `create_visualization` payload (no existing chart; not "just advise") | `references/tasks/create-viz.md` (then that guide cites `viz-authoring.md` — do **not** skip to it) |
 | "edit / add a filter / forecast / sort / field to **this** chart" (an existing viz) | `references/tasks/edit-viz.md` |
 | "show / view / display my existing chart/visualization" (no edit) | Call `get_visualization` directly (`minorVersion: -1`) — renders inline; do NOT chain `render_visualization` |
@@ -242,6 +246,8 @@ call `save_dashboard` or `upsert_user` without the user's explicit go-ahead.
   Derived table / Data Cloud SQL transform → `create-data-transform.md`, not
   ingest and not `enrich-model.md`. Metadata discovery (list SDMs, fields,
   relationships) is `list_*` / `get_*`, not `analyze_data`.
+- **read vs author a transform** — both use `create-data-transform.md`; select
+  its Read, Create, or Update path by intent.
 - **create vs. edit a viz** — a request that names or clearly references an
   **existing** chart ("add a forecast to my monthly sales chart", "filter this
   chart to West") routes to `edit-viz.md`; a request with no existing chart in
@@ -390,8 +396,8 @@ Not a first hop (cited only from the matching task guide):
   `tasks/build-dashboard.md` (NOT `dashboard-authoring.md`)
 - "how do I ingest a CSV / Excel / existing connection into a DLO/DMO" → `tasks/ingest-flat-file.md`
   (NOT `ingest-and-metric-gotchas.md`)
-- "how do I create or update a data transform" → `tasks/create-data-transform.md`
-  (NOT `data-transform-gotchas.md`)
+- "how do I create, update, or inspect a data transform" →
+  `tasks/create-data-transform.md` (NOT `data-transform-gotchas.md`)
 - "walk me through building a model end to end" → `tasks/build-end-to-end.md`
   (NOT `build-workflow.md`)
 - "how do I share / unshare / list who has access" → `tasks/share-asset.md`

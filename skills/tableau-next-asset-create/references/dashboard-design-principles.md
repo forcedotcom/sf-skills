@@ -19,6 +19,7 @@ gate — translated from universal dashboard design best practices to what the
 
 ## Contents
 
+- 0. Baseline Requirements — Every Dashboard (REQUIRED)
 - 1. Think Like a Business User (before any `create_*` call)
 - 2. Design the Narrative Before Picking Charts (REQUIRED)
 - 3. Visual Storytelling Flow — KPIs → Trends → Breakdowns → Correlations
@@ -31,6 +32,127 @@ gate — translated from universal dashboard design best practices to what the
 - 10. Data-Presence Gate — Hard Stop Before Any Viz
 - 11. Dashboard Quality Checklist (MCP Reality)
 - Not supported by the tableau-next-pilot MCP (do not attempt)
+
+---
+
+## 0. Baseline Requirements — Every Dashboard (REQUIRED)
+
+These apply to **every** dashboard, on top of the design principles below.
+Each maps to a real MCP mechanism — none introduces a new param or template.
+Treat the §11 "Baseline requirements" checklist group as the pass/fail gate.
+
+### 0.0 Pre-Build Intake Gate — Hard Stop Before Any Widget
+
+**STOP: before creating the workspace or any widget, ask the two questions
+below** — a blocking gate like §10's Data-Presence Gate, so the first build is
+usable instead of needing several revision rounds. **Ask only what the request
+hasn't already answered, batched into one `AskUserQuestion` prompt** (never
+serial); if both are answered, skip the gate and build.
+
+1. **Purpose & audience** — the main decision it supports, and exec/at-a-glance
+   vs analyst/exploratory. Drives density: **exec** → fewer, larger KPI tiles +
+   a few headline charts; **analyst** → more breakdowns, a detail table, more
+   filters. A stated goal ("exec summary of profit") already answers this.
+2. **Color scheme** — a named theme, or the SLDS default (use SLDS if no
+   preference). A theme in the request ("use an oscar theme") already answers
+   this; apply it per requirement #2. **When editing a dashboard that already
+   has a color scheme, skip this question and inherit the existing scheme**
+   (requirement #2) — don't ask the user to re-pick a palette they've set.
+
+Infer everything else (chart types, sort, filters, KPI set) from these answers
+plus the model — don't grow this into a questionnaire.
+
+1. **Title & subtitle.** There is no native dashboard title/subtitle field —
+   realize both with one `text` widget (`edit_dashboard`'s `upsert_text_widget`
+   + `place_widget_on_page`) placed at `row: 0` spanning the top band. Use two
+   Quill-Delta `content` ops: the title at a larger `size` (e.g. `"large"` /
+   `"24px"`, `bold: true`) on the first line, the subtitle at a smaller `size`
+   on the next. The title names the dashboard's business purpose; the subtitle
+   adds scope/timeframe (e.g. "FY27 to date, all regions").
+
+2. **A coherent color scheme.** The palette is chosen at the §0.0 Pre-Build
+   Intake Gate (SLDS default if the user has no preference). Apply the chosen palette
+   consistently in three places: the dashboard `layouts[].style`
+   (`backgroundColor` / `gutterColor` — SLDS default `#ffffff` / `#f3f3f3`, the
+   verified create-shell values in `dashboard-authoring.md` §1), every chart's
+   `Color` encoding (same dimension → same color across all charts, §8/§4), and
+   any `text`/widget style colors. Use SLDS color tokens for series colors;
+   don't scatter ad-hoc hex values that differ chart-to-chart.
+   **When adding an asset to an existing dashboard, inherit its established
+   palette — never introduce a competing one.** First read the dashboard back
+   (`get_dashboard` / `render_dashboard`) and detect the colors already in use —
+   the `layouts[].style` background/gutter colors and the `Color` encodings on
+   the existing charts — then apply that same palette to the new viz or widget.
+   A new asset dropped into a themed dashboard must match what's there; only
+   fall back to the SLDS default when the dashboard has no scheme yet.
+
+3. **Every visualization needs a visible title — add it as a `text` widget.**
+   There's no tool to render a title on the chart itself, so place a dedicated
+   `text` widget (`upsert_text_widget` + `place_widget_on_page`) in the grid row
+   **directly above** each viz, with the **same `colspan`** so the two read as
+   one unit. Give it a ≥3-word business-question title (no jargon, **not** a
+   bare dimension name like "Region"/"Category" — §6, `viz-authoring.md` §4) and
+   keep it short (e.g. `rowspan: 2`). Still set a meaningful `label` on the viz
+   for identification.
+
+4. **KPIs must be real SDM metrics.** For every KPI tile, create the metric in
+   the semantic model first (`add_semantic_model_metric`), then add it as a
+   `metric` widget (`upsert_metric_widget` with
+   `parameters.metricOption.{sdmApiName, sdmId}` + `place_widget_on_page`; see
+   §3). Do **not** fake a KPI with a text widget or a single-number viz — the
+   KPI must be backed by an SDM metric so it stays live and consistent.
+   **Size the metric widget for its insight.** A metric card auto-renders an
+   insight narrative (e.g. "Total Sales was 12.64M … top contributors …")
+   beneath the headline number, and it **truncates silently** when the widget
+   is too short or narrow. Give each metric enough `rowspan` **and** adequate
+   `colspan` to show the full narrative — a cramped quarter-width tile clips it
+   with no warning. Read the dashboard back (`render_dashboard`) and grow the
+   widget until the insight is no longer cut off.
+
+5. **Filters/parameters for interactivity.** Every dashboard must carry at
+   least one filter or parameter so it is dynamic, not static. Use a
+   dashboard-wide `add_global_filter_to_dashboard` (§9) or a `filter` /
+   `parameter` widget. **When adding a filter widget, set
+   `parameters.viewType: "listcard"`** — the MCP enum is `list` / `listcard` /
+   `toggle`; `listcard` is the required card-style List filter, while `list`
+   is the compact/legacy (classic) variant. Filter on dimensions, never
+   measures (§9), with a business-friendly `filterLabel`/`label`.
+   **Choose the filter from the business user's perspective — what cut of this
+   data would they want to explore?** Pick a dimension (or a parameter) that is
+   *relevant across the set* of visualizations and metrics; it need not appear
+   in every one — the test is business meaning, not literal field overlap. Ask
+   what question someone reading these charts would want to slice by, then
+   register that filter dashboard-wide via `add_global_filter_to_dashboard` (§9)
+   so it — and click-to-filter interactions, where selecting a mark in one viz
+   filters the rest — applies broadly rather than being scoped to a single
+   widget. Avoid an arbitrary field that is meaningful to only one chart and
+   leaves the rest of the dashboard unresponsive.
+   **Keep filter/parameter widgets compact — they are controls, not charts.**
+   A `listcard` filter renders as a small dropdown-style control (label + a
+   single collapsed value row), so a chart-sized placement leaves most of the
+   widget as empty box. Size it to the control, not to the grid: a modest
+   `colspan` (≈8–14 — a tight filter band, not a wide span) and a **short
+   `rowspan` of ~2–4**. The value count does *not* require a tall box — the
+   card stays collapsed and the list scrolls internally when expanded, so don't
+   scale `rowspan` to the number of values. The same applies to `parameter`
+   widgets. After placing, read the dashboard back and shrink any filter/
+   parameter whose box dwarfs its control until it sits neatly in the layout.
+
+6. **Multi-page navigation.** For a dashboard with more than one page, add
+   pages with `add_page` and wire navigation with a `navigation` widget
+   (`upsert_navigation_widget`, `parameters.viewType: "toggle"`, one
+   `navigationItems[]` entry per page targeting its `page_N` name).
+
+7. **Give adjacent widgets breathing room — space them deliberately.** Don't
+   pack metric tiles, filters, or charts flush against one another; a row of KPI
+   cards or filters touching edge-to-edge reads as one cramped block. Keep a
+   consistent gutter between neighboring widgets via the layout's
+   `cellSpacingX/Y`, and where it helps separate groups, leave a one-column or
+   one-row gap so each tile is visually distinct. This is the middle ground to
+   §4's "don't overcrowd": aim for even, intentional spacing between
+   components — neither crammed together nor stranded in wide empty bands.
+   Read the dashboard back (`render_dashboard`) and adjust the spacing until
+   tiles are clearly separated without large dead regions.
 
 ---
 
@@ -307,6 +429,17 @@ equivalent MCP tool. The gate is real; those helpers are not. Use
 ---
 
 ## 11. Dashboard Quality Checklist (MCP Reality)
+
+**Baseline requirements (every dashboard — §0)**
+- [ ] §0.0 Pre-Build Intake Gate cleared before building — purpose/audience and color/theme asked in one batched prompt (skipping anything the request already answered)
+- [ ] Title + subtitle present as a top `text` widget (`upsert_text_widget` at `row: 0`)
+- [ ] Color scheme (from the §0.0 gate; SLDS default) applied consistently across charts + dashboard `style`; when editing an existing dashboard, the new asset inherits the dashboard's existing palette rather than introducing a new one
+- [ ] Every visualization has a visible title via a `text` widget directly above it (≥3 words, not a bare dimension name) — no reliable native chart-title tool yet
+- [ ] Every KPI is a real SDM metric (`add_semantic_model_metric` → `upsert_metric_widget`), never a text/number stand-in, sized (rowspan + colspan) so its insight narrative isn't truncated
+- [ ] At least one filter or parameter present; filter widgets use `viewType: "listcard"` (card List, not the compact/classic `list`), sized compact as a control (modest `colspan`, short `rowspan` ~2–4) — not scaled to value count or given a chart-sized box
+- [ ] Filter/parameter chosen for business relevance across the set (the cut a user would actually explore), registered dashboard-wide (`add_global_filter_to_dashboard`) so it and click-to-filter apply broadly — not an arbitrary field meaningful to only one chart
+- [ ] Multi-page dashboards configure a `navigation` widget
+- [ ] Adjacent widgets (KPI tiles, filters, charts) have deliberate spacing between them — even gutters, not crammed edge-to-edge and not wide dead bands
 
 **Business clarity**
 - [ ] Every chart title states the business question it answers (≥3 words, no jargon)

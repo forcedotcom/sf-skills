@@ -977,7 +977,7 @@ visualization saves.
 
 A per-measure-field knob (`fields.<key>.referenceLine`), distinct from
 `edit_visualization`'s `addReferenceLine`/`editReferenceLine` operations
-(`edit-visualization.md` §6) which target an already-saved viz. Values:
+(`edit-visualization.md` "Reference line") which target an already-saved viz. Values:
 `Average`/`Sum`/`Min`/`Max` (computed line) or `Target` with a required
 `referenceLineValue` (constant quota/threshold) — no `Median`. Keep to at
 most one per chart.

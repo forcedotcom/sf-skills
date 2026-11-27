@@ -1,10 +1,10 @@
 """Tests for the three capabilities added for the Email-to-Case steel thread:
 
-  1. Production-org safety gate (enforce_production_gate / --confirm-production).
-  2. API-version derivation with a 67.0 floor (resolve_api_version).
-  3. Act-3 verify-cases proof step (verify_cases / --verify-cases).
+  1. Production-org safety gate (the `gate` subcommand / --confirm-production).
+  2. (removed: dispatch cannot list API versions; the default is pinned.)
+  3. Act-3 verify-cases proof step (the `cases` subcommand).
 
-All org I/O is mocked via FakeOrg — no live org required.
+The agent's dispatch loop runs against FakeOrg — no live org required.
 """
 from __future__ import annotations
 
@@ -40,46 +40,14 @@ def _apply(org, extra_argv, addr=True):
     src = b.build()
     with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
         path = write_input(d, src)
-        argv = ["--target-org", "x", "--input", path]
+        argv = ["--input", path]
         if addr:
             argv += ["--routing-email", "support@acme.com"]
         return run_main(apply_mod, argv + extra_argv)
 
 
-class ApiVersionDerivation(unittest.TestCase):
-    """resolve_api_version: floor at DEFAULT_API_VERSION, ride newer orgs."""
-
-    def test_floors_below_default(self):
-        self.assertEqual(apply_mod.resolve_api_version("62.0"), "67.0")
-
-    def test_equal_to_floor(self):
-        self.assertEqual(apply_mod.resolve_api_version("67.0"), "67.0")
-
-    def test_rides_newer_org(self):
-        self.assertEqual(apply_mod.resolve_api_version("68.0"), "68.0")
-
-    def test_rides_much_newer_org(self):
-        self.assertEqual(apply_mod.resolve_api_version("70.0"), "70.0")
-
-    def test_none_falls_back_to_floor(self):
-        self.assertEqual(apply_mod.resolve_api_version(None), "67.0")
-
-    def test_garbage_falls_back_to_floor(self):
-        self.assertEqual(apply_mod.resolve_api_version("not-a-version"), "67.0")
-
-    def test_summary_reports_derived_version(self):
-        org = _fresh(org_api_version="70.0")
-        summary = _apply(org, [])
-        self.assertEqual(summary["apiVersion"], "70.0")
-
-    def test_summary_reports_floored_version(self):
-        org = _fresh(org_api_version="60.0")
-        summary = _apply(org, [])
-        self.assertEqual(summary["apiVersion"], "67.0")
-
-
 class ProductionGate(unittest.TestCase):
-    """enforce_production_gate: block prod writes unless --confirm-production."""
+    """gate: block prod writes unless --confirm-production."""
 
     def test_sandbox_writes_without_confirmation(self):
         org = _fresh(is_sandbox=True)
@@ -114,14 +82,15 @@ class ProductionGate(unittest.TestCase):
             _apply(org, [])
         self.assertEqual(org.writes, [])
 
-    def test_unreadable_org_row_writes_with_confirmation(self):
+    def test_unreadable_org_row_blocked_even_with_confirmation(self):
         org = _fresh(is_sandbox=None)
-        summary = _apply(org, ["--confirm-production"])
-        self.assertEqual(summary["verified"]["routingAddressCount"], 1)
+        with self.assertRaises(SystemExit):
+            _apply(org, ["--confirm-production"])
+        self.assertEqual(org.writes, [])
 
 
 class VerifyCasesMode(unittest.TestCase):
-    """verify_cases / --verify-cases: proof requires an Email-origin Case with a
+    """cases: proof requires an Email-origin Case with a
     linked incoming EmailMessage."""
 
     def _run_verify(self, org, extra=None):
@@ -130,7 +99,7 @@ class VerifyCasesMode(unittest.TestCase):
         src = Input().with_default_toggles().build()
         with tempfile.TemporaryDirectory() as d, org.patch(apply_mod):
             path = write_input(d, src)
-            return run_main(apply_mod, ["--target-org", "x", "--input", path,
+            return run_main(apply_mod, ["--input", path,
                                         "--verify-cases", *(extra or [])])
 
     def test_proven_when_case_and_incoming_message(self):

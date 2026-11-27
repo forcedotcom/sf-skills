@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PublicKeyCertificateSet — JWKS_URL (endpoint) mode.
+  No PublicKeyCertificate components are created; Salesforce fetches keys from the
+  endpoint. Preferred for many users / rotating IdP keys.
+
+  jwtIssuer: matches the JWT `iss` claim exactly (StringOrURI — a bare string is
+  valid; only a colon-bearing value must be a well-formed URI). For JWKS_URL the
+  issuer is conventionally the IdP's https:// URL, but that's convention, not a rule.
+  The endpoint must be hosted OUTSIDE Salesforce and serve RS256/RS512 keys.
+
+  Endpoint element name `jwksEndPoint` is confirmed against the Metadata API
+  type definition for PublicKeyCertificateSet: "JWKS_URL — Used to specify a
+  certificate via the jwksEndPoint field on this Type" (core model getter
+  getJwksEndPoint()). Required when type=JWKS_URL; the platform rejects a
+  JWKS_URL set with a null/invalid jwksEndPoint.
+-->
+<PublicKeyCertificateSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <jwtIssuer>{JWT_ISSUER}</jwtIssuer>
+    <jwksEndPoint>{JWKS_ENDPOINT_URL}</jwksEndPoint>
+    <masterLabel>{KEYSET_LABEL}</masterLabel>
+    <type>JWKS_URL</type>
+</PublicKeyCertificateSet>

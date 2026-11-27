@@ -49,6 +49,14 @@ picks the chart.** Don't jump straight to a bar chart:
 
 - Pick the chart type matched to intent + field roles — do not default every
   chart to a bar chart.
+- **Precondition — open `../viz-authoring.md` BEFORE calling
+  `create_visualization`.** This guide does not carry the chart mechanics the
+  call needs: `marks.panes.type`, `layout`, the `encodings` array, and the
+  verified per-chart payload all live in `../viz-authoring.md` (§2, §11, §12).
+  Read the matching §11 payload for your chart type and copy its shape — do
+  **not** hand-construct `marks.panes.type` / `layout` / `encodings` from this
+  guide alone (guessing them triggers the §18 failures: `UNKNOWN_EXCEPTION`,
+  HTTP 500, `INVALID_VISUALIZATION_METADATA`).
 - Build with `create_visualization` (`fields` map + `visualSpecification`), only
   after Step 9 / G7 returns real data. FieldKeys in `fields` are pointers —
   they must exactly match `rows` / `columns` / encoding `fieldKey` strings.

@@ -20,7 +20,11 @@ Checks structural rules that must hold before applying:
   - Read-only fields (emailServicesAddress, isVerified) are not set.
   - Enum values for overEmailLimitAction / unauthorizedSenderAction are valid.
 
-Usage: python3 validate-casesettings.py <path-to-file>   (--help for this text)
+A source file with no routingAddresses is an error unless --no-addresses-ok is
+passed; that flag is for a run that only changes toggles on an org that already
+has its addresses.
+
+Usage: python3 validate-casesettings.py [--no-addresses-ok] <path-to-file>   (--help for this text)
 Exits non-zero and prints ERROR lines to stderr if any check fails.
 """
 import sys
@@ -59,7 +63,7 @@ def is_placeholder(value):
     return bool(value) and value.startswith("{") and value.endswith("}")
 
 
-def validate(path):
+def validate(path, allow_no_addresses=False):
     errors = []
     try:
         tree = ET.parse(path)
@@ -145,7 +149,7 @@ def validate(path):
         errors.append(f"unauthorizedSenderAction must be one of {sorted(UNAUTHORIZED_ACTIONS)}, found '{unauth}'.")
 
     addresses = e2c.findall(f"{Q}routingAddresses")
-    if not addresses:
+    if not addresses and not allow_no_addresses:
         errors.append("No <routingAddresses> found — at least one is expected.")
     seen_names = set()
     for i, addr in enumerate(addresses, 1):
@@ -180,6 +184,10 @@ def validate(path):
         # valid caseOwnerType — the platform rejects caseOwner without a type.
         case_owner = child_text(addr, "caseOwner")
         case_owner_type = child_text(addr, "caseOwnerType")
+        if atype == "Outlook" and case_owner is None:
+            errors.append(
+                f"{label} is an Outlook address, which requires caseOwner and "
+                "caseOwnerType — the platform rejects it with 'Missing caseOwner'.")
         if case_owner is not None:
             if is_placeholder(case_owner):
                 errors.append(
@@ -211,12 +219,16 @@ def validate(path):
 
 
 def main():
-    args = [a for a in sys.argv[1:] if a not in ("--help", "-h")]
+    allow_none = "--no-addresses-ok" in sys.argv
+    args = [a for a in sys.argv[1:] if a not in ("--help", "-h", "--no-addresses-ok")]
     if len(sys.argv) == 1 or "--help" in sys.argv or "-h" in sys.argv:
         print(__doc__)
         return 0 if "--help" in sys.argv or "-h" in sys.argv else 2
+    if not args:
+        print(__doc__)
+        return 2
     path = args[0]
-    errors = validate(path)
+    errors = validate(path, allow_no_addresses=allow_none)
     if errors:
         for e in errors:
             print(f"ERROR: {e}", file=sys.stderr)

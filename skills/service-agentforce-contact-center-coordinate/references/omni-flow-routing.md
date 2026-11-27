@@ -26,8 +26,8 @@ agent (published + Active)  ->  inbound RoutingFlow (Active, 300-prefix)  ->  ch
 - **Create new** — build both, in order:
   1. **Preflight** — `scripts/check-agentforce-prereq.sh <alias>` must return a canonical `Einstein Agent User` profile user. It can provision one with `sf org create agent-user` if the org has capacity. Do not use broad Agent/Bot profile matches.
   2. **Work dir** — `scripts/prepare-agent-workdir.sh acc-voice-build`, then run `sf agent generate agent-spec ... --output-file specs/<api-name>.yaml --target-org <alias>` from inside `acc-voice-build`; the spec generator requires SFDX project context.
-  3. **Agent** — from the parent/original work dir, run `scripts/create-voice-agent.sh <alias> <api-name> <label> acc-voice-build/specs/<api-name>.yaml acc-voice-build`. The script generates the authoring bundle, replaces the generator's `default_agent_user: "NEW AGENT USER"` placeholder with the spec's `agentUser`, deploys the `AiAuthoringBundle`, validates, publishes, and activates.
-  4. **Flows** — `scripts/create-routing-flows.sh <alias> <api-name> <label> <queue-id> <queue-name> acc-voice-build`. Renders and deploys the inbound (`_Voice_Omni_Flow`) and escalation (`_Voice_Escalation`) flows from inside the SFDX work dir and prints the inbound `300` Id.
+  3. **Agent** — from the parent/original work dir, run `scripts/create-voice-agent.sh <alias> <api-name> <label> acc-voice-build/specs/<api-name>.yaml acc-voice-build`. The script generates the authoring bundle, replaces the generator's `default_agent_user: "NEW AGENT USER"` placeholder with the spec's `agentUser`, validates, deploys the `AiAuthoringBundle`, publishes, and activates.
+  4. **Flows** — `scripts/create-routing-flows.sh <alias> <api-name> <label> <queue-id> <queue-name> acc-voice-build`. Renders the inbound (`_Voice_Omni_Flow`) and escalation (`_Voice_Escalation`) flows into a fresh temporary SFDX project, deploys only those two (aborts unless exactly 2 files), and prints the inbound `300` Id. The `acc-voice-build` argument is accepted but ignored.
 
 ## Create the channel
 
@@ -62,7 +62,7 @@ If the Agentforce prerequisite can't be confirmed (`references/agentforce-prereq
 | `RequiresProjectError` from `sf agent generate agent-spec` | Prepare and run from `acc-voice-build` with `scripts/prepare-agent-workdir.sh` |
 | `default agent user NEW AGENT USER` during publish | Let `create-voice-agent.sh` patch the generated `.agent` from the spec's `agentUser` before deploy/publish |
 | `Unable to access the Salesforce Agent APIs` / `User doesn't have access to use agent` | Ensure `agentUser` is a canonical `Einstein Agent User` profile user, not a generic Agent/Bot-profile user |
-| `InvalidProjectWorkspaceError` during flow deploy | Reuse the prepared work dir; `create-routing-flows.sh` deploys from inside it |
+| `InvalidProjectWorkspaceError` during flow deploy | `create-routing-flows.sh` deploys from its own temporary project, so the work dir is not involved; re-run it and check the `sf` error output |
 
 ## Verify
 

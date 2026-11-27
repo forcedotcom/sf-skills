@@ -1,16 +1,11 @@
-"""Helpers to drive apply-casesettings.py main() in tests: write a temp
-CaseSettings input file and invoke main() with an argv, capturing the JSON
-summary it prints. main() calls fail()->sys.exit(1) on error, and argparse may
-sys.exit(2); both surface as SystemExit for the test to assert on.
+"""Helpers to drive the apply-casesettings.py flow in tests: write a temp
+CaseSettings input file and run the agent flow against a FakeOrg. The script's
+fail() calls sys.exit(1) and argparse may sys.exit(2); both surface as SystemExit
+for the test to assert on.
 """
 from __future__ import annotations
 
-import io
-import json
-import tempfile
-from contextlib import redirect_stdout
 from pathlib import Path
-from unittest import mock
 
 
 def write_input(tmpdir: str, xml: str) -> str:
@@ -20,14 +15,12 @@ def write_input(tmpdir: str, xml: str) -> str:
 
 
 def run_main(apply_mod, argv):
-    """Run main() with the given argv (excluding program name). Returns the
-    parsed JSON summary dict printed to stdout. Raises SystemExit as-is."""
-    buf = io.StringIO()
-    with mock.patch("sys.argv", ["apply-casesettings.py", *argv]):
-        with redirect_stdout(buf):
-            apply_mod.main()
-    out = buf.getvalue().strip()
-    return json.loads(out) if out else {}
+    """Run the agent flow for ``argv`` (the old single-command flag set) against
+    the active FakeOrg and return the combined JSON summary. Failures surface as
+    SystemExit, as they would stop the agent."""
+    from . import _agent
+    assert _agent.ACTIVE is not None, "wrap the call in org.patch(apply_mod)"
+    return _agent.run_flow(_agent.ACTIVE, apply_mod, list(argv))
 
 
 class Input:

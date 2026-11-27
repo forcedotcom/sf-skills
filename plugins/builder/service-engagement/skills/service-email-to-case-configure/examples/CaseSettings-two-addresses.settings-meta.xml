@@ -6,9 +6,10 @@
   Note what is and is NOT here:
     1. The two required emailToCase switches (enableEmailToCase + enableOnDemandEmailToCase)
        and, on each address, the required addressType / routingName / caseOrigin / casePriority.
-    2. NO emailAddress on either address. The customer-facing emails are supplied at apply
-       time via one routing-email option per address, in this document order (first the
-       Support Inbox email, then the Sales Outlook Inbox email). See SKILL.md step 9.
+    2. NO emailAddress on either address; the Outlook address takes none at all and needs a
+       caseOwner + caseOwnerType (the platform rejects it otherwise). Replace the owner value.
+       The customer-facing email of the EmailToCase address (Support Inbox) is supplied at apply
+       time via one routing-email option. See SKILL.md step 9.
     3. Support Settings (Default Case Owner / Automated Case User) appear here only when the
        user names them — this example names none, so none are set. When named, write the
        paired fields (defaultCaseOwner + defaultCaseOwnerType, etc.); fields the org already
@@ -31,6 +32,8 @@
             <routingName>Sales Outlook Inbox</routingName>
             <caseOrigin>Email</caseOrigin>
             <casePriority>High</casePriority>
+            <caseOwner>OWNER_USERNAME_OR_QUEUE</caseOwner>
+            <caseOwnerType>User</caseOwnerType>
         </routingAddresses>
     </emailToCase>
 </CaseSettings>

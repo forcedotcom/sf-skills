@@ -117,6 +117,10 @@ AgentScript supports the following action types. Use the correct protocol for yo
 
 **Target Format**: `<type>://<DeveloperName>` (e.g., `apex://GetAccountInfo`, `prompt://Send_Email`)
 
+For `mcpTool`, do not build the target or the action block yourself. Get them
+from `sf agent mcp asset afscript`. See
+[MCP Tools in Agent Script](mcp-actions-in-agent-script.md).
+
 **Common Examples:**
 ```agentscript
 # Apex action

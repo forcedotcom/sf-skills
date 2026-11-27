@@ -16,7 +16,7 @@ Each routing address is one `<routingAddresses>` element inside `CaseSettings.em
 | `enableEmailToCase` | `emailToCase` | Master switch. Cannot be disabled once enabled. |
 | `enableOnDemandEmailToCase` | `emailToCase` | Must be `true` before the org accepts routing addresses. Requires the Default Case Owner + Automated Case User above. |
 
-**Support-settings resolution (Phase A).** The script reads current settings first. If the Default Case Owner or Automated Case User is already configured in the org, it is **preserved** untouched (pass `--overwrite-support-settings` to replace it). For a field the user names, write the value into the source file — `defaultCaseOwner` + `defaultCaseOwnerType`; `defaultCaseUser`, or `useSystemUserAsDefaultCaseUser` (+ optional `systemUserEmail`) — since the file is the scored, versionable artifact; the script also accepts the same values as flags (`--owner-type`/`--owner-value`, `--automated-type`/`--automated-value`, `--system-user-email`). Each value is validated against the org — an unknown user or queue, or an invalid type, fails the run with an actionable message so the caller can re-prompt. For a field that is unset **and** unnamed, ask; the authenticated CLI user is used **only** with `--use-authenticated-user`.
+**Support-settings resolution (Phase A).** The script reads current settings first. If the Default Case Owner or Automated Case User is already configured in the org, it is **preserved** untouched (pass `--overwrite-support-settings` to replace it). For a field the user names, write the value into the source file — `defaultCaseOwner` + `defaultCaseOwnerType`; `defaultCaseUser`, or `useSystemUserAsDefaultCaseUser` (+ optional `systemUserEmail`) — since the file is the scored, versionable artifact; the script also accepts the same values as flags (`--owner-type`/`--owner-value`, `--automated-type`/`--automated-value`, `--system-user-email`). Each value is validated against the org — an unknown user or queue, or an invalid type, fails the run with an actionable message so the caller can re-prompt. For a field that is unset **and** unnamed, ask; never default to the authenticated user.
 
 ## Surface selection by `addressType`
 
@@ -25,7 +25,7 @@ Each routing address is one `<routingAddresses>` element inside `CaseSettings.em
 | `addressType` | Surface | Notes |
 |---------------|---------|-------|
 | `EmailToCase` | **Metadata API** | The standard case. Requires out-of-band verification of the Salesforce-generated forwarding address before it receives production mail. |
-| `Outlook` | **Metadata API** | Used with Salesforce for Outlook. Requires On-Demand Email-to-Case enabled. |
+| `Outlook` | **Metadata API** | Used with Salesforce for Outlook. Requires On-Demand Email-to-Case enabled. Takes **no** `emailAddress` and **requires** `caseOwner` + `caseOwnerType`. |
 | `GmailOAuth` | **Metadata API** | Gmail connector. Only one GmailOAuth connector is supported — do not stack a second. |
 | `E2cEasy` | **Service Easy Setup wizard ONLY** | The wizard binds the address to the prebuilt `service_case` queue and completes email round-trip verification. Neither the queue binding nor `isVerified` can be reproduced by a Metadata API deploy. Do not emit Metadata for this type. |
 
@@ -71,3 +71,7 @@ Set these only when the user asks. `enableEmailToCase` and `enableOnDemandEmailT
 | `enableE2CSourceTracking` | boolean | Sets Case Source to Email for E2C-originated cases. |
 | `overEmailLimitAction` | enum | `Bounce` \| `Discard` \| `Requeue` — action when the daily E2C limit is exceeded. |
 | `unauthorizedSenderAction` | enum | `Bounce` \| `Discard` — action for email from invalid senders. |
+
+## Per-address Default Case Owner (opt-in)
+
+Ask one address at a time whether cases from *this* address go to a specific owner or fall to the org Default Case Owner / assignment rules (the default) — different addresses can route to different owners. If the user **declines**, leave `caseOwner`/`caseOwnerType` out of the source file entirely (the template ships them commented out). If the user **opts in**, ask for the **type** (`User`/`Queue`) and **value** (active Username or Queue DeveloperName) and set **both** `<caseOwnerType>` and `<caseOwner>` — the platform rejects `caseOwner` without its type. `apply-casesettings.py` validates it against the org and fails closed if absent. Do not guess or reuse the top-level Default Case Owner.

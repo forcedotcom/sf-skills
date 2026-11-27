@@ -56,4 +56,4 @@ only when the agent's type or data flow requires them:
 
 ## Next Steps
 
-- [patterns/](../patterns/) - Advanced patterns for complex behaviors
+- `../patterns/`: advanced patterns for complex behaviors (one `.agent` file per pattern)

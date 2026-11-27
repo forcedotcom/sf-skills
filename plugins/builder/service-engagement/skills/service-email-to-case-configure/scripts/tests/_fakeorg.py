@@ -1,19 +1,17 @@
 """In-memory fake Salesforce org for driving apply-casesettings.py end to end
 without a live org.
 
-The skill script funnels ALL network I/O through three seams:
-  * ``post_soap(url, envelope, soap_action)`` — readMetadata / updateMetadata
-  * ``query_active_user(session_id, instance_url, username)``
-  * ``query_queue(session_id, instance_url, name)``
-plus ``get_session`` for the CLI handshake. Patching those four lets the whole
-``main()`` flow run against this fake.
+The script itself does no I/O: the agent dispatches the requests it prints. This
+fake plays the platform side of those `dispatch` / `dispatch_readonly` calls
+(``FakeOrg.dispatch``), answering with the same `{status_code, body}` envelopes
+the MCP tools return, so the whole agent flow (see ``_agent.py``) runs against it.
 
-``FakeOrg`` holds a CaseSettings state as a nested dict and applies
-``updateMetadata`` with the SAME merge semantics as the platform:
+``FakeOrg`` holds a CaseSettings state as a nested dict and applies the PUT with
+the SAME merge semantics as the platform:
   * top-level scalar fields merge at the field level (an omitted field keeps its
     current value);
   * inside ``emailToCase``, scalar children merge at the field level;
-  * the ``routingAddresses`` collection is REPLACED wholesale — but ONLY when the
+  * the ``routingAddresses`` collection is REPLACED wholesale - but ONLY when the
     payload's ``emailToCase`` actually contains routingAddresses. A payload whose
     ``emailToCase`` omits routingAddresses (e.g. Phase A) leaves existing
     addresses untouched.
@@ -21,24 +19,21 @@ plus ``get_session`` for the CLI handshake. Patching those four lets the whole
     in the org (matched by routingName/emailAddress) is DROPPED from the replaced
     collection if any brand-new address appears AFTER it in document order; new
     addresses always survive. Placing new addresses BEFORE existing ones (what
-    the skill's Phase B does) preserves everything. This was proven live: the
-    platform-managed read-only fields (emailServicesAddress/isVerified) are NOT
-    the cause — existing addresses dropped with those fields stripped and
-    survived with them kept; only order mattered. Surviving existing addresses
+    the skill's Phase B does) preserves everything. Surviving existing addresses
     keep their minted read-only fields (so a verified address stays verified).
 
 The ``drop_one_existing_on_write`` flag injects a fault: the org drops one
 existing address on any multi-address write regardless of order, to exercise the
-skill's preservation guard (its runtime safety net) independent of the ordering
-model above.
+skill's preservation guard independent of the ordering model above.
 
 Reads reflect current state. Active users / queues are configured per test.
 """
 from __future__ import annotations
 
 import copy
+import json
+import re
 import xml.etree.ElementTree as ET
-from unittest import mock
 
 META_NS = "http://soap.sforce.com/2006/04/metadata"
 
@@ -51,6 +46,12 @@ def _local(tag: str) -> str:
     return tag.split("}", 1)[-1] if "}" in tag else tag
 
 
+def _in_list(soql: str, field: str):
+    """Values of ``<field> IN ('a', 'b')`` in a SOQL string."""
+    m = re.search(rf"{field} IN \(([^)]*)\)", soql)
+    return re.findall(r"'((?:[^'\\]|\\.)*)'", m.group(1)) if m else []
+
+
 class FakeOrg:
     """Models a single org's CaseSettings for apply-casesettings.py tests."""
 
@@ -60,104 +61,115 @@ class FakeOrg:
                  drop_one_existing_on_write=False):
         # Current CaseSettings state (nested dict; scalars are python str/bool).
         self.state = copy.deepcopy(case_settings) if case_settings else {}
-        # Active usernames (exact match, case-insensitive handled below).
-        self.active_users = {u.lower() for u in (active_users or [])}
+        self.active_users = list(active_users or [])
         # Queue DeveloperNames (and Names) that resolve.
         self.queues = set(queues or [])
-        # Record of every updateMetadata payload sent, as nested dicts, for
-        # asserting exactly what was written (e.g. stripped/kept fields).
+        # Every PUT payload sent, as nested dicts, for asserting exactly what was
+        # written (e.g. stripped/kept fields).
         self.writes: list[dict] = []
-        self.instance_url = "https://fake.my.salesforce.com"
-        self.auth_username = "authuser@fake.example.com"
-        # Organization row for the production-gate. is_sandbox=None models an
-        # unreadable Organization row (gate treats it as production).
+        # Every request the agent dispatched, as (tool, method, path).
+        self.calls: list[tuple] = []
+        # Organization row for the production gate. is_sandbox=None models an
+        # unreadable Organization row (no record comes back).
         self.is_sandbox = is_sandbox
         self.org_type = org_type
         self.is_trial = is_trial
-        # apiVersion the fake `sf org display` reports (for version derivation).
+        # Newest version the fake `GET /services/data` lists.
         self.org_api_version = org_api_version
         # Rows returned by the Act-3 verify-cases queries.
         self.cases = list(cases or [])
         self.email_messages = list(email_messages or [])
-        # Fault injection: when True, any multi-address write drops one existing
-        # address regardless of ordering, to exercise the skill's preservation
-        # guard independently of the (correctly-ordered) happy path.
         self.drop_one_existing_on_write = drop_one_existing_on_write
 
-    # -- session / lookups -------------------------------------------------
+    # -- dispatch ---------------------------------------------------------
 
-    def fake_get_session(self, target_org):
-        # Mirror the real get_session's version derivation (floor 67.0) so the
-        # metadata URL matches what a live run would produce. get_session is
-        # patched wholesale in tests, so resolve_api_version is unit-tested
-        # directly; this keeps the fake's URL faithful.
-        version = self.org_api_version
-        try:
-            major = int(str(version).split(".")[0])
-            if major < 67:
-                version = "67.0"
-        except (ValueError, IndexError):
-            version = "67.0"
-        return ("SESSIONID", f"{self.instance_url}/services/Soap/m/{version}",
-                self.instance_url, self.auth_username)
+    def dispatch(self, req: dict) -> dict:
+        """Answer one request the script printed, as the MCP tool would."""
+        tool, method, path = req["tool"], req["method"], req["path"]
+        self.calls.append((tool, method, path))
+        # dispatch_readonly is GET-only; anything state-changing must use dispatch.
+        assert (tool == "dispatch_readonly") == (method == "GET"), req
+        assert re.fullmatch(r"/services/data/(v\d+\.\d+/)?(headless/metadata|query)",
+                            path), path
+        if path.endswith("/headless/metadata"):
+            if method == "GET":
+                assert req["query_params"] == {"type": "CaseSettings",
+                                               "fullName": "Case"}
+                return self._ok({"type": "CaseSettings", "fullName": "Case",
+                                 "xmlRep": self._state_xml()})
+            assert method == "PUT" and req["body"]["type"] == "CaseSettings"
+            return self._apply_update(req["body"]["xmlRep"])
+        return self._query(req["query_params"]["q"])
 
-    def fake_query_active_user(self, session_id, instance_url, username):
-        if username and username.lower() in self.active_users:
-            return username
-        return None
+    @staticmethod
+    def _ok(body):
+        return {"status_code": 200, "body": body}
 
-    def fake_query_queue(self, session_id, instance_url, name):
-        return name if name in self.queues else None
+    def _query(self, soql: str) -> dict:
+        if "FROM Organization" in soql:
+            if self.is_sandbox is None:
+                return self._ok({"totalSize": 0, "done": True, "records": []})
+            return self._ok({"totalSize": 1, "done": True, "records": [{
+                "IsSandbox": self.is_sandbox,
+                "OrganizationType": self.org_type,
+                "TrialExpirationDate":
+                    "2030-01-01T00:00:00.000+0000" if self.is_trial else None}]})
+        if "FROM User" in soql:
+            wanted = {n.lower() for n in _in_list(soql, "Username")}
+            recs = [{"Username": u} for u in self.active_users
+                    if u.lower() in wanted]
+            return self._ok({"totalSize": len(recs), "records": recs})
+        if "FROM Group" in soql:
+            wanted = set(_in_list(soql, "DeveloperName")) | set(
+                _in_list(soql, "Name"))
+            recs = [{"DeveloperName": q, "Name": q} for q in sorted(self.queues)
+                    if q in wanted]
+            return self._ok({"totalSize": len(recs), "records": recs})
+        if "FROM Case" in soql:
+            rows = self.cases
+            m = re.search(r"SuppliedEmail = '([^']*)'", soql)
+            if m:
+                rows = [c for c in rows if c.get("SuppliedEmail") == m.group(1)]
+            return self._ok({"totalSize": len(rows), "records": list(rows)})
+        if "FROM EmailMessage" in soql:
+            ids = set(_in_list(soql, "ParentId"))
+            recs = [m for m in self.email_messages
+                    if m.get("Incoming") and m.get("ParentId") in ids]
+            return self._ok({"totalSize": len(recs), "records": recs})
+        raise AssertionError(f"unexpected query: {soql}")
 
-    def fake_query_org_info(self, session_id, instance_url):
-        return self.is_sandbox, self.org_type, self.is_trial
+    def _state_xml(self) -> str:
+        root = ET.Element(_q("CaseSettings"))
+        self._dict_to_xml(root, self.state)
+        ET.register_namespace("", META_NS)
+        return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+                + ET.tostring(root, encoding="unicode") + "\n")
 
-    def fake_query_email_cases(self, session_id, instance_url,
-                               supplied_email=None):
-        rows = self.cases
-        if supplied_email is not None:
-            rows = [c for c in rows if c.get("SuppliedEmail") == supplied_email]
-        return list(rows)
-
-    def fake_query_incoming_email_messages(self, session_id, instance_url,
-                                           case_ids):
-        ids = set(case_ids)
-        return [m for m in self.email_messages
-                if m.get("Incoming") and m.get("ParentId") in ids]
-
-    # -- SOAP -------------------------------------------------------------
-
-    def fake_post_soap(self, url, envelope, soap_action):
-        if soap_action == "readMetadata":
-            return self._read_response()
-        if soap_action == "updateMetadata":
-            return self._apply_update(envelope)
-        raise AssertionError(f"unexpected SOAPAction {soap_action!r}")
-
-    def _read_response(self):
-        """Build a SOAP-ish response whose .//records mirrors current state."""
-        env = ET.Element(_q("Envelope"))
-        body = ET.SubElement(env, _q("Body"))
-        resp = ET.SubElement(body, _q("readMetadataResponse"))
-        result = ET.SubElement(resp, _q("result"))
-        records = ET.SubElement(result, _q("records"))
-        self._dict_to_xml(records, self.state)
-        return env
-
-    def _apply_update(self, envelope):
+    def _apply_update(self, xml_rep: str) -> dict:
         """Parse the payload, record it, merge it into state, return success."""
-        root = ET.fromstring(envelope)
-        # find the <metadata> element under updateMetadata
-        metadata = None
-        for el in root.iter():
-            if _local(el.tag) == "metadata":
-                metadata = el
-                break
-        assert metadata is not None, "updateMetadata payload missing <metadata>"
-        payload = self._xml_to_dict(metadata)
+        payload = self._xml_to_dict(ET.fromstring(xml_rep))
+        rejected = self._reject_outlook(payload)
+        if rejected:
+            return {"status_code": 400, "body": {"results": [{
+                "success": False, "fullName": "Case", "errors": [
+                    {"statusCode": "INVALID_FIELD", "message": rejected}]}]}}
         self.writes.append(copy.deepcopy(payload))
         self._merge(payload)
-        return self._success_response()
+        return self._ok({"results": [{"success": True, "fullName": "Case",
+                                      "errors": []}]})
+
+    @staticmethod
+    def _reject_outlook(payload):
+        addrs = (payload.get("emailToCase") or {}).get("routingAddresses") or []
+        for a in [addrs] if isinstance(addrs, dict) else addrs:
+            if a.get("addressType") != "Outlook":
+                continue
+            label = f"EmailToCaseRoutingAddress[{a.get('routingName')}]"
+            if a.get("emailAddress"):
+                return f"{label}: emailAddress is not available for an Outlook routing address"
+            if not a.get("caseOwner"):
+                return f"{label}: Missing caseOwner"
+        return None
 
     def _merge(self, payload):
         for key, val in payload.items():
@@ -248,16 +260,6 @@ class FakeOrg:
             return []
         return [addrs] if isinstance(addrs, dict) else list(addrs)
 
-    @staticmethod
-    def _success_response():
-        env = ET.Element(_q("Envelope"))
-        body = ET.SubElement(env, _q("Body"))
-        resp = ET.SubElement(body, _q("updateMetadataResponse"))
-        result = ET.SubElement(resp, _q("result"))
-        ET.SubElement(result, _q("success")).text = "true"
-        ET.SubElement(result, _q("fullName")).text = "Case"
-        return env
-
     # -- dict <-> xml -----------------------------------------------------
 
     def _dict_to_xml(self, parent, value):
@@ -304,54 +306,16 @@ class FakeOrg:
 
     # -- patching ---------------------------------------------------------
 
-    def patch(self, apply_mod):
-        """Return a context manager patching the four seams on apply_mod."""
-        return _Patches(self, apply_mod)
-
-
-class _Patches:
-    def __init__(self, org: FakeOrg, apply_mod):
-        self.org = org
-        self.mod = apply_mod
-        self._patchers = []
-
-    def __enter__(self):
-        # get_session has a documented side-effect: unless --api-version was
-        # given, it sets the module's API_VERSION global to the org-derived,
-        # floored version. The real function is mocked here, so mirror that
-        # side-effect on the patched module using its own resolve_api_version.
-        mod = self.mod
-        org = self.org
-
-        def fake_get_session(target_org):
-            if not getattr(mod, "_API_VERSION_EXPLICIT", False):
-                mod.API_VERSION = mod.resolve_api_version(org.org_api_version)
-            return org.fake_get_session(target_org)
-
-        seams = {
-            "get_session": fake_get_session,
-            "post_soap": self.org.fake_post_soap,
-            "query_active_user": self.org.fake_query_active_user,
-            "query_queue": self.org.fake_query_queue,
-            "query_org_info": self.org.fake_query_org_info,
-            "query_email_cases": self.org.fake_query_email_cases,
-            "query_incoming_email_messages":
-                self.org.fake_query_incoming_email_messages,
-        }
-        for name, fn in seams.items():
-            p = mock.patch.object(self.mod, name, side_effect=fn)
-            p.start()
-            self._patchers.append(p)
-        return self
-
-    def __exit__(self, *exc):
-        for p in self._patchers:
-            p.stop()
-        return False
+    def patch(self, apply_mod=None):
+        """Context manager making ``run_main`` drive the agent flow against this
+        org. ``apply_mod`` is accepted for call-site symmetry with the old seam
+        patching; the script itself has no seams left to patch."""
+        from . import _agent
+        return _agent.Active(self)
 
 
 def last_e2c_write(org: FakeOrg) -> dict:
-    """The emailToCase block of the most recent updateMetadata payload."""
+    """The emailToCase block of the most recent PUT payload."""
     for w in reversed(org.writes):
         if "emailToCase" in w:
             return w["emailToCase"]
@@ -359,7 +323,7 @@ def last_e2c_write(org: FakeOrg) -> dict:
 
 
 def top_level_keys_written(org: FakeOrg) -> set:
-    """Union of all top-level keys across every updateMetadata payload."""
+    """Union of all top-level keys across every PUT payload."""
     keys: set = set()
     for w in org.writes:
         keys |= set(w.keys())

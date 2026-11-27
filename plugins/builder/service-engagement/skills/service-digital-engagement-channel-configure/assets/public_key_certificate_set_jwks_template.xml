@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PublicKeyCertificateSet — JWKS (uploaded keys) mode.
+  Groups one or more PublicKeyCertificate components under a JWT issuer.
+  Deploy the referenced PublicKeyCertificate components BEFORE this set.
+
+  jwtIssuer: must match the JWT `iss` claim exactly. StringOrURI (RFC 7519): a bare
+  string with no colon (e.g. testIssuer) is valid and deploys fine; only a value
+  containing a `:` must be a well-formed URI.
+  Repeat <publicKeyCertificateSetKeys> once per key; <publicKeyCertificate> is the
+  key's API name (the PublicKeyCertificate fullName).
+-->
+<PublicKeyCertificateSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <jwtIssuer>{JWT_ISSUER}</jwtIssuer>
+    <masterLabel>{KEYSET_LABEL}</masterLabel>
+    <publicKeyCertificateSetKeys>
+        <publicKeyCertificate>{KEY_API_NAME}</publicKeyCertificate>
+    </publicKeyCertificateSetKeys>
+    <type>JWKS</type>
+</PublicKeyCertificateSet>

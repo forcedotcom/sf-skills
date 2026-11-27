@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Create, publish, and activate an Agentforce voice service agent (Omni Flow "new agent" path).
 # Replicates the validated session flow: generate an authoring bundle from a spec, repair
-# generator placeholders, deploy the AiAuthoringBundle, validate, publish, and activate.
+# generator placeholders, validate, deploy the AiAuthoringBundle, publish, and activate.
 # Runs inside a scaffolded SFDX project so the bundle can publish.
 #
 # DEVIATION (do not remove): do NOT change plannerType to Atlas__VoiceAgent. This org (API <= 67)
@@ -10,7 +10,7 @@
 # Copilot RoutingFlow regardless of planner type. See references/omni-flow-routing.md.
 #
 # Usage: create-voice-agent.sh <org-alias> <agent-api-name> <agent-label> <spec-file> [work-dir]
-#   work-dir defaults to ./acc-voice-build (pass the same dir to create-routing-flows.sh)
+#   work-dir defaults to ./acc-voice-build
 # Output: the agent api-name (== BotDefinition DeveloperName) on stdout once Active.
 # Exit 0 on Active, 2 usage, 5 on any generate/validate/publish/activate failure.
 
@@ -50,12 +50,12 @@ if [[ -n "$AGENT_USER" && -f "$AGENT_FILE" ]]; then
   mv "$tmp_file" "$AGENT_FILE"
 fi
 
+VAL=$(sf agent validate authoring-bundle --api-name "$API_NAME" --target-org "$ALIAS" --json 2>&1) \
+  || { echo "agent validate failed:" >&2; echo "$VAL" >&2; exit 5; }
+
 DEP=$(sf project deploy start --source-dir "force-app/main/default/aiAuthoringBundles/${API_NAME}" \
   --target-org "$ALIAS" --json 2>&1) \
   || { echo "authoring-bundle deploy failed:" >&2; echo "$DEP" >&2; exit 5; }
-
-VAL=$(sf agent validate authoring-bundle --api-name "$API_NAME" --target-org "$ALIAS" --json 2>&1) \
-  || { echo "agent validate failed:" >&2; echo "$VAL" >&2; exit 5; }
 
 PUB=$(sf agent publish authoring-bundle --api-name "$API_NAME" --target-org "$ALIAS" --json 2>&1) \
   || { echo "agent publish failed:" >&2; echo "$PUB" >&2; exit 5; }

@@ -59,6 +59,6 @@ function escapeXml(s) {
 let text = fs.readFileSync(template, "utf-8");
 text = text.split("__MCP_SERVER_LABEL__").join(escapeXml(serverLabel));
 text = text.split("__MCP_SERVER_DESC__").join(escapeXml(serverDesc));
-fs.writeFileSync(dest, text, "utf-8");
+fs.writeFileSync(dest, text, { encoding: "utf-8", flag: "wx" });
 
 console.log(`Rendered MCP server component at ${dest}`);

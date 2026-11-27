@@ -16,8 +16,17 @@ fi
 ALIAS="$1"
 QUEUE_NAME="${2:-Default Queue Agentforce Contact Center}"
 
+# Group.Name is a free-text label (e.g. "Sales & Support"), so escape it for the SOQL
+# string literal instead of restricting the character set. Backslash first, then quote.
+if [[ -z "$QUEUE_NAME" || ${#QUEUE_NAME} -gt 255 || "$QUEUE_NAME" =~ [[:cntrl:]] ]]; then
+  echo "error: invalid queue name" >&2
+  exit 1
+fi
+SOQL_NAME=${QUEUE_NAME//\\/\\\\}
+SOQL_NAME=${SOQL_NAME//\'/\\\'}
+
 ID=$(sf data query \
-  --query "SELECT Id FROM Group WHERE Type = 'Queue' AND Name = '${QUEUE_NAME}' LIMIT 1" \
+  --query "SELECT Id FROM Group WHERE Type = 'Queue' AND Name = '${SOQL_NAME}' LIMIT 1" \
   --target-org "$ALIAS" --json 2>/dev/null | jq -r '.result.records[0].Id // empty')
 
 if [[ -z "$ID" ]]; then

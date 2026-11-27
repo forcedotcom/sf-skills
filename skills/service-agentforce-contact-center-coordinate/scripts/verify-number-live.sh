@@ -16,6 +16,11 @@ fi
 
 ALIAS="$1"; NUMBER="$2"
 
+if [[ ! "$NUMBER" =~ ^\+?[0-9]{6,15}$ ]]; then
+  echo "error: invalid phone number" >&2
+  exit 2
+fi
+
 # CommunicationChannelLine is Tooling-API-only (not queryable via `sf data query`) and its
 # live-status field is CodeStatus, not Status__c — query it the same way
 # resolve-channel-line.sh does.
@@ -25,7 +30,7 @@ query_status() {
   local resp
   resp=$(sf api request rest \
     "/services/data/${API_VERSION}/tooling/query?q=${query}" \
-    --target-org "$ALIAS" 2>/dev/null || true)
+    --target-org "$ALIAS") || { echo "error: status query failed for ${NUMBER}" >&2; exit 4; }
   # A success query is an object; an API error is a JSON array [{errorCode,...}].
   # Stop on the error shape instead of letting jq crash on `.records` below.
   echo "$resp" | jq -e 'type == "array"' >/dev/null 2>&1 && { echo "error: status query failed for ${NUMBER}: $resp" >&2; exit 4; }

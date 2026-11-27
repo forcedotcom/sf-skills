@@ -34,7 +34,7 @@ For Web deployments, embed this JavaScript snippet on the customer's website.
 | Parameter | Description | How to obtain |
 |-----------|-------------|---------------|
 | `SITE_URL` | The Experience Site base URL | From the deployment's `site` field — format: `https://<domain>/ESW_<name>_<timestamp>` |
-| `ORG_ID` | The Salesforce Org ID (15-char) | `sf org display --target-org <org-alias> --json` → `result.id` |
+| `ORG_ID` | The Salesforce Org ID (15-char) | `sf data query -q "SELECT Id FROM Organization" --target-org '<org-alias>' --json \| jq -r '.result.records[0].Id'` |
 | `EMBEDDED_SERVICE_CONFIG_DEVELOPER_NAME` | The deployment's developer name | Same as the `name` / API name used during creation |
 | `SCRT2_URL` | The Service Cloud Real Time messaging endpoint | Format: `https://<instance>.salesforce-scrt.com` — obtain from Setup > Embedded Service Deployments |
 
@@ -61,7 +61,7 @@ For API and Mobile deployments, provide this configuration JSON for the native a
 
 | Parameter | Description | How to obtain |
 |-----------|-------------|---------------|
-| `ORG_ID` | The Salesforce Org ID (15-char) | `sf org display --target-org <org-alias> --json` → `result.id` |
+| `ORG_ID` | The Salesforce Org ID (15-char) | `sf data query -q "SELECT Id FROM Organization" --target-org '<org-alias>' --json \| jq -r '.result.records[0].Id'` |
 | `EMBEDDED_SERVICE_CONFIG_DEVELOPER_NAME` | The deployment's developer name | Same as the `name` / API name used during creation |
 | `SCRT2_URL` | The Service Cloud Real Time messaging endpoint | Format: `https://<instance>.salesforce-scrt.com` — obtain from Setup > Embedded Service Deployments |
 

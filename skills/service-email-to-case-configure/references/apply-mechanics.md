@@ -1,7 +1,7 @@
 # Email-to-Case Apply Mechanics (why the write is shaped this way)
 
 Load-bearing design rationale behind `apply-casesettings.py`. Read this before changing
-how the script builds or sequences its `updateMetadata` payloads. Do not substitute a
+how the script builds or sequences its write payloads. Do not substitute a
 plain deploy or a minimal patch.
 
 ## Why two phases (and not a single file-based deploy)
@@ -10,9 +10,10 @@ Enabling On-Demand Email-to-Case provisions the org's internal email-service
 infrastructure, and a routing address can only bind to that infrastructure in a
 **subsequent** operation. A single file-based deploy (`sf project deploy`) that both
 enables On-Demand and declares a routing address **fails on a freshly-configured org** —
-verified on clean orgs. `apply-casesettings.py` therefore reads current settings, applies
-the **complete `emailToCase` block** (toggles) plus Support Settings in one `updateMetadata`
-call (Phase A), then re-reads and appends routing addresses in a second call (Phase B).
+verified on clean orgs. The flow therefore reads current settings, applies the **complete
+`emailToCase` block** (toggles) plus Support Settings in one PUT to `/headless/metadata`
+(Phase A), then re-reads and appends routing addresses in a second PUT (Phase B).
+`apply-casesettings.py` builds each PUT and validates each response; the agent dispatches them.
 
 ## Two load-bearing properties of the write
 
@@ -52,10 +53,12 @@ separately for exactly this reason.
 
 ## Routing-address ordering (multi-address preservation)
 
-The `updateMetadata` call **replaces the `routingAddresses` collection wholesale**.
+The write **may replace the `routingAddresses` collection wholesale**.
 An already-provisioned address is **dropped** if a brand-new address follows it in
 document order. Therefore the script **emits new addresses before** the carried-over
-existing ones, so existing addresses always survive.
+existing ones, so existing addresses always survive. (A PUT on a fresh test org kept an
+existing address regardless of order; the ordering is retained as a cheap safeguard until
+more orgs confirm it is unnecessary.)
 
 The platform-managed read-only fields (`emailServicesAddress` / `isVerified`) do **not**
 affect this — only document order does. As defensive hygiene the script still strips those
@@ -64,10 +67,10 @@ preservation mechanism; ordering is. A runtime **preservation guard** baselines 
 expected address count (`initial address count + created count`) captured before Phase A and
 **fails the run loudly** if any existing address is dropped anyway.
 
-## API version derivation
+## API version
 
-The Metadata API version is `max(org apiVersion, 67.0)` — derived from the org and floored
-at the skill's `minApiVersion` (`67.0`). This keeps every field the skill sets valid while
-auto-adopting newer org features (e.g. a v68+ org that supports the `botEmailDefinition`
-binding for Agentforce for Service on Email is picked up automatically). It never claims a
-version the org doesn't report. `--api-version` forces a specific value.
+Request paths are unversioned (`/headless/metadata` is `/services/data/headless/metadata`,
+SOQL is `/services/data/query`); the dispatch server injects the org's own API version,
+reported in the response `url`. Dispatch rejects `GET /services/data`, so the version
+cannot be listed. To pin one (e.g. to force the v68+ `botEmailDefinition` binding), pass
+`--api-version X.Y` to `requests`, `phase-a`, `phase-b`.

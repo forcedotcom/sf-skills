@@ -99,6 +99,19 @@ class RoutingAddressRules(unittest.TestCase):
     def test_no_routing_address_flagged(self):
         self.assertTrue(_has(_errors(Input().build()), "No <routingAddresses> found"))
 
+    def test_no_routing_address_allowed_only_when_opted_in(self):
+        with tempfile.TemporaryDirectory() as d:
+            path = write_input(d, Input().build())
+            self.assertEqual(validate_mod.validate(path, allow_no_addresses=True), [])
+            self.assertTrue(_has(validate_mod.validate(path), "No <routingAddresses> found"))
+
+    def test_opt_in_does_not_relax_other_rules(self):
+        xml = Input().build().replace("<enableOnDemandEmailToCase>true", "<enableOnDemandEmailToCase>false")
+        with tempfile.TemporaryDirectory() as d:
+            path = write_input(d, xml)
+            self.assertTrue(_has(validate_mod.validate(path, allow_no_addresses=True),
+                                 "enableOnDemandEmailToCase"))
+
     def test_missing_required_address_field(self):
         # routingName omitted
         xml = Input().address(addressType="EmailToCase", caseOrigin="Email",

@@ -225,7 +225,7 @@ this doc and flag it for a doc update.
 save on the user's explicit confirmation given *after* seeing it — even if the
 original request already said "save it" in the same message as the edit (same
 discipline as `edit_visualization` → `update_visualization`,
-`edit-visualization.md` §8).
+`edit-visualization.md` "Persistence handoff").
 
 ## 6. Deleting a widget — `remove_widget_from_dashboard`
 

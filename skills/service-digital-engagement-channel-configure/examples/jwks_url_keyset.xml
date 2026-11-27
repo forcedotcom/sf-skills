@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Example — JWKS_URL (endpoint) mode. Single PublicKeyCertificateSet; no key files.
+  Salesforce fetches keys from the endpoint (must be hosted outside Salesforce,
+  serving RS256/RS512 keys). Preferred for many users / rotating IdP keys.
+
+  The <jwksEndPoint> element name is confirmed against the Metadata API type
+  definition for PublicKeyCertificateSet (core getter getJwksEndPoint()).
+
+  File: PublicKeyCertificateSet/IdpKeyset.PublicKeyCertificateSet-meta.xml
+-->
+<PublicKeyCertificateSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <jwtIssuer>https://login.example.com/oauth2/v2.0</jwtIssuer>
+    <jwksEndPoint>https://login.example.com/discovery/v2.0/keys</jwksEndPoint>
+    <masterLabel>IdpKeyset</masterLabel>
+    <type>JWKS_URL</type>
+</PublicKeyCertificateSet>

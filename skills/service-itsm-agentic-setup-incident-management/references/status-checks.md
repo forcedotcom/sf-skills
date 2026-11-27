@@ -127,7 +127,7 @@ Read each of the six through the `IncidentMgmt` SOR's preference read (`getOrgPr
 preference:
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/incident-mgmt", "method": "GET", "queryParams": { "prefName": "IncidentValidationsEnabled" } })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.incident-mgmt.getOrgPref", "method": "GET", "queryParams": { "prefName": "IncidentValidationsEnabled" } })
 ```
 
 `body` is `true` (on) or `false` (off).
@@ -192,7 +192,7 @@ mcp__headless-360__dispatch_readonly({ "url": "/services/data/v{version}/setup/o
 ```
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/service/service-itsm/ipcpriority-matrix-setup/fetch-priority-matrix-configurations", "method": "GET", "queryParams": { "entityType": "Incident" } })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "service.service-itsm.ipcpriority-matrix-setup.fetchPriorityMatrixConfigurations", "method": "GET", "queryParams": { "entityType": "Incident" } })
 ```
 
 `body.isPreferenceEnabled` is *Turn on Automatic Priority Assignment for IT Service*; each
@@ -209,11 +209,11 @@ mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/service/service-
 ## Row 3 — SLA & Milestones
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/slasettings/get-sla-management-permission", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.slasettings.getSlaManagementPermission", "method": "GET" })
 ```
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/slasettings/get-sla-versioning-permission", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.slasettings.getSlaVersioningPermission", "method": "GET" })
 ```
 
 Each `body` is `true` or `false` — SLA Management and SLA Versioning. Only when both are `true`, read the
@@ -259,14 +259,14 @@ IT Service**).
 ## Row 5 — Email-to-Incident
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/email-to-incident", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.email-to-incident.getEmailToIncidentSetting", "method": "GET" })
 ```
 
 `body.emailToIncidentCommonSetting.enableEmailToIncident` says whether it's on. Only when it's on, read the
 routing addresses:
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/email-to-incident/get-all-routing-addresses", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.email-to-incident.getAllRoutingAddresses", "method": "GET" })
 ```
 
 `body` lists one entry per routing address; on newer releases each entry has a `verified` flag.
@@ -284,7 +284,7 @@ First the MIM probe — a `200` with a `true` / `false` body means MIM is active
 *auto-create problem*:
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/mim/get-mimsetup-page-org-preference", "method": "GET", "queryParams": { "prefName": "AutoCreationOfProblem" } })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.mim.getMIMSetupPageOrgPreference", "method": "GET", "queryParams": { "prefName": "AutoCreationOfProblem" } })
 ```
 
 Only when it returns a boolean, read the Major Incident Manager license, then the approval group:
@@ -298,7 +298,7 @@ mcp__headless-360__dispatch_readonly({
 ```
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/mim/get-major-incident-approval-group", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.mim.getMajorIncidentApprovalGroup", "method": "GET" })
 ```
 
 The group read returns the group's Id when one is designated and `{}` when none is — never show the Id.
@@ -381,11 +381,11 @@ mcp__headless-360__dispatch_readonly({ "url": "/services/data/v{version}/setup/o
 it's off — read the escalation level and the privileges:
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/service-mgmt-privilege-setup", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.service-mgmt-privilege-setup.fetchEscalationLevel", "method": "GET" })
 ```
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/service-mgmt-privilege-setup/get-service-privileges", "method": "GET" })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.service-mgmt-privilege-setup.getServicePrivileges", "method": "GET" })
 ```
 
 The level read's `body` is the saved escalation level — `2147483647` means none is saved yet. The privileges
@@ -405,7 +405,7 @@ Employee assignments have no read, so this never says who holds a privilege.
 ## Row 10 — Audit Tracking
 
 ```json
-mcp__headless-360__dispatch_readonly({ "url": "/headless/invoke/platform/field-history-tracking/get-single-entity-tracking-data", "method": "GET", "queryParams": { "entityEnumOrId": "Incident" } })
+mcp__headless-360__dispatch_readonly({ "fully-qualified-operation-id": "setup.platform.field-history-tracking.getSingleEntityTrackingData", "method": "GET", "queryParams": { "entityEnumOrId": "Incident" } })
 ```
 
 The tracked Incident fields are the `body.fields[]` entries with `isCurrentlyTracked` `true`;

@@ -346,7 +346,8 @@ Method-level format:
 - `@InvocableVariable` parameters: `label` (required), `description`, `required=true/false`
 - `@InvocableVariable` supports: primitives, `Id`, `SObject`, `List<T>` only (no `Map`/`Set`/`Blob`); use `List<Id>` or `List<SObject>` fields for Flow collection I/O
 - Always include `isSuccess`, `errorMessage`, and `errorType` (`e.getTypeName()`) in Response
-- Return errors in Response (recommended); throwing an exception triggers the Flow Fault path — reserve for unrecoverable failures only
+- Return errors in Response; throwing triggers the Flow Fault path — reserve for unrecoverable failures
+- Always does DML? Add a sidecar: `references/dml-declarations.md`
 
 ### REST Resource (`@RestResource`)
 - Template: `assets/rest-resource.cls`

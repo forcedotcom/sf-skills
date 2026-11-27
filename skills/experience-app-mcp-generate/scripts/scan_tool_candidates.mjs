@@ -30,7 +30,9 @@ function* walk(dir) {
   let entries;
   try {
     entries = fs.readdirSync(dir, { withFileTypes: true });
-  } catch {
+  } catch (error) {
+    process.stderr.write(`WARNING: unable to scan directory ${dir}: ${error.message}\n`);
+    process.exitCode = 2;
     return;
   }
   for (const e of entries) {

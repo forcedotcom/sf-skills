@@ -4,7 +4,8 @@
 #   - Inbound    <api-name>_Voice_Omni_Flow  : routingType=Copilot   -> routes to the agent, queue as fallback
 #   - Escalation <api-name>_Voice_Escalation : routingType=QueueBased -> agent hands off to the queue
 # Usage: create-routing-flows.sh <org-alias> <agent-api-name> <agent-label> <queue-id> <queue-name> [work-dir]
-#   work-dir defaults to ./acc-voice-build (reuse the same dir as create-voice-agent.sh)
+#   work-dir is accepted for backward compatibility but unused: flows are rendered into a fresh
+#   temp project so only the two flows below are ever deployed.
 # Output: the inbound FlowDefinition Id (300-prefix) on stdout.
 # Exit 0 on success, 2 usage, 5 on deploy failure, 3 if the inbound flow did not activate.
 
@@ -29,8 +30,9 @@ ASSETS_DIR="$(cd "$SCRIPT_DIR/../assets" && pwd)"
 LABEL_X="$(xml_escape "$LABEL")"
 QUEUE_NAME_X="$(xml_escape "$QUEUE_NAME")"
 
-ensure_sfdx_project "$WORK_DIR"
-WORK_DIR_ABS="$(cd "$WORK_DIR" && pwd)"
+WORK_DIR_ABS="$(mktemp -d)"
+trap 'rm -rf "$WORK_DIR_ABS"' EXIT
+ensure_sfdx_project "$WORK_DIR_ABS"
 FLOWS_DIR="$WORK_DIR_ABS/force-app/main/default/flows"
 mkdir -p "$FLOWS_DIR"
 
@@ -41,6 +43,9 @@ render_template "$ASSETS_DIR/omni-flow.flow-meta.xml" \
 render_template "$ASSETS_DIR/escalation-flow.flow-meta.xml" \
   "FLOW_LABEL=${LABEL_X} Voice Escalation" "QUEUE_ID=${QUEUE_ID}" "QUEUE_LABEL=${QUEUE_NAME_X}" \
   > "$FLOWS_DIR/${ESC}.flow-meta.xml"
+
+FLOW_COUNT=$(find "$FLOWS_DIR" -type f | wc -l | tr -d ' ')
+[[ "$FLOW_COUNT" == "2" ]] || { echo "error: expected 2 flow files in $FLOWS_DIR, found $FLOW_COUNT" >&2; exit 5; }
 
 DEP=$(cd "$WORK_DIR_ABS" && sf project deploy start --source-dir "$FLOWS_DIR" --target-org "$ALIAS" --json 2>&1) \
   || { echo "flow deploy failed:" >&2; echo "$DEP" >&2; exit 5; }

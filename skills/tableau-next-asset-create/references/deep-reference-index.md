@@ -24,9 +24,9 @@ router (`SKILL.md`); the first-hop rules there still apply.
   gotchas (§B);
   cited by `ingest-flat-file.md` and `enrich-model.md`. **Not a first hop** for
   an ingest-how-to (that first-hops to `tasks/ingest-flat-file.md`).
-- **`references/data-transform-gotchas.md`** — DCSQL transform create/update
-  payload, confirmation gates, immutable fields, timeout recovery, BATCH↔DCSQL
-  pairing, DMO `KQ_<pk>`. Cited by
+- **`references/data-transform-gotchas.md`** — saved-transform read caveats,
+  DCSQL create/update payload, immutable fields, timeout recovery, authoring
+  type pairing, DMO `KQ_<pk>`. Cited by
   `tasks/create-data-transform.md`; **not a first hop.**
 - **`references/sharing-and-promotion.md`** — principal lookup, access-type
   matrix, Personal Org shadow IDs, safe share mutation, Reuse/Promotion

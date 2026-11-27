@@ -28,7 +28,10 @@ filters, HTTP 400, and the client-side convert/`gh` procedure are in
 **`../sharing-and-promotion.md`** (§Promote).
 
 1. Confirm Personal Org context. Create is rejected outside it.
-2. `create_reuse_promotion_request` with a non-empty `requesterComment`
+2. **Before the first `create_reuse_promotion_request` call, Read
+   `../sharing-and-promotion.md` § "Promote: request lifecycle"** (create
+   params are flat top-level with no body wrapper; `workspaceIdOrApiName` is
+   an id, not the label). Then call it with a non-empty `requesterComment`
    (max 254 chars).
    Reuse: prod `assetId` + Personal Org destination workspace. Promotion:
    Personal Org `assetId` + the workspace that contains it.
@@ -41,6 +44,8 @@ filters, HTTP 400, and the client-side convert/`gh` procedure are in
 4. Survey outstanding Reuse work with `list_promotion_reuse_requests` and
    top-level `requestType=reuse` (not a `requestParams` wrapper). For one
    known id, get-by-id.
-5. Promotion only, after user confirm: `create_promotion_pull_request`, then
-   the download / `sf` convert / copy / `gh pr create` recovery path in the
-   deep ref. Stop if `sf` is missing.
+5. Promotion only, after user confirm: **Read `../sharing-and-promotion.md`
+   § "Promote: pull-request recovery" first.** `create_promotion_pull_request`
+   does **not** open the GitHub PR — it returns a 5-minute presigned URL; the
+   download / `sf` convert / copy / `gh pr create` steps are client-side and
+   are in that section. Stop if `sf` is missing.

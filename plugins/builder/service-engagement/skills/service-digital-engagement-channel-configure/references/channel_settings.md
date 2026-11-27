@@ -99,7 +99,7 @@ Comma-separated string, no spaces between extensions.
 When user verification is enabled:
 - Set `authMode` to `Auth`
 - The customer's backend must issue a signed JWT containing user identity claims
-- JWTs are verified only once a keyset (public key certificate set) whose key `kid` and issuer match them is attached via `messagingAuthorizations`; the channel itself deploys without one. Creating keys is a separate setup
+- JWTs are verified only once a keyset (public key certificate set) whose key `kid` and issuer match them is attached via `messagingAuthorizations`; the channel itself deploys without one. Create keysets per `references/keyset_setup.md`
 
 ---
 

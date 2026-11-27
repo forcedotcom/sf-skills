@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PublicKeyCertificate — one per uploaded key (JWKS / uploaded-keys mode only).
+  Not used in JWKS_URL (endpoint) mode.
+
+  jsonWebKey: the customer's PUBLIC JWK as a single JSON object, XML-escaped
+  (& -> &amp;  " -> &quot;  < -> &lt;  > -> &gt;). It must be a public key:
+  kty, kid, alg (RS256|RS512), use=sig, n, e, and optionally x5c. It must NOT
+  contain a real private exponent (d).
+-->
+<PublicKeyCertificate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isActive>true</isActive>
+    <jsonWebKey>{XML_ESCAPED_PUBLIC_JWK_JSON}</jsonWebKey>
+    <masterLabel>{KEY_LABEL}</masterLabel>
+</PublicKeyCertificate>

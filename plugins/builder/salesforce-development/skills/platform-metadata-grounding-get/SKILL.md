@@ -1,6 +1,6 @@
 ---
 name: platform-metadata-grounding-get
-description: "Find metadata that already exists in a Salesforce org by meaning, when you do not know its exact API name. Use to find objects, fields, flows, Apex classes, picklist values, permission sets, validation rules, record types, and sharing rules by what they store or do. Use before creating metadata to check whether something similar already exists, and before writing Apex, LWC, SOQL, or Flow logic to confirm the real names. Use to read how a field, object, or validation rule is configured, and which profiles and permission sets can read or edit a field. Works through the Metadata Grounding MCP (search_metadata, query_metadata, describe_metadata) or the Salesforce MCP operations searchMetadata, queryMetadata, and describeMetadata. Needs Salesforce Catalog in the org. DO NOT TRIGGER for choosing between grounding, SOQL, and the CLI (use platform-metadata-discovery-get), retrieving source (platform-metadata-retrieve), or Data Cloud DLO and DMO schema (data360-code-extension-generate)."
+description: "Find Salesforce metadata by meaning and read how an org's fields, picklists, objects, permissions, or automation are configured. Use for Catalog-backed discovery and configuration inspection, including known API names. Read before using search_metadata, query_metadata, describe_metadata, or Salesforce MCP grounding operations. DO NOT TRIGGER for choosing between grounding, SOQL, and the CLI (use platform-metadata-discovery-get), retrieving source (platform-metadata-retrieve), or Data Cloud DLO and DMO schema (data360-code-extension-generate)."
 metadata:
   relatedSkills:
   - data360-code-extension-generate
@@ -36,10 +36,12 @@ Metadata grounding searches the org's Salesforce Catalog, an index of the org's 
 
 Results are ranked and capped. They are never a complete list, and grounding never returns source.
 
+Use the org bound to the connected tool or explicitly selected by the user. Do not infer that connection from an unrelated CLI default, and do not require local CLI authentication before using a working MCP. When combining tools, establish that they target the same org; otherwise ask before combining results.
+
 ## When Not to Use Grounding
 
 - Questions about standard Salesforce features or product behavior that do not depend on this org.
-- A name you already know. Check it with scoped SOQL, which is exact and real time.
+- For a name you know, prefer a scoped query when a confirmed, authenticated route is available. A same-org grounding query remains useful when CLI access is unavailable; do not require CLI login to use a working grounding connection.
 - A complete list, a count, or proof that something does not exist. Use scoped SOQL or `sf org list metadata`.
 - Source to edit or deploy. Retrieve it with `platform-metadata-retrieve`.
 - Where something is used, or what breaks if it changes. Grounding has no reference data.
@@ -149,7 +151,7 @@ Identifiers have three parts separated by `::`: the 18-character org id, the nam
 
 ## Grounding Discipline
 
-- Cite the API names, labels, and properties the tools returned. Say which statements are observed and which are inferred.
+- Cite the API names, labels, and properties the tools returned. Say which statements are observed and which are inferred. Answer the question asked; omit unrelated configuration details unless they help. A missing property is unknown, not false or a default value. For example, a generic reference type alone does not distinguish lookup from master-detail.
 - Say "no match found in the org catalog." Never say the metadata does not exist.
 - Never treat results as a complete list.
 - Never write or deploy files built from query output. It returns properties, not source.

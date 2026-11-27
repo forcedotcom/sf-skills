@@ -1,9 +1,5 @@
 /**
-<<<<<<< Updated upstream
- * @description Abstract base class for {describe the family of classes this serves}.
-=======
  * Abstract base class for {describe the family of classes this serves}.
->>>>>>> Stashed changes
  *              Provides common behavior and defines extension points for subclasses.
  *              Subclasses must implement the abstract methods to provide specific behavior.
  *

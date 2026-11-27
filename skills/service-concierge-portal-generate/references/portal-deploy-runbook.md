@@ -8,7 +8,7 @@ The agent script does **not** change here — this is channel/site metadata arou
 
 ## Execution model — Headless first, UI fallback
 
-Every step in §A–§S below is executed headlessly via `sf` CLI + Data API + Metadata API + Tooling API. The Agentforce Orchestrator OrgPerm (§F.4) is enabled via a Connect API POST — no operator UI pause is required. Every Setup-URL fallback in this document is a *last resort* — attempt the headless path first, and only fall back to UI if the headless path returns an unrecoverable error.
+Every step in §A–§S below is executed headlessly via `sf` CLI + Data API + Metadata API + Tooling API. The Agentforce Orchestrator OrgPerm (§F.4) is enabled via a Connect API POST on v68+ orgs. Operator pauses are limited to §F.4.2a (choosing among existing Concierge orchestrators) and the §F.4.1 manual-UI fallback, which applies only on v67 or unsupported orgs where the POST returns `NOT_FOUND`/`UNSUPPORTED_OPERATION`. Every Setup-URL fallback in this document is a *last resort* — attempt the headless path first, and only fall back to UI if the headless path returns an unrecoverable error.
 
 If a non-critical step fails (branding polish, suggestion themes, progressive-rendering toggle), log the failure, continue, and surface the gap to the operator at the end. Do NOT abort the deploy for cosmetic gaps.
 
@@ -50,7 +50,7 @@ At the end of the run, print the live customer-facing portal URL for the operato
 > | 4 | Channel + routing + escalation | §E — `sf agent activate` first; if `MESSAGING_CHANNEL_DEV_NAME` not passed in, delegate to `service-digital-engagement-channel-configure` to create the channel (deploy XML with `<sessionHandlerType>AgentforceServiceAgent</sessionHandlerType>` + `<sessionHandlerQueue>` only — `sessionHandlerAsa` is not accepted by the v67 Metadata API); then delegate to `service-agentforce-channel-configure` (Phase 1: queue, Phase 2: Data API PATCH of `SessionHandlerId` + `FallbackQueueId` on the MessagingChannel, Phase 3: escalation question) | SOQL confirms `SessionHandlerId=$BOT_ID`, `FallbackQueueId` set; `BotVersion.Status=Active`; escalation answered by operator |
 > | 6 | Retrieve + edit + deploy bundle | §F.0 — retrieve `DigitalExperienceBundle:site/$BUNDLE_NAME`; **edit `sfdc_cms__brandingSet/*/content.json` with the four colors from §A (§D)**; replace home placeholder with 4 Concierge components (empty `attributes: {}`); add `Conversation__c` route + `conversation` view (§F.0.a); flip `authenticationType`; deploy | Retrieve confirms components + route; branding JSON contains user-specified hex values |
 > | 7 | Wire Concierge runtime binding | §F.3.a–d — create `EmbeddedServiceConfig` via Connect API `POST /connect/embeddedmessaging/deployment/setup` (same as Web Chat §C.4, omit `hostDomain`; auto-generates `ESW_*` site + test page), insert NSSE, **deploy AND assign** guest permset to Site's `GuestUserId` | `/webruntime/api/…/concierge/config` returns `deploymentName + siteUrl + scrtUrl` **AND** `SELECT PermissionSet.Name FROM PermissionSetAssignment WHERE AssigneeId=<GuestUserId>` returns the `<Bundle>_Guest_Concierge` row |
-> | 8 | Enable Agentforce Orchestrator + create orchestrator binding | §F.4 — `POST /connect/self-service/setup/agentforceOrchestratorEnablement?includeAgentforceOrchestratorPerms=false` (headless, no operator pause); verify SOQL probe; then `POST /connect/self-service/setup/agentOrchestrator {name, developerName, agentId}` | Connect GET returns orchestrator with agentId |
+> | 8 | Enable Agentforce Orchestrator + reuse or create orchestrator | §F.4 — `POST /connect/self-service/setup/agentforceOrchestratorEnablement?includeAgentforceOrchestratorPerms=false` (enable is headless on v68+; manual UI fallback only on v67/unsupported orgs per §F.4.1); verify SOQL probe; list existing orchestrators (§F.4.2a) — if any exist, confirm with the operator which to use; only if none exist, `POST /connect/self-service/setup/agentOrchestrator {name, developerName, agentId}` | Connect GET returns the chosen/created orchestrator |
 > | 9 | Deploy the bundle | §G — `sf project deploy start -m DigitalExperienceBundle:site/$BUNDLE_NAME` | Status: Succeeded |
 > | 10 | Publish the site | §I — `POST /connect/communities/$NETWORK_ID/publish`; PATCH `Network.Status=Live` | Site loads at `PUBLISHED_PORTAL_URL` |
 > | 11 | Network guest flags | §L.0 — PATCH `Network.OptionsGuestChatterEnabled=true AND OptionsGuestMemberVisibility=true` (single Data API call). ALSO verify auth ESC `AreGuestUsersAllowed=true` — flip via mdapi + republish if false. | `/concierge/config?asGuest=true` returns 200; SOQL confirms both Network flags + ESC flag true |
@@ -737,7 +737,7 @@ done
 - ✅ `TOGGLE_STATE=ON` → proceed with §F.4.2.
 - ❌ `TOGGLE_STATE=OFF` (both attempts) → toggle is genuinely OFF → proceed to §F.4.1 (headless enable).
 
-**F.4.1 — Headless enable via Connect API (fully headless — no operator pause).**
+**F.4.1 — Headless enable via Connect API (v68+; manual UI fallback on v67/unsupported orgs).**
 
 Enable Agentforce Orchestrator headlessly:
 
@@ -779,7 +779,20 @@ BOT_ID=$(sf data query -o "$ORG" -q "SELECT Id FROM BotDefinition WHERE Develope
   | python3 -c "import sys,json;print(json.load(sys.stdin)['result']['records'][0]['Id'])")
 ```
 
-**F.4.3 — Create the Orchestrator + Retriever + Parameters via one Connect POST.**
+**F.4.2a — Look for an existing Orchestrator before creating one.**
+
+An operator may already have configured an Orchestrator in this org (an org can have several with `AgenticContextDecoratorType=Concierge`, and binding one to the site is explicit — §F.4.4), so don't create one blindly. List the existing **Concierge** orchestrators first (other `AgenticContextDecoratorType` values are not candidates — the site only binds a Concierge one, and the create in §F.4.3 makes a Concierge one):
+
+```bash
+sf data query -o "$ORG" -q "SELECT Id, DeveloperName, MasterLabel, Status, AgenticContextDecoratorType FROM AgenticCtxtDecorDefinition WHERE AgenticContextDecoratorType = 'Concierge'" --json
+sf api request rest -o "$ORG" --method GET \
+  "/services/data/v67.0/connect/self-service/setup/agentOrchestrator"   # shows each orchestrator's agentIds; read only the entries whose id is in the query result
+```
+
+- **One or more Concierge records returned** → do NOT create. Ask the operator which to use (`AskUserQuestion`, one option per record labelled `MasterLabel (DeveloperName, Status)`, noting which already list `$BOT_ID` in `agentIds`). Set `ORCHESTRATOR_ID` to the chosen `Id`, skip §F.4.3, and continue at §F.4.4 to bind it to the site. If the chosen orchestrator's `agentIds` does not include `$BOT_ID`, **warn the operator** that the orchestrator is not wired to this agent and let them decide (pick another, or fix the agent in Setup → Agentforce Orchestrator) — never modify or delete an existing orchestrator from here.
+- **Zero Concierge records** → proceed to §F.4.3 to create one, then bind it to the site in §F.4.4, even if the org has orchestrators of other types.
+
+**F.4.3 — Create the Orchestrator + Retriever + Parameters via one Connect POST** *(only when §F.4.2a found no existing orchestrator)*.
 
 ```bash
 cat > /tmp/orch.json <<EOF
@@ -809,12 +822,12 @@ sf api request rest -o "$ORG" --method POST \
 | `greetingPrompt` | Optional | DeveloperName of a `GenAiPromptTemplate` (Flex type). |
 | `enableRecommendations` | Optional | Boolean. |
 
-Response: `{"orchestratorId":"1iE...UAM"}`. Capture this for verification.
+Response: `{"orchestratorId":"1iE...UAM"}`. Capture this as `ORCHESTRATOR_ID` for §F.4.4 and verification.
 
-**F.4.4 — NO NSSE PATCH on v67.** On v67, `NetworkSelfServiceExtension` has no `AgenticCtxtDecorDefinitionId` field. Binding is implicit: an org can only have one Orchestrator with `AgenticContextDecoratorType=Concierge`, and every LWR Concierge site picks it up automatically. Skip this step on v67. On v68+ where the NSSE field exists, PATCH it:
+**F.4.4 — Bind the chosen Orchestrator to the site (explicit).** An org can have more than one Orchestrator with `AgenticContextDecoratorType=Concierge`, so the site does not pick one up on its own — bind the one the operator chose in §F.4.2a (or the one §F.4.3 just created) via `NetworkSelfServiceExtension.AgenticCtxtDecorDefinitionId`. Before binding, if `$BOT_ID` is not in that orchestrator's `agentIds` (§F.4.5 shows them), warn the operator and get their decision first. The field only exists on v68+; on v67 `NetworkSelfServiceExtension` has no `AgenticCtxtDecorDefinitionId`, so the PATCH cannot be made — tell the operator the binding cannot be set headlessly on that org.
 
 ```bash
-# ONLY run this block on v68+ orgs
+# v68+ orgs only (the field does not exist on v67)
 NSSE_ID=$(sf data query -o "$ORG" -q "SELECT Id FROM NetworkSelfServiceExtension WHERE NetworkId='$NETWORK_ID' LIMIT 1" --json \
   | python3 -c "import sys,json;print(json.load(sys.stdin)['result']['records'][0]['Id'])")
 sf api request rest -o "$ORG" --method PATCH \
@@ -832,7 +845,7 @@ sf api request rest -o "$ORG" --method GET \
 # orchestrators[].agentIds should include your $BOT_ID
 ```
 
-**F.4.6 — Republish the site** *(only required when NSSE was patched — skip on v67)*.
+**F.4.6 — Republish the site** *(only required when NSSE was patched in §F.4.4 — skip on v67)*.
 
 ## Step G — Deploy the modified bundle
 

@@ -1,9 +1,12 @@
 # Task: Edit an existing visualization
 
-Modify a visualization that already exists — add/remove/replace a shelf field,
-filter, forecast, sort, mark encoding, mark type, dual axis, reference line, table
-calc, or axis title — and, only on explicit request, save the result. For building a
-brand-new chart, use `create-viz.md` instead.
+Modify a visualization that already exists — add/remove/replace/reorder a shelf
+field, filter, forecast, sort, mark encoding, mark type, mark stacking/centering/
+connector, layout, fit, dual axis, reference line, table calc, axis title, field
+label, field/axis/header visibility, header rotation or size, number/date format,
+global style, Measure Values, Flow (sankey) levels/link, or table totals — and,
+only on explicit request, save the result. For building a brand-new chart, use
+`create-viz.md` instead.
 
 ## Gates (assert before any tool call) → `../shared-gates.md`
 

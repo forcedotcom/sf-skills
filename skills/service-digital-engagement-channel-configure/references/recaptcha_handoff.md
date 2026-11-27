@@ -17,11 +17,8 @@ The reCAPTCHA key is not exposed through any API or Metadata field, so this skil
 
 ## Build the link
 
-1. Get the channel Id:
-   ```bash
-   sf data query -o <org> --json -q "SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'"
-   ```
-2. Path: `/lightning/setup/LiveMessageSetup/<ChannelId>/view?lightning__channelType=EmbeddedMessaging`. Prefix it with the org's `instanceUrl` if known (`result.instanceUrl` from `sf org display --json`; never print or copy the access token), otherwise give the path.
+1. Get the channel Id: `SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'`, through `dispatch_readonly` first, or `sf data query -o '<org>' --json -q "<query>"` where that is unavailable.
+2. Path: `/lightning/setup/LiveMessageSetup/<ChannelId>/view?lightning__channelType=EmbeddedMessaging`. Prefix it with the org's `instanceUrl` if known (`sf org display --target-org '<org>' --json | jq -r .result.instanceUrl`; always pipe through `jq`, because the raw output contains the access token, which must never be printed or copied), otherwise give the path.
 
 3. No channel Id yet (the query returns no row, or the channel is not deployed): never deploy only to get one. Give the generic route, Setup → Messaging Settings → open the channel, with the admin steps below, and carry on with the rest of the flow.
 

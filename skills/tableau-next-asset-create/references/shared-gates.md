@@ -319,4 +319,4 @@ intent (single viz) or no narrative (dashboard), STOP and design first.
   explicit confirmation given *after* they've
   seen the draft — even if the original request already said "save it" in the
   same message as the edit. Same rule, same rationale, as `edit_visualization`
-  → `update_visualization` (objective 9, `edit-visualization.md` §8).
+  → `update_visualization` (objective 9, `edit-visualization.md` "Persistence handoff").

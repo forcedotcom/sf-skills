@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  InvocableActionExtension sidecar declaring the DML that {ClassName}'s @InvocableMethod ALWAYS performs.
+  Lets Flow's Validation Exception Checker treat the action like a Record Insert/Update/Delete element.
+
+  Path (source format): force-app/main/default/invocableactionextensions/{ClassName}.invocableactionextension-meta.xml
+  Path (MDAPI format):  invocableactionextensions/{ClassName}.invocableactionextension
+  File name and <targetName> must both equal the Apex class name.
+  Versions: the class apiVersion doesn't matter. Deploy at API 64.0+ (InvocableActionExtension type minimum).
+  The DmlDeclarations key needs an org release that supports it; older orgs reject it as an invalid attribute key.
+
+  value = JSON list; one entry per operation + object:
+    operation        INSERT | UPDATE | DELETE   (no UPSERT)
+    exactly one of:  "object":"Case"  |  "dynamicTypeRef":"T__records"  |  "isDynamicTarget":true
+    fields           optional list of written field API names; omit/empty = "any field may be written"
+  Declare ONLY unconditional DML. Omit this file entirely if the action has no DML or only conditional DML.
+-->
+<InvocableActionExtension xmlns="http://soap.sforce.com/2006/04/metadata">
+    <targets>
+        <attributes>
+            <key>DmlDeclarations</key>
+            <value>[{"operation":"INSERT","object":"{SObject}","fields":["{Field1}","{Field2}"]}]</value>
+            <dataType>String</dataType>
+        </attributes>
+        <targetName>{ClassName}</targetName>
+        <targetType>ActionDefinition</targetType>
+    </targets>
+</InvocableActionExtension>

@@ -18,6 +18,11 @@ fi
 
 ALIAS="$1"; DEVNAME="$2"
 
+if [[ ! "$DEVNAME" =~ ^[A-Za-z][A-Za-z0-9_]{0,79}$ ]]; then
+  echo "error: invalid flow developer name" >&2
+  exit 2
+fi
+
 RESP=$(sf api request rest \
   "/services/data/${API_VERSION}/tooling/query?q=SELECT+Id,DeveloperName,ActiveVersionId+FROM+FlowDefinition+WHERE+DeveloperName='${DEVNAME}'+LIMIT+1" \
   --target-org "$ALIAS" 2>/dev/null || true)

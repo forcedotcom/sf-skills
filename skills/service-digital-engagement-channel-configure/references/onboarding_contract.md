@@ -1,38 +1,32 @@
 # Onboarding contract — delegated mode, transport, pre-scan, registration
 
-Read this when the invocation carries a `context` object, before any org write, or when registering the skill in an
+Read this when `delegationFrom` is set on the invocation, before any org write, or when registering the skill in an
 onboarding module. The sibling `service-digital-engagement-deployment-configure` has the same structure.
 
 ## 1. Two entry points, one write procedure
 
 | | Delegated | Standalone |
 |---|---|---|
-| Detected by | `context.calledFrom == "service-onboarding"` | no `context` object |
-| Values come from | `values` in the payload — already approved in the plan table | you ask for the Inputs in SKILL.md; defaults are in `references/channel_settings.md` |
-| Questions | none, except confirming drift on an existing channel (§3). A missing required key is a caller bug: stop and return `failed` naming the key. Never default a value the admin did not approve | the Inputs list in SKILL.md |
-| Wording | `discoveryMode == "guided"` → plain business language (§4). `"pickAreas"` → Salesforce terminology | Salesforce terminology (the Inputs as written) |
-| Ends with | the structured result in section 5 | a plain-language summary of the same outcome |
+| Detected by | `delegationFrom == "service-onboarding"` (alias until onboarding drops it: `context.calledFrom == "service-onboarding"`) | `delegationFrom` absent |
+| Values come from | `intent` — prose citing the facts the admin already approved in the plan. Read every Input from it first | you ask for the Inputs in SKILL.md; defaults are in `references/channel_settings.md` |
+| Questions | ask only for an Input the `intent` leaves open, plus (a) confirming drift on an existing channel (§3), and (b) when verification is on and `intent` names no keyset: after the channel exists, ask once whether to create a keyset, use an existing one, or skip. Never fabricate or default a value the admin did not approve. A missing routing target is `failed` (below) | the Inputs list in SKILL.md |
+| Wording | `discoveryMode == "guided"` → plain business language (§4). Any other mode → Salesforce terminology | Salesforce terminology (the Inputs as written) |
+| Ends with | the structured result in section 5, then stop: no "what next?", no onward delegation | a plain-language summary of the same outcome |
 
-Delegated payload:
+Delegated runtime values (shared rules: the Service-Onboarding delegation guidelines linked from SKILL.md):
 
 ```json
 {
-  "values": {
-    "channelLabel": "Acme Support Chat",
-    "routingType": "Queue",
-    "routingTarget": "Support_Queue",
-    "fallbackQueue": null,
-    "userVerification": false
-  },
-  "context": { "calledFrom": "service-onboarding", "discoveryMode": "guided" }
+  "intent": "Create a Queue-routed messaging channel 'Acme Support Chat' routed to Support_Queue; customers are not signed in.",
+  "delegationFrom": "service-onboarding",
+  "discoveryMode": "guided"
 }
 ```
 
-Required `values`: `channelLabel`, `routingType`, `routingTarget`; `fallbackQueue` is required when `routingType` is
-`Flow` or `AgentforceServiceAgent` and must be absent for `Queue` and `User`; `queueRoutingConfig` is required when
-`routingType` is `User`. `userVerification` defaults to `false` (`UnAuth`); when `true`, `verificationKeyset` (an existing
-keyset name) and `authIdentifier` are optional. Every other channel setting uses the defaults in
-`references/channel_settings.md` unless a key is supplied.
+Inputs to read from `intent`: `channelLabel`, `routingType`, `routingTarget` (required); a fallback queue is required when `routingType` is
+`Flow` or `AgentforceServiceAgent` and must be absent for `Queue` and `User`; a `QueueRoutingConfig` is required when
+`routingType` is `User`. User verification defaults to off (`UnAuth`); when on, a keyset name (an existing keyset) and `authIdentifier` are optional. Every other channel setting uses the defaults in
+`references/channel_settings.md` unless `intent` states it.
 
 Missing routing target, delegated: return `failed`, `errorMessage` = "<Flow|User|Bot|Queue|RoutingConfig> <name> not found". Never
 create one — queues come from the `queues` feature this one depends on.
@@ -63,11 +57,16 @@ to touch (`MessagingChannel`; and `Queue` if you must create one).
 | `xmlRep` returned, or "Metadata not found" style error | type is onboarded | Transport A |
 | `UNSUPPORTED_OPERATION` for the type or verb | not onboarded for that verb | Transport B for that call only |
 | auth / connection error | MCP unavailable | Transport B; say so |
+| `dispatch` not in your tool list | tool not loaded, not unavailable | load it (e.g. ToolSearch), then probe again before choosing B |
 
 **Transport B (fallback): `sf` CLI** — `sf project deploy start` and `sf data query` / `sf data update record` as in
 SKILL.md. Use only when the probe says Transport A is unavailable for that type/verb.
 
-Routing-target existence checks (Queue, Flow, User, Bot) are SOQL: `dispatch_readonly` on the REST query endpoint first; `sf data query` only if that call returns a path/route error.
+Routing-target existence checks (Queue, Flow, User, Bot) are SOQL: `dispatch_readonly` on the REST query endpoint first; `sf data query` only if that call returns a path/route error. The same applies to the channel Id and bind queries in steps 15 and 15a.
+
+**Setup review link.** The activation update needs the channel Id, so step 15 looks it up: `SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL_DEV_NAME>'` (Transport A `dispatch_readonly`; Transport B `sf data query`). The link is `<instanceUrl>/lightning/setup/LiveMessageSetup/<ChannelId>/view?lightning__channelType=EmbeddedMessaging`. `instanceUrl` comes from `sf org display --target-org '<alias>' --json | jq -r .result.instanceUrl` (always pipe through `jq`, never print the access token) and is usually unknown on Transport A, which has no `sf` session: then give the path alone. The link is the one exception to "no record Ids unless asked".
+
+**Confirm the target org before the first write.** Read it with `SELECT Id, Name, IsSandbox, InstanceName FROM Organization` (Transport A `dispatch_readonly`; Transport B `sf data query -o '<alias>'`). State name, org Id and sandbox/production, and get a yes (standalone) or name it in the announced write (delegated). Treat production as a heightened case: restate that the change is live. Falling from Transport A to B changes the credential and possibly the org: run the same query on B and continue only if the org Id matches; otherwise stop and ask (delegated: `failed`, "transport B targets a different org").
 
 ## 3. Pre-scan (idempotency)
 
@@ -91,7 +90,7 @@ Ask about the outcome; state the default with each; keep it to a handful.
 |---|---|
 | "Routing type: Queue, Flow, User or Agentforce Service Agent?" | "When a customer starts a chat, who should get it first: a team (queue), a specific person, or your AI agent? (Default: a team.)" |
 | "Fallback queue developer name?" | "If the chat goes to your AI agent or an automated flow and it can't take it, which team should get it?" (Not asked for a team or a person.) |
-| "Enable User Verification (JWT)?" | "Will customers be signed in to your site when they chat, so you know who they are? (Default: no.)" Yes → Auth mode; an existing signing keyset name is optional, and setting up the keys is a separate step |
+| "Enable User Verification (JWT)?" | "Will customers be signed in to your site when they chat, so you know who they are? (Default: no.)" Yes → Auth mode; a keyset name is optional. With none, after the channel exists ask once: create a keyset, use an existing one, or skip (`references/keyset_setup.md`) |
 | "Pre-chat form / custom parameters" | "What should we ask customers before the chat starts? (Default: name and email.)" |
 | "`isAbandonedChatsEnabled`, `chatAbandonmentTimeout`…" | Not asked; use the defaults in `references/channel_settings.md` |
 
@@ -104,12 +103,14 @@ Ask about the outcome; state the default with each; keep it to a handful.
   "outputs": {
     "channelName": "Acme_Support_Chat",
     "messagingChannelId": "<id or null>",
-    "isActive": true
+    "isActive": true,
+    "verificationActive": false,
+    "keysetChoice": "created | existing | skipped | not-asked"
   }
 }
 ```
 
-`status` and `errorMessage` are the contract. `outputs` is always returned.
+`status` and `errorMessage` are the contract. `outputs` is always returned. `verificationActive` is `true` only when `messagingAuthorizations` is on the channel; `keysetChoice` records the answer to the §1 keyset question (`not-asked` when verification is off or a `verificationKeyset` was given).
 On `failed`: `errorMessage` names the failed step and the platform error; stop; do not retry.
 
 ## 6. Registration entry (for the onboarding team to place in a module)
@@ -130,12 +131,12 @@ On `failed`: `errorMessage` names the failed step and the platform error; stop; 
     userVerification: { from: signal.messagingSignedIn,    default: false }
     verificationKeyset: { from: signal.messagingKeyset }
     authIdentifier:   { from: signal.messagingAuthIdentifier }
-  writes: "MessagingChannel (Metadata CRUD); IsActive via sObject update"
+  writes: "MessagingChannel (Metadata CRUD); IsActive via sObject update; PublicKeyCertificate and PublicKeyCertificateSet (Metadata CRUD) only when the admin chooses to create a keyset"
   gating:
     irreversible: false
-    note: "Reversible by deactivating the channel. Pre-chat form fields can be deactivated but the form cannot be fully deleted; removing a channel custom parameter needs the form field removed and the deployment republished first."
+    note: "Reversible by deactivating the channel. A created keyset or key cannot be deleted while a channel's messagingAuthorizations references it (remove the authorization first), and a key's kid is unique per org. Pre-chat form fields can be deactivated but the form cannot be fully deleted; removing a channel custom parameter needs the form field removed and the deployment republished first."
   validate:
     check: check-messaging-channel
-    passWhen: "GET MessagingChannel fullName=<normalized name> returns the targeted sessionHandlerType and target and the intended authMode; SOQL SELECT IsActive, SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName=<name> returns IsActive=true, and non-null SessionHandlerId/FallbackQueueId where the routing type requires them"
+    passWhen: "GET MessagingChannel fullName=<normalized name> returns the targeted sessionHandlerType and target and the intended authMode, plus a messagingAuthorizations entry naming the keyset when keysetChoice is created or existing; SOQL SELECT IsActive, SessionHandlerId, FallbackQueueId FROM MessagingChannel WHERE DeveloperName=<name> returns IsActive=true, and non-null SessionHandlerId/FallbackQueueId where the routing type requires them"
   alternative: "Setup > Messaging Settings > New Channel > Messaging for In-App and Web; choose routing, then activate."
 ```

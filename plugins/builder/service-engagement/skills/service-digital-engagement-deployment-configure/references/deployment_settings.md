@@ -112,7 +112,8 @@ Available since API v58.0. Repeatable. Configures conditions under which the mes
 | Create any ESD (Web) | No | No | Yes |
 | Create any ESD (API/Mobile) | Yes | No | Yes |
 | Update ESD (top-level + channel settings) | Yes | Yes | No |
-| Update ESD (forms/labels) | Yes | No | No |
+| Update ESD (forms) | Yes | No | No |
+| Custom labels (not in `EmbeddedServiceConfig` XML) | No | Yes | No |
 | Create BrandingSet | No (auto-created by Connect API) | No | Yes |
 | Update BrandingSet properties | No | Yes | No |
 | Publish ESD | No | No | Yes |

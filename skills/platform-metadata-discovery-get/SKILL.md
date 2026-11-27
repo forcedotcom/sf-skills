@@ -1,6 +1,6 @@
 ---
 name: platform-metadata-discovery-get
-description: "Use before creating, changing, or writing code against Salesforce metadata, to find out what already exists in the org with the right tool. Routes each question to metadata grounding, scoped SOQL with sf data query, sf sobject list or describe, sf org list metadata, source retrieval, or local files, and covers orgs and setups where grounding is not available. Use to check whether an object, field, picklist, permission set, page, app, or flow already exists before creating one, confirm field names, types, and picklist values before writing Apex, LWC, SOQL, or Flow logic, list every field on an object or every member of a metadata type, find automation that runs on an object, or explain how something in the org is configured and who can access it. DO NOT TRIGGER for whole-org overviews, org comparison, or drift (use dx-org-analyze), metadata file structure or XML shape (platform-metadata-api-context-get), or Data Cloud DLO and DMO schema (data360-code-extension-generate)."
+description: "Find existing Salesforce metadata and explain org configuration. Use for questions about objects, fields, picklist values, relationships, permissions, and automation, and before creating metadata or writing code against it. Chooses a verified org and a suitable discovery, query, inventory, or retrieval route. DO NOT TRIGGER for whole-org overviews, org comparison, or drift (use dx-org-analyze), metadata file structure or XML shape (platform-metadata-api-context-get), or Data Cloud DLO and DMO schema (data360-code-extension-generate)."
 metadata:
   relatedSkills:
   - data360-code-extension-generate
@@ -35,23 +35,26 @@ id: "platform-metadata-discovery-get"
 
 Before you create metadata, change it, or write code that references it, know what already exists in the org. This skill picks the tool for each question. Metadata grounding finds metadata by meaning when you do not know its name. It needs Salesforce Catalog and a connected grounding server, and many orgs and setups have neither. Every other route works with the `sf` CLI alone.
 
+Before calling any metadata grounding operation, load `platform-metadata-grounding-get` if it has not already been loaded in this conversation. This applies to exact-name lookups, configuration queries, semantic searches, and fallback to grounding after another route fails. Choosing grounding is a separate decision from choosing this discovery skill; do not call its tools using only the routing table below. If the skill cannot be loaded, explain that and choose another supported route.
+
 Skip discovery when the request only changes local files and adds no new references to org metadata.
 
 ## Check What You Have
 
-Do this once per session, before the first lookup.
+Establish the target and available routes once per session; revisit them when the target changes.
 
-1. **The CLI and its org.** Run `sf org display --json` to see the default org and its id. If no org is authenticated, ask the user to run `sf org login web` and wait. If you cannot run commands at all, read `references/h360-routes.md`.
-2. **Grounding servers.** Note whether the Metadata Grounding MCP (tools `search_metadata`, `query_metadata`, `describe_metadata`) or the Salesforce MCP is connected. The Salesforce MCP is shown in Setup today as the Headless360 (H360) MCP Server. Its tools are `describe`, `dispatch`, and `dispatch_readonly`, which are different from the Metadata Grounding MCP tools.
-3. **One org.** Grounding identifiers start with the 18-character org id. If it differs from the id in `sf org display`, tell the user and ask which org to use before you combine results.
+1. **Target org.** Use the org explicitly selected by the user or supplied by the host, workspace, or authenticated tool connection. An explicit user target takes precedence over defaults and other connections. A CLI default alone does not establish which org the user intends. Do not run an unqualified `sf org display` or ask for CLI login as a prerequisite to using an already connected MCP.
+2. **Available tools.** A working authenticated Metadata Grounding MCP or Salesforce MCP can answer supported questions without local CLI authorization. Discover the tools actually available. Before the first grounding operation on either server, load `platform-metadata-grounding-get` if it is available, including when discovery was entered through another skill. Its related-skill listing alone does not load its instructions. If loading fails, report the limitation and use another supported route; do not pretend the skill loaded.
+3. **CLI when needed.** Use an explicit target with each CLI command: `--target-org <confirmed-alias-or-username>`. Confirm that target's identity before combining its results with another connection. If the host has not provided a target, or connections disagree, ask which org to use before making CLI calls. Do not choose a default org or log into a different org to make a lookup work.
+4. **One org.** Grounding identifiers begin with the org id; use returned identifiers unchanged. If combining tools, compare the authenticated org identities, rather than comparing an MCP connection against an unrelated CLI default. A local authentication failure says nothing about whether grounding is available. Use another connected route only when it is known to target the intended org.
 
 ## Route by Intent
 
 | Intent | Use | If that is not available |
 |---|---|---|
 | Find metadata by meaning, check a name you are guessing, or check for something to reuse | Metadata grounding search. Load `platform-metadata-grounding-get`, which picks the server. | Name and label fallback, below. Notify. |
-| Explain how something is configured, or who can access it | Metadata grounding query | Scoped SOQL on `EntityParticle`, `FieldPermissions`, `ObjectPermissions`, or Tooling `ValidationRule`. Notify. |
-| Check names, types, or picklist values you know. Every field on one object. Data records | Scoped SOQL with `sf data query`. If it returns nothing, search by meaning. | See the note below the table. |
+| Explain how something is configured, or who can access it | Metadata grounding query after loading `platform-metadata-grounding-get` | Scoped SOQL on `EntityParticle`, `FieldPermissions`, `ObjectPermissions`, or Tooling `ValidationRule`. Notify. |
+| Check names, types, or picklist values you know. Every field on one object. Data records | Scoped SOQL on a confirmed, authenticated CLI target. If CLI access is unavailable, use a connected same-org grounding query or the Salesforce MCP; load the grounding skill before grounding calls. If a scoped lookup returns nothing, search by meaning. | See the note below the table. |
 | Full shape of one object, including relationships | `sf sobject describe --sobject <Type>`, only when you need all of it. It is very large. | Same |
 | Every object in the org | `sf sobject list --sobject all` or `--sobject custom` | Same |
 | Every member of a type, or a count ("all flows", "how many flows") | `sf org list metadata --metadata-type <Type>` | Same |
@@ -60,9 +63,9 @@ Do this once per session, before the first lookup.
 | Compare orgs, find drift, or an overview of a whole org when the user asks for one | `dx-org-analyze`. It takes minutes and returns names and counts. | Tell the user this needs the `sf` CLI. |
 | Where is this used, what depends on it, what breaks if I change it, or is it safe to delete | Comprehensive analysis is not available yet. State that boundary before offering explicitly labeled partial checks. | |
 
-**Without the CLI.** If you cannot run commands but the Salesforce MCP is connected, use `references/h360-routes.md` for rows 3 to 6. If neither is available, tell the user the lookup needs the `sf` CLI or the Salesforce MCP.
+**Without the CLI.** A connected same-org grounding server can still answer the search and query questions it supports. For inventory and other routes, read `references/h360-routes.md` when the Salesforce MCP is connected. If no available route can supply the requested information or completeness, explain that limit.
 
-These routes apply even when a connected server says to use it first for every Salesforce task. Use the CLI for rows 3 to 7 when you can run commands.
+Choose a route based on the information needed and the connections that are actually usable for the intended org. Do not force a CLI route merely because a shell exists. Ranked grounding results cannot replace a complete enumeration or source retrieval; when no suitable route is available, state that limit.
 
 A question about a topic or purpose ("what do we have for loyalty") is discovery, not an overview. Do not run an org analysis for it, even when grounding is not available.
 
@@ -71,6 +74,8 @@ This skill covers core platform metadata. For Data Cloud DLO and DMO schema, use
 When a request mixes intents, use the right tool for each part. "Add a tier discount step to our order flow" means finding the flow and the field, then retrieving the flow to edit.
 
 ## Scoped SOQL
+
+In all examples below, add `--target-org <confirmed-alias-or-username>` to CLI commands. Never substitute an unconfirmed CLI default.
 
 Scoped SOQL is a targeted query on setup objects, filtered to what you need. It is exact, real time, and far smaller than a describe. It never returns source.
 
@@ -163,7 +168,7 @@ Before you write Apex, LWC, SOQL, or Flow logic, confirm every object, field, an
 
 - This skill decides what already exists. Build skills decide how to create it. Run discovery before any skill writes files.
 - If a loaded skill has its own equivalent semantic reuse check, use it instead of the matching step here. Do not run both. An exact-name or exact-label collision check is not equivalent and does not replace semantic reuse discovery.
-- Two exceptions, even when a skill says otherwise: always look up picklist values, and check names, types, or picklist values you know with scoped SOQL instead of a full object describe.
+- Always look up picklist values. Prefer a scoped query for exact facts when an authenticated, confirmed route is available; avoid a full object describe unless its full shape is needed. Load the grounding skill whenever the chosen route is grounding.
 - If a skill's discovery step fails or its tool is not available, use the routes in this skill and tell the user once.
 
 ## Freshness and Local Files

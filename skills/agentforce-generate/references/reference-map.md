@@ -40,6 +40,7 @@ organized without risky deletions.
 - `known-issues.md`
 - `production-gotchas.md`
 - `mcp-management-reference.md`
+- `mcp-actions-in-agent-script.md`
 
 ## Supplemental References (Review for Merge/Prune Later)
 

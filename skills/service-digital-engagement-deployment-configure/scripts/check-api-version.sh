@@ -8,6 +8,13 @@
 MIN_VERSION="${1:?Usage: check-api-version.sh <min-version> <org-alias>}"
 ORG_ALIAS="${2:?Usage: check-api-version.sh <min-version> <org-alias>}"
 
+# The alias reaches a command line: reject anything that is not a plain alias/username
+# (a leading "-" would be read by sf as a flag).
+if ! printf '%s' "$ORG_ALIAS" | grep -qE '^[A-Za-z0-9][A-Za-z0-9_.@+-]*$'; then
+  echo "ERROR: Org alias '$ORG_ALIAS' is not a valid alias; ask for the alias or username."
+  exit 3
+fi
+
 API_VERSION=$(sf org display --target-org "$ORG_ALIAS" --json 2>/dev/null | python3 -c "
 import json, sys
 try:

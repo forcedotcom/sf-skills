@@ -1,6 +1,6 @@
 ---
 name: service-digital-engagement-deployment-configure
-description: "Configures Embedded Messaging Deployments for Messaging for In-App and Web (MIAW). Use when the user needs to create a new embedded messaging deployment from scratch using Connect API with defaults, or update an existing deployment's settings using Metadata API. Produces Connect API request payloads for new deployments and EmbeddedServiceConfig metadata XML for updates. TRIGGER when the user mentions embedded messaging deployment, embedded service deployment, MIAW deployment, messaging widget setup, chat widget configuration, embedded chat deployment, or references a .EmbeddedServiceConfig-meta.xml file. DO NOT TRIGGER when the user is creating a messaging channel (use service-digital-engagement-channel-configure), configuring legacy Live Agent embedded service, or generating the JavaScript code snippet for website embedding."
+description: "Configures Embedded Messaging Deployments for Messaging for In-App and Web (MIAW). Use when the user needs to create a new embedded messaging deployment from scratch using Connect API with defaults, or update an existing deployment's settings using Metadata API, including custom labels (widget text such as the Today divider, with translations). Produces Connect API request payloads for new deployments and EmbeddedServiceConfig metadata XML for updates. TRIGGER when the user mentions embedded messaging deployment, embedded service deployment, MIAW deployment, messaging widget setup, chat widget configuration, embedded chat deployment, changing or translating the text a messaging widget shows (custom labels), or references a .EmbeddedServiceConfig-meta.xml file. DO NOT TRIGGER when the user is creating a messaging channel (use service-digital-engagement-channel-configure), configuring legacy Live Agent embedded service, or generating the JavaScript code snippet for website embedding."
 metadata:
   version: "1.0"
   domains: ["Service"]
@@ -14,11 +14,24 @@ metadata:
       semver: ">=3.8"
     - tool: ["sf"]
       semver: ">=2.0.0"
+    - tool: ["jq"]
+      semver: ">=1.7.0"
 ---
 
 # Configuring Embedded Messaging Deployment
 
 Configures `EmbeddedServiceConfig` metadata for Salesforce Messaging for In-App and Web (MIAW). Supports two distinct workflows: creating new deployments via Connect API and updating existing deployments via Metadata API.
+
+## How delegation is handled
+
+### Service-Onboarding delegation
+
+When `delegationFrom` is set to service-onboarding, fetch and follow
+[the Service-Onboarding delegation guidelines](references/_vendored/service-onboarding-delegation-guidelines.md) before acting — it is the single
+source of truth, identical across every service-onboarding delegate. When it is absent, ignore this
+and run as a normal standalone conversation.
+
+---
 
 ## Scope
 
@@ -29,8 +42,10 @@ Configures `EmbeddedServiceConfig` metadata for Salesforce Messaging for In-App 
 
 ## Entry points and transport
 
-- **Delegated** (`context.calledFrom == "service-onboarding"`): use the approved `values`, ask nothing, and return `failed` naming any missing required key. **Standalone** (no `context`): run Clarifying Questions.
-- **Transport A** (primary): headless-360 MCP `dispatch` / `dispatch_readonly` on `/services/data/vXX.0/headless/metadata`. **Transport B**: the `sf` commands below, only where a probe shows Transport A unavailable. Exception: Web create always uses the `sf` CLI (step 17a).
+- **Delegated** (`delegationFrom` is set; alias `context.calledFrom == "service-onboarding"` until onboarding drops it): read the inputs from `intent` and ask only for what it leaves open (`deploymentName`, `deploymentType`, `channelName`). Never fabricate a value; invalid shell input or an unknown channel is `failed`. **Standalone** (no `delegationFrom`): run Clarifying Questions.
+- **Shell safety**: before use in a command, the org alias must match `^[A-Za-z0-9][A-Za-z0-9_.@+-]*$`, the derived API name `^[a-zA-Z][a-zA-Z0-9_]*$`, a channel Id `^[A-Za-z0-9]{15,18}$`, and `hostDomain` `^[A-Za-z0-9.-]+(:[0-9]+)?$`; otherwise stop and ask (delegated: `failed`). Pass labels and other free text single-quoted, escaping any `'` as `'\''`, and build JSON bodies with `jq -n --arg` (see `references/connect_api_creation.md`), never by string splicing.
+- **Transport A** (primary): headless-360 MCP `dispatch` / `dispatch_readonly` on `/services/data/vXX.0/headless/metadata`. **Transport B**: the `sf` commands below, only where a probe shows Transport A unavailable. **Decide the transport before the first org command and say it in one line** (`Transport: A, probe returned xmlRep` or `Transport: B, <signal>`); no org write without that line. For B, quote the failed tool load or the probe's error text: "dispatch isn't available" with no load attempt or probe result is not a reason. If `dispatch` / `dispatch_readonly` is not in your tool list, try to load it (e.g. ToolSearch) and probe before choosing B. If you have no tool-loading tool or the load fails, that is the signal: quote it, take B, and continue; never stop without writing. Use B only on one of these signals: `ROUTE_NOT_FOUND`, `UNSUPPORTED_OPERATION`, `METADATA_CRUD_ERROR`, or an auth/connection error. The choice resets at every step: an earlier `sf` step (e.g. the Web create) is never a reason to use `sf` for the next. The Web create also tries A first and falls back to B only on `INTERNAL_ERROR` from that call (step 17a).
+- **Target org**: before the first write, confirm the target org and sandbox/production with the user (contract §2); a switch from Transport A to B is a new confirmation.
 
 Details: `references/onboarding_contract.md` (§1 entry points, §2 transport, §3 pre-scan, §5 result).
 
@@ -44,7 +59,7 @@ Before generating, ask the user if not already clear (standalone only):
 - **Deployment type?** API (headless), Mobile (native apps), or Web (browser widget)?
 - **Channel name?** What is the `channelPlatformKey` of the messaging channel to associate?
 - For **create**: What should the deployment be named?
-- For **update**: What features to configure? (pre-chat forms, business hours, T&C, UI toggles)
+- For **update**: What features to configure? (pre-chat forms, custom labels, business hours, T&C, UI toggles)
 - For **pre-chat** (if requested): the questions in `references/prechat_forms.md` §Inputs to Gather
 - For **update (Web)**: What is the Experience Site name? Branding overrides needed?
 
@@ -77,11 +92,11 @@ All steps are sequential. Do not skip or reorder. Branch based on the operation 
 
 ### Phase 1 — Gather Context
 
-1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 <org-alias>` and report any errors it returns. Exit 1 = org below 67.0: stop all org writes and relay the script's next step (delegated: `failed`); local template generation may continue. Exit 2 = version could not be read: warn that it is unverified and continue; the deploy confirms it. Create `sfdx-project.json` in the metadata output folder only if none exists, with `sourceApiVersion` set to the script's `ORG_API_VERSION` (67.0 if exit 2).
+1. **Verify org API version** — run `scripts/check-api-version.sh 67.0 '<org-alias>'` and report any errors it returns. Exit 1 = org below 67.0: stop all org writes and relay the script's next step (delegated: `failed`); local template generation may continue. Exit 3 = invalid org alias: stop and ask for the alias (delegated: `failed`). Exit 2 = version could not be read: warn that it is unverified and continue; the deploy confirms it. Create `sfdx-project.json` in the metadata output folder only if none exists, with `sourceApiVersion` set to the script's `ORG_API_VERSION` (67.0 if exit 2).
 
-2. **Determine operation** — standalone: ask whether the user wants to create a new deployment or update an existing one. Delegated: taken from `values.operation`, then confirmed by the pre-scan (step 4a).
+2. **Determine operation** — standalone: ask whether the user wants to create a new deployment or update an existing one. Delegated: taken from `intent`, defaulting per contract §1, then confirmed by the pre-scan (step 4a).
 
-3. **Collect inputs** — standalone: per Clarifying Questions. Delegated: from `values` (`deploymentName`, `deploymentType`, `channelName` required).
+3. **Collect inputs** — standalone: per Clarifying Questions. Delegated: from `intent` (`deploymentName`, `deploymentType`, `channelName` required; ask for any it omits).
 
 3a. **Probe transport** — read-only `GET` of `EmbeddedServiceConfig` (contract §2).
 
@@ -112,7 +127,7 @@ Use this path when the operation is `update`.
 
 10. **Retrieve the existing deployment** — take the current `EmbeddedServiceConfig` from the org before making changes. Transport A: the `xmlRep` from the step 3a/4a `GET`. Transport B:
     ```bash
-    sf project retrieve start --metadata EmbeddedServiceConfig:<DEPLOYMENT_NAME> --target-org <org-alias>
+    sf project retrieve start --metadata EmbeddedServiceConfig:<DEPLOYMENT_NAME> --target-org '<org-alias>'
     ```
     Use it as the starting structure — the update is always a **full document** (see Rules). If retrieval is not possible, load `assets/esd_web_update_template.xml` as a fallback reference.
 
@@ -121,6 +136,8 @@ Use this path when the operation is `update`.
 12. **Apply pre-chat forms** — pre-chat is OFF by default: omit `<embeddedServiceForms>` unless the user asks to collect data before the conversation. If they do, **read `references/prechat_forms.md` first** and follow it (field attributes, hidden fields, ChoiceList, `displayNameFormat`, deactivate vs. remove).
     - **Before generating**, run the checks in its §Validating and Remediating Prerequisites against the *retrieved* channel. Channel fixes go through `service-digital-engagement-channel-configure`; never hand-edit the channel here.
     - Delta to graft onto a base deployment: `examples/esd_web_prechat_fields.xml`.
+
+12a. **Apply custom labels** (Web v1/v2 and Mobile, not API; only if asked) — read `references/custom_labels.md`. Labels are Tooling records, not `EmbeddedServiceConfig` XML: check the deployment type (Mobile: two keys only), Translation Workbench and language prerequisites first, warn that Web v1/v2 show different label sets, write them in Phase 2C, and they go live only on publish (17c). Reply to the user with the result, the Setup review link and one next question; leave out tool, recipe and endpoint names. Delegated: still end with the contract §5 result.
 
 13. **Apply branding customization** (Web only) — a BrandingSet is automatically created with defaults when the deployment is created via Connect API. If the user wants to override specific branding properties (colors, fonts, dimensions), read `references/branding_and_tooling.md` for the Tooling API steps to update individual properties.
 
@@ -141,7 +158,7 @@ Use this path when the operation is `update`.
 Runs for both Phase 2A and 2B, except when the pre-scan returned `already-configured`. Standalone: confirm before writing. Delegated: the plan approval is the confirmation; still announce each write.
 
 17a. **Write the deployment** —
-    - Web create: Connect API (see `references/connect_api_creation.md`) via `sf api request rest` — always, not `dispatch` (MCP `dispatch` fails with `INTERNAL_ERROR` during site creation).
+    - Web create: Connect API (see `references/connect_api_creation.md`). Transport A first: `dispatch` `POST` on the fully-qualified path. If it returns `INTERNAL_ERROR` (MCP sessions can fail while the ESW site is built), quote the error, re-run the step 3 pre-scan, and continue on B with `sf api request rest` only if no partial `EmbeddedServiceConfig` for the name exists; if one does, stop and ask.
     - API/Mobile create: Transport A `POST` `EmbeddedServiceConfig` (body carries `type`, `fullName`, `xmlRep`); Transport B `sf project deploy start`.
     - Update: Transport A `PUT` of the **full** document; Transport B `sf project deploy start`.
     Check `results[].success`, not just HTTP status. On failure stop and report the step — no silent retry.
@@ -233,9 +250,10 @@ File structure follows the templates in `assets/`.
 
 | File | When to read |
 |------|-------------|
-| `references/onboarding_contract.md` | Pre-scan (§3, both modes); delegated mode (`context.calledFrom == "service-onboarding"`), org writes (transport), module registration |
+| `references/onboarding_contract.md` | Pre-scan (§3, both modes); delegated mode (`delegationFrom` set), org writes (transport), module registration |
 | `assets/esd_api_mobile_template.xml`, `assets/esd_web_update_template.xml` | Before generating API/Mobile deployments and Web updates, respectively |
 | `references/deployment_settings.md` | When configuring deployment options beyond defaults; less common gotchas (embedded flow, reCAPTCHA, business hours) |
+| `references/custom_labels.md` | Whenever custom labels are requested — prerequisites, key validation, create/update/remove, transport |
 | `references/prechat_forms.md` | Whenever pre-chat is requested — inputs, field rules, ChoiceList, `displayNameFormat`, deactivate vs. remove, pre-chat gotchas and checklist |
 | `references/connect_api_creation.md` | When creating Web type deployments (Connect API required); publish command and ID query |
 | `references/branding_and_tooling.md` | When user asks about branding configuration |

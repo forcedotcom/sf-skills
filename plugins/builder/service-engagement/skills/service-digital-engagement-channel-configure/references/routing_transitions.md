@@ -16,7 +16,7 @@ Changes from Queue, and between Flow and Agentforce Service Agent, carry no stal
 ## Procedure
 
 1. Announce the change and which fields will be cleared. If the channel is active (`IsActive`), say that new sessions route differently from the moment of the update. Then let the user choose to **continue** or **stop**. Write nothing until they choose continue; if they stop, leave the channel as is and report no change. Delegated: a routing-type change is the exception to confirming drift with the user (contract §3), so return `failed` with `errorMessage` "routing type change Flow → Queue needs the user's confirmation" (naming the real types) and write nothing.
-2. Names must match `^[A-Za-z0-9_.@+-]+$` before they go into a query; otherwise stop and ask. Resolve the Ids: queue `SELECT Id FROM Group WHERE Type='Queue' AND DeveloperName='<NAME>'`; flow `SELECT DurableId FROM FlowDefinitionView WHERE ApiName='<NAME>' AND IsActive=true AND ProcessType='RoutingFlow'` (the `300` Id); user `SELECT Id FROM User WHERE Username='<USERNAME>' AND IsActive=true`; routing config `SELECT Id FROM QueueRoutingConfig WHERE DeveloperName='<NAME>'`; bot `SELECT Id FROM BotDefinition WHERE DeveloperName='<NAME>'` (its active version must be Active, SKILL.md step 7); the channel `SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL>'`.
+2. Names must match `^[A-Za-z0-9][A-Za-z0-9_.@+-]*$` before they go into a query; otherwise stop and ask. Resolve the Ids: queue `SELECT Id FROM Group WHERE Type='Queue' AND DeveloperName='<NAME>'`; flow `SELECT DurableId FROM FlowDefinitionView WHERE ApiName='<NAME>' AND IsActive=true AND ProcessType='RoutingFlow'` (the `300` Id); user `SELECT Id FROM User WHERE Username='<USERNAME>' AND IsActive=true`; routing config `SELECT Id FROM QueueRoutingConfig WHERE DeveloperName='<NAME>'`; bot `SELECT Id FROM BotDefinition WHERE DeveloperName='<NAME>'` (its active version must be Active, SKILL.md step 7); the channel `SELECT Id FROM MessagingChannel WHERE DeveloperName='<CHANNEL>'`.
 3. First query and keep the channel's current `SessionHandlerId`, `FallbackQueueId`, and `RoutingConfigurationId`. Then update the `MessagingChannel` record with all fields in one update (Transport A: sObject update through `dispatch`; Transport B: `sf data update record --sobject MessagingChannel --record-id <Id> --values "..."`):
 
    | To | Values |
@@ -35,7 +35,7 @@ The update needs Update on `MessagingChannel` plus field access to `SessionHandl
 
 ## Target lookups
 
-Names must match `^[A-Za-z0-9_.@+-]+$` before they go into a query. Use `sf data query --target-org <org-alias> --query "..."`.
+Names must match `^[A-Za-z0-9][A-Za-z0-9_.@+-]*$` before they go into a query. Use `sf data query --target-org '<org-alias>' --query "..."`.
 
 - Queue: `SELECT Id, DeveloperName FROM Group WHERE Type='Queue' AND DeveloperName='<QUEUE_NAME>'`
 - Flow: `SELECT Id, ApiName FROM FlowDefinitionView WHERE ApiName='<FLOW_NAME>' AND IsActive=true AND ProcessType='RoutingFlow'`

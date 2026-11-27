@@ -11,13 +11,13 @@ To override specific branding properties (colors, fonts, dimensions, images), us
 Query the existing BrandingSet properties, then update specific values:
 
 ```bash
-sf data query --query "SELECT Id, PropertyName, PropertyValue FROM BrandingSetProperty WHERE BrandingSetId IN (SELECT Id FROM BrandingSet WHERE DeveloperName='<BRANDING_SET_NAME>')" --target-org <org-alias> --tooling-api
+sf data query --query "SELECT Id, PropertyName, PropertyValue FROM BrandingSetProperty WHERE BrandingSetId IN (SELECT Id FROM BrandingSet WHERE DeveloperName='<BRANDING_SET_NAME>')" --target-org '<org-alias>' --tooling-api
 ```
 
 Update a specific property:
 
 ```bash
-sf data update record --sobject BrandingSetProperty --where "Id='<PROPERTY_ID>'" --values "PropertyValue='<NEW_VALUE>'" --target-org <org-alias> --tooling-api
+sf data update record --sobject BrandingSetProperty --where "Id='<PROPERTY_ID>'" --values "PropertyValue='<NEW_VALUE>'" --target-org '<org-alias>' --tooling-api
 ```
 
 ---
