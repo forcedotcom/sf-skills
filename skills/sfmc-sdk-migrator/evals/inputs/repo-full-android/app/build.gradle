@@ -1,0 +1,36 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.example.newsapp'
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.example.newsapp"
+        minSdk 21
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+
+    // Legacy SFMC Marketing Cloud SDK (monolith). This is the umbrella artifact
+    // and carries the changelog version in the legacy era.
+    implementation 'com.salesforce.marketingcloud:marketingcloudsdk:7.4.2'
+
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
+}

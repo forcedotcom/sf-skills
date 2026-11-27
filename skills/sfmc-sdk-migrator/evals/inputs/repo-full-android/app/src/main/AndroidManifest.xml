@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".NewsApp"
+        android:label="NewsApp"
+        android:icon="@mipmap/ic_launcher">
+
+        <!-- Legacy SDK component declared by hand. In v11 the push module
+             auto-merges its own components, so this manual declaration should be
+             removed during migration. -->
+        <service
+            android:name="com.salesforce.marketingcloud.notifications.NotificationOpenedService"
+            android:exported="false" />
+
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

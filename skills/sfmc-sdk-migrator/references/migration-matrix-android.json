@@ -1,0 +1,244 @@
+{
+  "platform": "android",
+  "sourceApiEra": "legacy-MarketingCloudSdk",
+  "targetApiEra": "unified-SFMCSdk",
+  "targetVersion": "11.0.1",
+  "targetRelease": 260,
+  "_seedNote": "Verified against the published v11.0.1 artifacts (bytecode inspection of the AARs on the SFMC maven, 2026-07). CRITICAL correction from earlier drafts: marketingcloudsdk:11.0.1 is NOT removed — it ships as the ENGAGEMENT feature module of the unified SDK and continues to expose MarketingCloudSdk, RegistrationManager, InboxMessageManager, AnalyticsManager, RegionMessageManager, and sdkState. Only the initialization shape, identity, push access, and IAM listener signature change. Module versions are independent: sfmcsdk:3.1.1, marketingcloudsdk:11.0.1, pushfeaturemodule:2.0.1, inappmessagingfeaturemodule:1.0.1. Verify against the change log before relying on it for a new customer migration.",
+
+  "detection": {
+    "packageRoots": ["com.salesforce.marketingcloud"],
+    "legacyArtifacts": ["marketingcloudsdk"],
+    "modernArtifacts": ["sfmcsdk", "pushfeaturemodule", "inappmessagingfeaturemodule", "mobileappmessagingsdk"],
+    "unifiedCoreArtifacts": ["sfmcsdk"],
+    "umbrellaVersionArtifacts": ["marketingcloudsdk"],
+    "_umbrellaVersionNote": "The changelog 'umbrella' version (8.x/9.x legacy, 11.0.1 unified) is carried by the marketingcloudsdk artifact in BOTH eras — in unified it is the engagement module and still numbered on the umbrella stream (11.0.1), while sfmcsdk (the unified core) is on its OWN stream (3.1.1). Read the current version from the umbrella artifact, never from sfmcsdk: sfmcsdk 3.x would misread as major<10 and wrongly classify an already-unified project as legacy. If the umbrella artifact is absent (e.g. a push-only unified project with no engagement module), currentVersion is genuinely undeterminable from artifact versions — report null rather than substituting a core-stream number.",
+    "legacyEntryPointRegexes": [
+      "MarketingCloudSdk\\s*\\.\\s*init\\s*\\(",
+      "MarketingCloudSdk\\s*\\.\\s*getInstance\\s*\\("
+    ],
+    "versionArtifactRegexes": {
+      "marketingcloudsdk": "marketingcloudsdk[:\"']\\s*[:=]?\\s*[\"']?([0-9][0-9A-Za-z.\\-]*)",
+      "sfmcsdk": "sfmcsdk[:\"']\\s*[:=]?\\s*[\"']?([0-9][0-9A-Za-z.\\-]*)"
+    },
+    "versionFiles": ["gradle.properties", "gradle/libs.versions.toml", "build.gradle", "build.gradle.kts"],
+    "versionRegexes": [
+      "marketingcloudsdk[:\"']\\s*[:=]?\\s*[\"']?([0-9]+\\.[0-9]+\\.[0-9]+)",
+      "sfmcsdk[:\"']\\s*[:=]?\\s*[\"']?([0-9]+\\.[0-9]+\\.[0-9]+)"
+    ],
+    "eraDisambiguation": "If ONLY marketingcloudsdk is present (no sfmcsdk), it's legacy — the app is on 8.x/9.x. If BOTH marketingcloudsdk and sfmcsdk are present, it's UNIFIED — marketingcloudsdk is now the engagement feature module, not a legacy holdover. Detect era by the presence of a unifiedCoreArtifacts entry (sfmcsdk), NOT by the presence of marketingcloudsdk and NOT by whether legacy-shaped symbols appear in code. In v11 the engagement module still ships Inbox/Region/Analytics/tags/sdkState, so a correctly-migrated project produces matrix findings against those symbols — those findings are a worklist signal, never an era signal. Use legacyEntryPointRegexes (MarketingCloudSdk.init / .getInstance — which have no unified equivalent) to tell a still-to-migrate project from one whose engagement call sites are legitimately preserved: their presence WITH a unified core means a partial/in-progress migration; their absence with a unified core means already-migrated."
+  },
+
+  "dependencies": {
+    "group": "com.salesforce.marketingcloud",
+    "_seedVersionWarning": "The `seedVersion` on each artifact below is a SNAPSHOT, not the source of truth. These modules are on INDEPENDENT version streams that cannot be derived from the umbrella release number, and any pinned value rots the moment SFMC ships a point release — a stale version then fails Gradle resolution at build time. Before writing Gradle coordinates in Phase 3, RESOLVE the real versions at runtime with `scripts/resolve_versions.py` (verify these seeds still exist, or discover latest), and let the Phase 5 Gradle build confirm the chosen set actually coheres. Only fall back to seedVersion if the Maven repo is unreachable — and say so in the report.",
+    "remove": [],
+    "keep": [
+      { "artifact": "marketingcloudsdk", "seedVersion": "11.0.1", "note": "In v11 this is the ENGAGEMENT feature module. Keep it. It still ships MarketingCloudSdk, RegistrationManager, InboxMessageManager, AnalyticsManager, RegionMessageManager, and sdkState. Removing it will break Inbox / Region / Analytics call sites that have no replacement in sfmcsdk. Resolve the current version at runtime." }
+    ],
+    "add": [
+      { "artifact": "sfmcsdk", "seedVersion": "3.1.1", "conditional": false, "note": "Unified core: SFMCSdk.configure, SFMCSdk.requestSdk, Identity, Event/EventManager. Always required. Its OWN version stream, independent of the umbrella '11.0.1' — resolve at runtime, do NOT set it to 11.0.1 (no such artifact version)." },
+      { "artifact": "pushfeaturemodule", "seedVersion": "2.0.1", "conditional": "push", "feature": "push", "note": "Push token, notification customization, notification URL handler. Own version stream — resolve at runtime." },
+      { "artifact": "inappmessagingfeaturemodule", "seedVersion": "1.0.1", "conditional": "iam", "feature": "iam", "note": "In-app messaging. Own version stream — resolve at runtime." },
+      { "artifact": "mobileappmessagingsdk", "seedVersion": "11.0.1", "conditional": "mam", "feature": "mam", "note": "Add only if Mobile App Messaging / engagement analytics is used. Resolve at runtime." }
+    ],
+    "_versionMappingNote": "The umbrella 'v11.x' release maps to multiple module versions on independent streams. When the user says 'upgrade to latest', resolve each module's current version via resolve_versions.py rather than assuming the umbrella number applies to every artifact. The seedVersions above reflect one known-coherent v11 set (verified 2026-07) but are a fallback, not a guarantee."
+  },
+
+  "manifest": {
+    "autoProvided": [
+      "com.salesforce.marketingcloud.sfmcsdk.SFMCSdkInitContentProvider",
+      "com.salesforce.marketingcloud.pushfeature.push.PushMessagingService",
+      "com.salesforce.marketingcloud.pushfeature.notifications.NotificationOpenActivity",
+      "com.salesforce.marketingcloud.pushfeature.notifications.NotificationOpenedService",
+      "com.salesforce.marketingcloud.pushfeature.notifications.PushNotificationActionHandler",
+      "android.permission.INTERNET",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.WAKE_LOCK",
+      "android.permission.EXPAND_STATUS_BAR"
+    ],
+    "appMustOwn": [
+      { "item": "android.permission.POST_NOTIFICATIONS", "when": "push used && targetSdkVersion >= 33", "note": "Android 13+ requires runtime notification permission; the app must request it. Flag this even when the migration is otherwise clean — v11 usually forces a targetSdk bump to 33+ (often 34/36) which trips this requirement." }
+    ],
+    "removeLegacy": [
+      { "pattern": "com.salesforce.marketingcloud.notifications.*", "note": "The v11 push module auto-merges notification components. Remove manual <service>/<receiver> declarations pointing at legacy classes." },
+      { "pattern": "com.salesforce.marketingcloud.MarketingCloudInitProvider", "note": "Replaced by SFMCSdkInitContentProvider (auto-merged)." }
+    ]
+  },
+
+  "packageMoves": [
+    { "from": "com.salesforce.marketingcloud.notifications.NotificationCustomizationOptions", "to": "com.salesforce.marketingcloud.pushfeature.notifications.NotificationCustomizationOptions", "note": "Static factory .create(iconRes) or .create(iconRes, launchIntentProvider, channelIdProvider). Fix imports; call sites otherwise unchanged." },
+    { "from": "com.salesforce.marketingcloud.messages.push.PushMessageManager", "to": "com.salesforce.marketingcloud.pushfeature.push.PushMessageManager", "note": "PushMessageManager.isMarketingCloudPush(remoteMessage) is still static and stays a static call. Handling methods (handleMessage, setPushToken) are on the instance reached via PushFeature.requestSdk." },
+    { "from": "com.salesforce.marketingcloud.notifications.NotificationManager", "to": "com.salesforce.marketingcloud.pushfeature.notifications.NotificationManager", "note": "Nested types (NotificationLaunchIntentProvider, NotificationChannelIdProvider, NotificationBuilder) live under this new package. If an Application class implements NotificationLaunchIntentProvider, update the import." },
+    { "from": "com.salesforce.marketingcloud.notifications.NotificationMessage", "to": "com.salesforce.marketingcloud.pushmodels.NotificationMessage", "note": "Ships in pushmodelsmodule (transitive of pushfeaturemodule). Field access (url, type, NotificationMessage.Type.OPEN_DIRECT / CLOUD_PAGE) is otherwise unchanged." },
+    { "from": "com.salesforce.marketingcloud.messages.iam.InAppMessage", "to": "com.salesforce.marketingcloud.inappmessaging.models.InAppMessage", "note": "IAM model moved out of the engagement module." }
+  ],
+
+  "mappings": [
+    {
+      "id": "init-sdk",
+      "area": "init",
+      "old": "MarketingCloudSdk.init(context, config, listener)",
+      "oldRegex": "MarketingCloudSdk\\s*\\.\\s*init\\s*\\(",
+      "new": "SFMCSdk.configure(context, SFMCSdkModuleConfig.build { engagementModuleConfig / pushFeatureModuleConfig / inAppMessagingFeatureModuleConfig }, listener)",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "before": "MarketingCloudSdk.init(this,\n    MarketingCloudConfig.builder()\n        .setApplicationId(BuildConfig.MC_APP_ID)\n        .setAccessToken(BuildConfig.MC_ACCESS_TOKEN)\n        .setSenderId(BuildConfig.FCM_SENDER_ID)\n        .setMarketingCloudServerUrl(BuildConfig.MC_SERVER_URL)\n        .setMid(BuildConfig.MC_MID)\n        .setInboxEnabled(true)\n        .setAnalyticsEnabled(true)\n        .setGeofencingEnabled(true)\n        .setUrlHandler(this)\n        .setNotificationCustomizationOptions(\n            NotificationCustomizationOptions.create(R.drawable.ic_notification))\n        .build(this),\n    initStatus -> { /* ... */ })",
+      "after": "SFMCSdk.configure(applicationContext as Application, SFMCSdkModuleConfig.build {\n    // Engagement module keeps the legacy MarketingCloudConfig.Builder — most setters survive here.\n    engagementModuleConfig = MarketingCloudConfig.Builder()\n        .setApplicationId(BuildConfig.MC_APP_ID)\n        .setAccessToken(BuildConfig.MC_ACCESS_TOKEN)\n        .setMarketingCloudServerUrl(BuildConfig.MC_SERVER_URL)\n        .setMid(BuildConfig.MC_MID)\n        .setAnalyticsEnabled(true)\n        .setPiAnalyticsEnabled(true)\n        .setInboxEnabled(true)\n        .setGeofencingEnabled(true)\n        .setProximityEnabled(true)\n        .setUrlHandler(this@BaseApp)\n        .build(this)\n\n    // Push config is now separate. setSenderId moved OFF MarketingCloudConfig and onto PushFeatureConfig.\n    pushFeatureModuleConfig = PushFeatureConfig.builder()\n        .setSenderId(BuildConfig.FCM_SENDER_ID)\n        .setNotificationCustomizationOptions(\n            NotificationCustomizationOptions.create(R.drawable.ic_notification))\n        .setUrlHandler(this@BaseApp)\n        .build()\n\n    // Only include when IAM is in featuresInUse.\n    inAppMessagingFeatureModuleConfig = InAppMessagingFeatureConfig.builder()\n        .setEventListener(inAppMessageListener)\n        .apply { ResourcesCompat.getFont(this@BaseApp, R.font.brand)?.let(::setTypeface) }\n        .setStatusBarColor(ContextCompat.getColor(this@BaseApp, R.color.primary))\n        .build()\n}) { initStatus -> /* ... */ }",
+      "caveat": "Traps (full shapes in refactoring-patterns-android.md §Initialization): (1) Config slots are engagementModuleConfig / pushFeatureModuleConfig / inAppMessagingFeatureModuleConfig / cdpModuleConfig / mamModuleConfig / personalizationModuleConfig — the short names 'pushModuleConfig' / 'inAppMessagingModuleConfig' do NOT exist and won't compile. (2) setSenderId is the ONLY setter that moved off MarketingCloudConfig.Builder (now @suppress there) onto PushFeatureConfig.builder().setSenderId(...) — migrate it, don't delete it, or push registration breaks; every other engagement setter (setMid/setInboxEnabled/setAnalyticsEnabled/setPiAnalyticsEnabled/setGeofencingEnabled/setProximityEnabled/setUrlHandler) stays. (3) PushFeatureConfig / InAppMessagingFeatureConfig expose only a static .builder() — the Builder() constructor is internal. (4) Init config must cover EVERY feature the scan reports, or that feature silently never initializes."
+    },
+    {
+      "id": "request-sdk-engagement",
+      "area": "init",
+      "old": "MarketingCloudSdk.requestSdk(listener) / MarketingCloudSdk.getInstance()",
+      "oldRegex": "MarketingCloudSdk\\s*\\.\\s*(requestSdk|getInstance)\\s*\\(",
+      "new": "MarketingCloudSdk.requestSdk { sdk -> ... }  (for engagement APIs)",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "before": "MarketingCloudSdk sdk = MarketingCloudSdk.getInstance();\nString token = sdk.getPushMessageManager().getPushToken();",
+      "after": "// Engagement APIs (RegistrationManager, InboxMessageManager, AnalyticsManager, RegionMessageManager, sdkState):\nMarketingCloudSdk.requestSdk { sdk ->\n    // sdk is a MarketingCloudSdk — the same type name as legacy, still shipped by the engagement module.\n    val current = sdk.sdkState.optJSONObject(\"RegistrationManager\")\n    sdk.analyticsManager.enableAnalytics()\n}\n\n// Push APIs (token, handleMessage): NOT reached through MarketingCloudSdk.requestSdk anymore —\n// use PushFeature.requestSdk instead.\nPushFeature.requestSdk { pushFeature ->\n    pushFeature.getPushMessageManager().setPushToken(newToken)\n}",
+      "caveat": "This is the biggest shape change hidden by the fact that MarketingCloudSdk still exists. In v11 that class STILL exposes RegistrationManager, InboxMessageManager, AnalyticsManager, RegionMessageManager, and sdkState — because it's now the engagement module. But getPushMessageManager() is GONE from MarketingCloudSdk; push moved to its own module. Root each call at the right entry point: engagement → MarketingCloudSdk.requestSdk, push → PushFeature.requestSdk, IAM → InAppMessagingFeature.requestSdk, unified identity/events → SFMCSdk.requestSdk. Prior drafts of this skill invented an sdk.mp { } extension for reaching push — that does NOT exist in any published artifact. Do not emit it. If code says sdk.getInstance() but the surrounding usage is engagement-only (registration, inbox, analytics, region, sdkState), the smallest correct rewrite keeps the receiver named MarketingCloudSdk and simply moves it inside MarketingCloudSdk.requestSdk."
+    },
+    {
+      "id": "push-token-set",
+      "area": "push",
+      "old": "MarketingCloudSdk.getInstance().getPushMessageManager().setPushToken(token)",
+      "oldRegex": "getPushMessageManager\\s*\\(\\s*\\)\\s*\\.\\s*setPushToken",
+      "new": "PushFeature.requestSdk { it.getPushMessageManager().setPushToken(token) }",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "before": "MarketingCloudSdk.getInstance().getPushMessageManager().setPushToken(token);",
+      "after": "PushFeature.requestSdk { pushFeature ->\n    pushFeature.getPushMessageManager().setPushToken(token)\n}",
+      "caveat": "Two things prior drafts got wrong: (1) push is reached via PushFeature.requestSdk, not sdk.mp inside SFMCSdk.requestSdk (there is no sdk.mp block in the published artifacts). (2) The accessor is getPushMessageManager() — Kotlin does NOT synthesize a pushMessageManager property here in v11's pushfeaturemodule (2.0.1), so pushFeature.pushMessageManager fails to resolve. Use the Java-style getter."
+    },
+    {
+      "id": "push-handle-message",
+      "area": "push",
+      "old": "PushMessageManager.handleMessage(remoteMessage)",
+      "oldRegex": "handleMessage\\s*\\(",
+      "new": "PushFeature.requestSdk { it.getPushMessageManager().handleMessage(remoteMessage) }",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "before": "if (PushMessageManager.isMarketingCloudPush(remoteMessage)) {\n    MarketingCloudSdk.getInstance().getPushMessageManager().handleMessage(remoteMessage);\n}",
+      "after": "import com.salesforce.marketingcloud.pushfeature.PushFeature\nimport com.salesforce.marketingcloud.pushfeature.push.PushMessageManager\n\nif (PushMessageManager.isMarketingCloudPush(remoteMessage)) {\n    PushFeature.requestSdk { pushFeature ->\n        pushFeature.getPushMessageManager().handleMessage(remoteMessage)\n    }\n}",
+      "caveat": "PushMessageManager MOVED to com.salesforce.marketingcloud.pushfeature.push — update the import. isMarketingCloudPush(...) stays static. If the app owns its own FirebaseMessagingService, that service stays app-owned; just fix the two calls inside it."
+    },
+    {
+      "id": "registration-contact-key",
+      "area": "identity",
+      "old": "RegistrationManager.edit().setContactKey(key).commit()",
+      "oldRegex": "setContactKey\\s*\\(",
+      "new": "SFMCSdk.requestSdk { it.identity.edit { profileId = key } }",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "before": "MarketingCloudSdk.getInstance().getRegistrationManager()\n    .edit().setContactKey(\"user@example.com\")\n    .setAttribute(\"firstName\", \"Ada\").commit();",
+      "after": "SFMCSdk.requestSdk { unifiedSdk ->\n    unifiedSdk.identity.edit {\n        profileId = \"user@example.com\"\n        attributes.set(\"firstName\", \"Ada\")\n    }\n}",
+      "caveat": "Identity.edit takes an EXTENSION-RECEIVER lambda: IdentityEditor.() -> Unit. So (a) do NOT name an explicit parameter — { editor -> editor.profileId = ... } compiles to a Function2 and fails with 'Function2 expected, Function1 found'. Just use property access on the implicit receiver. (b) IdentityEditor exposes profileId as a PROPERTY (profileId = ...), not a setter method (no setProfileId), and attributes live on an inner AttributesEditor reached via .attributes (attributes.set('k', 'v') / attributes.put('k', 'v') / attributes.set(mapOf(...))). Prior drafts of this skill emitted setProfileId(...) and putAttribute(...) directly on the SDK — those do not exist. There is no commit(); the edit block commits on close."
+    },
+    {
+      "id": "registration-attributes",
+      "area": "identity",
+      "old": "RegistrationManager.edit().setAttribute(key, value).commit()",
+      "oldRegex": "setAttribute\\s*\\(",
+      "new": "SFMCSdk.requestSdk { it.identity.edit { attributes.set(key, value) } }",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "caveat": "Attribute setters live on IdentityEditor.attributes (an AttributesEditor). Batch multiple attributes inside ONE identity.edit block. See registration-contact-key for the same lambda shape warning."
+    },
+    {
+      "id": "registration-tags",
+      "area": "identity",
+      "old": "RegistrationManager.edit().addTag(tag).commit()",
+      "oldRegex": "\\.(addTag|removeTag|addTags|removeTags)\\s*\\(",
+      "new": "sdk.registrationManager.edit().addTag(tag).commit()  (legal in v11 engagement module) OR migrate to profile attribute",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "manualReview": true,
+      "before": "sdk.registrationManager.edit().addTag(\"Camping\").commit();",
+      "after": "// Legal — engagement module still supports tags:\nMarketingCloudSdk.requestSdk { sdk ->\n    sdk.registrationManager.edit().addTag(\"Camping\").commit()\n}\n// OR (Salesforce guidance) — migrate to a profile attribute on unified identity:\nSFMCSdk.requestSdk { it.identity.edit { attributes.set(\"segment\", \"Camping\") } }",
+      "caveat": "Tags are NOT deleted in v11 — RegistrationManager.edit().addTag(...).commit() is still there on the engagement module. Prior drafts flagged this as unmapped; the correct posture is: (1) preserve the existing addTag/removeTag call if the customer wants continuity, OR (2) flag it and let the marketing team decide whether to move it to a profile attribute for the unified era. Do not silently drop the call."
+    },
+    {
+      "id": "track-page-view",
+      "area": "events",
+      "old": "AnalyticsManager.trackPageView(...)",
+      "oldRegex": "trackPageView\\s*\\(",
+      "new": "SFMCSdk.track(EventManager.customEvent(name, attributes))  OR keep sdk.analyticsManager.trackPageView (still on engagement module)",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "before": "MarketingCloudSdk.getInstance().getAnalyticsManager()\n    .trackPageView(\"data://ProductDetail\", \"Product viewed\");",
+      "after": "// Preferred (unified typed Event model):\nEventManager.customEvent(\n    \"ProductDetail\",\n    mapOf(\"description\" to \"Product viewed\")\n)?.let { SFMCSdk.track(it) }\n\n// Also still legal (analyticsManager remains on the engagement module):\nMarketingCloudSdk.requestSdk { sdk ->\n    sdk.analyticsManager.trackPageView(\"data://ProductDetail\", \"Product viewed\")\n}",
+      "caveat": "trackPageView and the other AnalyticsManager verbs (trackInboxOpenEvent, enableAnalytics/enablePiAnalytics toggles) still ship on the engagement module — the shortest correct rewrite is NO rewrite beyond wrapping in MarketingCloudSdk.requestSdk. Only move to the typed Event model if the customer wants the unified telemetry surface. If you DO: `?.let { SFMCSdk.track(it) }` is load-bearing — EventManager.customEvent returns Event? and v11 SILENTLY drops (WARN only, per the EventUtil / MCET_232 contract) any name or attribute key that is blank, starts with '$', or contains a line break, plus any attribute KEY containing a dot. So audit DYNAMICALLY built names/keys (concatenation, templates, reflection, enum.toString()) — legacy was permissive. Pass nested attributes as a nested Map<String, Any> (SDK flattens to dot-notation); a pre-flattened 'user.id' key is dropped. Worked examples: refactoring-patterns-android.md §Event tracking."
+    },
+    {
+      "id": "inbox-and-region",
+      "area": "engagement",
+      "old": "sdk.inboxMessageManager.* / sdk.regionMessageManager.* / sdk.sdkState",
+      "oldRegex": "\\.(inboxMessageManager|regionMessageManager|sdkState)\\b",
+      "new": "same symbols — engagement module retains them",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "before": "MarketingCloudSdk.getInstance().inboxMessageManager.registerInboxResponseListener(this);",
+      "after": "MarketingCloudSdk.requestSdk { sdk ->\n    sdk.inboxMessageManager.registerInboxResponseListener(this)\n}",
+      "caveat": "InboxMessage, InboxMessageManager, RegionMessageManager, and sdkState are ALL still on the v11 engagement module (marketingcloudsdk:11.0.1). No package changes, no rename. The only thing that changed is that access is now via MarketingCloudSdk.requestSdk instead of MarketingCloudSdk.getInstance(). Nullability note: InboxMessage.url is now String? — thread it through with .orEmpty() when a downstream API expects a non-null String."
+    },
+    {
+      "id": "iam-listener",
+      "area": "iam",
+      "old": "InAppMessageManager.setInAppMessageListener(...)",
+      "oldRegex": "setInAppMessageListener\\s*\\(",
+      "new": "Preferred: register via InAppMessagingFeatureConfig.builder().setEventListener(...) at init. Runtime alt: InAppMessagingFeature.requestSdk { it.getInAppMessageManager().setInAppMessageListener(listener) }",
+      "kind": "method",
+      "async": false,
+      "feature": "iam",
+      "before": "MarketingCloudSdk.getInstance().getInAppMessageManager()\n    .setInAppMessageListener(listener);",
+      "after": "// PREFERRED — register the listener at init inside InAppMessagingFeatureConfig:\ninAppMessagingFeatureModuleConfig = InAppMessagingFeatureConfig.builder()\n    .setEventListener(myListener)\n    .build()\n\n// RUNTIME ALTERNATIVE — setInAppMessageListener still exists; only the receiver moved:\nInAppMessagingFeature.requestSdk { iamFeature ->\n    iamFeature.getInAppMessageManager().setInAppMessageListener(myListener)  // listener is nullable; null clears it\n}",
+      "caveat": "setInAppMessageListener(listener: EventListener?) STILL EXISTS at runtime on InAppMessageManager (inappmessagingfeaturemodule:1.0.1, verified in source) — an earlier draft of this skill wrongly claimed the runtime setter was gone. What changed is the RECEIVER: the manager is no longer reached off the engagement MarketingCloudSdk / via SFMCSdk.requestSdk. Two correct rewrites: (1, preferred) fold the listener into the init InAppMessagingFeatureConfig.builder().setEventListener(...); (2) keep it as a runtime call rewritten onto InAppMessagingFeature.requestSdk { it.getInAppMessageManager().setInAppMessageListener(listener) }. The ONLY shape that does not exist is sdk.getInAppMessageManager()/sdk.inAppMessageManager off the engagement MarketingCloudSdk receiver."
+    },
+    {
+      "id": "iam-listener-close-signature",
+      "area": "iam",
+      "old": "override fun didCloseMessage(message: InAppMessage)",
+      "oldRegex": "didCloseMessage\\s*\\(",
+      "new": "override fun didCloseMessage(message: InAppMessage, closeAction: InAppMessageCloseAction)",
+      "kind": "method",
+      "async": false,
+      "feature": "iam",
+      "before": "override fun didCloseMessage(message: InAppMessage) {\n    Log.v(TAG, \"${message.id} closed\")\n}",
+      "after": "override fun didCloseMessage(\n    message: InAppMessage,\n    closeAction: InAppMessageCloseAction  // NEW second parameter in v11\n) {\n    Log.v(TAG, \"${message.id} closed by $closeAction\")\n}",
+      "caveat": "InAppMessageManager.EventListener.didCloseMessage grew a second parameter (InAppMessageCloseAction) in the unified IAM. Any existing override with a one-arg signature will fail to override — Kotlin will report 'X overrides nothing'. Fix by adding the parameter and importing com.salesforce.marketingcloud.inappmessagingfeature.InAppMessageCloseAction."
+    },
+    {
+      "id": "import-marketingcloudsdk",
+      "area": "init",
+      "old": "import com.salesforce.marketingcloud.MarketingCloudSdk",
+      "oldRegex": "import\\s+com\\.salesforce\\.marketingcloud\\.MarketingCloudSdk",
+      "new": "keep com.salesforce.marketingcloud.MarketingCloudSdk + add com.salesforce.marketingcloud.sfmcsdk.SFMCSdk",
+      "kind": "import",
+      "async": false,
+      "feature": "core",
+      "caveat": "MarketingCloudSdk stays. Do NOT delete this import globally — it's the receiver type for engagement APIs. Add SFMCSdk, SFMCSdkModuleConfig, and (as used) EventManager, PushFeature, InAppMessagingFeature, IdentityEditor imports. See packageMoves for the imports that DID change (NotificationCustomizationOptions, PushMessageManager, NotificationManager, NotificationMessage, InAppMessage)."
+    },
+    {
+      "id": "custom-push-receiver-subclass",
+      "area": "push",
+      "old": "class extends MCPushReceiver / PushMessageManager.NotificationBuilder custom impl",
+      "oldRegex": "extends\\s+\\w*Push\\w*Receiver|:\\s*\\w*Push\\w*Receiver",
+      "new": null,
+      "kind": "class",
+      "async": false,
+      "feature": "push",
+      "manualReview": true,
+      "caveat": "Custom subclasses / interface implementations of SDK push types are app-specific and have no mechanical mapping. Detect and flag with file:line; do not auto-rewrite."
+    }
+  ]
+}

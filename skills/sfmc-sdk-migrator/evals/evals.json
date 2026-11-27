@@ -1,0 +1,795 @@
+{
+  "skill_name": "sfmc-sdk-migrator",
+  "_note": "Each eval carries an `assertions` array. Every assertion has a `tier`: 'deterministic' assertions are executed by evals/run_evals.py — it runs scan_usage.py / target_options.py against the fixture and checks a JSON path, no network, no LLM, CI-safe. 'llm_graded' assertions describe a rewrite-quality criterion a grader applies to the skill's output; each may also carry `staticChecks` (file-scoped substring/regex tests the runner evaluates deterministically when a --with-skill output tree is supplied). Each eval also carries an optional `platform` field ('android' | 'ios', default 'android') that the runner passes through to scan_usage.py and target_options.py — needed because the detection matrices and version catalogs are platform-scoped. See evals/README.md for the check-DSL and the with-skill vs baseline flow.",
+  "checkOps": {
+    "_doc": "Operators usable in a deterministic assertion's `check.op`.",
+    "eq": "value at path equals expected",
+    "ne": "value at path does not equal expected",
+    "gt": "numeric greater-than", "gte": "numeric >=", "lt": "numeric <", "lte": "numeric <=",
+    "isTrue": "value is boolean true", "isFalse": "value is boolean false", "isNull": "value is null",
+    "contains": "string/list at path contains expected", "notContains": "string/list at path does not contain expected",
+    "subset": "expected list is a subset of the list at path", "setEq": "list at path equals expected as a set",
+    "in": "value at path is one of expected (a list)", "hasKey": "dict at path has expected key",
+    "lengthEq": "list/dict/string at path has length == expected", "lengthGte": "length >= expected",
+    "regex": "string at path matches expected regex"
+  },
+  "evals": [
+    {
+      "id": 0,
+      "name": "full-android-migration",
+      "prompt": "We're stuck on an ancient version of the Salesforce Marketing Cloud SDK and upgrading has been a nightmare. Can you migrate our Android app to the latest SDK? The repo is at REPO_PATH. Update the code, the build.gradle, and the manifest, and tell me what I need to check by hand.",
+      "files": ["inputs/repo-full-android"],
+      "expected_output": "Scans repo, detects legacy MarketingCloudSdk 7.4.2 -> SFMCSdk 11.0.1. Rewrites init to SFMCSdk.configure, getInstance() calls to async requestSdk{}, setContactKey->identity.setProfileId, trackPageView->EventManager.customEvent+SFMCSdk.track. Flags addTag (tags) and the custom FirebaseMessagingService for manual review. Bumps build.gradle to sfmcsdk+pushfeaturemodule 11.0.1 (keeps marketingcloudsdk engagement module). Removes legacy manifest service. Preserves business logic (AnalyticsCache.lastUser, AppState.sdkReady, handleOwnPush). Produces a migration report.",
+      "assertions": [
+        {
+          "id": "full-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Detects the legacy umbrella version 7.4.2.",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "7.4.2" }
+        },
+        {
+          "id": "full-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies the project as legacy (no unified core artifact present).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "legacy-MarketingCloudSdk" }
+        },
+        {
+          "id": "full-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status is not-started for a pure-legacy project.",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "not-started" }
+        },
+        {
+          "id": "full-detect-integrated",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Confirms an SFMC SDK module is actually integrated.",
+          "check": { "path": "detected.sdkIntegrated", "op": "isTrue" }
+        },
+        {
+          "id": "full-detect-no-unified-core",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No unified sfmcsdk core artifact in a legacy project.",
+          "check": { "path": "detected.sawUnifiedCore", "op": "isFalse" }
+        },
+        {
+          "id": "full-detect-legacy-entrypoint",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Sees the legacy MarketingCloudSdk.init/getInstance entry points.",
+          "check": { "path": "detected.sawLegacyEntryPoint", "op": "isTrue" }
+        },
+        {
+          "id": "full-detect-features",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Detects both core and push features in use.",
+          "check": { "path": "featuresInUse", "op": "setEq", "value": ["core", "push"] }
+        },
+        {
+          "id": "full-detect-init-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the init-sdk call site.",
+          "check": { "path": "symbolCounts.init-sdk", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-detect-contact-key-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the setContactKey identity call site.",
+          "check": { "path": "symbolCounts.registration-contact-key", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-detect-trackpageview-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the trackPageView analytics call site.",
+          "check": { "path": "symbolCounts.track-page-view", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-detect-tags-manual-review",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "The addTag call is flagged for manual review (>=1 manual-review finding).",
+          "check": { "path": "manualReviewCount", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-target-latest",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Latest stable target is 11.0.1.",
+          "check": { "path": "latestStable", "op": "eq", "value": "11.0.1" }
+        },
+        {
+          "id": "full-target-not-current",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "A legacy project is not already-current.",
+          "check": { "path": "alreadyCurrent", "op": "isFalse" }
+        },
+        {
+          "id": "full-target-crosses-boundary",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Reaching 11.0.1 crosses the architecture boundary (full code migration).",
+          "check": { "path": "options[?version=11.0.1].migrationKind", "op": "eq", "value": "full-code-migration" }
+        },
+        {
+          "id": "full-target-partial-spec-expands",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "args": { "target": "v10" },
+          "description": "A partial target 'v10' expands to the newest 10.x release (10.0.0).",
+          "check": { "path": "resolvedTarget", "op": "eq", "value": "10.0.0" }
+        },
+        {
+          "id": "full-rewrite-init",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/NewsApp.kt",
+          "description": "The legacy init is rewritten to SFMCSdk.configure with an SFMCSdkModuleConfig.build block, and setSenderId is moved onto the push feature config (not deleted).",
+          "rubric": "The single MarketingCloudSdk.init(...) call is replaced by SFMCSdk.configure(context, SFMCSdkModuleConfig.build { ... }, listener). Engagement setters (setApplicationId/setAccessToken/setMarketingCloudServerUrl/setMid/setInboxEnabled/setAnalyticsEnabled/setNotificationCustomizationOptions) remain on an engagementModuleConfig MarketingCloudConfig; setSenderId is migrated onto a pushFeatureModuleConfig PushFeatureConfig (never dropped). The init-status callback body preserving AppState.sdkReady is retained.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.configure" },
+            { "mustContain": "SFMCSdkModuleConfig.build" },
+            { "mustContain": "setSenderId" },
+            { "mustNotContain": "MarketingCloudSdk.init(" },
+            { "mustContain": "AppState.sdkReady" }
+          ]
+        },
+        {
+          "id": "full-rewrite-identity",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/UserSession.kt",
+          "description": "setContactKey/setAttribute migrate to SFMCSdk.requestSdk { identity.edit { profileId = ...; attributes.set(...) } }; addTag is flagged, not silently dropped; AnalyticsCache.lastUser is preserved.",
+          "rubric": "The registration edit chain is rewritten onto the unified identity API: profileId is set as a property (profileId = email), attributes go through attributes.set/put, all inside SFMCSdk.requestSdk { it.identity.edit { ... } }. The lambda uses the implicit extension receiver (no explicit named editor param) and there is no commit() call. The addTag(segment) call is either preserved on the engagement registrationManager or surfaced in the manual-review section — never silently deleted. The business line AnalyticsCache.lastUser = email survives unchanged.",
+          "staticChecks": [
+            { "mustContain": "identity.edit" },
+            { "mustContain": "profileId" },
+            { "mustContain": "AnalyticsCache.lastUser" },
+            { "mustNotContain": "setContactKey" }
+          ]
+        },
+        {
+          "id": "full-rewrite-push-service",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/NewsMessagingService.kt",
+          "description": "The app-owned FirebaseMessagingService stays app-owned; only the two SDK calls inside it are rewritten onto PushFeature.requestSdk, and handleOwnPush is preserved.",
+          "rubric": "The class remains a FirebaseMessagingService subclass owned by the app (not deleted, not replaced by an SDK class). setPushToken and handleMessage are routed through PushFeature.requestSdk { it.getPushMessageManager()... } (the async push entry point, not MarketingCloudSdk.getInstance()). PushMessageManager.isMarketingCloudPush stays a static call and its import moves to com.salesforce.marketingcloud.pushfeature.push. The customer's handleOwnPush path and its NotificationRouter.show call are preserved unchanged.",
+          "staticChecks": [
+            { "mustContain": "FirebaseMessagingService" },
+            { "mustContain": "PushFeature.requestSdk" },
+            { "mustContain": "handleOwnPush" },
+            { "mustNotContain": "MarketingCloudSdk.getInstance()" }
+          ]
+        },
+        {
+          "id": "full-rewrite-gradle",
+          "tier": "llm_graded",
+          "target": "app/build.gradle",
+          "description": "Gradle keeps the marketingcloudsdk engagement module and adds sfmcsdk + pushfeaturemodule; it does NOT remove marketingcloudsdk.",
+          "rubric": "The dependency block still declares com.salesforce.marketingcloud:marketingcloudsdk (now the engagement feature module, kept — not removed) and adds com.salesforce.marketingcloud:sfmcsdk and com.salesforce.marketingcloud:pushfeaturemodule (push is in use). Versions may be the resolved runtime versions or the matrix seed fallback; sfmcsdk must NOT be pinned to 11.0.1 (no such artifact version on its stream).",
+          "staticChecks": [
+            { "mustContain": "sfmcsdk" },
+            { "mustContain": "marketingcloudsdk" },
+            { "mustContain": "pushfeaturemodule" }
+          ]
+        },
+        {
+          "id": "full-rewrite-manifest",
+          "tier": "llm_graded",
+          "target": "app/src/main/AndroidManifest.xml",
+          "description": "The hand-declared legacy notification service is removed (auto-merged by the v11 push module).",
+          "rubric": "The manual <service> declaration pointing at com.salesforce.marketingcloud.notifications.NotificationOpenedService is removed, because the unified push module auto-merges its own notification components. The app's own MainActivity and non-SDK manifest entries are untouched.",
+          "staticChecks": [
+            { "mustNotContain": "com.salesforce.marketingcloud.notifications.NotificationOpenedService" }
+          ]
+        },
+        {
+          "id": "full-report-produced",
+          "tier": "llm_graded",
+          "target": "MIGRATION_REPORT.md",
+          "description": "A migration report is produced covering summary, changes by area, manual-review items, and verification.",
+          "rubric": "A migration report is generated (any reasonable filename) with: a from/to summary (legacy 7.4.2 -> unified 11.0.1), changes grouped by area with file:line, a 'Needs manual review' section that names the addTag tag handling and the custom FirebaseMessagingService, and a verification section with the build result and manual dev checks.",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "gradle-version-catalog",
+      "prompt": "Help me update build.gradle for the marketing cloud sdk. We use a version catalog (libs.versions.toml). The project is at REPO_PATH. Get us onto the current release.",
+      "files": ["inputs/repo-gradle-only"],
+      "expected_output": "Detects legacy marketingcloudsdk 8.1.0 declared via libs.versions.toml. Updates the version catalog and build.gradle.kts to the modern sfmcsdk (+ pushfeaturemodule since init is present) at 11.0.1. Migrates the single MarketingCloudSdk.init call in NewsApp.kt to SFMCSdk.configure. Reports changes.",
+      "assertions": [
+        {
+          "id": "gradle-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Reads the umbrella version 8.1.0 from the version catalog's full-coordinate string.",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "8.1.0" }
+        },
+        {
+          "id": "gradle-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as legacy (only marketingcloudsdk present).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "legacy-MarketingCloudSdk" }
+        },
+        {
+          "id": "gradle-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status not-started.",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "not-started" }
+        },
+        {
+          "id": "gradle-detect-init-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the single init call site to migrate.",
+          "check": { "path": "symbolCounts.init-sdk", "op": "eq", "value": 1 }
+        },
+        {
+          "id": "gradle-target-latest",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Latest stable is 11.0.1.",
+          "check": { "path": "latestStable", "op": "eq", "value": "11.0.1" }
+        },
+        {
+          "id": "gradle-target-crosses-boundary",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "8.1.0 -> 11.0.1 crosses the architecture boundary.",
+          "check": { "path": "options[?version=11.0.1].crossesArchitectureBoundary", "op": "isTrue" }
+        },
+        {
+          "id": "gradle-rewrite-catalog",
+          "tier": "llm_graded",
+          "target": "gradle/libs.versions.toml",
+          "description": "The version catalog entry is updated off legacy marketingcloudsdk 8.1.0 to the unified modules.",
+          "rubric": "The libs.versions.toml is updated so the SFMC dependency is no longer pinned to legacy marketingcloudsdk:8.1.0. It declares the unified sfmcsdk core (+ pushfeaturemodule, since an init call is present) at their resolved v11-era versions, keeping the marketingcloudsdk engagement module. The androidx/kotlin entries are untouched.",
+          "staticChecks": [
+            { "mustContain": "sfmcsdk" },
+            { "mustNotContain": "marketingcloudsdk:8.1.0" }
+          ]
+        },
+        {
+          "id": "gradle-rewrite-init",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/NewsApp.kt",
+          "description": "The single init call migrates to SFMCSdk.configure and AppState.initialized is preserved.",
+          "rubric": "MarketingCloudSdk.init(...) is replaced with SFMCSdk.configure(context, SFMCSdkModuleConfig.build { ... }, listener). setSenderId moves onto the push feature config. The init-status callback preserving AppState.initialized = initStatus.isUsable is retained.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.configure" },
+            { "mustNotContain": "MarketingCloudSdk.init(" },
+            { "mustContain": "AppState.initialized" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "already-modern-no-op",
+      "prompt": "Can you upgrade our Marketing Cloud SDK to the latest version? Code is at REPO_PATH.",
+      "files": ["inputs/repo-already-modern-android"],
+      "expected_output": "Detects the app is ALREADY on the modern SFMCSdk 11.0.1 API. Does NOT make spurious rewrites or break the working SFMCSdk.configure / requestSdk code. Reports that no migration is needed (or only a trivial version check), demonstrating the scope guard / no-over-migration behavior.",
+      "assertions": [
+        {
+          "id": "modern-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Reads the umbrella version 11.0.1 (not the sfmcsdk 3.x core stream).",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "11.0.1" }
+        },
+        {
+          "id": "modern-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as unified (sfmcsdk core present).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "unified-SFMCSdk" }
+        },
+        {
+          "id": "modern-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status is already-modern (unified core, no legacy entry points).",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "already-modern" }
+        },
+        {
+          "id": "modern-detect-no-legacy-entrypoint",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No legacy init/getInstance entry points.",
+          "check": { "path": "detected.sawLegacyEntryPoint", "op": "isFalse" }
+        },
+        {
+          "id": "modern-detect-unified-core",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Sees the unified sfmcsdk core artifact.",
+          "check": { "path": "detected.sawUnifiedCore", "op": "isTrue" }
+        },
+        {
+          "id": "modern-detect-no-manual-review",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No manual-review findings on already-modern code.",
+          "check": { "path": "manualReviewCount", "op": "eq", "value": 0 }
+        },
+        {
+          "id": "modern-target-already-current",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "target_options reports already-current for 11.0.1 (nothing newer catalogued).",
+          "check": { "path": "alreadyCurrent", "op": "isTrue" }
+        },
+        {
+          "id": "modern-target-no-options",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "No upgrade options offered when already current.",
+          "check": { "path": "options", "op": "lengthEq", "value": 0 }
+        },
+        {
+          "id": "modern-no-rewrite-init",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/NewsApp.kt",
+          "description": "The working SFMCSdk.configure init is left intact — no spurious rewrite.",
+          "rubric": "The already-correct SFMCSdk.configure(...) initialization is unchanged (byte-for-byte, or only trivially reformatted). The skill does NOT introduce legacy symbols, does NOT rewrap the module configs, and does NOT churn working code. This is the scope-guard / no-over-migration behavior.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.configure" },
+            { "mustNotContain": "MarketingCloudSdk.init(" }
+          ]
+        },
+        {
+          "id": "modern-no-rewrite-identity",
+          "tier": "llm_graded",
+          "target": "app/src/main/java/com/example/newsapp/UserSession.kt",
+          "description": "The working unified identity call is left intact.",
+          "rubric": "The existing SFMCSdk.requestSdk { it.identity.edit { profileId = ...; attributes.set(...) } } code is unchanged. No legacy setContactKey/setProfileId is introduced.",
+          "staticChecks": [
+            { "mustContain": "identity.edit" },
+            { "mustNotContain": "setContactKey" }
+          ]
+        },
+        {
+          "id": "modern-reports-no-op",
+          "tier": "llm_graded",
+          "target": "*",
+          "description": "The skill states no migration is needed (or only a trivial version check), rather than fabricating changes.",
+          "rubric": "The skill's response/report explicitly says the project is already on the modern unified SFMCSdk and no code migration is required (at most a trivial version check). It does not claim to have rewritten call sites that didn't need rewriting.",
+          "gradeAgainst": "response"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "full-ios-migration",
+      "platform": "ios",
+      "prompt": "We're on a very old Salesforce Marketing Cloud iOS SDK and need to modernize. Can you migrate our iOS app to the latest unified SDK? The repo is at REPO_PATH. Update the Swift code, the Podfile, the entitlements, and the Notification Service Extension, and tell me what I need to verify by hand.",
+      "files": ["inputs/repo-full-ios"],
+      "expected_output": "Scans repo, detects legacy MarketingCloudSDK 8.1.1 -> unified SFMCSDK 11.0.0. Rewrites sfmc_configure to SFMCSdk.initializeSdk driven by SFMCSdkConfigBuilder.setPush(config: PushConfigBuilder...), sfmc_setContactKey/sfmc_setAttributeNamed to SFMCSdk.identity, sfmc_trackPageView to SFMCSdk.track(event:), sfmc_setDeviceToken to SFMCSdk.mp.setDeviceToken, sfmc_setNotificationRequest to SFMCSdk.mp.setNotificationRequest. Flags the sfmc_addTag call and the Notification Service Extension for manual review. Bumps Podfile to MarketingCloudSDK 11.0.0 + SFMCSDK 4.0.0. Preserves AppState.sdkReady, AnalyticsCache.lastConfigureSucceeded, AppState.lastNotificationIdentifier. Produces a migration report.",
+      "assertions": [
+        {
+          "id": "full-ios-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Detects the legacy umbrella version 8.1.1 (from Podfile.lock + Podfile).",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "8.1.1" }
+        },
+        {
+          "id": "full-ios-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as legacy (no unified SFMCSDK core in Podfile.lock).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "legacy-MarketingCloudSDK" }
+        },
+        {
+          "id": "full-ios-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status is not-started for a pure-legacy project.",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "not-started" }
+        },
+        {
+          "id": "full-ios-detect-integrated",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Confirms an SFMC SDK module is actually integrated.",
+          "check": { "path": "detected.sdkIntegrated", "op": "isTrue" }
+        },
+        {
+          "id": "full-ios-detect-no-unified-core",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No unified SFMCSDK core artifact in a legacy project.",
+          "check": { "path": "detected.sawUnifiedCore", "op": "isFalse" }
+        },
+        {
+          "id": "full-ios-detect-legacy-entrypoint",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Sees the legacy MarketingCloudSDK.sharedInstance / sfmc_configure entry points.",
+          "check": { "path": "detected.sawLegacyEntryPoint", "op": "isTrue" }
+        },
+        {
+          "id": "full-ios-detect-features",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Detects both core and push features in use (setDeviceToken + NSE).",
+          "check": { "path": "featuresInUse", "op": "setEq", "value": ["core", "push"] }
+        },
+        {
+          "id": "full-ios-detect-init-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the sfmc_configure init call site.",
+          "check": { "path": "symbolCounts.init-sdk", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-ios-detect-contact-key-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the sfmc_setContactKey identity call site.",
+          "check": { "path": "symbolCounts.set-contact-key", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-ios-detect-set-device-token-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the sfmc_setDeviceToken push registration call site.",
+          "check": { "path": "symbolCounts.set-device-token", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "full-ios-detect-nse-manual-review",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "The NSE and the addTag call are flagged for manual review (>=2 findings).",
+          "check": { "path": "manualReviewCount", "op": "gte", "value": 2 }
+        },
+        {
+          "id": "full-ios-target-latest",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Latest stable target is 11.0.0.",
+          "check": { "path": "latestStable", "op": "eq", "value": "11.0.0" }
+        },
+        {
+          "id": "full-ios-target-not-current",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "A legacy iOS project is not already-current.",
+          "check": { "path": "alreadyCurrent", "op": "isFalse" }
+        },
+        {
+          "id": "full-ios-target-crosses-boundary",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Reaching 11.0.0 crosses the architecture boundary (full code migration).",
+          "check": { "path": "options[?version=11.0.0].migrationKind", "op": "eq", "value": "full-code-migration" }
+        },
+        {
+          "id": "full-ios-rewrite-init",
+          "tier": "llm_graded",
+          "target": "NewsApp/App/AppDelegate.swift",
+          "description": "sfmc_configure is rewritten to SFMCSdk.initializeSdk with SFMCSdkConfigBuilder.setPush and PushConfigBuilder, and AppState.sdkReady is preserved.",
+          "rubric": "The MarketingCloudSDK.sharedInstance().sfmc_configure(with:) call is replaced by SFMCSdk.initializeSdk(...) driven by SFMCSdkConfigBuilder().setPush(config:onCompletion:) with a PushConfigBuilder that carries appId/accessToken/marketingCloudServerUrl/mid/inboxEnabled/analyticsEnabled. The AppState.sdkReady and AnalyticsCache.lastConfigureSucceeded assignments survive (possibly moved into the completion handler). The import switches to `import SFMCSdk` (MarketingCloudSDK import may remain for engagement types).",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.initializeSdk" },
+            { "mustContain": "SFMCSdkConfigBuilder" },
+            { "mustContain": "PushConfigBuilder" },
+            { "mustNotContain": "sfmc_configure(with:" },
+            { "mustContain": "AppState.sdkReady" }
+          ]
+        },
+        {
+          "id": "full-ios-rewrite-identity",
+          "tier": "llm_graded",
+          "target": "NewsApp/App/UserSession.swift",
+          "description": "sfmc_setContactKey and sfmc_setAttributeNamed migrate to the unified SFMCSdk.identity API; sfmc_trackPageView migrates to SFMCSdk.track(event:); AnalyticsCache.lastUserEmail is preserved.",
+          "rubric": "The three sfmc_setContactKey / sfmc_setAttributeNamed calls are rewritten onto SFMCSdk.identity (setProfileId / setProfileAttributes). The sfmc_trackPageView call migrates to SFMCSdk.track(event:) with a CustomEvent (initializer failability handled — no force-unwrap). The AnalyticsCache.lastUserEmail = email line survives unchanged. No legacy sharedInstance() calls remain in this file.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.identity" },
+            { "mustContain": "AnalyticsCache.lastUserEmail" },
+            { "mustNotContain": "sfmc_setContactKey" },
+            { "mustNotContain": "sfmc_setAttributeNamed" }
+          ]
+        },
+        {
+          "id": "full-ios-rewrite-push",
+          "tier": "llm_graded",
+          "target": "NewsApp/App/AppDelegate.swift",
+          "description": "sfmc_setDeviceToken migrates to SFMCSdk.mp.setDeviceToken and sfmc_setNotificationRequest migrates to SFMCSdk.mp.setNotificationRequest; AppState.lastNotificationIdentifier is preserved.",
+          "rubric": "MarketingCloudSDK.sharedInstance().sfmc_setDeviceToken(deviceToken) is rewritten to SFMCSdk.mp.setDeviceToken(deviceToken). MarketingCloudSDK.sharedInstance().sfmc_setNotificationRequest(request) is rewritten to SFMCSdk.mp.setNotificationRequest(request). The AppState.lastNotificationIdentifier assignment in the UN delegate survives. UNUserNotificationCenter delegate wiring is preserved.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.mp.setDeviceToken" },
+            { "mustContain": "AppState.lastNotificationIdentifier" },
+            { "mustNotContain": "sfmc_setDeviceToken" }
+          ]
+        },
+        {
+          "id": "full-ios-rewrite-podfile",
+          "tier": "llm_graded",
+          "target": "Podfile",
+          "description": "The Podfile keeps MarketingCloudSDK (engagement module) and adds SFMCSDK (unified core); versions move to the v11 stream.",
+          "rubric": "The Podfile still declares pod 'MarketingCloudSDK' (kept — this is the engagement module in v11, not removed) at ~> 11.0.0 (or a resolved 11.x pin). It ADDS pod 'SFMCSDK' at ~> 4.0.0 (or a resolved 4.x pin). It does NOT pin SFMCSDK to the 11.x stream (there is no such artifact). The MCExtensionSDK pod may also appear if the NSE Podfile target is present.",
+          "staticChecks": [
+            { "mustContain": "MarketingCloudSDK" },
+            { "mustContain": "SFMCSDK" },
+            { "mustNotContain": "MarketingCloudSDK', '~> 8" }
+          ]
+        },
+        {
+          "id": "full-ios-nse-flagged",
+          "tier": "llm_graded",
+          "target": "NewsAppNSE/NotificationService.swift",
+          "description": "The Notification Service Extension is either flagged for manual review or migrated onto MCExtensionSDK — never silently rewritten with main-app SDK calls.",
+          "rubric": "The NSE is treated with care. Either (a) the file is left with a clear manual-review marker/comment pointing at MCExtensionSDK and the required App Group entitlement, or (b) it is rewritten to use MCExtensionSDK (import MCExtensionSDK; SFMCSdkExtension or MCExtensionSDK equivalent) inside the NSE target only, NEVER by dropping in a plain SFMCSdk.mp call sourced from the main-app config. The core forwarding of the UNNotificationRequest to fetch attachments must remain.",
+          "optional": true
+        },
+        {
+          "id": "full-ios-report-produced",
+          "tier": "llm_graded",
+          "target": "MIGRATION_REPORT.md",
+          "description": "A migration report is produced covering summary, changes by area, manual-review items, and verification.",
+          "rubric": "A migration report is generated (any reasonable filename) with: a from/to summary (legacy 8.1.1 -> unified 11.0.0), changes grouped by area with file:line, a 'Needs manual review' section that names the sfmc_addTag call and the Notification Service Extension migration to MCExtensionSDK, and a verification section covering `pod install --repo-update` and a device push round-trip.",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "cocoapods-only-ios",
+      "platform": "ios",
+      "prompt": "Update our iOS app's Podfile for the Marketing Cloud SDK — we want to get on the current release. Project is at REPO_PATH.",
+      "files": ["inputs/repo-cocoapods-ios"],
+      "expected_output": "Detects legacy MarketingCloudSDK 8.0.13 declared via Podfile with a single sfmc_configure call in AppDelegate. Updates Podfile to MarketingCloudSDK 11.0.0 + SFMCSDK 4.0.0. Migrates the sfmc_configure call to SFMCSdk.initializeSdk driven by SFMCSdkConfigBuilder.setPush(config:) / PushConfigBuilder. Reports changes.",
+      "assertions": [
+        {
+          "id": "cocoapods-ios-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Reads the umbrella version 8.0.13 from Podfile / Podfile.lock.",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "8.0.13" }
+        },
+        {
+          "id": "cocoapods-ios-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as legacy (only MarketingCloudSDK present in Podfile.lock).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "legacy-MarketingCloudSDK" }
+        },
+        {
+          "id": "cocoapods-ios-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status not-started.",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "not-started" }
+        },
+        {
+          "id": "cocoapods-ios-detect-init-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the single sfmc_configure init call site to migrate.",
+          "check": { "path": "symbolCounts.init-sdk", "op": "eq", "value": 1 }
+        },
+        {
+          "id": "cocoapods-ios-target-latest",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Latest stable is 11.0.0.",
+          "check": { "path": "latestStable", "op": "eq", "value": "11.0.0" }
+        },
+        {
+          "id": "cocoapods-ios-target-crosses-boundary",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "8.0.13 -> 11.0.0 crosses the architecture boundary.",
+          "check": { "path": "options[?version=11.0.0].crossesArchitectureBoundary", "op": "isTrue" }
+        },
+        {
+          "id": "cocoapods-ios-rewrite-podfile",
+          "tier": "llm_graded",
+          "target": "Podfile",
+          "description": "The Podfile entry is updated off legacy MarketingCloudSDK 8.x to the unified modules.",
+          "rubric": "The Podfile no longer pins MarketingCloudSDK to any 8.x version. It declares pod 'MarketingCloudSDK' on the v11 stream (~> 11.0.0 or resolved) and adds pod 'SFMCSDK' (~> 4.0.0 or resolved). The `platform :ios, ...` line and any non-SDK pod entries are untouched.",
+          "staticChecks": [
+            { "mustContain": "SFMCSDK" },
+            { "mustNotContain": "MarketingCloudSDK', '~> 8" }
+          ]
+        },
+        {
+          "id": "cocoapods-ios-rewrite-init",
+          "tier": "llm_graded",
+          "target": "App/AppDelegate.swift",
+          "description": "The single sfmc_configure call migrates to SFMCSdk.initializeSdk with SFMCSdkConfigBuilder + PushConfigBuilder.",
+          "rubric": "sfmc_configure(with:) is replaced by SFMCSdk.initializeSdk(...) driven by SFMCSdkConfigBuilder().setPush(config:onCompletion:) with a PushConfigBuilder that carries the same appId/accessToken/marketingCloudServerUrl/mid/inboxEnabled/analyticsEnabled values. The return value's boolean is preserved (via completion handler or a plain true).",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.initializeSdk" },
+            { "mustContain": "PushConfigBuilder" },
+            { "mustNotContain": "sfmc_configure(with:" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "spm-only-ios",
+      "platform": "ios",
+      "prompt": "Bump our SFMC SDK to the current unified release. We use Swift Package Manager. Repo is at REPO_PATH.",
+      "files": ["inputs/repo-spm-ios"],
+      "expected_output": "Detects legacy MarketingCloudSDK 8.1.1 pinned via Package.swift/Package.resolved. Updates Package.swift to the v11 stream (with the SFMCSDK / MarketingCloudSDK products) and rewrites the AppDelegate sfmc_configure + sfmc_setContactKey calls onto SFMCSdk.initializeSdk and SFMCSdk.identity.setProfileId. Does NOT introduce a branch: pin. Reports changes.",
+      "assertions": [
+        {
+          "id": "spm-ios-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Reads the umbrella version 8.1.1 from Package.swift/Package.resolved via case-insensitive identity match.",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "8.1.1" }
+        },
+        {
+          "id": "spm-ios-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as legacy (no unified SFMCSDK identity in Package.resolved).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "legacy-MarketingCloudSDK" }
+        },
+        {
+          "id": "spm-ios-detect-init-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the sfmc_configure init call site.",
+          "check": { "path": "symbolCounts.init-sdk", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "spm-ios-detect-contact-key-symbol",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Finds the sfmc_setContactKey call site.",
+          "check": { "path": "symbolCounts.set-contact-key", "op": "gte", "value": 1 }
+        },
+        {
+          "id": "spm-ios-target-latest",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "Latest stable is 11.0.0.",
+          "check": { "path": "latestStable", "op": "eq", "value": "11.0.0" }
+        },
+        {
+          "id": "spm-ios-rewrite-package-swift",
+          "tier": "llm_graded",
+          "target": "Package.swift",
+          "description": "Package.swift is updated to pin the v11 stream (exact:) and adds the SFMCSDK product; NO branch: pin.",
+          "rubric": "The .package(...) declaration for the SFMC SDK moves off 8.1.1 to the v11 stream — either `exact: \"11.0.0\"` or `.upToNextMajor(from: \"11.0.0\")`. The `SFMCSDK` product is added alongside `MarketingCloudSDK` in the target's dependencies (SFMCSDK is the unified core in v11). The pin must NOT be `branch: \"...\"` (branch pins are a red flag surfaced in refactoring-patterns-ios.md).",
+          "staticChecks": [
+            { "mustContain": "11.0.0" },
+            { "mustNotContain": "branch:" },
+            { "mustNotContain": "exact: \"8.1.1\"" }
+          ]
+        },
+        {
+          "id": "spm-ios-rewrite-init",
+          "tier": "llm_graded",
+          "target": "App/AppDelegate.swift",
+          "description": "sfmc_configure is rewritten to SFMCSdk.initializeSdk and sfmc_setContactKey is rewritten to SFMCSdk.identity.setProfileId.",
+          "rubric": "The sfmc_configure(with:) call is replaced by SFMCSdk.initializeSdk(...) with SFMCSdkConfigBuilder().setPush(config:onCompletion:) / PushConfigBuilder. The sfmc_setContactKey(\"spm-fixture@example.com\") call is rewritten to SFMCSdk.identity.setProfileId(\"spm-fixture@example.com\"). No sharedInstance() references remain in this file.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.initializeSdk" },
+            { "mustContain": "SFMCSdk.identity" },
+            { "mustNotContain": "sfmc_configure(with:" },
+            { "mustNotContain": "sfmc_setContactKey" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "already-modern-no-op-ios",
+      "platform": "ios",
+      "prompt": "Can you upgrade our iOS Marketing Cloud SDK to the latest version? Code is at REPO_PATH.",
+      "files": ["inputs/repo-already-modern-ios"],
+      "expected_output": "Detects the iOS app is ALREADY on the modern SFMCSdk 11.0.0 unified API. Does NOT make spurious rewrites or break the working SFMCSdk.initializeSdk / SFMCSdk.mp code. Reports that no migration is needed. Scope-guard behavior parallel to the Android already-modern eval.",
+      "assertions": [
+        {
+          "id": "modern-ios-detect-version",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Reads the umbrella version 11.0.0 from Podfile.lock.",
+          "check": { "path": "detected.currentVersion", "op": "eq", "value": "11.0.0" }
+        },
+        {
+          "id": "modern-ios-detect-era",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Classifies as unified (SFMCSDK core present in Podfile.lock).",
+          "check": { "path": "detected.apiEra", "op": "eq", "value": "unified-SFMCSDK" }
+        },
+        {
+          "id": "modern-ios-detect-status",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Migration status is already-modern (unified core, no legacy sfmc_configure).",
+          "check": { "path": "detected.migrationStatus", "op": "eq", "value": "already-modern" }
+        },
+        {
+          "id": "modern-ios-detect-no-legacy-entrypoint",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No legacy sharedInstance/sfmc_configure entry points.",
+          "check": { "path": "detected.sawLegacyEntryPoint", "op": "isFalse" }
+        },
+        {
+          "id": "modern-ios-detect-unified-core",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "Sees the unified SFMCSDK core artifact.",
+          "check": { "path": "detected.sawUnifiedCore", "op": "isTrue" }
+        },
+        {
+          "id": "modern-ios-detect-no-manual-review",
+          "tier": "deterministic",
+          "tool": "scan_usage",
+          "description": "No manual-review findings on already-modern iOS code.",
+          "check": { "path": "manualReviewCount", "op": "eq", "value": 0 }
+        },
+        {
+          "id": "modern-ios-target-already-current",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "target_options reports already-current for 11.0.0 on iOS.",
+          "check": { "path": "alreadyCurrent", "op": "isTrue" }
+        },
+        {
+          "id": "modern-ios-target-no-options",
+          "tier": "deterministic",
+          "tool": "target_options",
+          "argsFrom": { "current": "detected.currentVersion" },
+          "description": "No upgrade options offered when already current.",
+          "check": { "path": "options", "op": "lengthEq", "value": 0 }
+        },
+        {
+          "id": "modern-ios-no-rewrite-init",
+          "tier": "llm_graded",
+          "target": "App/AppDelegate.swift",
+          "description": "The working SFMCSdk.initializeSdk init is left intact — no spurious rewrite.",
+          "rubric": "The already-correct v11 SFMCSdk.initializeSdk(...) initialization is unchanged (byte-for-byte, or only trivially reformatted). The skill does NOT introduce legacy symbols (sharedInstance, sfmc_configure, SFMCSdk.mp, SFMCSdkConfigBuilder(), PushConfigBuilder(...)) and does NOT churn working code. Scope-guard / no-over-migration.",
+          "staticChecks": [
+            { "mustContain": "SFMCSdk.initializeSdk" },
+            { "mustContain": "PushFeature.requestSdk" },
+            { "mustNotContain": "sfmc_configure(with:" },
+            { "mustNotContain": "SFMCSdk.mp" }
+          ]
+        },
+        {
+          "id": "modern-ios-reports-no-op",
+          "tier": "llm_graded",
+          "target": "*",
+          "description": "The skill states no migration is needed, rather than fabricating changes.",
+          "rubric": "The skill's response/report explicitly says the project is already on the modern unified SFMCSdk on iOS and no code migration is required. It does not claim to have rewritten call sites that didn't need rewriting.",
+          "gradeAgainst": "response"
+        }
+      ]
+    }
+  ]
+}

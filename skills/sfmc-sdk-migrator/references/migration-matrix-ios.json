@@ -1,0 +1,594 @@
+{
+  "platform": "ios",
+  "sourceApiEra": "legacy-MarketingCloudSDK",
+  "targetApiEra": "unified-SFMCSDK",
+  "targetVersion": "11.0.0",
+  "_seedNote": "Seeded 2026-07 against the public change-log and re-verified 2026-07 against the two SFMC iOS SDK repositories on disk: legacy sdk-ios (MarketingCloudSDK 9.0.4) and the unified mono-repo unified-sdk-ios (MarketingCloudSDK 11.0.1 + MarketingCloud-SFMCSdk 4.0.1 + SFPushFeatureSDK 2.0.0 + SFInAppMessagingFeatureSDK 1.0.0 + MarketingCloud-ExtensionSDK 3.0.0). Verified by reading the actual Swift sources of `sfmc-sdk/SFMCSdk/SFMCSdk.swift`, `push-feature-module/PushFeatureSDK/Module/PushFeature.swift`, `mce-sdk/MarketingCloudSDK/MarketingCloudSDK/MarketingCloudSdk.swift`, and the unified LearningApp-MPP demo AppDelegate — NOT from docs alone. THREE ERAS exist on iOS, not two: (1) legacy-pure 8.x — `MarketingCloudSDK.sharedInstance().sfmc_configure(...)`, no `SFMCSdk` symbol; (2) legacy-transitional 9.x — `SFMCSdk.requestPushSdk { mp in mp.sfmc_...() }` + `ConfigBuilder().setPush(config:onCompletion:).build()` — the `SFMCSdk` façade EXISTS in 9.x but is a wrapper over the monolithic MarketingCloudSDK, so the module architecture is still legacy; (3) unified v10+/v11 — `SFMCSdk.mp` is REMOVED, engagement moves to `MarketingCloudSdk.requestSdk { mp in ... }` (from `import MarketingCloudSDK`), push token/URL handling moves to `PushFeature.requestSdk { pf in ... }` (from `import PushFeatureSDK`), IAM moves to `InAppMessagingFeatureSDK` module with typed `InAppMessageDetails` + 2-arg `didClose(inAppMessage:action:)`. The root builder in v11 is `ConfigBuilder()` (NOT `SFMCSdkConfigBuilder()` — that class does not exist) with `.setEngagement(config: MarketingCloudSdkConfigBuilder(appId:)...build())` + `.setPushFeature(config: PushFeatureConfigBuilder()...build())`. Module versions are independent — resolve at runtime.",
+
+  "detection": {
+    "packageRoots": ["MarketingCloudSDK", "SFMCSdk", "SFMCSDK", "MCExtensionSDK", "PushFeatureSDK", "InAppMessagingFeatureSDK", "MobileAppMessagingSDK"],
+    "_packageRootsNote": "Import identifiers in Swift/ObjC. `MarketingCloudSDK` names the engagement module in ALL eras (legacy monolith, 9.x transitional, unified engagement). `SFMCSdk` / `SFMCSDK` name the SFMC core façade — present in 9.x transitional AND unified. `MCExtensionSDK` is the NSE / Content Extension helper. v11+ ADDS `PushFeatureSDK` (push token / URL handling / notification info), `InAppMessagingFeatureSDK` (IAM), `MobileAppMessagingSDK` (MAM). Presence of any of these is a hit — but presence alone does NOT settle the era; that's the version's job (see umbrella `MarketingCloudSDK` major).",
+    "legacyArtifacts": ["MarketingCloudSDK"],
+    "modernArtifacts": ["MCExtensionSDK", "PushFeatureSDK", "InAppMessagingFeatureSDK", "MobileAppMessagingSDK"],
+    "unifiedCoreArtifacts": ["PushFeatureSDK", "InAppMessagingFeatureSDK"],
+    "_unifiedCoreArtifactsNote": "Do NOT use `SFMCSDK` as a unified-core signal on iOS — it exists in the 9.x transitional era too (as `MarketingCloud-SFMCSdk 2.x`), so its presence is not a v10+ tell. Instead, key on the v11-only feature modules `PushFeatureSDK` and `InAppMessagingFeatureSDK` (created ONLY when push and IAM moved out of the monolith in v10+). If neither is present, fall back to the umbrella `MarketingCloudSDK` major version (>=10 → unified).",
+    "umbrellaVersionArtifacts": ["MarketingCloudSDK"],
+    "_umbrellaVersionNote": "The changelog 'umbrella' version is carried by the `MarketingCloudSDK` pod in ALL THREE eras: legacy-pure 8.x, legacy-transitional 9.x (still uses MarketingCloudSDK 9.x with MarketingCloud-SFMCSdk 2.x pulled in as a transitive dep), unified 11.x. Read `currentVersion` from `MarketingCloudSDK`; era is derived from that major: <9 pure-legacy, ==9 legacy-transitional, >=10 unified. The `SFMCSDK` / `SFMCSdk` core streams are on separate version lines (2.x in the 9.x era, 4.x in the v11 era) and MUST NOT be used to infer the umbrella version — a 4.x SFMCSDK reading would still fail the major<10 test and mislabel a unified project as legacy. If the umbrella artifact is absent (SDK integrated only via feature modules with no engagement), currentVersion is null.",
+    "legacyEntryPointRegexes": [
+      "\\[\\s*MarketingCloudSDK\\s+sharedInstance\\s*\\]",
+      "MarketingCloudSDK\\s*\\.\\s*sharedInstance\\s*\\(\\s*\\)",
+      "sfmc_configure\\s*\\(",
+      "\\[\\s*[A-Za-z_][A-Za-z0-9_]*\\s+sfmc_configureWithDictionary\\s*:",
+      "\\.sfmc_configure(?:With)?\\s*\\(",
+      "SFMCSdk\\s*\\.\\s*requestPushSdk\\s*\\{",
+      "SFMCSdk\\s*\\.\\s*requestPushSdk\\s*\\(",
+      "\\[\\s*SFMCSdk\\s+requestPushSdk\\s*:",
+      "SFMCSdk\\s*\\.\\s*mp\\b",
+      "\\bPushConfigBuilder\\s*\\(",
+      "\\[\\s*PushConfigBuilder\\s+alloc\\s*\\]",
+      "\\bSFMCSdkConfigBuilder\\s*\\(",
+      "setPushWithConfig\\s*:"
+    ],
+    "_legacyEntryPointRegexesNote": "These entry points are LEGACY-ONLY — none exists in unified v11+. Their presence anywhere in the code base means migration is either not-started (pure 8.x) or in-progress (9.x transitional). Specifically: `.sharedInstance()` / `sfmc_configure(...)` are pure 8.x monolithic; `SFMCSdk.requestPushSdk { mp in ... }` and `SFMCSdk.mp` are 9.x transitional (the `SFMCSdk` façade exists but wraps the monolith); `PushConfigBuilder(appId:)` and Swift `SFMCSdkConfigBuilder()` are 9.x-transitional init helpers that were removed in v11 (v11 uses `MarketingCloudSdkConfigBuilder(appId:)` + `PushFeatureConfigBuilder()` + `ConfigBuilder()` root). In v11, engagement is reached via `MarketingCloudSdk.requestSdk { mp in ... }` (note lowercase 'd' — different symbol from 9.x `SFMCSdk.requestPushSdk`) and push token via `PushFeature.requestSdk { pf in ... }`. IMPORTANT Obj-C caveat: the Obj-C bridged name `SFMCSdkConfigBuilder` EXISTS in BOTH era 2 (bridged from Swift `SFMCSdkConfigBuilder`) AND era 3 (bridged from Swift `ConfigBuilder`) — so `[[SFMCSdkConfigBuilder alloc] init]` alone is NOT era-2-only. The disambiguator is the method: `setPushWithConfig:onCompletion:` is era-2-only (v11 uses `setEngagementWithConfig:` / `setPushFeatureWithConfig:`). Obj-C bracket variants (`[SFMCSdk requestPushSdk:...]`, `[[PushConfigBuilder alloc] initWithAppId:...]`, any call to `setPushWithConfig:`) are included so .m/.mm call sites are also detected. If any of the above regexes fires anywhere, the app has legacy code to rewrite.",
+    "transitionalEntryPointRegexes": [
+      "SFMCSdk\\s*\\.\\s*requestPushSdk\\s*[\\{\\(]",
+      "\\[\\s*SFMCSdk\\s+requestPushSdk\\s*:",
+      "\\bPushConfigBuilder\\s*\\(",
+      "\\[\\s*PushConfigBuilder\\s+alloc\\s*\\]",
+      "\\bSFMCSdkConfigBuilder\\s*\\(",
+      "setPushWithConfig\\s*:"
+    ],
+    "_transitionalEntryPointRegexesNote": "Symbols that only exist in the 9.x transitional era — NOT in pure-legacy 8.x (which didn't have SFMCSdk yet) and NOT in unified v11+ (which removed them). Firing any of these places the app in the 9.x transitional era. Used to distinguish era 2 from era 1 when the umbrella version is ambiguous (e.g. missing lockfile). Obj-C bracket forms included: `[SFMCSdk requestPushSdk:...]`, `[[PushConfigBuilder alloc] initWithAppId:...]`, and the era-2-only method call `setPushWithConfig:onCompletion:` (v11's Obj-C uses `setEngagementWithConfig:` / `setPushFeatureWithConfig:`, so `setPushWithConfig:` is a clean era-2 marker). NOTE: the Obj-C class name `SFMCSdkConfigBuilder` exists in v11 too (bridged from Swift `ConfigBuilder`), so bare `[[SFMCSdkConfigBuilder alloc] init]` is NOT era-2 evidence on its own — the Swift `SFMCSdkConfigBuilder(...)` regex still is (`ConfigBuilder` is the v11 Swift name).",
+    "versionArtifactRegexes": {
+      "MarketingCloudSDK": "(?:pod\\s+[\"']MarketingCloudSDK[\"']\\s*,\\s*[\"'][~<>=\\s]*|MarketingCloudSDK\\s*\\(|\"identity\"\\s*:\\s*\"marketingcloudsdk(?:[a-z0-9._-]*)\"[^}]*?\"version\"\\s*:\\s*\"|MarketingCloudSDK-iOS-SDK[^\"']*?[\"']\\s*[,:]\\s*[\"']|exact\\s*:\\s*[\"'])([0-9][0-9A-Za-z.\\-]*)",
+      "SFMCSDK": "(?:pod\\s+[\"']MarketingCloud-SFMCSdk[\"']\\s*,\\s*[\"'][~<>=\\s]*|MarketingCloud-SFMCSdk\\s*\\(|\"identity\"\\s*:\\s*\"sfmcsdk(?:[a-z0-9._-]*)\"[^}]*?\"version\"\\s*:\\s*\")([0-9][0-9A-Za-z.\\-]*)",
+      "MCExtensionSDK": "(?:pod\\s+[\"']MarketingCloud-ExtensionSDK[\"']\\s*,\\s*[\"'][~<>=\\s]*|MarketingCloud-ExtensionSDK\\s*\\()([0-9][0-9A-Za-z.\\-]*)",
+      "PushFeatureSDK": "(?:pod\\s+[\"']SFPushFeatureSDK[\"']\\s*,\\s*[\"'][~<>=\\s]*|SFPushFeatureSDK\\s*\\()([0-9][0-9A-Za-z.\\-]*)",
+      "InAppMessagingFeatureSDK": "(?:pod\\s+[\"']SFInAppMessagingFeatureSDK[\"']\\s*,\\s*[\"'][~<>=\\s]*|SFInAppMessagingFeatureSDK\\s*\\()([0-9][0-9A-Za-z.\\-]*)",
+      "MobileAppMessagingSDK": "(?:pod\\s+[\"']SFMobileAppMessagingSDK[\"']\\s*,\\s*[\"'][~<>=\\s]*|SFMobileAppMessagingSDK\\s*\\()([0-9][0-9A-Za-z.\\-]*)"
+    },
+    "_versionArtifactRegexesNote": "iOS pins versions in FOUR places: (a) `Podfile` — `pod 'MarketingCloudSDK', '~> 11.0.0'`; (b) `Podfile.lock` — `MarketingCloudSDK (11.0.0)`; (c) `Package.resolved` JSON — `\"identity\": \"marketingcloudsdk-ios-sdk\", ... \"version\": \"11.0.0\"` (SPM derives the identity from the repo slug, so it may carry a suffix like `-ios-sdk`); (d) `Package.swift` — `.exact(\"11.0.0\")` on a `.package(url: ...MarketingCloudSDK-iOS-SDK...)` declaration. NAMING: v11 pods `MarketingCloud-SFMCSdk` and `MarketingCloud-ExtensionSDK` use a HYPHEN, not a colon-separated form. Case-insensitivity: Package.resolved lowercases identities; Podfile keeps CamelCase. Compile these with re.IGNORECASE at scan time.",
+    "versionFiles": ["Podfile", "Podfile.lock", "Package.swift", "Package.resolved", "project.pbxproj", "*.xcconfig"],
+    "eraDisambiguation": "iOS has THREE eras, not two. Classify by the umbrella `MarketingCloudSDK` major version AND by which entry-point symbols appear: (era 1) legacy-pure 8.x — MarketingCloudSDK <9, `.sharedInstance()` / `sfmc_configure(...)` present, no `SFMCSdk` symbol; (era 2) legacy-transitional 9.x — MarketingCloudSDK ==9, `SFMCSdk` façade exists (`SFMCSdk.requestPushSdk { mp in ... }`, `SFMCSdk.mp`, `SFMCSdkConfigBuilder()`, `PushConfigBuilder(appId:)`) but architecture is still monolithic under the hood; (era 3) unified v10+/v11 — MarketingCloudSDK >=10, uses `MarketingCloudSdk.requestSdk` (lowercase 'd', from `import MarketingCloudSDK`) and `PushFeature.requestSdk` (from `import PushFeatureSDK`), `ConfigBuilder()` + `.setEngagement/setPushFeature/setInAppMessagingFeature/setMAM`, `MarketingCloudSdkConfigBuilder(appId:)`. The `SFMCSdk` symbol EXISTS in BOTH era 2 and era 3 — presence alone is not decisive; check the umbrella version and the transitionalEntryPointRegexes. Presence of `PushFeatureSDK` / `InAppMessagingFeatureSDK` / `MobileAppMessagingSDK` imports is a strong era-3 tell (created only in v11). MIGRATION STATUS within an era: any legacyEntryPoint match with the umbrella at v11 means partial-migration (main app not yet finished migrating); no legacy entry points with the umbrella at v11 means already-modern."
+  },
+
+  "dependencies": {
+    "_seedVersionWarning": "The `seedVersion` on each artifact below is a SNAPSHOT of the 2026-07 v11 known-coherent set, not the source of truth. iOS SDK modules are on INDEPENDENT version streams that cannot be derived from the umbrella release number, and any pinned value rots the moment SFMC ships a point release. Before writing Podfile / Package.swift coordinates in Phase 3, RESOLVE the real versions at runtime with `scripts/resolve_versions.py` (CocoaPods trunk for pods, `git ls-remote --tags` for SPM), and let `pod install --repo-update` or `xcodebuild -resolvePackageDependencies` confirm the chosen set coheres. Only fall back to seedVersion if the network is unreachable — and say so in the report.",
+    "_managers": {
+      "cocoapods": "podName is authoritative — matches the entry in the customer's Podfile.",
+      "spm": "spmProduct is the Swift product name (what an app puts in Package.swift target dependencies). spmPackage is the CocoaPods podspec-style name kept for cross-manager identity. spmRepoSlug is the FINAL PATH SEGMENT of the git URL under github.com/salesforce-marketingcloud/ — this is what resolve_versions.py binds an artifact to when scanning `git ls-remote --tags`. THREE DIFFERENT NAMES, do not conflate: product = Package.swift target dep; package = podspec identity; repoSlug = git repo directory name. Each module lives in its OWN repo under the salesforce-marketingcloud GitHub org.",
+      "carthage": "carthageName maps to the binary spec; supported only for legacy projects still on Carthage — not the recommended path"
+    },
+    "remove": [],
+    "keep": [
+      {
+        "artifact": "MarketingCloudSDK",
+        "podName": "MarketingCloudSDK",
+        "importModule": "MarketingCloudSDK",
+        "spmProduct": "MarketingCloudSDK",
+        "spmPackage": "MarketingCloudSDK-iOS-SDK",
+        "spmRepoSlug": "MarketingCloudSDK-iOS",
+        "seedVersion": "11.0.1",
+        "note": "In v11 this is the ENGAGEMENT feature module of the unified SDK. Keep it and BUMP its version (era 1/2 → era 3). It ships the engagement class `MarketingCloudSdk` (lowercase 'd'), inbox, region, tags, analytics, and the registration callback — reached via `MarketingCloudSdk.requestSdk { mp in ... }` (NOT via `SFMCSdk.mp`, which was removed in v11). Removing this pod breaks every engagement call site. Resolve current version at runtime."
+      }
+    ],
+    "add": [
+      {
+        "artifact": "MarketingCloud-SFMCSdk",
+        "podName": "MarketingCloud-SFMCSdk",
+        "importModule": "SFMCSDK",
+        "spmProduct": "SFMCSDK",
+        "spmPackage": "MarketingCloud-SFMCSdk",
+        "spmRepoSlug": "sfmc-sdk-ios",
+        "seedVersion": "4.0.1",
+        "conditional": false,
+        "note": "Unified core (pod name uses a hyphen: `MarketingCloud-SFMCSdk`). Provides `SFMCSdk.initializeSdk(config, completion:)`, `SFMCSdk.identity`, `SFMCSdk.track(event:)`, plus config primitives `ConfigBuilder()` and feature-config builders. On its own v4.x stream, independent of the umbrella 11.x. In many Podfiles this is transitive (pulled in by MarketingCloudSDK 11.x) — but it MUST be added explicitly to Package.swift/Cartfile targets that need the import. Swift import: `import SFMCSDK` (module name uppercased); the class inside is `SFMCSdk` (mixed-case)."
+      },
+      {
+        "artifact": "SFPushFeatureSDK",
+        "podName": "SFPushFeatureSDK",
+        "importModule": "PushFeatureSDK",
+        "spmProduct": "PushFeatureSDK",
+        "spmPackage": "SFPushFeatureSDK",
+        "spmRepoSlug": "push-feature-sdk-ios",
+        "seedVersion": "2.0.0",
+        "conditional": "push",
+        "feature": "push",
+        "note": "Push feature module — NEW in v11 (era 3). Owns push token registration, notification response/user-info intake, and the URL handling delegate. v11 pattern: `PushFeature.requestSdk { pf in pf?.setDeviceToken(deviceToken) }`. Configured through `PushFeatureConfigBuilder()` composed onto `ConfigBuilder()` via `.setPushFeature(config:)`. In 9.x transitional and earlier, push lived on the monolith — this pod did not exist. Import name: `PushFeatureSDK`."
+      },
+      {
+        "artifact": "SFInAppMessagingFeatureSDK",
+        "podName": "SFInAppMessagingFeatureSDK",
+        "importModule": "InAppMessagingFeatureSDK",
+        "spmProduct": "InAppMessagingFeatureSDK",
+        "spmPackage": "SFInAppMessagingFeatureSDK",
+        "spmRepoSlug": "iam-feature-sdk-ios",
+        "seedVersion": "1.0.0",
+        "conditional": "iam",
+        "feature": "iam",
+        "note": "In-app messaging feature module — NEW in v11 (era 3). Delegate protocol `InAppMessageEventDelegate` with `shouldShow`/`didShow`/`didClose(inAppMessage:action:)` and typed model `InAppMessageDetails`. Configured through `InAppMessagingFeatureConfigBuilder().build()` composed onto `ConfigBuilder()` via `.setInAppMessagingFeature(config:)`. Delegate is set via `SFMCSdk.setInAppMessageEventDelegate(_:)`. Not present in the legacy monolith. Import name: `InAppMessagingFeatureSDK`.",
+        "shippedArtifactBug": {
+          "id": "iam-1.0.0-swiftinterface-nodoc",
+          "affects": "SFInAppMessagingFeatureSDK 1.0.0",
+          "symptom": "Xcode 26.2 / Swift 6.2.3 fails to load module `InAppMessagingFeatureSDK` with `Cannot load underlying module for 'InAppMessagingFeatureSDK'`, blocking every v11 build that adds the pod.",
+          "cause": "The shipped `InAppMessagingFeatureSDK.private.swiftinterface` (line 84) declares `extension InAppMessagingFeature : SFMCSDK.InAppMessagingFeatureProtocol`, but `SFMCSDK-Swift.h` marks `InAppMessagingFeatureProtocol` `/// :nodoc:` + `SWIFT_UNAVAILABLE`. The unavailable-in-Swift protocol reference breaks module verification. Verified against the 11.0.0 xcframework — this is a packaging defect, NOT fixable in app code.",
+          "fallback": "Check `featuresInUse` from `scan_usage.py`. If IAM is NOT in use (`iam` absent from the list), drop the pod: remove `pod 'SFInAppMessagingFeatureSDK'` from the Podfile, remove `import InAppMessagingFeatureSDK`, remove the `.setInAppMessagingFeature(config:)` chain from `ConfigBuilder()`, and remove any `InAppMessageEventDelegate` conformance/extension. Re-run the scan to confirm no IAM symbols remain. If IAM IS in use, HALT the v11 migration and surface for manual review — pin to legacy 9.x or wait for a fixed 1.0.x that removes the `:nodoc:` protocol reference from the swiftinterface.",
+          "verify": {
+            "script": "scripts/verify_known_issue.py",
+            "cli": "python3 scripts/verify_known_issue.py --project <project> --issue-id iam-1.0.0-swiftinterface-nodoc",
+            "requiresResolver": "cocoapods:pod install --repo-update  |  spm:xcodebuild -resolvePackageDependencies",
+            "emitPolicy": "reproduces -> emit fallback verbatim; patched -> suppress + note observation in the report so a future regression is visible; not-materialized -> run the resolver and re-verify, else emit tagged 'unverified'; inconclusive -> emit tagged 'unverified'."
+          }
+        }
+      },
+      {
+        "artifact": "SFMobileAppMessagingSDK",
+        "podName": "SFMobileAppMessagingSDK",
+        "importModule": "MobileAppMessagingSDK",
+        "spmProduct": "MobileAppMessagingSDK",
+        "spmPackage": "SFMobileAppMessagingSDK",
+        "spmRepoSlug": "mam-core-sdk-ios",
+        "seedVersion": "2.0.0",
+        "conditional": "mam",
+        "feature": "mam",
+        "note": "Mobile app messaging (embedded messaging surfaces) — NEW in v11 (era 3). Optional module — add only when the app uses MAM. Configured through `MobileAppMessagingConfigBuilder(appId:).build()` composed onto `ConfigBuilder()` via `.setMAM(config:)`. Import name: `MobileAppMessagingSDK`."
+      },
+      {
+        "artifact": "MarketingCloud-ExtensionSDK",
+        "podName": "MarketingCloud-ExtensionSDK",
+        "importModule": "MCExtensionSDK",
+        "spmProduct": "MCExtensionSDK",
+        "spmPackage": "MarketingCloud-ExtensionSDK",
+        "spmRepoSlug": "extension-sdk-ios",
+        "seedVersion": "3.0.0",
+        "conditional": "push",
+        "feature": "push",
+        "note": "Notification Service Extension AND Notification Content Extension helper. Add to the NSE target (subclass `SFMCNotificationService`, override `sfmcProvideConfig()` returning `SFNotificationServiceConfig`) and the Content Extension target (subclass `SFMCNotificationViewController`, override `sfmcProvideConfig()` returning `SFContentExtensionConfig`) — NOT the main app. Import name: `MCExtensionSDK`. Own version stream (v3.x) — resolve at runtime."
+      },
+      {
+        "artifact": "MarketingCloud-AppGroupSDK",
+        "podName": "MarketingCloud-AppGroupSDK",
+        "importModule": null,
+        "spmProduct": "AppGroupSDK",
+        "spmPackage": "MarketingCloud-AppGroupSDK",
+        "spmRepoSlug": "app-group-internal-sdk",
+        "seedVersion": "1.0.0",
+        "conditional": "transitive",
+        "feature": "core",
+        "note": "Transitive dependency of MarketingCloudSDK 11.x — lists it in Podfile.lock automatically. Do NOT add it explicitly to Podfile unless the app also wants to import it directly (rare). Included here so the resolver knows the coordinate exists on its own version stream."
+      }
+    ],
+    "_versionMappingNote": "The umbrella 'v11.x' release maps to multiple module versions on independent streams (MarketingCloudSDK 11.x, MarketingCloud-SFMCSdk 4.x, SFPushFeatureSDK 2.x, SFInAppMessagingFeatureSDK 1.x, SFMobileAppMessagingSDK 2.x, MarketingCloud-ExtensionSDK 3.x). When the user says 'upgrade to latest', resolve each module's current version via resolve_versions.py rather than assuming the umbrella number applies to every artifact. The seedVersions above reflect one known-coherent v11 set (verified 2026-07 against unified-sdk-ios podspecs) but are a fallback, not a guarantee."
+  },
+
+  "manifest": {
+    "_manifestNote": "iOS 'manifest' work spans Info.plist and .entitlements across every target that touches the SDK — main app AND (crucially) the Notification Service Extension AND the Notification Content Extension. Fields carry an optional `target` slot (`main-app` | `notification-service-extension` | `notification-content-extension` | `any`) so Phase 3 knows which target's file to edit. The Content Extension is a distinct target from the NSE (different Info.plist keys: NSE uses `NSExtensionPointIdentifier: com.apple.usernotifications.service`; Content Extension uses `com.apple.usernotifications.content-extension`) and both targets link `MCExtensionSDK` but subclass DIFFERENT SFMC base classes (NSE → `SFMCNotificationService`; Content Extension → `SFMCNotificationViewController`). Never generate a package-manager manifest (Podfile / Package.swift) from scratch — if the customer has neither, flag as out-of-scope.",
+    "_targetEnum": ["main-app", "notification-service-extension", "notification-content-extension", "any"],
+    "autoProvided": [
+      {
+        "item": "SFMCSDK background modes registration",
+        "target": "main-app",
+        "note": "Unified 10+ registers its own URL sessions and doesn't require the legacy `background fetch` background mode unless the app itself needs it. If Info.plist declares `UIBackgroundModes` = `fetch` only for the SDK's benefit, it can be removed — but only if no other subsystem depends on it. Verify before deleting."
+      }
+    ],
+    "appMustOwn": [
+      {
+        "item": "aps-environment entitlement",
+        "target": "main-app",
+        "when": "push used",
+        "note": "The app's .entitlements file must declare `aps-environment` = `development` or `production`. The SDK cannot supply this; without it push registration fails silently. Check main-app entitlements."
+      },
+      {
+        "item": "UIBackgroundModes = remote-notification",
+        "target": "main-app",
+        "when": "push used",
+        "note": "Info.plist must include `remote-notification` under `UIBackgroundModes` for silent-push analytics to fire. Confirm before removing any `UIBackgroundModes` array."
+      },
+      {
+        "item": "App Group entitlement",
+        "target": "main-app | notification-service-extension | notification-content-extension",
+        "when": "push used && rich-media notifications used",
+        "note": "The main app, the NSE, AND (if present) the Notification Content Extension must ALL share the same App Group entitlement (`group.com.<company>.<app>`) so both extensions can hand push receipts to the SDK's engagement analytics running in the main app. If any target is missing the entitlement, rich-push analytics silently drop. Cross-check `.entitlements` files across every target that touches the SDK."
+      },
+      {
+        "item": "UNUserNotificationCenter delegate wired in AppDelegate",
+        "target": "main-app",
+        "when": "push used",
+        "note": "Legacy 8.x/9.x auto-hooked the delegate; unified 10+ requires the app to set `UNUserNotificationCenter.current().delegate = self` explicitly in `didFinishLaunchingWithOptions`. If the app already has its own delegate for local notifications, thread the SDK's willPresent/didReceive calls through the existing methods — never replace them wholesale."
+      },
+      {
+        "item": "IPHONEOS_DEPLOYMENT_TARGET >= 14.0",
+        "target": "main-app | notification-service-extension | notification-content-extension",
+        "when": "always for v11+",
+        "note": "Unified v11 raises the minimum deployment target (verify from the podspec of the resolved MarketingCloudSDK version — v11.0.1 = iOS 14). Bump the deployment target in the pbxproj / xcconfig if it's lower. Applies to every target that links the SDK, including the NSE and Content Extension."
+      }
+    ],
+    "removeLegacy": [
+      {
+        "item": "NSAppTransportSecurity exception for SFMC HTTP endpoints",
+        "target": "main-app",
+        "when": "app added an NSAppTransportSecurity exception specifically for a legacy SFMC HTTP endpoint",
+        "note": "Legacy SDKs used a handful of HTTP-only endpoints that required NSExceptionDomains entries. Unified 10+ is HTTPS-end-to-end. If the app added an exception for one of those hosts and NOTHING ELSE uses it, it can be removed. Manual-review; the exception may exist for a different (non-SFMC) reason."
+      }
+    ]
+  },
+
+  "packageMoves": [
+    {
+      "from": "import MarketingCloudSDK",
+      "to": "keep `import MarketingCloudSDK` + add `import SFMCSDK`, `import PushFeatureSDK`, `import InAppMessagingFeatureSDK` (as needed)",
+      "note": "MarketingCloudSDK stays — it's the engagement module in v11 (contains `MarketingCloudSdk` with a lowercase 'd', `MarketingCloudSDK` class for engagement APIs, and typed enums like `MCELogLevel`/`MCERegistrationCallback`). Add `SFMCSDK` (unified core: `SFMCSdk.initializeSdk`, `SFMCSdk.identity`, `SFMCSdk.track`, `ConfigBuilder`). Add `PushFeatureSDK` in files that manage device tokens, notification response/user-info intake, or set a URL handling delegate. Add `InAppMessagingFeatureSDK` in files that conform to `InAppMessageEventDelegate` or reference `InAppMessageDetails`. Obj-C equivalent: `@import MarketingCloudSDK;` + `@import SFMCSDK;` + `@import PushFeatureSDK;` + `@import InAppMessagingFeatureSDK;`.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift imports SFMCSDK, MarketingCloudSDK, PushFeatureSDK, MobileAppMessagingSDK, InAppMessagingFeatureSDK"
+    },
+    {
+      "from": "import MarketingCloudSDK (in Notification Service Extension)",
+      "to": "import MCExtensionSDK",
+      "note": "NSE files DROP `import MarketingCloudSDK` entirely and import `MCExtensionSDK`. The base class becomes `SFMCNotificationService`. Do not link MarketingCloudSDK to the NSE target — link MCExtensionSDK only.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/MarketingCloudServiceExtension/NotificationService.swift: `import MCExtensionSDK` / `class NotificationService: SFMCNotificationService`"
+    },
+    {
+      "from": "no legacy analog (new file type)",
+      "to": "import MCExtensionSDK (in Notification Content Extension)",
+      "note": "Notification Content Extensions are a separate target (Info.plist `NSExtensionPointIdentifier: com.apple.usernotifications.content-extension`). The `UNNotificationContentExtension` class inside subclasses `SFMCNotificationViewController`, overrides `sfmcProvideConfig() -> SFContentExtensionConfig`, and lets the base class handle rendering. Link MCExtensionSDK to this target too.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/MarketingCloudContentExtension/NotificationViewController.swift"
+    },
+    {
+      "from": "SFMCSdkConfigBuilder / MCESDKConfigBuilder / MarketingCloudSDKConfigBuilder (init helpers used in eras 1-2)",
+      "to": "ConfigBuilder() (root) composed with MarketingCloudSdkConfigBuilder(appId:), PushFeatureConfigBuilder(), InAppMessagingFeatureConfigBuilder(), MobileAppMessagingConfigBuilder(appId:)",
+      "note": "v11 dropped both `SFMCSdkConfigBuilder` (9.x transitional) and the older `MCESDKConfigBuilder` (8.x pure). The v11 root is `ConfigBuilder()` (in module `SFMCSDK`); feature configs are attached via `.setEngagement(config:)`, `.setPushFeature(config:)`, `.setInAppMessagingFeature(config:)`, `.setMAM(config:)`. Full working shape in `refactoring-patterns-ios.md §Initialization` and verified in `unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift` lines 119-202.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift"
+    },
+    {
+      "from": "SFMCSdk.mp (9.x transitional engagement accessor)",
+      "to": "MarketingCloudSdk.requestSdk { mp in ... }  (v11 engagement callback)",
+      "note": "The `SFMCSdk.mp` static property was REMOVED in v11. Engagement APIs are now reached through a static callback: `MarketingCloudSdk.requestSdk { mp in mp?.setRegistrationCallback { ... } }` (note lowercase 'd' in the class name — the module is `MarketingCloudSDK` uppercase but the class is `MarketingCloudSdk`). The callback delivers an optional `MarketingCloudSdkInterface` — call sites MUST optional-chain or guard-let. Not a mechanical rename; every callsite gets wrapped in the closure.",
+      "verified": "unified-sdk-ios/mce-sdk/MarketingCloudSDK/MarketingCloudSDK/MarketingCloudSdk.swift line 208: `public static func requestSdk(_ callback: @escaping (_ marketingCloudSdk: MarketingCloudSdkInterface?) -> Void)`"
+    },
+    {
+      "from": "SFMCSdk.requestPushSdk { mp in ... } (9.x transitional push accessor)",
+      "to": "PushFeature.requestSdk { pf in ... }  (v11 push feature callback)",
+      "note": "`SFMCSdk.requestPushSdk` was a 9.x-transitional façade for reaching the monolithic push code. In v11 push is its own module, reached via `PushFeature.requestSdk { pfSdk in pfSdk?.setDeviceToken(deviceToken) }`. The callback delivers an optional `PushFeatureApi` — optional-chain or guard-let.",
+      "verified": "unified-sdk-ios/push-feature-module/PushFeatureSDK/Module/PushFeature.swift line 170"
+    },
+    {
+      "from": "MCEInAppMessage",
+      "to": "InAppMessageDetails (in module InAppMessagingFeatureSDK)",
+      "note": "IAM model type renamed AND moved to its own module. Not `InAppMessage` (my earlier note was wrong) — the v11 type is `InAppMessageDetails` and its associated close action is `InAppMessageCloseAction`. Import from `InAppMessagingFeatureSDK`.",
+      "verified": "unified-sdk-ios/sfmc-sdk/SFMCSdk/Interfaces/Common/Protocols/Delegates/InAppMessageEventDelegate.swift"
+    }
+  ],
+
+  "mappings": [
+    {
+      "id": "init-sdk",
+      "area": "init",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_configure(with: dict)  [era 1] OR SFMCSdk.initializeSdk(ConfigBuilder().setPush(config:onCompletion:).build())  [era 2, 9.x transitional]",
+      "oldRegex": "sfmc_configure(?:With)?(?:Dictionary)?\\s*[:(]|\\bSFMCSdkConfigBuilder\\s*\\(|\\bPushConfigBuilder\\s*\\(|\\[\\s*PushConfigBuilder\\s+alloc\\s*\\]|ConfigBuilder\\s*\\(\\s*\\)\\s*\\.\\s*setPush\\s*\\(\\s*config:|setPushWithConfig\\s*:",
+      "new": "SFMCSdk.initializeSdk(ConfigBuilder().setEngagement(...).setPushFeature(...).setInAppMessagingFeature(...).build(), completion:)",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "before": "// Swift (era 2 — 9.x transitional)\nlet pushConfig = PushConfigBuilder(appId: Constants.mcAppId)\n    .setAccessToken(Constants.mcAccessToken)\n    .setMarketingCloudServerUrl(Constants.mcServerUrl)\n    .setMid(Constants.mcMid)\n    .setInboxEnabled(true)\n    .setAnalyticsEnabled(true)\n    .build()\n\nlet config = SFMCSdkConfigBuilder()\n    .setPush(config: pushConfig, onCompletion: { result in\n        // Runs after push module initializes.\n    })\n    .build()\n\nSFMCSdk.initializeSdk(config)",
+      "after": "// Swift (era 3 — v11 unified)\nimport SFMCSDK\nimport MarketingCloudSDK\nimport PushFeatureSDK\nimport InAppMessagingFeatureSDK\n\nvar configBuilder = ConfigBuilder()\n\nlet engagementConfiguration = MarketingCloudSdkConfigBuilder(appId: Constants.mcAppId)\n    .setAccessToken(Constants.mcAccessToken)\n    .setMarketingCloudServerUrl(Constants.mcServerUrl)\n    .setMid(Constants.mcMid)\n    .setInboxEnabled(true)\n    .setAnalyticsEnabled(true)\n    .setDelayRegistrationUntilContactKeyIsSet(true)\n    .build()\nconfigBuilder = configBuilder.setEngagement(config: engagementConfiguration)\n\nlet pushFeatureConfiguration = PushFeatureConfigBuilder()\n    .setApplicationControlsBadging(true)\n    .build()\nconfigBuilder = configBuilder.setPushFeature(config: pushFeatureConfiguration)\n\nlet iamFeatureConfiguration = InAppMessagingFeatureConfigBuilder().build()\nconfigBuilder = configBuilder.setInAppMessagingFeature(config: iamFeatureConfiguration)\n\nSFMCSdk.initializeSdk(configBuilder.build()) { status in\n    // status is [ModuleInitStatus] — one entry per module\n    for s in status {\n        print(\"module \\(s.module) init \\(s.status)\")\n    }\n}",
+      "beforeObjc": "// Obj-C (era 2 — 9.x transitional)\n@import SFMCSDK;\n@import MarketingCloudSDK;\n\nPushConfigBuilder *pushConfig = [[[[[[[PushConfigBuilder alloc] initWithAppId:kAppId]\n    setAccessToken:kAccessToken]\n    setMarketingCloudServerUrl:[NSURL URLWithString:kServerUrl]]\n    setMid:kMid]\n    setInboxEnabled:YES]\n    setAnalyticsEnabled:YES];\n\nSFMCSdkConfig *config = [[[SFMCSdkConfigBuilder alloc]\n    setPushWithConfig:[pushConfig build]\n         onCompletion:^(enum OperationResult r) { /* ... */ }]\n    build];\n\n[SFMCSdk initializeSdk:config];",
+      "afterObjc": "// Obj-C (era 3 — v11 unified)\n@import SFMCSDK;\n@import MarketingCloudSDK;\n@import PushFeatureSDK;\n@import InAppMessagingFeatureSDK;\n\nSFMCSdkConfigBuilder *configBuilder = [[SFMCSdkConfigBuilder alloc] init];\n\nSFMarketingCloudSdkConfig *engagement = [[[[[[[[SFMarketingCloudSdkConfigBuilder alloc] initWithAppId:kAppId]\n    setAccessToken:kAccessToken]\n    setMarketingCloudServerUrl:[NSURL URLWithString:kServerUrl]]\n    setMid:kMid]\n    setInboxEnabled:YES]\n    setAnalyticsEnabled:YES]\n    build];\n[configBuilder setEngagementWithConfig:engagement];\n\nSFPushFeatureConfig *pushCfg = [[[[SFPushFeatureConfigBuilder alloc] init]\n    setApplicationControlsBadging:YES]\n    build];\n[configBuilder setPushFeatureWithConfig:pushCfg];\n\nSFInAppMessagingFeatureConfig *iamCfg = [[[SFInAppMessagingFeatureConfigBuilder alloc] init] build];\n[configBuilder setInAppMessagingFeatureWithConfig:iamCfg];\n\n[SFMCSdk initializeSdk:[configBuilder build]\n           completion:^(NSArray<SFMCModuleInitStatus *> *status) {\n    for (SFMCModuleInitStatus *s in status) {\n        NSLog(@\"module %@ init %ld\", @(s.module), (long)s.status);\n    }\n}];",
+      "caveat": "MAJOR shape change from BOTH eras 1 and 2 (v11 is not just a rename of era 2). Traps: (1) Root builder is `ConfigBuilder()`, NOT `SFMCSdkConfigBuilder()` — the latter does not exist in v11. (2) Push moved to its own feature module: `PushFeatureConfigBuilder()` composed via `.setPushFeature(config:)`. Some push settings from era 1/2 that were on the push builder are NO LONGER on `PushFeatureConfigBuilder` — they moved to `MarketingCloudSdkConfigBuilder` (engagement): `setAccessToken`, `setMarketingCloudServerUrl`, `setMid`, `setInboxEnabled`, `setAnalyticsEnabled`, `setDelayRegistrationUntilContactKeyIsSet`. Only `setApplicationControlsBadging` (and IAM interop toggles) live on `PushFeatureConfigBuilder`. (3) Engagement builder init selector is `MarketingCloudSdkConfigBuilder(appId:)` (note lowercase 'd'). (4) `initializeSdk` completion changed shape: era 2 gave a per-push `OperationResult`; v11 gives a top-level `[ModuleInitStatus]` array — one entry per module. Legacy code that inspected `result == .success` for a single module must iterate the array. (5) IAM and MAM each have their own feature-config builder; do NOT try to configure IAM through the engagement builder. Full working shape in `refactoring-patterns-ios.md §Initialization`.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift lines 119-202; sfmc-sdk/SFMCSdk/SFMCSdk.swift line 56"
+    },
+    {
+      "id": "shared-instance-engagement",
+      "area": "init",
+      "old": "MarketingCloudSDK.sharedInstance()  [era 1] OR SFMCSdk.mp / SFMCSdk.requestPushSdk { mp in ... }  [era 2]",
+      "oldRegex": "MarketingCloudSDK\\s*\\.\\s*sharedInstance\\s*\\(\\s*\\)|\\[\\s*MarketingCloudSDK\\s+sharedInstance\\s*\\]|SFMCSdk\\s*\\.\\s*mp\\b|SFMCSdk\\s*\\.\\s*requestPushSdk|\\[\\s*SFMCSdk\\s+requestPushSdk\\s*:",
+      "new": "MarketingCloudSdk.requestSdk { mp in mp?.<engagement-call>() }  (engagement)  +  SFMCSdk.identity  (identity)",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "before": "// Swift (era 2 — 9.x transitional)\nSFMCSdk.requestPushSdk { mp in\n    let token = mp.deviceToken()  // engagement API on the transitional façade\n}\n\n// Direct access:\nlet token2 = SFMCSdk.mp.deviceToken()",
+      "after": "// Swift (era 3 — v11 unified)\nimport MarketingCloudSDK\nimport SFMCSDK\n\nMarketingCloudSdk.requestSdk { mp in\n    let token = mp?.deviceToken()  // note lowercase 'd' on the class + optional callback\n    mp?.setRegistrationCallback { registration in\n        // ...\n    }\n}\n\n// Identity is on SFMCSdk (no engagement callback needed) but v11 uses edit-closure:\nSFMCSdk.identity.edit { identity in\n    identity.profileId = \"user@example.com\"\n    return identity\n}",
+      "beforeObjc": "// Obj-C (era 2)\n[SFMCSdk requestPushSdk:^(id<MarketingCloudSDKPushProtocol> mp) {\n    NSString *token = [mp deviceToken];\n}];",
+      "afterObjc": "// Obj-C (era 3)\n[SFMarketingCloudSdk requestSdk:^(id<MarketingCloudSdkInterface> _Nullable mp) {\n    NSString *token = [mp deviceToken];\n}];",
+      "caveat": "Both `SFMCSdk.mp` and `SFMCSdk.requestPushSdk` were REMOVED in v11 (they were 9.x transitional). v11 replaces them with `MarketingCloudSdk.requestSdk { mp in ... }` — note: (a) class name is `MarketingCloudSdk` (lowercase 'd'), NOT `MarketingCloudSDK` (which is the module name), (b) callback param is OPTIONAL (`MarketingCloudSdkInterface?`), so every access requires optional-chaining or a guard-let. Identity APIs stay on `SFMCSdk.identity` but the SHAPE changed — v11 removed flat `setProfileId(_:)`/`setProfileAttributes(_:)` and requires the `edit(identity:)` closure form (see mappings `set-contact-key`, `set-attribute`, `clear-attribute`). This is NOT a mechanical rename — every callsite that accessed `SFMCSdk.mp.foo()` must be wrapped in the callback closure. Obj-C @objc name is `SFMarketingCloudSdk`.",
+      "verified": "unified-sdk-ios/mce-sdk/MarketingCloudSDK/MarketingCloudSDK/MarketingCloudSdk.swift lines 15, 208; unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift lines 249, 317-319"
+    },
+    {
+      "id": "set-contact-key",
+      "area": "identity",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setContactKey(_:)  [era 1]  OR  SFMCSdk.identity.setProfileId(_:)  [era 2]",
+      "oldRegex": "sfmc_setContactKey\\s*[:(]|SFMCSdk\\.identity\\.setProfileId\\s*\\(|\\[\\s*\\[\\s*SFMCSdk\\s+identity\\s*\\]\\s+setProfileId\\s*:",
+      "new": "SFMCSdk.identity.edit { identity in identity.profileId = ...; return identity }",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Swift (era 1)\n_ = MarketingCloudSDK.sharedInstance().sfmc_setContactKey(\"user@example.com\")\n\n// Swift (era 2 — 9.x transitional had flat setter)\nSFMCSdk.identity.setProfileId(\"user@example.com\")",
+      "after": "// Swift (era 3 — v11 requires the edit-closure form)\nSFMCSdk.identity.edit { identity in\n    identity.profileId = \"user@example.com\"\n    return identity\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_setContactKey:@\"user@example.com\"];",
+      "afterObjc": "// Obj-C (era 3)\n[[SFMCSdk identity] editWithIdentity:^id<SFIdentityModifier>(id<SFIdentityModifier> identity) {\n    identity.profileId = @\"user@example.com\";\n    return identity;\n}];",
+      "caveat": "v11 REMOVED the flat `setProfileId(_:)`/`setProfileAttributes(_:)` setters that existed in era 2 (9.x transitional). All identity mutations now flow through `SFMCSdk.identity.edit(identity:)` with an `IdentityModifier` closure. Verified against Pods/MarketingCloud-SFMCSdk/Frameworks/SFMCSDK.xcframework — only `edit(identity:)` exists; `setProfileId`/`setProfileAttributes` compile-error. Legacy returned BOOL; v11 returns Void via the closure. Manual review because callers that branched on the BOOL must be re-examined."
+    },
+    {
+      "id": "set-attribute",
+      "area": "identity",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setAttributeNamed(_:value:)  [era 1]  OR  SFMCSdk.identity.setProfileAttribute(_:value:) / setProfileAttributes(_:)  [era 2]",
+      "oldRegex": "sfmc_setAttributeNamed\\s*[:(]|SFMCSdk\\.identity\\.setProfileAttributes?\\s*\\(|\\[\\s*\\[\\s*SFMCSdk\\s+identity\\s*\\]\\s+setProfileAttributes?\\s*:",
+      "new": "SFMCSdk.identity.edit { identity in identity.addAttributes(attributes: [...]); return identity }",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Swift (era 1)\n_ = MarketingCloudSDK.sharedInstance()\n    .sfmc_setAttributeNamed(\"firstName\", value: \"Ada\")\n\n// Swift (era 2 — 9.x transitional)\nSFMCSdk.identity.setProfileAttributes([\n    \"firstName\": \"Ada\",\n    \"lastName\": \"Lovelace\"\n])",
+      "after": "// Swift (era 3 — v11 edit-closure form)\nSFMCSdk.identity.edit { identity in\n    identity.addAttributes(attributes: [\n        \"firstName\": \"Ada\",\n        \"lastName\": \"Lovelace\"\n    ])\n    return identity\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_setAttributeNamed:@\"firstName\" value:@\"Ada\"];",
+      "afterObjc": "// Obj-C (era 3)\n[[SFMCSdk identity] editWithIdentity:^id<SFIdentityModifier>(id<SFIdentityModifier> identity) {\n    [identity addAttributesWithAttributes:@{ @\"firstName\": @\"Ada\", @\"lastName\": @\"Lovelace\" }];\n    return identity;\n}];",
+      "caveat": "IdentityModifier method is `addAttributes(attributes:)` (label required, batch dict only). No single-key setter — pass a one-key dict. Values are `[String: String]`; NSNumber/NSDate from Obj-C must be stringified. Verified against Pods/MarketingCloud-SFMCSdk/Frameworks/SFMCSDK.xcframework — see `@objc(SFIdentityModifier) public protocol IdentityModifier` with `addAttributes(attributes:)`, `clearAttribute(key:)`, `clearAttributes(keys:)`. Manual review because era-2 → era-3 mutations that were compact one-liners become closure-wrapped."
+    },
+    {
+      "id": "clear-attribute",
+      "area": "identity",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_clearAttributeNamed(_:)  [era 1]  OR  SFMCSdk.identity.clearProfileAttribute(_:) / clearProfileAttributes(withKeys:)  [era 2]",
+      "oldRegex": "sfmc_clearAttributeNamed\\s*[:(]|SFMCSdk\\.identity\\.clearProfileAttributes?\\s*\\(|\\[\\s*\\[\\s*SFMCSdk\\s+identity\\s*\\]\\s+clearProfileAttributes?\\s*:",
+      "new": "SFMCSdk.identity.edit { identity in identity.clearAttribute(key: ...) / .clearAttributes(keys: [...]); return identity }",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Swift (era 2)\nSFMCSdk.identity.clearProfileAttribute(\"firstName\")",
+      "after": "// Swift (era 3 — v11)\nSFMCSdk.identity.edit { identity in\n    identity.clearAttribute(key: \"firstName\")\n    return identity\n}",
+      "beforeObjc": "// Obj-C (era 2)\n[[SFMCSdk identity] clearProfileAttribute:@\"firstName\"];",
+      "afterObjc": "// Obj-C (era 3)\n[[SFMCSdk identity] editWithIdentity:^id<SFIdentityModifier>(id<SFIdentityModifier> identity) {\n    [identity clearAttributeWithKey:@\"firstName\"];\n    return identity;\n}];",
+      "caveat": "IdentityModifier exposes `clearAttribute(key:)` and `clearAttributes(keys: [String])` — batch variant present (Obj-C: `clearAttributesWithKeys:`). Verified against Pods/MarketingCloud-SFMCSdk/Frameworks/SFMCSDK.xcframework."
+    },
+    {
+      "id": "add-tag",
+      "area": "identity",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_addTag(_:) / sfmc_removeTag  [era 1]",
+      "oldRegex": "sfmc_(?:addTag|removeTag|addTags|removeTags)\\s*[:(]",
+      "new": "MarketingCloudSdk.requestSdk { mp in mp?.addTag(_:) / removeTag(_:) }",
+      "kind": "method",
+      "async": true,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Swift (era 1)\n_ = MarketingCloudSDK.sharedInstance().sfmc_addTag(\"Camping\")\n_ = MarketingCloudSDK.sharedInstance().sfmc_removeTag(\"Winter\")",
+      "after": "// Swift (era 3 — engagement module still supports tags, reached via callback)\nMarketingCloudSdk.requestSdk { mp in\n    _ = mp?.addTag(\"Camping\")\n    _ = mp?.removeTag(\"Winter\")\n}\n\n// OR (Salesforce guidance for unified segmentation): migrate to profile attribute\nSFMCSdk.identity.edit { identity in\n    identity.addAttributes(attributes: [\"segment\": \"Camping\"])\n    return identity\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_addTag:@\"Camping\"];\n[[MarketingCloudSDK sharedInstance] sfmc_removeTag:@\"Winter\"];",
+      "afterObjc": "// Obj-C (era 3)\n[SFMarketingCloudSdk requestSdk:^(id<MarketingCloudSdkInterface> _Nullable mp) {\n    [mp addTag:@\"Camping\"];\n    [mp removeTag:@\"Winter\"];\n}];",
+      "caveat": "Tags survived in v11 but the access shape changed — the callback wrapping is required (no more `sharedInstance()`). Preserve if the customer's segmentation uses tags; flag for the marketing team to decide whether to migrate to profile attributes for unified segmentation. Manual review because dropping vs preserving is a business decision."
+    },
+    {
+      "id": "track-event",
+      "area": "events",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_trackPageView(url:title:) / sfmc_trackEvent(...)  [era 1]",
+      "oldRegex": "sfmc_(?:trackPageView|trackEvent|track)\\s*[:(]",
+      "new": "SFMCSdk.track(event: CustomEvent(name: ..., attributes: ...))",
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "before": "// Swift (era 1)\n_ = MarketingCloudSDK.sharedInstance()\n    .sfmc_trackPageView(withURL: \"data://ProductDetail\",\n                       title: \"Product viewed\",\n                       item: nil, search: nil)",
+      "after": "// Swift (era 3)\nif let event = CustomEvent(\n    name: \"ProductDetail\",\n    attributes: [\"description\": \"Product viewed\"]\n) {\n    SFMCSdk.track(event: event)\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance]\n    sfmc_trackPageViewWithURL:@\"data://ProductDetail\"\n                        title:@\"Product viewed\"\n                         item:nil\n                       search:nil];",
+      "afterObjc": "// Obj-C (era 3)\nCustomEvent *event = [[CustomEvent alloc]\n    initWithName:@\"ProductDetail\"\n      attributes:@{ @\"description\": @\"Product viewed\" }];\nif (event != nil) {\n    [SFMCSdk trackWithEvent:event];\n}",
+      "caveat": "CustomEvent's init is FAILABLE (returns nil) — v11 validates name and attribute keys (blank / '$'-prefix / newline / dot-in-key silently drops). The `if let`/nil-check is load-bearing; do not force-unwrap. Legacy was permissive; dynamically-built page-view names may drop silently. `SFMCSdk.track(event:)` is UNCHANGED between eras 2 and 3."
+    },
+    {
+      "id": "register-for-remote-notifications",
+      "area": "push",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_registerForRemoteNotifications()  [era 1]",
+      "oldRegex": "sfmc_registerForRemoteNotifications\\s*\\(\\s*\\)",
+      "new": "UNUserNotificationCenter.current().requestAuthorization(...) — app-owned; SDK does not register",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "manualReview": true,
+      "before": "// Swift (era 1)\nMarketingCloudSDK.sharedInstance().sfmc_registerForRemoteNotifications()",
+      "after": "// Swift (era 3) — the app owns registration\nUNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in\n    guard granted, error == nil else { return }\n    DispatchQueue.main.async {\n        UIApplication.shared.registerForRemoteNotifications()\n    }\n}\n// The SDK receives the token through AppDelegate's\n// didRegisterForRemoteNotificationsWithDeviceToken (see set-device-token).",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_registerForRemoteNotifications];",
+      "afterObjc": "// Obj-C (era 3) — the app owns registration\n[[UNUserNotificationCenter currentNotificationCenter]\n    requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound)\n                  completionHandler:^(BOOL granted, NSError * _Nullable error) {\n    if (!granted || error) { return; }\n    dispatch_async(dispatch_get_main_queue(), ^{\n        [[UIApplication sharedApplication] registerForRemoteNotifications];\n    });\n}];",
+      "caveat": "v11 does NOT wrap `UNUserNotificationCenter` authorization. `sfmc_registerForRemoteNotifications` bundled authorization+registration; v11 requires the app to do both, then hand the token to the SDK. Manual review because most apps already have their own permission flow; the migration REMOVES the legacy call and confirms the app's path exists — where to prompt is a UX decision the skill cannot make."
+    },
+    {
+      "id": "set-device-token",
+      "area": "push",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setDeviceToken(_:)  [era 1] OR SFMCSdk.requestPushSdk { mp in mp.setDeviceToken(_:) }  [era 2]",
+      "oldRegex": "sfmc_setDeviceToken\\s*[:(]",
+      "new": "PushFeature.requestSdk { pfSdk in pfSdk?.setDeviceToken(_:) }",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "before": "// Swift (era 2 — 9.x transitional) — inside AppDelegate\nfunc application(_ application: UIApplication,\n                 didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {\n    SFMCSdk.requestPushSdk { mp in\n        mp.setDeviceToken(deviceToken)\n    }\n}",
+      "after": "// Swift (era 3 — v11) — inside AppDelegate\nimport PushFeatureSDK\n\nfunc application(_ application: UIApplication,\n                 didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {\n    PushFeature.requestSdk { pfSdk in\n        pfSdk?.setDeviceToken(deviceToken)\n    }\n}",
+      "beforeObjc": "// Obj-C (era 2)\n- (void)application:(UIApplication *)application\n    didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {\n    [SFMCSdk requestPushSdk:^(id<MarketingCloudSDKPushProtocol> mp) {\n        [mp setDeviceToken:deviceToken];\n    }];\n}",
+      "afterObjc": "// Obj-C (era 3)\n- (void)application:(UIApplication *)application\n    didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {\n    [SFPushFeature requestSdk:^(id<PushFeatureApi> _Nullable pf) {\n        [pf setDeviceToken:deviceToken];\n    }];\n}",
+      "caveat": "Device token moved to the push feature module. Callback param is OPTIONAL — optional-chain in Swift; the Obj-C block param is nullable. Do NOT rename the AppDelegate method — it's a UIApplicationDelegate contract. Only the body changes. Obj-C @objc name is `SFPushFeature`.",
+      "verified": "unified-sdk-ios/push-feature-module/PushFeatureSDK/Module/PushFeature.swift line 266; unified-sdk-ios/MarketingCloudSDKExplorer/SDKExplorer/AppDelegate.swift lines 88-90"
+    },
+    {
+      "id": "handle-notification-response",
+      "area": "push",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setNotificationRequest(_:) / sfmc_setNotificationUserInfo(_:)  [era 1]",
+      "oldRegex": "sfmc_setNotificationRequest\\s*[:(]|sfmc_setNotificationUserInfo\\s*[:(]",
+      "new": "PushFeature.requestSdk { pfSdk in pfSdk?.setNotificationResponse(_:) / .setNotificationUserInfo(_:) }",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "before": "// Swift (era 1) — inside UNUserNotificationCenterDelegate\nfunc userNotificationCenter(_ center: UNUserNotificationCenter,\n                            didReceive response: UNNotificationResponse,\n                            withCompletionHandler completionHandler: @escaping () -> Void) {\n    MarketingCloudSDK.sharedInstance().sfmc_setNotificationRequest(response.notification.request)\n    completionHandler()\n}",
+      "after": "// Swift (era 3 — v11)\nimport PushFeatureSDK\n\nfunc userNotificationCenter(_ center: UNUserNotificationCenter,\n                            didReceive response: UNNotificationResponse,\n                            withCompletionHandler completionHandler: @escaping () -> Void) {\n    PushFeature.requestSdk { pfSdk in\n        pfSdk?.setNotificationResponse(response)\n    }\n    completionHandler()\n}\n\nfunc application(_ application: UIApplication,\n                 didReceiveRemoteNotification userInfo: [AnyHashable: Any],\n                 fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {\n    PushFeature.requestSdk { pfSdk in\n        pfSdk?.setNotificationUserInfo(userInfo)\n    }\n    completionHandler(.newData)\n}",
+      "beforeObjc": "// Obj-C (era 1)\n- (void)userNotificationCenter:(UNUserNotificationCenter *)center\n       didReceiveNotificationResponse:(UNNotificationResponse *)response\n                withCompletionHandler:(void (^)(void))completionHandler {\n    [[MarketingCloudSDK sharedInstance] sfmc_setNotificationRequest:response.notification.request];\n    completionHandler();\n}",
+      "afterObjc": "// Obj-C (era 3)\n@import PushFeatureSDK;\n\n- (void)userNotificationCenter:(UNUserNotificationCenter *)center\n       didReceiveNotificationResponse:(UNNotificationResponse *)response\n                withCompletionHandler:(void (^)(void))completionHandler {\n    [SFPushFeature requestSdk:^(id<PushFeatureApi> _Nullable pf) {\n        [pf setNotificationResponse:response];\n    }];\n    completionHandler();\n}\n\n- (void)application:(UIApplication *)application\n    didReceiveRemoteNotification:(NSDictionary *)userInfo\n           fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {\n    [SFPushFeature requestSdk:^(id<PushFeatureApi> _Nullable pf) {\n        [pf setNotificationUserInfo:userInfo];\n    }];\n    completionHandler(UIBackgroundFetchResultNewData);\n}",
+      "caveat": "TWO changes: (a) API selector changed from `setNotificationRequest(_:)` taking a `UNNotificationRequest` to `setNotificationResponse(_:)` taking the whole `UNNotificationResponse` — the SDK now records the response (open+action) not just the request; (b) it moved onto `PushFeatureApi` via the `PushFeature.requestSdk` callback. The silent-push user-info handler is separate: `setNotificationUserInfo(_:)`. Preserve any app-side business logic in these delegate methods; only rewrite the SDK call.",
+      "verified": "unified-sdk-ios/push-feature-module/PushFeatureSDK/Module/PushFeature.swift lines 319, 343"
+    },
+    {
+      "id": "handle-notification-response-era2-removal",
+      "area": "push",
+      "kind": "method",
+      "migrationKind": "within-legacy",
+      "eraFrom": 2,
+      "eraTo": 2,
+      "old": "SFMCSdk.requestPushSdk { mp in mp.setNotificationRequest(_:) }  [era 2 — 8.x façade only]",
+      "oldRegex": "\\.setNotificationRequest\\s*\\(",
+      "new": "SFMCSdk.requestPushSdk { mp in mp.setNotificationResponse(_:) }  [era 2 — 9.x]",
+      "async": true,
+      "feature": "push",
+      "targetVersionGuard": ">=9.0.0 <10.0.0",
+      "callSiteGuard": "only when the enclosing method has `response: UNNotificationResponse` in scope (typically `userNotificationCenter(_:didReceive:withCompletionHandler:)`). If the site instead has only `request: UNNotificationRequest` (an NSE-style `didReceive(_:withContentHandler:)`), do NOT rewrite — flag for manual review because the legacy `setNotificationRequest(_:UNNotificationRequest)` shape is gone entirely and the replacement needs the response object.",
+      "before": "// Swift (era 2 — 8.x façade) — inside UNUserNotificationCenterDelegate\nfunc userNotificationCenter(_ center: UNUserNotificationCenter,\n                            didReceive response: UNNotificationResponse,\n                            withCompletionHandler completionHandler: @escaping () -> Void) {\n    SFMCSdk.requestPushSdk { mp in\n        mp.setNotificationRequest(response.notification.request)\n    }\n    completionHandler()\n}",
+      "after": "// Swift (era 2 — 9.x, within-legacy target)\nfunc userNotificationCenter(_ center: UNUserNotificationCenter,\n                            didReceive response: UNNotificationResponse,\n                            withCompletionHandler completionHandler: @escaping () -> Void) {\n    SFMCSdk.requestPushSdk { mp in\n        mp.setNotificationResponse(response)\n    }\n    completionHandler()\n}",
+      "beforeObjc": "// Obj-C (era 2 — 8.x façade)\n- (void)userNotificationCenter:(UNUserNotificationCenter *)center\n       didReceiveNotificationResponse:(UNNotificationResponse *)response\n                withCompletionHandler:(void (^)(void))completionHandler {\n    [SFMCSdk requestPushSdk:^(id<MarketingCloudSDKPushProtocol> mp) {\n        [mp setNotificationRequest:response.notification.request];\n    }];\n    completionHandler();\n}",
+      "afterObjc": "// Obj-C (era 2 — 9.x)\n- (void)userNotificationCenter:(UNUserNotificationCenter *)center\n       didReceiveNotificationResponse:(UNNotificationResponse *)response\n                withCompletionHandler:(void (^)(void))completionHandler {\n    [SFMCSdk requestPushSdk:^(id<MarketingCloudSDKPushProtocol> mp) {\n        [mp setNotificationResponse:response];\n    }];\n    completionHandler();\n}",
+      "caveat": "9.0.0 REMOVED `setNotificationRequest(_:)` from `PushInterface` — a customer bumping `MarketingCloudSDK 8.x` → `9.x` on the façade path (SFMCSdk façade appeared in 8.1.0 alongside `requestPushSdk`) gets a compile error `value of type 'any PushInterface' has no member 'setNotificationRequest'`. The delegate method signature is unchanged; only the SDK selector and its argument change (`response.notification.request` → `response`). Distinct from the era-1→era-3 mapping (`handle-notification-response`) which also migrates onto `PushFeature.requestSdk`. Verified against 9.0.3 `Pods/MarketingCloudSDK/.../MarketingCloudSDK.framework/Headers/MarketingCloudSDK-Swift.h` — only `setNotificationResponse:` and `setNotificationUserInfo:` exist on `PushInterface`.",
+      "verified": "sdk-ios 9.0.3 MarketingCloudSDK-Swift.h; observed on 8.1.4 → 9.0.3 LearningApp migration 2026-07"
+    },
+    {
+      "id": "set-url-handling-delegate",
+      "area": "push",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setURLHandlingDelegate(_:)  [era 1]",
+      "oldRegex": "sfmc_setURLHandlingDelegate\\s*[:(]",
+      "new": "PushFeature.requestSdk { pfSdk in pfSdk?.setURLHandlingDelegate(self) }",
+      "kind": "method",
+      "async": true,
+      "feature": "push",
+      "before": "// Swift (era 1)\nMarketingCloudSDK.sharedInstance().sfmc_setURLHandlingDelegate(self)",
+      "after": "// Swift (era 3 — v11)\nimport PushFeatureSDK\n\nPushFeature.requestSdk { pfSdk in\n    pfSdk?.setURLHandlingDelegate(self)\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_setURLHandlingDelegate:self];",
+      "afterObjc": "// Obj-C (era 3)\n@import PushFeatureSDK;\n\n[SFPushFeature requestSdk:^(id<PushFeatureApi> _Nullable pf) {\n    [pf setURLHandlingDelegate:self];\n}];",
+      "caveat": "Delegate setter moved onto the push feature module. IMPORTANT: the `URLHandlingDelegate` protocol method signature is UNCHANGED across all eras — `func sfmc_handleURL(_ handleUrl: URL, type: String)` / Obj-C `- (void)sfmc_handleURL:(NSURL *)url type:(NSString *)type`. Do NOT rename the delegate method body; only rewrite where the delegate is set.",
+      "verified": "unified-sdk-ios/push-feature-module/PushFeatureSDK/Module/PushFeature.swift line 369; unified-sdk-ios/MarketingCloudSDKExplorer/SDKExplorer/AppDelegate.swift line 371"
+    },
+    {
+      "id": "notification-service-extension",
+      "area": "push",
+      "old": "class NotificationService: UNNotificationServiceExtension { override func didReceive(...) { /* SDK NSE code with MarketingCloudSDK or SFMCSdk direct calls */ } }",
+      "oldRegex": "class\\s+\\w+\\s*:\\s*UNNotificationServiceExtension|@interface\\s+\\w+\\s*:\\s*UNNotificationServiceExtension",
+      "new": "class NotificationService: SFMCNotificationService { override func sfmcProvideConfig() -> SFNotificationServiceConfig { ... } override func sfmcDidReceive(...) { ... } }",
+      "kind": "class",
+      "async": true,
+      "feature": "push",
+      "manualReview": true,
+      "before": "// Swift (era 1) — NSE target\nimport UserNotifications\nimport MarketingCloudSDK\n\nclass NotificationService: UNNotificationServiceExtension {\n    var contentHandler: ((UNNotificationContent) -> Void)?\n    var bestAttemptContent: UNMutableNotificationContent?\n\n    override func didReceive(_ request: UNNotificationRequest,\n                             withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {\n        self.contentHandler = contentHandler\n        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)\n        MarketingCloudSDK.sharedInstance().sfmc_setNotificationRequest(request)\n        if let bestAttemptContent = bestAttemptContent {\n            contentHandler(bestAttemptContent)\n        }\n    }\n}",
+      "after": "// Swift (era 3 — v11) — NSE target uses MCExtensionSDK; base class handles the plumbing\nimport UserNotifications\nimport MCExtensionSDK\n\nclass NotificationService: SFMCNotificationService {\n    override func sfmcProvideConfig() -> SFNotificationServiceConfig {\n        return SFNotificationServiceConfig(\n            appId: Constants.mcAppId,\n            appGroupIdentifier: Constants.appGroupId\n        )\n    }\n\n    override func sfmcDidReceive(_ request: UNNotificationRequest,\n                                 mutableContent bestAttemptContent: UNMutableNotificationContent,\n                                 withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {\n        // Optionally mutate bestAttemptContent (title, badge, etc.) before calling contentHandler.\n        contentHandler(bestAttemptContent)\n    }\n}",
+      "beforeObjc": "// Obj-C (era 1) — NSE target\n@import UserNotifications;\n@import MarketingCloudSDK;\n\n@interface NotificationService : UNNotificationServiceExtension\n@property (nonatomic, copy) void (^contentHandler)(UNNotificationContent *);\n@property (nonatomic, strong) UNMutableNotificationContent *bestAttemptContent;\n@end\n\n@implementation NotificationService\n- (void)didReceiveNotificationRequest:(UNNotificationRequest *)request\n                   withContentHandler:(void (^)(UNNotificationContent *))contentHandler {\n    self.contentHandler = contentHandler;\n    self.bestAttemptContent = [request.content mutableCopy];\n    [[MarketingCloudSDK sharedInstance] sfmc_setNotificationRequest:request];\n    contentHandler(self.bestAttemptContent);\n}\n@end",
+      "afterObjc": "// Obj-C (era 3 — v11) — NSE target uses MCExtensionSDK\n@import UserNotifications;\n@import MCExtensionSDK;\n\n@interface NotificationService : SFMCNotificationService\n@end\n\n@implementation NotificationService\n- (SFNotificationServiceConfig *)sfmcProvideConfig {\n    return [[SFNotificationServiceConfig alloc] initWithAppId:kAppId\n                                          appGroupIdentifier:kAppGroupId];\n}\n\n- (void)sfmcDidReceive:(UNNotificationRequest *)request\n         mutableContent:(UNMutableNotificationContent *)bestAttemptContent\n     withContentHandler:(void (^)(UNNotificationContent *))contentHandler {\n    contentHandler(bestAttemptContent);\n}\n@end",
+      "caveat": "ALWAYS manual review. Structural changes in v11: (a) base class is now `SFMCNotificationService` (from MCExtensionSDK), NOT `UNNotificationServiceExtension` directly; (b) the SDK's rich-media download runs BEFORE the app's override — `sfmcDidReceive(_:mutableContent:withContentHandler:)` receives the already-mutated content; (c) `sfmcProvideConfig()` returns an `SFNotificationServiceConfig` with the appId and App Group id so the extension can share state with the main app; (d) do NOT call `SFMCSdk.initializeSdk` inside the extension — the config supplied via `sfmcProvideConfig()` is enough. Ensure the NSE target: swaps `import MarketingCloudSDK` → `import MCExtensionSDK`; adds MCExtensionSDK to the NSE Podfile target (NOT the main app); shares an App Group entitlement with the main app.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/MarketingCloudServiceExtension/NotificationService.swift"
+    },
+    {
+      "id": "notification-content-extension",
+      "area": "push",
+      "old": "class NotificationViewController: UIViewController, UNNotificationContentExtension { /* custom rich-content rendering */ }",
+      "oldRegex": "class\\s+\\w+\\s*:\\s*UIViewController\\s*,\\s*UNNotificationContentExtension|@interface\\s+\\w+\\s*:\\s*UIViewController\\s*<[^>]*UNNotificationContentExtension",
+      "new": "class NotificationViewController: SFMCNotificationViewController { override func sfmcProvideConfig() -> SFContentExtensionConfig { ... } }",
+      "kind": "class",
+      "async": true,
+      "feature": "push",
+      "manualReview": true,
+      "before": "// Swift (pre-v11 or bespoke) — Notification Content Extension target\nimport UIKit\nimport UserNotifications\nimport UserNotificationsUI\n\nclass NotificationViewController: UIViewController, UNNotificationContentExtension {\n    override func viewDidLoad() {\n        super.viewDidLoad()\n    }\n\n    func didReceive(_ notification: UNNotification) {\n        // Custom rendering of the notification body / carousel.\n    }\n}",
+      "after": "// Swift (era 3 — v11) — Content Extension target\nimport UIKit\nimport UserNotifications\nimport UserNotificationsUI\nimport MCExtensionSDK\n\nclass NotificationViewController: SFMCNotificationViewController {\n    override func sfmcProvideConfig() -> SFContentExtensionConfig {\n        return SFContentExtensionConfig(\n            appId: Constants.mcAppId,\n            appGroupIdentifier: Constants.appGroupId\n        )\n    }\n}",
+      "beforeObjc": "// Obj-C (pre-v11 or bespoke) — Content Extension target\n@import UIKit;\n@import UserNotifications;\n@import UserNotificationsUI;\n\n@interface NotificationViewController : UIViewController <UNNotificationContentExtension>\n@end\n\n@implementation NotificationViewController\n- (void)didReceiveNotification:(UNNotification *)notification {\n    // Custom rendering of the notification body / carousel.\n}\n@end",
+      "afterObjc": "// Obj-C (era 3 — v11) — Content Extension target\n@import UIKit;\n@import UserNotifications;\n@import UserNotificationsUI;\n@import MCExtensionSDK;\n\n@interface NotificationViewController : SFMCNotificationViewController\n@end\n\n@implementation NotificationViewController\n- (SFContentExtensionConfig *)sfmcProvideConfig {\n    return [[SFContentExtensionConfig alloc] initWithAppId:kAppId\n                                       appGroupIdentifier:kAppGroupId];\n}\n@end",
+      "caveat": "The Notification Content Extension target is separate from the Notification Service Extension (different Info.plist `NSExtensionPointIdentifier`). Base class is `SFMCNotificationViewController` from MCExtensionSDK. Override `sfmcProvideConfig()` returning `SFContentExtensionConfig`; the SDK renders rich media (carousel, video) itself. If the app had bespoke rendering, migrating to the SDK-rendered UI is a UX decision — flag for review before overwriting the controller. Both extension targets must share the App Group entitlement with the main app.",
+      "verified": "unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/MarketingCloudContentExtension/NotificationViewController.swift"
+    },
+    {
+      "id": "in-app-message-delegate",
+      "area": "iam",
+      "old": "MarketingCloudSDK.sharedInstance().sfmc_setInAppMessageDelegate(_:) / MCEInAppMessageDelegate  [era 1]  OR one-arg sfmc_didClose(inAppMessage:)  [era 2]",
+      "oldRegex": "sfmc_setInAppMessageDelegate\\s*[:(]|MCEInAppMessageDelegate\\b|sfmc_didClose\\s*\\(\\s*inAppMessage:",
+      "new": "SFMCSdk.setInAppMessageEventDelegate(_:) with InAppMessageEventDelegate — didClose(inAppMessage:action:) is TWO-ARG in v11 and payload type is InAppMessageDetails",
+      "kind": "method",
+      "async": false,
+      "feature": "iam",
+      "before": "// Swift (era 1)\nMarketingCloudSDK.sharedInstance().sfmc_setInAppMessageDelegate(self)\n\nfunc sfmc_didCloseInAppMessage(_ message: [AnyHashable: Any]) {\n    print(\"IAM closed: \\(message)\")\n}",
+      "after": "// Swift (era 3 — v11)\nimport SFMCSDK\nimport InAppMessagingFeatureSDK\n\nSFMCSdk.setInAppMessageEventDelegate(self)\n\nextension AppDelegate: InAppMessageEventDelegate {\n    func shouldShow(inAppMessage message: InAppMessageDetails) -> Bool {\n        return true\n    }\n\n    func didShow(inAppMessage message: InAppMessageDetails) {\n        print(\"IAM \\(message.id) shown\")\n    }\n\n    func didClose(inAppMessage message: InAppMessageDetails, action: InAppMessageCloseAction) {\n        print(\"IAM \\(message.id) closed by \\(action)\")\n    }\n}",
+      "beforeObjc": "// Obj-C (era 1)\n[[MarketingCloudSDK sharedInstance] sfmc_setInAppMessageDelegate:self];\n\n- (void)sfmc_didCloseInAppMessage:(NSDictionary *)message {\n    NSLog(@\"IAM closed: %@\", message);\n}",
+      "afterObjc": "// Obj-C (era 3 — v11)\n@import SFMCSDK;\n@import InAppMessagingFeatureSDK;\n\n[SFMCSdk setInAppMessageEventDelegate:self];\n\n// In @implementation ...\n- (BOOL)shouldShowInAppMessage:(id<SFMCSdkInAppMessageDetails>)message {\n    return YES;\n}\n\n- (void)didShowInAppMessage:(id<SFMCSdkInAppMessageDetails>)message {\n    NSLog(@\"IAM %@ shown\", message.id);\n}\n\n- (void)didCloseInAppMessage:(id<SFMCSdkInAppMessageDetails>)message\n                       action:(SFMCSdkInAppMessageCloseAction *)action {\n    NSLog(@\"IAM %@ closed\", message.id);\n}",
+      "caveat": "Three important changes: (a) v11 `didClose` takes TWO args — `inAppMessage:` AND `action:` — Swift will silently accept a one-arg override without warning that it doesn't match the protocol requirement, and the method will simply never fire; explicit protocol conformance surfaces the mismatch. (b) The payload type is `InAppMessageDetails` (NOT `InAppMessage`, contra earlier notes) and legacy `[AnyHashable: Any]` key accesses become property accesses (`message.id`, `message.messageId`, etc.). (c) The protocol is `InAppMessageEventDelegate` (NOT `InAppMessageEventListener`) and it's set via `SFMCSdk.setInAppMessageEventDelegate(_:)`. `shouldShow` and `didShow` are optional; provide defaults only if the app needs them.",
+      "verified": "unified-sdk-ios/sfmc-sdk/SFMCSdk/Interfaces/Common/Protocols/Delegates/InAppMessageEventDelegate.swift; unified-sdk-ios/mce-sdk/examples/LearningApp-MPP/LearningAppMPP/AppDelegate.swift lines 552-590"
+    },
+    {
+      "id": "import-marketingcloudsdk",
+      "area": "init",
+      "old": "import MarketingCloudSDK / @import MarketingCloudSDK;",
+      "oldRegex": "(?:import\\s+MarketingCloudSDK|@import\\s+MarketingCloudSDK\\s*;|#import\\s+<MarketingCloudSDK/MarketingCloudSDK\\.h>)",
+      "new": "keep MarketingCloudSDK + add SFMCSDK + add PushFeatureSDK / InAppMessagingFeatureSDK / MobileAppMessagingSDK (as needed)",
+      "kind": "import",
+      "async": false,
+      "feature": "core",
+      "before": "// Swift\nimport MarketingCloudSDK",
+      "after": "// Swift (era 3 — v11)\nimport MarketingCloudSDK\nimport SFMCSDK\nimport PushFeatureSDK          // if this file touches push token / delegate / notification info\nimport InAppMessagingFeatureSDK // if this file conforms to InAppMessageEventDelegate",
+      "beforeObjc": "// Obj-C\n@import MarketingCloudSDK;\n// OR\n#import <MarketingCloudSDK/MarketingCloudSDK.h>",
+      "afterObjc": "// Obj-C (era 3 — v11)\n@import MarketingCloudSDK;\n@import SFMCSDK;\n@import PushFeatureSDK;          // if this file touches push token / delegate / notification info\n@import InAppMessagingFeatureSDK; // if this file implements the IAM delegate methods",
+      "caveat": "MarketingCloudSDK import STAYS in the main-app — it's the engagement module in v11 (contains `MarketingCloudSdk`). Add `import SFMCSDK` in every Swift file that touches identity, event tracking, or the unified core (`ConfigBuilder`, `SFMCSdk.initializeSdk`, `SFMCSdk.identity`, `SFMCSdk.track`). Add `import PushFeatureSDK` in files that manage device tokens, notification response/user-info, or a URL handling delegate. Add `import InAppMessagingFeatureSDK` in files that conform to `InAppMessageEventDelegate`. NSE and Content Extension files DROP `import MarketingCloudSDK` and use `import MCExtensionSDK` instead. Obj-C equivalents use `@import`; the `#import <MarketingCloudSDK/MarketingCloudSDK.h>` bracket form is also legacy — convert to `@import MarketingCloudSDK;` when adding the new module imports."
+    },
+    {
+      "id": "custom-push-subclass",
+      "area": "push",
+      "old": "class extends MarketingCloudSDK or implements a legacy SDK delegate protocol",
+      "oldRegex": "class\\s+\\w+\\s*:\\s*MarketingCloudSDK\\b|@interface\\s+\\w+\\s*:\\s*MarketingCloudSDK\\b",
+      "new": null,
+      "kind": "class",
+      "async": false,
+      "feature": "push",
+      "manualReview": true,
+      "caveat": "Subclassing `MarketingCloudSDK` (rare but seen) has no mechanical rewrite. Detect and flag with file:line; do not auto-rewrite."
+    },
+    {
+      "id": "removed-private-header-notifications",
+      "area": "other",
+      "old": "#import \"SFMCNotificationConstants.h\" (legacy v9 header vending notification-name string constants; no longer shipped in v11)",
+      "oldRegex": "#(?:import|include)\\s+[\"<]SFMCNotificationConstants\\.h[\">]",
+      "new": null,
+      "kind": "import",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Obj-C (legacy v9 pattern; commonly appears in code templated from older example projects)\n#import \"SFMCNotificationConstants.h\"\n\n[[NSNotificationCenter defaultCenter] postNotificationName:SFMCIAMInsertMessageNotification object:self];",
+      "after": "// v11 — inline the notification-name constants this file actually uses.\n// SFMCFoundation* names in `MarketingCloudSDK+Constants.h` are still shipped and unchanged.\nstatic NSNotificationName const SFMCIAMInsertMessageNotification = @\"SFMCIAMInsertMessageNotification\";\nstatic NSNotificationName const SFMCIAMShowMessageNotification = @\"SFMCIAMShowMessageNotification\";\nstatic NSNotificationName const SFMCControlChannelControlChannelUpdatedNotification = @\"SFMCControlChannelControlChannelUpdatedNotification\";\n\n[[NSNotificationCenter defaultCenter] postNotificationName:SFMCIAMInsertMessageNotification object:self];",
+      "caveat": "`SFMCNotificationConstants.h` was a legacy v9 header that vended app-level `NSNotificationName` string constants (e.g. `SFMCIAMInsertMessageNotification`, `SFMCIAMShowMessageNotification`, `SFMCControlChannelControlChannelUpdatedNotification`). It is no longer shipped in v11 pods — `#import` resolves to file-not-found. TRAP: Xcode silently drops any .m file with an unresolvable `#import` from the ScanDependencies/CompileC schedule (no compile line in the build log). The failure surfaces later as a linker `Undefined symbols for architecture arm64: _OBJC_CLASS_$_...` on any type declared in that .m — masquerading as a target-membership problem. FIX: remove the `#import` and inline `static NSNotificationName const XxxNotification = @\"XxxNotification\";` above the `@implementation` for each notification name this file actually posts/observes. These are app-internal identifier strings; the values are literal string equivalence with the legacy header — no SDK contract, just an NSNotificationCenter channel between the app's own view controllers. Manual-review flagged because a partial migration (removing the `#import` without inlining used constants) leaves compile errors. The DIFFERENT `SFMCFoundation*` notification names (e.g. `SFMCFoundationUNNotificationReceivedNotification`) are shipped constants — those come from `MarketingCloudSDK+Constants.h` and remain exported in v11; do not confuse the two.",
+      "verified": "Verified 9.0.4 → 11.0.1 migration: two .m files referencing this header failed to link on v11; the v11 pod's `Headers/` dir has no `SFMCNotificationConstants.h`."
+    },
+    {
+      "id": "removed-private-header-date-formatters",
+      "area": "other",
+      "old": "#import \"SFMCDateNumberFormatters.h\" (legacy v9 header vending shared NSDateFormatter/NSNumberFormatter helpers; no longer shipped in v11)",
+      "oldRegex": "#(?:import|include)\\s+[\"<]SFMCDateNumberFormatters\\.h[\">]|\\[\\s*SFMCDateNumberFormatters\\s+(?:date|number)Formatter\\s*\\]",
+      "new": null,
+      "kind": "import",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Obj-C (legacy v9 pattern; commonly appears in code templated from older example projects)\n#import \"SFMCDateNumberFormatters.h\"\n\nNSString *iso = [[SFMCDateNumberFormatters dateFormatter] stringFromDate:[NSDate date]];",
+      "after": "// v11 — inline a file-local formatter (dispatch_once for thread-safety).\nstatic NSDateFormatter *AppIAMDateFormatter(void) {\n    static NSDateFormatter *formatter;\n    static dispatch_once_t onceToken;\n    dispatch_once(&onceToken, ^{\n        formatter = [[NSDateFormatter alloc] init];\n        formatter.locale = [NSLocale localeWithLocaleIdentifier:@\"en_US_POSIX\"];\n        formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];\n        formatter.dateFormat = @\"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'\";\n    });\n    return formatter;\n}\n\nNSString *iso = [AppIAMDateFormatter() stringFromDate:[NSDate date]];",
+      "caveat": "`SFMCDateNumberFormatters.h` was a legacy v9 header that vended shared `NSDateFormatter`/`NSNumberFormatter` singletons via `+[SFMCDateNumberFormatters dateFormatter]` / `+numberFormatter`. Removed from v11 pods (both header and class). Same Xcode-silently-drops-uncompilable-files trap as `removed-private-header-notifications` — a linker `Undefined symbols` error on unrelated classes is the first (misleading) sign. FIX: remove the `#import`, inline a file-local `NSDateFormatter` factory. The POSIX/UTC/ISO-8601 shape shown here matches the format v9's `+dateFormatter` used for message-envelope `modifiedDateUtc`; verify the exact format if the value is written to persistent storage or sent to a server that expects a specific shape, because callers may depend on it round-tripping through JSON. Manual-review flagged because format-string drift silently changes serialized payloads.",
+      "verified": "Verified 9.0.4 → 11.0.1 migration: one .m file referencing this header failed to link on v11; v11 pods do not vend `SFMCDateNumberFormatters`."
+    },
+    {
+      "id": "removed-authevent-enum",
+      "area": "events",
+      "old": "AuthEventType (Obj-C NS_ENUM from v9 SFMCEvent.h)",
+      "oldRegex": "\\bAuthEventType\\b",
+      "new": null,
+      "kind": "class",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "before": "// Swift (era 1/2)\nguard let authEvent = AuthEventType(rawValue: picker.selectedRow(inComponent: 0))?.rawValue else { return }\nMarketingCloudSDK.sharedInstance().sfmc_trackAuthenticationEvent(authEvent, /* ... */)",
+      "after": "// v11 — no framework-provided enum. Use a locally-declared enum + generic CustomEvent.\nenum AuthEvent: String, CaseIterable {\n    case Login\n    // add more cases as the app previously used\n}\n\nlet selectedRow = picker.selectedRow(inComponent: 0)\nguard AuthEvent.allCases.indices.contains(selectedRow),\n      let event = CustomEvent(name: \"AuthenticationEvent\",\n                              attributes: [\"AuthEventType\": AuthEvent.allCases[selectedRow].rawValue]) else {\n    return\n}\nSFMCSdk.track(event: event)",
+      "caveat": "v9 shipped an Obj-C `NS_ENUM(NSInteger, AuthEventType)` in `SFMCEvent.h` under MarketingCloudSDK. Removed in v11 along with the `sfmc_trackAuthenticationEvent(...)` selector — authentication events collapse into the generic `CustomEvent(name:attributes:)` pipeline (`SFMCSdk.track(event:)`). REWRITE SHAPE: (a) declare a local `enum AuthEvent: String, CaseIterable` in the calling file with the same cases the v9 app used (usually just `.Login`); (b) construct a `CustomEvent(name: \"AuthenticationEvent\", attributes: [\"AuthEventType\": <raw>])`. Remember `CustomEvent(name:attributes:)` is a FAILABLE initializer — v11 rejects invalid names/keys (blank, leading `$`, dots, newlines) where the v9 API silently accepted them. `if let`/`guard let` — do NOT force-unwrap. Manual-review flagged because analytics dashboards keyed off the legacy trackAuthenticationEvent event name may need adjustment to match the new `CustomEvent` name your rewrite chooses (defaults here: `\"AuthenticationEvent\"`).",
+      "verified": "SDKExplorer 9.0.4 → 11.0.1 migration: 1 Swift file (BehavioralTriggersViewController.swift) referenced AuthEventType; v11 module map does not export AuthEventType."
+    },
+    {
+      "id": "objc-only-selectors",
+      "area": "other",
+      "old": "Obj-C call sites of unified selectors on Swift-only APIs",
+      "oldRegex": "\\[\\s*SFMCSdk\\s+(?:track|initializeSdk)\\s*[a-zA-Z:]",
+      "new": null,
+      "kind": "method",
+      "async": false,
+      "feature": "core",
+      "manualReview": true,
+      "objcOnly": true,
+      "caveat": "Some unified APIs are Swift-only (no @objc). When an Obj-C .m/.h calls into unified via a bridged form (e.g. `[SFMCSdk trackWithEvent:...]`), the bridging must be verified against the framework's generated `-Swift.h` header — if the symbol lacks @objc, the fix is either (a) a Swift shim exposed to Obj-C, or (b) migrate the caller to Swift. Flag every Obj-C call site touching SFMCSdk / MarketingCloudSdk / PushFeature / InAppMessageEventDelegate for review; do not auto-rewrite. Obj-C bridged class names verified against the v11 `-Swift.h` headers in Pods: `SFMCSdk` (unchanged), `SFMarketingCloudSdk` (engagement, from `MarketingCloudSDK-Swift.h`), `SFPushFeature` (push), `SFInAppMessagingFeature` (IAM), `SFMCSdkConfigBuilder` (root — now bridges Swift `ConfigBuilder`), `SFMarketingCloudSdkConfigBuilder`, `SFPushFeatureConfigBuilder`, `SFInAppMessagingFeatureConfigBuilder`, `SFMCSdkCustomEvent`, `SFMCModuleInitStatus`. Protocols: `SFIdentityModifier` (identity closure param), `SFPushFeatureApi`, `SFInAppMessagingFeatureApi`, `MarketingCloudSdkInterface`, `SFMCSdkInAppMessageDetails`, `SFMCSdkInAppMessageEventDelegate`. Selector conventions: `editWithIdentity:`, `addAttributesWithAttributes:`, `clearAttributeWithKey:`, `clearAttributesWithKeys:`, `initializeSdk:completion:`, `trackWithEvent:`, `requestSdk:`, `setEngagementWithConfig:`, `setPushFeatureWithConfig:`, `setInAppMessagingFeatureWithConfig:`, `initWithAppId:` (on the engagement builder)."
+    }
+  ]
+}

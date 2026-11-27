@@ -1,0 +1,29 @@
+{
+  "platform": "ios",
+  "source": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/change-log.html#ios",
+  "_note": "Scraped 2026-06-26. The iOS migration matrix (migration-matrix-ios.json) and refactoring patterns are NOT yet authored — this catalog exists so target-version selection works on iOS, but the actual code rewrite for iOS is not yet supported. The architecture boundary is also major version 10 (unified SFMCSDK). Several later iOS changelog entries ship as dated updates without an explicit semver in the source; only versioned releases are listed here.",
+  "eraBoundaryMajor": 10,
+  "latestStable": "11.0.0",
+  "migrationGuides": {
+    "to10": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/migrate-to-version-10.html",
+    "to11": "https://developer.salesforce.com/docs/marketing/mobile-unified-sdk/guide/migrate-to-version-11.html"
+  },
+  "versions": [
+    { "version": "11.0.0", "date": "2026-03-31", "major": 11, "era": "unified", "breaking": true, "notes": "Major. New In-App Messaging feature module. Min iOS 12. SFMC 4.0.0 / Extension 3.0.0 / Push 2.0.0 / IAM 1.0.0.", "knownIssues": [ { "id": "iam-1.0.0-swiftinterface-nodoc", "affects": "SFInAppMessagingFeatureSDK 1.0.0", "symptom": "Xcode 26.2 / Swift 6.2.3 refuses to load the `InAppMessagingFeatureSDK` module with 'Cannot load underlying module for InAppMessagingFeatureSDK', blocking any v11 build that includes the pod.", "cause": "The shipped `.private.swiftinterface` (line 84) declares `extension InAppMessagingFeature : SFMCSDK.InAppMessagingFeatureProtocol`, but `SFMCSDK` marks that protocol `/// :nodoc:` + `SWIFT_UNAVAILABLE`. Packaging defect — not app-code fixable.", "workaround": "If the app does not use IAM (scan_usage.py `featuresInUse` omits `iam`), drop the pod, the `import InAppMessagingFeatureSDK`, the `.setInAppMessagingFeature(config:)` chain, and any `InAppMessageEventDelegate` extension. If the app does use IAM, HALT — pin to legacy 9.x or wait for a fixed 1.0.x. See migration-matrix-ios.json `SFInAppMessagingFeatureSDK.shippedArtifactBug`.", "verify": { "script": "scripts/verify_known_issue.py", "cli": "python3 scripts/verify_known_issue.py --project <project> --issue-id iam-1.0.0-swiftinterface-nodoc", "requiresResolver": "cocoapods:pod install --repo-update  |  spm:xcodebuild -resolvePackageDependencies", "emitPolicy": "reproduces -> emit warning verbatim; patched -> suppress warning + note the observation in the report; not-materialized -> run the resolver and re-verify, otherwise emit tagged 'unverified'; inconclusive -> emit tagged 'unverified'." } } ] },
+    { "version": "10.0.0", "date": "2025-11-06", "major": 10, "era": "unified", "breaking": true, "notes": "Major. Unified SDK architecture. Min iOS 12. SFMCSDK 3.0.0 / Extension 2.0.0 / Push 1.0.0." },
+    { "version": "9.0.2", "date": "2025-06-11", "major": 9, "era": "legacy", "breaking": false, "notes": "Apple certificate signing fix (resolves 9.0.0/9.0.1 issue)." },
+    { "version": "9.0.1", "date": "2025-05-26", "major": 9, "era": "legacy", "breaking": false, "notes": "Carousel thumbnail support. Update to 9.0.2 for cert fix." },
+    { "version": "9.0.0", "date": "2025-03-14", "major": 9, "era": "legacy", "breaking": true, "notes": "Major (legacy API). Carousel push, Push Delivery ENS, Inbox 2.0. BREAKING: removed `setNotificationRequest(_:UNNotificationRequest)` from `PushInterface` — 8.x→9.x façade migrations must swap to `setNotificationResponse(_:UNNotificationResponse)` (see migration-matrix-ios.json `handle-notification-response-era2-removal`). Update to 9.0.2 for cert fix." },
+    { "version": "8.1.1", "date": "2024-01-18", "major": 8, "era": "legacy", "breaking": false, "notes": "Framework code signatures; discontinued iOS 11 support. (Later 8.1.x dated updates add Privacy Manifest, hang fix, cert fix.)" },
+    { "version": "8.1.0", "date": "2023-10-30", "major": 8, "era": "legacy", "breaking": false, "notes": "Runtime Toggles; SPM auto-includes SFMCSDK; requestPushSdk API. Min iOS 11." },
+    { "version": "8.0.13", "date": "2023-05-03", "major": 8, "era": "legacy", "breaking": false, "notes": "Bug fixes." },
+    { "version": "8.0.12", "date": "2023-03-27", "major": 8, "era": "legacy", "breaking": true, "notes": "Registration callbacks; configurable filesystem protection; deprecates tearDown methods." },
+    { "version": "8.0.10", "date": "2023-01-24", "major": 8, "era": "legacy", "breaking": true, "notes": "Deprecates iOS 10.0 and Xcode 13.x and older." },
+    { "version": "8.0.9", "date": "2022-12-07", "major": 8, "era": "legacy", "breaking": false, "notes": "Push open reporting / Inbox fix. Min iOS 10." },
+    { "version": "8.0.8", "date": "2022-09-29", "major": 8, "era": "legacy", "breaking": false, "notes": "ENS support." },
+    { "version": "8.0.7", "date": "2022-08-18", "major": 8, "era": "legacy", "breaking": false, "notes": "Obj-C compatibility; SDK data merge tool." },
+    { "version": "8.0.5", "date": "2022-03-31", "major": 8, "era": "legacy", "breaking": true, "notes": "iOS 15 keychain crash fix; library evolution (min Xcode 12.5)." },
+    { "version": "8.0.4", "date": "2022-02-04", "major": 8, "era": "legacy", "breaking": false, "notes": "CocoaPods support alongside SPM." },
+    { "version": "8.0.0", "date": "2021-10-14", "major": 8, "era": "legacy", "breaking": true, "notes": "Introduced Swift Packages; discontinued CocoaPods in favor of SPM." }
+  ]
+}
