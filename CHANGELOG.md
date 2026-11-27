@@ -1,3 +1,13 @@
+# [1.72.0](https://github.com/forcedotcom/sf-skills/compare/1.71.0...1.72.0) (2026-11-27)
+
+
+### Features
+
+* Plugins Promotion: salesforce-development 2.9.0 and 10 more @W-24990843@ ([b09f91f](https://github.com/forcedotcom/sf-skills/commit/b09f91fe832e19b1f8c5eddd3bfb418640d997b4))
+* Release 265 skills (35 new, 230 updated, 1 demoted, 4 removed) - sf-skills or headless360Mcp public @W-25057530@ ([640f6f9](https://github.com/forcedotcom/sf-skills/commit/640f6f9b1a22e189a74110fee4bd11b697d0b11f))
+
+
+
 # [1.71.0](https://github.com/forcedotcom/sf-skills/compare/1.70.0...1.71.0) (2026-11-20)
 
 
